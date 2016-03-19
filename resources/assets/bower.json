@@ -1,0 +1,15 @@
+{
+  "name": "koi-frontend",
+  "version": "1.0.0",
+  "description": "aplicación front-end base KOI-TI",
+  "dependencies": {
+    "AdminLTE": "admin-lte#~2.3.2",
+    "alertify.js": "alertifyjs#~1.0.10",
+    "backbone": "~1.1.2",
+    "bootstrap-validator": "~0.9.0",
+    "datatables.net-buttons": "~1.1.2",
+    "datatables.net-buttons-bs": "~1.1.2",
+    "font-awesome": "fontawesome#~4.5.0",
+    "moment": "~2.10.6"
+  }
+}
