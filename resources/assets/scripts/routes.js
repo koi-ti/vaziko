@@ -80,6 +80,7 @@ app || (app = {});
             }
 
             this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel, parameters: { callback: 'toEdit' } });
+            this.createTerceroView.render();
         },
 
         /**
@@ -95,7 +96,7 @@ app || (app = {});
             }
 
             this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel });
-
+            this.createTerceroView.render();
         },
 
         /**

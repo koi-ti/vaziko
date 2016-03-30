@@ -28,7 +28,10 @@ class Municipio extends Model
             $query->select('koi_municipio.id', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"));
             $query->join('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
             $query->orderby('municipio_nombre', 'asc');
-            return $query->lists('municipio_nombre', 'koi_municipio.id');      
+            $collection = $query->lists('municipio_nombre', 'koi_municipio.id');
+            
+            $collection->prepend('', '');
+            return $collection;
         });
     }
 }

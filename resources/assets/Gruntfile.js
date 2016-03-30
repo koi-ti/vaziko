@@ -15,10 +15,10 @@ module.exports = function(grunt) {
 			options: {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
 				compress: {
-					drop_console: false
+					drop_console: true
 				},
-				beautify: true,
-				mangle: false
+				beautify: false,
+				mangle: true
 			},
 			app: {
 				files: {
@@ -34,7 +34,6 @@ module.exports = function(grunt) {
 					 	'./bower_components/adminLTE/plugins/fastclick/fastclick.min.js',
 		    			'./bower_components/adminLTE/plugins/slimScroll/jquery.slimscroll.min.js',
 		    			'./bower_components/adminLTE/plugins/iCheck/icheck.min.js',
-		    			'./bower_components/adminLTE/plugins/pace/pace.min.js',
 		    			'./bower_components/adminLTE/plugins/select2/select2.full.min.js',
 		    			'./bower_components/adminLTE/plugins/select2/i18n/es.js',
 		    			'./bower_components/adminLTE/plugins/input-mask/jquery.inputmask.js',
@@ -50,6 +49,7 @@ module.exports = function(grunt) {
 						'./scripts/helpers/misc.js',
 						'./scripts/models/**.js',
 						'./scripts/views/**/**.js',
+						'./scripts/collections/**/**.js',
 						'./scripts/routes.js',
 						'./scripts/init.js'
 					]
@@ -75,7 +75,6 @@ module.exports = function(grunt) {
 			    '../../public/css/vendor.min.css': [
 	    			'./bower_components/AdminLTE/dist/css/skins/skin-green.min.css',	    			
 	    			'./bower_components/AdminLTE/plugins/iCheck/minimal/green.css',    			
-	    			'./bower_components/AdminLTE/plugins/pace/pace.min.css',    			
 	    			'./bower_components/AdminLTE/plugins/select2/select2.min.css',    			
 	    			'./bower_components/AdminLTE/dist/css/AdminLTE.min.css',
 	    			'./bower_components/datatables.net-bs/css/dataTables.bootstrap.css',	

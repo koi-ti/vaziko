@@ -16,9 +16,6 @@ var app = app || {};
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
-
-        // Start
-        $(document).ajaxStart(function() { Pace.restart(); }); 
     }
 
     InitComponent.prototype = {
@@ -33,6 +30,7 @@ var app = app || {};
             this.initAlertify();
             this.initInputMask();
             this.initSelect2();
+            this.initToUpper();
         },
 
         /**
@@ -71,6 +69,15 @@ var app = app || {};
         */
         initSelect2: function () {
             $('.select2-default').select2({ language: 'es', placeholder: 'Seleccione' });
+        },
+
+        /**
+        * Init toUpper
+        */
+        initToUpper: function () {
+            $('.input-toupper').keyup(function(){
+                $(this).val( $(this).val().toUpperCase() );
+            });
         }
     };
 

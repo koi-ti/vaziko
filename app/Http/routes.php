@@ -32,10 +32,15 @@ Route::group(['middleware' => 'auth'], function()
 {
 	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
 	
-	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-	
 	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
+	
+	Route::group(['prefix' => 'terceros'], function()
+	{
+		Route::get('dv', ['as' => 'terceros.dv', 'uses' => 'Admin\TerceroController@dv']);
+		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
+	});	
+	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 });

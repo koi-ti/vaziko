@@ -18,52 +18,29 @@
 		</div>
 
 		<div class="form-group col-md-3">
-			<label for="tercero_regimen" class="control-label">Regimen</label>
-			{!! Form::select('tercero_regimen', ['' => 'Seleccione'] + config('koi.terceros.regimen'), null, ['id' => 'tercero_regimen', 'class' => 'form-control', 'required']) !!}
-		</div>
-
-		<div class="form-group col-md-3">
 			<label for="tercero_persona" class="control-label">Persona</label>
 			{!! Form::select('tercero_persona', ['' => 'Seleccione'] + config('koi.terceros.persona'), null, ['id' => 'tercero_persona', 'class' => 'form-control', 'required']) !!}
 		</div>
+		
+		<div class="form-group col-md-3">
+			<label for="tercero_regimen" class="control-label">Regimen</label>
+			{!! Form::select('tercero_regimen', ['' => 'Seleccione'] + config('koi.terceros.regimen'), null, ['id' => 'tercero_regimen', 'class' => 'form-control', 'required']) !!}
+		</div>
 	</div>
 
-	<div class="row">
-		<div class="form-group col-md-12">
-			<label for="tercero_razonsocial" class="control-label">Razón Social o Comercial</label>
-			{!! Form::text('tercero_razonsocial', null, ['id' => 'tercero_razonsocial', 'placeholder' => 'Razón Social o Comercial', 'class' => 'form-control input-sm']) !!}        
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-3">
-			<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
-			{!! Form::text('tercero_nombre1', null, ['id' => 'tercero_nombre1', 'placeholder' => '1er. Nombre', 'class' => 'form-control input-sm']) !!}        
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
-			{!! Form::text('tercero_nombre2', null, ['id' => 'tercero_nombre2', 'placeholder' => '2do. Nombre', 'class' => 'form-control input-sm']) !!}        
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
-			{!! Form::text('tercero_apellido1', null, ['id' => 'tercero_apellido1', 'placeholder' => '1er. Apellido', 'class' => 'form-control input-sm']) !!}
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
-			{!! Form::text('tercero_apellido2', null, ['id' => 'tercero_apellido2', 'placeholder' => '2do. Apellido', 'class' => 'form-control input-sm']) !!}
-		</div>
-	</div>
+	{{-- Render template name-partner-tpl --}}
+	<div class="row" id="name-partner-content"></div>
 
 	<div class="row">
 		<div class="form-group col-md-6">
 			<label for="tercero_direccion" class="control-label">Dirección</label>
       		<div class="input-group input-group-sm">
 				{!! Form::text('tercero_direccion', null, ['id' => 'tercero_direccion', 'placeholder' => 'Dirección', 'class' => 'form-control address-koi-component', 'required']) !!}
+				{!! Form::hidden('tercero_postal', null, ['id' => 'tercero_postal', 'class' => 'form-control']) !!}
 				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion"><i class="fa fa-map-signs"></i></button>
+					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
+						<i class="fa fa-map-signs"></i>
+					</button>
 				</span>
 			</div>
 		</div>
@@ -75,7 +52,7 @@
 
 		<div class="form-group col-md-3">
 			<label for="tercero_representante" class="control-label">Representante Legal</label>
-			{!! Form::text('tercero_representante', null, ['id' => 'tercero_representante', 'placeholder' => 'Representante Legal', 'class' => 'form-control input-sm']) !!}
+			{!! Form::text('tercero_representante', null, ['id' => 'tercero_representante', 'placeholder' => 'Representante Legal', 'class' => 'form-control input-sm input-toupper']) !!}
 		</div>
     </div>
 
@@ -181,7 +158,60 @@
     		<label for="tercero_otro" class="control-label">Otro</label>
     	</div>
     	<div class="form-group col-md-2">
-			{!! Form::text('tercero_cual', null, ['id' => 'tercero_cual', 'placeholder' => '¿Cual?', 'class' => 'form-control input-sm']) !!}
+			{!! Form::text('tercero_cual', null, ['id' => 'tercero_cual', 'placeholder' => '¿Cual?', 'class' => 'form-control input-sm input-toupper']) !!}
+		</div>
+    </div>
+
+    <div class="row">
+    	<div class="form-group col-md-12">
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
+				</ul>
+				<div class="tab-content">
+					
+					<div class="row">
+						<div class="tab-pane active" id="tab_contactos">
+							<div id="content-contact-list">
+								<ul id="browse-contact-list">
+									{{-- Render contact list --}}
+								</ul>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
 		</div>
     </div>
 </div>	
+
+{{-- templates --}}
+<script type="text/template" id="name-partner-tpl">
+	<%if(persona == 2){ %>
+		<div class="form-group col-md-12">
+			<label for="tercero_razonsocial" class="control-label">Razón Social o Comercial</label>
+			{!! Form::text('tercero_razonsocial', null, ['id' => 'tercero_razonsocial', 'placeholder' => 'Razón Social o Comercial', 'class' => 'form-control input-sm input-toupper', 'required']) !!}        
+		</div>
+	<% }else{ %>
+		<div class="form-group col-md-3">
+			<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
+			{!! Form::text('tercero_nombre1', null, ['id' => 'tercero_nombre1', 'placeholder' => '1er. Nombre', 'class' => 'form-control input-sm input-toupper', 'required']) !!}        
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
+			{!! Form::text('tercero_nombre2', null, ['id' => 'tercero_nombre2', 'placeholder' => '2do. Nombre', 'class' => 'form-control input-sm input-toupper']) !!}        
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
+			{!! Form::text('tercero_apellido1', null, ['id' => 'tercero_apellido1', 'placeholder' => '1er. Apellido', 'class' => 'form-control input-sm input-toupper', 'required']) !!}
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
+			{!! Form::text('tercero_apellido2', null, ['id' => 'tercero_apellido2', 'placeholder' => '2do. Apellido', 'class' => 'form-control input-sm input-toupper']) !!}
+		</div>
+	<% } %>
+</script>
