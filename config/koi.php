@@ -88,6 +88,7 @@ return [
             'DPTAL' => 'Departamental',
             'SUPERMZ' => 'Supermanzana',
             'ED' => 'Edificio',
+            'TV' => 'Transversal',
             'TRR' => 'Torre',
             'ESQ' => 'Esquina',
             'ESTAC' => 'Estación',
