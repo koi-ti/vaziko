@@ -2,6 +2,6 @@
 
 @section('content')
 	<section class="content">
-		Hola mundo Vaziko
+		
     </section>
 @stop

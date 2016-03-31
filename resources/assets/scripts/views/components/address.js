@@ -15,7 +15,7 @@ app || (app = {});
         template: _.template( ($('#koi-address-component-tpl').html() || '') ),
 
 		events: {
-        	'focus input.address-koi-component': 'addressChanged',
+        	// 'focus input.address-koi-component': 'addressChanged',
             'click .btn-address-koi-component': 'focusComponent',
             'submit #form-address-component': 'addAddress',
 

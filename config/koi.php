@@ -31,8 +31,8 @@ return [
         ],
 
         'persona' => [
-            1 => 'Natural',
-            2 => 'Jurídica'
+            'N' => 'Natural',
+            'J' => 'Jurídica'
         ]
     ],
 

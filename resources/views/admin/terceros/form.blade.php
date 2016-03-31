@@ -7,7 +7,7 @@
 					{!! Form::text('tercero_nit', null, ['id' => 'tercero_nit', 'placeholder' => 'Nit', 'class' => 'form-control input-sm', 'required']) !!}       
 				</div>
 				<div class="col-md-3">
-					{!! Form::text('tercero_digito', null, ['id' => 'tercero_digito', 'class' => 'form-control input-sm', 'disabled', 'required']) !!}
+					{!! Form::text('tercero_digito', null, ['id' => 'tercero_digito', 'class' => 'form-control input-sm', 'readonly', 'required']) !!}
 				</div>
 			</div>
 		</div>
@@ -32,17 +32,21 @@
 	<div class="row" id="name-partner-content"></div>
 
 	<div class="row">
-		<div class="form-group col-md-6">
+		<div class="form-group col-md-3">
 			<label for="tercero_direccion" class="control-label">Dirección</label>
       		<div class="input-group input-group-sm">
 				{!! Form::text('tercero_direccion', null, ['id' => 'tercero_direccion', 'placeholder' => 'Dirección', 'class' => 'form-control address-koi-component', 'required']) !!}
-				{!! Form::hidden('tercero_postal', null, ['id' => 'tercero_postal', 'class' => 'form-control']) !!}
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
 						<i class="fa fa-map-signs"></i>
 					</button>
 				</span>
 			</div>
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_municipio" class="control-label">Municipio</label>
+			{!! Form::select('tercero_municipio', App\Models\Base\Municipio::getMunicipios(), null, ['id' => 'tercero_municipio', 'class' => 'form-control select2-default', 'required']) !!}
 		</div>
 
 		<div class="form-group col-md-3">
@@ -188,7 +192,7 @@
 
 {{-- templates --}}
 <script type="text/template" id="name-partner-tpl">
-	<%if(persona == 2){ %>
+	<%if(persona == 'J'){ %>
 		<div class="form-group col-md-12">
 			<label for="tercero_razonsocial" class="control-label">Razón Social o Comercial</label>
 			{!! Form::text('tercero_razonsocial', null, ['id' => 'tercero_razonsocial', 'placeholder' => 'Razón Social o Comercial', 'class' => 'form-control input-sm input-toupper', 'required']) !!}        

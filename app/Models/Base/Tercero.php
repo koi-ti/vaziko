@@ -10,7 +10,7 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-use Hash, Validator;
+use Validator;
 
 use App\Models\BaseModel;
 
@@ -26,8 +26,6 @@ class Tercero extends BaseModel implements AuthenticatableContract,
      * @var string
      */
     protected $table = 'koi_tercero';
-
-    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -54,12 +52,12 @@ class Tercero extends BaseModel implements AuthenticatableContract,
     {
         $rules = [
             'tercero_nit' => 'required|max:15|min:1|unique:koi_tercero',
-            // 'tercero_digito' => 'required',
+            'tercero_digito' => 'required',
             'tercero_tipo' => 'required',
             'tercero_regimen' => 'required',
             'tercero_persona' => 'required',
             'tercero_direccion' => 'required',
-            // 'tercero_municipio' => 'required',
+            'tercero_municipio' => 'required',
             'tercero_actividad' => 'required'
         ];
 
@@ -77,16 +75,9 @@ class Tercero extends BaseModel implements AuthenticatableContract,
         return false;
     }
 
-    public function setPasswordAttribute($pass)
-    {
-        if (!empty($pass)) {
-            $this->attributes['password'] = Hash::make($pass);
-        }
-    }
-
     public function getName()
     {
-        return $this->attributes['tercero_razonsocial'];
+        return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_apellido1']);
     }
 
     public function setTerceroNombre1Attribute($name)

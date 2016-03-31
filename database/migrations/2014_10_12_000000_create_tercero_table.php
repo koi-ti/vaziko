@@ -20,7 +20,7 @@ class CreateTerceroTable extends Migration
             $table->integer('tercero_digito')->default(0);
             $table->string('tercero_tipo', 2)->nullable();
             $table->integer('tercero_regimen')->nullable();
-            $table->integer('tercero_persona')->nullable();
+            $table->string('tercero_persona', 1)->nullable();
 
             $table->string('tercero_nombre1', 100)->nullable();
             $table->string('tercero_nombre2', 100)->nullable();
