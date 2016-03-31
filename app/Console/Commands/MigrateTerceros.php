@@ -99,8 +99,7 @@ class MigrateTerceros extends Command
             }
 
             // Commit Transaction
-            // DB::commit();
-            DB::rollback();
+            DB::commit();
 
         }catch(\Exception $e){
             DB::rollback();
