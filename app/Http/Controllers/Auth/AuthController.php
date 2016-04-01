@@ -40,10 +40,10 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => ['getLogout', 'integrate'] ]);
     }
 
-        /**
+    /**
      * Handle a login request to the application.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -91,5 +91,22 @@ class AuthController extends Controller
             ->withErrors([
                 $this->loginUsername() => $this->getFailedLoginMessage(),
             ]);
+    }
+
+    /**
+     * Handle a integrate login request to the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function integrate(Request $request)
+    {
+        if($request->has('username')) {
+            $user = Tercero::where('username', $request->username)->firstOrFail();
+            Auth::login($user);
+
+            return redirect()->route($request->has('redirect') ? $request->redirect : 'dashboard');
+        }
+        abort(404);
     }
 }

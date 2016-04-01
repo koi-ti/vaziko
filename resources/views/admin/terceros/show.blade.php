@@ -42,7 +42,7 @@
 			</div>
 
 			<div class="row">
-				@if($tercero->tercero_persona == 2)
+				@if($tercero->tercero_persona == 'J')
 					<div class="form-group col-md-12">
 						<label class="control-label">Razón Social o Comercial</label>
 						<div>{{ $tercero->tercero_razonsocial }}</div>       

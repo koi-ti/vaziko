@@ -166,7 +166,7 @@
 		</div>
     </div>
 
-    <div class="row">
+{{--     <div class="row">
     	<div class="form-group col-md-12">
 			<div class="nav-tabs-custom">
 				<ul class="nav nav-tabs">
@@ -177,9 +177,9 @@
 					<div class="row">
 						<div class="tab-pane active" id="tab_contactos">
 							<div id="content-contact-list">
-								<ul id="browse-contact-list">
+								<ul id="browse-contact-list"> --}}
 									{{-- Render contact list --}}
-								</ul>
+								{{-- </ul>
 							</div>
 						</div>
 					</div>
@@ -187,7 +187,7 @@
 				</div>
 			</div>
 		</div>
-    </div>
+    </div> --}}
 </div>	
 
 {{-- templates --}}
