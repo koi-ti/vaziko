@@ -102,7 +102,7 @@
                 {{-- Terceros --}}
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
-                        <a href="http://181.52.238.27:8081/vaziko/index.php"><i class="fa fa-building-o"></i> Orden de producción</a>
+                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Orden de producción</a>
                     </li>
                 </ul>
             </li>
