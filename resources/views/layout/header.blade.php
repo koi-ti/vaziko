@@ -62,12 +62,14 @@
                 <a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> <span>Dashboard </span></a>
             </li>
             
+            {{-- Administracion --}}
             <li class="treeview {{ in_array(Request::segment(1), ['terceros', 'municipios', 'departamentos', 'actividades']) ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}">
                     <i class="fa fa-cog"></i> <span>Administración</span><i class="fa fa-angle-left pull-right"></i>
                 </a>
+                
+                {{-- Terceros --}}
                 <ul class="treeview-menu">
-                    
                     <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
                         <a href="{{ route('terceros.index') }}"><i class="fa fa-users"></i> Terceros</a>
                     </li>
@@ -89,7 +91,20 @@
                         </ul>
                     </li>
                 </ul>
+            </li>
 
+            {{-- Produccion --}}
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
+                </a>
+                
+                {{-- Terceros --}}
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
+                        <a href="http://181.52.238.27:8081/vaziko/index.php"><i class="fa fa-building-o"></i> Orden de producción</a>
+                    </li>
+                </ul>
             </li>
         </ul>
     </section>
