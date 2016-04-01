@@ -1,5 +1,7 @@
 @extends('layout.layout')
 
+@section('title') Minicipios @stop
+
 @section('content')
     <section class="content-header">
 		<h1>

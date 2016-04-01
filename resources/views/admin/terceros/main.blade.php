@@ -1,5 +1,7 @@
 @extends('layout.layout')
 
+@section('title') Terceros @stop
+
 @section('content')
     <section class="content-header">
 		<h1>
