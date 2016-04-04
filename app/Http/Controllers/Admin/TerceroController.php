@@ -23,9 +23,8 @@ class TerceroController extends Controller
         if ($request->ajax()) {
 
             $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ', tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre")
+            $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre")
             );
-
             return Datatables::of($query)->make(true);
         }
         return view('admin.terceros.index');

@@ -30,12 +30,12 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('terceros.index') ),
                 columns: [
                     { data: 'tercero_nit', name: 'tercero_nit' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'tercero_razonsocial', name: 'tercero_razonsocial'},
                     { data: 'tercero_nombre1', name: 'tercero_nombre1' },
                     { data: 'tercero_nombre2', name: 'tercero_nombre2' },
                     { data: 'tercero_apellido1', name: 'tercero_apellido1' },
-                    { data: 'tercero_apellido2', name: 'tercero_apellido2' },
-                    // { data: 'tercero_nombre', name: 'tercero_nombre' }
+                    { data: 'tercero_apellido2', name: 'tercero_apellido2' }
                 ],
 				buttons: [
 					{ 
@@ -49,14 +49,20 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
+                        width: '15%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('terceros.show', {terceros: full.id }) )  +'">' + data + '</a>';
                         }
+                    },
+                    {
+                        targets: 1,
+                        width: '85%',
+                        searchable: false
+                    },
+                    {
+                        targets: [2, 3, 4, 5, 6],
+                        visible: false
                     }
-                    // {
-                    //     targets: [2, 3, 4, 5, 6],
-                    //     visible: false
-                    // }
                 ]
 			});
         }

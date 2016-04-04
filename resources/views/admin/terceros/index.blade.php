@@ -12,6 +12,7 @@
 			        <thead>
 			            <tr>
 			                <th>Nit</th>
+			                <th>Nombre</th>
 			                <th>Razon Social</th>
 			                <th>Nombre1</th>
 			                <th>Nombre2</th>
