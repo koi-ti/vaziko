@@ -25,8 +25,8 @@ return [
         ],
 
         'regimen' => [
-            1 => 'Común', 
-            2 => 'Simplificado', 
+            1 => 'Simplificado', 
+            2 => 'Común', 
             3 => 'Especial'
         ],
 

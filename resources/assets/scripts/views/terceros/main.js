@@ -34,7 +34,8 @@ app || (app = {});
                     { data: 'tercero_nombre1', name: 'tercero_nombre1' },
                     { data: 'tercero_nombre2', name: 'tercero_nombre2' },
                     { data: 'tercero_apellido1', name: 'tercero_apellido1' },
-                    { data: 'tercero_apellido2', name: 'tercero_apellido2' }
+                    { data: 'tercero_apellido2', name: 'tercero_apellido2' },
+                    // { data: 'tercero_nombre', name: 'tercero_nombre' }
                 ],
 				buttons: [
 					{ 
@@ -52,6 +53,10 @@ app || (app = {});
                             return '<a href="'+ window.Misc.urlFull( Route.route('terceros.show', {terceros: full.id }) )  +'">' + data + '</a>';
                         }
                     }
+                    // {
+                    //     targets: [2, 3, 4, 5, 6],
+                    //     visible: false
+                    // }
                 ]
 			});
         }
