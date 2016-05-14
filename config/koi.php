@@ -101,5 +101,12 @@ return [
             'Vía' => 'VIA',
             'ZN' => 'Zona'
         ]  
+    ],
+
+    'contabilidad' => [
+        'naturaleza' => [
+            'D' => 'Débito', 
+            'C' => 'Crédito'
+        ],
     ]
 ];

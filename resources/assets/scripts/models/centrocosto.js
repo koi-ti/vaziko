@@ -1,5 +1,5 @@
 /**
-* Class ContactoModel extend of Backbone Model
+* Class CentroCostoModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.ContactoModel = Backbone.Model.extend({
+    app.CentroCostoModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('terceros.contactos.index') );
+            return window.Misc.urlFull( Route.route('centroscosto.index') );
         },
         idAttribute: 'id',
         defaults: {

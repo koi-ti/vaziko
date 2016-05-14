@@ -18,7 +18,13 @@ app || (app = {});
 
             'municipios(/)': 'getMunicipiosMain',        
             'departamentos(/)': 'getDepartamentosMain',        
-            'actividades(/)': 'getActividadesMain',        
+            'actividades(/)': 'getActividadesMain',   
+
+            // Contabilidad
+            'plancuentas(/)': 'getPlanCuentasMain',             
+            'centroscosto(/)': 'getCentrosCostoMain',  
+            'centroscosto/create(/)': 'getCentrosCostoCreate',  
+            'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
         },
 
         /**
@@ -27,6 +33,7 @@ app || (app = {});
         initialize : function ( opts ){
             // Initialize resources
             this.componentAddressView = new app.ComponentAddressView();
+            this.componentCreateResourceView = new app.ComponentCreateResourceView();
       	},
 
         /**
@@ -136,6 +143,61 @@ app || (app = {});
             }
 
             this.mainActividadView = new app.MainActividadView( );
+        },
+
+        /**
+        * show view main plan de cuentas
+        */
+        getPlanCuentasMain: function () {
+
+            if ( this.mainPlanCuentasView instanceof Backbone.View ){
+                this.mainPlanCuentasView.stopListening();
+                this.mainPlanCuentasView.undelegateEvents();
+            }
+
+            this.mainPlanCuentasView = new app.MainPlanCuentasView( );
+        },
+
+        /**
+        * show view main centros de costo
+        */
+        getCentrosCostoMain: function () {
+
+            if ( this.mainCentrosCostoView instanceof Backbone.View ){
+                this.mainCentrosCostoView.stopListening();
+                this.mainCentrosCostoView.undelegateEvents();
+            }
+
+            this.mainCentrosCostoView = new app.MainCentrosCostoView( );
+        },
+
+        /**
+        * show view create centro de costo
+        */
+        getCentrosCostoCreate: function () {
+            this.centroCostoModel = new app.CentroCostoModel();
+
+            if ( this.createCentroCostoView instanceof Backbone.View ){
+                this.createCentroCostoView.stopListening();
+                this.createCentroCostoView.undelegateEvents();
+            }
+
+            this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel, parameters: { callback: 'toShow' } });
+        },
+
+        /**
+        * show view edit centro de costo
+        */
+        getCentrosCostoEdit: function (centrocosto) {
+            this.centroCostoModel = new app.CentroCostoModel();
+            this.centroCostoModel.set({'id': centrocosto}, {'silent':true});
+
+            if ( this.createCentroCostoView instanceof Backbone.View ){
+                this.createCentroCostoView.stopListening();
+                this.createCentroCostoView.undelegateEvents();
+            }
+
+            this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel });
         }
     }) );
 

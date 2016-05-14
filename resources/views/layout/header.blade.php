@@ -106,6 +106,34 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- Contabilidad --}}
+            <li class="treeview {{ in_array(Request::segment(1), ['plancuentas', 'centroscosto']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
+                </a>
+                
+                {{-- Terceros --}}
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'asientos' ? 'active' : '' }}">
+                        <a href="#"><i class="fa fa-file-text-o"></i> Asientos contables</a>
+                    </li>
+                   
+                    <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto']) ? 'active' : '' }}">
+                        <a href="#">
+                            <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
+                        </a>
+                        <ul class="treeview-menu">
+                            <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
+                                <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
+                            </li>
+                            <li class="{{ Request::segment(1) == 'centroscosto' ? 'active' : '' }}">
+                                <a href="{{ route('centroscosto.index') }}"><i class="fa fa-circle-o"></i> Centros de costo</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </section>
   </aside>

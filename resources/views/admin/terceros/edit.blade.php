@@ -25,4 +25,34 @@
 
 		{!! Form::close() !!}
 	</div>
+
+    <div class="row">
+    	<div class="form-group col-md-12">
+			<div class="nav-tabs-custom">
+				<ul class="nav nav-tabs">
+					<li class="active"><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
+					<li><a href="#tab_usuario" data-toggle="tab">Usuario</a></li>
+				</ul>
+				<div class="tab-content">
+					
+					{{-- Tab contactos --}}
+					<div class="tab-pane active" id="tab_contactos">
+						<div class="box">
+							<div class="box-body table-responsive no-padding">
+								<table id="browse-contact-list" class="table table-hover">	
+									{{-- Render contact list --}}						
+								</table>
+							</div>
+						</div>
+					</div>
+					
+					{{-- Tab usuario --}}
+					<div class="tab-pane" id="tab_usuario">
+						Cuenta de usuario
+					</div>
+				
+				</div>
+			</div>
+		</div>
+    </div>
 @stop

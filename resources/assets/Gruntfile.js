@@ -15,10 +15,10 @@ module.exports = function(grunt) {
 			options: {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
 				compress: {
-					drop_console: true
+					drop_console: false
 				},
-				beautify: false,
-				mangle: true
+				beautify: true,
+				mangle: false
 			},
 			app: {
 				files: {

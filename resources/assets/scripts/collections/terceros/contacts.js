@@ -12,9 +12,9 @@ app || (app = {});
     app.ContactsList = Backbone.Collection.extend({
 
         url: function() {
-            return window.Misc.urlFull( Route.route('terceros.index') );
+            return window.Misc.urlFull( Route.route('terceros.contactos.index') );
         },
-        model: app.AttachmentModel,
+        model: app.ContactoModel,
 
         /**
         * Constructor Method

@@ -165,29 +165,6 @@
 			{!! Form::text('tercero_cual', null, ['id' => 'tercero_cual', 'placeholder' => '¿Cual?', 'class' => 'form-control input-sm input-toupper']) !!}
 		</div>
     </div>
-
-{{--     <div class="row">
-    	<div class="form-group col-md-12">
-			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
-				</ul>
-				<div class="tab-content">
-					
-					<div class="row">
-						<div class="tab-pane active" id="tab_contactos">
-							<div id="content-contact-list">
-								<ul id="browse-contact-list"> --}}
-									{{-- Render contact list --}}
-								{{-- </ul>
-							</div>
-						</div>
-					</div>
-
-				</div>
-			</div>
-		</div>
-    </div> --}}
 </div>	
 
 {{-- templates --}}

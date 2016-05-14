@@ -38,6 +38,15 @@ app || (app = {});
             this.$persona = this.$('#tercero_persona');
             this.$retecree = this.$('#tercero_retecree');
 
+            // Model exist
+            if( this.model.id !== undefined ) {
+
+                this.contactsList = new app.ContactsList();
+
+                // Reference views
+                this.referenceViews();
+            }    
+
             // Events
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -49,6 +58,23 @@ app || (app = {});
         render: function(){
 
             this.$persona.change();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+        
+            // Contact list
+            this.contactsListView = new app.ContactsListView( {
+                collection: this.contactsList,
+                parameters: {
+                    dataFilter: {
+                        'tercero_id': this.model.get('id')
+                    }
+               }
+            });
+
         },
 
         nitChanged: function(e) {
