@@ -55,7 +55,10 @@ class PlanCuentasController extends Controller
                 try {
                     // Cuenta
                     $plancuenta->fill($data);
+                    $plancuenta->fillBoolean($data);
+                    $plancuenta->setNivelesCuenta();
                     $plancuenta->save();
+
 
                     // Commit Transaction
                     DB::commit();
@@ -120,6 +123,7 @@ class PlanCuentasController extends Controller
                     // Cuenta
                     $plancuenta->fill($data);
                     $plancuenta->fillBoolean($data);
+                    $plancuenta->setNivelesCuenta();
                     $plancuenta->save();
 
                     // Commit Transaction

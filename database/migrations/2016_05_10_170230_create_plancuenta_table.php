@@ -25,12 +25,14 @@ class CreatePlancuentaTable extends Migration
             $table->string('plancuentas_tipo', 1);
             $table->double('plancuentas_tasa')->nullable();
             
-            $table->integer('plancuentas_nivel1');
-            $table->integer('plancuentas_nivel2');
-            $table->integer('plancuentas_nivel3');
-            $table->integer('plancuentas_nivel4');
-            $table->integer('plancuentas_nivel5');
-            $table->integer('plancuentas_nivel6');
+            $table->integer('plancuentas_nivel1')->default(0);
+            $table->integer('plancuentas_nivel2')->default(0);
+            $table->integer('plancuentas_nivel3')->default(0);
+            $table->integer('plancuentas_nivel4')->default(0);
+            $table->integer('plancuentas_nivel5')->default(0);
+            $table->integer('plancuentas_nivel6')->default(0);
+            $table->integer('plancuentas_nivel7')->default(0);
+            $table->integer('plancuentas_nivel8')->default(0);
 
             $table->foreign('plancuentas_centro')->references('id')->on('koi_centrocosto')->onDelete('restrict');
         });
