@@ -16,7 +16,14 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-        	
+            'centrocosto_codigo': '',   
+        	'centrocosto_centro': '',	
+            'centrocosto_nombre': '',   
+            'centrocosto_descripcion1': '',   
+            'centrocosto_descripcion2': '',
+            'centrocosto_estructura': 'N',
+            'centrocosto_orden': false,
+        	'centrocosto_activo': false
         }
     });
 

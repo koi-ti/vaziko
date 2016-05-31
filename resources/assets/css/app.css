@@ -52,3 +52,7 @@ label {
 .icheckbox_minimal-green.checked.disabled {
   background-position: -40px 0;
 }
+.list-unstyled {
+  color: #dd4b39;
+  font-size: 12px;
+}

@@ -30,7 +30,9 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('plancuentas.index') ),
                 columns: [
                     { data: 'plancuentas_cuenta', name: 'plancuentas_cuenta' },
+                    { data: 'plancuentas_nivel', name: 'plancuentas_nivel' },
                     { data: 'plancuentas_nombre', name: 'plancuentas_nombre' },
+                    { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' },
                     { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' }
                 ],
 				buttons: [
@@ -50,15 +52,24 @@ app || (app = {});
                             return '<a href="'+ window.Misc.urlFull( Route.route('plancuentas.show', {plancuentas: full.id }) )  +'">' + data + '</a>';
                         }
                     },
-   //                  {
-   //                      targets: 1,
-   //                      width: '85%',
-   //                      searchable: false
-   //                  },
-   //                  {
-   //                      targets: [2, 3, 4, 5, 6],
-   //                      visible: false
-   //                  }
+                    {
+                        targets: 1,
+                        width: '10%'                    
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return data == 'D' ? 'Débito' : 'Crédito';
+                        }                     
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return data ? 'Si' : 'No';
+                        }                    
+                    }
                 ]
 			});
         }

@@ -10,9 +10,9 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-use Validator;
-
 use App\Models\BaseModel;
+
+use Validator, DB;
 
 class Tercero extends BaseModel implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -32,14 +32,14 @@ class Tercero extends BaseModel implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'username', 'password'];
+    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'username', 'password'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['tercero_activo', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_otro'];
+    protected $boolean = ['tercero_activo', 'tercero_responsable_iva', 'tercero_autoretenedor_cree', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_otro'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -75,6 +75,17 @@ class Tercero extends BaseModel implements AuthenticatableContract,
         return false;
     }
 
+    public static function getTercero($id)
+    {
+        $query = Tercero::query();
+        $query->select('koi_tercero.*', 'actividad_nombre', 'actividad_tarifa', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"));
+        $query->leftJoin('koi_actividad', 'tercero_actividad', '=', 'koi_actividad.id');
+        $query->leftJoin('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
+        $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+        $query->where('koi_tercero.id', $id);
+        return $query->first();
+    }
+
     public function getName()
     {
         return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_apellido1']);
@@ -103,5 +114,10 @@ class Tercero extends BaseModel implements AuthenticatableContract,
     public function setTerceroRazonsocialAttribute($name)
     {
         $this->attributes['tercero_razonsocial'] = strtoupper($name);
+    }
+
+    public function setTerceroDireccionAttribute($name)
+    {
+        $this->attributes['tercero_direccion'] = strtoupper($name);
     }
 }

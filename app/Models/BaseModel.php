@@ -41,15 +41,8 @@ class BaseModel extends Model
 	*/
 	public function fillBoolean(array $attributes)
 	{
-        if (count($this->boolean) > 0 && ! static::$unguarded) {
-            $attributes = array_intersect_key($attributes, array_flip($this->boolean));
-        }
-
-		foreach ($attributes as $key => $value) {
-            $key = $this->removeTableFromKey($key);
-
-            // The developers may choose to place some attributes in the "boolean"
-        	$this->setAttribute($key, $value ? true : false);
+		foreach ($this->boolean as $value) {
+        	$this->setAttribute($value, (isset($attributes[$value]) && $value == trim($attributes[$value])) ? true : false);
         }
 	}
 }

@@ -12,7 +12,11 @@
 			        <thead>
 			            <tr>
 			                <th>Código</th>
+			                <th>Centro</th>
 			                <th>Nombre</th>
+			                <th>Estructura</th>
+			                <th>Orden</th>
+			                <th>Activo</th>
 			            </tr>
 			        </thead>
 			    </table>

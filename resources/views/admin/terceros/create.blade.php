@@ -7,7 +7,7 @@
 
 @section('module')
 	<div class="box box-success" id="tercero-create">
-		{!! Form::open(['route' => 'terceros.store', 'id' => 'form-create-tercero', 'data-toggle' => 'validator']) !!}
+		{!! Form::open(['route' => 'terceros.store', 'id' => 'form-create-tercero', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 			
 	        <div class="box-header with-border">
 	        	<div class="row">
@@ -20,8 +20,9 @@
 				</div>
 			</div>
 
-			{{-- Include form tercero --}}
-			@include('admin.terceros.form')
+			<div class="box-body" id="render-form-tercero">
+				{{-- Render form tercero --}}
+			</div>
 
 		{!! Form::close() !!}
 	</div>

@@ -23,7 +23,7 @@ class CreatePlancuentaTable extends Migration
             $table->integer('plancuentas_centro')->unsigned()->nullable();
             $table->boolean('plancuentas_tercero')->default(false);
             $table->string('plancuentas_tipo', 1);
-            $table->float('plancuentas_tasa')->nullable();
+            $table->double('plancuentas_tasa')->nullable();
             
             $table->integer('plancuentas_nivel1');
             $table->integer('plancuentas_nivel2');

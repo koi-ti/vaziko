@@ -49,9 +49,6 @@ app || (app = {});
         * @param Object contactModel Model instance
         */
         addOne: function (contactModel) {
-
-        	console.log('contactModel', contactModel)
-
             var view = new app.ContactItemView( { model: contactModel } );
             this.$el.append( view.render().el );
         },

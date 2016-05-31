@@ -16,8 +16,14 @@ class CreateCentrocostoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('centrocosto_codigo', 20)->unique();
+            $table->string('centrocosto_codigo', 4)->unique();
+            $table->string('centrocosto_centro', 20)->unique();
             $table->string('centrocosto_nombre', 200);
+            $table->string('centrocosto_descripcion1', 200)->nullable();
+            $table->string('centrocosto_descripcion2', 200)->nullable();
+            $table->string('centrocosto_estructura', 1)->comment = 'S - Tiene subniveles, N - No tiene subniveles';
+            $table->boolean('centrocosto_orden')->default(false);   
+            $table->boolean('centrocosto_activo')->default(false);   
         });
     }
 

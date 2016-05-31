@@ -30,9 +30,7 @@ class CreateTerceroTable extends Migration
             $table->string('tercero_direccion', 200)->nullable();
             $table->string('tercero_postal', 100)->nullable();
             $table->integer('tercero_municipio')->unsigned()->nullable();
-
             $table->string('tercero_email', 200)->nullable();
-            $table->string('tercero_representante', 200)->nullable();
 
             $table->string('tercero_telefono1', 15)->nullable();
             $table->string('tercero_telefono2', 15)->nullable();
@@ -40,8 +38,12 @@ class CreateTerceroTable extends Migration
             $table->string('tercero_celular', 13)->nullable();
 
             $table->integer('tercero_actividad')->unsigned()->nullable();
+            $table->string('tercero_cc_representante', 15)->nullable();
+            $table->string('tercero_representante', 200)->nullable();
         
             $table->boolean('tercero_activo')->default(false);                            
+            $table->boolean('tercero_responsable_iva')->default(false);                            
+            $table->boolean('tercero_autoretenedor_cree')->default(false);                            
             $table->boolean('tercero_socio')->default(false);                            
             $table->boolean('tercero_cliente')->default(false);                            
             $table->boolean('tercero_acreedor')->default(false);                            

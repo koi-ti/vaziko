@@ -20,15 +20,45 @@
 
 		<div class="box-body">
 			<div class="row">	
-				<div class="form-group col-md-3">
+				<div class="form-group col-md-2">
 					<label class="control-label">Código</label>
 					<div>{{ $centrocosto->centrocosto_codigo }}</div>
 				</div>
-			</div>
-			<div class="row">	
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-3">
+					<label class="control-label">Centro</label>
+					<div>{{ $centrocosto->centrocosto_centro }}</div>
+				</div>
+				<div class="form-group col-md-7">
 					<label class="control-label">Nombre</label>
 					<div>{{ $centrocosto->centrocosto_nombre }}</div>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="form-group col-md-12">
+					<label class="control-label">Descripcion 1</label>
+					<div>{{ $centrocosto->centrocosto_descripcion1 }}</div>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="form-group col-md-12">
+					<label class="control-label">Descripcion 2</label>
+					<div>{{ $centrocosto->centrocosto_descripcion2 }}</div>
+				</div>
+			</div>
+			<div class="row">	
+				<div class="form-group col-md-2 col-xs-4 col-sm-4">
+					<label class="control-label">Estructura</label>
+					<div>{{ $centrocosto->centrocosto_estructura ? 'Si' : 'No' }}</div>
+				</div>
+				<div class="form-group col-md-2 col-xs-4 col-sm-4">
+					<br><label class="checkbox-inline" for="centrocosto_orden">
+						<input type="checkbox" id="centrocosto_orden" name="centrocosto_orden" value="centrocosto_orden" disabled {{ $centrocosto->centrocosto_orden ? 'checked': '' }}> Orden
+					</label>
+				</div>
+				<div class="form-group col-md-2 col-xs-4 col-sm-4">
+					<br><label class="checkbox-inline" for="centrocosto_activo">
+						<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" disabled {{ $centrocosto->centrocosto_activo ? 'checked': '' }}> Activo
+					</label>
 				</div>
 			</div>
 		</div>

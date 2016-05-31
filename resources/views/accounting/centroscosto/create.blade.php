@@ -7,8 +7,7 @@
 
 @section('module')
 	<div class="box box-success" id="centrocosto-create">
-		{!! Form::open(['route' => 'centroscosto.store', 'id' => 'form-create-centrocosto', 'data-toggle' => 'validator']) !!}
-			
+		{!! Form::open(['id' => 'form-centrocosto', 'data-toggle' => 'validator']) !!}
 	        <div class="box-header with-border">
 	        	<div class="row">
 					<div class="col-md-2 col-sm-6 col-xs-6 text-left">
@@ -20,9 +19,9 @@
 				</div>
 			</div>
 
-			{{-- Include form centrocosto --}}
-			@include('accounting.centroscosto.form')
-
+			<div class="box-body" id="render-form-centrocosto">
+				{{-- Render form centrocosto --}}
+			</div>
 		{!! Form::close() !!}
 	</div>
 @stop

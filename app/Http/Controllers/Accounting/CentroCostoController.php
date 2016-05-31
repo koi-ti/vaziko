@@ -22,7 +22,6 @@ class CentroCostoController extends Controller
     {
         if ($request->ajax()) {
             $query = CentroCosto::query();
-            $query->select('id', 'centrocosto_codigo', 'centrocosto_nombre');
             return Datatables::of($query)->make(true);
         }
         return view('accounting.centroscosto.index');
@@ -55,11 +54,12 @@ class CentroCostoController extends Controller
                 try {
                     // Centro costo
                     $centrocosto->fill($data);
+                    $centrocosto->fillBoolean($data);
                     $centrocosto->save();
 
                     // Commit Transaction
-                    // DB::commit();
-                    DB::rollback();
+                    DB::commit();
+                    // DB::rollback();
                     return response()->json(['success' => true, 'id' => $centrocosto->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -78,9 +78,12 @@ class CentroCostoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
         $centrocosto = CentroCosto::findOrFail($id);
+        if ($request->ajax()) {
+            return response()->json($centrocosto);    
+        }        
         return view('accounting.centroscosto.show', ['centrocosto' => $centrocosto]);
     }
 
@@ -114,6 +117,7 @@ class CentroCostoController extends Controller
                 try {
                     // Centro costo
                     $centrocosto->fill($data);
+                    $centrocosto->fillBoolean($data);
                     $centrocosto->save();
 
                     // Commit Transaction

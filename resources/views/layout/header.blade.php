@@ -63,13 +63,15 @@
             </li>
             
             {{-- Administracion --}}
-            <li class="treeview {{ in_array(Request::segment(1), ['terceros', 'municipios', 'departamentos', 'actividades']) ? 'active' : '' }}">
+            <li class="treeview {{ in_array(Request::segment(1), ['empresa', 'terceros', 'municipios', 'departamentos', 'actividades']) ? 'active' : '' }}">
                 <a href="{{ route('dashboard') }}">
                     <i class="fa fa-cog"></i> <span>Administración</span><i class="fa fa-angle-left pull-right"></i>
                 </a>
                 
-                {{-- Terceros --}}
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'empresa' ? 'active' : '' }}">
+                        <a href="{{ route('empresa.index') }}"><i class="fa fa-building"></i> Empresa</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
                         <a href="{{ route('terceros.index') }}"><i class="fa fa-users"></i> Terceros</a>
                     </li>

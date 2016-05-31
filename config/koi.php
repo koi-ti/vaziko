@@ -33,6 +33,12 @@ return [
         'persona' => [
             'N' => 'Natural',
             'J' => 'Jurídica'
+        ],
+
+        'niif' => [
+            '1' => 'Plena',
+            '2' => 'Pymes',
+            '3' => 'Micro pymes'
         ]
     ],
 
@@ -104,9 +110,17 @@ return [
     ],
 
     'contabilidad' => [
-        'naturaleza' => [
-            'D' => 'Débito', 
-            'C' => 'Crédito'
-        ],
+        'plancuentas' => [ 
+            'naturaleza' => [
+                'D' => 'Débito', 
+                'C' => 'Crédito'
+            ],
+            'tipo' => [
+                'N' => 'Ninguno', 
+                'I' => 'Inventario',
+                'C' => 'Cartera',
+                'P' => 'Cuentas por pagar'
+            ]
+        ]
     ]
 ];

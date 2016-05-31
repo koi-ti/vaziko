@@ -12,8 +12,10 @@
 			        <thead>
 			            <tr>
 			                <th>Cuenta</th>
+			                <th>Nivel</th>
 			                <th>Nombre</th>
 			                <th>Naturaleza</th>
+			                <th>Tercero</th>
 			            </tr>
 			        </thead>
 			    </table>

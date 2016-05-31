@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Datatables;
+use DB, Log, Datatables;
 
-use App\Models\Accounting\PlanCuenta;
+use App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto;
 
 class PlanCuentasController extends Controller
 {
@@ -22,7 +22,7 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $query = PlanCuenta::query();
-            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nombre', 'plancuentas_naturaleza');
+            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza');
             return Datatables::of($query)->make(true);
         }
         return view('accounting.plancuentas.index');
@@ -46,7 +46,29 @@ class PlanCuentasController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $plancuenta = new PlanCuenta;
+            if ($plancuenta->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Cuenta
+                    $plancuenta->fill($data);
+                    $plancuenta->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $plancuenta->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $plancuenta->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -55,9 +77,16 @@ class PlanCuentasController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $plancuenta = PlanCuenta::getCuenta($id);
+        if($plancuenta instanceof PlanCuenta){
+            if ($request->ajax()) {
+                return response()->json($plancuenta);    
+            }        
+            return view('accounting.plancuentas.show', ['plancuenta' => $plancuenta]);
+        }
+        abort(404);
     }
 
     /**
@@ -68,7 +97,8 @@ class PlanCuentasController extends Controller
      */
     public function edit($id)
     {
-        //
+        $plancuenta = PlanCuenta::findOrFail($id);
+        return view('accounting.plancuentas.edit', ['plancuenta' => $plancuenta]);
     }
 
     /**
@@ -80,7 +110,30 @@ class PlanCuentasController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $plancuenta = PlanCuenta::findOrFail($id);
+            if ($plancuenta->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Cuenta
+                    $plancuenta->fill($data);
+                    $plancuenta->fillBoolean($data);
+                    $plancuenta->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $plancuenta->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $plancuenta->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -92,5 +145,26 @@ class PlanCuentasController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Display a level of account.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function nivel(Request $request)
+    {
+        $nivel = '';
+        switch (strlen($request->plancuentas_cuenta)) {
+            case '1': $nivel = 1; break;
+            case '2': $nivel = 2; break;
+            case '4': $nivel = 3; break;
+            case '6': $nivel = 4; break;
+            case '8': $nivel = 5; break;
+            case '11': $nivel = 6; break;
+            case '13': $nivel = 7; break;
+            case '15': $nivel = 8; break;
+        }
+        return response()->json(['success' => true, 'nivel' => $nivel]);
     }
 }

@@ -80,12 +80,13 @@ class TerceroController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        $tercero = Tercero::findOrFail($id);
-        $actividad = Actividad::findOrFail($tercero->tercero_actividad);
-
-        return view('admin.terceros.show', ['tercero' => $tercero, 'actividad' => $actividad]);
+        $tercero = Tercero::getTercero($id);
+        if ($request->ajax()) {
+            return response()->json($tercero);    
+        } 
+        return view('admin.terceros.show', ['tercero' => $tercero]);
     }
 
     /**
@@ -184,14 +185,7 @@ class TerceroController extends Controller
             $dv = (11-$b);
         }
 
-        $persona = '';
-        $documento = '';
-        if(($primer==8||$primer==9)&&($longitud==9)) {
-            $persona = 2;
-            $documento = 'NI';
-        }
-
-        return response()->json(['success' => true, 'dv' => $dv, 'persona' => $persona, 'documento' => $documento]);
+        return response()->json(['success' => true, 'dv' => $dv]);
     }
 
     /**

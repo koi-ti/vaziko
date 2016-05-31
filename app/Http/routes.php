@@ -35,8 +35,8 @@ Route::group(['middleware' => 'auth'], function()
 	
 	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
-
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
+	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
 	
 	Route::group(['prefix' => 'terceros'], function()
 	{
@@ -47,6 +47,10 @@ Route::group(['middleware' => 'auth'], function()
 	});	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
+	Route::group(['prefix' => 'plancuentas'], function()
+	{
+		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
+	});
 	Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 });

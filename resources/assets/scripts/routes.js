@@ -14,7 +14,10 @@ app || (app = {});
             'login(/)': 'getLogin',        
             'terceros(/)': 'getTercerosMain',        
             'terceros/create(/)': 'getTercerosCreate',        
+            'terceros/:tercero(/)': 'getTercerosShow',
             'terceros/:tercero/edit(/)': 'getTercerosEdit',
+
+            'empresa(/)': 'getEmpresaEdit',        
 
             'municipios(/)': 'getMunicipiosMain',        
             'departamentos(/)': 'getDepartamentosMain',        
@@ -22,8 +25,11 @@ app || (app = {});
 
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',             
+            'plancuentas/create(/)': 'getPlanCuentasCreate', 
+            'plancuentas/:plancuenta/edit(/)': 'getPlanCuentasEdit',
+
             'centroscosto(/)': 'getCentrosCostoMain',  
-            'centroscosto/create(/)': 'getCentrosCostoCreate',  
+            'centroscosto/create(/)': 'getCentrosCostoCreate', 
             'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
         },
 
@@ -86,8 +92,23 @@ app || (app = {});
                 this.createTerceroView.undelegateEvents();
             }
 
-            this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel, parameters: { callback: 'toEdit' } });
+            this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel });
             this.createTerceroView.render();
+        },
+
+        /**
+        * show view show tercero
+        */
+        getTercerosShow: function (tercero) {
+            this.terceroModel = new app.TerceroModel();
+            this.terceroModel.set({'id': tercero}, {'silent':true});
+
+            if ( this.showTerceroView instanceof Backbone.View ){
+                this.showTerceroView.stopListening();
+                this.showTerceroView.undelegateEvents();
+            }
+
+            this.showTerceroView = new app.ShowTerceroView({ model: this.terceroModel });
         },
 
         /**
@@ -103,7 +124,22 @@ app || (app = {});
             }
 
             this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel });
-            this.createTerceroView.render();
+            this.terceroModel.fetch();
+        },
+
+        /**
+        * show view edit empresa
+        */
+        getEmpresaEdit: function () {
+            this.empresaModel = new app.EmpresaModel();
+
+            if ( this.createEmpresaView instanceof Backbone.View ){
+                this.createEmpresaView.stopListening();
+                this.createEmpresaView.undelegateEvents();
+            }
+
+            this.createEmpresaView = new app.CreateEmpresaView({ model: this.empresaModel });
+            this.empresaModel.fetch();
         },
 
         /**
@@ -159,6 +195,37 @@ app || (app = {});
         },
 
         /**
+        * show view create cuenta contable
+        */
+        getPlanCuentasCreate: function () {
+            this.planCuentaModel = new app.PlanCuentaModel();
+
+            if ( this.createPlanCuentaView instanceof Backbone.View ){
+                this.createPlanCuentaView.stopListening();
+                this.createPlanCuentaView.undelegateEvents();
+            }
+
+            this.createPlanCuentaView = new app.CreatePlanCuentaView({ model: this.planCuentaModel });
+            this.createPlanCuentaView.render();
+        },
+
+        /**
+        * show view edit cuenta contable
+        */
+        getPlanCuentasEdit: function (plancuenta) {
+            this.planCuentaModel = new app.PlanCuentaModel();
+            this.planCuentaModel.set({'id': plancuenta}, {silent: true});
+
+            if ( this.createPlanCuentaView instanceof Backbone.View ){
+                this.createPlanCuentaView.stopListening();
+                this.createPlanCuentaView.undelegateEvents();
+            }
+
+            this.createPlanCuentaView = new app.CreatePlanCuentaView({ model: this.planCuentaModel });
+            this.planCuentaModel.fetch();
+        },
+
+        /**
         * show view main centros de costo
         */
         getCentrosCostoMain: function () {
@@ -183,6 +250,7 @@ app || (app = {});
             }
 
             this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel, parameters: { callback: 'toShow' } });
+            this.createCentroCostoView.render();
         },
 
         /**
@@ -190,14 +258,15 @@ app || (app = {});
         */
         getCentrosCostoEdit: function (centrocosto) {
             this.centroCostoModel = new app.CentroCostoModel();
-            this.centroCostoModel.set({'id': centrocosto}, {'silent':true});
+            this.centroCostoModel.set({'id': centrocosto}, {silent: true});
 
             if ( this.createCentroCostoView instanceof Backbone.View ){
                 this.createCentroCostoView.stopListening();
                 this.createCentroCostoView.undelegateEvents();
             }
 
-            this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel });
+            this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel, parameters: { callback: 'toShow' } });
+            this.centroCostoModel.fetch();
         }
     }) );
 

@@ -1,5 +1,5 @@
 /**
-* Class CreateTerceroView  of Backbone Router
+* Class CreateEmpresaView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,27 +9,25 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateTerceroView = Backbone.View.extend({
+    app.CreateEmpresaView = Backbone.View.extend({
 
-        el: '#tercero-create',
-        template: _.template( ($('#add-tercero-tpl').html() || '') ),
+        el: '#empresa-create',
+        template: _.template( ($('#add-company-tpl').html() || '') ),
         templateName: _.template( ($('#tercero-name-tpl').html() || '') ),
         events: {
             'change input#tercero_nit': 'nitChanged',
             'change select#tercero_persona': 'personaChanged',
             'change select#tercero_actividad': 'actividadChanged',
-            'submit #form-create-tercero': 'onStore'
+            'submit #form-create-empresa': 'onStore'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {      
-            
+        initialize : function() {                  
             // Attributes 
-            this.msgSuccess = 'Tercero guardado con exito!';
-            this.$wraperForm = this.$('#render-form-tercero');
-
+            this.$wraperForm = this.$('#render-form-empresa');
+            
             // Events
             this.listenTo( this.model, 'change:id', this.render );
             this.listenTo( this.model, 'change:tercero_persona', this.renderName );
@@ -41,19 +39,9 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
+
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-
-            // Model exist
-            if( this.model.id == undefined ) {
-                this.renderName();
-            }else{
-
-                this.contactsList = new app.ContactsList();
-
-                // Reference views
-                this.referenceViews();
-            }
 
             // Reference to fields
             this.$dv = this.$('#tercero_digito');
@@ -78,29 +66,14 @@ app || (app = {});
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper(); 
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+           	if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();  
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();  
 
-            if( typeof window.initComponent.initICheck == 'function' )
+       		if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck(); 
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Contact list
-            this.contactsListView = new app.ContactsListView( {
-                collection: this.contactsList,
-                parameters: {
-                    dataFilter: {
-                        'tercero_id': this.model.get('id')
-                    }
-               }
-            });
         },
 
         nitChanged: function(e) {
@@ -128,7 +101,7 @@ app || (app = {});
         },
 
         personaChanged: function(e) {
-            this.model.set({ tercero_persona: $(e.currentTarget).val() });
+        	this.model.set({ tercero_persona: $(e.currentTarget).val() });
         },
 
         actividadChanged: function(e) {
@@ -184,19 +157,19 @@ app || (app = {});
             window.Misc.removeSpinner( this.el );
 
             if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
+	            // response success or error
+	            var text = resp.success ? '' : resp.errors;
+	            if( _.isObject( resp.errors ) ) {
+	                text = window.Misc.parseErrors(resp.errors);
+	            }
 
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
+	            if( !resp.success ) {
+	                alertify.error(text);
+	                return;
+	            }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('terceros.show', { terceros: resp.id})) );
-            }
+                alertify.success('datos de empresa fueron actualizados con éxito.');
+	     	}
         }
     });
 

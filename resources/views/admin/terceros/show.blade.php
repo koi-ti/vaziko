@@ -71,19 +71,19 @@
 			</div>
 
 			<div class="row">
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-3">
 					<label class="control-label">Dirección</label>
 					<div>{{ $tercero->tercero_direccion }}</div>
 				</div>
 
 				<div class="form-group col-md-3">
+					<label class="control-label">Municipio</label>
+					<div>{{ $tercero->municipio_nombre }}</div>
+				</div>
+				
+				<div class="form-group col-md-3">
 					<label class="control-label">Email</label>
 					<div>{{ $tercero->tercero_email }}</div>
-				</div>
-
-				<div class="form-group col-md-3">
-					<label class="control-label">Representante Legal</label>
-					<div>{{ $tercero->tercero_representante }}</div>
 				</div>
 	        </div>
 
@@ -105,73 +105,149 @@
 
 				<div class="form-group col-md-3">
 					<label class="control-label">Celular</label>
-					<div><i class="fa fa-mobile"></i> {{ $tercero->tercero_fax }}</div>
+					<div><i class="fa fa-mobile"></i> {{ $tercero->tercero_celular }}</div>
 				</div>
 	        </div>
 
 	        <div class="row">
-	        	<div class="form-group col-md-10">
-	        		<label class="control-label">Actividad Económica</label>
-	        		<div>{{ $actividad->actividad_nombre }}</div>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		<label class="control-label">% Cree</label>
-	        		<div>{{ $actividad->actividad_tarifa }}</div>
-	        	</div>
-	        </div>
-	        
-	        <div class="row">
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_activo', 'socio', $tercero->tercero_activo, ['id' => 'tercero_activo', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_activo" class="control-label">Activo</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_socio', 'socio', $tercero->tercero_socio, ['id' => 'tercero_socio', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_socio" class="control-label">Socio</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_cliente', 'cliente', $tercero->tercero_cliente, ['id' => 'tercero_cliente', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_cliente" class="control-label">Cliente</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_acreedor', 'acreedor', $tercero->tercero_acreedor, ['id' => 'tercero_acreedor', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_acreedor" class="control-label">Acreedor</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_interno', 'interno', $tercero->tercero_interno, ['id' => 'tercero_interno', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_interno" class="control-label">Interno</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_mandatario', 'mandatario', $tercero->tercero_mandatario, ['id' => 'tercero_mandatario', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_mandatario" class="control-label">Mandatario</label>
-	        	</div>
-	        </div>
+				<div class="form-group col-md-6">
+					<label class="control-label">Representante Legal</label>
+					<div>{{ $tercero->tercero_representante }}</div>
+				</div>
 
-	        <div class="row">
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_empleado', 'empleado', $tercero->tercero_empleado, ['id' => 'tercero_empleado', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_empleado" class="control-label">Empleado</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_proveedor', 'proveedor', $tercero->tercero_proveedor, ['id' => 'tercero_proveedor', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_proveedor" class="control-label">Proveedor</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_extranjero', 'extranjero', $tercero->tercero_extranjero, ['id' => 'tercero_extranjero', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_extranjero" class="control-label">Extranjero</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_afiliado', 'afiliado', $tercero->tercero_afiliado, ['id' => 'tercero_afiliado', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_afiliado" class="control-label">Afiliado</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-	        		{!! Form::checkbox('tercero_otro', 'otro', $tercero->tercero_otro, ['id' => 'tercero_otro', 'class' => 'minimal', 'disabled' => 'disabled' ]) !!}
-	        		<label for="tercero_otro" class="control-label">Otro</label>
-	        	</div>
-	        	<div class="form-group col-md-2">
-					<div>{{ $tercero->tercero_cual }}</div>
+				<div class="form-group col-md-3">
+					<label class="control-label">Cédula</label>
+					<div>{{ $tercero->tercero_cc_representante }}</div>
 				</div>
 	        </div>
+
+		    <div class="row">
+		    	<div class="form-group col-md-12">
+					<div class="nav-tabs-custom">
+						<ul class="nav nav-tabs">
+							<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
+							<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
+						</ul>
+						<div class="tab-content">
+							
+							{{-- Tab contabilidad --}}
+							<div class="tab-pane active" id="tab_contabilidad">
+					        	<div class="row">
+						        	<div class="form-group col-md-10">
+						        		<label class="control-label">Actividad Económica</label>
+						        		<div>{{ $tercero->actividad_nombre }}</div>
+						        	</div>
+						        	<div class="form-group col-md-2">
+						        		<label class="control-label">% Cree</label>
+						        		<div>{{ $tercero->actividad_tarifa }}</div>
+						        	</div>
+						        </div>
+
+			        	        <div class="row">
+						        	<div class="form-group col-md-2">
+						        		<label class="checkbox-inline" for="tercero_activo">
+											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" disabled {{ $tercero->tercero_activo ? 'checked': '' }}> Activo
+										</label>
+						        	</div>
+
+    								<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_cliente">
+											<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente" disabled {{ $tercero->tercero_cliente ? 'checked': '' }}> Cliente
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_acreedor">
+											<input type="checkbox" id="tercero_acreedor" name="tercero_acreedor" value="tercero_acreedor" disabled {{ $tercero->tercero_acreedor ? 'checked': '' }}> Acreedor
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_interno">
+											<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" disabled {{ $tercero->tercero_interno ? 'checked': '' }}> Interno
+										</label>
+									</div>
+
+									<div class="form-group col-md-3">
+										<label class="checkbox-inline" for="tercero_responsable_iva">
+											<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" disabled {{ $tercero->tercero_responsable_iva ? 'checked': '' }}> Responsable de IVA
+										</label>
+									</div>
+						        </div>
+
+						        <div class="row">
+						        	<div class="form-group col-md-2">
+								    	<label class="checkbox-inline" for="tercero_empleado">
+											<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" disabled {{ $tercero->tercero_empleado ? 'checked': '' }}> Empleado
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_proveedor">
+											<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" disabled {{ $tercero->tercero_proveedor ? 'checked': '' }}> Proveedor
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_extranjero">
+											<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero" disabled {{ $tercero->tercero_extranjero ? 'checked': '' }}> Extranjero
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_afiliado">
+											<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" disabled {{ $tercero->tercero_afiliado ? 'checked': '' }}> Afiliado
+										</label>
+									</div>
+
+									<div class="form-group col-md-3">
+										<label class="checkbox-inline" for="tercero_autoretenedor_cree">
+											<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" disabled {{ $tercero->tercero_autoretenedor_cree ? 'checked': '' }}> Autorretenedor CREE
+										</label>
+									</div>
+						        </div>
+
+        						<div class="row">
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_socio">
+											<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" disabled {{ $tercero->tercero_socio ? 'checked': '' }}> Socio
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_mandatario">
+											<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" disabled {{ $tercero->tercero_mandatario ? 'checked': '' }}> Mandatario
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_otro">
+											<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" disabled {{ $tercero->tercero_otro ? 'checked': '' }}> Otro
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<div>{{ $tercero->tercero_cual }}</div>
+									</div>
+							    </div>
+							</div>
+							
+							{{-- Tab contactos --}}
+							<div class="tab-pane" id="tab_contactos">
+								<div class="box">
+									<div class="box-body table-responsive no-padding">
+										<table id="browse-contact-list" class="table table-hover">	
+											{{-- Render contact list --}}						
+										</table>
+									</div>
+								</div>
+							</div>
+						
+						</div>
+					</div>
+				</div>
+		    </div>
 		</div>
+
 	</div>
 @stop

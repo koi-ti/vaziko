@@ -30,7 +30,11 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('centroscosto.index') ),
                 columns: [
                     { data: 'centrocosto_codigo', name: 'centrocosto_codigo' },
-                    { data: 'centrocosto_nombre', name: 'centrocosto_nombre' }
+                    { data: 'centrocosto_centro', name: 'centrocosto_centro' },
+                    { data: 'centrocosto_nombre', name: 'centrocosto_nombre' },
+                    { data: 'centrocosto_estructura', name: 'centrocosto_estructura' },
+                    { data: 'centrocosto_orden', name: 'centrocosto_orden' },
+                    { data: 'centrocosto_activo', name: 'centrocosto_activo' }
                 ],
 				buttons: [
 					{ 
@@ -44,11 +48,25 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '25%',
+                        width: '10%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: full.id }) )  +'">' + data + '</a>';
                         }
-                    }
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return data == 'S' ? 'Si' : 'No';
+                        }
+                    },
+                    {
+                        targets: [4, 5],
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return data ? 'Si' : 'No';
+                        }
+                    },
                 ]
 			});
         }

@@ -12,8 +12,9 @@ app || (app = {});
     app.CreateCentroCostoView = Backbone.View.extend({
 
         el: '#centrocosto-create',
+        template: _.template( ($('#add-centrocosto-tpl').html() || '') ),
         events: {
-            'submit #form-create-centrocosto': 'onStore'
+            'submit #form-centrocosto': 'onStore'
         },
         parameters: {
             callback : ''
@@ -29,8 +30,10 @@ app || (app = {});
             
             // Attributes 
             this.msgSuccess = 'Centro de costo guardado con exito!'; 
+            this.$wraperForm = this.$('#render-form-centrocosto');
 
             // Events
+            this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
@@ -44,8 +47,31 @@ app || (app = {});
             
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );                
+                this.model.save( data, {patch: true, silent: true} );                
             }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function() {
+
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html( this.template(attributes) );
+
+            this.ready();  
+        },
+        
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck(); 
+
+            if( typeof window.initComponent.initToUpper == 'function' )
+                window.initComponent.initToUpper();
         },
 
         /**
@@ -61,33 +87,35 @@ app || (app = {});
         responseServer: function ( model, resp, opts ) {
             window.Misc.removeSpinner( this.el );
 
-            // response success or error
-            var text = resp.success ? '' : resp.errors;
-            if( _.isObject( resp.errors ) ) {
-                text = window.Misc.parseErrors(resp.errors);
-            }
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
 
-            if( !resp.success ) {
-                alertify.error(text);
-                return;
-            }
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
 
-            // stuffToDo Callback
-            var _this = this,
-                stuffToDo = {
-                    'toShow' : function() {
-                        window.Misc.successRedirect(_this.msgSuccess, window.Misc.urlFull( Route.route('centroscosto.show', { centroscosto: resp.id})) );            
-                    },
+                // stuffToDo Callback
+                var _this = this,
+                    stuffToDo = {
+                        'toShow' : function() {
+                            window.Misc.redirect( window.Misc.urlFull( Route.route('centroscosto.show', { centroscosto: resp.id})) );            
+                        },
 
-                    'default' : function() {
-                        alertify.success(_this.msgSuccess);
-                    }
-                };
+                        'default' : function() {
+                            alertify.success(_this.msgSuccess);
+                        }
+                    };
 
-            if (stuffToDo[this.parameters.callback]) {
-                stuffToDo[this.parameters.callback]();
-            } else {
-                stuffToDo['default']();
+                if (stuffToDo[this.parameters.callback]) {
+                    stuffToDo[this.parameters.callback]();
+                } else {
+                    stuffToDo['default']();
+                }
             }
         }
     });
