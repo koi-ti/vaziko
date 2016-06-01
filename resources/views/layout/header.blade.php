@@ -110,7 +110,7 @@
             </li>
 
             {{-- Contabilidad --}}
-            <li class="treeview {{ in_array(Request::segment(1), ['plancuentas', 'centroscosto']) ? 'active' : '' }}">
+            <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -118,7 +118,7 @@
                 {{-- Terceros --}}
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'asientos' ? 'active' : '' }}">
-                        <a href="#"><i class="fa fa-file-text-o"></i> Asientos contables</a>
+                        <a href="{{ route('asientos.index') }}"><i class="fa fa-file-text-o"></i> Asientos contables</a>
                     </li>
                    
                     <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto']) ? 'active' : '' }}">

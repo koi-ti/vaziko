@@ -31,6 +31,9 @@ app || (app = {});
             'centroscosto(/)': 'getCentrosCostoMain',  
             'centroscosto/create(/)': 'getCentrosCostoCreate', 
             'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
+
+            'asientos(/)': 'getAsientosMain',
+            'asientos/create(/)': 'getAsientosCreate'             
         },
 
         /**
@@ -40,6 +43,8 @@ app || (app = {});
             // Initialize resources
             this.componentAddressView = new app.ComponentAddressView();
             this.componentCreateResourceView = new app.ComponentCreateResourceView();
+            this.componentSearchTerceroView = new app.ComponentSearchTerceroView();
+            this.componentDocumentView = new app.ComponentDocumentView();
       	},
 
         /**
@@ -267,6 +272,34 @@ app || (app = {});
 
             this.createCentroCostoView = new app.CreateCentroCostoView({ model: this.centroCostoModel, parameters: { callback: 'toShow' } });
             this.centroCostoModel.fetch();
+        },
+
+        /**
+        * show view main asientos contables
+        */
+        getAsientosMain: function () {
+
+            if ( this.mainAsientosView instanceof Backbone.View ){
+                this.mainAsientosView.stopListening();
+                this.mainAsientosView.undelegateEvents();
+            }
+
+            this.mainAsientosView = new app.MainAsientosView( );
+        },
+
+        /**
+        * show view create asiento contable
+        */
+        getAsientosCreate: function () {
+            this.asientoModel = new app.AsientoModel();
+
+            if ( this.createAsientoView instanceof Backbone.View ){
+                this.createAsientoView.stopListening();
+                this.createAsientoView.undelegateEvents();
+            }
+
+            this.createAsientoView = new app.CreateAsientoView({ model: this.asientoModel });
+            this.createAsientoView.render();
         }
     }) );
 

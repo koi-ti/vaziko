@@ -202,5 +202,20 @@ class TerceroController extends Controller
         }
         return response()->json(['success' => true, 'rcree' => $rcree]);
     }
-    
+
+    /**
+     * Search tercero.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('tercero_nit')) {
+            $tercero = Tercero::select('tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"))->where('tercero_nit', $request->tercero_nit)->first();
+            if($tercero instanceof Tercero) {
+                return response()->json(['success' => true, 'tercero_nombre' => $tercero->tercero_nombre]);
+            }
+        }
+        return response()->json(['success' => false]);
+    }
 }
