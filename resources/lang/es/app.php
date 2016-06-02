@@ -22,5 +22,6 @@ return [
     'save' => 'Guardar',
     'edit' => 'Editar',
     'comeback' => 'Regresar',
-    'cancel' => 'Cancelar'
+    'cancel' => 'Cancelar',
+    'add' => 'Agregar'
 ];

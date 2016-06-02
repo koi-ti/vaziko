@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\BaseModel;
 
-use Validator;
+use Validator, DB;
 
 class CentroCosto extends BaseModel
 {
@@ -70,7 +70,7 @@ class CentroCosto extends BaseModel
     public static function getCentrosCosto()
     {
         $query = CentroCosto::query();
-        $query->select('id', 'centrocosto_nombre');
+        $query->select('id', DB::raw("CONCAT(centrocosto_centro, ' - ', centrocosto_nombre) as centrocosto_nombre"));
         $query->orderby('centrocosto_nombre', 'asc');
         $collection = $query->lists('centrocosto_nombre', 'id');
 

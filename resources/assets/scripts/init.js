@@ -62,6 +62,16 @@ var app = app || {};
         */
         initInputMask: function () {
             $("[data-mask]").inputmask();
+            // $("[data-currency]").inputmask({ 
+            //     alias: 'numeric',
+            //     numericInput: true,
+            //     autoGroup: true,
+            //     digitsOptional: false,
+            //     digits: '2',
+            //     groupSeparator: ',',
+            //     digitsOptional: '$ ',
+            //     placeholder: '0'
+            // });
         },
 
         /**

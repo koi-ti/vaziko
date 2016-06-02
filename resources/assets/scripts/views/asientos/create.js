@@ -15,6 +15,7 @@ app || (app = {});
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
         events: {
             'change select#asiento1_documento': 'documentoChanged',
+            'click .submit-asiento': 'submitAsiento',
             'submit #form-asientos': 'onStore'
         },
 
@@ -38,6 +39,7 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
             
             this.$numero = this.$('#asiento1_numero');
+            this.$form = this.$('#form-asientos');
 
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
@@ -83,6 +85,13 @@ app || (app = {});
                     alertify.error(thrownError);
                 });
             }
+        },
+
+        /**
+        * Event submit Asiento
+        */
+        submitAsiento: function (e) {
+            this.$form.submit();
         },
 
         /**
