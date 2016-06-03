@@ -22,7 +22,7 @@ class CreateCentrocostoTable extends Migration
             $table->string('centrocosto_descripcion1', 200)->nullable();
             $table->string('centrocosto_descripcion2', 200)->nullable();
             $table->string('centrocosto_estructura', 1)->comment = 'S - Tiene subniveles, N - No tiene subniveles';
-            $table->boolean('centrocosto_orden')->default(false);   
+            $table->string('centrocosto_tipo', 1);   
             $table->boolean('centrocosto_activo')->default(false);   
         });
     }

@@ -136,6 +136,14 @@ return [
                 'C' => 'Cartera',
                 'P' => 'Cuentas por pagar'
             ]
+        ],
+
+        'centrocosto' => [ 
+            'tipo' => [
+                'N' => 'Ninguno', 
+                'O' => 'Orden',
+                'I' => 'Inventario'
+            ]
         ]
     ]
 ];

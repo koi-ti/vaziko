@@ -22,8 +22,8 @@ app || (app = {});
             'centrocosto_descripcion1': '',   
             'centrocosto_descripcion2': '',
             'centrocosto_estructura': 'N',
-            'centrocosto_orden': false,
-        	'centrocosto_activo': false
+            'centrocosto_tipo': 'N',
+        	'centrocosto_activo': true
         }
     });
 

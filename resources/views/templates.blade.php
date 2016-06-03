@@ -334,6 +334,19 @@
 		</div>
     </div>
 
+    <div class="row">
+		<div class="form-group col-md-12 col-sm-12 col-xs-12">
+			<label class="control-label">Tipo</label>
+			<div class="row">
+				@foreach(config('koi.contabilidad.centrocosto.tipo') as $key => $value)
+					<label class="radio-inline" for="centrocosto_tipo_{{ $key }}">
+						<input type="radio" id="centrocosto_tipo_{{ $key }}" name="centrocosto_tipo" value="{{ $key }}" <%- centrocosto_tipo == '{{ $key }}' ? 'checked': '' %> >{{ $value }}
+					</label>					
+				@endforeach
+			</div>	
+		</div>
+    </div>
+
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-4 col-sm-4">
 			<label for="centrocosto_estructura" class="control-label">Estructura</label>
@@ -342,16 +355,11 @@
 				<option value="S" <%- centrocosto_estructura == 'S' ? 'selected': ''%>>Si</option>
 			</select>
 		</div>
-		<div class="form-group col-md-2 col-xs-4 col-sm-4">
-			<br><label class="checkbox-inline" for="centrocosto_orden">
-				<input type="checkbox" id="centrocosto_orden" name="centrocosto_orden" value="centrocosto_orden" <%- centrocosto_orden ? 'checked': ''%>> Orden
-			</label>    
-		</div>		
-		<div class="form-group col-md-2 col-xs-4 col-sm-4">
+		<div class="form-group col-md-2 col-xs-8 col-sm-3">
 			<br><label class="checkbox-inline" for="centrocosto_activo">
 				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- centrocosto_activo ? 'checked': ''%>> Activo
 			</label>    
-		</div>
+		</div>		
     </div>
 </script>
 

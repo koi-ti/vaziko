@@ -15,7 +15,6 @@
 			                <th>Centro</th>
 			                <th>Nombre</th>
 			                <th>Estructura</th>
-			                <th>Orden</th>
 			                <th>Activo</th>
 			            </tr>
 			        </thead>

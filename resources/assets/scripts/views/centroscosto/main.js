@@ -33,7 +33,6 @@ app || (app = {});
                     { data: 'centrocosto_centro', name: 'centrocosto_centro' },
                     { data: 'centrocosto_nombre', name: 'centrocosto_nombre' },
                     { data: 'centrocosto_estructura', name: 'centrocosto_estructura' },
-                    { data: 'centrocosto_orden', name: 'centrocosto_orden' },
                     { data: 'centrocosto_activo', name: 'centrocosto_activo' }
                 ],
 				buttons: [
@@ -61,7 +60,7 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: [4, 5],
+                        targets: [4],
                         width: '10%',
                         render: function ( data, type, full, row ) {
                             return data ? 'Si' : 'No';

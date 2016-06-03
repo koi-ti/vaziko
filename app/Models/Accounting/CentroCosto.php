@@ -24,14 +24,14 @@ class CentroCosto extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['centrocosto_centro', 'centrocosto_codigo', 'centrocosto_nombre', 'centrocosto_descripcion1', 'centrocosto_descripcion2', 'centrocosto_estructura'];
+    protected $fillable = ['centrocosto_centro', 'centrocosto_codigo', 'centrocosto_nombre', 'centrocosto_tipo', 'centrocosto_descripcion1', 'centrocosto_descripcion2', 'centrocosto_estructura'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['centrocosto_orden', 'centrocosto_activo'];
+    protected $boolean = ['centrocosto_activo'];
 
     public function isValid($data)
     {
@@ -39,6 +39,7 @@ class CentroCosto extends BaseModel
             'centrocosto_codigo' => 'required|max:4|min:1|unique:koi_centrocosto',
             'centrocosto_centro' => 'required|max:20',
             'centrocosto_nombre' => 'required|max:200',
+            'centrocosto_tipo' => 'required|max:1',
             'centrocosto_descripcion1' => 'max:200',
             'centrocosto_descripcion2' => 'max:200'
         ];
