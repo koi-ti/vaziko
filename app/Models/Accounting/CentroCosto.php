@@ -36,7 +36,7 @@ class CentroCosto extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'centrocosto_codigo' => 'required|max:4|min:1',
+            'centrocosto_codigo' => 'required|max:4|min:1|unique_with:koi_centrocosto,centrocosto_centro',
             'centrocosto_centro' => 'required|max:20',
             'centrocosto_nombre' => 'required|max:200',
             'centrocosto_tipo' => 'required|max:1',

@@ -404,7 +404,7 @@
 	</div>
 
 	<div class="row">
-		<div class="form-group col-md-5 col-xs-10">
+		<div class="form-group col-md-6 col-xs-10">
 			<label for="plancuentas_centro" class="control-label">Centro de costo</label>
 			<select name="plancuentas_centro" id="plancuentas_centro" class="form-control select2-default-clear">
 				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto() as $key => $value)
