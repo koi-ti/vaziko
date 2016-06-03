@@ -9,7 +9,8 @@
         "laravel/framework": "5.1.*",
         "laravelcollective/html": "5.1.*",
         "lord/laroute" : "2.*",
-        "yajra/laravel-datatables-oracle": "^6.8"
+        "yajra/laravel-datatables-oracle": "^6.8",
+        "felixkiss/uniquewith-validator": "2.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
