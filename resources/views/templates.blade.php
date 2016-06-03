@@ -442,3 +442,14 @@
 		</div>
     </div>
 </script>
+
+<script type="text/template" id="add-asiento2-item-tpl">
+	<td><%- asiento2_cuenta %></td>
+    <td><%- plancuentas_nombre %></td>
+    <td><a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" target="_blank"><%- asiento2_beneficiario_nit %></a></td>
+    <td><%- centrocosto_nombre %></td>
+    <td class="text-right"><%- asiento2_base ? asiento2_base : 0 %></td>
+    <td class="text-right"><%- asiento2_debito ? asiento2_debito : 0 %></td>
+    <td class="text-right"><%- asiento2_credito ? asiento2_credito: 0 %></td>
+    <td><%- asiento2_detalle %></td>
+</script>

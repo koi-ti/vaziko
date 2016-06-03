@@ -112,7 +112,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="asiento2_cuenta" placeholder="Cuenta" class="form-control cuenta-contable-koi-component" name="asiento2_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_cuenta_nombre" required>		
+								<input id="asiento2_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="asiento2_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_cuenta_nombre" required>		
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -132,11 +132,11 @@
 						<div class="form-group col-sm-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat" data-field="asiento2_beneficiario">
+									<button type="button" class="btn btn-default btn-flat" data-field="asiento2_beneficiario_nit">
 										<i class="fa fa-user"></i>
 									</button>
 								</span>
-								<input id="asiento2_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento2_beneficiario" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_beneficiario_nombre" required>		
+								<input id="asiento2_beneficiario_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento2_beneficiario_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_beneficiario_nombre" required>		
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -175,13 +175,14 @@
 			</form>
 
 			<div class="box-body table-responsive">
-				<table id="asientos-detalle-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+				<table id="browse-detalle-asiento-list" class="table table-bordered table-striped" cellspacing="0" width="100%">
 			        <thead>
 			            <tr>
 			                <th>Cuenta</th>
 			                <th>Nombre</th>
 			                <th>Beneficiario</th>
 			                <th>Centro Costo</th>
+			                <th>Base</th>
 			                <th>Debito</th>
 			                <th>Credito</th>
 			                <th>Detalle</th>

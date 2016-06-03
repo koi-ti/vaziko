@@ -33,7 +33,8 @@ app || (app = {});
             'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
 
             'asientos(/)': 'getAsientosMain',
-            'asientos/create(/)': 'getAsientosCreate'             
+            'asientos/create(/)': 'getAsientosCreate',             
+            'asientos/:asientos(/)': 'getAsientosShow',
         },
 
         /**
@@ -44,6 +45,7 @@ app || (app = {});
             this.componentAddressView = new app.ComponentAddressView();
             this.componentCreateResourceView = new app.ComponentCreateResourceView();
             this.componentSearchTerceroView = new app.ComponentSearchTerceroView();
+            this.componentSearchCuentaView = new app.ComponentSearchCuentaView();
             this.componentDocumentView = new app.ComponentDocumentView();
       	},
 
@@ -300,6 +302,21 @@ app || (app = {});
 
             this.createAsientoView = new app.CreateAsientoView({ model: this.asientoModel });
             this.createAsientoView.render();
+        },
+
+        /**
+        * show view show asiento contable
+        */
+        getAsientosShow: function (asiento) {
+            this.asientoModel = new app.AsientoModel();
+            this.asientoModel.set({'id': asiento}, {'silent':true});
+
+            if ( this.showAsientoView instanceof Backbone.View ){
+                this.showAsientoView.stopListening();
+                this.showAsientoView.undelegateEvents();
+            }
+
+            this.showAsientoView = new app.ShowAsientoView({ model: this.asientoModel });
         }
     }) );
 

@@ -171,4 +171,20 @@ class PlanCuentasController extends Controller
         }
         return response()->json(['success' => true, 'nivel' => $nivel]);
     }
+
+    /**
+     * Search plan cuentas.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('plancuentas_cuenta')) {
+            $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
+            if($plancuenta instanceof PlanCuenta) {
+                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre]);
+            }
+        }
+        return response()->json(['success' => false]);
+    }
 }

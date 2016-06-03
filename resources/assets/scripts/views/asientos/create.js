@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'click .submit-asiento': 'submitAsiento',
+            'submit #form-item-asiento': 'onStoreItem',
             'submit #form-asientos': 'onStore'
         },
 
@@ -25,6 +26,8 @@ app || (app = {});
         initialize : function() {   
             // Attributes 
             this.$wraperForm = this.$('#render-form-asientos');
+
+            this.asientoCuentasList = new app.AsientoCuentasList();
 
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -41,17 +44,28 @@ app || (app = {});
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
 
+            // Prepare account detailt
+            this.getCuentasDetalle();
+
+            // to fire plugins
+            this.ready();
+		},
+       	
+        /**
+        * fires libraries js
+        */
+        ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
-       		if( typeof window.initComponent.initICheck == 'function' )
+            if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck(); 
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();   
-		},
-       	
+                window.initComponent.initSelect2();  
+        },
+
         documentoChanged: function(e) {
             var _this = this,
                 documento = $(e.currentTarget).val();
@@ -103,8 +117,34 @@ app || (app = {});
             
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
+                data.cuentas = this.asientoCuentasList.toJSON()
+
                 this.model.save( data, {patch: true, silent: true} );                
             }
+        },
+
+        /**
+        *  Get asiento cuentas
+        */
+        getCuentasDetalle: function () {
+            var cuentasView = new app.AsientoCuentasListView({
+                collection: this.asientoCuentasList,
+                parameters: {
+                    wrapper: this.el
+                }
+            });
+        },
+
+        /**
+        * Event add item Asiento Cuentas
+        */
+        onStoreItem: function (e) {
+
+            if (!e.isDefaultPrevented()) {
+            
+                e.preventDefault();             
+                this.asientoCuentasList.trigger( 'store', this.$(e.target) );
+            }            
         },
 
         /**

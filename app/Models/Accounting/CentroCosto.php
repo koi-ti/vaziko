@@ -70,7 +70,7 @@ class CentroCosto extends BaseModel
     public static function getCentrosCosto()
     {
         $query = CentroCosto::query();
-        $query->select('id', DB::raw("CONCAT(centrocosto_centro, ' - ', centrocosto_nombre) as centrocosto_nombre"));
+        $query->select('id', DB::raw("CONCAT(centrocosto_codigo, ' - ', centrocosto_nombre) as centrocosto_nombre"));
         $query->orderby('centrocosto_nombre', 'asc');
         $collection = $query->lists('centrocosto_nombre', 'id');
 

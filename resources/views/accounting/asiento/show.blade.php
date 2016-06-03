@@ -7,7 +7,7 @@
 
 
 @section('module')
-	<div class="box box-success">
+	<div class="box box-success" id="asientos-show">
 		<div class="box-header with-border">
         	<div class="row">
 				<div class="col-md-2 col-sm-12 col-xs-12 text-left">
@@ -65,6 +65,23 @@
 					<label for="asiento1_detalle" class="control-label">Detalle</label>
 					<div>{{ $asiento->asiento1_detalle }}</div>
 				</div>
+			</div>
+
+			<div class="box-body table-responsive">
+				<table id="browse-detalle-asiento-list" class="table table-bordered table-striped" cellspacing="0" width="100%">
+			        <thead>
+			            <tr>
+			                <th>Cuenta</th>
+			                <th>Nombre</th>
+			                <th>Beneficiario</th>
+			                <th>Centro Costo</th>
+			                <th>Base</th>
+			                <th>Debito</th>
+			                <th>Credito</th>
+			                <th>Detalle</th>
+			            </tr>
+			        </thead>
+			    </table>
 			</div>
 		</div>
 	</div>
