@@ -174,7 +174,16 @@
 						{{-- Tab contabilidad --}}
 						<div class="tab-pane active" id="tab_contabilidad">
 		    	    	    <div class="row">
-						    	<div class="form-group col-md-10">
+		    	    	    	<div class="form-group col-md-2">
+						    		<label for="empresa_niif" class="control-label">Grupo Niif</label>
+						    		<select name="empresa_niif" id="empresa_niif" class="form-control" required>
+										<option value="">Seleccione</option>
+										@foreach( config('koi.terceros.niif') as $key => $value)
+											<option value="{{ $key }}" <%- empresa_niif == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+										@endforeach
+									</select>
+						    	</div>
+						    	<div class="form-group col-md-8">
 						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
 						    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default" required>
 										@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
@@ -189,16 +198,7 @@
 						    </div>
 
 				    	    <div class="row">
-						    	<div class="form-group col-md-3">
-						    		<label for="empresa_niif" class="control-label">Grupo Niif</label>
-						    		<select name="empresa_niif" id="empresa_niif" class="form-control" required>
-										<option value="">Seleccione</option>
-										@foreach( config('koi.terceros.niif') as $key => $value)
-											<option value="{{ $key }}" <%- empresa_niif == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-										@endforeach
-									</select>
-						    	</div>
-						    	<div class="form-group col-md-9 col-sm-12 col-xs-12">
+						    	<div class="form-group col-md-12 col-sm-12 col-xs-12">
 									<label class="control-label"></label>
 									<div class="row">
 										<label class="checkbox-inline" for="tercero_responsable_iva">
@@ -207,6 +207,18 @@
 
 										<label class="checkbox-inline" for="tercero_autoretenedor_cree">
 											<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- tercero_autoretenedor_cree ? 'checked': ''%>> Autorretenedor CREE
+										</label>
+
+										<label class="checkbox-inline" for="tercero_gran_contribuyente">
+											<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- tercero_gran_contribuyente ? 'checked': ''%>> Gran contribuyente
+										</label>
+									
+										<label class="checkbox-inline" for="tercero_autoretenedor_renta">
+											<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- tercero_autoretenedor_renta ? 'checked': ''%>> Autorretenedor renta
+										</label>
+									
+										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
+											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- tercero_autoretenedor_ica ? 'checked': ''%>> Autorretenedor ICA
 										</label>
 									</div>	
 								</div>

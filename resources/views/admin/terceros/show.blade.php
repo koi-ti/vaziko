@@ -221,6 +221,26 @@
 									</div>
 
 									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_gran_contribuyente">
+											<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" disabled {{ $tercero->tercero_gran_contribuyente ? 'checked': '' }}> Gran contribuyente
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_autoretenedor_renta">
+											<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" disabled {{ $tercero->tercero_autoretenedor_renta ? 'checked': '' }}> Autorretenedor renta
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
+											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" disabled {{ $tercero->tercero_autoretenedor_ica ? 'checked': '' }}> Autorretenedor ICA
+										</label>
+									</div>
+							    </div>
+
+							    <div class="row">
+									<div class="form-group col-md-2">
 										<label class="checkbox-inline" for="tercero_otro">
 											<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" disabled {{ $tercero->tercero_otro ? 'checked': '' }}> Otro
 										</label>

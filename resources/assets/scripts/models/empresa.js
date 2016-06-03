@@ -38,6 +38,9 @@ app || (app = {});
             'tercero_representante' : '',
             'tercero_responsable_iva': false,
             'tercero_autoretenedor_cree': false,
+            'tercero_gran_contribuyente': false,
+            'tercero_autoretenedor_renta': false,
+            'tercero_autoretenedor_ica': false,
             'actividad_tarifa' : '',
             'empresa_niif' : ''
         }

@@ -37,6 +37,11 @@ app || (app = {});
             'tercero_cc_representante' : '',
             'tercero_representante' : '',
             'tercero_activo': false,
+            'tercero_responsable_iva': false,
+            'tercero_autoretenedor_cree': false,
+            'tercero_gran_contribuyente': false,
+            'tercero_autoretenedor_renta': false,
+            'tercero_autoretenedor_ica': false,
             'tercero_socio': false,
             'tercero_cliente': false,
             'tercero_acreedor': false,
@@ -48,8 +53,6 @@ app || (app = {});
             'tercero_afiliado': false,
             'tercero_otro': false,
             'tercero_cual': '',
-            'tercero_responsable_iva': false,
-            'tercero_autoretenedor_cree': false,
             'actividad_tarifa' : ''
         }
     });
