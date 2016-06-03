@@ -14,7 +14,7 @@
 			                <th>Código</th>
 			                <th>Centro</th>
 			                <th>Nombre</th>
-			                <th>Estructura</th>
+			                <th>Titulo</th>
 			                <th>Activo</th>
 			            </tr>
 			        </thead>

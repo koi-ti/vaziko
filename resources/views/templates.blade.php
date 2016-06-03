@@ -369,7 +369,7 @@
 
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-4 col-sm-4">
-			<label for="centrocosto_estructura" class="control-label">Estructura</label>
+			<label for="centrocosto_estructura" class="control-label">Titulo</label>
 			<select name="centrocosto_estructura" id="centrocosto_estructura" class="form-control" required>
 				<option value="N" <%- centrocosto_estructura == 'N' ? 'selected': ''%>>No</option>
 				<option value="S" <%- centrocosto_estructura == 'S' ? 'selected': ''%>>Si</option>

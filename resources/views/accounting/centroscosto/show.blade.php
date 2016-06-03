@@ -57,7 +57,7 @@
 
 			<div class="row">	
 				<div class="form-group col-md-2 col-xs-4 col-sm-4">
-					<label class="control-label">Estructura</label>
+					<label class="control-label">Titulo</label>
 					<div>{{ $centrocosto->centrocosto_estructura == 'S' ? 'Si' : 'No' }}</div>
 				</div>
 				<div class="form-group col-md-2 col-xs-8 col-sm-3">
