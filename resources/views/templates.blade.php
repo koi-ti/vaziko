@@ -407,7 +407,7 @@
 		<div class="form-group col-md-6 col-xs-10">
 			<label for="plancuentas_centro" class="control-label">Centro de costo</label>
 			<select name="plancuentas_centro" id="plancuentas_centro" class="form-control select2-default-clear">
-				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto() as $key => $value)
+				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
 					<option value="{{ $key }}" <%- plancuentas_centro == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>

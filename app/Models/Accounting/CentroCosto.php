@@ -68,11 +68,16 @@ class CentroCosto extends BaseModel
         $this->attributes['centrocosto_nombre'] = strtoupper($name);
     }
 
-    public static function getCentrosCosto()
+    public static function getCentrosCosto($centrocosto_estructura = null)
     {
         $query = CentroCosto::query();
         $query->select('id', DB::raw("CONCAT(centrocosto_codigo, centrocosto_centro, ' - ', centrocosto_nombre) as centrocosto_nombre"));
         $query->orderby('centrocosto_nombre', 'asc');
+        
+        if($centrocosto_estructura != null){
+            $query->where('centrocosto_estructura', $centrocosto_estructura);
+        }
+
         $collection = $query->lists('centrocosto_nombre', 'id');
 
         $collection->prepend('', '');
