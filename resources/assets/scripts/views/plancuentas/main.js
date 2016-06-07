@@ -33,7 +33,7 @@ app || (app = {});
                     { data: 'plancuentas_nivel', name: 'plancuentas_nivel' },
                     { data: 'plancuentas_nombre', name: 'plancuentas_nombre' },
                     { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' },
-                    { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' }
+                    { data: 'plancuentas_tercero', name: 'plancuentas_tercero' }
                 ],
 				buttons: [
 					{ 
@@ -67,6 +67,7 @@ app || (app = {});
                         targets: 4,
                         width: '10%',
                         render: function ( data, type, full, row ) {
+                            console.log(data)
                             return data ? 'Si' : 'No';
                         }                    
                     }

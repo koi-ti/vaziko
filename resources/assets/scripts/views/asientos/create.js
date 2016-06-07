@@ -139,7 +139,17 @@ app || (app = {});
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
+            // e.preventDefault();             
 
+            console.log( this.$('#asiento2_valor').val(), e.target );
+            // this.$('#asiento2_valor').unmask();
+            console.log('-> ', this.$('#asiento2_valor').inputmask('unmaskedvalue') );
+            // console.log( this.$('#asiento2_valor').val('jhgjhg') );
+
+            // this.$('#asiento2_valor').inputmask('unmaskedvalue');
+            // this.$("[data-currency]").inputmask('unmaskedvalue');
+
+            this.$('#asiento2_valor').inputmask('unmaskedvalue');            
             if (!e.isDefaultPrevented()) {
             
                 e.preventDefault();             

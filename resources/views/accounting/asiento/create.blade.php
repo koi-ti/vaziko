@@ -18,8 +18,6 @@
 			</div>
 		</div>
 
-		{{-- <input data-currency style="text-align: right;"> --}}
-
 		<div class="box-body" id="render-form-asientos">
 			{{-- Render form asientos --}}
 		</div>
@@ -154,7 +152,7 @@
 						</div>
 
 						<div class="form-group col-sm-2">
-							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" type="text">
+							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" type="text" data-currency>
 						</div>
 					</div>
 
@@ -163,7 +161,7 @@
 							<input id="asiento2_detalle" name="asiento2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
 						</div>
 						<div class="form-group col-sm-2">
-							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" type="text" required>
+							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" type="text" data-currency required>
 						</div>
 						<div class="form-group col-sm-1">
 							<button type="submit" class="btn btn-success btn-sm btn-block">

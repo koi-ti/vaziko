@@ -425,11 +425,11 @@
 			<label class="control-label">Naturaleza</label>
 			<div class="row">
 				<label class="radio-inline" for="plancuentas_naturaleza_debito">
-					<input type="radio" id="plancuentas_naturaleza_debito" name="plancuentas_naturaleza" value="D" checked> Débito
+					<input type="radio" id="plancuentas_naturaleza_debito" name="plancuentas_naturaleza" value="D" <%- plancuentas_naturaleza == 'D' ? 'checked': ''%>> Débito
 				</label>
 
 				<label class="radio-inline" for="plancuentas_naturaleza_credito">
-					<input type="radio" id="plancuentas_naturaleza_credito" name="plancuentas_naturaleza" value="C"> Crédito
+					<input type="radio" id="plancuentas_naturaleza_credito" name="plancuentas_naturaleza" value="C" <%- plancuentas_naturaleza == 'C' ? 'checked': ''%>> Crédito
 				</label>
 			</div>	
 		</div>
@@ -440,11 +440,10 @@
 			<label for="plancuentas_tercero">¿Requiere tercero?</label>
 			<div class="row">
 				<label class="radio-inline" for="plancuentas_tercero_no">
-					<input type="radio" id="plancuentas_tercero_no" name="plancuentas_tercero" value="false" checked> Si
+					<input type="radio" id="plancuentas_tercero_no" name="plancuentas_tercero" value="plancuentas_tercero_no" <%- !plancuentas_tercero ? 'checked': ''%>> No
 				</label>
-
 				<label class="radio-inline" for="plancuentas_tercero_si">
-					<input type="radio" id="plancuentas_tercero_si" name="plancuentas_tercero" value="true"> No
+					<input type="radio" id="plancuentas_tercero_si" name="plancuentas_tercero" value="plancuentas_tercero" <%- plancuentas_tercero ? 'checked': ''%>> Si
 				</label>
 			</div>
 		</div>
@@ -456,7 +455,7 @@
 			<div class="row">
 				@foreach(config('koi.contabilidad.plancuentas.tipo') as $key => $value)
 					<label class="radio-inline" for="plancuentas_naturaleza_{{ $key }}">
-						<input type="radio" id="plancuentas_naturaleza_{{ $key }}" name="plancuentas_tipo" value="{{ $key }}" checked> {{ $value }}
+						<input type="radio" id="plancuentas_naturaleza_{{ $key }}" name="plancuentas_tipo" value="{{ $key }}" <%- plancuentas_tipo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
 					</label>					
 				@endforeach
 			</div>	

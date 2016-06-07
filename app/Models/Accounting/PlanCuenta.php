@@ -24,7 +24,7 @@ class PlanCuenta extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_centro', 'plancuentas_naturaleza', 'plancuentas_tercero', 'plancuentas_tipo', 'plancuentas_tasa'];
+    protected $fillable = ['plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_centro', 'plancuentas_naturaleza', 'plancuentas_tipo', 'plancuentas_tasa'];
 
     /**
      * The attributes that are mass boolean assignable.

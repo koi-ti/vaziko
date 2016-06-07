@@ -61,17 +61,15 @@ var app = app || {};
         * Init inputMask
         */
         initInputMask: function () {
+
             $("[data-mask]").inputmask();
-            // $("[data-currency]").inputmask({ 
-            //     alias: 'numeric',
-            //     numericInput: true,
-            //     autoGroup: true,
-            //     digitsOptional: false,
-            //     digits: '2',
-            //     groupSeparator: ',',
-            //     digitsOptional: '$ ',
-            //     placeholder: '0'
-            // });
+
+            $("[data-currency]").inputmask({ 
+                alias: 'decimal',
+                autoGroup: true,
+                digits: '2',
+                groupSeparator: ',',
+            });
         },
 
         /**

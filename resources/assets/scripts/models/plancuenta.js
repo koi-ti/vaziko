@@ -19,10 +19,10 @@ app || (app = {});
         	'plancuentas_cuenta': '',	
         	'plancuentas_nivel': '',	
         	'plancuentas_nombre': '',	
-        	'plancuentas_naturaleza': '',	
+        	'plancuentas_naturaleza': 'D',	
         	'plancuentas_centro': '',	
         	'plancuentas_tercero': false,	
-        	'plancuentas_tipo': '',	
+        	'plancuentas_tipo': 'N',	
         	'plancuentas_tasa': 0
         }
     });

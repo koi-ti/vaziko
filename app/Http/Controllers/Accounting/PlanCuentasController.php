@@ -22,7 +22,7 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $query = PlanCuenta::query();
-            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza');
+            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tercero');
             return Datatables::of($query)->make(true);
         }
         return view('accounting.plancuentas.index');
