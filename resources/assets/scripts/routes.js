@@ -35,6 +35,8 @@ app || (app = {});
             'asientos(/)': 'getAsientosMain',
             'asientos/create(/)': 'getAsientosCreate',             
             'asientos/:asientos(/)': 'getAsientosShow',
+            
+            'documentos(/)': 'getDocumentosMain', 
         },
 
         /**
@@ -317,7 +319,20 @@ app || (app = {});
             }
 
             this.showAsientoView = new app.ShowAsientoView({ model: this.asientoModel });
+        },
+        
+        /**
+        * show view main documentos
+        */
+        getDocumentosMain: function () {
+            if ( this.mainDocumentosView instanceof Backbone.View ){
+                this.mainDocumentosView.stopListening();
+                this.mainDocumentosView.undelegateEvents();
+            }
+
+            this.mainDocumentosView = new app.MainDocumentosView( );
         }
+        
     }) );
 
 })(jQuery, this, this.document);

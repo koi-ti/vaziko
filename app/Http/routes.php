@@ -32,7 +32,9 @@ Route::get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin'])
 Route::group(['middleware' => 'auth'], function()
 {
 	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
-	
+        Route::get('prueba',function(){
+            return "Hola Mundo";
+        });
 	/*
 	|-------------------------
 	| Admin Routes
@@ -43,11 +45,11 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('dv', ['as' => 'terceros.dv', 'uses' => 'Admin\TerceroController@dv']);
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
-
+                
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
 	});	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-
+        Route::resource('documentos', 'Accounting\DocumentoController',['only' =>['index','edit','create']]);
 	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
@@ -78,4 +80,6 @@ Route::group(['middleware' => 'auth'], function()
 	
 	Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-});
+        Route::resource('prueba', 'PruebaController');
+        
+        });

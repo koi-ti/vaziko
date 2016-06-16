@@ -15,10 +15,10 @@ module.exports = function(grunt) {
 			options: {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
 				compress: {
-					drop_console: true
+					drop_console: false
 				},
-				beautify: false,
-				mangle: true
+				beautify: true,
+				mangle: false
 			},
 			app: {
 				files: {
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 			main: {
 				files: [
   					//move jQuery file to public/js/ directory
-  					{expand: true, cwd: './bower_components/AdminLTE/plugins/jQuery/', src: ['jQuery-2.1.4.min.js'], dest: '../../public/js/', filter: 'isFile', 
+  					{expand: true, cwd: './bower_components/AdminLTE/plugins/jQuery/', src: ['jQuery-2.2.0.min.js'], dest: '../../public/js/', filter: 'isFile', 
             			rename: function(dest, src) { return dest + 'jquery.min.js'; } },
             		
             		// move awesome fonts to public/css/ directory

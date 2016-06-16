@@ -18,9 +18,14 @@ class DocumentoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $query = Documento::query();
+            $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre');
+            return Datatables::of($query)->make(true);
+        }
+        return view("accounting.documentos.index");
     }
 
     /**
@@ -30,7 +35,7 @@ class DocumentoController extends Controller
      */
     public function create()
     {
-        //
+        
     }
 
     /**
@@ -70,7 +75,7 @@ class DocumentoController extends Controller
      */
     public function edit($id)
     {
-        //
+        
     }
 
     /**
