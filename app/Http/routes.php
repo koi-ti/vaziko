@@ -47,11 +47,12 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
 	});	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-
+        Route::resource('prueba','Accounting\DocumentoController', ['only' => ['index']]);
 	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
+        Route::resource('prueba2', '\Admin\pruebacontroller', ['only' => ['index']]);
 	
 	/*
 	|-------------------------

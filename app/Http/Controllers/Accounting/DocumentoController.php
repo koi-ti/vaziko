@@ -20,7 +20,7 @@ class DocumentoController extends Controller
      */
     public function index()
     {
-        //
+       return "hola mundo";
     }
 
     /**
