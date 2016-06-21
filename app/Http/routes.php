@@ -31,10 +31,6 @@ Route::get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin'])
 */
 Route::group(['middleware' => 'auth'], function()
 {
-	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
-        Route::get('prueba',function(){
-            return "Hola Mundo";
-        });
 	/*
 	|-------------------------
 	| Admin Routes
@@ -55,7 +51,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
-        Route::resource('prueba2', '\Admin\pruebacontroller', ['only' => ['index']]);
+        
 	
 	/*
 	|-------------------------
@@ -89,6 +85,6 @@ Route::group(['middleware' => 'auth'], function()
 	
 	Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-        Route::resource('prueba', 'PruebaController');
+        
         
         });
