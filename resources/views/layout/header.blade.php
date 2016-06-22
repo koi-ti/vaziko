@@ -110,7 +110,7 @@
             </li>
 
             {{-- Contabilidad --}}
-            <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto']) ? 'active' : '' }}">
+            <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -121,16 +121,22 @@
                         <a href="{{ route('asientos.index') }}"><i class="fa fa-file-text-o"></i> Asientos contables</a>
                     </li>
                    
-                    <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto']) ? 'active' : '' }}">
+                    <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
                         <a href="#">
                             <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                         </a>
                         <ul class="treeview-menu">
-                            <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
-                                <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
-                            </li>
                             <li class="{{ Request::segment(1) == 'centroscosto' ? 'active' : '' }}">
                                 <a href="{{ route('centroscosto.index') }}"><i class="fa fa-circle-o"></i> Centros de costo</a>
+                            </li>
+                            <li class="{{ Request::segment(1) == 'documentos' ? 'active' : '' }}">
+                                <a href="{{ route('documentos.index') }}"><i class="fa fa-circle-o"></i> Documentos</a>
+                            </li>
+                            <li class="{{ Request::segment(1) == 'folders' ? 'active' : '' }}">
+                                <a href="{{ route('folders.index') }}"><i class="fa fa-circle-o"></i> Folders</a>
+                            </li>
+                            <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
+                                <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
                             </li>
                         </ul>
                     </li>

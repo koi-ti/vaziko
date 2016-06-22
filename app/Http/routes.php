@@ -31,6 +31,7 @@ Route::get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin'])
 */
 Route::group(['middleware' => 'auth'], function()
 {
+	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
 	/*
 	|-------------------------
 	| Admin Routes
@@ -45,14 +46,11 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
 	});	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-        Route::resource('folders', 'Accounting\FoldersController', ['only'=>['index', 'create', 'edit']]);
-        Route::resource('documentos', 'Accounting\DocumentoController',['only' =>['index','edit','create']]);
-	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
+    Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
         
-	
 	/*
 	|-------------------------
 	| Accounting Routes
@@ -63,7 +61,6 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
-
         
 	Route::group(['prefix' => 'documentos'], function()
 	{
@@ -85,6 +82,6 @@ Route::group(['middleware' => 'auth'], function()
 	
 	Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-        
-        
-        });
+   	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'edit']]);
+    Route::resource('documentos', 'Accounting\DocumentoController',['only' =>['index','edit','create']]);        
+});

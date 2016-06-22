@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 
 use DB, log, Datatables;
 
-use App\Models\Accounting\Folders;
+use App\Models\Accounting\Folder;
 
-class FoldersController extends Controller
+class FolderController extends Controller
 {
       /**
      * Display a listing of the resource.
@@ -21,7 +21,7 @@ class FoldersController extends Controller
     public function index(Request $request) 
     {
         if ($request->ajax()) {
-            $query = Folders::query();
+            $query = Folder::query();
             $query->select('koi_folder.id as id','folder_codigo', 'folder_nombre');
             return Datatables::of($query)->make(true);
         }
@@ -57,8 +57,8 @@ class FoldersController extends Controller
      */
     public function show (Request $request, $id)
     {
-        $folders = Folders::getFolders($id);
-        if($folders instanceof Folders){
+        $folders = Folder::getFolders($id);
+        if($folders instanceof Folder){
             if ($request->ajax()) {
                 return response ()->json($folders);
             }
@@ -109,7 +109,7 @@ class FoldersController extends Controller
     public function filter(Request $request)
     {
         if ($request->has('folder')) {
-            $data = Folders::select('id', 'folder_nombre')->where('folder_folder', $request->folder)->get();
+            $data = Folder::select('id', 'folder_nombre')->where('folder_folder', $request->folder)->get();
             return response()->json(['success' => true, 'folders' => $data]);
         }
         return response()->json(['success' => false]);

@@ -67,7 +67,6 @@ app || (app = {});
                         targets: 4,
                         width: '10%',
                         render: function ( data, type, full, row ) {
-                            console.log(data)
                             return data ? 'Si' : 'No';
                         }                    
                     }
