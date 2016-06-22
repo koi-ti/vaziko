@@ -10,9 +10,7 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.MainDepartamentoView = Backbone.View.extend({
-
         el: '#departamentos-main',
-
         /**
         * Constructor Method
         */

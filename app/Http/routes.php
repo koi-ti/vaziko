@@ -49,11 +49,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
 	});	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+        Route::resource('folders', 'Accounting\FoldersController', ['only'=>['index', 'create', 'edit']]);
         Route::resource('documentos', 'Accounting\DocumentoController',['only' =>['index','edit','create']]);
 	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
+        Route::resource('prueba2', '\Admin\pruebacontroller', ['only' => ['index']]);
 	
 	/*
 	|-------------------------
@@ -66,12 +68,19 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
 
+        
 	Route::group(['prefix' => 'documentos'], function()
 	{
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
 	});
 	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'show']]);
 
+        Route::group(['prefix' => 'folders'], function()
+	{
+		Route::get('filter', ['as' => 'folder.filter', 'uses' => 'Accounting\FoldersController@filter']);
+	});
+	Route::resource('folders', 'Accounting\FoldersController', ['only' => ['index', 'show']]);
+        
 	Route::group(['prefix' => 'asientos'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store']]);

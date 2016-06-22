@@ -15,13 +15,13 @@ class Folder extends Model
 
     public $timestamps = false;
 
-    public static function getFolders()
+    public static function getFolders($id)
     {
-        // if (Cache::has('_folders')) {
-        //     return Cache::get('_folders');    
+        // if (Cache::has('_folder')) {
+        //     return Cache::get('_folder');    
         // }
 
-        // return Cache::rememberForever('_folders', function() {
+        // return Cache::rememberForever('_folder', function() {
             $query = Folder::query();
             $query->orderby('folder_nombre', 'asc');
             $collection = $query->lists('folder_nombre', 'id');
@@ -29,3 +29,4 @@ class Folder extends Model
         // });
     }
 }
+
