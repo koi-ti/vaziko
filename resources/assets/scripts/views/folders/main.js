@@ -38,7 +38,17 @@ app || (app={});
                                 window.Misc.redirect(window.Misc.urlFull( Route.route('folders.create') ) )
                         }
                     }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            return '<a href="'+ window.Misc.urlFull( Route.route('folders.show', {folders: full.id }) )  +'">' + data + '</a>';
+                        }
+                    }
                 ]
+
             });
         }
     });

@@ -39,29 +39,15 @@ app || (app = {});
                         }
                     }
                 ],
-//                columnDefs: [
-//                    {
-//                        targets: 0,
-//                        width: '10%',
-//                        render: function ( data, type, full, row ) {
-//                            return '<a href="'+ window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: full.id }) )  +'">' + data + '</a>';
-//                        }
-//                    },
-//                    {
-//                        targets: 3,
-//                        width: '10%',
-//                        render: function ( data, type, full, row ) {
-//                            return data == 'S' ? 'Si' : 'No';
-//                        }
-//                    },
-//                    {
-//                        targets: [4],
-//                        width: '10%',
-//                        render: function ( data, type, full, row ) {
-//                            return data ? 'Si' : 'No';
-//                        }
-//                    },
-//                ]
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            return '<a href="'+ window.Misc.urlFull( Route.route('documentos.show', {documentos: full.id }) )  +'">' + data + '</a>';
+                        }
+                    }
+                ]
             });
         }
     });

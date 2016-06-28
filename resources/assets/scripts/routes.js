@@ -37,7 +37,9 @@ app || (app = {});
             'asientos/:asientos(/)': 'getAsientosShow',
             
             'documentos(/)': 'getDocumentosMain', 
-            'folders(/)': 'getFoldersMain'
+            
+            'folders(/)': 'getFoldersMain',
+            'folders/:folders/edit(/)':'getFoldersEdit'
         },
 
         /**
@@ -335,6 +337,22 @@ app || (app = {});
             this.mainFoldersView = new app.MainFoldersView( );
         },
         
+               /**
+        * show view edit folder
+        */
+        getFoldersEdit: function (folder) {
+            this.FoldersModel = new app.FoldersModel();
+            this.FoldersModel.set({'id': folder}, {silent: true});
+
+            if ( this.createFoldersView instanceof Backbone.View ){
+                this.createFoldersView.stopListening();
+                this.createFoldersView.undelegateEvents();
+            }
+
+            this.createFoldersView = new app.CreateFoldersView({ model: this.FoldersModel, parameters: { callback: 'toShow' } });
+            this.centroFolders.fetch();
+        },
+        
         /**
         * show view main documentos
         */
@@ -350,4 +368,3 @@ app || (app = {});
     }) );
 
 })(jQuery, this, this.document);
-

@@ -6,7 +6,6 @@
 
 //Global App Backbone
 app || (app = {});
-
 (function ($, window, document, undefined) {
 
     app.MainPlanCuentasView = Backbone.View.extend({
@@ -53,7 +52,7 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: 1,
+                        targets: 1, 
                         width: '10%'                    
                     },
                     {

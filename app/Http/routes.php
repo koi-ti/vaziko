@@ -61,18 +61,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
-        
+        Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+
 	Route::group(['prefix' => 'documentos'], function()
 	{
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
 	});
-	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'show']]);
-
-        Route::group(['prefix' => 'folders'], function()
-	{
-		Route::get('filter', ['as' => 'folder.filter', 'uses' => 'Accounting\FoldersController@filter']);
-	});
-	Route::resource('folders', 'Accounting\FoldersController', ['only' => ['index', 'show']]);
+	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'show','create', 'edit']]);
         
 	Route::group(['prefix' => 'asientos'], function()
 	{
@@ -80,8 +75,6 @@ Route::group(['middleware' => 'auth'], function()
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'show']]);
 	
-	Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-   	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'edit']]);
-    Route::resource('documentos', 'Accounting\DocumentoController',['only' =>['index','edit','create']]);        
+   	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'edit', 'show']]);
 });

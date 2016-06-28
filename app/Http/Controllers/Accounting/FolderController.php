@@ -55,14 +55,11 @@ class FolderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show (Request $request, $id)
+    public function show(Request $request, $id)
     {
-        $folders = Folder::getFolders($id);
-        if($folders instanceof Folder){
-            if ($request->ajax()) {
-                return response ()->json($folders);
-            }
-            // return view('accounting.plancuentas.show', ['plancuenta' => $plancuenta]);
+        $folder = Folder::find($id);
+        if($folder instanceof Folder) {
+            return view('accounting.folders.show', ['folder' => $folder]);
         }
         abort (404);
     }
@@ -75,8 +72,9 @@ class FolderController extends Controller
      */
     public function edit($id)
     {
-        
-    }
+        $folder = Folder::find($id);
+        return view('accounting.folders.edit', ['folder' => $folder]);
+        }
         
     /**
      * Update the specified resource in storage.
@@ -99,19 +97,5 @@ class FolderController extends Controller
     public function destroy($id)
     {
         //
-    }
-    
-    /**
-     * Filter folders.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function filter(Request $request)
-    {
-        if ($request->has('folder')) {
-            $data = Folder::select('id', 'folder_nombre')->where('folder_folder', $request->folder)->get();
-            return response()->json(['success' => true, 'folders' => $data]);
-        }
-        return response()->json(['success' => false]);
     }
 }

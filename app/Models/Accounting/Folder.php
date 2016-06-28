@@ -15,7 +15,7 @@ class Folder extends Model
 
     public $timestamps = false;
 
-    public static function getFolders()
+    public static function getFolders($id)
     {
         // if (Cache::has('_folder')) {
         //     return Cache::get('_folder');    

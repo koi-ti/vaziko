@@ -35,7 +35,7 @@ class DocumentoController extends Controller
      */
     public function create()
     {
-        
+        return view('accounting.documentos.create');
     }
 
     /**
@@ -62,7 +62,7 @@ class DocumentoController extends Controller
             if ($request->ajax()) {
                 return response()->json($documento);    
             }        
-            // return view('accounting.plancuentas.show', ['plancuenta' => $plancuenta]);
+            return view('accounting.documentos.show', ['documento' => $documento]);
         }
         abort(404);
     }
