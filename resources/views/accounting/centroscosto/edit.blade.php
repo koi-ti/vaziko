@@ -2,7 +2,8 @@
 
 @section('breadcrumb')	
 	<li><a href="{{ route('centroscosto.index') }}">Centros de costo</a></li>
-	<li class="active">Editar ({{ $centrocosto->centrocosto_codigo }})</li>
+	<li><a href="{{ route('centroscosto.show', ['centroscosto' => $centrocosto->id]) }}">{{ $centrocosto->centrocosto_codigo }}</a></li>
+	<li class="active">Editar</li>
 @stop
 
 @section('module')

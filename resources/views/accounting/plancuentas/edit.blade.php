@@ -2,7 +2,8 @@
 
 @section('breadcrumb')	
 	<li><a href="{{ route('plancuentas.index') }}">Plan de cuentas</a></li>
-	<li class="active">Editar ({{ $plancuenta->plancuentas_cuenta }})</li>
+	<li><a href="{{ route('plancuentas.show', ['plancuentas' => $plancuenta->id]) }}">{{ $plancuenta->plancuentas_cuenta }}</a></li>
+	<li class="active">Editar</li>
 @stop
 
 @section('module')

@@ -2,7 +2,7 @@
 
 @section('breadcrumb')	
 	<li><a href="{{ route('plancuentas.index') }}">Plan de cuentas</a></li>
-	<li class="active">{{ $plancuenta->plancuentas_codigo }}</li>
+	<li class="active">{{ $plancuenta->plancuentas_cuenta }}</li>
 @stop
 
 
