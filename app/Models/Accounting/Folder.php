@@ -4,6 +4,8 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Validator;
+
 class Folder extends Model
 {
     /**
@@ -15,16 +17,46 @@ class Folder extends Model
 
     public $timestamps = false;
 
-    public static function getFolders($id)
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['folder_codigo', 'folder_nombre'];
+
+    public function isValid($data)
     {
-        // if (Cache::has('_folder')) {
-        //     return Cache::get('_folder');    
+        $rules = [
+            'folder_codigo' => 'required|max:4|min:1|unique:koi_folder',
+            'folder_nombre' => 'required|max:50'
+        ];
+
+        if ($this->exists){
+            $rules['folder_codigo'] .= ',folder_codigo,' . $this->id;
+        }else{
+            $rules['folder_codigo'] .= '|required';
+        }
+
+        $validator = Validator::make($data, $rules);
+        if ($validator->passes()) {
+            return true;
+        }
+        $this->errors = $validator->errors();
+        return false;
+    }
+
+    public static function getFolders()
+    {
+        // if (Cache::has('_folders')) {
+        //     return Cache::get('_folders');    
         // }
 
-        // return Cache::rememberForever('_folder', function() {
+        // return Cache::rememberForever('_folders', function() {
             $query = Folder::query();
             $query->orderby('folder_nombre', 'asc');
             $collection = $query->lists('folder_nombre', 'id');
+            
+            $collection->prepend('', '');
             return $collection;
         // });
     }

@@ -144,6 +144,13 @@ return [
                 'O' => 'Orden',
                 'I' => 'Inventario'
             ]
+        ],
+
+        'documento' => [ 
+            'consecutivo' => [
+                'A' => 'Automático', 
+                'M' => 'Manual'
+            ]
         ]
     ]
 ];

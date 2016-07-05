@@ -1,5 +1,5 @@
 /**
-* Class DocumentoModel extend of Backbone Model
+* Class FolderModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -8,14 +8,15 @@ app || (app = {});
 
 (function (window, document, undefined){
     
-    app.FoldersModel = Backbone.Model.extend({
+    app.FolderModel = Backbone.Model.extend({
         
         urlRoot: function () {
             return window.Misc.urlFull (Route.route('folders.index') ); 
         },
-        idAttribute: 'id',
+        idAttribute: 'id', 
         defaults: {
-            
+            'folder_codigo': '',   
+            'folder_nombre': '' 
         }
     });
     

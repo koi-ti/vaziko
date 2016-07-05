@@ -15,10 +15,10 @@ module.exports = function(grunt) {
 			options: {
 				banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - <%= grunt.template.today("yyyy-mm-dd") %> */\n',
 				compress: {
-					drop_console: false
+					drop_console: true
 				},
-				beautify: true,
-				mangle: false
+				beautify: false,
+				mangle: true
 			},
 			app: {
 				files: {
@@ -39,6 +39,7 @@ module.exports = function(grunt) {
 		    			'./bower_components/jquery.inputmask/dist/jquery.inputmask.bundle.js',
 		    			'./bower_components/datatables.net/js/jquery.dataTables.min.js',
 		    			'./bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js',
+		    			'./bower_components/datatables.net-buttons/js/buttons.html5.js',
 		    			'./bower_components/datatables.net-buttons/js/dataTables.buttons.js',
 		    			'./bower_components/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
 					 	'./scripts/helpers/routes.min.js'

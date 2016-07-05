@@ -16,6 +16,10 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+        	'documento_codigo': '',
+        	'documento_nombre': '',
+        	'documento_folder': '',
+            'documento_tipo_consecutivo': 'A'
         }
     });
 

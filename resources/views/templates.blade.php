@@ -480,3 +480,82 @@
     <td class="text-right"><%- asiento2_credito ? asiento2_credito: 0 %></td>
     <td><%- asiento2_detalle %></td>
 </script>
+
+<script type="text/template" id="add-folder-tpl">
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="folder_codigo" class="control-label">Código</label>			
+			<input type="text" id="folder_codigo" name="folder_codigo" value="<%- folder_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
+		</div>
+    </div>
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="folder_nombre" class="control-label">Nombre</label>
+			<input type="text" id="folder_nombre" name="folder_nombre" value="<%- folder_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>    
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-documento-tpl">
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="documento_codigo" class="control-label">Código</label>			
+			<input type="text" id="documento_codigo" name="documento_codigo" value="<%- documento_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="20" required>
+		</div>
+		<div class="form-group col-md-8">
+			<label for="documento_nombre" class="control-label">Nombre</label>
+			<input type="text" id="documento_nombre" name="documento_nombre" value="<%- documento_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>    
+		</div>
+    </div>
+	<div class="row">
+		<div class="form-group col-md-6 col-xs-10">
+			<label for="documento_folder" class="control-label">Folder</label>
+			<select name="documento_folder" id="documento_folder" class="form-control select2-default" required>
+				@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
+					<option value="{{ $key }}" <%- documento_folder == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="folder" data-field="documento_folder">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+    <div class="row">
+		<div class="form-group col-md-12 col-sm-12 col-xs-12">
+			<label class="control-label">Consecutivo</label>
+			<div class="row">
+				@foreach(config('koi.contabilidad.documento.consecutivo') as $key => $value)
+					<label class="radio-inline" for="documento_tipo_consecutivo_{{ $key }}">
+						<input type="radio" id="documento_tipo_consecutivo_{{ $key }}" name="documento_tipo_consecutivo" value="{{ $key }}" <%- documento_tipo_consecutivo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
+					</label>					
+				@endforeach
+			</div>	
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-actividad-tpl">
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="actividad_codigo" class="control-label">Código</label>			
+			<input type="text" id="actividad_codigo" name="actividad_codigo" value="<%- actividad_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="11" required>
+		</div>
+		<div class="form-group col-md-8">
+			<label for="actividad_nombre" class="control-label">Nombre</label>
+			<input type="text" id="actividad_nombre" name="actividad_nombre" value="<%- actividad_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" required>    
+		</div>
+    </div>
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="actividad_tarifa" class="control-label">% Cree</label>			
+			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm" maxlength="4" required>
+		</div>
+    	<div class="form-group col-md-2">
+			<label for="actividad_categoria" class="control-label">Categoria</label>			
+			<input type="text" id="actividad_categoria" name="actividad_categoria" value="<%- actividad_categoria %>" placeholder="Categoria" class="form-control input-sm input-toupper" maxlength="3">
+		</div>
+    </div>
+</script>

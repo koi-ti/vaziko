@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Datatables;
+use DB, Log, Datatables;
 
 use App\Models\Base\Actividad;
 
@@ -33,7 +33,7 @@ class ActividadController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.actividades.create');
     }
 
     /**
@@ -44,7 +44,29 @@ class ActividadController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $actividad = new Actividad;
+            if ($actividad->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Actividad
+                    $actividad->fill($data);
+                    $actividad->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $actividad->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $actividad->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -53,9 +75,13 @@ class ActividadController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $actividad = Actividad::findOrFail($id);
+        if ($request->ajax()) {
+            return response()->json($actividad);    
+        }        
+        return view('admin.actividades.show', ['actividad' => $actividad]);
     }
 
     /**
@@ -66,7 +92,8 @@ class ActividadController extends Controller
      */
     public function edit($id)
     {
-        //
+        $actividad = Actividad::findOrFail($id);
+        return view('admin.actividades.edit', ['actividad' => $actividad]); 
     }
 
     /**
@@ -78,7 +105,29 @@ class ActividadController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $actividad = Actividad::findOrFail($id);
+            if ($actividad->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Actividad
+                    $actividad->fill($data);
+                    $actividad->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $actividad->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $actividad->errors]);
+        }
+        abort(403);
     }
 
     /**

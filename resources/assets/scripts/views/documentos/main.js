@@ -28,7 +28,9 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('documentos.index') ),
                 columns: [
                     { data: 'documento_codigo', name: 'documento_codigo' },
-                    { data: 'documento_nombre', name: 'documento_nombre' }
+                    { data: 'documento_nombre', name: 'documento_nombre' },
+                    { data: 'folder_codigo', name: 'folder_codigo' },
+                    { data: 'folder_id', name: 'folder_id' }
                 ],
                 buttons: [
                     { 
@@ -46,6 +48,25 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('documentos.show', {documentos: full.id }) )  +'">' + data + '</a>';
                         }
+                    },
+                    {
+                        targets: 1,
+                        width: '70%'
+                    },
+                    {
+                        targets: 2,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            if(!_.isNull(full.folder_codigo) && !_.isUndefined(full.folder_codigo)) {
+                                return '<a href="'+ window.Misc.urlFull( Route.route('folders.show', {folders: full.folder_id }) )  +'">' + data + '</a>';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        targets: 3,
+                        visible: false,
+                        searchable: false
                     }
                 ]
             });

@@ -53,9 +53,13 @@ class DepartamentoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $departamento = Departamento::findOrFail($id);
+        if ($request->ajax()) {
+            return response()->json($departamento);    
+        }        
+        return view('admin.departamentos.show', ['departamento' => $departamento]);
     }
 
     /**
@@ -66,7 +70,7 @@ class DepartamentoController extends Controller
      */
     public function edit($id)
     {
-        //
+        // 
     }
 
     /**

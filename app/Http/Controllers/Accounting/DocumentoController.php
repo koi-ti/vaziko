@@ -22,7 +22,8 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $query = Documento::query();
-            $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre');
+            $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre', 'folder_codigo', 'koi_folder.id as folder_id');
+            $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
             return Datatables::of($query)->make(true);
         }
         return view("accounting.documentos.index");
@@ -46,7 +47,29 @@ class DocumentoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $documento = new Documento;
+            if ($documento->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Documento
+                    $documento->fill($data);
+                    $documento->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $documento->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $documento->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -75,7 +98,8 @@ class DocumentoController extends Controller
      */
     public function edit($id)
     {
-        
+        $documento = Documento::findOrFail($id);
+        return view('accounting.documentos.edit', ['documento' => $documento]);   
     }
 
     /**
@@ -87,7 +111,29 @@ class DocumentoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $documento = Documento::findOrFail($id);
+            if ($documento->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Documento
+                    $documento->fill($data);
+                    $documento->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $documento->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $documento->errors]);
+        }
+        abort(403);
     }
 
     /**

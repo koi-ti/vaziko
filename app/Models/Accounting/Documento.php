@@ -4,6 +4,8 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
+use Validator;
+
 class Documento extends Model
 {
     /**
@@ -14,6 +16,36 @@ class Documento extends Model
     protected $table = 'koi_documento';
 
     public $timestamps = false;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['documento_codigo', 'documento_nombre', 'documento_folder', 'documento_tipo_consecutivo'];
+
+    public function isValid($data)
+    {
+        $rules = [
+            'documento_codigo' => 'required|max:20|min:1|unique:koi_documento',
+            'documento_nombre' => 'required|max:200',
+            'documento_folder' => 'required',
+            'documento_tipo_consecutivo' => 'required|max:1'
+        ];
+
+        if ($this->exists){
+            $rules['documento_codigo'] .= ',documento_codigo,' . $this->id;
+        }else{
+            $rules['documento_codigo'] .= '|required';
+        }
+
+        $validator = Validator::make($data, $rules);
+        if ($validator->passes()) {
+            return true;
+        }
+        $this->errors = $validator->errors();
+        return false;
+    }
 
     public static function getDocument($id)
     {

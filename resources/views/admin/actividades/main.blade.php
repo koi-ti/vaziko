@@ -1,14 +1,14 @@
 @extends('layout.layout')
 
-@section('title') Documentos @stop
+@section('title') Actividades Económicas @stop
 
 @section('content')
     <section class="content-header">
         <h1>
-            Documentos <small>Administración de documentos</small>
+			Actividades <small>Administración de actividades económicas</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
+			<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
             @yield('breadcrumb')
         </ol>
     </section>

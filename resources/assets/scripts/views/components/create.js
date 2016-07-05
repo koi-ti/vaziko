@@ -43,7 +43,14 @@ app || (app = {});
     	            	_this.model = new app.CentroCostoModel();
                         var template = _.template($('#add-centrocosto-tpl').html());
             			_this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
-    	            }
+    	            },
+                    'folder' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Folder');
+
+                        _this.model = new app.FolderModel();
+                        var template = _.template($('#add-folder-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    }
 	            };
 
             if (stuffToDo[this.resource]) {
@@ -125,6 +132,10 @@ app || (app = {});
                 stuffToDo = {
                     'centrocosto' : function() {
                         _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('centrocosto_nombre')}] }).trigger('change');
+                        _this.$resourceField.val(_this.model.get('id')).trigger('change');
+                    },
+                    'folder' : function() {
+                        _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('folder_nombre')}] }).trigger('change');
                         _this.$resourceField.val(_this.model.get('id')).trigger('change');
                     }
                 };

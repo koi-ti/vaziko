@@ -19,17 +19,36 @@
     </div>
     <div class="box-body">
         <div class="row">
-            <div class="form-group col-md-2">
+            <div class="form-group col-md-3">
                 <label class="control-label">Código</label>
                 <div>{{ $documento->documento_codigo }}</div>
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-9">
                 <label class="control-label">Nombre</label>
-                <div>{{$documento->documento_nombre}}</div>
+                <div>{{ $documento->documento_nombre }}</div>
             </div>
+        </div>
         
+        <div class="row">
+            <div class="form-group col-md-6">
+                <label class="control-label">Folder</label>
+                <div>{{ $documento->folder_nombre }}</div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label class="control-label">Tipo consecutivo</label>
+                <div>{{ $documento->documento_tipo_consecutivo ? config('koi.contabilidad.documento.consecutivo')[$documento->documento_tipo_consecutivo] : ''  }}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="form-group col-md-4">
+                <label class="control-label">Consecutivo</label>
+                <div>{{ $documento->documento_consecutivo }}</div>
+            </div>
         </div>
     </div>
 </div>
-
 @stop

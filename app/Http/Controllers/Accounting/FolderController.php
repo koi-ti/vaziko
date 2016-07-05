@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, log, Datatables;
+use DB, Log, Datatables;
 
 use App\Models\Accounting\Folder;
 
@@ -46,7 +46,29 @@ class FolderController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $folder = new Folder;
+            if ($folder->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Folder
+                    $folder->fill($data);
+                    $folder->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $folder->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $folder->errors]);
+        }
+        abort(403);
     }
     
     /**
@@ -57,11 +79,11 @@ class FolderController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $folder = Folder::find($id);
-        if($folder instanceof Folder) {
-            return view('accounting.folders.show', ['folder' => $folder]);
-        }
-        abort (404);
+        $folder = Folder::findOrFail($id);
+        if ($request->ajax()) {
+            return response()->json($folder);    
+        }        
+        return view('accounting.folders.show', ['folder' => $folder]);
     }
     
     /**
@@ -72,9 +94,9 @@ class FolderController extends Controller
      */
     public function edit($id)
     {
-        $folder = Folder::find($id);
+        $folder = Folder::findOrFail($id);
         return view('accounting.folders.edit', ['folder' => $folder]);
-        }
+    }
         
     /**
      * Update the specified resource in storage.
@@ -85,7 +107,29 @@ class FolderController extends Controller
      */
     public function update (Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            
+            $folder = Folder::findOrFail($id);
+            if ($folder->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Folder
+                    $folder->fill($data);
+                    $folder->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $folder->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $folder->errors]);
+        }
+        abort(403);
     }
         
     /**

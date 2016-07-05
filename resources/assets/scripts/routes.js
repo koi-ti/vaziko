@@ -18,10 +18,12 @@ app || (app = {});
             'terceros/:tercero/edit(/)': 'getTercerosEdit',
 
             'empresa(/)': 'getEmpresaEdit',        
-
             'municipios(/)': 'getMunicipiosMain',        
-            'departamentos(/)': 'getDepartamentosMain',        
+            'departamentos(/)': 'getDepartamentosMain', 
+
             'actividades(/)': 'getActividadesMain',   
+            'actividades/create(/)': 'getActividadesCreate', 
+            'actividades/:actividad/edit(/)': 'getActividadesEdit',
 
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',             
@@ -37,9 +39,12 @@ app || (app = {});
             'asientos/:asientos(/)': 'getAsientosShow',
             
             'documentos(/)': 'getDocumentosMain', 
-            
+            'documentos/create(/)': 'getDocumentosCreate', 
+            'documentos/:documento/edit(/)':'getDocumentosEdit',
+
             'folders(/)': 'getFoldersMain',
-            'folders/:folders/edit(/)':'getFoldersEdit'
+            'folders/create(/)': 'getFoldersCreate', 
+            'folders/:folder/edit(/)':'getFoldersEdit'
         },
 
         /**
@@ -194,6 +199,37 @@ app || (app = {});
         },
 
         /**
+        * show view create actividades
+        */
+        getActividadesCreate: function () {
+            this.actividadModel = new app.ActividadModel();
+
+            if ( this.createActividadView instanceof Backbone.View ){
+                this.createActividadView.stopListening();
+                this.createActividadView.undelegateEvents();
+            }
+
+            this.createActividadView = new app.CreateActividadView({ model: this.actividadModel });
+            this.createActividadView.render();
+        },
+        
+        /**
+        * show view edit actividades
+        */
+        getActividadesEdit: function (actividad) {
+            this.actividadModel = new app.ActividadModel();
+            this.actividadModel.set({'id': actividad}, {silent: true});
+
+            if ( this.createActividadView instanceof Backbone.View ){
+                this.createActividadView.stopListening();
+                this.createActividadView.undelegateEvents();
+            }
+
+            this.createActividadView = new app.CreateActividadView({ model: this.actividadModel });
+            this.actividadModel.fetch();
+        },
+
+        /**
         * show view main plan de cuentas
         */
         getPlanCuentasMain: function () {
@@ -205,7 +241,7 @@ app || (app = {});
 
             this.mainPlanCuentasView = new app.MainPlanCuentasView( );
         },
-
+        
         /**
         * show view create cuenta contable
         */
@@ -324,7 +360,7 @@ app || (app = {});
             this.showAsientoView = new app.ShowAsientoView({ model: this.asientoModel });
         },
         
-              /**
+        /**
         * show view show folders
         */
         getFoldersMain: function () {
@@ -337,20 +373,35 @@ app || (app = {});
             this.mainFoldersView = new app.MainFoldersView( );
         },
         
-               /**
+        /**
+        * show view create folders
+        */
+        getFoldersCreate: function () {
+            this.folderModel = new app.FolderModel();
+
+            if ( this.createFolderView instanceof Backbone.View ){
+                this.createFolderView.stopListening();
+                this.createFolderView.undelegateEvents();
+            }
+
+            this.createFolderView = new app.CreateFolderView({ model: this.folderModel });
+            this.createFolderView.render();
+        },
+
+        /**
         * show view edit folder
         */
         getFoldersEdit: function (folder) {
-            this.FoldersModel = new app.FoldersModel();
-            this.FoldersModel.set({'id': folder}, {silent: true});
+            this.folderModel = new app.FolderModel();
+            this.folderModel.set({'id': folder}, {silent: true});
 
-            if ( this.createFoldersView instanceof Backbone.View ){
-                this.createFoldersView.stopListening();
-                this.createFoldersView.undelegateEvents();
+            if ( this.createFolderView instanceof Backbone.View ){
+                this.createFolderView.stopListening();
+                this.createFolderView.undelegateEvents();
             }
 
-            this.createFoldersView = new app.CreateFoldersView({ model: this.FoldersModel, parameters: { callback: 'toShow' } });
-            this.centroFolders.fetch();
+            this.createFolderView = new app.CreateFolderView({ model: this.folderModel });
+            this.folderModel.fetch();
         },
         
         /**
@@ -363,8 +414,38 @@ app || (app = {});
             }
 
             this.mainDocumentosView = new app.MainDocumentosView( );
+        },
+
+        /**
+        * show view create documento
+        */
+        getDocumentosCreate: function () {
+            this.documentoModel = new app.DocumentoModel();
+
+            if ( this.createDocumentoView instanceof Backbone.View ){
+                this.createDocumentoView.stopListening();
+                this.createDocumentoView.undelegateEvents();
+            }
+
+            this.createDocumentoView = new app.CreateDocumentoView({ model: this.documentoModel });
+            this.createDocumentoView.render();
+        },
+
+        /**
+        * show view edit documento
+        */
+        getDocumentosEdit: function (documento) {
+            this.documentoModel = new app.DocumentoModel();
+            this.documentoModel.set({'id': documento}, {silent: true});
+
+            if ( this.createDocumentoView instanceof Backbone.View ){
+                this.createDocumentoView.stopListening();
+                this.createDocumentoView.undelegateEvents();
+            }
+
+            this.createDocumentoView = new app.CreateDocumentoView({ model: this.documentoModel });
+            this.documentoModel.fetch();
         }
-        
     }) );
 
 })(jQuery, this, this.document);
