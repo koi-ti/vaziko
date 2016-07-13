@@ -130,7 +130,8 @@ app || (app = {});
             var cuentasView = new app.AsientoCuentasListView({
                 collection: this.asientoCuentasList,
                 parameters: {
-                    wrapper: this.el
+                    wrapper: this.el,
+                    edit: true
                 }
             });
         },
@@ -141,9 +142,9 @@ app || (app = {});
         onStoreItem: function (e) {
             // e.preventDefault();             
 
-            console.log( this.$('#asiento2_valor').val(), e.target );
+            // console.log( this.$('#asiento2_valor').val() );
             // this.$('#asiento2_valor').unmask();
-            console.log('-> ', this.$('#asiento2_valor').inputmask('unmaskedvalue') );
+            // console.log('-> ', this.$('#asiento2_valor').inputmask('unmaskedvalue') );
             // console.log( this.$('#asiento2_valor').val('jhgjhg') );
 
             // this.$('#asiento2_valor').inputmask('unmaskedvalue');

@@ -60,12 +60,17 @@ class CentroCosto extends BaseModel
 
     public function setCentrocostoCodigoAttribute($code)
     {
-        $this->attributes['centrocosto_codigo'] = strtoupper($code);
+        $this->attributes['centrocosto_codigo'] = strtoupper(trim($code));
     }
 
     public function setCentrocostoNombreAttribute($name)
     {
         $this->attributes['centrocosto_nombre'] = strtoupper($name);
+    }
+
+    public function getCode()
+    {
+        return sprintf('%s%s', $this->attributes['centrocosto_codigo'], $this->attributes['centrocosto_centro']);
     }
 
     public static function getCentrosCosto($centrocosto_estructura = null)

@@ -66,7 +66,10 @@ app || (app = {});
         ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();         
+                window.initComponent.initToUpper();
+
+            if( typeof window.initComponent.initSpinner == 'function' )
+                window.initComponent.initSpinner();         
         },
 
         /**

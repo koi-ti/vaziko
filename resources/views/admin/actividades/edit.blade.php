@@ -19,7 +19,7 @@
 					</div>
 				</div>
 			</div>
-
+			
 			<div class="box-body" id="render-form-actividad">
 				{{-- Render form actividades --}}
 			</div>

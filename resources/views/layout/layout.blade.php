@@ -16,10 +16,10 @@
         
         {{-- Icons css --}}
         <link href="{{ asset("/css/icons.min.css") }}" rel="stylesheet" type="text/css" />
-        {{-- Bootstrap css --}}
-        <link href="{{ asset("/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
         {{-- Vendor css --}}
         <link href="{{ asset("/css/vendor.min.css") }}" rel="stylesheet" type="text/css" />
+        {{-- App css --}}
+        <link href="{{ asset("/css/app.min.css") }}" rel="stylesheet" type="text/css" />
         
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

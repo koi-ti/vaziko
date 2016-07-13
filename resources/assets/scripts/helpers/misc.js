@@ -29,7 +29,6 @@
          */
         
         formToJson: function( selector ){
-
             var o = {}, a = [];
             if( $.prototype.isPrototypeOf(selector) ){
                 a = selector.serializeArray();
@@ -52,7 +51,6 @@
             });
 
             return o;
-
         },
 
         /**

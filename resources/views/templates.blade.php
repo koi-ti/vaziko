@@ -471,10 +471,25 @@
 </script>
 
 <script type="text/template" id="add-asiento2-item-tpl">
-	<td><%- asiento2_cuenta %></td>
+	<% if(edit) { %>
+	<td class="text-center">
+		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>">
+			<span><i class="fa fa-times"></i></span>
+		</a>
+	</td>
+	<% } %>
+	<td><%- plancuentas_cuenta %></td>
     <td><%- plancuentas_nombre %></td>
-    <td><a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" target="_blank"><%- asiento2_beneficiario_nit %></a></td>
-    <td><%- centrocosto_nombre %></td>
+    <td>
+    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
+    		<%- tercero_nit %>
+    	</a>
+    </td>
+    <td>
+    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
+    		<%- centrocosto_codigo %>
+    	</a>
+    </td>
     <td class="text-right"><%- asiento2_base ? asiento2_base : 0 %></td>
     <td class="text-right"><%- asiento2_debito ? asiento2_debito : 0 %></td>
     <td class="text-right"><%- asiento2_credito ? asiento2_credito: 0 %></td>
@@ -551,7 +566,7 @@
     <div class="row">
 		<div class="form-group col-md-2">
 			<label for="actividad_tarifa" class="control-label">% Cree</label>			
-			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm" maxlength="4" required>
+			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm spinner-percentage" maxlength="4" required>
 		</div>
     	<div class="form-group col-md-2">
 			<label for="actividad_categoria" class="control-label">Categoria</label>			

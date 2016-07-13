@@ -16,13 +16,14 @@ class CreateAsiento1Table extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('asiento1_mes');
             $table->integer('asiento1_ano');
+            $table->integer('asiento1_mes');
             $table->integer('asiento1_folder')->unsigned();
             $table->integer('asiento1_documento')->unsigned();
             $table->integer('asiento1_numero');
             $table->integer('asiento1_dia');
             $table->integer('asiento1_beneficiario')->unsigned();  
+            $table->integer('asiento1_sucursal')->unsigned()->nullable();  
             $table->text('asiento1_detalle')->nullable();  
             $table->integer('asiento1_usuario_elaboro')->unsigned();  
             $table->datetime('asiento1_fecha_elaboro');  
@@ -30,6 +31,7 @@ class CreateAsiento1Table extends Migration
             $table->foreign('asiento1_folder')->references('id')->on('koi_folder')->onDelete('restrict');
             $table->foreign('asiento1_documento')->references('id')->on('koi_documento')->onDelete('restrict');
             $table->foreign('asiento1_beneficiario')->references('id')->on('koi_tercero')->onDelete('restrict');
+            $table->foreign('asiento1_sucursal')->references('id')->on('koi_sucursal')->onDelete('restrict');
             $table->foreign('asiento1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
             
             $table->unique(['asiento1_mes', 'asiento1_ano', 'asiento1_folder', 'asiento1_documento', 'asiento1_numero'], 'koi_asiento1_mes_ano_folder_documento_numero_unique');

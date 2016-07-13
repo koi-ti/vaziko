@@ -9,7 +9,9 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables, Auth;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Accounting\Documento, App\Models\Base\Tercero;
+use App\Classes\AsientoContableDocumento;
+
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2;
 
 class AsientoController extends Controller
 {
@@ -54,21 +56,6 @@ class AsientoController extends Controller
             if ($asiento->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // Recuperar tercero
-                    $tercero = Tercero::where('tercero_nit', $request->asiento1_beneficiario)->first();
-                    if(!$tercero instanceof Tercero) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);                    
-                    }
-
-                    // Recuerar documento
-                    $documento = Documento::where('id', $request->asiento1_documento)->first();
-                    if(!$documento instanceof Documento) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);                    
-                    }
-                    $consecutivo = $documento->documento_consecutivo + 1;
-
                     // Validar Carrito
                     $cuentas = $request->has('cuentas') ? $request->get('cuentas') : null;
                     if(!isset($cuentas) || $cuentas == null || !is_array($cuentas) || count($cuentas) == 0) {
@@ -76,63 +63,49 @@ class AsientoController extends Controller
                         return response()->json(['success' => false, 'errors' => 'Por favor ingrese detalle para el asiento contable.']);
                     }
 
-                    // Asiento
-                    $asiento->fill($data);
-                    $asiento->asiento1_numero = $consecutivo;
-                    $asiento->asiento1_beneficiario = $tercero->id;
-                    $asiento->asiento1_usuario_elaboro = Auth::user()->id;
-                    $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
-                    $asiento->save();
-
-                    // Insertar dellate asiento
+                    // Preparar cuentas
+                    $arCuentas = [];
                     foreach ($cuentas as $item) {
                         $asiento2 = new Asiento2;
                         if (!$asiento2->isValid($item)) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $asiento2->errors]);
-                        }
+                        }     
 
-                        // Recuperar tercero
-                        $tercero = Tercero::find($item['asiento2_beneficiario'])->first();
-                        if(!$tercero instanceof Tercero) {
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);                    
-                        }
-
-                        // Recuperar cuenta
-                        $cuenta = PlanCuenta::where('plancuentas_cuenta', $item['asiento2_cuenta'])->first();
-                        if(!$cuenta instanceof PlanCuenta) {
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.']);                    
-                        }
-
-                        // Recuperar centro costo
-                        $centrocosto = null;
-                        if(isset($item['asiento2_centro']) && !empty($item['asiento2_centro'])) {
-                            $centrocosto = CentroCosto::find($item['asiento2_centro'])->first();
-                            if(!$centrocosto instanceof CentroCosto) {
-                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.']);                    
-                            }
-                        }
-
-                        $asiento2->asiento2_asiento = $asiento->id;
-                        $asiento2->asiento2_beneficiario = $tercero->id;
-                        $asiento2->asiento2_cuenta = $cuenta->id;
-                        if($centrocosto instanceof CentroCosto) {
-                            $asiento2->asiento2_centro = $centrocosto->id;
-                        }
-                        $asiento2->asiento2_credito = $item['asiento2_credito'];
-                        $asiento2->asiento2_debito = $item['asiento2_debito'];
-                        $asiento2->asiento2_base = $item['asiento2_base'];
-                        $asiento2->asiento2_detalle = $item['asiento2_detalle'];
-                        $asiento2->save(); 
+                        $arCuenta['Cuenta'] = $item['plancuentas_cuenta']; 
+                        $arCuenta['Tercero'] = $item['asiento2_beneficiario'];
+                        $arCuenta['Detalle'] = $item['asiento2_detalle'];  
+                        $arCuenta['Naturaleza'] = $item['asiento2_naturaleza'];  
+                        $arCuenta['CentroCosto'] = $item['asiento2_centro'];  
+                        $arCuenta['Base'] = $item['asiento2_base'];  
+                        $arCuenta['Credito'] = $item['asiento2_credito'];
+                        $arCuenta['Debito'] = $item['asiento2_debito'];
+                        $arCuentas[] = $arCuenta;
                     }
 
-                    // Actualizar consecutivo
-                    $documento->documento_consecutivo = $consecutivo;
-                    $documento->save();
+                    // Creo el objeto para manejar el asiento
+                    $objAsiento = new AsientoContableDocumento($data);
+                    if($objAsiento->asiento_error){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                    }
+
+                    // Preparar asiento
+                    $result = $objAsiento->asientoCuentas($arCuentas);
+                    if($result != 'OK'){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
+
+                    $result = $objAsiento->insertarAsiento();
+                    if($result != 'OK') {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    } 
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $asiento->id]);
+                    return response()->json(['success' => true, 'id' => $objAsiento->asiento->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());

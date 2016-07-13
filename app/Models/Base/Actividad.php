@@ -27,7 +27,7 @@ class Actividad extends Model
     public function isValid($data)
     {
         $rules = [
-            'actividad_codigo' => 'required|max:11|min:1|unique:koi_actividad',
+            'actividad_codigo' => 'required|min:1|max:11|unique:koi_actividad',
             'actividad_nombre' => 'required',
             'actividad_tarifa' => 'required|numeric|max:100|min:0'
         ];

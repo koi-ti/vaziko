@@ -13,10 +13,11 @@ app || (app = {});
 
         el: '#browse-detalle-asiento-list',
         events: {
-            //
+            'click .item-asiento2-remove': 'removeOne'
         },
         parameters: {
             wrapper: null,
+            edit: false,
             dataFilter: {}
         },
 
@@ -51,8 +52,14 @@ app || (app = {});
         * @param Object mentoringTaskModel Model instance
         */
         addOne: function (Asiento2Model) {
-            var view = new app.AsientoCuentasItemView( { model: Asiento2Model } );
-            this.$el.prepend( view.render().el );
+            var view = new app.AsientoCuentasItemView({ 
+                model: Asiento2Model,
+                parameters: {
+                    edit: this.parameters.edit
+                } 
+            });
+            Asiento2Model.view = view;
+            this.$el.append( view.render().el );
         },
 
         /**
@@ -102,6 +109,20 @@ app || (app = {});
             });
         },
 
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource");
+            var model = this.collection.get(resource);  
+            if ( model instanceof Backbone.Model ) { 
+                model.view.remove();
+                this.collection.remove(model); 
+            }
+        },
+         
         /**
         * Load spinner on the request
         */
