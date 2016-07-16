@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'click .submit-asiento': 'submitAsiento',
+            'click .pre-save-asiento': 'submitPreSaveAsiento',
             'submit #form-item-asiento': 'onStoreItem',
             'submit #form-asientos': 'onStore'
         },
@@ -29,6 +30,10 @@ app || (app = {});
 
             this.asientoCuentasList = new app.AsientoCuentasList();
 
+            // Pre-save default false
+            this.preSave = false;
+
+            this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
@@ -44,8 +49,8 @@ app || (app = {});
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
 
-            // Prepare account detailt
-            this.getCuentasDetalle();
+            // Reference views
+            this.referenceViews();
 
             // to fire plugins
             this.ready();
@@ -63,7 +68,27 @@ app || (app = {});
                 window.initComponent.initICheck(); 
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();  
+                window.initComponent.initSelect2(); 
+
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator(); 
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Detalle asiento list
+            this.cuentasListView = new app.AsientoCuentasListView({
+                collection: this.asientoCuentasList,
+                parameters: {
+                    wrapper: this.el,
+                    edit: true,
+                    dataFilter: {
+                        'asiento': this.model.get('id')
+                    }
+                }
+            });
         },
 
         documentoChanged: function(e) {
@@ -102,9 +127,18 @@ app || (app = {});
         },
 
         /**
+        * Event submit Asiento (Pre-guardado)
+        */
+        submitPreSaveAsiento: function (e) {
+            this.preSave = true;
+            this.$form.submit();
+        },
+
+        /**
         * Event submit Asiento
         */
         submitAsiento: function (e) {
+            this.preSave = false;
             this.$form.submit();
         },
 
@@ -118,22 +152,10 @@ app || (app = {});
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
                 data.cuentas = this.asientoCuentasList.toJSON()
+                data.preguardado = this.preSave;
 
                 this.model.save( data, {patch: true, silent: true} );                
             }
-        },
-
-        /**
-        *  Get asiento cuentas
-        */
-        getCuentasDetalle: function () {
-            var cuentasView = new app.AsientoCuentasListView({
-                collection: this.asientoCuentasList,
-                parameters: {
-                    wrapper: this.el,
-                    edit: true
-                }
-            });
         },
 
         /**

@@ -182,7 +182,7 @@ class PlanCuentasController extends Controller
         if($request->has('plancuentas_cuenta')) {
             $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
             if($plancuenta instanceof PlanCuenta) {
-                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre]);
+                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre, 'plancuentas_tasa' => $plancuenta->plancuentas_tasa]);
             }
         }
         return response()->json(['success' => false]);

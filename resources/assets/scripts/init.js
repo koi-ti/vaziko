@@ -65,12 +65,12 @@ var app = app || {};
 
             $("[data-mask]").inputmask();
 
-            $("[data-currency]").inputmask({ 
-                alias: 'decimal',
-                autoGroup: true,
-                digits: '2',
-                groupSeparator: ',',
-            });
+            // $("[data-currency]").inputmask({ 
+            //     alias: 'decimal',
+            //     autoGroup: true,
+            //     digits: '2',
+            //     groupSeparator: ',',
+            // });
         },
 
         /**
@@ -108,6 +108,17 @@ var app = app || {};
                     }
                }
             });
+        },
+
+        /**
+        * Init initValidator
+        */
+        initValidator: function () {
+
+            $('form[data-toggle="validator"]').each(function () {
+                var $form = $(this)
+                $.fn.validator.call($form, $form.data())
+            })
         }
     };
 

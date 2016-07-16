@@ -37,6 +37,7 @@ app || (app = {});
             'asientos(/)': 'getAsientosMain',
             'asientos/create(/)': 'getAsientosCreate',             
             'asientos/:asientos(/)': 'getAsientosShow',
+            'asientos/:asiento/edit(/)': 'getAsientosEdit',
             
             'documentos(/)': 'getDocumentosMain', 
             'documentos/create(/)': 'getDocumentosCreate', 
@@ -360,6 +361,22 @@ app || (app = {});
             this.showAsientoView = new app.ShowAsientoView({ model: this.asientoModel });
         },
         
+        /**
+        * show view edit asiento contable
+        */
+        getAsientosEdit: function (asiento) {
+            this.asientoModel = new app.AsientoModel();
+            this.asientoModel.set({'id': asiento}, {'silent':true});
+
+            if ( this.createAsientoView instanceof Backbone.View ){
+                this.createAsientoView.stopListening();
+                this.createAsientoView.undelegateEvents();
+            }
+
+            this.createAsientoView = new app.CreateAsientoView({ model: this.asientoModel });
+            this.asientoModel.fetch();
+        },
+
         /**
         * show view show folders
         */

@@ -17,20 +17,12 @@ class Asiento2 extends Model
 
     public $timestamps = false;
 
-	/**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['asiento2_cuenta', 'asiento2_beneficiario', 'asiento2_beneficiario'];
-
     public function isValid($data)
     {
         $rules = [
-            'asiento2_cuenta' => 'required|integer',
-            'asiento2_beneficiario_nit' => 'required|integer',
-            'asiento2_naturaleza' => 'required',
-            'asiento2_valor' => 'required'
+            'plancuentas_cuenta' => 'required|integer',
+            'tercero_nit' => 'required|integer',
+            'asiento2_naturaleza' => 'required'        
         ];
 
         $validator = Validator::make($data, $rules);

@@ -73,7 +73,7 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store']]);
 	});
-	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'show']]);
+	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);

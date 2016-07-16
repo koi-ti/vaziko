@@ -55,4 +55,20 @@ class Documento extends Model
         $query->where('koi_documento.id', $id);
         return $query->first();
     }
+
+    public static function getDocuments()
+    {
+        // if (Cache::has('_documents')) {
+        //     return Cache::get('_documents');    
+        // }
+
+        // return Cache::rememberForever('_documents', function() {
+            $query = Documento::query();
+            $query->orderby('documento_nombre', 'asc');
+            $collection = $query->lists('documento_nombre', 'id');
+            
+            $collection->prepend('', '');
+            return $collection;
+        // });
+    }
 }
