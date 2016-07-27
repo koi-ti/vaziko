@@ -107,7 +107,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" required>		
+								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" required>		
 							</div>
 						</div>
 						<div class="col-sm-4">

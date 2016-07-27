@@ -70,9 +70,7 @@ class AsientoContableDocumento {
         // Validar cierre contable 
 		// $empresa = $Skina->getEmpresa_UI();
 		// if( $this->asiento1_fecha <= $empresa->empresa_fecha_contabilidad){
-		// $db->RollBackTrans();
-		// $this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
-		// $this->asiento_error = 'La fecha que intenta realizar el asiento: no esta PERMITIDA. Es menor a la del cierre contable :';
+		// 	$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
 		// }
 	}
 

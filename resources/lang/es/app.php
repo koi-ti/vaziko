@@ -25,4 +25,7 @@ return [
     'cancel' => 'Cancelar',
     'add' => 'Agregar',
     'continue' => 'Continuar',
+
+    'pdf' => 'Generar PDF',
+    'xls' => 'Generar XLS',
 ];

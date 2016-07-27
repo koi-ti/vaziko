@@ -77,4 +77,11 @@ Route::group(['middleware' => 'auth'], function()
 	
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);
+
+   	/*
+	|-------------------------
+	| Reports Routes
+	|-------------------------
+	*/
+   	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only'=>['index', 'store']]);
 });

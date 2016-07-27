@@ -30,9 +30,18 @@ app || (app = {});
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$inputBase = this.$("#"+$(e.currentTarget).attr("data-base"));
 			this.$inputValor = this.$("#"+$(e.currentTarget).attr("data-valor"));
+			this.$inputCentro = this.$("#"+$(e.currentTarget).attr("data-centro"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
 
 			var cuenta = this.$inputContent.val();
+
+			// Before eval clear data
+			this.$inputName.val('');
+			// Clear centro costo
+            if(this.$inputCentro.length) {
+        		this.$inputCentro.val('').trigger('change');
+            }
+
 			if(!_.isUndefined(cuenta) && !_.isNull(cuenta) && cuenta != '') {
 				// Get plan cuenta 
 	            $.ajax({
@@ -40,8 +49,7 @@ app || (app = {});
 	                type: 'GET',
 	                data: { plancuentas_cuenta: cuenta },
 	                beforeSend: function() {
-						_this.$inputName.val('');	                    
-	                    window.Misc.setSpinner( _this.$wraperConten );
+						window.Misc.setSpinner( _this.$wraperConten );
 	                }
 	            })
 	            .done(function(resp) {  
@@ -63,6 +71,13 @@ app || (app = {});
 	                    	}else{
 	                    		// Case without plancuentas_tasa 
 	                    		_this.$inputBase.val(0);
+	                    	}
+	                    }
+
+	                    // Eval centro costo
+	                    if(_this.$inputCentro.length) {
+	                    	if(!_.isUndefined(resp.plancuentas_centro) && !_.isNull(resp.plancuentas_centro) && resp.plancuentas_centro > 0) {
+	                    		_this.$inputCentro.val( resp.plancuentas_centro ).trigger('change');
 	                    	}
 	                    }
 	                }
