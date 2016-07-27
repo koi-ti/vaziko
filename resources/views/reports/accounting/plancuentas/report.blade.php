@@ -1,7 +1,7 @@
 @extends('reports.layout', ['title' => 'Plan de Unico de Cuentas - P.U.C'])
 
 @section('content')
-	<table width="100%">
+	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
 				<th width="15%">CUENTA</th>
