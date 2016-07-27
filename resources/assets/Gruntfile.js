@@ -82,13 +82,13 @@ module.exports = function(grunt) {
 		    	],
 			    '../../public/css/vendor.min.css': [
 	    			'./bower_components/jquery-ui/themes/base/all.css',
-	    			'./bower_components/adminLTE/bootstrap/css/bootstrap.min.css',	    			
-	    			'./bower_components/AdminLTE/dist/css/skins/skin-green.min.css',	    			
-	    			'./bower_components/AdminLTE/plugins/iCheck/minimal/green.css',    			
-	    			'./bower_components/AdminLTE/plugins/select2/select2.min.css',    			
+	    			'./bower_components/adminLTE/bootstrap/css/bootstrap.min.css',
+	    			'./bower_components/AdminLTE/dist/css/skins/skin-green.min.css',
+	    			'./bower_components/AdminLTE/plugins/iCheck/minimal/green.css',
+	    			'./bower_components/AdminLTE/plugins/select2/select2.min.css',
 	    			'./bower_components/AdminLTE/dist/css/AdminLTE.min.css',
-	    			'./bower_components/datatables.net-bs/css/dataTables.bootstrap.css',	
-	    			'./bower_components/datatables.net-buttons-bs/css/buttons.bootstrap.min.css',				
+	    			'./bower_components/datatables.net-bs/css/dataTables.bootstrap.css',
+	    			'./bower_components/datatables.net-buttons-bs/css/buttons.bootstrap.min.css',
 	    			'./bower_components/alertify.js/alertify/css/alertify.css'
 		    	]
 			  }
@@ -100,9 +100,9 @@ module.exports = function(grunt) {
 			main: {
 				files: [
   					//move jQuery file to public/js/ directory
-  					{expand: true, cwd: './bower_components/AdminLTE/plugins/jQuery/', src: ['jQuery-2.2.0.min.js'], dest: '../../public/js/', filter: 'isFile', 
+  					{expand: true, cwd: './bower_components/AdminLTE/plugins/jQuery/', src: ['jQuery-2.2.0.min.js'], dest: '../../public/js/', filter: 'isFile',
             			rename: function(dest, src) { return dest + 'jquery.min.js'; } },
-            		
+
             		// move awesome fonts to public/css/ directory
 					{expand: true, cwd: './bower_components/font-awesome/fonts/', src: ['**'], dest: '../../public/fonts/'},
 
@@ -136,7 +136,7 @@ module.exports = function(grunt) {
 					'./scripts/routes.js',
 					'./Gruntfile.js'
 				],
-				tasks: ['uglify:app']			
+				tasks: ['uglify:app']
 			}
 		}
 	});

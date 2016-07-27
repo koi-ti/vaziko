@@ -11,40 +11,40 @@ app || (app = {});
 
     app.AppRouter = new( Backbone.Router.extend({
         routes : {
-            'login(/)': 'getLogin',        
-            'terceros(/)': 'getTercerosMain',        
-            'terceros/create(/)': 'getTercerosCreate',        
+            'login(/)': 'getLogin',
+            'terceros(/)': 'getTercerosMain',
+            'terceros/create(/)': 'getTercerosCreate',
             'terceros/:tercero(/)': 'getTercerosShow',
             'terceros/:tercero/edit(/)': 'getTercerosEdit',
 
-            'empresa(/)': 'getEmpresaEdit',        
-            'municipios(/)': 'getMunicipiosMain',        
-            'departamentos(/)': 'getDepartamentosMain', 
+            'empresa(/)': 'getEmpresaEdit',
+            'municipios(/)': 'getMunicipiosMain',
+            'departamentos(/)': 'getDepartamentosMain',
 
-            'actividades(/)': 'getActividadesMain',   
-            'actividades/create(/)': 'getActividadesCreate', 
+            'actividades(/)': 'getActividadesMain',
+            'actividades/create(/)': 'getActividadesCreate',
             'actividades/:actividad/edit(/)': 'getActividadesEdit',
 
             // Contabilidad
-            'plancuentas(/)': 'getPlanCuentasMain',             
-            'plancuentas/create(/)': 'getPlanCuentasCreate', 
+            'plancuentas(/)': 'getPlanCuentasMain',
+            'plancuentas/create(/)': 'getPlanCuentasCreate',
             'plancuentas/:plancuenta/edit(/)': 'getPlanCuentasEdit',
 
-            'centroscosto(/)': 'getCentrosCostoMain',  
-            'centroscosto/create(/)': 'getCentrosCostoCreate', 
+            'centroscosto(/)': 'getCentrosCostoMain',
+            'centroscosto/create(/)': 'getCentrosCostoCreate',
             'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
 
             'asientos(/)': 'getAsientosMain',
-            'asientos/create(/)': 'getAsientosCreate',             
+            'asientos/create(/)': 'getAsientosCreate',
             'asientos/:asientos(/)': 'getAsientosShow',
             'asientos/:asiento/edit(/)': 'getAsientosEdit',
-            
-            'documentos(/)': 'getDocumentosMain', 
-            'documentos/create(/)': 'getDocumentosCreate', 
+
+            'documentos(/)': 'getDocumentosMain',
+            'documentos/create(/)': 'getDocumentosCreate',
             'documentos/:documento/edit(/)':'getDocumentosEdit',
 
             'folders(/)': 'getFoldersMain',
-            'folders/create(/)': 'getFoldersCreate', 
+            'folders/create(/)': 'getFoldersCreate',
             'folders/:folder/edit(/)':'getFoldersEdit'
         },
 
@@ -58,6 +58,7 @@ app || (app = {});
             this.componentSearchTerceroView = new app.ComponentSearchTerceroView();
             this.componentSearchCuentaView = new app.ComponentSearchCuentaView();
             this.componentDocumentView = new app.ComponentDocumentView();
+            this.componentReportView = new app.ComponentReportView();
       	},
 
         /**
@@ -213,7 +214,7 @@ app || (app = {});
             this.createActividadView = new app.CreateActividadView({ model: this.actividadModel });
             this.createActividadView.render();
         },
-        
+
         /**
         * show view edit actividades
         */
@@ -242,7 +243,7 @@ app || (app = {});
 
             this.mainPlanCuentasView = new app.MainPlanCuentasView( );
         },
-        
+
         /**
         * show view create cuenta contable
         */
@@ -360,7 +361,7 @@ app || (app = {});
 
             this.showAsientoView = new app.ShowAsientoView({ model: this.asientoModel });
         },
-        
+
         /**
         * show view edit asiento contable
         */
@@ -381,7 +382,7 @@ app || (app = {});
         * show view show folders
         */
         getFoldersMain: function () {
-          
+
             if ( this.mainFoldersView instanceof Backbone.View ){
                 this.mainFoldersView.stopListening();
                 this.mainFoldersView.undelegateEvents();
@@ -389,7 +390,7 @@ app || (app = {});
 
             this.mainFoldersView = new app.MainFoldersView( );
         },
-        
+
         /**
         * show view create folders
         */
@@ -420,7 +421,7 @@ app || (app = {});
             this.createFolderView = new app.CreateFolderView({ model: this.folderModel });
             this.folderModel.fetch();
         },
-        
+
         /**
         * show view main documentos
         */

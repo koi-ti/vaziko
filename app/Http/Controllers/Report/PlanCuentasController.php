@@ -20,7 +20,7 @@ class PlanCuentasController extends Controller
      */
     public function index()
     {
-        return view('reports.accounting.plancuentas.plancuentas');
+        return view('reports.accounting.plancuentas.index');
     }
 
     /**
@@ -42,6 +42,12 @@ class PlanCuentasController extends Controller
     public function store(Request $request)
     {
         $query = PlanCuenta::query();
+
+        // Filters
+        if($request->has('plancuentas_nivel')) {
+            $query->where('plancuentas_nivel', $request->plancuentas_nivel);
+        }
+
         $query->orderBy('plancuentas_cuenta', 'asc');
         $plancuentas = $query->get();
 
@@ -54,7 +60,7 @@ class PlanCuentasController extends Controller
                 $sheet->setFontSize(9);
                 $sheet->loadView('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas]);
             });
-        })->export('pdf');
+        })->download('pdf');
         // })->export('xls');
     }
 
