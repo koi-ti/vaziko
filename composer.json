@@ -12,7 +12,8 @@
         "yajra/laravel-datatables-oracle": "^6.8",
         "felixkiss/uniquewith-validator": "2.*",
         "maatwebsite/excel": "~2.1.0",
-        "dompdf/dompdf": "~0.6.1"
+        "dompdf/dompdf": "~0.6.1",
+        "barryvdh/laravel-dompdf": "0.6.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

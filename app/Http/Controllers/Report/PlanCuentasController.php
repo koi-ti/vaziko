@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Excel;
+use Excel, View, App;
 
 use App\Models\Accounting\PlanCuenta;
 
@@ -31,19 +31,26 @@ class PlanCuentasController extends Controller
             $query->orderBy('plancuentas_cuenta', 'asc');
             $plancuentas = $query->get();
 
-            Excel::create(sprintf('%s_%s_%s', 'vaziko_plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas) {
-                $excel->setTitle('Plan de Unico de Cuentas - P.U.C');
-                $excel->setCreator(config('koi.app.name'));
-                $excel->setCompany(config('koi.name'));
+            $view =  View::make('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas])->render();
+            $pdf = App::make('dompdf.wrapper');
+            $pdf->loadHTML($view);
+            return $pdf->download('invoice.pdf');
 
-                $excel->sheet('Excel', function($sheet) use($plancuentas) {
-                    $sheet->setFontSize(9);
-                    $sheet->loadView('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas]);
-                });
-            })->download('pdf');
+            // return $pdf->stream('invoice', ['Attachment' => 0]);
 
-        }else{
-            return view('reports.accounting.plancuentas.index');
+            // Excel::create(sprintf('%s_%s_%s', 'vaziko_plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas) {
+            //     $excel->setTitle('Plan de Unico de Cuentas - P.U.C');
+            //     $excel->setCreator(config('koi.app.name'));
+            //     $excel->setCompany(config('koi.name'));
+
+            //     $excel->sheet('Excel', function($sheet) use($plancuentas) {
+            //         $sheet->setFontSize(9);
+            //         $sheet->loadView('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas]);
+            //     });
+            // })->download('pdf');
+
         }
+
+        return view('reports.accounting.plancuentas.index');
     }
 }
