@@ -4,8 +4,8 @@
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-				<th width="15%">CUENTA</th>
-				<th width="76%">NOMBRE</th>
+				<th width="15%" style="text-align:left">CUENTA</th>
+				<th width="76%" style="text-align:left">NOMBRE</th>
 				<th width="3%" style="text-align:center">NV</th>
 				<th width="3%" style="text-align:center">C/D</th>
 				<th width="3%" style="text-align:center">TER</th>
