@@ -38,7 +38,7 @@ class PlanCuentasController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas, $title, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'plancuentas', date('Y_m_d'), date('H_m_s')), function($excel) use($plancuentas, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($plancuentas, $title, $type) {
                             $sheet->loadView('reports.accounting.plancuentas.report', compact('plancuentas', 'title', 'type'));
                         });
@@ -49,7 +49,7 @@ class PlanCuentasController extends Controller
                     $pdf = App::make('dompdf.wrapper');
                     $pdf->loadHTML(View::make('reports.accounting.plancuentas.report',  compact('plancuentas', 'title', 'type'))->render());
                     $pdf->setPaper('A4', 'letter')->setWarnings(false);
-                    return $pdf->download(sprintf('%s_%s_%s.pdf', 'plancuentas', date('Y-m-d'), date('H:m:s')));
+                    return $pdf->download(sprintf('%s_%s_%s.pdf', 'plancuentas', date('Y_m_d'), date('H_m_s')));
                 break;
             }
         }
