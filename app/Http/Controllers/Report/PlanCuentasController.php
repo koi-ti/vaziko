@@ -38,7 +38,7 @@ class PlanCuentasController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'vaziko_plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas, $title, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($plancuentas, $title, $type) {
                             $sheet->loadView('reports.accounting.plancuentas.report', compact('plancuentas', 'title', 'type'));
                         });
