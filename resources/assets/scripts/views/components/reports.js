@@ -25,13 +25,11 @@ app || (app = {});
 		},
 
 		onPdf: function(e) {
-
-            console.log( e );
+			this.$("#type-report-koi-component").val('pdf');
 		},
 
 		onXls: function(e) {
-
-            console.log( e );
+			this.$("#type-report-koi-component").val('xls');
 		}
     });
 

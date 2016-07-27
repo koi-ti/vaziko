@@ -15,36 +15,35 @@
 
    	<section class="content">
 	    <div class="box box-success" id="empresa-create">
-		 	{!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}
+	    	<form action="{{ route('rplancuentas.index') }}" method="GET" data-toggle="validator">
+			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
+				<div class="box-body">
+					<div class="row">
+						<div class="form-group col-md-offset-5 col-md-2">
+							<label for="nivel" class="control-label">Nivel</label>
+							<select name="nivel" id="nivel" class="form-control select2-default-clear">
+								<option value="" selected></option>
+								@foreach( config('koi.contabilidad.plancuentas.niveles') as $key => $value)
+									<option value="{{ $key }}">{{ $value }}</option>
+								@endforeach
+							</select>
+						</div>
+					</div>
 
-			<div class="box-body">
-				<div class="row">
-					<div class="form-group col-md-offset-5 col-md-2">
-						<label for="plancuentas_nivel" class="control-label">Nivel</label>
-						<select name="plancuentas_nivel" id="plancuentas_nivel" class="form-control select2-default-clear">
-							<option value="" selected></option>
-							@foreach( config('koi.contabilidad.plancuentas.niveles') as $key => $value)
-								<option value="{{ $key }}">{{ $value }}</option>
-							@endforeach
-						</select>
+					<div class="row">
+						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
+								<i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
+							</button>
+						</div>
+						<div class="col-md-2 col-sm-6 col-xs-6">
+							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
+								<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
+							</button>
+						</div>
 					</div>
 				</div>
-
-				<div class="row">
-					<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-						<button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-							<i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-						</button>
-					</div>
-					<div class="col-md-2 col-sm-6 col-xs-6">
-						<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-							<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-						</button>
-					</div>
-				</div>
-			</div>
-
-			{!! Form::close() !!}
+			</form>
 		</div>
 	</section>
 @stop

@@ -36,21 +36,21 @@ Route::group(['middleware' => 'auth'], function()
 	|-------------------------
 	| Admin Routes
 	|-------------------------
-	*/	
+	*/
 	Route::group(['prefix' => 'terceros'], function()
 	{
 		Route::get('dv', ['as' => 'terceros.dv', 'uses' => 'Admin\TerceroController@dv']);
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
-                
+
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
-	});	
+	});
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
     Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
-        
+
 	/*
 	|-------------------------
 	| Accounting Routes
@@ -68,13 +68,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
 	});
 	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-        
+
 	Route::group(['prefix' => 'asientos'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store']]);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-	
+
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);
 
@@ -83,5 +83,5 @@ Route::group(['middleware' => 'auth'], function()
 	| Reports Routes
 	|-------------------------
 	*/
-   	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only'=>['index', 'store']]);
+   	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
 });
