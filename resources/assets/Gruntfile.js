@@ -68,7 +68,8 @@ module.exports = function(grunt) {
 					]
 				},
 				files: {
-					"../../public/css/app.min.css": "./css/app.less"
+					"../../public/css/app.min.css": "./css/app.less",
+					"../../public/css/report.min.css": "./css/report.less"
 				}
 			}
 		},
