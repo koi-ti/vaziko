@@ -16,7 +16,20 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-        }
+			'asiento1_ano': moment().format('YYYY'),
+			'asiento1_mes': moment().format('M'),
+			'asiento1_dia': moment().format('D'),
+			'asiento1_folder': '',
+			'asiento1_documento': '',
+			'asiento1_numero': '',
+			'asiento1_beneficiario': '',
+			'tercero_nit': '',
+			'tercero_nombre': '',
+			'asiento1_sucursal': '',
+			'asiento1_preguardado': '',
+			'asiento1_detalle': '',
+			'asiento1_fecha_elaboro': ''
+		}
     });
 
 })(this, this.document);

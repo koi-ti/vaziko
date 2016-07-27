@@ -24,6 +24,7 @@ class CreateAsiento1Table extends Migration
             $table->integer('asiento1_dia');
             $table->integer('asiento1_beneficiario')->unsigned();  
             $table->integer('asiento1_sucursal')->unsigned()->nullable();  
+            $table->boolean('asiento1_preguardado')->default(false);                            
             $table->text('asiento1_detalle')->nullable();  
             $table->integer('asiento1_usuario_elaboro')->unsigned();  
             $table->datetime('asiento1_fecha_elaboro');  

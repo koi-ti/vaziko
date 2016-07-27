@@ -23,14 +23,13 @@
 			<div class="row">
 				<label for="asiento1_ano" class="col-sm-1 control-label">Fecha</label>
 				<div class="form-group col-sm-2">
-					<input id="asiento1_ano" value="{{ date('Y') }}" placeholder="Año" class="form-control input-sm input-toupper" name="asiento1_ano" type="number" maxlength="4" data-minlength="4" required>
+					<input id="asiento1_ano" value="<%- asiento1_ano %>" placeholder="Año" class="form-control input-sm input-toupper" name="asiento1_ano" type="number" maxlength="4" data-minlength="4" required>
 				</div>
 
 				<div class="form-group col-sm-2">
 					<select name="asiento1_mes" id="asiento1_mes" class="form-control" required>
 						@foreach( config('koi.meses') as $key => $value)
-							<option value="{{ $key }}" {{ date('m') == $key ? 'selected': '' }} >{{ $value }}</option>
-
+							<option value="{{ $key }}" <%- asiento1_mes == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 						@endforeach
 					</select>
 				</div>
@@ -38,7 +37,7 @@
 				<div class="form-group col-sm-1">
 					<select name="asiento1_dia" id="asiento1_dia" class="form-control" required>
 						@for($i = 1; $i <= 31; $i++)
-							<option value="{{ $i }}" {{ date('d') == $i ? 'selected': '' }} >{{ $i }}</option>
+							<option value="{{ $i }}" <%- asiento1_dia == '{{ $i }}' ? 'selected': ''%>>{{ $i }}</option>
 						@endfor
 					</select>
 				</div>
@@ -50,7 +49,7 @@
 					<select name="asiento1_folder" id="asiento1_folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper="asientos-create" data-documents="asiento1_documento" required>
 						<option value="" selected>Seleccione</option>
 						@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
-							<option value="{{ $key }}" >{{ $value }}</option>
+							<option value="{{ $key }}" <%- asiento1_folder == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 						@endforeach
 					</select>
 				</div>
@@ -59,12 +58,15 @@
 				<div class="form-group col-sm-3">
 					<select name="asiento1_documento" id="asiento1_documento" class="form-control select2-default" required>
 						<option value="" selected>Seleccione</option>
+						@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
+							<option value="{{ $key }}" <%- asiento1_documento == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
+						@endforeach
 					</select>
 				</div>
 
 				<label for="asiento1_numero" class="col-sm-1 control-label">Número</label>
 				<div class="form-group col-sm-2">
-					<input id="asiento1_numero" name="asiento1_numero" value="" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
+					<input id="asiento1_numero" name="asiento1_numero" value="<%- asiento1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
 				</div>
             </div> 
 
@@ -77,18 +79,18 @@
 								<i class="fa fa-user"></i>
 							</button>
 						</span>
-						<input id="asiento1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento1_beneficiario" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento1_beneficiario_nombre" required>		
+						<input id="asiento1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento1_beneficiario" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento1_beneficiario_nombre" value="<%- tercero_nit %>" required>		
 					</div>
 				</div>
 				<div class="col-sm-5">
-					<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled required>
+					<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" disabled required>
 				</div>
 			</div>
 
 			<div class="row">
 				<label for="asiento1_detalle" class="col-sm-1 control-label">Detalle</label>
 				<div class="form-group col-sm-10">
-					<textarea id="asiento1_detalle" name="asiento1_detalle" class="form-control" rows="2" placeholder="Detalle"></textarea>
+					<textarea id="asiento1_detalle" name="asiento1_detalle" class="form-control" rows="2" placeholder="Detalle"><%- asiento1_detalle %></textarea>
 				</div>
             </div> 
 		</form>
@@ -101,15 +103,15 @@
 						<div class="form-group col-sm-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat" data-field="asiento2_cuenta">
+									<button type="button" class="btn btn-default btn-flat" data-field="plancuentas_cuenta">
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="asiento2_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="asiento2_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_cuenta_nombre" required>		
+								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" required>		
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<input id="asiento2_cuenta_nombre" name="asiento2_cuenta_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled required>
+							<input id="plancuentas_nombre" name="plancuentas_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled required>
 						</div>
 
 						<div class="form-group col-sm-6">
@@ -125,15 +127,15 @@
 						<div class="form-group col-sm-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat" data-field="asiento2_beneficiario_nit">
+									<button type="button" class="btn btn-default btn-flat" data-field="tercero_nit">
 										<i class="fa fa-user"></i>
 									</button>
 								</span>
-								<input id="asiento2_beneficiario_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento2_beneficiario_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento2_beneficiario_nombre" required>		
+								<input id="tercero_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="tercero_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="tercero_nombre" required>		
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<input id="asiento2_beneficiario_nombre" name="asiento2_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled required>
+							<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled required>
 						</div>
 
 						<div class="form-group col-sm-3">
@@ -147,7 +149,7 @@
 						</div>
 
 						<div class="form-group col-sm-2">
-							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" type="text">
+							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" readonly="readonly" type="text">
 						</div>
 					</div>
 

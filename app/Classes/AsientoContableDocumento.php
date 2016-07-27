@@ -10,12 +10,19 @@ class AsientoContableDocumento {
 
 	public $asiento;
 	private $beneficiario;
+	private $documento;
 	private $asiento_cuentas = [];
 	public $asiento_error = NULL;
+	public $preguardado = false;
 
-	function __construct(Array $data)
+	function __construct(Array $data, Asiento $asiento = null)
 	{
-        $this->asiento = new Asiento;
+		// Cuando se edita termina un asiento PRE-GUARDADO ya existe $asiento  
+		if(!$asiento instanceof Asiento) {
+   	 		$asiento = new Asiento;
+		}
+		$this->asiento = $asiento;                    
+        
         if (!$this->asiento->isValid($data)) {
         	$this->asiento_error = $this->asiento->errors;
         }
@@ -24,21 +31,47 @@ class AsientoContableDocumento {
         // Recuperar tercero
         $this->beneficiario = Tercero::where('tercero_nit', $data['asiento1_beneficiario'])->first();
         if(!$this->beneficiario instanceof Tercero) {
-            return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";                    
+        	$this->asiento_error = "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador."; 
+        	return; 
         }
 
-		// $this->asiento1_usuario_elaboro = Auth::user()->codigo_usuario;
-		// $this->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
+        // Recuerar documento
+        $this->documento = Documento::where('id', $this->asiento->asiento1_documento)->first();
+        if(!$this->documento instanceof Documento) {
+            $this->asiento_error = "No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.";
+            return;                    
+        }
 
+        // Generar consecutivo, en caso de confirmar PRE-GUARDADO no actualizar consecutivo en documento
+		if($this->asiento->asiento1_preguardado == false) {
+	        // Recuperar consecutivo
+	        if($this->documento->documento_tipo_consecutivo == 'A'){ 
+	        	$this->asiento->asiento1_numero = $this->documento->documento_consecutivo + 1;
+	        }
+
+	        // Validar consecutivo
+	        if (!intval($this->asiento->asiento1_numero) || $this->asiento->asiento1_numero <= 0){
+				$this->asiento_error = "No es posible recuperar el consecutivo documento ({$this->asiento->asiento1_numero}), por favor verifique la información del asiento o consulte al administrador.";
+				return;
+			}
+
+			$asiento = Asiento::where('asiento1_numero', $this->asiento->asiento1_numero)->where('asiento1_documento', $this->documento->id)->first();
+			if($asiento instanceof Asiento) {
+	            $this->asiento_error = "Ya existe asiento con el numero {$this->asiento->asiento1_numero} para el documento {$this->documento->documento_nombre}, por favor verifique la información del asiento o consulte al administrador.";  
+	            return;                  
+	        }
+	  	}
+
+        // Validar Pre-Guardado
+        if(isset($data['preguardado']) && $data['preguardado'] == true) {
+        	$this->preguardado = true;	
+        }
+
+        // Validar cierre contable 
 		// $empresa = $Skina->getEmpresa_UI();
 		// if( $this->asiento1_fecha <= $empresa->empresa_fecha_contabilidad){
-		// $db->RollBackTrans();
-		// $this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
-		// $this->asiento_error = 'La fecha que intenta realizar el asiento: no esta PERMITIDA. Es menor a la del cierre contable :';
+		// 	$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
 		// }
-
-		// $this->asiento1_mes = date('m');
-		// $this->asiento1_ano = date('Y');
 	}
 
 	function asientoCuentas($cuentas = null, $num = null, $item = 1)
@@ -48,10 +81,13 @@ class AsientoContableDocumento {
 		}
 		$this->asiento_cuentas = $cuentas;
 
-		// Valido que las sumas sean Iguales
-		$result = $this->validarSumas();
-		if ($result != 'OK'){
-			return $result;
+		// Preguardado asiento contable FALSE no valida sumas 
+		if($this->preguardado == false) {
+			// Valido que las sumas sean Iguales
+			$result = $this->validarSumas();
+			if ($result != 'OK'){
+				return $result;
+			}
 		}
 
 		foreach ($this->asiento_cuentas as $cuenta) 
@@ -59,7 +95,7 @@ class AsientoContableDocumento {
 			// Recuperar cuenta
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $cuenta['Cuenta'])->first();
             if(!$objCuenta instanceof PlanCuenta) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";                    
+                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (asientoCuentas). ";                    
             }
 
 			// Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
@@ -85,37 +121,28 @@ class AsientoContableDocumento {
 	        if(!is_array($niveles)) {
 				return "Error al recuperar niveles para la cuenta {$cuenta['Cuenta']}.";
 	        }
-
-			// $array_niveles = $Skina->Setear_NivelesCuenta($this->asiento_cuentas[$i]['Cuenta']);
-			// $clase = $array_niveles['clase'];
-			// $grupo = $array_niveles['grupo'];
-			// $n1 = $array_niveles['nivel1'];
-			// $n2 = $array_niveles['nivel2'];
-			// $n3 = $array_niveles['nivel3'];
-			// $n4 = $array_niveles['nivel4'];
-			// $n5 = $array_niveles['nivel5'];
-
-			// if($n1==0&&($n2!=0||$n3!=0||$n4!=0||$n5!=0)){
-			// $db->RollBackTrans();
-			// $Msg=" El nivel 1 de la cuenta ".$this->asiento_cuentas[$i]['Cuenta']."  es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. Nivel 2 $n2 , Nivel 3 $n3 , Nivel 4 $n4 5 $n5 ";
-			// return $Msg;
-			// }
-			// if($n2==0&&($n3!=0||$n4!=0 || $n5!=0 )){
-			// $db->RollBackTrans();
-			// $Msg=" El nivel 2 de la cuenta ".$this->asiento_cuentas[$i]['Cuenta']." es cero y un nivel inferior es disitnto de cero. No se puede realizar el Asiento. Nivel 3 $n3 , Nivel 4 $n4  5 $n5";
-			// return $Msg;
-			// }
-			// if($n3==0 && ($n4!=0 ||$n5!=0)){
-			// $db->RollBackTrans();
-			// $Msg=" El nivel 3 de la cuenta ".$this->asiento_cuentas[$i]['Cuenta']." es cero y el nivel 4 es disitnto de cero. No se puede realizar el Asiento. Nivel 4 $n4 5 $n5.";
-			// return $Msg;
-			// }
-
-			// if($n4==0 && $n5!=0){
-			// $db->RollBackTrans();
-			// $Msg=" El nivel 4 de la cuenta  ".$this->asiento_cuentas[$i]['Cuenta']." es cero y el nivel 5 es disitnto de cero. No se puede realizar el Asiento. Nivel 4 $n4 5 $n5.";
-			// return $Msg;
-			// }
+			
+			// Verifico que existan todos los niveles de la cuenta
+			$srnivel = "<br/>N2: {$niveles['nivel2']}, N3: {$niveles['nivel3']}, N4: {$niveles['nivel4']}, N5: {$niveles['nivel5']}, N6: {$niveles['nivel6']}, N7: {$niveles['nivel7']}, N8: {$niveles['nivel8']}";
+			
+			if($niveles['nivel2'] == 0 && ($niveles['nivel3'] != 0 || $niveles['nivel4'] != 0 || $niveles['nivel5'] != 0 || $niveles['nivel6'] != 0 || $niveles['nivel7'] != 0 || $niveles['nivel8'] != 0)) {
+				return "El nivel 2 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			
+			}else if($niveles['nivel3'] == 0 && ($niveles['nivel4'] != 0 || $niveles['nivel5'] != 0 || $niveles['nivel6'] != 0 || $niveles['nivel7'] != 0 || $niveles['nivel8'] != 0)) {
+				return "El nivel 3 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			
+			}else if($niveles['nivel4'] == 0 && ($niveles['nivel5'] != 0 || $niveles['nivel6'] != 0 || $niveles['nivel7'] != 0 || $niveles['nivel8'] != 0)) {
+				return "El nivel 4 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			
+			}else if($niveles['nivel5'] == 0 && ($niveles['nivel6'] != 0 || $niveles['nivel7'] != 0 || $niveles['nivel8'] != 0)) {
+				return "El nivel 5 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			
+			}else if($niveles['nivel6'] == 0 && ($niveles['nivel7'] != 0 || $niveles['nivel8'] != 0)) {
+				return "El nivel 6 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			
+			}else if($niveles['nivel7'] == 0 && $niveles['nivel8'] != 0) {
+				return "El nivel 7 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
+			}
 
 			if (floatval($cuenta['Debito']) > 0 && $cuenta['Credito'] == 0) {
 				$debito += round($cuenta['Debito'],2);
@@ -137,18 +164,21 @@ class AsientoContableDocumento {
 
 	public function insertarAsiento() 
 	{
-     	// Recuerar documento
-        $documento = Documento::where('id', $this->asiento->asiento1_documento)->first();
-        if(!$documento instanceof Documento) {
-            return "No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.";                    
-        }
-        $consecutivo = $documento->documento_consecutivo + 1;
-        if (!intval($consecutivo)){
-			return "No es posible recuperar el consecutivo documento, por favor verifique la información del asiento o consulte al administrador.";
+		// Valido registros de asiento2, en caso de confirmar PRE-GUARDADO eliminar registros existentes
+		$asientos = Asiento2::where('asiento2_asiento', $this->asiento->id)->get();
+		if($asientos->count() > 0 || $this->asiento->asiento1_preguardado) {
+			Asiento2::where('asiento2_asiento', $this->asiento->id)->delete();
+		}
+		
+		// Actualizar consecutivo, en caso de confirmar PRE-GUARDADO no actualizar consecutivo en documento
+		if($this->asiento->asiento1_preguardado == false){
+			$this->documento->documento_consecutivo = $this->asiento->asiento1_numero;
+			$this->documento->save();
+
 		}
 
 		// Asiento
-		$this->asiento->asiento1_numero = $consecutivo;
+		$this->asiento->asiento1_preguardado = $this->preguardado;
 		$this->asiento->asiento1_beneficiario = $this->beneficiario->id;
 		$this->asiento->asiento1_usuario_elaboro = Auth::user()->id;
 		$this->asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
@@ -159,7 +189,7 @@ class AsientoContableDocumento {
 	        // Recuperar cuenta
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $cuenta['Cuenta'])->first();
             if(!$objCuenta instanceof PlanCuenta) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";                    
+                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (1. insertarAsiento).";                    
             }
             
             // Recuperar niveles cuenta
@@ -184,7 +214,7 @@ class AsientoContableDocumento {
 	        if(isset($cuenta['CentroCosto']) && !empty($cuenta['CentroCosto'])) {
 	            $objCentroCosto = CentroCosto::find($cuenta['CentroCosto']);
 	            if(!$objCentroCosto instanceof CentroCosto) {
-	                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";                    
+	                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (2. insertarAsiento).";                    
 	            }
 	        } 
 
@@ -210,23 +240,21 @@ class AsientoContableDocumento {
 		    $asiento2->asiento2_detalle = $cuenta['Detalle'] ?: '';
 		    $asiento2->save(); 
 
-		    // Mayorizacion de saldos Contables
-            $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			if($result != 'OK') {
-				return $result;
-			}
+    		// Preguardado asiento contable FALSE realiza movimientos contables 
+		    if($this->preguardado == false) {
+			    // Mayorizacion de saldos Contables
+	            $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+				if($result != 'OK') {
+					return $result;
+				}
 
-			// Mayorizacion de saldos x tercero
-			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			if($result != 'OK') {
-				return $result;
+				// Mayorizacion de saldos x tercero
+				$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+				if($result != 'OK') {
+					return $result;
+				}
 			}
 		}
-
-		// Actualizar consecutivo
-		$documento->documento_consecutivo = $consecutivo;
-		$documento->save();
-
 		return 'OK';
 	}
 
@@ -412,7 +440,7 @@ class AsientoContableDocumento {
 	        // Recuperar cuenta
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $item)->first();
             if(!$objCuenta instanceof PlanCuenta) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";                    
+                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (saldosContables).";                    
             }
 
             // Recuperar registro saldos contable

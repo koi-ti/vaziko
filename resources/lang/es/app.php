@@ -23,5 +23,9 @@ return [
     'edit' => 'Editar',
     'comeback' => 'Regresar',
     'cancel' => 'Cancelar',
-    'add' => 'Agregar'
+    'add' => 'Agregar',
+    'continue' => 'Continuar',
+
+    'pdf' => 'Generar PDF',
+    'xls' => 'Generar XLS',
 ];

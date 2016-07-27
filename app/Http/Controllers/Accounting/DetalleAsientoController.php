@@ -24,7 +24,7 @@ class DetalleAsientoController extends Controller
             $detalle = [];
             if($request->has('asiento')) {
                 $query = Asiento2::query();
-                $query->select('koi_asiento2.*', 'plancuentas_cuenta', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'plancuentas_nombre', 'centrocosto_nombre', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"));
+                $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"), DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
                 $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
                 $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
                 $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
@@ -61,13 +61,13 @@ class DetalleAsientoController extends Controller
             if ($asiento2->isValid($data)) {
                 try {
                     // Recuperar tercero
-                    $tercero = Tercero::where('tercero_nit', $request->asiento2_beneficiario_nit)->first();
+                    $tercero = Tercero::where('tercero_nit', $request->tercero_nit)->first();
                     if(!$tercero instanceof Tercero) {
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);                    
                     }
                       
                     // Recuperar cuenta
-                    $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->asiento2_cuenta)->first();
+                    $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
                     if(!$cuenta instanceof PlanCuenta) {
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.']);                    
                     }
@@ -90,6 +90,11 @@ class DetalleAsientoController extends Controller
                         if(!$centrocosto instanceof CentroCosto) {
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.']);                    
                         }
+                    }
+
+                    // Validar valor
+                    if(!is_numeric($request->asiento2_valor) || $request->asiento2_valor <= 0) {
+                        return response()->json(['success' => false, 'errors' => "Valor no puede ser menor o igual a 0 ($request->asiento2_valor)."]);                    
                     }
 
                     return response()->json(['success' => true, 'id' => uniqid(), 
