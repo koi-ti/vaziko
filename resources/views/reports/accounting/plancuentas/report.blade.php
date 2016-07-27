@@ -1,4 +1,4 @@
-@extends('reports.layout', ['title' => 'Plan de Unico de Cuentas - P.U.C'])
+@extends('reports.layout', ['type' => $type, 'title' => $title])
 
 @section('content')
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
@@ -11,12 +11,11 @@
 				<th width="5%" class="center">TER</th>
 			</tr>
 		</thead>
-
 		<tbody>
 			@foreach($plancuentas as $cuenta)
 				<tr>
 					<td class="left">{{ $cuenta->plancuentas_cuenta }}</td>
-					<td class="left">{{ printf('%s%s', str_repeat('&nbsp;&nbsp;', $cuenta->plancuentas_nivel), $cuenta->plancuentas_nombre) }}</td>
+					<td class="left">{{ $cuenta->plancuentas_nombre }}</td>
 					<td class="center">{{ $cuenta->plancuentas_nivel }}</td>
 					<td class="center">{{ $cuenta->plancuentas_naturaleza }}</td>
 					<td class="center">{{ $cuenta->plancuentas_tercero ? 'SI' : 'NO' }}</td>
