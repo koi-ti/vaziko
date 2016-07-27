@@ -24,8 +24,8 @@ class PlanCuentasController extends Controller
             $query = PlanCuenta::query();
 
             // Filters
-            if($request->has('plancuentas_nivel')) {
-                $query->where('plancuentas_nivel', $request->plancuentas_nivel);
+            if($request->has('nivel')) {
+                $query->where('plancuentas_nivel', $request->nivel);
             }
 
             $query->orderBy('plancuentas_cuenta', 'asc');
@@ -35,7 +35,6 @@ class PlanCuentasController extends Controller
             $pdf->loadHTML(View::make('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas])->render());
             $pdf->setPaper('A4', 'letter')->setWarnings(false);
 
-            // return PDF::loadFile(public_path().'/myfile.html')
             return $pdf->stream(sprintf('%s_%s_%s.pdf', 'plancuentas', date('Y-m-d'), date('H:m:s')));
 
             // return $dompdf->stream('invoice', ['Attachment'=>0);
