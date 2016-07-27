@@ -41,7 +41,9 @@ class PlanCuentasController extends Controller
                     $sheet->loadView('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas]);
                 });
             })->download('pdf');
+
+        }else{
+            return view('reports.accounting.plancuentas.index');
         }
-        return view('reports.accounting.plancuentas.index');
     }
 }
