@@ -34,9 +34,8 @@ class PlanCuentasController extends Controller
             $view =  View::make('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas])->render();
             $pdf = App::make('dompdf.wrapper');
             $pdf->loadHTML($view);
-            return $pdf->download('invoice.pdf');
-
-            // return $pdf->stream('invoice', ['Attachment' => 0]);
+            return $pdf->stream('invoice');
+            // return $dompdf->stream('invoice', ['Attachment'=>0);
 
             // Excel::create(sprintf('%s_%s_%s', 'vaziko_plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas) {
             //     $excel->setTitle('Plan de Unico de Cuentas - P.U.C');
