@@ -31,25 +31,27 @@ class PlanCuentasController extends Controller
             $query->orderBy('plancuentas_cuenta', 'asc');
             $plancuentas = $query->get();
 
-            $pdf = App::make('dompdf.wrapper');
-            $pdf->loadHTML(View::make('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas])->render());
-            $pdf->setPaper('A4', 'letter')->setWarnings(false);
+            // Prepare data
+            $title = 'Plan de Unico de Cuentas - P.U.C';
+            $type = $request->type;
 
-            return $pdf->stream(sprintf('%s_%s_%s.pdf', 'plancuentas', date('Y-m-d'), date('H:m:s')));
+            // Generate file
+            switch ($type) {
+                case 'xls':
+                    Excel::create(sprintf('%s_%s_%s', 'plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas, $title, $type) {
+                        $excel->sheet('Excel', function($sheet) use($plancuentas, $title, $type) {
+                            $sheet->loadView('reports.accounting.plancuentas.report', compact('plancuentas', 'title', 'type'));
+                        });
+                    })->download('xls');
+                break;
 
-            // return $dompdf->stream('invoice', ['Attachment'=>0);
-
-            // Excel::create(sprintf('%s_%s_%s', 'vaziko_plancuentas', date('Y-m-d'), date('H:m:s')), function($excel) use($plancuentas) {
-            //     $excel->setTitle('Plan de Unico de Cuentas - P.U.C');
-            //     $excel->setCreator(config('koi.app.name'));
-            //     $excel->setCompany(config('koi.name'));
-
-            //     $excel->sheet('Excel', function($sheet) use($plancuentas) {
-            //         $sheet->setFontSize(9);
-            //         $sheet->loadView('reports.accounting.plancuentas.report', ['plancuentas' => $plancuentas]);
-            //     });
-            // })->download('pdf');
-
+                case 'pdf':
+                    $pdf = App::make('dompdf.wrapper');
+                    $pdf->loadHTML(View::make('reports.accounting.plancuentas.report',  compact('plancuentas', 'title', 'type'))->render());
+                    $pdf->setPaper('A4', 'letter')->setWarnings(false);
+                    return $pdf->download(sprintf('%s_%s_%s.pdf', 'plancuentas', date('Y-m-d'), date('H:m:s')));
+                break;
+            }
         }
 
         return view('reports.accounting.plancuentas.index');
