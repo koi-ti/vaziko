@@ -2,7 +2,72 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 		<title>{{ $title }}</title>
-        <link href="{{ asset("/css/report.min.css") }}" rel="stylesheet" type="text/css" />
+		<style type="text/css">
+			body {
+				font-size: 9;
+				font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+				font-weight: normal;
+			}
+
+			@page{
+				margin-top: 35px;
+				margin-right: 30px;
+				margin-left: 30px;
+				margin-bottom: 35px;
+			}
+
+			.tbtitle {
+				width: 100%;
+			}
+
+			.company{
+				font-size: 16px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			.nit{
+				font-size: 12px;
+				font-weight: bold;
+				text-align: center;
+				border-bottom: 1px solid black;
+			}
+
+			.title{
+				font-size: 12px;
+				font-weight: bold;
+				text-align: center;
+			}
+
+			.rtable{
+				width: 100%;
+			}
+
+			.rtable th {
+				border: 1px solid black;
+				padding-left: 2px;
+			}
+
+			.rtable td, th {
+				height: 19px;
+			}
+
+			.rtable tr:nth-child(even) {
+				background-color: #f2f2f2
+			}
+
+			.left {
+				text-align: left;
+			}
+
+			.right {
+				text-align: right;
+			}
+
+			.center{
+				text-align: center;
+			}
+			</style>
 	</head>
 	<body>
 		{{--*/ $empresa = App\Models\Base\Empresa::getEmpresa(); /*--}}
