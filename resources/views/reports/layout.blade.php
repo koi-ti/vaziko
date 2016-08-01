@@ -71,6 +71,10 @@
 				.center{
 					text-align: center;
 				}
+
+				.bold{
+					font-weight: bold;
+				}
 			</style>
 		@endif
 	</head>

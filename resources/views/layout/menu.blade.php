@@ -54,7 +54,7 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -66,7 +66,7 @@
             </li>
 
             {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rplancuentas']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -74,9 +74,9 @@
                     <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
                         <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
                     </li>
-                    {{-- <li class="{{ Request::segment(1) == 'centroscosto' ? 'active' : '' }}">
-                        <a href="{{ route('centroscosto.index') }}"><i class="fa fa-circle-o"></i> Auxiliares contables</a>
-                    </li> --}}
+                    <li class="{{ Request::segment(1) == 'rmayorbalance' ? 'active' : '' }}">
+                        <a href="{{ route('rmayorbalance.index') }}"><i class="fa fa-circle-o"></i> Mayor y balance</a>
+                    </li>
                 </ul>
             </li>
 

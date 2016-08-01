@@ -5,10 +5,11 @@
 		<thead>
 			<tr>
 				<th width="15%" class="left">CUENTA</th>
-				<th width="70%" class="left">NOMBRE</th>
+				<th width="62%" class="left">NOMBRE</th>
 				<th width="5%" class="center">NV</th>
 				<th width="5%" class="center">C/D</th>
 				<th width="5%" class="center">TER</th>
+				<th width="8%" class="center">TASA</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,6 +20,7 @@
 					<td class="center">{{ $cuenta->plancuentas_nivel }}</td>
 					<td class="center">{{ $cuenta->plancuentas_naturaleza }}</td>
 					<td class="center">{{ $cuenta->plancuentas_tercero ? 'SI' : 'NO' }}</td>
+					<td class="right">{{ $cuenta->plancuentas_tasa }}</td>
 				</tr>
 			@endforeach
 		</tbody>
