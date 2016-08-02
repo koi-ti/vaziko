@@ -10,22 +10,29 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.ComponentSearchCuentaView = Backbone.View.extend({
-        
+
       	el: 'body',
 		events: {
-			'change input.plancuenta-koi-component': 'cuentaChanged'
+			'change input.plancuenta-koi-component': 'cuentaChanged',
+            'click .btn-plancuenta-koi-component': 'searchCuenta'
 		},
 
         /**
         * Constructor Method
         */
 		initialize: function() {
-			// Initialize     
+			// Initialize
+		},
+
+		searchCuenta: function(e) {
+            e.preventDefault();
+
+            console.log('searchCuenta');
 		},
 
 		cuentaChanged: function(e) {
 			var _this = this;
-			
+
 			this.$inputContent = $(e.currentTarget);
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$inputBase = this.$("#"+$(e.currentTarget).attr("data-base"));
@@ -43,7 +50,7 @@ app || (app = {});
             }
 
 			if(!_.isUndefined(cuenta) && !_.isNull(cuenta) && cuenta != '') {
-				// Get plan cuenta 
+				// Get plan cuenta
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('plancuentas.search')),
 	                type: 'GET',
@@ -52,24 +59,24 @@ app || (app = {});
 						window.Misc.setSpinner( _this.$wraperConten );
 	                }
 	            })
-	            .done(function(resp) {  
+	            .done(function(resp) {
 	                window.Misc.removeSpinner( _this.$wraperConten );
                    if(resp.success) {
 	                    // Set name
 	                    if(!_.isUndefined(resp.plancuentas_nombre) && !_.isNull(resp.plancuentas_nombre)){
 							_this.$inputName.val(resp.plancuentas_nombre);
 	                    }
-	                    
+
 	                    // Eval base
                     	if(_this.$inputBase.length) {
 							_this.$inputBase.prop('readonly', true);
-							
+
 	                    	if(!_.isUndefined(resp.plancuentas_tasa) && !_.isNull(resp.plancuentas_tasa) && resp.plancuentas_tasa > 0) {
 	                    		// Case plancuentas_tasa eval value
 	                    		_this.$inputBase.prop('readonly', false);
 	             				_this.$inputValor.val( (resp.plancuentas_tasa * _this.$inputBase.val()) );
 	                    	}else{
-	                    		// Case without plancuentas_tasa 
+	                    		// Case without plancuentas_tasa
 	                    		_this.$inputBase.val(0);
 	                    	}
 	                    }

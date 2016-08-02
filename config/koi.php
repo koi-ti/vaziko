@@ -7,25 +7,25 @@ return [
 	'image' => '/images/koi.png',
 
     'app' => [
-    	'name' => 'Váziko',
-    	'site' => 'http://www.vaziko.com', 	
-    	
-	    'image' => [
+        'name' => 'Váziko',
+        'site' => 'http://www.vaziko.com',
+        'image' => [
             'logo' => '/images/logo.png',
-    		'avatar' => '/images/avatar.svg'
-    	]
+            'avatar' => '/images/avatar.svg'
+        ],
+    	'ano' => 2015
     ],
 
     'meses' => [
-        01 => 'Enero',
-        02 => 'Febrero',
-        03 => 'Marzo',
-        04 => 'Abril',
-        05 => 'Mayo',
-        06 => 'Junio',
-        07 => 'Julio',
-        08 => 'Agosto',
-        09 => 'Septiembre',
+        1 => 'Enero',
+        2 => 'Febrero',
+        3 => 'Marzo',
+        4 => 'Abril',
+        5 => 'Mayo',
+        6 => 'Junio',
+        7 => 'Julio',
+        8 => 'Agosto',
+        9 => 'Septiembre',
         10 => 'Octubre',
         11 => 'Noviembre',
         12 => 'Diciembre'
@@ -33,15 +33,15 @@ return [
 
     'terceros' => [
         'tipo' => [
-            'CC' => 'Cédula de Ciudadanía', 
-            'TI' => 'Tarjeta de Identidad', 
-            'CE' => 'Cédula de Extranjería', 
+            'CC' => 'Cédula de Ciudadanía',
+            'TI' => 'Tarjeta de Identidad',
+            'CE' => 'Cédula de Extranjería',
             'PA' => 'Pasaporte', 'NI' => 'Nit'
         ],
 
         'regimen' => [
-            1 => 'Simplificado', 
-            2 => 'Común', 
+            1 => 'Simplificado',
+            2 => 'Común',
             3 => 'Especial'
         ],
 
@@ -59,23 +59,23 @@ return [
 
     'direcciones' => [
         'nomenclatura' => [
-            'AC' => 'Avenida Calle', 
-            'AK' => 'Avenida Carrera', 
-            'CL' => 'Calle', 
-            'KR' => 'Carrera', 
-            'DG' => 'Diagonal', 
+            'AC' => 'Avenida Calle',
+            'AK' => 'Avenida Carrera',
+            'CL' => 'Calle',
+            'KR' => 'Carrera',
+            'DG' => 'Diagonal',
             'TV' => 'Transversal'
         ],
         'alfabeto' => [
-            'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H', 'I' => 'I', 
-            'J' => 'J', 'K' => 'K', 'L' => 'L', 'M' => 'M', 'N' => 'N', 'O' => 'O', 'P' => 'P', 'Q' => 'Q', 'R' => 'R', 
+            'A' => 'A', 'B' => 'B', 'C' => 'C', 'D' => 'D', 'E' => 'E', 'F' => 'F', 'G' => 'G', 'H' => 'H', 'I' => 'I',
+            'J' => 'J', 'K' => 'K', 'L' => 'L', 'M' => 'M', 'N' => 'N', 'O' => 'O', 'P' => 'P', 'Q' => 'Q', 'R' => 'R',
             'S' => 'S', 'T' => 'T', 'U' => 'U', 'V' => 'V', 'W' => 'W', 'X' => 'X', 'Y' => 'Y', 'Z' => 'Z'
         ],
         'cardinales' => [
-            'SUR' => 'Sur', 
-            'ESTE' => 'Este', 
+            'SUR' => 'Sur',
+            'ESTE' => 'Este',
             'NORTE' => 'Norte'
-        ],  
+        ],
         'complementos' => [
             'APTO' => 'Apartamento',
             'AGR' => 'Agrupación',
@@ -121,23 +121,23 @@ return [
             'URB' => 'Urbanización',
             'Vía' => 'VIA',
             'ZN' => 'Zona'
-        ]  
+        ]
     ],
 
     'contabilidad' => [
-        'plancuentas' => [ 
+        'plancuentas' => [
             'naturaleza' => [
-                'D' => 'Débito', 
+                'D' => 'Débito',
                 'C' => 'Crédito'
             ],
             'tipo' => [
-                'N' => 'Ninguno', 
+                'N' => 'Ninguno',
                 'I' => 'Inventario',
                 'C' => 'Cartera',
                 'P' => 'Cuentas por pagar'
             ],
             'niveles' => [
-                '1' => 'Uno', 
+                '1' => 'Uno',
                 '2' => 'Dos',
                 '3' => 'Tres',
                 '4' => 'Cuatro',
@@ -148,17 +148,17 @@ return [
             ]
         ],
 
-        'centrocosto' => [ 
+        'centrocosto' => [
             'tipo' => [
-                'N' => 'Ninguno', 
+                'N' => 'Ninguno',
                 'O' => 'Orden',
                 'I' => 'Inventario'
             ]
         ],
 
-        'documento' => [ 
+        'documento' => [
             'consecutivo' => [
-                'A' => 'Automático', 
+                'A' => 'Automático',
                 'M' => 'Manual'
             ]
         ]

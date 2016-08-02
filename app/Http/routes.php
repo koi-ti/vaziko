@@ -84,4 +84,5 @@ Route::group(['middleware' => 'auth'], function()
 	|-------------------------
 	*/
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
+   	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
 });
