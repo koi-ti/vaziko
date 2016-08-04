@@ -15,7 +15,7 @@
 
 	<section class="content">
     	@yield('module')
-    </section>    
+    </section>
 
     {{-- Templates --}}
     <script type="text/template" id="add-asiento-tpl">
@@ -68,18 +68,18 @@
 				<div class="form-group col-sm-2">
 					<input id="asiento1_numero" name="asiento1_numero" value="<%- asiento1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
 				</div>
-            </div> 
+            </div>
 
 			<div class="row">
 				<label for="asiento1_beneficiario" class="col-sm-1 control-label">Beneficiario</label>
 				<div class="form-group col-sm-3">
 		      		<div class="input-group input-group-sm">
 						<span class="input-group-btn">
-							<button type="button" class="btn btn-default btn-flat" data-field="asiento1_beneficiario">
+							<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="asiento1_beneficiario">
 								<i class="fa fa-user"></i>
 							</button>
 						</span>
-						<input id="asiento1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento1_beneficiario" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento1_beneficiario_nombre" value="<%- tercero_nit %>" required>		
+						<input id="asiento1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento1_beneficiario" type="text" maxlength="15" data-wrapper="asientos-create" data-name="asiento1_beneficiario_nombre" value="<%- tercero_nit %>" required>
 					</div>
 				</div>
 				<div class="col-sm-5">
@@ -92,9 +92,9 @@
 				<div class="form-group col-sm-10">
 					<textarea id="asiento1_detalle" name="asiento1_detalle" class="form-control" rows="2" placeholder="Detalle"><%- asiento1_detalle %></textarea>
 				</div>
-            </div> 
+            </div>
 		</form>
-		
+
 		<!-- Detalle -->
 		<div class="box box-success">
 			<form method="POST" accept-charset="UTF-8" id="form-item-asiento" data-toggle="validator">
@@ -103,11 +103,11 @@
 						<div class="form-group col-sm-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat" data-field="plancuentas_cuenta">
+									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="plancuentas_cuenta">
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" required>		
+								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" data-tasa="asiento2_tasa" required>
 							</div>
 						</div>
 						<div class="col-sm-4">
@@ -127,15 +127,15 @@
 						<div class="form-group col-sm-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat" data-field="tercero_nit">
+									<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero_nit">
 										<i class="fa fa-user"></i>
 									</button>
 								</span>
-								<input id="tercero_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="tercero_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="tercero_nombre" required>		
+								<input id="tercero_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="tercero_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="tercero_nombre">
 							</div>
 						</div>
 						<div class="col-sm-4">
-							<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled required>
+							<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled>
 						</div>
 
 						<div class="form-group col-sm-3">
@@ -149,7 +149,8 @@
 						</div>
 
 						<div class="form-group col-sm-2">
-							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" readonly="readonly" type="text">
+							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm currency" readonly="readonly" type="text">
+							<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
 						</div>
 					</div>
 
@@ -158,19 +159,19 @@
 							<input id="asiento2_detalle" name="asiento2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
 						</div>
 						<div class="form-group col-sm-2">
-							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" type="text" required>
+							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm currency" type="text" required>
 						</div>
 						<div class="form-group col-sm-1">
 							<button type="submit" class="btn btn-success btn-sm btn-block">
 								<i class="fa fa-plus"></i>
 							</button>
 						</div>
-		            </div> 
+		            </div>
 				</div>
 			</form>
 
 			<!-- table table-bordered table-striped -->
-			<div class="box-body table-responsive no-padding"> 
+			<div class="box-body table-responsive no-padding">
 				<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 		            <tr>
 		                <th></th>

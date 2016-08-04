@@ -18,14 +18,15 @@ app || (app = {});
             'click .submit-asiento': 'submitAsiento',
             'click .pre-save-asiento': 'submitPreSaveAsiento',
             'submit #form-item-asiento': 'onStoreItem',
+            'change input#asiento2_base': 'baseChanged',
             'submit #form-asientos': 'onStore'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function() {   
-            // Attributes 
+        initialize : function() {
+            // Attributes
             this.$wraperForm = this.$('#render-form-asientos');
 
             this.asientoCuentasList = new app.AsientoCuentasList();
@@ -45,9 +46,12 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-            
+
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
+            this.$inputTasa = this.$("#asiento2_tasa");
+            this.$inputValor = this.$("#asiento2_valor");
+            this.$inputBase = this.$("#asiento2_base");
 
             // Reference views
             this.referenceViews();
@@ -55,7 +59,7 @@ app || (app = {});
             // to fire plugins
             this.ready();
 		},
-       	
+
         /**
         * fires libraries js
         */
@@ -65,13 +69,13 @@ app || (app = {});
                 window.initComponent.initToUpper();
 
             if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2(); 
+                window.initComponent.initSelect2();
 
             if( typeof window.initComponent.initValidator == 'function' )
-                window.initComponent.initValidator(); 
+                window.initComponent.initValidator();
         },
 
         /**
@@ -106,7 +110,7 @@ app || (app = {});
                         window.Misc.setSpinner( _this.el );
                     }
                 })
-                .done(function(resp) {  
+                .done(function(resp) {
                     window.Misc.removeSpinner( _this.el );
                     if( _.isObject( resp ) ) {
                         if(!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
@@ -148,13 +152,13 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
                 data.cuentas = this.asientoCuentasList.toJSON()
                 data.preguardado = this.preSave;
 
-                this.model.save( data, {patch: true, silent: true} );                
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -162,22 +166,31 @@ app || (app = {});
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
-            // e.preventDefault();             
-
-            // console.log( this.$('#asiento2_valor').val() );
-            // this.$('#asiento2_valor').unmask();
-            // console.log('-> ', this.$('#asiento2_valor').inputmask('unmaskedvalue') );
-            // console.log( this.$('#asiento2_valor').val('jhgjhg') );
-
-            // this.$('#asiento2_valor').inputmask('unmaskedvalue');
-            // this.$("[data-currency]").inputmask('unmaskedvalue');
-
-            this.$('#asiento2_valor').inputmask('unmaskedvalue');            
+            this.$('#asiento2_valor').inputmask('unmaskedvalue');
             if (!e.isDefaultPrevented()) {
-            
-                e.preventDefault();             
+
+                e.preventDefault();
                 this.asientoCuentasList.trigger( 'store', this.$(e.target) );
-            }            
+            }
+        },
+
+        /**
+        * Change base
+        */
+        baseChanged: function(e) {
+            var _this = this;
+
+            var tasa = this.$inputTasa.val();
+            var base = this.$inputBase.val();
+
+            // Set valor
+
+            if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
+                this.$inputValor.val( tasa * base );
+            }else{
+                // Case without plancuentas_tasa
+                this.$inputValor.val('');
+            }
         },
 
         /**

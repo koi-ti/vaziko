@@ -29,7 +29,6 @@ class Empresa extends Model
 		$query->join('koi_tercero', 'empresa_tercero', '=', 'koi_tercero.id');
 		$query->leftJoin('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
 		$query->leftJoin('koi_actividad', 'tercero_actividad', '=', 'koi_actividad.id');
-
     	return $query->first();
     }
 
@@ -42,4 +41,4 @@ class Empresa extends Model
     {
         $this->attributes['empresa_nm_revisor'] = strtoupper($name);
     }
-}  
+}

@@ -11,22 +11,36 @@ app || (app = {});
     app.MainPlanCuentasView = Backbone.View.extend({
 
         el: '#plancuentas-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
 
         /**
         * Constructor Method
         */
         initialize : function() {
-            
-            this.$plancuentasSearchTable = this.$('#plancuentas-search-table');
+            var _this = this;
 
-            this.$plancuentasSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+            // Rerefences
+            this.$plancuentasSearchTable = this.$('#plancuentas-search-table');
+            this.$searchCuenta = this.$('#plancuentas_cuenta');
+            this.$searchName = this.$('#plancuentas_nombre');
+
+            this.plancuentasSearchTable = this.$plancuentasSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('plancuentas.index') ),
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('plancuentas.index') ),
+                    data: function( data ) {
+                        data.persistent = true;
+                        data.plancuentas_cuenta = _this.$searchCuenta.val();
+                        data.plancuentas_nombre = _this.$searchName.val();
+                    }
+                },
                 columns: [
                     { data: 'plancuentas_cuenta', name: 'plancuentas_cuenta' },
                     { data: 'plancuentas_nivel', name: 'plancuentas_nivel' },
@@ -34,15 +48,6 @@ app || (app = {});
                     { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' },
                     { data: 'plancuentas_tercero', name: 'plancuentas_tercero' }
                 ],
-				buttons: [
-					{ 
-						text: '<i class="fa fa-user-plus"></i> Nueva cuenta',
-                        className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('plancuentas.create') ) )
-						}
-					}
-				],
                 columnDefs: [
                     {
                         targets: 0,
@@ -52,26 +57,41 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: 1, 
-                        width: '10%'                    
+                        targets: 1,
+                        width: '10%'
                     },
                     {
                         targets: 3,
                         width: '10%',
                         render: function ( data, type, full, row ) {
                             return data == 'D' ? 'Débito' : 'Crédito';
-                        }                     
+                        }
                     },
                     {
                         targets: 4,
                         width: '10%',
                         render: function ( data, type, full, row ) {
                             return data ? 'Si' : 'No';
-                        }                    
+                        }
                     }
                 ]
 			});
-        }
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.plancuentasSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            this.$searchCuenta.val('');
+            this.$searchName.val('');
+
+            this.plancuentasSearchTable.ajax.reload();
+        },
     });
 
 })(jQuery, this, this.document);
