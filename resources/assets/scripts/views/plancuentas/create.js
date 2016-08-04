@@ -21,8 +21,8 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {      
-            // Attributes 
+        initialize : function() {
+            // Attributes
             this.$wraperForm = this.$('#render-form-plancuentas');
 
             // Events
@@ -38,7 +38,7 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-            
+
             this.$nivel = this.$('#plancuentas_nivel');
 
             // to fire plugins
@@ -46,30 +46,30 @@ app || (app = {});
                 window.initComponent.initToUpper();
 
        		if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();   
+                window.initComponent.initSelect2();
 		},
-       	
+
         cuentaChanged: function(e) {
             var _this = this;
-            
+
             $.ajax({
                 url: window.Misc.urlFull(Route.route('plancuentas.nivel')),
                 type: 'GET',
                 data: { plancuentas_cuenta: $(e.currentTarget).val() },
                 beforeSend: function() {
-            		_this.$nivel.val('');  
+            		_this.$nivel.val('');
                     window.Misc.setSpinner( _this.el );
                 }
             })
-            .done(function(resp) {  
+            .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
                 if(resp.success) {
            		 	if(_.isUndefined(resp.nivel) || _.isNull(resp.nivel) || !_.isNumber(resp.nivel)) {
 		                alertify.error('Ocurrió un error definiendo el nivel de la cuenta, por favor verifique el número de caracteres.');
-             		}       
+             		}
                     _this.$nivel.val(resp.nivel);
                 }
             })
@@ -85,10 +85,10 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );                
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 

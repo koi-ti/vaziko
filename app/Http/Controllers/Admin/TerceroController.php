@@ -25,7 +25,33 @@ class TerceroController extends Controller
             $query = Tercero::query();
             $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre")
             );
-            return Datatables::of($query)->make(true);
+
+            // Persistent data filter
+            if($request->has('persistent') && $request->persistent) {
+                session(['search_tercero_nit' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
+                session(['search_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
+            }
+
+            return Datatables::of($query)
+                ->filter(function($query) use($request) {
+                    // Documento
+                    if($request->has('tercero_nit')) {
+                        $query->whereRaw("tercero_nit LIKE '%{$request->tercero_nit}%'");
+                    }
+
+                    // Nombre
+                    if($request->has('tercero_nombre')) {
+                        $query->where(function ($query) use($request) {
+                            $query->whereRaw("tercero_nombre1 LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("tercero_nombre2 LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("tercero_apellido1 LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("tercero_apellido2 LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("tercero_razonsocial LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) LIKE '%{$request->tercero_nombre}%'");
+                        });
+                    }
+                })
+                ->make(true);
         }
         return view('admin.terceros.index');
     }
@@ -50,7 +76,7 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $tercero = new Tercero;
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
@@ -84,8 +110,8 @@ class TerceroController extends Controller
     {
         $tercero = Tercero::getTercero($id);
         if ($request->ajax()) {
-            return response()->json($tercero);    
-        } 
+            return response()->json($tercero);
+        }
         return view('admin.terceros.show', ['tercero' => $tercero]);
     }
 
@@ -112,7 +138,7 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $tercero = Tercero::findOrFail($id);
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
@@ -154,30 +180,30 @@ class TerceroController extends Controller
      */
     public function dv(Request $request)
     {
-        // Calc dv      
+        // Calc dv
         $primer = substr($request->tercero_nit,0,1);
         $longitud = strlen($request->tercero_nit);
-        $verificacion = [ 
-            0=>71, 1=>67, 2=>59, 
-            3=>53, 4=>47, 5=>43, 
-            6=>41, 7=>37, 8=>29, 
+        $verificacion = [
+            0=>71, 1=>67, 2=>59,
+            3=>53, 4=>47, 5=>43,
+            6=>41, 7=>37, 8=>29,
             9=>23, 10=>19, 11=>17,
-            12=>13, 13=>7, 14=>3 
-        ]; 
+            12=>13, 13=>7, 14=>3
+        ];
         //$a contendra el valor de la sumatoria de los productos de cada posicion del nit * el factor correspondiente en el array de verificacion
         //$b residuo($a,11)
         //si $b=0 => digito =0
         //si $b=1 => digito =1
-        //si $b!=0 && $b!=1 => digito =11-$b 
+        //si $b!=0 && $b!=1 => digito =11-$b
         $a = 0;
         $posicionnit = ($longitud-1);
         for($i=14; $i >= (15-$longitud); $i--) {
             $a += ($verificacion[$i]*substr($request->tercero_nit, $posicionnit,1));
             $posicionnit--;
-        }       
+        }
 
         $b = $a%11;
-        if($b==0) {       
+        if($b==0) {
             $dv = 0;
         }else if($b==1) {
             $dv = 1;

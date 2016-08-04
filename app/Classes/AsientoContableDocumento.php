@@ -4,7 +4,7 @@ namespace App\Classes;
 
 use Auth, DB;
 
-use App\Models\Accounting\PlanCuenta, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\CentroCosto, App\Models\Accounting\SaldoContable, App\Models\Accounting\SaldoTercero;
+use App\Models\Accounting\PlanCuenta, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\CentroCosto, App\Models\Accounting\SaldoContable, App\Models\Accounting\SaldoTercero, App\Models\Base\Empresa;
 
 class AsientoContableDocumento {
 
@@ -14,6 +14,7 @@ class AsientoContableDocumento {
 	private $asiento_cuentas = [];
 	public $asiento_error = NULL;
 	public $preguardado = false;
+	private $empresa;
 
 	function __construct(Array $data, Asiento $asiento = null)
 	{
@@ -67,8 +68,14 @@ class AsientoContableDocumento {
         	$this->preguardado = true;
         }
 
+        // Recuperar empresa
+		$this->empresa = Empresa::getEmpresa();
+		if(!$this->empresa instanceof Empresa) {
+        	$this->asiento_error = "No es posible recuperar información empresa, por favor consulte al administrador.";
+			return;
+		}
+
         // Validar cierre contable
-		// $empresa = $Skina->getEmpresa_UI();
 		// if( $this->asiento1_fecha <= $empresa->empresa_fecha_contabilidad){
 		// 	$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
 		// }
@@ -204,10 +211,28 @@ class AsientoContableDocumento {
 			}
 
 		    // Recuperar tercero
-		    $objTercero = Tercero::find($cuenta['Tercero']);
-		    if(!$objTercero instanceof Tercero) {
-		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
-		    }
+		    $objTercero = null;
+	        if(isset($cuenta['Tercero']) && !empty($cuenta['Tercero'])) {
+			    $objTercero = Tercero::find($cuenta['Tercero']);
+			    if(!$objTercero instanceof Tercero) {
+			        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
+			    }
+		   	}
+
+		   	if($objCuenta->plancuentas_tercero) {
+                if(!$objTercero instanceof Tercero) {
+                    return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+            }
+
+            // Si no require tercero se realiza el asiento a tercero empresa
+            if(!$objTercero instanceof Tercero) {
+            	$objTercero = Tercero::find($this->empresa->empresa_tercero);
+			}
+
+			if(!$objTercero instanceof Tercero) {
+                return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+            }
 
             // Recuperar centro costo
 	        $objCentroCosto = null;
@@ -220,7 +245,7 @@ class AsientoContableDocumento {
 
 			$asiento2 = new Asiento2;
 			$asiento2->asiento2_asiento = $this->asiento->id;
-		    $asiento2->asiento2_beneficiario = $objTercero->id;
+	        $asiento2->asiento2_beneficiario = $objTercero->id;
 		    $asiento2->asiento2_cuenta = $objCuenta->id;
 			$asiento2->asiento2_nivel1 = $niveles['nivel1'] ?: 0;
 			$asiento2->asiento2_nivel2 = $niveles['nivel2'] ?: 0;

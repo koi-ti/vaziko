@@ -23,7 +23,7 @@
 						<div class="form-group col-sm-3 col-md-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat btn-plancuenta-koi-component" data-field="cuenta_inicio">
+									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="cuenta_inicio">
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
@@ -40,7 +40,7 @@
 						<div class="form-group col-sm-3 col-md-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat btn-plancuenta-koi-component" data-field="cuenta_fin">
+									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="cuenta_fin">
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>

@@ -21,8 +21,7 @@ class Asiento2 extends Model
     {
         $rules = [
             'plancuentas_cuenta' => 'required|integer',
-            'tercero_nit' => 'required|integer',
-            'asiento2_naturaleza' => 'required'        
+            'asiento2_naturaleza' => 'required'
         ];
 
         $validator = Validator::make($data, $rules);

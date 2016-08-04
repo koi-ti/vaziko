@@ -22,8 +22,26 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $query = PlanCuenta::query();
-            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tercero');
-            return Datatables::of($query)->make(true);
+            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tercero', 'plancuentas_tasa', 'plancuentas_centro');
+
+            // Persistent data filter
+            if($request->has('persistent') && $request->persistent) {
+                session(['search_plancuentas_cuenta' => $request->has('plancuentas_cuenta') ? $request->plancuentas_cuenta : '']);
+                session(['search_plancuentas_nombre' => $request->has('plancuentas_nombre') ? $request->plancuentas_nombre : '']);
+            }
+
+            return Datatables::of($query)
+                ->filter(function($query) use($request) {
+                    // Cuenta
+                    if($request->has('plancuentas_cuenta')) {
+                        $query->whereRaw("plancuentas_cuenta LIKE '%{$request->plancuentas_cuenta}%'");
+                    }
+                    // Nombre
+                    if($request->has('plancuentas_nombre')) {
+                        $query->whereRaw("plancuentas_nombre LIKE '%{$request->plancuentas_nombre}%'");
+                    }
+                })
+                ->make(true);
         }
         return view('accounting.plancuentas.index');
     }
@@ -48,7 +66,7 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $plancuenta = new PlanCuenta;
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
@@ -85,8 +103,8 @@ class PlanCuentasController extends Controller
         $plancuenta = PlanCuenta::getCuenta($id);
         if($plancuenta instanceof PlanCuenta){
             if ($request->ajax()) {
-                return response()->json($plancuenta);    
-            }        
+                return response()->json($plancuenta);
+            }
             return view('accounting.plancuentas.show', ['plancuenta' => $plancuenta]);
         }
         abort(404);
@@ -115,7 +133,7 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $plancuenta = PlanCuenta::findOrFail($id);
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
