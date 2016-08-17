@@ -25,7 +25,7 @@ class PlanCuentasController extends Controller
 
             // Filters
             if($request->has('nivel')) {
-                $query->where('plancuentas_nivel', $request->nivel);
+                $query->where('plancuentas_nivel', '<=', $request->nivel);
             }
 
             $query->orderBy('plancuentas_cuenta', 'asc');
