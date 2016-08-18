@@ -1,6 +1,6 @@
 @extends('accounting.asiento.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
 	<li><a href="{{ route('asientos.index') }}">Asientos contables</a></li>
 	<li class="active">{{ $asiento->asiento1_ano }}-{{ $asiento->asiento1_mes }} {{ $asiento->asiento1_numero }}</li>
 @stop
@@ -24,20 +24,20 @@
 		<div class="box-body">
 			<div class="row">
 				<div class="form-group col-md-1">
-					<label for="asiento1_ano" class="control-label">Año</label>	
+					<label for="asiento1_ano" class="control-label">Año</label>
 					<div>{{ $asiento->asiento1_ano }}</div>
 				</div>
 				<div class="form-group col-md-1">
-					<label for="asiento1_mes" class="control-label">Mes</label>	
+					<label for="asiento1_mes" class="control-label">Mes</label>
 					<div>{{ $asiento->asiento1_mes ? config('koi.meses')[$asiento->asiento1_mes] : ''  }}</div>
 				</div>
 				<div class="form-group col-md-1">
-					<label for="asiento1_dia" class="control-label">Día</label>	
+					<label for="asiento1_dia" class="control-label">Día</label>
 					<div>{{ $asiento->asiento1_dia }}</div>
 				</div>
 				@if($asiento->asiento1_preguardado)
 					<div class="form-group col-md-offset-7 col-md-2 text-right">
-						<span class="label label-warning">PRE-GUARDADO</span>					
+						<span class="label label-warning">PRE-GUARDADO</span>
 					</div>
 				@endif
 			</div>
@@ -55,7 +55,7 @@
 
 				<div class="form-group col-md-2">
 					<label for="asiento1_numero" class="control-label">Número</label>
-					<div>{{ $asiento->asiento1_numero }}</div>	
+					<div>{{ $asiento->asiento1_numero }}</div>
 				</div>
 			</div>
 
@@ -89,6 +89,15 @@
 		                <th>Credito</th>
 		                <th>Detalle</th>
 		            </tr>
+		            <tfoot>
+						<tr>
+							<td colspan="4"></td>
+							<th class="text-left">Total</th>
+							<td class="text-right" id="total-debitos">0</td>
+							<td class="text-right" id="total-creditos">0</td>
+							<td></td>
+						</tr>
+					</tfoot>
 			    </table>
 			</div>
 		</div>

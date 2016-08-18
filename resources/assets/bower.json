@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "aplicación front-end base KOI-TI",
   "dependencies": {
+    "accounting.js": "~0.4.1",
     "AdminLTE": "admin-lte#~2.3.2",
     "alertify.js": "alertifyjs#~1.0.10",
     "backbone": "~1.1.2",

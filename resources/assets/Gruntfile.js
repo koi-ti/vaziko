@@ -45,6 +45,7 @@ module.exports = function(grunt) {
 		    			'./bower_components/datatables.net-buttons/js/buttons.html5.js',
 		    			'./bower_components/datatables.net-buttons/js/dataTables.buttons.js',
 		    			'./bower_components/datatables.net-buttons-bs/js/buttons.bootstrap.min.js',
+		    			'./bower_components/accounting.js/accounting.min.js',
 					 	'./scripts/helpers/routes.min.js'
 					],
 					'../../public/js/app.min.js': [
