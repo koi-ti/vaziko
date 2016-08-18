@@ -181,12 +181,11 @@ app || (app = {});
             var _this = this;
 
             var tasa = this.$inputTasa.val();
-            var base = this.$inputBase.val();
+            var base = this.$inputBase.inputmask('unmaskedvalue');
 
             // Set valor
-
             if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                this.$inputValor.val( tasa * base );
+                this.$inputValor.val( (tasa * base) / 100 );
             }else{
                 // Case without plancuentas_tasa
                 this.$inputValor.val('');

@@ -220,7 +220,8 @@ app || (app = {});
             	if(!_.isUndefined(data.plancuentas_tasa) && !_.isNull(data.plancuentas_tasa) && data.plancuentas_tasa > 0) {
             		// Case plancuentas_tasa eval value
         			this.$inputBase.prop('readonly', false);
-     				this.$inputValor.val( (data.plancuentas_tasa * this.$inputBase.val()) );
+                    var base = this.$inputBase.inputmask('unmaskedvalue');
+     				this.$inputValor.val( (data.plancuentas_tasa * base) / 100);
             	}else{
             		// Case without plancuentas_tasa
             		this.$inputBase.val('');

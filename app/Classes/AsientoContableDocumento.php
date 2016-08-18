@@ -219,15 +219,16 @@ class AsientoContableDocumento {
 			    }
 		   	}
 
-		   	if($objCuenta->plancuentas_tercero) {
-                if(!$objTercero instanceof Tercero) {
-                    return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
-                }
-            }
+		   	// Validacion plancuentas_tercero requiere tercero inactiva
+		   	// if($objCuenta->plancuentas_tercero) {
+                // if(!$objTercero instanceof Tercero) {
+                    // return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                // }
+            // }
 
             // Si no require tercero se realiza el asiento a tercero empresa
             if(!$objTercero instanceof Tercero) {
-            	$objTercero = Tercero::find($this->empresa->empresa_tercero);
+            	$objTercero = $this->beneficiario;
 			}
 
 			if(!$objTercero instanceof Tercero) {
