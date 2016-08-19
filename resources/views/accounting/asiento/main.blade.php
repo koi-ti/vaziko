@@ -149,7 +149,7 @@
 						</div>
 
 						<div class="form-group col-sm-2">
-							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm currency" readonly="readonly" type="text">
+							<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
 							<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
 						</div>
 					</div>
