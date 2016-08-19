@@ -47,7 +47,7 @@ var app = app || {};
         initICheck: function () {
             $('input').iCheck({
                 checkboxClass: 'icheckbox_minimal-green',
-                radioClass: 'iradio_minimal-green'            
+                radioClass: 'iradio_minimal-green'
             });
         },
 
@@ -65,12 +65,13 @@ var app = app || {};
 
             $("[data-mask]").inputmask();
 
-            // $("[data-currency]").inputmask({ 
-            //     alias: 'decimal',
-            //     autoGroup: true,
-            //     digits: '2',
-            //     groupSeparator: ',',
-            // });
+            $("[data-currency]").inputmask({
+                radixPoint: ",",
+                alias: 'currency',
+                removeMaskOnSubmit: true,
+                unmaskAsNumber: true,
+                min: 0
+            });
         },
 
         /**

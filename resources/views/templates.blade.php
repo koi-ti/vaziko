@@ -4,7 +4,7 @@
 		<% if(tercero_persona == 'J'){ %>
 			<div class="form-group col-md-12">
 				<label for="tercero_razonsocial" class="control-label">Razón Social o Comercial</label>
-				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Raz&oacute;n Social o Comercial" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text" required>		
+				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Raz&oacute;n Social o Comercial" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text" required>
 			</div>
 		<% }else{ %>
 			<div class="form-group col-md-3">
@@ -63,7 +63,7 @@
 				@endforeach
 			</select>
 		</div>
-		
+
 		<div class="form-group col-md-3">
 			<label for="tercero_regimen" class="control-label">Regimen</label>
 			<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
@@ -82,7 +82,7 @@
 		<div class="form-group col-md-3">
 			<label for="tercero_direccion" class="control-label">Dirección</label>
       		<div class="input-group input-group-sm">
-				<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>		
+				<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>
 				<span class="input-group-btn">
 					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
 						<i class="fa fa-map-signs"></i>
@@ -170,7 +170,7 @@
 					<% } %>
 				</ul>
 				<div class="tab-content">
-									
+
 					{{-- Tab contabilidad --}}
 					<div class="tab-pane active" id="tab_contabilidad">
 	    	    	    <div class="row">
@@ -251,7 +251,7 @@
 								</label>
 							</div>
 					    </div>
-						
+
 						<div class="row">
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_socio">
@@ -296,14 +296,14 @@
 							</div>
 					    </div>
 					</div>
-					
+
 					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
 						{{-- Tab contactos --}}
 						<div class="tab-pane" id="tab_contactos">
 							<div class="box">
 								<div class="box-body table-responsive no-padding">
-									<table id="browse-contact-list" class="table table-hover">	
-										{{-- Render contact list --}}						
+									<table id="browse-contact-list" class="table table-hover">
+										{{-- Render contact list --}}
 									</table>
 								</div>
 							</div>
@@ -327,30 +327,30 @@
 <script type="text/template" id="add-centrocosto-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="centrocosto_codigo" class="control-label">Código</label>			
+			<label for="centrocosto_codigo" class="control-label">Código</label>
 			<input type="text" id="centrocosto_codigo" name="centrocosto_codigo" value="<%- centrocosto_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
 		</div>
     	<div class="form-group col-md-3">
-			<label for="centrocosto_centro" class="control-label">Centro</label>			
+			<label for="centrocosto_centro" class="control-label">Centro</label>
 			<input type="text" id="centrocosto_centro" name="centrocosto_centro" value="<%- centrocosto_centro %>" placeholder="Centro" class="form-control input-sm input-toupper" maxlength="20" required>
 		</div>
 		<div class="form-group col-md-7">
 			<label for="centrocosto_nombre" class="control-label">Nombre</label>
-			<input type="text" id="centrocosto_nombre" name="centrocosto_nombre" value="<%- centrocosto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>    
+			<input type="text" id="centrocosto_nombre" name="centrocosto_nombre" value="<%- centrocosto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
     </div>
-	
+
 	<div class="row">
 		<div class="form-group col-md-12">
 			<label for="centrocosto_descripcion1" class="control-label">Descripcion 1</label>
-			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripcion 1" class="form-control input-sm input-toupper" maxlength="200">    
+			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripcion 1" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
 	<div class="row">
 		<div class="form-group col-md-12">
 			<label for="centrocosto_descripcion2" class="control-label">Descripcion 2</label>
-			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripcion 2" class="form-control input-sm input-toupper" maxlength="200">    
+			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripcion 2" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
@@ -361,9 +361,9 @@
 				@foreach(config('koi.contabilidad.centrocosto.tipo') as $key => $value)
 					<label class="radio-inline" for="centrocosto_tipo_{{ $key }}">
 						<input type="radio" id="centrocosto_tipo_{{ $key }}" name="centrocosto_tipo" value="{{ $key }}" <%- centrocosto_tipo == '{{ $key }}' ? 'checked': '' %> >{{ $value }}
-					</label>					
+					</label>
 				@endforeach
-			</div>	
+			</div>
 		</div>
     </div>
 
@@ -378,8 +378,8 @@
 		<div class="form-group col-md-2 col-xs-8 col-sm-3">
 			<br><label class="checkbox-inline" for="centrocosto_activo">
 				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- centrocosto_activo ? 'checked': ''%>> Activo
-			</label>    
-		</div>		
+			</label>
+		</div>
     </div>
 </script>
 
@@ -392,7 +392,7 @@
 					<input type="text" id="plancuentas_cuenta" name="plancuentas_cuenta" value="<%- plancuentas_cuenta %>" placeholder="Cuenta" class="form-control input-sm" maxlength="15" required>
 				</div>
 				<div class="col-md-3">
-					<input type="text" id="plancuentas_nivel" name="plancuentas_nivel" value="<%- plancuentas_nivel %>" class="form-control input-sm" maxlength="1" required readonly>				
+					<input type="text" id="plancuentas_nivel" name="plancuentas_nivel" value="<%- plancuentas_nivel %>" class="form-control input-sm" maxlength="1" required readonly>
 				</div>
 			</div>
 		</div>
@@ -431,7 +431,7 @@
 				<label class="radio-inline" for="plancuentas_naturaleza_credito">
 					<input type="radio" id="plancuentas_naturaleza_credito" name="plancuentas_naturaleza" value="C" <%- plancuentas_naturaleza == 'C' ? 'checked': ''%>> Crédito
 				</label>
-			</div>	
+			</div>
 		</div>
 	</div>
 
@@ -456,9 +456,9 @@
 				@foreach(config('koi.contabilidad.plancuentas.tipo') as $key => $value)
 					<label class="radio-inline" for="plancuentas_naturaleza_{{ $key }}">
 						<input type="radio" id="plancuentas_naturaleza_{{ $key }}" name="plancuentas_tipo" value="{{ $key }}" <%- plancuentas_tipo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
-					</label>					
+					</label>
 				@endforeach
-			</div>	
+			</div>
 		</div>
     </div>
 
@@ -490,23 +490,23 @@
     		<%- centrocosto_codigo %>
     	</a>
     </td>
-    <td class="text-right"><%- asiento2_base ? asiento2_base : 0 %></td>
-    <td class="text-right"><%- asiento2_debito ? asiento2_debito : 0 %></td>
-    <td class="text-right"><%- asiento2_credito ? asiento2_credito: 0 %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
     <td><%- asiento2_detalle %></td>
 </script>
 
 <script type="text/template" id="add-folder-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="folder_codigo" class="control-label">Código</label>			
+			<label for="folder_codigo" class="control-label">Código</label>
 			<input type="text" id="folder_codigo" name="folder_codigo" value="<%- folder_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
 		</div>
     </div>
     <div class="row">
 		<div class="form-group col-md-8">
 			<label for="folder_nombre" class="control-label">Nombre</label>
-			<input type="text" id="folder_nombre" name="folder_nombre" value="<%- folder_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>    
+			<input type="text" id="folder_nombre" name="folder_nombre" value="<%- folder_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
     </div>
 </script>
@@ -514,12 +514,12 @@
 <script type="text/template" id="add-documento-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="documento_codigo" class="control-label">Código</label>			
+			<label for="documento_codigo" class="control-label">Código</label>
 			<input type="text" id="documento_codigo" name="documento_codigo" value="<%- documento_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="20" required>
 		</div>
 		<div class="form-group col-md-8">
 			<label for="documento_nombre" class="control-label">Nombre</label>
-			<input type="text" id="documento_nombre" name="documento_nombre" value="<%- documento_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>    
+			<input type="text" id="documento_nombre" name="documento_nombre" value="<%- documento_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
     </div>
 	<div class="row">
@@ -545,9 +545,9 @@
 				@foreach(config('koi.contabilidad.documento.consecutivo') as $key => $value)
 					<label class="radio-inline" for="documento_tipo_consecutivo_{{ $key }}">
 						<input type="radio" id="documento_tipo_consecutivo_{{ $key }}" name="documento_tipo_consecutivo" value="{{ $key }}" <%- documento_tipo_consecutivo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
-					</label>					
+					</label>
 				@endforeach
-			</div>	
+			</div>
 		</div>
     </div>
 </script>
@@ -555,21 +555,21 @@
 <script type="text/template" id="add-actividad-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="actividad_codigo" class="control-label">Código</label>			
+			<label for="actividad_codigo" class="control-label">Código</label>
 			<input type="text" id="actividad_codigo" name="actividad_codigo" value="<%- actividad_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="11" required>
 		</div>
 		<div class="form-group col-md-8">
 			<label for="actividad_nombre" class="control-label">Nombre</label>
-			<input type="text" id="actividad_nombre" name="actividad_nombre" value="<%- actividad_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" required>    
+			<input type="text" id="actividad_nombre" name="actividad_nombre" value="<%- actividad_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" required>
 		</div>
     </div>
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="actividad_tarifa" class="control-label">% Cree</label>			
+			<label for="actividad_tarifa" class="control-label">% Cree</label>
 			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm spinner-percentage" maxlength="4" required>
 		</div>
     	<div class="form-group col-md-2">
-			<label for="actividad_categoria" class="control-label">Categoria</label>			
+			<label for="actividad_categoria" class="control-label">Categoria</label>
 			<input type="text" id="actividad_categoria" name="actividad_categoria" value="<%- actividad_categoria %>" placeholder="Categoria" class="form-control input-sm input-toupper" maxlength="3">
 		</div>
     </div>

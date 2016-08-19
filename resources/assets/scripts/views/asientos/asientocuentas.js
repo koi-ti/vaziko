@@ -24,10 +24,15 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){            
+        initialize : function(opts){
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // References
+            this.$debitos = this.$('#total-debitos');
+            this.$creditos = this.$('#total-creditos');
+            this.$diferencia = this.$('#total-diferencia');
 
             //Init Attributes
             this.confCollection = { reset: true, data: {} };
@@ -52,14 +57,17 @@ app || (app = {});
         * @param Object mentoringTaskModel Model instance
         */
         addOne: function (Asiento2Model) {
-            var view = new app.AsientoCuentasItemView({ 
+            var view = new app.AsientoCuentasItemView({
                 model: Asiento2Model,
                 parameters: {
                     edit: this.parameters.edit
-                } 
+                }
             });
             Asiento2Model.view = view;
             this.$el.append( view.render().el );
+
+            // Update total
+            this.totalize();
         },
 
         /**
@@ -76,17 +84,17 @@ app || (app = {});
         storeOne: function (form) {
             var _this = this,
                 data = window.Misc.formToJson( form );
-            
+
             // Set Spinner
             window.Misc.setSpinner( this.parameters.wrapper );
 
             // Add model in collection
             var asiento2Model = new app.Asiento2Model();
             asiento2Model.save(data, {
-                success : function(model, resp) {   
+                success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
-                        
+
                         // response success or error
                         var text = resp.success ? '' : resp.errors;
                         if( _.isObject( resp.errors ) ) {
@@ -96,16 +104,16 @@ app || (app = {});
                         if( !resp.success ) {
                             alertify.error(text);
                             return;
-                        }   
-                        
+                        }
+
                         // Add model in collection
                         _this.collection.add(model);
-                    }                 
+                    }
                 },
                 error : function(model, error) {
                     window.Misc.removeSpinner( _this.parameters.wrapper );
                     alertify.error(error.statusText)
-                }   
+                }
             });
         },
 
@@ -116,13 +124,35 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource");
-            var model = this.collection.get(resource);  
-            if ( model instanceof Backbone.Model ) { 
+            var model = this.collection.get(resource);
+            if ( model instanceof Backbone.Model ) {
                 model.view.remove();
-                this.collection.remove(model); 
+                this.collection.remove(model);
+            }
+
+            // Update total
+            this.totalize();
+        },
+
+        /**
+        * Render totalize debitos and creditos
+        */
+        totalize: function () {
+            var data = this.collection.totalize();
+
+            if(this.$debitos.length) {
+                this.$debitos.html( window.Misc.currency(data.debitos) );
+            }
+
+            if(this.$creditos.length) {
+                this.$creditos.html( window.Misc.currency(data.creditos) );
+            }
+
+            if(this.$diferencia.length) {
+                this.$diferencia.html( window.Misc.currency(data.diferencia) );
             }
         },
-         
+
         /**
         * Load spinner on the request
         */

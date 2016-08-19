@@ -159,7 +159,7 @@
 							<input id="asiento2_detalle" name="asiento2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
 						</div>
 						<div class="form-group col-sm-2">
-							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm currency" type="text" required>
+							<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" data-currency type="text" required>
 						</div>
 						<div class="form-group col-sm-1">
 							<button type="submit" class="btn btn-success btn-sm btn-block">
@@ -184,6 +184,23 @@
 		                <th>Credito</th>
 		                <th>Detalle</th>
 		            </tr>
+					<tfoot>
+						<tr>
+							<td colspan="5"></td>
+							<th class="text-left">Total</th>
+							<td class="text-right" id="total-debitos">0</td>
+							<td class="text-right" id="total-creditos">0</td>
+							<td></td>
+						</tr>
+						<tr>
+							<td colspan="5"></td>
+							<th class="text-left">Diferencia</th>
+							<td colspan="2" class="text-right">
+								<small class="label pull-right bg-red" id="total-diferencia">0</small>
+							</td>
+							<td></td>
+						</tr>
+					</tfoot>
 			    </table>
 			</div>
 		</div>

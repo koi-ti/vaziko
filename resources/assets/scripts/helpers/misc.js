@@ -17,7 +17,7 @@
         * Inializes the functions when DOM ready
         */
         initialize: function(){
-        	
+
         },
 
         /**
@@ -27,7 +27,7 @@
          *  @return { object } form into json
          *
          */
-        
+
         formToJson: function( selector ){
             var o = {}, a = [];
             if( $.prototype.isPrototypeOf(selector) ){
@@ -96,7 +96,7 @@
                 text = listError;
             }
             return text;
-        },  
+        },
 
         /**
         *  Sets a loading spinner in a box
@@ -116,7 +116,7 @@
         removeSpinner: function( selector ){
 
             var $selector = $(selector).find( '.overlay' );
-            
+
             if($selector.length)
                 $selector.remove();
         },
@@ -171,9 +171,18 @@
         */
         successRedirect: function( msg, url ){
             alertify.success(msg);
-            setTimeout(function(){ 
+            setTimeout(function(){
                 window.Misc.redirect( url );
             }, 500);
+        },
+
+        /**
+        * Format COP currency
+        * @param { value }
+        *
+        */
+        currency: function( value ){
+            return accounting.formatMoney(value, '', 2, ".", ",");
         }
     };
 
