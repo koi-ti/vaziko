@@ -82,11 +82,12 @@ class DetalleAsientoController extends Controller
                         }
                     }
 
-                    if($cuenta->plancuentas_tercero) {
-                        if(!$tercero instanceof Tercero) {
-                            return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
-                        }
-                    }
+                    // Validacion plancuentas_tercero requiere tercero inactiva
+                    // if($cuenta->plancuentas_tercero) {
+                    //     if(!$tercero instanceof Tercero) {
+                    //         return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                    //     }
+                    // }
 
                     // Validar base
                     if( !empty($cuenta->plancuentas_tasa) && $cuenta->plancuentas_tasa > 0 && (!$request->has('asiento2_base') || $request->asiento2_base == 0) ) {
