@@ -59,12 +59,11 @@
 
 			<div class="form-group col-md-3">
 				<label for="tercero_persona" class="control-label">Persona</label>
-				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
-					<option value="" selected>Seleccione</option>
+				<div>
 					@foreach( config('koi.terceros.persona') as $key => $value)
-						<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+						<%= tercero_persona == '{{ $key }}' ? '{{ $value }}': '' %>
 					@endforeach
-				</select>
+				</div>
 			</div>
 
 			<div class="form-group col-md-3">
