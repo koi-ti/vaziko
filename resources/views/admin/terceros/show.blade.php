@@ -1,6 +1,6 @@
 @extends('admin.terceros.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
 	<li><a href="{{ route('terceros.index') }}">Terceros</a></li>
 	<li class="active">{{ $tercero->tercero_nit }}</li>
 @stop
@@ -22,7 +22,7 @@
 			<div class="row">
 				<div class="form-group col-md-3">
 					<label class="control-label">Documento</label>
-					<div>{{ $tercero->tercero_nit }} - {{ $tercero->tercero_digito }}</div>      
+					<div>{{ $tercero->tercero_nit }} - {{ $tercero->tercero_digito }}</div>
 				</div>
 
 				<div class="form-group col-md-3">
@@ -45,17 +45,17 @@
 				@if($tercero->tercero_persona == 'J')
 					<div class="form-group col-md-12">
 						<label class="control-label">Razón Social o Comercial</label>
-						<div>{{ $tercero->tercero_razonsocial }}</div>       
+						<div>{{ $tercero->tercero_razonsocial }}</div>
 					</div>
 				@else
 					<div class="form-group col-md-3">
 						<label class="control-label">1er. Nombre</label>
-						<div>{{ $tercero->tercero_nombre1 }}</div>        
+						<div>{{ $tercero->tercero_nombre1 }}</div>
 					</div>
 
 					<div class="form-group col-md-3">
 						<label class="control-label">2do. Nombre</label>
-						<div>{{ $tercero->tercero_nombre2 }}</div>        
+						<div>{{ $tercero->tercero_nombre2 }}</div>
 					</div>
 
 					<div class="form-group col-md-3">
@@ -66,6 +66,11 @@
 					<div class="form-group col-md-3">
 						<label class="control-label">2do. Apellido</label>
 						<div>{{ $tercero->tercero_apellido2 }}</div>
+					</div>
+
+					<div class="form-group col-md-12">
+						<label class="control-label">Establecimiento</label>
+						<div>{{ $tercero->tercero_razonsocial }}</div>
 					</div>
 				@endif
 			</div>
@@ -80,7 +85,7 @@
 					<label class="control-label">Municipio</label>
 					<div>{{ $tercero->municipio_nombre }}</div>
 				</div>
-				
+
 				<div class="form-group col-md-3">
 					<label class="control-label">Email</label>
 					<div>{{ $tercero->tercero_email }}</div>
@@ -129,7 +134,7 @@
 							<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
 						</ul>
 						<div class="tab-content">
-							
+
 							{{-- Tab contabilidad --}}
 							<div class="tab-pane active" id="tab_contabilidad">
 					        	<div class="row">
@@ -251,18 +256,18 @@
 									</div>
 							    </div>
 							</div>
-							
+
 							{{-- Tab contactos --}}
 							<div class="tab-pane" id="tab_contactos">
 								<div class="box">
 									<div class="box-body table-responsive no-padding">
-										<table id="browse-contact-list" class="table table-hover">	
-											{{-- Render contact list --}}						
+										<table id="browse-contact-list" class="table table-hover">
+											{{-- Render contact list --}}
 										</table>
 									</div>
 								</div>
 							</div>
-						
+
 						</div>
 					</div>
 				</div>

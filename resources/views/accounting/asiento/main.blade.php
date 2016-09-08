@@ -85,6 +85,11 @@
 				<div class="col-sm-5">
 					<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" disabled required>
 				</div>
+				<div class="col-sm-1">
+					<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="asiento1_beneficiario">
+						<i class="fa fa-plus"></i>
+					</button>
+				</div>
 			</div>
 
 			<div class="row">
@@ -110,7 +115,7 @@
 								<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="asientos-create" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" data-tasa="asiento2_tasa" required>
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<input id="plancuentas_nombre" name="plancuentas_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled required>
 						</div>
 
@@ -134,8 +139,13 @@
 								<input id="tercero_nit" placeholder="Beneficiario" class="form-control tercero-koi-component" name="tercero_nit" type="text" maxlength="15" data-wrapper="asientos-create" data-name="tercero_nombre">
 							</div>
 						</div>
-						<div class="col-sm-4">
+						<div class="col-sm-3">
 							<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled>
+						</div>
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="tercero_nit">
+								<i class="fa fa-plus"></i>
+							</button>
 						</div>
 
 						<div class="form-group col-sm-3">

@@ -12,10 +12,10 @@
 			<li>Empresa</li>
 		</ol>
     </section>
-   	
+
    	<section class="content">
 	    <div class="box box-success" id="empresa-create">
-		 	{!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}			
+		 	{!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}
 
 			<div class="box-header with-border">
 	        	<div class="row">
@@ -66,7 +66,7 @@
 					@endforeach
 				</select>
 			</div>
-			
+
 			<div class="form-group col-md-3">
 				<label for="tercero_regimen" class="control-label">Regimen</label>
 				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
@@ -78,14 +78,18 @@
 			</div>
 		</div>
 
-		{{-- Render name --}}
-		<div id="content-render-name"></div>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
+				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
+			</div>
+		</div>
 
 		<div class="row">
 			<div class="form-group col-md-3">
 				<label for="tercero_direccion" class="control-label">Dirección</label>
 	      		<div class="input-group input-group-sm">
-					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>		
+					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
 							<i class="fa fa-map-signs"></i>
@@ -170,7 +174,7 @@
 						<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
 					</ul>
 					<div class="tab-content">
-										
+
 						{{-- Tab contabilidad --}}
 						<div class="tab-pane active" id="tab_contabilidad">
 		    	    	    <div class="row">
@@ -212,15 +216,15 @@
 										<label class="checkbox-inline" for="tercero_gran_contribuyente">
 											<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- tercero_gran_contribuyente ? 'checked': ''%>> Gran contribuyente
 										</label>
-									
+
 										<label class="checkbox-inline" for="tercero_autoretenedor_renta">
 											<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- tercero_autoretenedor_renta ? 'checked': ''%>> Autorretenedor renta
 										</label>
-									
+
 										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
 											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- tercero_autoretenedor_ica ? 'checked': ''%>> Autorretenedor ICA
 										</label>
-									</div>	
+									</div>
 								</div>
 						    </div>
 
@@ -254,7 +258,7 @@
 						    	</div>
 						    </div>
 						</div>
-					
+
 					</div>
 				</div>
 			</div>

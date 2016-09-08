@@ -23,7 +23,13 @@ class TerceroController extends Controller
         if ($request->ajax()) {
 
             $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre")
+            $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2',
+                DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
             );
 
             // Persistent data filter
@@ -237,7 +243,14 @@ class TerceroController extends Controller
     public function search(Request $request)
     {
         if($request->has('tercero_nit')) {
-            $tercero = Tercero::select('tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"))->where('tercero_nit', $request->tercero_nit)->first();
+            $tercero = Tercero::select('tercero_nit',
+                DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
+            )->where('tercero_nit', $request->tercero_nit)->first();
             if($tercero instanceof Tercero) {
                 return response()->json(['success' => true, 'tercero_nombre' => $tercero->tercero_nombre]);
             }

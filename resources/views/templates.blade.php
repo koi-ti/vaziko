@@ -1,42 +1,11 @@
 {{-- templates --}}
-<script type="text/template" id="tercero-name-tpl">
-	<div class="row">
-		<% if(tercero_persona == 'J'){ %>
-			<div class="form-group col-md-12">
-				<label for="tercero_razonsocial" class="control-label">Razón Social o Comercial</label>
-				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Raz&oacute;n Social o Comercial" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text" required>
-			</div>
-		<% }else{ %>
-			<div class="form-group col-md-3">
-				<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
-				<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text" required>
-			</div>
-
-			<div class="form-group col-md-3">
-				<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
-				<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
-			</div>
-
-			<div class="form-group col-md-3">
-				<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
-				<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text" required>
-			</div>
-
-			<div class="form-group col-md-3">
-				<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
-				<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
-			</div>
-		<% } %>
-	</div>
-</script>
-
 <script type="text/template" id="add-tercero-tpl">
 	<div class="row">
 		<div class="form-group col-md-3">
 			<label for="tercero_nit" class="control-label">Documento</label>
 			<div class="row">
 				<div class="col-md-9">
-					<input id="tercero_nit" value="<%- tercero_nit %>" placeholder="Nit" class="form-control input-sm" name="tercero_nit" type="text" required>
+					<input id="tercero_nit" value="<%- tercero_nit %>" placeholder="Nit" class="form-control input-sm change-nit-koi-component" name="tercero_nit" type="text" required data-field="tercero_digito">
 				</div>
 				<div class="col-md-3">
 					<input id="tercero_digito" value="<%- tercero_digito %>" class="form-control input-sm" name="tercero_digito" type="text" readonly required>
@@ -75,8 +44,34 @@
 		</div>
 	</div>
 
-	{{-- Render name --}}
-	<div id="content-render-name"></div>
+	<div class="row">
+		<div class="form-group col-md-3">
+			<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
+			<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
+			<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
+			<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
+			<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-12">
+			<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
+			<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
+		</div>
+	</div>
 
 	<div class="row">
 		<div class="form-group col-md-3">
@@ -176,7 +171,7 @@
 	    	    	    <div class="row">
 					    	<div class="form-group col-md-10">
 					    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-					    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default" required>
+					    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default change-actividad-koi-component" required data-field="tercero_retecree">
 									@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
 										<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 									@endforeach
@@ -571,6 +566,31 @@
     	<div class="form-group col-md-2">
 			<label for="actividad_categoria" class="control-label">Categoria</label>
 			<input type="text" id="actividad_categoria" name="actividad_categoria" value="<%- actividad_categoria %>" placeholder="Categoria" class="form-control input-sm input-toupper" maxlength="3">
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-rfacturap-tpl">
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="facturap1_factura" class="control-label">Factura</label>
+			<input type="text" id="facturap1_factura" name="facturap1_factura" placeholder="Factura" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-4">
+			<label for="facturap1_vencimiento" class="control-label">Vencimiento</label>
+			<input type="text" id="facturap1_vencimiento" name="facturap1_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="facturap1_cuotas" class="control-label">Cuotas</label>
+			<input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" class="form-control input-sm" min="1" max="100" required>
+		</div>
+		<div class="form-group col-md-4">
+			<label for="facturap1_periodicidad" class="control-label">Periodicidad</label>
+			<input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" class="form-control input-sm" min="1" value="15" required>
 		</div>
     </div>
 </script>

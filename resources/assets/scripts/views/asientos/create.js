@@ -13,13 +13,15 @@ app || (app = {});
 
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
+        templateFp: _.template( ($('#add-rfacturap-tpl').html() || '') ),
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'click .submit-asiento': 'submitAsiento',
             'click .pre-save-asiento': 'submitPreSaveAsiento',
             'submit #form-item-asiento': 'onStoreItem',
+            'submit #form-create-facturap-component': 'onStoreFacturap',
             'change input#asiento2_base': 'baseChanged',
-            'submit #form-asientos': 'onStore'
+            'submit #form-asientos': 'onStore',
         },
 
         /**
@@ -27,6 +29,7 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
+            this.$modalFactura = $('#modal-facturap-component');
             this.$wraperForm = this.$('#render-form-asientos');
 
             this.asientoCuentasList = new app.AsientoCuentasList();
@@ -49,6 +52,7 @@ app || (app = {});
 
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
+            this.$formItem = this.$('#form-item-asiento');
             this.$inputTasa = this.$("#asiento2_tasa");
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
@@ -76,6 +80,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initValidator == 'function' )
                 window.initComponent.initValidator();
+
+            if( typeof window.initComponent.initDatePicker == 'function' )
+                window.initComponent.initDatePicker();
         },
 
         /**
@@ -163,14 +170,68 @@ app || (app = {});
         },
 
         /**
-        * Event add item Asiento Cuentas
+        * Event Create Cuenta
         */
-        onStoreItem: function (e) {
-            this.$('#asiento2_valor').inputmask('unmaskedvalue');
+        onStoreFacturap: function (e) {
+
             if (!e.isDefaultPrevented()) {
 
                 e.preventDefault();
-                this.asientoCuentasList.trigger( 'store', this.$(e.target) );
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formItem ));
+                data.asiento2_base = this.$inputBase.inputmask('unmaskedvalue');
+                data.asiento2_valor = this.$inputValor.inputmask('unmaskedvalue');
+
+                this.asientoCuentasList.trigger( 'store', data );
+
+                // Open hide facturap
+                this.$modalFactura.modal('hide');
+            }
+        },
+
+        /**
+        * Event add item Asiento Cuentas
+        */
+        onStoreItem: function (e) {
+            var _this = this;
+
+            if (!e.isDefaultPrevented()) {
+
+                e.preventDefault();
+                var data = window.Misc.formToJson( e.target );
+                this.asientoCuentasList.trigger( 'store', data );
+
+                // Search plancuenta
+                // $.ajax({
+                //     url: window.Misc.urlFull(Route.route('plancuentas.search')),
+                //     type: 'GET',
+                //     data: { plancuentas_cuenta: data.plancuentas_cuenta },
+                //     beforeSend: function() {
+                //         window.Misc.setSpinner( _this.el );
+                //     }
+                // })
+                // .done(function(resp) {
+                //     window.Misc.removeSpinner( _this.el );
+                //     if(resp.success) {
+                //         // Evaluate others actions
+                //         // Facturap
+                //         // && !_.isUndefined(resp.plancuentas_tipo) && !_.isNull(resp.plancuentas_tipo) && resp.plancuentas_tipo == 'P'
+                //         if(!_.isUndefined(resp.plancuentas_naturaleza) && !_.isNull(resp.plancuentas_naturaleza) && resp.plancuentas_naturaleza == 'C') {
+                //             _this.$modalFactura.find('.content-modal').html( _this.templateFp({ }) );
+                //             // to fire plugins
+                //             _this.ready();
+                //             // Open modal facturap
+                //             _this.$modalFactura.modal('show');
+
+                //         }else{
+                //             _this.asientoCuentasList.trigger( 'store', data );
+                //         }
+                //     }
+                // })
+                // .fail(function(jqXHR, ajaxOptions, thrownError) {
+                //     window.Misc.removeSpinner( _this.el );
+                //     alertify.error(thrownError);
+                // });
             }
         },
 

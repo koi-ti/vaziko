@@ -13,26 +13,21 @@ app || (app = {});
 
         el: '#tercero-create',
         template: _.template( ($('#add-tercero-tpl').html() || '') ),
-        templateName: _.template( ($('#tercero-name-tpl').html() || '') ),
         events: {
-            'change input#tercero_nit': 'nitChanged',
-            'change select#tercero_persona': 'personaChanged',
-            'change select#tercero_actividad': 'actividadChanged',
             'submit #form-create-tercero': 'onStore'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {      
-            
-            // Attributes 
+        initialize : function(opts) {
+
+            // Attributes
             this.msgSuccess = 'Tercero guardado con exito!';
             this.$wraperForm = this.$('#render-form-tercero');
 
             // Events
             this.listenTo( this.model, 'change:id', this.render );
-            this.listenTo( this.model, 'change:tercero_persona', this.renderName );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
@@ -45,28 +40,13 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
 
             // Model exist
-            if( this.model.id == undefined ) {
-                this.renderName();
-            }else{
+            if( this.model.id != undefined ) {
 
                 this.contactsList = new app.ContactsList();
 
                 // Reference views
                 this.referenceViews();
             }
-
-            // Reference to fields
-            this.$dv = this.$('#tercero_digito');
-            this.$retecree = this.$('#tercero_retecree'); 
-            
-            this.ready();  
-        },
-
-        /**
-        * render name
-        */
-        renderName: function (model, value, opts) {
-            this.$('#content-render-name').html( this.templateName(this.model.toJSON()) );
             this.ready();
         },
 
@@ -76,16 +56,16 @@ app || (app = {});
         ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper(); 
+                window.initComponent.initToUpper();
 
             if( typeof window.initComponent.initInputMask == 'function' )
-                window.initComponent.initInputMask();  
+                window.initComponent.initInputMask();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();  
+                window.initComponent.initSelect2();
 
             if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
         },
 
         /**
@@ -103,70 +83,16 @@ app || (app = {});
             });
         },
 
-        nitChanged: function(e) {
-            var _this = this;
-            
-            $.ajax({
-                url: window.Misc.urlFull(Route.route('terceros.dv')),
-                type: 'GET',
-                data: { tercero_nit: $(e.currentTarget).val() },
-                beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
-                }
-            })
-            .done(function(resp) {  
-                window.Misc.removeSpinner( _this.el );
-                if(resp.success) {
-                    // Dv
-                    _this.$dv.val(resp.dv);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.el );
-                alertify.error(thrownError);
-            });
-        },
-
-        personaChanged: function(e) {
-            this.model.set({ tercero_persona: $(e.currentTarget).val() });
-        },
-
-        actividadChanged: function(e) {
-            var _this = this;
-            
-            $.ajax({
-                url: window.Misc.urlFull(Route.route('terceros.rcree')),
-                type: 'GET',
-                data: { tercero_actividad: $(e.currentTarget).val() },
-                beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
-                }
-            })
-            .done(function(resp) {  
-                window.Misc.removeSpinner( _this.el );
-                if(resp.success) {
-                    // % cree
-                    if(!_.isUndefined(resp.rcree) && !_.isNull(resp.rcree)){
-                        _this.$retecree.html(resp.rcree);
-                    }
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.el );
-                alertify.error(thrownError);
-            });
-        },
-
         /**
         * Event Create Forum Post
         */
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );                
+                this.model.save( data, {patch: true} );
             }
         },
 
