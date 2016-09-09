@@ -32,6 +32,7 @@ var app = app || {};
             this.initSelect2();
             this.initToUpper();
             this.initSpinner();
+            this.initDatePicker();
         },
 
         /**
@@ -120,7 +121,19 @@ var app = app || {};
                 var $form = $(this)
                 $.fn.validator.call($form, $form.data())
             })
-        }
+        },
+
+        /**
+        * Init icheck
+        */
+        initDatePicker: function () {
+
+            $('.datepicker').datepicker({
+                autoclose: true,
+                language: 'es',
+                format: 'yyyy-mm-dd'
+            });
+        },
     };
 
     //Init App Components

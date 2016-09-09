@@ -10,7 +10,7 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.ComponentCreateResourceView = Backbone.View.extend({
-        
+
       	el: 'body',
 		events: {
             'click .btn-add-resource-koi-component': 'addResource',
@@ -21,10 +21,10 @@ app || (app = {});
         * Constructor Method
         */
 		initialize: function() {
-			// Initialize            
+			// Initialize
             this.$modalComponent = this.$('#modal-add-resource-component');
             this.$wraperError = this.$('#error-resource-component');
-            this.$wraperContent = this.$('#content-create-resource-component');
+            this.$wraperContent = this.$('#content-create-resource-component').find('.modal-body');
 		},
 
 		/**
@@ -50,13 +50,20 @@ app || (app = {});
                         _this.model = new app.FolderModel();
                         var template = _.template($('#add-folder-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
+                    'tercero' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Tercero');
+
+                        _this.model = new app.TerceroModel();
+                        var template = _.template($('#add-tercero-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     }
 	            };
 
             if (stuffToDo[this.resource]) {
                 stuffToDo[this.resource]();
-				
-                this.$wraperError.hide().empty();                                     
+
+                this.$wraperError.hide().empty();
 
 	            // Events
             	this.listenTo( this.model, 'sync', this.responseServer );
@@ -66,7 +73,7 @@ app || (app = {});
                 this.ready();
 
 				this.$modalComponent.modal('show');
-            } 
+            }
 		},
 
         /**
@@ -75,16 +82,16 @@ app || (app = {});
         ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper(); 
+                window.initComponent.initToUpper();
 
             if( typeof window.initComponent.initInputMask == 'function' )
-                window.initComponent.initInputMask();  
+                window.initComponent.initInputMask();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();  
+                window.initComponent.initSelect2();
 
             if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
         },
 
         /**
@@ -93,12 +100,12 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-                
-                this.$wraperError.hide().empty();                                     
+
+                this.$wraperError.hide().empty();
 
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );                
+                this.model.save( data, {patch: true} );
             }
         },
 
@@ -106,14 +113,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.$wraperConten );
+            window.Misc.setSpinner( this.$wraperContent );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.$wraperConten );
+            window.Misc.removeSpinner( this.$wraperContent );
 
             // response success or error
             var text = resp.success ? '' : resp.errors;
@@ -122,8 +129,8 @@ app || (app = {});
             }
 
             if( !resp.success ) {
-                this.$wraperError.empty().append(text);                                     
-                this.$wraperError.show();                                     
+                this.$wraperError.empty().append(text);
+                this.$wraperError.show();
                 return;
             }
 
@@ -137,12 +144,15 @@ app || (app = {});
                     'folder' : function() {
                         _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('folder_nombre')}] }).trigger('change');
                         _this.$resourceField.val(_this.model.get('id')).trigger('change');
+                    },
+                    'tercero' : function() {
+                        _this.$resourceField.val(_this.model.get('tercero_nit')).trigger('change');
                     }
                 };
 
             if (stuffToDo[this.resource]) {
                 stuffToDo[this.resource]();
-                
+
                 this.$modalComponent.modal('hide');
             }
         }

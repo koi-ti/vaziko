@@ -59,6 +59,7 @@ app || (app = {});
             this.componentSearchCuentaView = new app.ComponentSearchCuentaView();
             this.componentDocumentView = new app.ComponentDocumentView();
             this.componentReportView = new app.ComponentReportView();
+            this.componentTerceroView = new app.ComponentTerceroView();
       	},
 
         /**
