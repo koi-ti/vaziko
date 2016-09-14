@@ -71,7 +71,7 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::group(['prefix' => 'asientos'], function()
 	{
-		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store']]);
+		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 

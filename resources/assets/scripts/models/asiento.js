@@ -21,6 +21,7 @@ app || (app = {});
 			'asiento1_dia': moment().format('D'),
 			'asiento1_folder': '',
 			'asiento1_documento': '',
+			'documento_tipo_consecutivo': '',
 			'asiento1_numero': '',
 			'asiento1_beneficiario': '',
 			'tercero_nit': '',
