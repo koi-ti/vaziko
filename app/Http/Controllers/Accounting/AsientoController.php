@@ -11,7 +11,7 @@ use DB, Log, Datatables, Auth;
 
 use App\Classes\AsientoContableDocumento;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Base\Tercero, App\Models\Accounting\Documento;
 
 class AsientoController extends Controller
 {
@@ -51,66 +51,55 @@ class AsientoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-             
+
             $asiento = new Asiento;
+            $asiento2 = new Asiento2;
             if ($asiento->isValid($data)) {
-                DB::beginTransaction();
-                try {
-                    // Validar Carrito
-                    $cuentas = $request->has('cuentas') ? $request->get('cuentas') : null;
-                    if(!isset($cuentas) || $cuentas == null || !is_array($cuentas) || count($cuentas) == 0) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'Por favor ingrese detalle para el asiento contable.']);
-                    }
-
-                    // Preparar cuentas
-                    $arCuentas = [];
-                    foreach ($cuentas as $item) {
-                        $asiento2 = new Asiento2;
-                        if (!$asiento2->isValid($item)) {
+                if ($asiento2->isValid($data)) {
+                    DB::beginTransaction();
+                    try {
+                        // Recuperar tercero
+                        $tercero = Tercero::where('tercero_nit', $request->asiento1_beneficiario)->first();
+                        if(!$tercero instanceof Tercero) {
                             DB::rollback();
-                            return response()->json(['success' => false, 'errors' => $asiento2->errors]);
-                        }     
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                        }
 
-                        $arCuenta['Cuenta'] = $item['plancuentas_cuenta']; 
-                        $arCuenta['Tercero'] = $item['asiento2_beneficiario'];
-                        $arCuenta['Detalle'] = $item['asiento2_detalle'];  
-                        $arCuenta['Naturaleza'] = $item['asiento2_naturaleza'];  
-                        $arCuenta['CentroCosto'] = $item['asiento2_centro'];  
-                        $arCuenta['Base'] = $item['asiento2_base'];  
-                        $arCuenta['Credito'] = $item['asiento2_credito'];
-                        $arCuenta['Debito'] = $item['asiento2_debito'];
-                        $arCuentas[] = $arCuenta;
-                    }
+                        // Asiento1
+                        $asiento->fill($data);
+                        $asiento->asiento1_beneficiario = $tercero->id;
+                        $asiento->asiento1_preguardado = true;
+                        $asiento->asiento1_usuario_elaboro = Auth::user()->id;
+                        $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
+                        $asiento->save();
 
-                    // Creo el objeto para manejar el asiento
-                    $objAsiento = new AsientoContableDocumento($data);
-                    if($objAsiento->asiento_error) {
+                        // Asiento2
+                        $cuenta = [];
+                        $cuenta['Cuenta'] = $request->plancuentas_cuenta;
+                        $cuenta['Tercero'] = $request->tercero_nit;
+                        $cuenta['Detalle'] = $request->asiento2_detalle;
+                        $cuenta['Naturaleza'] = $request->asiento2_naturaleza;
+                        $cuenta['CentroCosto'] = $request->asiento2_centro;
+                        $cuenta['Base'] = $request->asiento2_base;
+                        $cuenta['Credito'] = $request->asiento2_naturaleza == 'C' ? $request->asiento2_valor: 0;
+                        $cuenta['Debito'] = $request->asiento2_naturaleza == 'D' ? $request->asiento2_valor: 0;
+
+                        $result = $asiento2->store($asiento, $cuenta);
+                        if(!$result->success) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result->error]);
+                        }
+
+                        // Commit Transaction
+                        DB::commit();
+                        return response()->json(['success' => true, 'id' => $asiento->id]);
+                    }catch(\Exception $e){
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                        Log::error($e->getMessage());
+                        return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                     }
-
-                    // Preparar asiento
-                    $result = $objAsiento->asientoCuentas($arCuentas);
-                    if($result != 'OK'){
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $result]);
-                    }
-
-                    $result = $objAsiento->insertarAsiento();
-                    if($result != 'OK') {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $result]);
-                    } 
-
-                    // Commit Transaction
-                    DB::commit();
-                    return response()->json(['success' => true, 'id' => $objAsiento->asiento->id]);
-                }catch(\Exception $e){
-                    DB::rollback();
-                    Log::error($e->getMessage());
-                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
+                return response()->json(['success' => false, 'errors' => $asiento2->errors]);
             }
             return response()->json(['success' => false, 'errors' => $asiento->errors]);
         }
@@ -126,13 +115,13 @@ class AsientoController extends Controller
     public function show(Request $request, $id)
     {
         $asiento = Asiento::getAsiento($id);
-        if(!$asiento instanceof Asiento){       
+        if(!$asiento instanceof Asiento){
             abort(404);
         }
-        
+
         if ($request->ajax()) {
-            return response()->json($asiento);    
-        } 
+            return response()->json($asiento);
+        }
 
         return view('accounting.asiento.show', ['asiento' => $asiento]);
     }
@@ -149,7 +138,7 @@ class AsientoController extends Controller
         if($asiento->asiento1_preguardado == false) {
             return redirect()->route('asientos.show', ['asiento' => $asiento]);
         }
-        
+
         return view('accounting.asiento.edit', ['asiento' => $asiento]);
     }
 
@@ -170,31 +159,33 @@ class AsientoController extends Controller
 
                 DB::beginTransaction();
                 try {
+                    // Preparar cuentas
+                    // Recupero items asiento 2
+                    $query = Asiento2::query();
+                    $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
+                    $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
+                    $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
+                    $query->where('asiento2_asiento', $asiento->id);
+                    $asiento2 = $query->get();
+
+                    $cuentas = [];
+                    foreach ($asiento2 as $item) {
+                        $arCuenta = [];
+                        $arCuenta['Id'] = $item->id;
+                        $arCuenta['Cuenta'] = $item->plancuentas_cuenta;
+                        $arCuenta['Tercero'] = $item->tercero_nit;
+                        $arCuenta['Naturaleza'] = $item->asiento2_naturaleza;
+                        $arCuenta['CentroCosto'] = $item->asiento2_centro;
+                        $arCuenta['Base'] = $item->asiento2_base;
+                        $arCuenta['Credito'] = $item->asiento2_credito;
+                        $arCuenta['Debito'] = $item->asiento2_debito;
+                        $cuentas[] = $arCuenta;
+                    }
+
                     // Validar Carrito
-                    $cuentas = $request->has('cuentas') ? $request->get('cuentas') : null;
                     if(!isset($cuentas) || $cuentas == null || !is_array($cuentas) || count($cuentas) == 0) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'Por favor ingrese detalle para el asiento contable.']);
-                    }
-
-                    // Preparar cuentas
-                    $arCuentas = [];
-                    foreach ($cuentas as $item) {
-                        $asiento2 = new Asiento2;
-                        if (!$asiento2->isValid($item)) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => $asiento2->errors]);
-                        }     
-
-                        $arCuenta['Cuenta'] = $item['plancuentas_cuenta']; 
-                        $arCuenta['Tercero'] = $item['asiento2_beneficiario'];
-                        $arCuenta['Detalle'] = $item['asiento2_detalle'];  
-                        $arCuenta['Naturaleza'] = $item['asiento2_naturaleza'];  
-                        $arCuenta['CentroCosto'] = $item['asiento2_centro'];  
-                        $arCuenta['Base'] = $item['asiento2_base'];  
-                        $arCuenta['Credito'] = $item['asiento2_credito'];
-                        $arCuenta['Debito'] = $item['asiento2_debito'];
-                        $arCuentas[] = $arCuenta;
                     }
 
                     // Creo el objeto para manejar el asiento
@@ -205,7 +196,7 @@ class AsientoController extends Controller
                     }
 
                     // Preparar asiento
-                    $result = $objAsiento->asientoCuentas($arCuentas);
+                    $result = $objAsiento->asientoCuentas($cuentas);
                     if($result != 'OK'){
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
@@ -215,11 +206,11 @@ class AsientoController extends Controller
                     if($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
-                    } 
+                    }
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $objAsiento->asiento->id]);
+                    return response()->json(['success' => true, 'id' => $asiento->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());

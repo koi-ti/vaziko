@@ -13,12 +13,11 @@ class AsientoContableDocumento {
 	private $documento;
 	private $asiento_cuentas = [];
 	public $asiento_error = NULL;
-	public $preguardado = false;
 	private $empresa;
 
 	function __construct(Array $data, Asiento $asiento = null)
 	{
-		// Cuando se edita termina un asiento PRE-GUARDADO ya existe $asiento
+		// Cuando se edita termina un asiento ya existe $asiento
 		if(!$asiento instanceof Asiento) {
    	 		$asiento = new Asiento;
 		}
@@ -43,30 +42,24 @@ class AsientoContableDocumento {
             return;
         }
 
-        // Generar consecutivo, en caso de confirmar PRE-GUARDADO no actualizar consecutivo en documento
-		if($this->asiento->asiento1_preguardado == false) {
-	        // Recuperar consecutivo
-	        if($this->documento->documento_tipo_consecutivo == 'A'){
-	        	$this->asiento->asiento1_numero = $this->documento->documento_consecutivo + 1;
-	        }
+        // Recuperar consecutivo
+        if($this->documento->documento_tipo_consecutivo == 'A'){
+        	$this->asiento->asiento1_numero = $this->documento->documento_consecutivo + 1;
+        }
 
-	        // Validar consecutivo
-	        if (!intval($this->asiento->asiento1_numero) || $this->asiento->asiento1_numero <= 0){
-				$this->asiento_error = "No es posible recuperar el consecutivo documento ({$this->asiento->asiento1_numero}), por favor verifique la información del asiento o consulte al administrador.";
-				return;
-			}
+        // Validar consecutivo
+        if (!intval($this->asiento->asiento1_numero) || $this->asiento->asiento1_numero <= 0){
+			$this->asiento_error = "No es posible recuperar el consecutivo documento ({$this->asiento->asiento1_numero}), por favor verifique la información del asiento o consulte al administrador.";
+			return;
+		}
 
+    	if($this->documento->documento_tipo_consecutivo == 'M') {
 			$asiento = Asiento::where('asiento1_numero', $this->asiento->asiento1_numero)->where('asiento1_documento', $this->documento->id)->first();
 			if($asiento instanceof Asiento) {
 	            $this->asiento_error = "Ya existe asiento con el numero {$this->asiento->asiento1_numero} para el documento {$this->documento->documento_nombre}, por favor verifique la información del asiento o consulte al administrador.";
 	            return;
 	        }
-	  	}
-
-        // Validar Pre-Guardado
-        if(isset($data['preguardado']) && $data['preguardado'] == true) {
-        	$this->preguardado = true;
-        }
+       	}
 
         // Recuperar empresa
 		$this->empresa = Empresa::getEmpresa();
@@ -81,20 +74,17 @@ class AsientoContableDocumento {
 		// }
 	}
 
-	function asientoCuentas($cuentas = null, $num = null, $item = 1)
+	function asientoCuentas($cuentas = null)
 	{
 		if (!is_array( $cuentas )) {
 			return 'El parámetro pasado como cuentas no es un array '.$cuentas;
 		}
 		$this->asiento_cuentas = $cuentas;
 
-		// Preguardado asiento contable FALSE no valida sumas
-		if($this->preguardado == false) {
-			// Valido que las sumas sean Iguales
-			$result = $this->validarSumas();
-			if ($result != 'OK'){
-				return $result;
-			}
+		// Valido que las sumas sean Iguales
+		$result = $this->validarSumas();
+		if ($result != 'OK'){
+			return $result;
 		}
 
 		foreach ($this->asiento_cuentas as $cuenta)
@@ -171,21 +161,11 @@ class AsientoContableDocumento {
 
 	public function insertarAsiento()
 	{
-		// Valido registros de asiento2, en caso de confirmar PRE-GUARDADO eliminar registros existentes
-		$asientos = Asiento2::where('asiento2_asiento', $this->asiento->id)->get();
-		if($asientos->count() > 0 || $this->asiento->asiento1_preguardado) {
-			Asiento2::where('asiento2_asiento', $this->asiento->id)->delete();
-		}
-
-		// Actualizar consecutivo, en caso de confirmar PRE-GUARDADO no actualizar consecutivo en documento
-		if($this->asiento->asiento1_preguardado == false){
-			$this->documento->documento_consecutivo = $this->asiento->asiento1_numero;
-			$this->documento->save();
-
-		}
+		$this->documento->documento_consecutivo = $this->asiento->asiento1_numero;
+		$this->documento->save();
 
 		// Asiento
-		$this->asiento->asiento1_preguardado = $this->preguardado;
+		$this->asiento->asiento1_preguardado = false;
 		$this->asiento->asiento1_beneficiario = $this->beneficiario->id;
 		$this->asiento->asiento1_usuario_elaboro = Auth::user()->id;
 		$this->asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
@@ -193,92 +173,42 @@ class AsientoContableDocumento {
 
 		foreach ($this->asiento_cuentas as $cuenta)
 		{
-	        // Recuperar cuenta
-            $objCuenta = PlanCuenta::where('plancuentas_cuenta', $cuenta['Cuenta'])->first();
-            if(!$objCuenta instanceof PlanCuenta) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (1. insertarAsiento).";
-            }
-
-            // Recuperar niveles cuenta
-			$niveles = PlanCuenta::getNivelesCuenta($cuenta['Cuenta']);
-	        if(!is_array($niveles)) {
-				return "Error al recuperar niveles para la cuenta {$cuenta['Cuenta']}.";
-	        }
-
-	        // Validar base
-			if( !empty($objCuenta->plancuentas_tasa) && $objCuenta->plancuentas_tasa > 0 && (!isset($cuenta['Base']) || empty($cuenta['Base']) || $cuenta['Base'] == 0) ) {
-				return "Para la cuenta {$objCuenta->plancuentas_cuenta} debe existir base.";
+			// Asiento2
+			$asiento2 = null;
+			if(isset($cuenta['Id']) && !empty($cuenta['Id'])) {
+				$asiento2 = Asiento2::find($cuenta['Id']);
 			}
 
-		    // Recuperar tercero
-		    $objTercero = null;
-	        if(isset($cuenta['Tercero']) && !empty($cuenta['Tercero'])) {
-			    $objTercero = Tercero::find($cuenta['Tercero']);
-			    if(!$objTercero instanceof Tercero) {
-			        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
-			    }
-		   	}
-
-		   	// Validacion plancuentas_tercero requiere tercero inactiva
-		   	// if($objCuenta->plancuentas_tercero) {
-                // if(!$objTercero instanceof Tercero) {
-                    // return response()->json(['success' => false, 'errors' => 'La cuenta requiere información de tercero beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
-                // }
-            // }
-
-            // Si no require tercero se realiza el asiento a tercero empresa
-            if(!$objTercero instanceof Tercero) {
-            	$objTercero = $this->beneficiario;
-			}
-
-			if(!$objTercero instanceof Tercero) {
-                return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
-            }
-
-            // Recuperar centro costo
-	        $objCentroCosto = null;
-	        if(isset($cuenta['CentroCosto']) && !empty($cuenta['CentroCosto'])) {
-	            $objCentroCosto = CentroCosto::find($cuenta['CentroCosto']);
-	            if(!$objCentroCosto instanceof CentroCosto) {
-	                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (2. insertarAsiento).";
+			if(!$asiento2 instanceof Asiento2) {
+				$asiento2 = new Asiento2;
+				$result = $asiento2->store($this->asiento, $cuenta);
+	            if(!$result->success) {
+	                return $result->error;
 	            }
-	        }
+	      	}
 
-			$asiento2 = new Asiento2;
-			$asiento2->asiento2_asiento = $this->asiento->id;
-	        $asiento2->asiento2_beneficiario = $objTercero->id;
-		    $asiento2->asiento2_cuenta = $objCuenta->id;
-			$asiento2->asiento2_nivel1 = $niveles['nivel1'] ?: 0;
-			$asiento2->asiento2_nivel2 = $niveles['nivel2'] ?: 0;
-			$asiento2->asiento2_nivel3 = $niveles['nivel3'] ?: 0;
-			$asiento2->asiento2_nivel4 = $niveles['nivel4'] ?: 0;
-			$asiento2->asiento2_nivel5 = $niveles['nivel5'] ?: 0;
-			$asiento2->asiento2_nivel6 = $niveles['nivel6'] ?: 0;
-			$asiento2->asiento2_nivel7 = $niveles['nivel7'] ?: 0;
-			$asiento2->asiento2_nivel8 = $niveles['nivel8'] ?: 0;
+	        // Recuperar cuenta
+            $objCuenta = PlanCuenta::find($asiento2->asiento2_cuenta);
+            if(!$objCuenta instanceof PlanCuenta) {
+                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
+            }
 
-		    if($objCentroCosto instanceof CentroCosto) {
-		        $asiento2->asiento2_centro = $objCentroCosto->id;
+            // Recuperar tercero
+            $objTercero = Tercero::find($asiento2->asiento2_beneficiario);
+		    if(!$objTercero instanceof Tercero) {
+		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
 		    }
-		    $asiento2->asiento2_credito = $cuenta['Credito'] ?: 0;
-		    $asiento2->asiento2_debito = $cuenta['Debito'] ?: 0;
-		    $asiento2->asiento2_base = $cuenta['Base'] ?: 0;
-		    $asiento2->asiento2_detalle = $cuenta['Detalle'] ?: '';
-		    $asiento2->save();
 
-    		// Preguardado asiento contable FALSE realiza movimientos contables
-		    if($this->preguardado == false) {
-			    // Mayorizacion de saldos Contables
-	            $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-				if($result != 'OK') {
-					return $result;
-				}
+		    // Mayorizacion de saldos Contables
+            $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			if($result != 'OK') {
+				return $result;
+			}
 
-				// Mayorizacion de saldos x tercero
-				$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-				if($result != 'OK') {
-					return $result;
-				}
+			// Mayorizacion de saldos x tercero
+			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			if($result != 'OK') {
+				return $result;
 			}
 		}
 		return 'OK';

@@ -122,15 +122,31 @@ app || (app = {});
         removeOne: function (e) {
             e.preventDefault();
 
-            var resource = $(e.currentTarget).attr("data-resource");
-            var model = this.collection.get(resource);
-            if ( model instanceof Backbone.Model ) {
-                model.view.remove();
-                this.collection.remove(model);
-            }
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
 
-            // Update total
-            this.totalize();
+            if ( model instanceof Backbone.Model ) {
+                model.destroy({
+                    success : function(model, resp) {
+                        if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                            if( !resp.success ) {
+                                alertify.error(resp.errors);
+                                return;
+                            }
+
+                            model.view.remove();
+                            _this.collection.remove(model);
+
+                            // Update total
+                            _this.totalize();
+                        }
+                    }
+                });
+
+            }
         },
 
         /**

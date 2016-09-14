@@ -1,5 +1,5 @@
 /**
-* Class CreateAsientoView  of Backbone Router
+* Class EditAsientoView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,7 +9,7 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateAsientoView = Backbone.View.extend({
+    app.EditAsientoView = Backbone.View.extend({
 
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
@@ -17,7 +17,9 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'submit #form-item-asiento': 'onStoreItem',
+            // 'submit #form-create-facturap-component': 'onStoreFacturap',
             'change input#asiento2_base': 'baseChanged',
+            'click .submit-asiento': 'submitAsiento',
             'submit #form-asientos': 'onStore',
         },
 
@@ -26,7 +28,7 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$modalFactura = $('#modal-facturap-component');
+            // this.$modalFactura = $('#modal-facturap-component');
             this.$wraperForm = this.$('#render-form-asientos');
 
             this.asientoCuentasList = new app.AsientoCuentasList();
@@ -42,7 +44,7 @@ app || (app = {});
         render: function() {
 
             var attributes = this.model.toJSON();
-            attributes.edit = false;
+            attributes.edit = true;
             this.$wraperForm.html( this.template(attributes) );
 
             this.$numero = this.$('#asiento1_numero');
@@ -51,12 +53,18 @@ app || (app = {});
             this.$inputTasa = this.$("#asiento2_tasa");
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
+            this.$inputDocumento = this.$("#asiento1_documento");
 
             // Reference views
             this.referenceViews();
 
             // to fire plugins
             this.ready();
+
+            // to change document
+            if(this.model.get('documento_tipo_consecutivo') == 'A'){
+                this.$inputDocumento.change();
+            }
 		},
 
         /**
@@ -78,6 +86,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
         },
 
         /**
@@ -133,6 +144,13 @@ app || (app = {});
         },
 
         /**
+        * Event submit Asiento
+        */
+        submitAsiento: function (e) {
+            this.$form.submit();
+        },
+
+        /**
         * Event Create Cuenta
         */
         onStore: function (e) {
@@ -142,6 +160,75 @@ app || (app = {});
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Event Create Cuenta
+        */
+        // onStoreFacturap: function (e) {
+
+        //     if (!e.isDefaultPrevented()) {
+
+        //         e.preventDefault();
+
+        //         var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formItem ));
+        //         data.asiento2_base = this.$inputBase.inputmask('unmaskedvalue');
+        //         data.asiento2_valor = this.$inputValor.inputmask('unmaskedvalue');
+
+        //         this.asientoCuentasList.trigger( 'store', data );
+
+        //         // Open hide facturap
+        //         this.$modalFactura.modal('hide');
+        //     }
+        // },
+
+        /**
+        * Event add item Asiento Cuentas
+        */
+        onStoreItem: function (e) {
+            var _this = this;
+
+            if (!e.isDefaultPrevented()) {
+
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                data.asiento1_id = this.model.get('id');
+
+                this.asientoCuentasList.trigger( 'store', data );
+
+                // Search plancuenta
+                // $.ajax({
+                //     url: window.Misc.urlFull(Route.route('plancuentas.search')),
+                //     type: 'GET',
+                //     data: { plancuentas_cuenta: data.plancuentas_cuenta },
+                //     beforeSend: function() {
+                //         window.Misc.setSpinner( _this.el );
+                //     }
+                // })
+                // .done(function(resp) {
+                //     window.Misc.removeSpinner( _this.el );
+                //     if(resp.success) {
+                //         // Evaluate others actions
+                //         // Facturap
+                //         // && !_.isUndefined(resp.plancuentas_tipo) && !_.isNull(resp.plancuentas_tipo) && resp.plancuentas_tipo == 'P'
+                //         if(!_.isUndefined(resp.plancuentas_naturaleza) && !_.isNull(resp.plancuentas_naturaleza) && resp.plancuentas_naturaleza == 'C') {
+                //             _this.$modalFactura.find('.content-modal').html( _this.templateFp({ }) );
+                //             // to fire plugins
+                //             _this.ready();
+                //             // Open modal facturap
+                //             _this.$modalFactura.modal('show');
+
+                //         }else{
+                //             _this.asientoCuentasList.trigger( 'store', data );
+                //         }
+                //     }
+                // })
+                // .fail(function(jqXHR, ajaxOptions, thrownError) {
+                //     window.Misc.removeSpinner( _this.el );
+                //     alertify.error(thrownError);
+                // });
             }
         },
 
@@ -188,8 +275,8 @@ app || (app = {});
                     return;
                 }
 
-                // Redirect to Content Course
-                Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
+                // Redirect to show view
+                window.Misc.redirect( window.Misc.urlFull( Route.route('asientos.edit', { asientos: resp.id}) ) );
             }
         }
     });

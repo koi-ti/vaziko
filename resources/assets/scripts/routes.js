@@ -370,12 +370,17 @@ app || (app = {});
             this.asientoModel = new app.AsientoModel();
             this.asientoModel.set({'id': asiento}, {'silent':true});
 
+            if ( this.editAsientoView instanceof Backbone.View ){
+                this.editAsientoView.stopListening();
+                this.editAsientoView.undelegateEvents();
+            }
+
             if ( this.createAsientoView instanceof Backbone.View ){
                 this.createAsientoView.stopListening();
                 this.createAsientoView.undelegateEvents();
             }
 
-            this.createAsientoView = new app.CreateAsientoView({ model: this.asientoModel });
+            this.editAsientoView = new app.EditAsientoView({ model: this.asientoModel });
             this.asientoModel.fetch();
         },
 
