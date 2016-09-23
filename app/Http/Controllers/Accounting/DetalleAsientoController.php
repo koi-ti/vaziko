@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Log, DB;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero;
 
 class DetalleAsientoController extends Controller
 {
@@ -129,6 +129,13 @@ class DetalleAsientoController extends Controller
                         return response()->json(['success' => false, 'errors' => $result->error]);
                     }
 
+                    // Insertar movimiento asiento
+                    $result = $asiento2->movimiento($request);
+                    if(!$result->success) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result->error]);
+                    }
+
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento2->id,
                         'asiento2_cuenta' => $objCuenta->id,
@@ -199,10 +206,15 @@ class DetalleAsientoController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
+
                 $asiento2 = Asiento2::find($id);
                 if(!$asiento2 instanceof Asiento2){
                     return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                 }
+                // Eliminar movimiento
+                AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->delete();
+
+                // Eliminar item asiento2
                 $asiento2->delete();
 
                 DB::commit();

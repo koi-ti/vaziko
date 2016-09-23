@@ -15,6 +15,28 @@
 
 	<section class="content">
     	@yield('module')
+
+    	<!-- Modal facturap -->
+		<div class="modal fade" id="modal-facturap-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+			<div class="modal-dialog modal-md" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Factura proveedor</h4>
+					</div>
+					{!! Form::open(['id' => 'form-create-facturap-component', 'data-toggle' => 'validator']) !!}
+						<div class="modal-body box box-success">
+							<div id="error-eval-facturap" class="alert alert-danger"></div>
+							<div class="content-modal"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+						</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
     </section>
 
     {{-- Templates --}}
@@ -102,7 +124,7 @@
 						</div>
 					</div>
 					<div class="col-sm-5">
-						<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" disabled required>
+						<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" readonly required>
 					</div>
 					<div class="col-sm-1">
 						<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="asiento1_beneficiario">
@@ -159,7 +181,7 @@
 								</div>
 							</div>
 							<div class="col-sm-3">
-								<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" disabled>
+								<input id="tercero_nombre" name="tercero_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
 							</div>
 							<div class="col-sm-1">
 								<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="tercero_nit">

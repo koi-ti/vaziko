@@ -19,8 +19,9 @@ class CreateFacturap1Table extends Migration
             $table->integer('facturap1_sucursal')->unsigned();
             $table->integer('facturap1_tercero')->unsigned();
             $table->string('facturap1_factura', 200);
+            $table->date('facturap1_fecha');
             $table->smallInteger('facturap1_cuotas');
-            $table->datetime('facturap1_fecha');
+            $table->smallInteger('facturap1_periodicidad');
             $table->text('facturap1_observaciones')->nullable();
             $table->integer('facturap1_usuario_elaboro')->unsigned();
             $table->datetime('facturap1_fecha_elaboro');

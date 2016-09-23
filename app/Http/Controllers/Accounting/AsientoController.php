@@ -11,7 +11,7 @@ use DB, Log, Datatables, Auth;
 
 use App\Classes\AsientoContableDocumento;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Base\Tercero, App\Models\Accounting\Documento;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Base\Tercero, App\Models\Accounting\Documento;
 
 class AsientoController extends Controller
 {
@@ -90,6 +90,13 @@ class AsientoController extends Controller
                             return response()->json(['success' => false, 'errors' => $result->error]);
                         }
 
+                        // Insertar movimiento asiento
+                        $result = $asiento2->movimiento($request);
+                        if(!$result->success) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result->error]);
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $asiento->id]);
@@ -162,7 +169,9 @@ class AsientoController extends Controller
                     // Preparar cuentas
                     // Recupero items asiento 2
                     $query = Asiento2::query();
-                    $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
+                    $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_tipo', 'tercero_nit',
+                        DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza")
+                    );
                     $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
                     $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
                     $query->where('asiento2_asiento', $asiento->id);
@@ -202,10 +211,20 @@ class AsientoController extends Controller
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
 
+                    // Insertar asiento
                     $result = $objAsiento->insertarAsiento();
                     if($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
+                    }
+
+                    // Insertar movimientos asiento
+                    foreach ($asiento2 as $item) {
+                        $result = $item->movimientos();
+                        if($result != 'OK') {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result]);
+                        }
                     }
 
                     // Commit Transaction

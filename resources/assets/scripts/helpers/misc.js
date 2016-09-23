@@ -183,6 +183,107 @@
         */
         currency: function( value ){
             return accounting.formatMoney(value, '', 2, ".", ",");
+        },
+
+        /**
+        * Evaluate accounts
+        */
+        evaluateAccount: function ( options ) {
+
+            options || (options = {});
+
+            var defaults = {
+                'callback': null,
+                'wrap': 'body',
+                'cuenta': null,
+                'centrocosto': null
+            }, settings = {};
+
+            settings = $.extend({}, defaults, options);
+
+            // Search plancuenta
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('plancuentas.search')),
+                type: 'GET',
+                data: { plancuentas_cuenta: settings.cuenta },
+                beforeSend: function() {
+                    window.Misc.setSpinner( settings.wrap );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( settings.wrap );
+                if(resp.success) {
+                    // Evaluate actions
+                    var response = { actions: false };
+                    if(!_.isUndefined(resp.plancuentas_tipo) && !_.isNull(resp.plancuentas_tipo) && resp.plancuentas_tipo == 'P') {
+                        response.actions = true;
+                        response.action = 'facturap';
+                    }
+
+                    // return callback
+                    if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                        settings.callback( response );
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( settings.wrap );
+                alertify.error(thrownError);
+            });
+        },
+
+        /**
+        * Evaluate facturap
+        */
+        evaluateFacturap: function ( options ) {
+
+            options || (options = {});
+
+            var defaults = {
+                'callback': null,
+                'wrap': 'body',
+                'facturap': null,
+                'tercero': null,
+                'naturaleza': null
+            }, settings = {};
+            settings = $.extend({}, defaults, options);
+
+            // Search facturap
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('facturap.search')),
+                type: 'GET',
+                data: { facturap1_factura: settings.facturap, tercero_nit: settings.tercero },
+                beforeSend: function() {
+                    window.Misc.setSpinner( settings.wrap );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( settings.wrap );
+                var response = { actions: false };
+
+                if(resp.success) {
+                    // Evaluate actions
+                    response.actions = true;
+                    response.facturap = resp.id;
+                    response.action = 'quota';
+
+                }else{
+                    if(settings.naturaleza == 'C') {
+                        response.actions = true;
+                        response.action = 'add';
+
+                    }else if(settings.naturaleza == 'D') {
+                        response.message = 'Para realizar movimientos de naturaleza débito de ingresar un numero de factura existente.';
+                    }
+                }
+
+                // return callback
+                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                    settings.callback( response );
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( settings.wrap );
+                alertify.error(thrownError);
+            });
         }
     };
 
