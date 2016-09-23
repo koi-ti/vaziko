@@ -180,7 +180,7 @@ app || (app = {});
 
                             }else{
                                 // Default insert
-                                _this.asientoCuentasList.trigger( 'store', data );
+                                _this.model.save( data, {patch: true, silent: true} );
                             }
                         }
                     })(this)
