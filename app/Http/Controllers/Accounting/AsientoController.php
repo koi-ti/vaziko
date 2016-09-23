@@ -11,7 +11,7 @@ use DB, Log, Datatables, Auth;
 
 use App\Classes\AsientoContableDocumento;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Base\Tercero, App\Models\Accounting\Documento;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Base\Tercero, App\Models\Accounting\Documento;
 
 class AsientoController extends Controller
 {
