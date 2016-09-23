@@ -28,9 +28,7 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            // this.$modalFactura = $('#modal-facturap-component');
             this.$wraperForm = this.$('#render-form-asientos');
-
             this.asientoCuentasList = new app.AsientoCuentasList();
 
             this.listenTo( this.model, 'change', this.render );
@@ -164,71 +162,59 @@ app || (app = {});
         },
 
         /**
-        * Event Create Cuenta
-        */
-        // onStoreFacturap: function (e) {
-
-        //     if (!e.isDefaultPrevented()) {
-
-        //         e.preventDefault();
-
-        //         var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formItem ));
-        //         data.asiento2_base = this.$inputBase.inputmask('unmaskedvalue');
-        //         data.asiento2_valor = this.$inputValor.inputmask('unmaskedvalue');
-
-        //         this.asientoCuentasList.trigger( 'store', data );
-
-        //         // Open hide facturap
-        //         this.$modalFactura.modal('hide');
-        //     }
-        // },
-
-        /**
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
-            var _this = this;
-
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
 
+                // Prepare global data
                 var data = window.Misc.formToJson( e.target );
                 data.asiento1_id = this.model.get('id');
 
-                this.asientoCuentasList.trigger( 'store', data );
+                // Evaluate account
+                window.Misc.evaluateAccount({
+                    'cuenta': data.plancuentas_cuenta,
+                    'centrocosto': data.asiento2_centro,
+                    'wrap': this.$el,
+                    'callback': (function (_this) {
+                        return function ( resp )
+                        {
+                            if(resp.actions) {
+                                // stuffToDo Response success
+                                var stuffToDo = {
+                                    'facturap' : function() {
+                                        // FacturapView
+                                        if ( _this.createFacturapView instanceof Backbone.View ){
+                                            _this.createFacturapView.stopListening();
+                                            _this.createFacturapView.undelegateEvents();
+                                        }
 
-                // Search plancuenta
-                // $.ajax({
-                //     url: window.Misc.urlFull(Route.route('plancuentas.search')),
-                //     type: 'GET',
-                //     data: { plancuentas_cuenta: data.plancuentas_cuenta },
-                //     beforeSend: function() {
-                //         window.Misc.setSpinner( _this.el );
-                //     }
-                // })
-                // .done(function(resp) {
-                //     window.Misc.removeSpinner( _this.el );
-                //     if(resp.success) {
-                //         // Evaluate others actions
-                //         // Facturap
-                //         // && !_.isUndefined(resp.plancuentas_tipo) && !_.isNull(resp.plancuentas_tipo) && resp.plancuentas_tipo == 'P'
-                //         if(!_.isUndefined(resp.plancuentas_naturaleza) && !_.isNull(resp.plancuentas_naturaleza) && resp.plancuentas_naturaleza == 'C') {
-                //             _this.$modalFactura.find('.content-modal').html( _this.templateFp({ }) );
-                //             // to fire plugins
-                //             _this.ready();
-                //             // Open modal facturap
-                //             _this.$modalFactura.modal('show');
+                                        data.tercero_nit = data.tercero_nit ? data.tercero_nit : _this.model.get('tercero_nit');
+                                        data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : _this.model.get('tercero_nombre');
 
-                //         }else{
-                //             _this.asientoCuentasList.trigger( 'store', data );
-                //         }
-                //     }
-                // })
-                // .fail(function(jqXHR, ajaxOptions, thrownError) {
-                //     window.Misc.removeSpinner( _this.el );
-                //     alertify.error(thrownError);
-                // });
+                                        _this.createFacturapView = new app.CreateFacturapView({
+                                            model: _this.model,
+                                            collection: _this.asientoCuentasList,
+                                            parameters: {
+                                                data: data
+                                            }
+                                        });
+                                        _this.createFacturapView.render();
+                                    }
+                                };
+
+                                if (stuffToDo[resp.action]) {
+                                    stuffToDo[resp.action]();
+                                }
+
+                            }else{
+                                // Default insert
+                                _this.asientoCuentasList.trigger( 'store', data );
+                            }
+                        }
+                    })(this)
+                });
             }
         },
 

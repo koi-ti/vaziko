@@ -10,17 +10,15 @@
         <link rel="icon" type="image/png" href="{{ asset(config('koi.app.image.logo')) }}" />
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        
+
         {{-- Secure tags TuProyecto --}}
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        
+
         {{-- Icons css --}}
         <link href="{{ asset("/css/icons.min.css") }}" rel="stylesheet" type="text/css" />
-        {{-- Bootstrap css --}}
-        <link href="{{ asset("/css/bootstrap.min.css") }}" rel="stylesheet" type="text/css" />
         {{-- Vendor css --}}
         <link href="{{ asset("/css/vendor.min.css") }}" rel="stylesheet" type="text/css" />
-        
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -35,7 +33,7 @@
 				<img src="{{ asset(config('koi.app.image.logo')) }}" alt="{{ config('koi.app.sitename') }}"/><br>
         		<b>{{ config('koi.app.name') }}</b>
 			</div>
-			
+
 			@if (count($errors) > 0)
 			<div class="callout callout-warning">
 				@foreach ($errors->all() as $error)

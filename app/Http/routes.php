@@ -80,6 +80,19 @@ Route::group(['middleware' => 'auth'], function()
 
    	/*
 	|-------------------------
+	| Supplier invoice Routes
+	|-------------------------
+	*/
+	Route::group(['prefix' => 'facturap'], function()
+	{
+		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Accounting\FacturapController@search']);
+		Route::resource('cuotas', 'Accounting\FacturapCuotasController', ['only' => ['index']]);
+	});
+	Route::resource('facturap', 'Accounting\FacturapController', ['only' => ['index']]);
+
+
+   	/*
+	|-------------------------
 	| Reports Routes
 	|-------------------------
 	*/
