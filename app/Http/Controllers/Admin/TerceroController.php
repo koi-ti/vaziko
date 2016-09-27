@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables;
 
-use App\Models\Base\Tercero, App\Models\Base\Actividad;
+use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Accounting\Facturap2;
 
 class TerceroController extends Controller
 {
@@ -256,5 +256,26 @@ class TerceroController extends Controller
             }
         }
         return response()->json(['success' => false]);
+    }
+
+    /**
+     * facturap list.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function facturap(Request $request)
+    {
+        if($request->ajax() && $request->has('tercero_id')) {
+
+            $query = Facturap2::query();
+            $query->select('koi_facturap2.id as id', 'facturap2_cuota', 'facturap2_vencimiento', 'facturap2_saldo', 'facturap1_factura', 'facturap1_fecha', DB::raw('facturap2_vencimiento - current_date as dias'));
+            $query->join('koi_facturap1', 'facturap2_factura', '=', 'koi_facturap1.id');
+            $query->whereRaw('facturap2_saldo != 0');
+            $query->where('facturap1_tercero', $request->tercero_id)->get();
+            $facturap = $query->get();
+
+            return response()->json($facturap);
+        }
+        abort(404);
     }
 }

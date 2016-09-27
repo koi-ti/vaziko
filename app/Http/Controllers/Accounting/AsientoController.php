@@ -65,8 +65,28 @@ class AsientoController extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                         }
 
+                        // Permitir solo un asiento preguardado por documento
+                        $preguardado = Asiento::where('asiento1_preguardado', true)->where('asiento1_folder', $request->asiento1_folder)->where('asiento1_documento', $request->asiento1_documento)->first();
+                        if($preguardado instanceof Asiento) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'Existe un asiento preguardado para este documento, por favor terminarlo para poder generar uno nuevo.']);
+                        }
+
+                        // Recuerar documento
+                        $documento = Documento::where('id', $request->asiento1_documento)->first();
+                        if(!$documento instanceof Documento) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
+                        }
+
                         // Asiento1
                         $asiento->fill($data);
+
+                        // Consecutivo
+                        if($documento->documento_tipo_consecutivo == 'A'){
+                            $asiento->asiento1_numero = $documento->documento_consecutivo + 1;
+                        }
+
                         $asiento->asiento1_beneficiario = $tercero->id;
                         $asiento->asiento1_preguardado = true;
                         $asiento->asiento1_usuario_elaboro = Auth::user()->id;

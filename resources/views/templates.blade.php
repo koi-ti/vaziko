@@ -319,6 +319,15 @@
 	<td><%- tcontacto_cargo %></td>
 </script>
 
+<script type="text/template" id="facturapt-item-list-tpl">
+	<td><%- facturap1_factura %></td>
+    <td><%- facturap2_cuota %></td>
+    <td><%- facturap1_fecha %></td>
+    <td><%- facturap2_vencimiento %></td>
+    <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
+    <td class="text-right"><%- dias %></td>
+</script>
+
 <script type="text/template" id="add-centrocosto-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
