@@ -189,14 +189,18 @@
 								</button>
 							</div>
 
-							<div class="form-group col-sm-3">
-								<label class="radio-inline" for="asiento2_naturaleza_debito">
+							<div class="form-group col-sm-2">
+								<label class="radio-inline without-padding" for="asiento2_naturaleza_debito">
 									<input type="radio" id="asiento2_naturaleza_debito" name="asiento2_naturaleza" value="D" checked> Débito
 								</label>
 
-								<label class="radio-inline" for="asiento2_naturaleza_credito">
+								<label class="radio-inline without-padding" for="asiento2_naturaleza_credito">
 									<input type="radio" id="asiento2_naturaleza_credito" name="asiento2_naturaleza" value="C"> Crédito
 								</label>
+							</div>
+
+							<div class="form-group col-sm-1 text-right">
+								<label for="asiento2_base" class="control-label">Base</label>
 							</div>
 
 							<div class="form-group col-sm-2">
@@ -206,8 +210,11 @@
 						</div>
 
 						<div class="row">
-							<div class="form-group col-sm-9">
+							<div class="form-group col-sm-8">
 								<input id="asiento2_detalle" name="asiento2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
+							</div>
+							<div class="form-group col-sm-1 text-right">
+								<label for="asiento2_valor" class="control-label">Valor</label>
 							</div>
 							<div class="form-group col-sm-2">
 								<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" data-currency type="text" required>

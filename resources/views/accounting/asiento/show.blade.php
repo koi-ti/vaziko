@@ -77,6 +77,20 @@
 				</div>
 			</div>
 
+			<div class="row">
+				<div class="form-group col-md-2">
+					<label class="control-label">Usuario elaboro</label>
+					<div>
+						<a href="{{ route('terceros.show', ['terceros' =>  $asiento->asiento1_usuario_elaboro ]) }}" title="Ver tercero">
+							{{ $asiento->username_elaboro }}</a>
+					</div>
+				</div>
+				<div class="form-group col-md-2">
+					<label class="control-label">Fecha elaboro</label>
+					<div>{{ $asiento->asiento1_fecha_elaboro }}</div>
+				</div>
+			</div>
+
 			<div class="box-body table-responsive">
 				<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 		            <tr>
