@@ -17,7 +17,6 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'submit #form-item-asiento': 'onStoreItem',
-            // 'submit #form-create-facturap-component': 'onStoreFacturap',
             'change input#asiento2_base': 'baseChanged',
             'click .submit-asiento': 'submitAsiento',
             'submit #form-asientos': 'onStore',
@@ -172,42 +171,34 @@ app || (app = {});
                 var data = window.Misc.formToJson( e.target );
                 data.asiento1_id = this.model.get('id');
 
+                // Definir tercero
+                data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
+                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
+
                 // Evaluate account
-                window.Misc.evaluateAccount({
+                window.Misc.evaluateActionsAccount({
                     'cuenta': data.plancuentas_cuenta,
                     'centrocosto': data.asiento2_centro,
                     'wrap': this.$el,
                     'callback': (function (_this) {
                         return function ( resp )
                         {
-                            if(resp.actions) {
-                                // stuffToDo Response success
-                                var stuffToDo = {
-                                    'facturap' : function() {
-                                        // FacturapView
-                                        if ( _this.createFacturapView instanceof Backbone.View ){
-                                            _this.createFacturapView.stopListening();
-                                            _this.createFacturapView.undelegateEvents();
-                                        }
-
-                                        data.tercero_nit = data.tercero_nit ? data.tercero_nit : _this.model.get('tercero_nit');
-                                        data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : _this.model.get('tercero_nombre');
-
-                                        _this.createFacturapView = new app.CreateFacturapView({
-                                            model: _this.model,
-                                            collection: _this.asientoCuentasList,
-                                            parameters: {
-                                                data: data
-                                            }
-                                        });
-                                        _this.createFacturapView.render();
-                                    }
-                                };
-
-                                if (stuffToDo[resp.action]) {
-                                    stuffToDo[resp.action]();
+                            if(resp.success) {
+                                // Open AsientoActionView
+                                if ( _this.asientoActionView instanceof Backbone.View ){
+                                    _this.asientoActionView.stopListening();
+                                    _this.asientoActionView.undelegateEvents();
                                 }
 
+                                _this.asientoActionView = new app.AsientoActionView({
+                                    model: _this.model,
+                                    collection: _this.asientoCuentasList,
+                                    parameters: {
+                                        data: data,
+                                        actions: resp.actions
+                                    }
+                                });
+                                _this.asientoActionView.render();
                             }else{
                                 // Default insert
                                 _this.asientoCuentasList.trigger( 'store', data );

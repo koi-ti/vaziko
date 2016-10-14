@@ -12,11 +12,18 @@
 
         <ul class="treeview-menu">
             {{-- Modulos administracion --}}
-            <li class="{{ Request::segment(1) == 'empresa' ? 'active' : '' }}">
-                <a href="{{ route('empresa.index') }}"><i class="fa fa-building"></i> Empresa</a>
-            </li>
-            <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
-                <a href="{{ route('terceros.index') }}"><i class="fa fa-users"></i> Terceros</a>
+            <li class="{{ in_array(Request::segment(1), ['empresa', 'terceros']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'empresa' ? 'active' : '' }}">
+                        <a href="{{ route('empresa.index') }}"><i class="fa fa-building"></i> Empresa</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
+                        <a href="{{ route('terceros.index') }}"><i class="fa fa-users"></i> Terceros</a>
+                    </li>
+                </ul>
             </li>
 
             {{-- Referencias administracion --}}
@@ -39,20 +46,6 @@
         </ul>
     </li>
 
-    {{-- Produccion --}}
-    <li class="treeview">
-        <a href="#">
-            <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
-        </a>
-
-        {{-- Modulos produccion --}}
-        <ul class="treeview-menu">
-            <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
-                <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Orden de producción</a>
-            </li>
-        </ul>
-    </li>
-
     {{-- Contabilidad --}}
     <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
         <a href="#">
@@ -61,8 +54,15 @@
 
         <ul class="treeview-menu">
             {{-- Modulos contabilidad --}}
-            <li class="{{ Request::segment(1) == 'asientos' ? 'active' : '' }}">
-                <a href="{{ route('asientos.index') }}"><i class="fa fa-file-text-o"></i> Asientos contables</a>
+            <li class="{{ in_array(Request::segment(1), ['asientos']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'asientos' ? 'active' : '' }}">
+                        <a href="{{ route('asientos.index') }}"><i class="fa fa-file-text-o"></i> Asientos</a>
+                    </li>
+                </ul>
             </li>
 
             {{-- Reportes contabilidad --}}
@@ -97,6 +97,63 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
                         <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Inventario --}}
+    <li class="treeview {{ in_array(Request::segment(1), ['grupos', 'subgrupos', 'productos']) ? 'active' : '' }}">
+        <a href="#">
+            <i class="fa fa-list"></i> <span>Inventario</span><i class="fa fa-angle-left pull-right"></i>
+        </a>
+
+        <ul class="treeview-menu">
+            {{-- Modulos inventario --}}
+            <li class="{{ in_array(Request::segment(1), ['productos']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'productos' ? 'active' : '' }}">
+                        <a href="{{ route('productos.index') }}"><i class="fa fa-barcode"></i> Productos</a>
+                    </li>
+                </ul>
+            </li>
+
+            {{-- Referencias inventario --}}
+            <li class="{{ in_array(Request::segment(1), ['grupos', 'subgrupos']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'grupos' ? 'active' : '' }}">
+                        <a href="{{ route('grupos.index') }}"><i class="fa fa-circle-o"></i> Grupos</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'subgrupos' ? 'active' : '' }}">
+                        <a href="{{ route('subgrupos.index') }}"><i class="fa fa-circle-o"></i> Subgrupos</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Produccion --}}
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes']) ? 'active' : '' }}">
+        <a href="#">
+            <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
+        </a>
+
+        <ul class="treeview-menu">
+            {{-- Modulos produccion --}}
+            <li class="{{ in_array(Request::segment(1), ['ordenes']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
+                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Orden</a>
                     </li>
                 </ul>
             </li>

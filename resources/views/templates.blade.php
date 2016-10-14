@@ -579,78 +579,32 @@
     </div>
 </script>
 
-<script type="text/template" id="eval-rfacturap-tpl">
-	<div class="row">
-		<div class="form-group col-md-12 text-center">
-			<strong>(<%- tercero_nit %> - <%- tercero_nombre %>)</strong>
-		</div>
-	</div>
-
+<script type="text/template" id="add-subgrupo-tpl">
     <div class="row">
-		<div class="form-group col-md-9">
-			<label for="facturap1_factura" class="control-label">
-				Ingrese el numero de factura para realizar el <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
-			</label>
-			<input type="text" id="facturap1_factura" name="facturap1_factura" placeholder="Factura" class="form-control input-sm" maxlength="200" required>
+		<div class="form-group col-md-2">
+			<label for="subgrupo_codigo" class="control-label">Código</label>
+			<input type="text" id="subgrupo_codigo" name="subgrupo_codigo" value="<%- subgrupo_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
 		</div>
-		<div class="form-group col-md-3">
-			<label class="control-label">Valor</label>
-			<div><%- window.Misc.currency( asiento2_valor ) %></div>
+    </div>
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="subgrupo_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subgrupo_nombre" name="subgrupo_nombre" value="<%- subgrupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
-	</div>
-	<div id="content-invoice"></div>
+    </div>
 </script>
 
-<script type="text/template" id="add-rfacturap-tpl">
-	<div class="row">
-		<div class="form-group col-md-4">
-			<label for="facturap1_vencimiento" class="control-label">Vencimiento</label>
-			<input type="text" id="facturap1_vencimiento" name="facturap1_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+<script type="text/template" id="add-grupo-tpl">
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="grupo_codigo" class="control-label">Código</label>
+			<input type="text" id="grupo_codigo" name="grupo_codigo" value="<%- grupo_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
 		</div>
-
-		<div class="form-group col-md-4">
-			<label for="facturap1_cuotas" class="control-label">Cuotas</label>
-			<input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" class="form-control input-sm" value="2" min="1" max="100" required>
+    </div>
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="grupo_nombre" class="control-label">Nombre</label>
+			<input type="text" id="grupo_nombre" name="grupo_nombre" value="<%- grupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
-
-		<div class="form-group col-md-4">
-			<label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
-			<input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" class="form-control input-sm" min="1" value="15" required>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-12">
-			<input type="hidden" id="facturap1_sucursal" class="form-control" name="facturap1_sucursal" value="1" required>
-			<label for="facturap1_observaciones" class="control-label">Observaciones</label>
-			<textarea id="facturap1_observaciones" name="facturap1_observaciones" class="form-control" rows="2" placeholder="Observaciones"></textarea>
-		</div>
-	</div>
-</script>
-
-<script type="text/template" id="add-rfacturap2-tpl">
-	<div class="row">
-		<!-- table table-bordered table-striped -->
-		<div class="box-body table-responsive no-padding">
-			<table id="browse-rfacturap2-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-	            <tr>
-	                <th>Cuota</th>
-	                <th>Vencimiento</th>
-	                <th>Valor</th>
-	                <th>Saldo</th>
-	                <th></th>
-	            </tr>
-		    </table>
-		</div>
-	</div>
-</script>
-
-<script type="text/template" id="add-rfacturap2-item-tpl">
-    <td><%- facturap2_cuota %></td>
-    <td><%- facturap2_vencimiento %></td>
-    <td class="text-right"><%- window.Misc.currency(facturap2_valor) %></td>
-    <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
-    <td>
-		<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm" data-currency type="text">
-    </td>
+    </div>
 </script>

@@ -45,7 +45,16 @@ app || (app = {});
 
             'folders(/)': 'getFoldersMain',
             'folders/create(/)': 'getFoldersCreate',
-            'folders/:folder/edit(/)':'getFoldersEdit'
+            'folders/:folder/edit(/)':'getFoldersEdit',
+
+            // Inventario
+            'subgrupos(/)': 'getSubGruposMain',
+            'subgrupos/create(/)': 'getSubGruposCreate',
+            'subgrupos/:subgrupo/edit(/)': 'getSubGruposEdit',
+
+            'grupos(/)': 'getGruposMain',
+            'grupos/create(/)': 'getGruposCreate',
+            'grupos/:grupo/edit(/)': 'getGruposEdit'
         },
 
         /**
@@ -469,6 +478,94 @@ app || (app = {});
 
             this.createDocumentoView = new app.CreateDocumentoView({ model: this.documentoModel });
             this.documentoModel.fetch();
+        },
+
+        /**
+        * show view main subgrupos
+        */
+        getSubGruposMain: function () {
+
+            if ( this.mainSubGruposView instanceof Backbone.View ){
+                this.mainSubGruposView.stopListening();
+                this.mainSubGruposView.undelegateEvents();
+            }
+
+            this.mainSubGruposView = new app.MainSubGruposView( );
+        },
+
+        /**
+        * show view create subgrupo
+        */
+        getSubGruposCreate: function () {
+            this.subGrupoModel = new app.SubGrupoModel();
+
+            if ( this.createSubGrupoView instanceof Backbone.View ){
+                this.createSubGrupoView.stopListening();
+                this.createSubGrupoView.undelegateEvents();
+            }
+
+            this.createSubGrupoView = new app.CreateSubGrupoView({ model: this.subGrupoModel });
+            this.createSubGrupoView.render();
+        },
+
+        /**
+        * show view edit subgrupo
+        */
+        getSubGruposEdit: function (subgrupo) {
+            this.subGrupoModel = new app.SubGrupoModel();
+            this.subGrupoModel.set({'id': subgrupo}, {silent: true});
+
+            if ( this.createSubGrupoView instanceof Backbone.View ){
+                this.createSubGrupoView.stopListening();
+                this.createSubGrupoView.undelegateEvents();
+            }
+
+            this.createSubGrupoView = new app.CreateSubGrupoView({ model: this.subGrupoModel });
+            this.subGrupoModel.fetch();
+        },
+
+        /**
+        * show view main grupos
+        */
+        getGruposMain: function () {
+
+            if ( this.mainGruposView instanceof Backbone.View ){
+                this.mainGruposView.stopListening();
+                this.mainGruposView.undelegateEvents();
+            }
+
+            this.mainGruposView = new app.MainGruposView( );
+        },
+
+        /**
+        * show view create grupo
+        */
+        getGruposCreate: function () {
+            this.grupoModel = new app.GrupoModel();
+
+            if ( this.createGrupoView instanceof Backbone.View ){
+                this.createGrupoView.stopListening();
+                this.createGrupoView.undelegateEvents();
+            }
+
+            this.createGrupoView = new app.CreateGrupoView({ model: this.grupoModel });
+            this.createGrupoView.render();
+        },
+
+        /**
+        * show view edit grupo
+        */
+        getGruposEdit: function (grupo) {
+            this.grupoModel = new app.GrupoModel();
+            this.grupoModel.set({'id': grupo}, {silent: true});
+
+            if ( this.createGrupoView instanceof Backbone.View ){
+                this.createGrupoView.stopListening();
+                this.createGrupoView.undelegateEvents();
+            }
+
+            this.createGrupoView = new app.CreateGrupoView({ model: this.grupoModel });
+            this.grupoModel.fetch();
         }
     }) );
 
