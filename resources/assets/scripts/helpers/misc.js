@@ -186,9 +186,9 @@
         },
 
         /**
-        * Evaluate accounts
+        * Evaluate actions accounts
         */
-        evaluateAccount: function ( options ) {
+        evaluateActionsAccount: function ( options ) {
 
             options || (options = {});
 
@@ -203,27 +203,19 @@
 
             // Search plancuenta
             $.ajax({
-                url: window.Misc.urlFull(Route.route('plancuentas.search')),
+                url: window.Misc.urlFull(Route.route('asientos.detalle.evaluate')),
                 type: 'GET',
-                data: { plancuentas_cuenta: settings.cuenta },
+                data: { plancuentas_cuenta: settings.cuenta, centrocosto_codigo: settings.centrocosto },
                 beforeSend: function() {
                     window.Misc.setSpinner( settings.wrap );
                 }
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( settings.wrap );
-                if(resp.success) {
-                    // Evaluate actions
-                    var response = { actions: false };
-                    if(!_.isUndefined(resp.plancuentas_tipo) && !_.isNull(resp.plancuentas_tipo) && resp.plancuentas_tipo == 'P') {
-                        response.actions = true;
-                        response.action = 'facturap';
-                    }
 
-                    // return callback
-                    if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
-                        settings.callback( response );
-                }
+                // return callback
+                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                    settings.callback( resp );
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 window.Misc.removeSpinner( settings.wrap );

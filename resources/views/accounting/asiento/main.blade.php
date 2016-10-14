@@ -13,18 +13,18 @@
 		</ol>
     </section>
 
-	<section class="content">
+	<section id="asiento-content-section" class="content">
     	@yield('module')
 
     	<!-- Modal facturap -->
-		<div class="modal fade" id="modal-facturap-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+		<div class="modal fade" id="modal-asiento-facturap-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-md" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 						<h4>Factura proveedor</h4>
 					</div>
-					{!! Form::open(['id' => 'form-create-facturap-component', 'data-toggle' => 'validator']) !!}
+					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
 						<div class="modal-body box box-success">
 							<div id="error-eval-facturap" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
@@ -32,6 +32,23 @@
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
 							<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+						</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal ordenp -->
+		<div class="modal fade" id="modal-asiento-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Ordenes de producción</h4>
+					</div>
+					{!! Form::open(['id' => 'form-create-ordenp-asiento-component-source', 'class' => 'form-horizontal', 'data-toggle' => 'validator']) !!}
+						<div class="modal-body box box-success" id="modal-asiento-wrapper-ordenp">
+							<div class="content-modal"></div>
 						</div>
 					{!! Form::close() !!}
 				</div>
@@ -263,5 +280,139 @@
 				</div>
 			</div>
 		</div>
+	</script>
+
+	<script type="text/template" id="searchordenp-asiento-tpl">
+		<div class="form-group">
+			<div class="col-md-12 text-center">
+				<label class="control-label">
+					Seleccione orden de producción para asociar al <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+				</label>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<label for="searchordenp_asiento_ordenp_numero" class="col-md-1 control-label">Codigo</label>
+			<div class="col-md-2">
+				<input id="searchordenp_asiento_ordenp_numero" placeholder="Codigo" class="form-control input-sm" name="searchordenp_asiento_ordenp_numero" type="text" maxlength="15">
+			</div>
+			<label for="searchordenp_asiento_tercero" class="col-sm-1 control-label">Tercero</label>
+			<div class="form-group col-sm-3">
+	      		<div class="input-group input-group-sm">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="searchordenp_asiento_tercero">
+							<i class="fa fa-user"></i>
+						</button>
+					</span>
+					<input id="searchordenp_asiento_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="searchordenp_asiento_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="searchordenp_asiento_tercero_nombre">
+				</div>
+			</div>
+			<div class="col-sm-5">
+				<input id="searchordenp_asiento_tercero_nombre" name="searchordenp_asiento_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-offset-3 col-md-2 col-xs-4">
+				<button type="button" class="btn btn-primary btn-block btn-sm btn-searchordenp_asiento-search">Buscar</button>
+			</div>
+			<div class="col-md-2 col-xs-4">
+				<button type="button" class="btn btn-default btn-block btn-sm btn-searchordenp_asiento-clear">Limpiar</button>
+			</div>
+			<div class="col-md-2 col-xs-4">
+				<button type="button" class="btn btn-default btn-block btn-sm" data-dismiss="modal">Cancelar</button>
+			</div>
+		</div>
+
+		<div class="form-group">
+			<div class="col-md-12 table-responsive">
+				<table id="browse-searchordenp-asiento-list" class="table table-bordered table-striped" cellspacing="0" width="100%">
+			        <thead>
+			            <tr>
+			                <th>Codigo</th>
+		                	<th>Ano</th>
+		                	<th>Numero</th>
+		                	<th>Tercero</th>
+			            </tr>
+			        </thead>
+			    </table>
+	       	</div>
+	 	</div>
+	</script>
+
+	<script type="text/template" id="rfacturap-asiento-tpl">
+		<div class="row">
+			<div class="form-group col-md-12 text-center">
+				<strong>(<%- tercero_nit %> - <%- tercero_nombre %>)</strong>
+			</div>
+		</div>
+
+	    <div class="row">
+			<div class="form-group col-md-9">
+				<label for="facturap1_factura" class="control-label">
+					Ingrese el numero de factura para realizar el <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+				</label>
+				<input type="text" id="facturap1_factura" name="facturap1_factura" placeholder="Factura" class="form-control input-sm" maxlength="200" required>
+			</div>
+			<div class="form-group col-md-3">
+				<label class="control-label">Valor</label>
+				<div><%- window.Misc.currency( asiento2_valor ) %></div>
+			</div>
+		</div>
+		<div id="content-invoice"></div>
+	</script>
+
+	<script type="text/template" id="add-rfacturap-asiento-tpl">
+		<div class="row">
+			<div class="form-group col-md-4">
+				<label for="facturap1_vencimiento" class="control-label">Vencimiento</label>
+				<input type="text" id="facturap1_vencimiento" name="facturap1_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+			</div>
+
+			<div class="form-group col-md-4">
+				<label for="facturap1_cuotas" class="control-label">Cuotas</label>
+				<input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" class="form-control input-sm" value="2" min="1" max="100" required>
+			</div>
+
+			<div class="form-group col-md-4">
+				<label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
+				<input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" class="form-control input-sm" min="1" value="15" required>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-12">
+				<input type="hidden" id="facturap1_sucursal" class="form-control" name="facturap1_sucursal" value="1" required>
+				<label for="facturap1_observaciones" class="control-label">Observaciones</label>
+				<textarea id="facturap1_observaciones" name="facturap1_observaciones" class="form-control" rows="2" placeholder="Observaciones"></textarea>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="add-rfacturap2-asiento-tpl">
+		<div class="row">
+			<!-- table table-bordered table-striped -->
+			<div class="box-body table-responsive no-padding">
+				<table id="browse-rfacturap2-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+		            <tr>
+		                <th>Cuota</th>
+		                <th>Vencimiento</th>
+		                <th>Valor</th>
+		                <th>Saldo</th>
+		                <th></th>
+		            </tr>
+			    </table>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="add-rfacturap2-item-tpl">
+	    <td><%- facturap2_cuota %></td>
+	    <td><%- facturap2_vencimiento %></td>
+	    <td class="text-right"><%- window.Misc.currency(facturap2_valor) %></td>
+	    <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
+	    <td>
+			<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm" data-currency type="text">
+	    </td>
 	</script>
 @stop

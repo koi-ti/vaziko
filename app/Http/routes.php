@@ -74,6 +74,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'asientos'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
+		Route::get('detalle/evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
@@ -92,6 +93,25 @@ Route::group(['middleware' => 'auth'], function()
 	});
 	Route::resource('facturap', 'Accounting\FacturapController', ['only' => ['index']]);
 
+	/*
+	|-------------------------
+	| Production Routes
+	|-------------------------
+	*/
+	Route::group(['prefix' => 'ordenes'], function()
+	{
+
+	});
+	Route::resource('ordenes', 'Production\OrdenpController', ['only' => ['index']]);
+
+	/*
+	|-------------------------
+	| Inventory Routes
+	|-------------------------
+	*/
+	Route::resource('grupos', 'Inventory\GrupoController', ['except' => ['destroy']]);
+	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
+	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 
    	/*
 	|-------------------------

@@ -43,7 +43,7 @@
 			@endif
 
 			<div class="login-box-body">
-				<p class="login-box-msg">Ingresa con tu email y contraseña</p>
+				<p class="login-box-msg">Ingresa con tu usuario y contraseña</p>
 
 				{!! Form::open(['route' => 'auth.login', 'id' => 'form-login-account', 'data-toggle' => 'validator']) !!}
 					<div class="form-group has-feedback">

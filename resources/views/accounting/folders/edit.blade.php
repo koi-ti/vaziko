@@ -1,7 +1,7 @@
 @extends('accounting.folders.main')
 
-@section('breadcrumb')	
-	<li><a href="{{ route('folders.index') }}">Plan de cuentas</a></li>
+@section('breadcrumb')
+	<li><a href="{{ route('folders.index') }}">Folders</a></li>
 	<li><a href="{{ route('folders.show', ['folders' => $folder->id]) }}">{{ $folder->folder_codigo }}</a></li>
 	<li class="active">Editar</li>
 @stop

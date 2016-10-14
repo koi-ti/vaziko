@@ -228,4 +228,50 @@ class DetalleAsientoController extends Controller
         }
         abort(403);
     }
+
+    /**
+     * Evaluate actions detail asiento.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function evaluate(Request $request)
+    {
+        // Prepare response
+        $response = new \stdClass();
+        $response->success = false;
+        $response->actions = [];
+
+        // Evaluate actions centro costo
+        if($request->has('centrocosto_codigo')) {
+            $centrocosto = CentroCosto::find($request->centrocosto_codigo);
+            if($centrocosto instanceof CentroCosto) {
+                if($centrocosto->centrocosto_codigo == 'OP') {
+                    $action = new \stdClass();
+                    $action->action = 'ordenp';
+                    $action->success = false;
+
+                    $response->actions[] = $action;
+                }
+            }
+        }
+
+        // Evaluate actions plancuentas
+        if($request->has('plancuentas_cuenta')) {
+            $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
+            if($plancuenta instanceof PlanCuenta) {
+                if($plancuenta->plancuentas_tipo && $plancuenta->plancuentas_tipo == 'P') {
+                    $action = new \stdClass();
+                    $action->action = 'facturap';
+                    $action->success = false;
+
+                    $response->actions[] = $action;
+                }
+            }
+        }
+
+        if(is_array($response->actions) && count($response->actions) > 0) {
+            $response->success = true;
+        }
+        return response()->json($response);
+    }
 }
