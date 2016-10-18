@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 use Validator, Cache;
 
-class Grupo extends Model
+class Unidad extends Model
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'koi_grupo';
+    protected $table = 'koi_unidadmedida';
 
     public $timestamps = false;
 
@@ -22,26 +22,26 @@ class Grupo extends Model
      *
      * @var static string
      */
-    public static $key_cache = '_groups_inventory';
+    public static $key_cache = '_measurement_units';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['grupo_codigo', 'grupo_nombre'];
+    protected $fillable = ['unidadmedida_nombre', 'unidadmedida_sigla'];
 
     public function isValid($data)
     {
         $rules = [
-            'grupo_codigo' => 'required|max:4|min:1|unique:koi_grupo',
-            'grupo_nombre' => 'required|max:50'
+            'unidadmedida_sigla' => 'required|max:15|min:1|unique:koi_unidadmedida',
+            'unidadmedida_nombre' => 'required|max:100'
         ];
 
         if ($this->exists){
-            $rules['grupo_codigo'] .= ',grupo_codigo,' . $this->id;
+            $rules['unidadmedida_sigla'] .= ',unidadmedida_sigla,' . $this->id;
         }else{
-            $rules['grupo_codigo'] .= '|required';
+            $rules['unidadmedida_sigla'] .= '|required';
         }
 
         $validator = Validator::make($data, $rules);
@@ -52,16 +52,16 @@ class Grupo extends Model
         return false;
     }
 
-    public static function getGrupos()
+    public static function getUnidades()
     {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }
 
         return Cache::rememberForever( self::$key_cache , function() {
-            $query = Grupo::query();
-            $query->orderby('grupo_nombre', 'asc');
-            $collection = $query->lists('grupo_nombre', 'id');
+            $query = Unidad::query();
+            $query->orderby('unidadmedida_nombre', 'asc');
+            $collection = $query->lists('unidadmedida_nombre', 'id');
 
             $collection->prepend('', '');
             return $collection;

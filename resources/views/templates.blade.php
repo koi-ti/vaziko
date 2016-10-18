@@ -1,4 +1,13 @@
-{{-- templates --}}
+{{-- Base templates --}}
+<script type="text/template" id="add-sucursal-tpl">
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="sucursal_nombre" class="control-label">Nombre</label>
+			<input type="text" id="sucursal_nombre" name="sucursal_nombre" value="<%- sucursal_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="100" required>
+		</div>
+    </div>
+</script>
+
 <script type="text/template" id="add-tercero-tpl">
 	<div class="row">
 		<div class="form-group col-md-3">
@@ -319,6 +328,7 @@
 	<td><%- tcontacto_cargo %></td>
 </script>
 
+{{-- Accounting templates --}}
 <script type="text/template" id="facturapt-item-list-tpl">
 	<td><%- facturap1_factura %></td>
     <td><%- facturap2_cuota %></td>
@@ -579,6 +589,7 @@
     </div>
 </script>
 
+{{-- Inventory templates --}}
 <script type="text/template" id="add-subgrupo-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
@@ -607,4 +618,109 @@
 			<input type="text" id="grupo_nombre" name="grupo_nombre" value="<%- grupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
     </div>
+</script>
+
+<script type="text/template" id="add-unidad-tpl">
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="unidadmedida_sigla " class="control-label">Sigla</label>
+			<input type="text" id="unidadmedida_sigla" name="unidadmedida_sigla" value="<%- unidadmedida_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" maxlength="15" required>
+		</div>
+    </div>
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="unidadmedida_nombre" class="control-label">Nombre</label>
+			<input type="text" id="unidadmedida_nombre" name="unidadmedida_nombre" value="<%- unidadmedida_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="100" required>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-producto-tpl">
+	<div class="row">
+		<div class="form-group col-md-3">
+			<label for="producto_codigo" class="control-label">Código</label>
+			<input type="text" id="producto_codigo" name="producto_codigo" value="<%- producto_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="producto_codigoori" class="control-label">Código proveedor</label>
+			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+		</div>
+
+		<div class="form-group col-md-6">
+			<label for="producto_nombre" class="control-label">Nombre</label>
+			<input type="text" id="producto_nombre" name="producto_nombre" value="<%- producto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-3 col-xs-10">
+			<label for="producto_grupo" class="control-label">Grupo</label>
+			<select name="producto_grupo" id="producto_grupo" class="form-control select2-default" required>
+				@foreach( App\Models\Inventory\Grupo::getGrupos() as $key => $value)
+					<option value="{{ $key }}" <%- producto_grupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="grupo" data-field="producto_grupo">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+
+		<div class="form-group col-md-3 col-xs-10">
+			<label for="producto_subgrupo" class="control-label">Subgrupo</label>
+			<select name="producto_subgrupo" id="producto_subgrupo" class="form-control select2-default" required>
+				@foreach( App\Models\Inventory\SubGrupo::getSubGrupos() as $key => $value)
+					<option value="{{ $key }}" <%- producto_subgrupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="subgrupo" data-field="producto_subgrupo">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-3 col-xs-10">
+			<label for="producto_unidadmedida" class="control-label">Unidad de medida</label>
+			<select name="producto_unidadmedida" id="producto_unidadmedida" class="form-control select2-default-clear">
+				@foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+					<option value="{{ $key }}" <%- producto_unidadmedida == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="unidadmedida" data-field="producto_unidadmedida">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-12">
+			<label for="producto_vidautil" class="control-label">Vida útil</label>
+			<input type="number" id="producto_vidautil" name="producto_vidautil" value="<%- producto_vidautil %>" placeholder="Vida útil" class="form-control input-sm">
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-2 col-xs-12">
+			<label for="producto_unidades" class="control-label">¿Maneja unidades?</label>
+			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- producto_unidades ? 'checked': ''%>></div>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="producto_serie" class="control-label">¿Meneja serie?</label>
+			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- producto_serie ? 'checked': ''%>></div>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="producto_metrado" class="control-label">¿Producto metrado?</label>
+			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- producto_metrado ? 'checked': ''%>></div>
+		</div>
+	</div>
 </script>

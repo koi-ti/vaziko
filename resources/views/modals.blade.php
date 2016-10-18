@@ -29,6 +29,15 @@
 	</div>
 </div>
 
+<!-- Modal search ordenp -->
+<div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal search -->
 <div class="modal fade" id="modal-search-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -228,6 +237,62 @@
 				            </tr>
 				        </thead>
 				    </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<script type="text/template" id="koi-search-ordenp-component-tpl">
+	<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+		<h4 class="modal-title">Buscador de ordenes</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-ordenp-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="searchordenp_ordenp_numero" class="col-md-1 control-label">Codigo</label>
+				<div class="col-md-2">
+					<input id="searchordenp_ordenp_numero" placeholder="Codigo" class="form-control input-sm" name="searchordenp_ordenp_numero" type="text" maxlength="15">
+				</div>
+				<label for="searchordenp_tercero" class="col-sm-1 control-label">Tercero</label>
+				<div class="form-group col-sm-3">
+		      		<div class="input-group input-group-sm">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="searchordenp_tercero">
+								<i class="fa fa-user"></i>
+							</button>
+						</span>
+						<input id="searchordenp_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="searchordenp_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="searchordenp_tercero_nombre">
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<input id="searchordenp_tercero_nombre" name="searchordenp_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-ordenp-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-ordenp-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th>Código</th>
+			                	<th>Ano</th>
+				                <th>Numero</th>
+			                	<th>Tercero</th>
+			                	<th>Fecha</th>
+				            </tr>
+				        </thead>
+		            </table>
 	           	</div>
 	     	</div>
 		</div>

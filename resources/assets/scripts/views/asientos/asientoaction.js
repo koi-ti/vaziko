@@ -17,12 +17,9 @@ app || (app = {});
         templateAddFacturap: _.template( ($('#add-rfacturap-asiento-tpl').html() || '') ),
         templateCuotasFacturap: _.template( ($('#add-rfacturap2-asiento-tpl').html() || '') ),
         events: {
-        	'click .btn-searchordenp_asiento-search': 'searchOrden',
-            'click .btn-searchordenp_asiento-clear': 'clearSearchOrden',
-	        'click .a-searchordenp-asiento': 'onStoreItemOrden',
-
-            'change input#facturap1_factura': 'facturapChanged',
-            'submit #form-create-asiento-component-source': 'onStoreItemFacturap'
+            'submit #form-create-ordenp-asiento-component-source': 'onStoreItemOrdenp',
+            'submit #form-create-asiento-component-source': 'onStoreItemFacturap',
+            'change input#facturap1_factura': 'facturapChanged'
         },
         parameters: {
             data: { },
@@ -155,80 +152,26 @@ app || (app = {});
         referenceOrdenp: function( ) {
             var _this = this;
 
-            // References
-            this.$searchordenpOrden = this.$('#searchordenp_asiento_ordenp_numero');
-            this.$searchordenpTercero = this.$('#searchordenp_asiento_tercero');
-            this.$searchordenpTerceroNombre = this.$('#searchordenp_asiento_tercero_nombre');
-            this.$ordersSearchTable = this.$('#browse-searchordenp-asiento-list');
+            this.$wraperFormOp = this.$modalOp.find('.content-modal');
+            this.$wraperErrorOp = this.$('#error-search-orden-asiento2');
 
-            this.ordersSearchTable = this.$ordersSearchTable.DataTable({
-				dom: "<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                ajax: {
-                    url: window.Misc.urlFull( Route.route('ordenes.index') ),
-                    data: function( data ) {
-                        data.ordenp_numero = _this.$searchordenpOrden.val();
-                        data.ordenp_tercero_nit = _this.$searchordenpTercero.val();
-                    }
-                },
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'ordenp_ano', name: 'ordenp_ano' },
-                    { data: 'ordenp_numero', name: 'ordenp_numero' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' }
-                ],
-                order: [
-                	[ 1, 'desc' ], [ 2, 'desc' ]
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        searchable: false,
-                        render: function ( data, type, full, row ) {
-                        	return '<a href="#" class="a-searchordenp-asiento">' + data + '</a>';
-                        }
-                    },
-                    {
-                        targets: [1, 2],
-                        visible: false
-                    }
-                ]
-			});
+            // Hide errors
+            this.$wraperErrorOp.hide().empty();
 
             // Open modal
             this.$modalOp.modal('show');
         },
 
-		searchOrden: function(e) {
-			e.preventDefault();
-
-		    this.ordersSearchTable.ajax.reload();
-		},
-
-		clearSearchOrden: function(e) {
-			e.preventDefault();
-
-			this.$searchordenpOrden.val('');
-			this.$searchordenpTercero.val('');
-			this.$searchordenpTerceroNombre.val('');
-
-			this.ordersSearchTable.ajax.reload();
-		},
-
         /**
         * Event add item ordenp
         */
-        onStoreItemOrden: function (e) {
+        onStoreItemOrdenp: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 // Prepare global data
-    	        var order = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
-                this.parameters.data.ordenp_codigo = order.id;
+    	        // var order = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+                // this.parameters.data.ordenp_codigo = order.id;
 
                 // Set action success
 				this.setSuccessAction('ordenp', this.parameters.actions);

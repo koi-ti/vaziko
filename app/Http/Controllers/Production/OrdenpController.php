@@ -22,7 +22,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select(DB::raw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) as id"), 'ordenproduccion0_numero as ordenp_numero', 'ordenproduccion0_ano as ordenp_ano',
+            $query->select(DB::raw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) as ordenp_codigo"), 'ordenproduccion0_numero as ordenp_numero', 'ordenproduccion0_ano as ordenp_ano', 'ordenproduccion0_fecha_elaboro as ordenp_fecha',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -116,5 +116,30 @@ class OrdenpController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Search orden.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('ordenp_codigo')) {
+            $ordenp = Ordenp::select(
+                DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
+            )
+            ->join('koi_tercero', 'ordenproduccion0_tercero', '=', 'koi_tercero.id')
+            ->whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->ordenp_codigo}'")->first();
+            if($ordenp instanceof Ordenp) {
+                return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre]);
+            }
+        }
+        return response()->json(['success' => false]);
     }
 }

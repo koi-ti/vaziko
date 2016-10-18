@@ -45,13 +45,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
 
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
-
 	});
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-    Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
-	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
-	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
+    Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
+	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
+	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------
@@ -100,7 +100,7 @@ Route::group(['middleware' => 'auth'], function()
 	*/
 	Route::group(['prefix' => 'ordenes'], function()
 	{
-
+		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['only' => ['index']]);
 
@@ -111,7 +111,9 @@ Route::group(['middleware' => 'auth'], function()
 	*/
 	Route::resource('grupos', 'Inventory\GrupoController', ['except' => ['destroy']]);
 	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
+	Route::resource('unidades', 'Inventory\UnidadesMedidaController', ['except' => ['destroy']]);
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
+   	Route::resource('traslados', 'Inventory\TrasladosController', ['only'=>['index', 'create', 'store', 'show']]);
 
    	/*
 	|-------------------------

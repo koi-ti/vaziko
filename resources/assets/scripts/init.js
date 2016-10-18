@@ -79,7 +79,7 @@ var app = app || {};
         * Init select2
         */
         initSelect2: function () {
-            $('.select2-default').select2({ language: 'es', placeholder: 'Seleccione' });
+            $('.select2-default').select2({ language: 'es', placeholder: 'Seleccione', allowClear: false });
             $('.select2-default-clear').select2({ language: 'es', placeholder: 'Seleccione', allowClear: true });
         },
 
