@@ -9,9 +9,9 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables, Cache;
 
-use App\Models\Inventory\Grupo;
+use App\Models\Inventory\Unidad;
 
-class GrupoController extends Controller
+class UnidadesMedidaController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,11 +21,10 @@ class GrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Grupo::query();
-            $query->select('koi_grupo.id as id', 'grupo_codigo', 'grupo_nombre');
+            $query = Unidad::query();
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.grupos.index');
+        return view('inventory.unidades.index');
     }
 
     /**
@@ -35,7 +34,7 @@ class GrupoController extends Controller
      */
     public function create()
     {
-        return view('inventory.grupos.create');
+        return view('inventory.unidades.create');
     }
 
     /**
@@ -49,27 +48,27 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $grupo = new Grupo;
-            if ($grupo->isValid($data)) {
+            $unidad = new Unidad;
+            if ($unidad->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // grupo
-                    $grupo->fill($data);
-                    $grupo->save();
+                    // unidad
+                    $unidad->fill($data);
+                    $unidad->save();
 
                     // Commit Transaction
                     DB::commit();
                     // Forget cache
-                    Cache::forget( Grupo::$key_cache );
+                    Cache::forget( Unidad::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $grupo->id]);
+                    return response()->json(['success' => true, 'id' => $unidad->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $grupo->errors]);
+            return response()->json(['success' => false, 'errors' => $unidad->errors]);
         }
         abort(403);
     }
@@ -82,11 +81,11 @@ class GrupoController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $grupo = Grupo::findOrFail($id);
+        $unidad = Unidad::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($grupo);
+            return response()->json($unidad);
         }
-        return view('inventory.grupos.show', ['grupo' => $grupo]);
+        return view('inventory.unidades.show', ['unidad' => $unidad]);
     }
 
     /**
@@ -97,8 +96,8 @@ class GrupoController extends Controller
      */
     public function edit($id)
     {
-        $grupo = Grupo::findOrFail($id);
-        return view('inventory.grupos.edit', ['grupo' => $grupo]);
+        $unidad = Unidad::findOrFail($id);
+        return view('inventory.unidades.edit', ['unidad' => $unidad]);
     }
 
     /**
@@ -113,27 +112,27 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $grupo = Grupo::findOrFail($id);
-            if ($grupo->isValid($data)) {
+            $unidad = Unidad::findOrFail($id);
+            if ($unidad->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // grupo
-                    $grupo->fill($data);
-                    $grupo->save();
+                    // unidad
+                    $unidad->fill($data);
+                    $unidad->save();
 
                     // Commit Transaction
                     DB::commit();
                     // Forget cache
-                    Cache::forget( Grupo::$key_cache );
+                    Cache::forget( Unidad::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $grupo->id]);
+                    return response()->json(['success' => true, 'id' => $unidad->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $grupo->errors]);
+            return response()->json(['success' => false, 'errors' => $unidad->errors]);
         }
         abort(403);
     }

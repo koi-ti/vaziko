@@ -22,12 +22,17 @@ class CreateProductoTable extends Migration
             $table->string('producto_referencia', 15)->comment = 'Si no tiene serie entonces es igual a producto_codigo, si no es la referencia de producto_codigo (El padre)';
             $table->integer('producto_grupo')->unsigned();
             $table->integer('producto_subgrupo')->unsigned();
+            $table->integer('producto_unidadmedida')->unsigned()->nullable();
             $table->double('producto_precio')->default(0);
             $table->double('producto_costo')->default(0);
-            $table->boolean('producto_unidades')->default(true);
+            $table->integer('producto_vidautil')->nullable();
+            $table->boolean('producto_unidades')->default(true)->comment = 'Si es falso no hace suma /resta de unidades, ni valida unidades en el inventario';
+            $table->boolean('producto_serie')->default(false)->comment = 'El producto maneja serie';
+            $table->boolean('producto_metrado')->default(false)->comment = 'El producto se va a vender por metros';
 
             $table->foreign('producto_grupo')->references('id')->on('koi_grupo')->onDelete('restrict');
             $table->foreign('producto_subgrupo')->references('id')->on('koi_subgrupo')->onDelete('restrict');
+            $table->foreign('producto_unidadmedida')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
         });
     }
 

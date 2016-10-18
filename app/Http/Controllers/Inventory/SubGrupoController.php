@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Inventory\SubGrupo;
 
@@ -59,6 +59,9 @@ class SubGrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( SubGrupo::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -120,6 +123,9 @@ class SubGrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( SubGrupo::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();

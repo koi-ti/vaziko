@@ -4,7 +4,7 @@ namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class SubGrupo extends Model
 {
@@ -16,6 +16,13 @@ class SubGrupo extends Model
     protected $table = 'koi_subgrupo';
 
     public $timestamps = false;
+
+    /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_subgroups_inventory';
 
     /**
      * The attributes that are mass assignable.
@@ -43,5 +50,21 @@ class SubGrupo extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getSubGrupos()
+    {
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = SubGrupo::query();
+            $query->orderby('subgrupo_nombre', 'asc');
+            $collection = $query->lists('subgrupo_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 }

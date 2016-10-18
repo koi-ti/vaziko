@@ -25,6 +25,10 @@ app || (app = {});
             'actividades/create(/)': 'getActividadesCreate',
             'actividades/:actividad/edit(/)': 'getActividadesEdit',
 
+            'sucursales(/)': 'getSucursalesMain',
+            'sucursales/create(/)': 'getSucursalesCreate',
+            'sucursales/:sucursal/edit(/)': 'getSucursalesEdit',
+
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',
             'plancuentas/create(/)': 'getPlanCuentasCreate',
@@ -54,7 +58,15 @@ app || (app = {});
 
             'grupos(/)': 'getGruposMain',
             'grupos/create(/)': 'getGruposCreate',
-            'grupos/:grupo/edit(/)': 'getGruposEdit'
+            'grupos/:grupo/edit(/)': 'getGruposEdit',
+
+            'unidades(/)': 'getUnidadesMain',
+            'unidades/create(/)': 'getUnidadesCreate',
+            'unidades/:unidad/edit(/)': 'getUnidadesEdit',
+
+            'productos(/)': 'getProductosMain',
+            'productos/create(/)': 'getProductosCreate',
+            'productos/:producto/edit(/)': 'getProductosEdit'
         },
 
         /**
@@ -69,6 +81,7 @@ app || (app = {});
             this.componentDocumentView = new app.ComponentDocumentView();
             this.componentReportView = new app.ComponentReportView();
             this.componentTerceroView = new app.ComponentTerceroView();
+            this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
       	},
 
         /**
@@ -239,6 +252,50 @@ app || (app = {});
 
             this.createActividadView = new app.CreateActividadView({ model: this.actividadModel });
             this.actividadModel.fetch();
+        },
+
+        /**
+        * show view main sucursales
+        */
+        getSucursalesMain: function () {
+
+            if ( this.mainSucursalesView instanceof Backbone.View ){
+                this.mainSucursalesView.stopListening();
+                this.mainSucursalesView.undelegateEvents();
+            }
+
+            this.mainSucursalesView = new app.MainSucursalesView( );
+        },
+
+        /**
+        * show view create sucursales
+        */
+        getSucursalesCreate: function () {
+            this.sucursalModel = new app.SucursalModel();
+
+            if ( this.createSucursalView instanceof Backbone.View ){
+                this.createSucursalView.stopListening();
+                this.createSucursalView.undelegateEvents();
+            }
+
+            this.createSucursalView = new app.CreateSucursalView({ model: this.sucursalModel });
+            this.createSucursalView.render();
+        },
+
+        /**
+        * show view edit sucursales
+        */
+        getSucursalesEdit: function (sucursal) {
+            this.sucursalModel = new app.SucursalModel();
+            this.sucursalModel.set({'id': sucursal}, {silent: true});
+
+            if ( this.createSucursalView instanceof Backbone.View ){
+                this.createSucursalView.stopListening();
+                this.createSucursalView.undelegateEvents();
+            }
+
+            this.createSucursalView = new app.CreateSucursalView({ model: this.sucursalModel });
+            this.sucursalModel.fetch();
         },
 
         /**
@@ -566,6 +623,94 @@ app || (app = {});
 
             this.createGrupoView = new app.CreateGrupoView({ model: this.grupoModel });
             this.grupoModel.fetch();
+        },
+
+        /**
+        * show view main unidades de medida
+        */
+        getUnidadesMain: function () {
+
+            if ( this.mainUnidadesView instanceof Backbone.View ){
+                this.mainUnidadesView.stopListening();
+                this.mainUnidadesView.undelegateEvents();
+            }
+
+            this.mainUnidadesView = new app.MainUnidadesView( );
+        },
+
+        /**
+        * show view create unidad de medida
+        */
+        getUnidadesCreate: function () {
+            this.unidadModel = new app.UnidadModel();
+
+            if ( this.createUnidadView instanceof Backbone.View ){
+                this.createUnidadView.stopListening();
+                this.createUnidadView.undelegateEvents();
+            }
+
+            this.createUnidadView = new app.CreateUnidadView({ model: this.unidadModel });
+            this.createUnidadView.render();
+        },
+
+        /**
+        * show view edit unidad de medida
+        */
+        getUnidadesEdit: function (unidad) {
+            this.unidadModel = new app.UnidadModel();
+            this.unidadModel.set({'id': unidad}, {silent: true});
+
+            if ( this.createUnidadView instanceof Backbone.View ){
+                this.createUnidadView.stopListening();
+                this.createUnidadView.undelegateEvents();
+            }
+
+            this.createUnidadView = new app.CreateUnidadView({ model: this.unidadModel });
+            this.unidadModel.fetch();
+        },
+
+        /**
+        * show view main productos
+        */
+        getProductosMain: function () {
+
+            if ( this.mainProductosView instanceof Backbone.View ){
+                this.mainProductosView.stopListening();
+                this.mainProductosView.undelegateEvents();
+            }
+
+            this.mainProductosView = new app.MainProductosView( );
+        },
+
+        /**
+        * show view create producto
+        */
+        getProductosCreate: function () {
+            this.productoModel = new app.ProductoModel();
+
+            if ( this.createProductoView instanceof Backbone.View ){
+                this.createProductoView.stopListening();
+                this.createProductoView.undelegateEvents();
+            }
+
+            this.createProductoView = new app.CreateProductoView({ model: this.productoModel });
+            this.createProductoView.render();
+        },
+
+        /**
+        * show view edit producto
+        */
+        getProductosEdit: function (producto) {
+            this.productoModel = new app.ProductoModel();
+            this.productoModel.set({'id': producto}, {silent: true});
+
+            if ( this.createProductoView instanceof Backbone.View ){
+                this.createProductoView.stopListening();
+                this.createProductoView.undelegateEvents();
+            }
+
+            this.createProductoView = new app.CreateProductoView({ model: this.productoModel });
+            this.productoModel.fetch();
         }
     }) );
 

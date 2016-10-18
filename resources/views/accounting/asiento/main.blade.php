@@ -48,7 +48,12 @@
 					</div>
 					{!! Form::open(['id' => 'form-create-ordenp-asiento-component-source', 'class' => 'form-horizontal', 'data-toggle' => 'validator']) !!}
 						<div class="modal-body box box-success" id="modal-asiento-wrapper-ordenp">
+							<div id="error-search-orden-asiento2" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
 						</div>
 					{!! Form::close() !!}
 				</div>
@@ -283,7 +288,7 @@
 	</script>
 
 	<script type="text/template" id="searchordenp-asiento-tpl">
-		<div class="form-group">
+		<div class="row">
 			<div class="col-md-12 text-center">
 				<label class="control-label">
 					Seleccione orden de producción para asociar al <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
@@ -291,53 +296,22 @@
 			</div>
 		</div>
 
-		<div class="form-group">
-			<label for="searchordenp_asiento_ordenp_numero" class="col-md-1 control-label">Codigo</label>
-			<div class="col-md-2">
-				<input id="searchordenp_asiento_ordenp_numero" placeholder="Codigo" class="form-control input-sm" name="searchordenp_asiento_ordenp_numero" type="text" maxlength="15">
-			</div>
-			<label for="searchordenp_asiento_tercero" class="col-sm-1 control-label">Tercero</label>
+		<div class="row">
+			<label for="asiento1_beneficiario" class="col-sm-offset-1 col-sm-1 control-label">Orden</label>
 			<div class="form-group col-sm-3">
 	      		<div class="input-group input-group-sm">
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="searchordenp_asiento_tercero">
-							<i class="fa fa-user"></i>
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="asiento2_orden_codigo">
+							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="searchordenp_asiento_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="searchordenp_asiento_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="searchordenp_asiento_tercero_nombre">
+					<input id="asiento2_orden_codigo" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden_codigo" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
 				</div>
 			</div>
-			<div class="col-sm-5">
-				<input id="searchordenp_asiento_tercero_nombre" name="searchordenp_asiento_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+			<div class="col-sm-6">
+				<input id="asiento2_orden_beneficiario" name="asiento2_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
 			</div>
 		</div>
-
-		<div class="form-group">
-			<div class="col-md-offset-3 col-md-2 col-xs-4">
-				<button type="button" class="btn btn-primary btn-block btn-sm btn-searchordenp_asiento-search">Buscar</button>
-			</div>
-			<div class="col-md-2 col-xs-4">
-				<button type="button" class="btn btn-default btn-block btn-sm btn-searchordenp_asiento-clear">Limpiar</button>
-			</div>
-			<div class="col-md-2 col-xs-4">
-				<button type="button" class="btn btn-default btn-block btn-sm" data-dismiss="modal">Cancelar</button>
-			</div>
-		</div>
-
-		<div class="form-group">
-			<div class="col-md-12 table-responsive">
-				<table id="browse-searchordenp-asiento-list" class="table table-bordered table-striped" cellspacing="0" width="100%">
-			        <thead>
-			            <tr>
-			                <th>Codigo</th>
-		                	<th>Ano</th>
-		                	<th>Numero</th>
-		                	<th>Tercero</th>
-			            </tr>
-			        </thead>
-			    </table>
-	       	</div>
-	 	</div>
 	</script>
 
 	<script type="text/template" id="rfacturap-asiento-tpl">

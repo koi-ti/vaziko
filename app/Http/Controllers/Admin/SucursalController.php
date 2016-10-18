@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Inventory;
+namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables, Cache;
+use DB, Log, Datatables;
 
-use App\Models\Inventory\Grupo;
+use App\Models\Base\Sucursal;
 
-class GrupoController extends Controller
+class SucursalController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,11 +21,11 @@ class GrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Grupo::query();
-            $query->select('koi_grupo.id as id', 'grupo_codigo', 'grupo_nombre');
+            $query = Sucursal::query();
+            $query->select('koi_sucursal.id as id', 'sucursal_nombre');
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.grupos.index');
+        return view('admin.sucursal.index');
     }
 
     /**
@@ -35,7 +35,7 @@ class GrupoController extends Controller
      */
     public function create()
     {
-        return view('inventory.grupos.create');
+        return view('admin.sucursal.create');
     }
 
     /**
@@ -49,27 +49,24 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $grupo = new Grupo;
-            if ($grupo->isValid($data)) {
+            $sucursal = new Sucursal;
+            if ($sucursal->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // grupo
-                    $grupo->fill($data);
-                    $grupo->save();
+                    // sucursal
+                    $sucursal->fill($data);
+                    $sucursal->save();
 
                     // Commit Transaction
                     DB::commit();
-                    // Forget cache
-                    Cache::forget( Grupo::$key_cache );
-
-                    return response()->json(['success' => true, 'id' => $grupo->id]);
+                    return response()->json(['success' => true, 'id' => $sucursal->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $grupo->errors]);
+            return response()->json(['success' => false, 'errors' => $sucursal->errors]);
         }
         abort(403);
     }
@@ -82,11 +79,11 @@ class GrupoController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $grupo = Grupo::findOrFail($id);
+        $sucursal = Sucursal::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($grupo);
+            return response()->json($sucursal);
         }
-        return view('inventory.grupos.show', ['grupo' => $grupo]);
+        return view('admin.sucursal.show', ['sucursal' => $sucursal]);
     }
 
     /**
@@ -97,8 +94,8 @@ class GrupoController extends Controller
      */
     public function edit($id)
     {
-        $grupo = Grupo::findOrFail($id);
-        return view('inventory.grupos.edit', ['grupo' => $grupo]);
+        $sucursal = Sucursal::findOrFail($id);
+        return view('admin.sucursal.edit', ['sucursal' => $sucursal]);
     }
 
     /**
@@ -113,27 +110,24 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $grupo = Grupo::findOrFail($id);
-            if ($grupo->isValid($data)) {
+            $sucursal = Sucursal::findOrFail($id);
+            if ($sucursal->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // grupo
-                    $grupo->fill($data);
-                    $grupo->save();
+                    // sucursal
+                    $sucursal->fill($data);
+                    $sucursal->save();
 
                     // Commit Transaction
                     DB::commit();
-                    // Forget cache
-                    Cache::forget( Grupo::$key_cache );
-
-                    return response()->json(['success' => true, 'id' => $grupo->id]);
+                    return response()->json(['success' => true, 'id' => $sucursal->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $grupo->errors]);
+            return response()->json(['success' => false, 'errors' => $sucursal->errors]);
         }
         abort(403);
     }
