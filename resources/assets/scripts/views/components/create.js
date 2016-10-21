@@ -79,6 +79,13 @@ app || (app = {});
                         var template = _.template($('#add-unidad-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     },
+                    'producto' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Producto');
+
+                        _this.model = new app.ProductoModel();
+                        var template = _.template($('#add-producto-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
 	            };
 
             if (stuffToDo[this.resource]) {
@@ -180,7 +187,10 @@ app || (app = {});
                     'unidadmedida' : function() {
                         _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('unidadmedida_nombre')}] }).trigger('change');
                         _this.$resourceField.val(_this.model.get('id')).trigger('change');
-                    }
+                    },
+                    'producto' : function() {
+                        _this.$resourceField.val(_this.model.get('producto_codigo')).trigger('change');
+                    },
                 };
 
             if (stuffToDo[this.resource]) {

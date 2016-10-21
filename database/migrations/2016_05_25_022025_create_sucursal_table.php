@@ -17,6 +17,7 @@ class CreateSucursalTable extends Migration
 
             $table->increments('id');
             $table->string('sucursal_nombre', 200);
+            $table->integer('sucursal_traslado')->default(0)->comment = "Consecutivo traslados de inventario";
         });
     }
 

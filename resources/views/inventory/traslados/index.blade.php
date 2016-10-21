@@ -11,8 +11,10 @@
                 <table id="traslados-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th>Código</th>
-                            <th>Nombre</th>
+                            <th>Número</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Fecha</th>
                         </tr>
                     </thead>
                 </table>
