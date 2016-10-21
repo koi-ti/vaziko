@@ -173,4 +173,20 @@ class ProductoController extends Controller
     {
         //
     }
+
+    /**
+     * Search producto.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('producto_codigo')) {
+            $producto = Producto::select('producto_nombre')->where('producto_codigo', $request->producto_codigo)->first();
+            if($producto instanceof Producto) {
+                return response()->json(['success' => true, 'producto_nombre' => $producto->producto_nombre]);
+            }
+        }
+        return response()->json(['success' => false]);
+    }
 }

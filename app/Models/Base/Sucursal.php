@@ -4,7 +4,7 @@ namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class Sucursal extends Model
 {
@@ -16,6 +16,13 @@ class Sucursal extends Model
     protected $table = 'koi_sucursal';
 
     public $timestamps = false;
+
+    /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_offices';
 
     /**
      * The attributes that are mass assignable.
@@ -42,5 +49,21 @@ class Sucursal extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+
+    public static function getSucursales()
+    {
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = Sucursal::query();
+            $query->orderby('sucursal_nombre', 'asc');
+            $collection = $query->lists('sucursal_nombre', 'id');
+
+            return $collection;
+        });
     }
 }

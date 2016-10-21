@@ -112,8 +112,18 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('grupos', 'Inventory\GrupoController', ['except' => ['destroy']]);
 	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
 	Route::resource('unidades', 'Inventory\UnidadesMedidaController', ['except' => ['destroy']]);
-	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'traslados'], function()
+	{
+		Route::resource('detalle', 'Inventory\DetalleTrasladoController', ['only' => ['index', 'store']]);
+	});
    	Route::resource('traslados', 'Inventory\TrasladosController', ['only'=>['index', 'create', 'store', 'show']]);
+
+	Route::group(['prefix' => 'productos'], function()
+	{
+		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
+	});
+	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 
    	/*
 	|-------------------------

@@ -66,7 +66,11 @@ app || (app = {});
 
             'productos(/)': 'getProductosMain',
             'productos/create(/)': 'getProductosCreate',
-            'productos/:producto/edit(/)': 'getProductosEdit'
+            'productos/:producto/edit(/)': 'getProductosEdit',
+
+            'traslados(/)': 'getTrasladosMain',
+            'traslados/create(/)': 'getTrasladosCreate',
+            'traslados/:traslado(/)': 'getTrasladosShow',
         },
 
         /**
@@ -82,6 +86,8 @@ app || (app = {});
             this.componentReportView = new app.ComponentReportView();
             this.componentTerceroView = new app.ComponentTerceroView();
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
+            this.componentSearchProductoView = new app.ComponentSearchProductoView();
+            this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},
 
         /**
@@ -711,7 +717,50 @@ app || (app = {});
 
             this.createProductoView = new app.CreateProductoView({ model: this.productoModel });
             this.productoModel.fetch();
-        }
+        },
+
+        /**
+        * show view main traslados
+        */
+        getTrasladosMain: function () {
+
+            if ( this.mainTrasladosView instanceof Backbone.View ){
+                this.mainTrasladosView.stopListening();
+                this.mainTrasladosView.undelegateEvents();
+            }
+
+            this.mainTrasladosView = new app.MainTrasladosView( );
+        },
+
+        /**
+        * show view create traslado
+        */
+        getTrasladosCreate: function () {
+            this.trasladoModel = new app.TrasladoModel();
+
+            if ( this.createTrasladoView instanceof Backbone.View ){
+                this.createTrasladoView.stopListening();
+                this.createTrasladoView.undelegateEvents();
+            }
+
+            this.createTrasladoView = new app.CreateTrasladoView({ model: this.trasladoModel });
+            this.createTrasladoView.render();
+        },
+
+        /**
+        * show view show traslado
+        */
+        getTrasladosShow: function (traslado) {
+            this.trasladoModel = new app.TrasladoModel();
+            this.trasladoModel.set({'id': traslado}, {'silent':true});
+
+            if ( this.showTrasladoView instanceof Backbone.View ){
+                this.showTrasladoView.stopListening();
+                this.showTrasladoView.undelegateEvents();
+            }
+
+            this.showTrasladoView = new app.ShowTrasladoView({ model: this.trasladoModel });
+        },
     }) );
 
 })(jQuery, this, this.document);
