@@ -25,7 +25,7 @@
 						<h4>Factura proveedor</h4>
 					</div>
 					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
-						<div class="modal-body box box-success">
+						<div class="modal-body box box-success" id="modal-asiento-wrapper-facturap">
 							<div id="error-eval-facturap" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
@@ -49,6 +49,28 @@
 					{!! Form::open(['id' => 'form-create-ordenp-asiento-component-source', 'class' => 'form-horizontal', 'data-toggle' => 'validator']) !!}
 						<div class="modal-body box box-success" id="modal-asiento-wrapper-ordenp">
 							<div id="error-search-orden-asiento2" class="alert alert-danger"></div>
+							<div class="content-modal"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+						</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
+
+		<!-- Modal inventario -->
+		<div class="modal fade" id="modal-asiento-inventario-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Inventario</h4>
+					</div>
+					{!! Form::open(['id' => 'form-create-inventario-asiento-component-source', 'data-toggle' => 'validator']) !!}
+						<div class="modal-body box box-success" id="modal-asiento-wrapper-inventario">
+							<div id="error-inventario-asiento2" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
 						<div class="modal-footer">
@@ -301,11 +323,11 @@
 			<div class="form-group col-sm-3">
 	      		<div class="input-group input-group-sm">
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="asiento2_orden_codigo">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="asiento2_orden">
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="asiento2_orden_codigo" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden_codigo" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
+					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
 				</div>
 			</div>
 			<div class="col-sm-6">
@@ -388,5 +410,110 @@
 	    <td>
 			<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm" data-currency type="text">
 	    </td>
+	</script>
+
+	<script type="text/template" id="add-inventario-asiento-tpl">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<label class="control-label">
+					Seleccione producto de inventario para asociar al <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>. Valor (<%- window.Misc.currency( asiento2_valor ) %>)
+				</label>
+				<% if(asiento2_naturaleza == 'C') { %>
+					<br/>
+					<label class="control-label text-red">
+						El valor del Crédito puede ser modificado si es diferente al costo de movimiento.
+					</label>
+				<% } %>
+			</div>
+		</div>
+		<br />
+  	  	<div class="row">
+            <div class="form-group col-sm-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-flat btn-koi-search-producto-component" data-field="producto_codigo">
+                            <i class="fa fa-barcode"></i>
+                        </button>
+                    </span>
+                    <input id="producto_codigo" placeholder="Producto" class="form-control producto-koi-component evaluate-producto-movimiento-asiento" name="producto_codigo" type="text" maxlength="15" data-wrapper="traslados-create" data-name="producto_nombre" required>
+                </div>
+            </div>
+            <div class="col-sm-4 col-xs-10">
+                <input id="producto_nombre" name="producto_nombre" placeholder="Nombre producto" class="form-control input-sm" type="text" maxlength="15" readonly required>
+            </div>
+
+            <% if(asiento2_naturaleza == 'D') { %>
+	            <div class="col-sm-1 col-xs-1">
+	                <button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="producto" data-field="producto_codigo">
+	                    <i class="fa fa-plus"></i>
+	                </button>
+	            </div>
+            <% } %>
+
+            <div class="form-group col-md-2">
+                <input id="movimiento_cantidad" name="movimiento_cantidad" class="form-control input-sm evaluate-producto-movimiento-asiento" type="number" placeholder="Unidades" min="1" required>
+			</div>
+
+            <div class="form-group <%- asiento2_naturaleza == 'D' ? 'col-sm-3' : 'col-sm-4' %>">
+                <select name="movimiento_sucursal" id="movimiento_sucursal" class="form-control evaluate-producto-movimiento-asiento" required>
+                    <option value="" selected>Sucursal</option>
+                    @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+		<div id="content-detail-inventory"></div>
+	</script>
+
+	<script type="text/template" id="add-itemrollo-asiento-tpl">
+		<div class="row">
+			<div class="col-sm-4 col-md-offset-4 col-xs-12">
+				<!-- table table-bordered table-striped -->
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-itemtollo-list" class="table table-hover table-bordered" cellspacing="0">
+			            <tr>
+			                <th>Item</th>
+			                <th>Metros (m)</th>
+			            </tr>
+				    </table>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="choose-itemrollo-asiento-tpl">
+		<div class="row">
+			<div class="col-sm-6 col-md-offset-3 col-xs-12">
+				<!-- table table-bordered table-striped -->
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-chooseitemtollo-list" class="table table-hover table-bordered" cellspacing="0">
+			            <tr>
+			                <th>Item</th>
+			                <th>Metros (m)</th>
+			                <th>Saldo (m)</th>
+			                <th></th>
+			            </tr>
+				    </table>
+				</div>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="add-series-asiento-tpl">
+		<div class="row">
+			<div class="col-sm-6 col-md-offset-3 col-xs-12">
+				<!-- table table-bordered table-striped -->
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-series-list" class="table table-hover table-bordered" cellspacing="0">
+			            <tr>
+			                <th>Item</th>
+			                <th>Serie</th>
+			            </tr>
+				    </table>
+				</div>
+			</div>
+		</div>
 	</script>
 @stop

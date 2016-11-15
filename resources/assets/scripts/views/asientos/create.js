@@ -142,42 +142,32 @@ app || (app = {});
                 var data = window.Misc.formToJson( e.target );
                 data.asiento1_id = this.model.get('id');
 
-                // Evaluate account
-                window.Misc.evaluateAccount({
-                    'cuenta': data.plancuentas_cuenta,
-                    'centrocosto': data.asiento2_centro,
+                // Definir tercero
+                data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
+                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
+
+                window.Misc.evaluateActionsAccount({
+                    'data': data,
                     'wrap': this.$el,
                     'callback': (function (_this) {
-                        return function ( resp )
+                        return function ( actions )
                         {
-                            if(resp.actions) {
-                                // stuffToDo Response success
-                                var stuffToDo = {
-                                    'facturap' : function() {
-                                        // FacturapView
-                                        if ( _this.createFacturapView instanceof Backbone.View ){
-                                            _this.createFacturapView.stopListening();
-                                            _this.createFacturapView.undelegateEvents();
-                                        }
-
-                                        data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
-                                        data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
-
-                                        _this.createFacturapView = new app.CreateFacturapView({
-                                            model: _this.model,
-                                            collection: _this.asientoCuentasList,
-                                            parameters: {
-                                                data: data
-                                            }
-                                        });
-                                        _this.createFacturapView.render();
-                                    }
-                                };
-
-                                if (stuffToDo[resp.action]) {
-                                    stuffToDo[resp.action]();
+                            if( Array.isArray( actions ) && actions.length > 0 ) {
+                                // Open AsientoActionView
+                                if ( _this.asientoActionView instanceof Backbone.View ){
+                                    _this.asientoActionView.stopListening();
+                                    _this.asientoActionView.undelegateEvents();
                                 }
 
+                                _this.asientoActionView = new app.AsientoActionView({
+                                    model: _this.model,
+                                    collection: _this.asientoCuentasList,
+                                    parameters: {
+                                        data: data,
+                                        actions: actions
+                                    }
+                                });
+                                _this.asientoActionView.render();
                             }else{
                                 // Default insert
                                 _this.model.save( data, {patch: true, silent: true} );

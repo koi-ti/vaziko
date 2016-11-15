@@ -76,9 +76,10 @@ class ProductoController extends Controller
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->save();
 
-                    // En la creación siempre producto_codigo = producto_referencia
-                    $producto->producto_referencia = $producto->producto_codigo;
+                    // En la creación siempre producto_referencia = id
+                    $producto->producto_referencia = $producto->id;
                     $producto->save();
 
                     // Commit Transaction
@@ -144,9 +145,6 @@ class ProductoController extends Controller
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
-
-                    // En la creación siempre producto_codigo = producto_referencia
-                    $producto->producto_referencia = $producto->producto_codigo;
                     $producto->save();
 
                     // Commit Transaction
@@ -182,9 +180,9 @@ class ProductoController extends Controller
     public function search(Request $request)
     {
         if($request->has('producto_codigo')) {
-            $producto = Producto::select('producto_nombre')->where('producto_codigo', $request->producto_codigo)->first();
+            $producto = Producto::select('id', 'producto_nombre', 'producto_metrado', 'producto_serie', 'producto_unidades')->where('producto_codigo', $request->producto_codigo)->first();
             if($producto instanceof Producto) {
-                return response()->json(['success' => true, 'producto_nombre' => $producto->producto_nombre]);
+                return response()->json(['success' => true, 'id' => $producto->id, 'producto_nombre' => $producto->producto_nombre, 'producto_metrado' => $producto->producto_metrado, 'producto_serie' => $producto->producto_serie, 'producto_unidades' => $producto->producto_unidades]);
             }
         }
         return response()->json(['success' => false]);

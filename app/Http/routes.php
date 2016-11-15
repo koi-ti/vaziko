@@ -74,7 +74,8 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'asientos'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
-		Route::get('detalle/evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
+		Route::post('detalle/evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
+		Route::post('detalle/validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
@@ -122,6 +123,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'productos'], function()
 	{
 		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
+		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
 	});
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 

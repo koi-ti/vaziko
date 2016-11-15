@@ -21,13 +21,16 @@ class CreateAsientomovimientoTable extends Migration
             $table->boolean('movimiento_nuevo')->default(false)->nullable();
             $table->string('movimiento_facturap', 200)->nullable();
             $table->integer('movimiento_sucursal')->nullable()->unsigned();
+            $table->string('movimiento_serie', 15)->nullable();
+            $table->integer('movimiento_producto')->nullable()->unsigned();
             $table->double('movimiento_valor')->default(0);
             $table->date('movimiento_fecha')->nullable();
-            $table->string('movimiento_cuota')->nullable();
-            $table->string('movimiento_periodicidad')->nullable();
+            $table->integer('movimiento_item')->nullable();
+            $table->integer('movimiento_periodicidad')->nullable();
             $table->text('movimiento_observaciones')->nullable();
 
             $table->foreign('movimiento_asiento2')->references('id')->on('koi_asiento2')->onDelete('restrict');
+            $table->foreign('movimiento_producto')->references('id')->on('koi_producto')->onDelete('restrict');
             $table->foreign('movimiento_sucursal')->references('id')->on('koi_sucursal')->onDelete('restrict');
         });
     }
