@@ -484,32 +484,6 @@
     </div>
 </script>
 
-<script type="text/template" id="add-asiento2-item-tpl">
-	<% if(edit) { %>
-	<td class="text-center">
-		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>">
-			<span><i class="fa fa-times"></i></span>
-		</a>
-	</td>
-	<% } %>
-	<td><%- plancuentas_cuenta %></td>
-    <td><%- plancuentas_nombre %></td>
-    <td>
-    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
-    		<%- tercero_nit %>
-    	</a>
-    </td>
-    <td>
-    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
-    		<%- centrocosto_codigo %>
-    	</a>
-    </td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
-    <td><%- asiento2_detalle %></td>
-</script>
-
 <script type="text/template" id="add-folder-tpl">
     <div class="row">
 		<div class="form-group col-md-2">

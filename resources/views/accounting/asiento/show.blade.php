@@ -101,7 +101,7 @@
 		                <th>Base</th>
 		                <th>Debito</th>
 		                <th>Credito</th>
-		                <th>Detalle</th>
+		                <th></th>
 		            </tr>
 		            <tfoot>
 						<tr>

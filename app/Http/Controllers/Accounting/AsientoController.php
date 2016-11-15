@@ -11,7 +11,7 @@ use DB, Log, Datatables, Auth;
 
 use App\Classes\AsientoContableDocumento;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Base\Tercero, App\Models\Accounting\Documento;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto;
 
 class AsientoController extends Controller
 {
@@ -79,6 +79,27 @@ class AsientoController extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
                         }
 
+                        // Recuperar centro costo
+                        $centrocosto = $ordenp = null;
+                        if($request->has('asiento2_centro')) {
+                            $centrocosto = CentroCosto::find($request->asiento2_centro);
+                            if(!$centrocosto instanceof CentroCosto) {
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar centro costo, por favor verifique la información del asiento o consulte al administrador.']);
+                            }
+
+                            if($centrocosto->centrocosto_codigo == 'OP') {
+                                // Validate orden
+                                if($request->has('asiento2_orden')) {
+                                    $ordenp = Ordenp::whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->asiento2_orden}'")->first();
+                                }
+                                if(!$ordenp instanceof Ordenp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador."]);
+                                }
+                            }
+                        }
+
                         // Asiento1
                         $asiento->fill($data);
 
@@ -103,6 +124,7 @@ class AsientoController extends Controller
                         $cuenta['Base'] = $request->asiento2_base;
                         $cuenta['Credito'] = $request->asiento2_naturaleza == 'C' ? $request->asiento2_valor: 0;
                         $cuenta['Debito'] = $request->asiento2_naturaleza == 'D' ? $request->asiento2_valor: 0;
+                        $cuenta['Orden'] = ($ordenp instanceof Ordenp ? $ordenp->id : '');
 
                         $result = $asiento2->store($asiento, $cuenta);
                         if(!$result->success) {
@@ -246,6 +268,9 @@ class AsientoController extends Controller
                             return response()->json(['success' => false, 'errors' => $result]);
                         }
                     }
+
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'INSERTANDO TODO OK']);
 
                     // Commit Transaction
                     DB::commit();
