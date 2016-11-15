@@ -13,7 +13,7 @@
                     <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
                 <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    <a href=" {{ route('productos.edit', ['productos' => $producto->id])}}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                    <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
                 </div>
             </div>
         </div>
@@ -29,7 +29,7 @@
                 </div>
                 <div class="form-group col-md-3">
                     <label class="control-label">Referencia</label>
-                    <div>{{ $producto->producto_referencia }}</div>
+                    <div><a href="{{ route('productos.show', ['productos' => $producto->referencia_id]) }}" title="Ver referencia">{{ $producto->referencia_codigo }}</a></div>
                 </div>
             </div>
             <div class="row">
@@ -83,9 +83,16 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-2">
                     <label class="control-label">Precio</label>
-                    <div>{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
+                    <div class="text-right">{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <label class="control-label">Costo promedio</label>
+                    <div class="text-right">{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
                 </div>
             </div>
         </div>
