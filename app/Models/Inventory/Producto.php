@@ -72,10 +72,11 @@ class Producto extends BaseModel
     public static function getProduct($id)
     {
         $query = Producto::query();
-        $query->select('koi_producto.*', 'grupo_nombre', 'subgrupo_nombre', 'unidadmedida_sigla', 'unidadmedida_nombre');
-        $query->join('koi_grupo', 'producto_grupo', '=', 'koi_grupo.id');
-        $query->join('koi_subgrupo', 'producto_subgrupo', '=', 'koi_subgrupo.id');
-        $query->leftJoin('koi_unidadmedida', 'producto_unidadmedida', '=', 'koi_unidadmedida.id');
+        $query->select('koi_producto.*', 'referencia.id as referencia_id', 'referencia.producto_codigo as referencia_codigo', 'grupo_nombre', 'subgrupo_nombre', 'unidadmedida_sigla', 'unidadmedida_nombre');
+        $query->join('koi_producto as referencia', 'koi_producto.producto_referencia', '=', 'referencia.id');
+        $query->join('koi_grupo', 'koi_producto.producto_grupo', '=', 'koi_grupo.id');
+        $query->join('koi_subgrupo', 'koi_producto.producto_subgrupo', '=', 'koi_subgrupo.id');
+        $query->leftJoin('koi_unidadmedida', 'koi_producto.producto_unidadmedida', '=', 'koi_unidadmedida.id');
         $query->where('koi_producto.id', $id);
         return $query->first();
     }
