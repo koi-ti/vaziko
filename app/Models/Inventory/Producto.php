@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 use App\Models\BaseModel;
 
-use Validator;
+use DB, Validator;
 
 class Producto extends BaseModel
 {
@@ -47,8 +47,7 @@ class Producto extends BaseModel
             'producto_codigoori' => 'required|max:15|min:1',
             'producto_nombre' => 'required|max:200',
             'producto_grupo' => 'required',
-            'producto_subgrupo' => 'required',
-            'producto_unidades' => 'required'
+            'producto_subgrupo' => 'required'
         ];
 
         if ($this->exists){
@@ -79,5 +78,39 @@ class Producto extends BaseModel
         $query->leftJoin('koi_unidadmedida', 'producto_unidadmedida', '=', 'koi_unidadmedida.id');
         $query->where('koi_producto.id', $id);
         return $query->first();
+    }
+
+    public function serie($serie)
+    {
+        $producto = Producto::where('producto_codigo', $serie)->first();
+        if($producto instanceof Producto) {
+            return "Ya existe un producto con este número de serie {$producto->producto_codigo}, por favor verifique la información del asiento o consulte al administrador.";
+        }
+
+        $producto = $this->replicate();
+        $producto->producto_codigo = $serie;
+        $producto->save();
+
+        return $producto;
+    }
+
+    public function costopromedio($costo = 0, $cantidad = 0, $update = true)
+    {
+        $suma = DB::table('koi_prodbode')
+            ->where('prodbode_producto', $this->id)
+            ->sum('prodbode_cantidad');
+
+        $totalp1 = $suma * $this->producto_costo;
+        $totalp2 = $costo * $cantidad;
+        $totalp3 = $cantidad + $suma;
+        $costopromedio = ( $totalp1 + $totalp2 ) / $totalp3;
+
+        if($update) {
+            // Actualizar producto costo
+            $this->producto_costo = $costopromedio;
+            $this->save();
+        }
+
+        return $costopromedio;
     }
 }

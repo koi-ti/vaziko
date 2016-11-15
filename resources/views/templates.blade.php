@@ -589,6 +589,29 @@
     </div>
 </script>
 
+<script type="text/template" id="add-itemrollo-tpl">
+    <td class="text-center"><%- id %></td>
+    <td>
+		<input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0.1" step="0.1" required>
+    </td>
+</script>
+
+<script type="text/template" id="choose-itemrollo-tpl">
+    <td class="text-center"><%- prodboderollo_item %></td>
+    <td class="text-right"><%- prodboderollo_centimetro %></td>
+    <td class="text-right"><%- prodboderollo_saldo %></td>
+    <td>
+		<input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0" max="<%- prodboderollo_saldo %>" step="0.1">
+    </td>
+</script>
+
+<script type="text/template" id="add-serie-tpl">
+    <td class="text-center"><%- id %></td>
+    <td>
+    	<input type="text" id="producto_serie_<%- id %>" name="producto_serie_<%- id %>" class="form-control input-sm input-toupper" maxlength="15" required>
+    </td>
+</script>
+
 {{-- Inventory templates --}}
 <script type="text/template" id="add-subgrupo-tpl">
     <div class="row">

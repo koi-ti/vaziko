@@ -175,15 +175,15 @@ app || (app = {});
                 data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
                 data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
 
+                console.log( data );
                 // Evaluate account
                 window.Misc.evaluateActionsAccount({
-                    'cuenta': data.plancuentas_cuenta,
-                    'centrocosto': data.asiento2_centro,
+                    'data': data,
                     'wrap': this.$el,
                     'callback': (function (_this) {
-                        return function ( resp )
+                        return function ( actions )
                         {
-                            if(resp.success) {
+                            if( Array.isArray( actions ) && actions.length > 0 ) {
                                 // Open AsientoActionView
                                 if ( _this.asientoActionView instanceof Backbone.View ){
                                     _this.asientoActionView.stopListening();
@@ -195,7 +195,7 @@ app || (app = {});
                                     collection: _this.asientoCuentasList,
                                     parameters: {
                                         data: data,
-                                        actions: resp.actions
+                                        actions: actions
                                     }
                                 });
                                 _this.asientoActionView.render();

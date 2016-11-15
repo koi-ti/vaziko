@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Log, DB;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 
 class DetalleAsientoController extends Controller
 {
@@ -83,34 +83,37 @@ class DetalleAsientoController extends Controller
                     }
 
                     // Recuperar centro costo
-                    $centrocosto = null;
+                    $centrocosto = $ordenp = null;
                     if($request->has('asiento2_centro')) {
                         $centrocosto = CentroCosto::find($request->asiento2_centro);
                         if(!$centrocosto instanceof CentroCosto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar centro costo, por favor verifique la información del asiento o consulte al administrador.']);
                         }
-                    }
 
-                    // // Validar tercero
-                    $tercero = null;
-                    if($request->has('tercero_nit')) {
-                        // Recuperar tercero
-                        $tercero = Tercero::where('tercero_nit', $request->tercero_nit)->first();
-                        if(!$tercero instanceof Tercero) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                        if($centrocosto->centrocosto_codigo == 'OP') {
+                            // Validate orden
+                            if($request->has('asiento2_orden')) {
+                                $ordenp = Ordenp::whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->asiento2_orden}'")->first();
+                            }
+                            if(!$ordenp instanceof Ordenp) {
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador."]);
+                            }
                         }
                     }
 
-                    // Si no require tercero se realiza el asiento a tercero
-                    if(!$tercero instanceof Tercero) {
-                        $tercero = Tercero::find($asiento->asiento1_beneficiario);
-                    }
-
+                    // Recuperar tercero
+                    $tercero = Tercero::where('tercero_nit', $request->tercero_nit)->first();
                     if(!$tercero instanceof Tercero) {
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                    }
+
+                    // Validate asiento2
+                    $result = Asiento2::validarAsiento2($request, $objCuenta);
+                    if($result != 'OK') {
+                        return response()->json(['success' => false, 'errors' => $result]);
                     }
 
                     $cuenta = [];
@@ -122,6 +125,7 @@ class DetalleAsientoController extends Controller
                     $cuenta['Base'] = $request->asiento2_base;
                     $cuenta['Credito'] = $request->asiento2_naturaleza == 'C' ? $request->asiento2_valor: 0;
                     $cuenta['Debito'] = $request->asiento2_naturaleza == 'D' ? $request->asiento2_valor: 0;
+                    $cuenta['Orden'] = ($ordenp instanceof Ordenp ? $ordenp->id : '');
 
                     $result = $asiento2->store($asiento, $cuenta);
                     if(!$result->success) {
@@ -147,7 +151,8 @@ class DetalleAsientoController extends Controller
                         'tercero_nit' => ($tercero instanceof Tercero ? $tercero->tercero_nit : ''),
                         'tercero_nombre' => ($tercero instanceof Tercero ? $tercero->getName() : ''),
                         'asiento2_credito' => $asiento2->asiento2_credito,
-                        'asiento2_debito' => $asiento2->asiento2_debito
+                        'asiento2_debito' => $asiento2->asiento2_debito,
+                        'asiento2_orden' => ($ordenp instanceof Ordenp ? $ordenp->id : '')
                     ]);
 
                 }catch(\Exception $e){
@@ -238,40 +243,126 @@ class DetalleAsientoController extends Controller
     {
         // Prepare response
         $response = new \stdClass();
-        $response->success = false;
         $response->actions = [];
+        $response->success = false;
+
+        // Recuperar plancuentas
+        $cuenta = null;
+        if($request->has('plancuentas_cuenta')) {
+            $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
+        }
+
+        if(!$cuenta instanceof PlanCuenta) {
+            $response->errors = "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
+            return response()->json($response);
+        }
+
+        // Validate asiento2
+        $result = Asiento2::validarAsiento2($request, $cuenta);
+        if($result != 'OK') {
+            $response->errors = $result;
+            return response()->json($response);
+        }
 
         // Evaluate actions centro costo
-        if($request->has('centrocosto_codigo')) {
-            $centrocosto = CentroCosto::find($request->centrocosto_codigo);
+        if($request->has('asiento2_centro')) {
+            $centrocosto = CentroCosto::find($request->asiento2_centro);
             if($centrocosto instanceof CentroCosto) {
                 if($centrocosto->centrocosto_codigo == 'OP') {
                     $action = new \stdClass();
                     $action->action = 'ordenp';
                     $action->success = false;
-
                     $response->actions[] = $action;
                 }
             }
         }
 
         // Evaluate actions plancuentas
-        if($request->has('plancuentas_cuenta')) {
-            $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
-            if($plancuenta instanceof PlanCuenta) {
-                if($plancuenta->plancuentas_tipo && $plancuenta->plancuentas_tipo == 'P') {
-                    $action = new \stdClass();
-                    $action->action = 'facturap';
-                    $action->success = false;
+        $action = new \stdClass();
+        // Proveedores
+        if($cuenta->plancuentas_tipo && $cuenta->plancuentas_tipo == 'P') {
+            $action->action = 'facturap';
+            $action->success = false;
+            $response->actions[] = $action;
 
-                    $response->actions[] = $action;
-                }
+        // Inventario
+        }elseif($cuenta->plancuentas_tipo && $cuenta->plancuentas_tipo == 'I') {
+            $action->action = 'inventario';
+            $action->success = false;
+            $response->actions[] = $action;
+        }
+
+        $response->success = true;
+        return response()->json($response);
+    }
+
+    /**
+     * Validate actions detail asiento.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function validation(Request $request)
+    {
+        // Prepare response
+        $response = new \stdClass();
+        $response->success = false;
+        $response->asiento2_valor = $request->asiento2_valor;
+
+        // Recuperar cuenta
+        $cuenta = null;
+        if($request->has('plancuentas_cuenta')) {
+            $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
+        }
+        if(!$cuenta instanceof PlanCuenta) {
+            $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
+            return response()->json($response);
+        }
+
+        if($request->has('action'))
+        {
+            switch ($request->action) {
+                case 'ordenp':
+                    // Valido movimiento ordenp
+                    $result = Asiento2::validarOrdenp($request);
+                    if($result != 'OK') {
+                        $response->errors = $result;
+                        return response()->json($response);
+                    }
+                    $response->success = true;
+                    return response()->json($response);
+                break;
+
+                case 'facturap':
+                    // Valido movimiento facturap
+                    $result = Asiento2::validarFacturap($request);
+                    if($result != 'OK') {
+                        $response->errors = $result;
+                        return response()->json($response);
+                    }
+                    $response->success = true;
+                    return response()->json($response);
+                break;
+
+                case 'inventario':
+                    // Valido movimiento inventario
+                    $result = Asiento2::validarInventario($request);
+                    if($result->success != true) {
+                        $response->errors = $result->errors;
+                        return response()->json($response);
+                    }
+
+                    // Inventario modifica valor item asiento por el valor del costo del movimiento
+                    if(isset($result->asiento2_valor) && $result->asiento2_valor != $request->asiento2_valor){
+                        $response->asiento2_valor = $result->asiento2_valor;
+                    }
+
+                    $response->success = true;
+                    return response()->json($response);
+                break;
             }
         }
 
-        if(is_array($response->actions) && count($response->actions) > 0) {
-            $response->success = true;
-        }
+        $response->errors = 'No es posible definir acción a validar, por favor verifique la información del asiento o consulte al administrador.';
         return response()->json($response);
     }
 }

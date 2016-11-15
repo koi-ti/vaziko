@@ -28,7 +28,8 @@ app || (app = {});
         	'asiento2_centro': '',
         	'centrocosto_nombre': '',
         	'asiento2_base': 0,
-        	'asiento2_detalle': ''
+            'asiento2_detalle': '',
+        	'asiento2_orden': ''
         }
     });
 

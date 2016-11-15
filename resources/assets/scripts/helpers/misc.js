@@ -195,8 +195,7 @@
             var defaults = {
                 'callback': null,
                 'wrap': 'body',
-                'cuenta': null,
-                'centrocosto': null
+                'data': null
             }, settings = {};
 
             settings = $.extend({}, defaults, options);
@@ -204,8 +203,8 @@
             // Search plancuenta
             $.ajax({
                 url: window.Misc.urlFull(Route.route('asientos.detalle.evaluate')),
-                type: 'GET',
-                data: { plancuentas_cuenta: settings.cuenta, centrocosto_codigo: settings.centrocosto },
+                type: 'POST',
+                data: settings.data,
                 beforeSend: function() {
                     window.Misc.setSpinner( settings.wrap );
                 }
@@ -213,9 +212,20 @@
             .done(function(resp) {
                 window.Misc.removeSpinner( settings.wrap );
 
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
                 // return callback
                 if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
-                    settings.callback( resp );
+                    settings.callback( resp.actions );
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 window.Misc.removeSpinner( settings.wrap );
