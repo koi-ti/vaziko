@@ -140,6 +140,10 @@ class ProductoController extends Controller
 
             $producto = Producto::findOrFail($id);
             if ($producto->isValid($data)) {
+                if($producto->id != $producto->producto_referencia ) {
+                    return response()->json(['success' => false, 'errors' => 'No es posible editar una serie, para modificar comportamiento por favor modifique la referencia padre.']);
+                }
+
                 DB::beginTransaction();
                 try {
                     // Producto

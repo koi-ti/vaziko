@@ -29,7 +29,8 @@ app || (app = {});
         	'centrocosto_nombre': '',
         	'asiento2_base': 0,
             'asiento2_detalle': '',
-        	'asiento2_orden': ''
+            'asiento2_orden': '',
+        	'ordenp_codigo': ''
         }
     });
 

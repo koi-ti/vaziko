@@ -175,7 +175,6 @@ app || (app = {});
                 data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
                 data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
 
-                console.log( data );
                 // Evaluate account
                 window.Misc.evaluateActionsAccount({
                     'data': data,

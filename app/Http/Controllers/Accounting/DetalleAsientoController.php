@@ -31,10 +31,14 @@ class DetalleAsientoController extends Controller
                             )
                         ELSE tercero_razonsocial END)
                         AS tercero_nombre"),
-                    DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
+                    DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
+                    DB::raw("CONCAT(COALESCE(ordenproduccion0_numero, ''),'-',SUBSTRING(COALESCE(ordenproduccion0_ano,''), -2)) as ordenp_codigo")
+                );
                 $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
                 $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
                 $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
+                // Temporal join
+                $query->leftJoin('ordenproduccion0', 'asiento2_ordenp', '=', 'ordenproduccion0.id');
                 $query->where('asiento2_asiento', $request->asiento);
                 $detalle = $query->get();
             }
@@ -152,7 +156,8 @@ class DetalleAsientoController extends Controller
                         'tercero_nombre' => ($tercero instanceof Tercero ? $tercero->getName() : ''),
                         'asiento2_credito' => $asiento2->asiento2_credito,
                         'asiento2_debito' => $asiento2->asiento2_debito,
-                        'asiento2_orden' => ($ordenp instanceof Ordenp ? $ordenp->id : '')
+                        'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
+                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->ordenproduccion0_numero}-".substr($ordenp->ordenproduccion0_ano,-2) : '')
                     ]);
 
                 }catch(\Exception $e){

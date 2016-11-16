@@ -13,7 +13,10 @@ app || (app = {});
 
         tagName: 'tr',
         template: _.template( ($('#add-asiento2-item-tpl').html() || '') ),
+        templateInfo: _.template( ($('#show-info-asiento2-tpl').html() || '') ),
+
         events: {
+            'click .item-asiento2-show-info': 'showInfo'
         },
         parameters: {
             edit: false
@@ -28,6 +31,7 @@ app || (app = {});
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             //Init Attributes
+            this.$modalInfo = $('#modal-asiento-show-info-component');
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
@@ -42,6 +46,17 @@ app || (app = {});
             this.$el.html( this.template(attributes) );
 
             return this;
+        },
+
+        /**
+        * Show info asiento
+        */
+        showInfo: function () {
+            var attributes = this.model.toJSON();
+            // Render info
+            this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( attributes ) );
+            // Open modal
+            this.$modalInfo.modal('show');
         }
     });
 

@@ -13,7 +13,9 @@
                     <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
                 <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                    @if($producto->id == $producto->producto_referencia)
+                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                    @endif
                 </div>
             </div>
         </div>
