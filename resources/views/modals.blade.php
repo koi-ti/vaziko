@@ -311,7 +311,7 @@
 <script type="text/template" id="koi-search-producto-component-tpl">
 	<div class="modal-header">
 		<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-		<h4 class="modal-title">Buscador de productos</h4>
+		<h4 class="modal-title">Buscador de insumos</h4>
 	</div>
 		{!! Form::open(['id' => 'form-koi-search-producto-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 		<div class="modal-body">
