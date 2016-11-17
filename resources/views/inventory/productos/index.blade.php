@@ -1,7 +1,7 @@
 @extends('inventory.productos.main')
 
 @section('breadcrumb')
-    <li class="active">Productos</li>
+    <li class="active">Insumos</li>
 @stop
 
 @section('module')

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Base\Actividad;
 
@@ -46,7 +46,7 @@ class ActividadController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $actividad = new Actividad;
             if ($actividad->isValid($data)) {
                 DB::beginTransaction();
@@ -57,6 +57,9 @@ class ActividadController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Actividad::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $actividad->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -79,8 +82,8 @@ class ActividadController extends Controller
     {
         $actividad = Actividad::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($actividad);    
-        }        
+            return response()->json($actividad);
+        }
         return view('admin.actividades.show', ['actividad' => $actividad]);
     }
 
@@ -93,7 +96,7 @@ class ActividadController extends Controller
     public function edit($id)
     {
         $actividad = Actividad::findOrFail($id);
-        return view('admin.actividades.edit', ['actividad' => $actividad]); 
+        return view('admin.actividades.edit', ['actividad' => $actividad]);
     }
 
     /**
@@ -107,7 +110,7 @@ class ActividadController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $actividad = Actividad::findOrFail($id);
             if ($actividad->isValid($data)) {
                 DB::beginTransaction();
@@ -118,6 +121,9 @@ class ActividadController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Actividad::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $actividad->id]);
                 }catch(\Exception $e){
                     DB::rollback();

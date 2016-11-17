@@ -18,6 +18,13 @@ class Actividad extends Model
     public $timestamps = false;
 
     /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_actividades';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -48,11 +55,11 @@ class Actividad extends Model
 
     public static function getActividades()
     {
-        if (Cache::has('_actividades')) {
-            return Cache::get('_actividades');    
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
         }
 
-        return Cache::rememberForever('_actividades', function() {
+        return Cache::rememberForever( self::$key_cache , function() {
             $query = Actividad::query();
             $query->select('id', DB::raw("UPPER(CONCAT(actividad_codigo, ' - ', actividad_nombre)) as actividad_nombre"));
             $query->orderby('actividad_codigo', 'asc');

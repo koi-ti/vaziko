@@ -120,7 +120,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'productos' ? 'active' : '' }}">
-                        <a href="{{ route('productos.index') }}"><i class="fa fa-barcode"></i> Productos</a>
+                        <a href="{{ route('productos.index') }}"><i class="fa fa-barcode"></i> Insumos</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'traslados' ? 'active' : '' }}">
                         <a href="{{ route('traslados.index') }}"><i class="fa fa-arrows"></i> Traslados</a>
