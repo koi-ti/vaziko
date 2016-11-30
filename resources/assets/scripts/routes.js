@@ -29,6 +29,10 @@ app || (app = {});
             'sucursales/create(/)': 'getSucursalesCreate',
             'sucursales/:sucursal/edit(/)': 'getSucursalesEdit',
 
+            'puntosventa(/)': 'getPuntosVentaMain',
+            'puntosventa/create(/)': 'getPuntosVentaCreate',
+            'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
+
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',
             'plancuentas/create(/)': 'getPlanCuentasCreate',
@@ -71,6 +75,10 @@ app || (app = {});
             'traslados(/)': 'getTrasladosMain',
             'traslados/create(/)': 'getTrasladosCreate',
             'traslados/:traslado(/)': 'getTrasladosShow',
+
+            // Produccion
+            'ordenes(/)': 'getOrdenesMain',
+            'ordenes/create(/)': 'getOrdenesCreate',
         },
 
         /**
@@ -302,6 +310,50 @@ app || (app = {});
 
             this.createSucursalView = new app.CreateSucursalView({ model: this.sucursalModel });
             this.sucursalModel.fetch();
+        },
+
+        /**
+        * show view main puntos de venta
+        */
+        getPuntosVentaMain: function () {
+
+            if ( this.mainPuntoventaView instanceof Backbone.View ){
+                this.mainPuntoventaView.stopListening();
+                this.mainPuntoventaView.undelegateEvents();
+            }
+
+            this.mainPuntoventaView = new app.MainPuntoventaView( );
+        },
+
+        /**
+        * show view create puntos de venta
+        */
+        getPuntosVentaCreate: function () {
+            this.puntoVentaModel = new app.PuntoVentaModel();
+
+            if ( this.createPuntoventaView instanceof Backbone.View ){
+                this.createPuntoventaView.stopListening();
+                this.createPuntoventaView.undelegateEvents();
+            }
+
+            this.createPuntoventaView = new app.CreatePuntoventaView({ model: this.puntoVentaModel });
+            this.createPuntoventaView.render();
+        },
+
+        /**
+        * show view edit puntos de venta
+        */
+        getPuntosVentaEdit: function (puntoventa) {
+            this.puntoVentaModel = new app.PuntoVentaModel();
+            this.puntoVentaModel.set({'id': puntoventa}, {silent: true});
+
+            if ( this.createPuntoventaView instanceof Backbone.View ){
+                this.createPuntoventaView.stopListening();
+                this.createPuntoventaView.undelegateEvents();
+            }
+
+            this.createPuntoventaView = new app.CreatePuntoventaView({ model: this.puntoVentaModel });
+            this.puntoVentaModel.fetch();
         },
 
         /**
@@ -760,6 +812,33 @@ app || (app = {});
             }
 
             this.showTrasladoView = new app.ShowTrasladoView({ model: this.trasladoModel });
+        },
+
+        /**
+        * show view main ordenes de produccion
+        */
+        getOrdenesMain: function () {
+            if ( this.mainOrdenesView instanceof Backbone.View ){
+                this.mainOrdenesView.stopListening();
+                this.mainOrdenesView.undelegateEvents();
+            }
+
+            this.mainOrdenesView = new app.MainOrdenesView( );
+        },
+
+        /**
+        * show view create ordenes de produccion
+        */
+        getOrdenesCreate: function () {
+            this.ordenpModel = new app.OrdenpModel();
+
+            if ( this.createOrdenpView instanceof Backbone.View ){
+                this.createOrdenpView.stopListening();
+                this.createOrdenpView.undelegateEvents();
+            }
+
+            this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
+            this.createOrdenpView.render();
         },
     }) );
 

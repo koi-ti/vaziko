@@ -43,7 +43,7 @@
 					text-align: center;
 				}
 
-				.rtable{
+				.rtable {
 					width: 100%;
 				}
 
@@ -58,6 +58,14 @@
 
 				.rtable tr:nth-child(even) {
 					background-color: #f2f2f2
+				}
+
+				.htable {
+					width: 100%;
+				}
+
+				.htable td, th, td {
+					text-align: left;
 				}
 
 				.left {

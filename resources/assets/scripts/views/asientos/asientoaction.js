@@ -18,6 +18,10 @@ app || (app = {});
         templateFacturap: _.template( ($('#rfacturap-asiento-tpl').html() || '') ),
         templateAddFacturap: _.template( ($('#add-rfacturap-asiento-tpl').html() || '') ),
         templateCuotasFacturap: _.template( ($('#add-rfacturap2-asiento-tpl').html() || '') ),
+        // Cartera
+        templateCartera: _.template( ($('#rcartera-asiento-tpl').html() || '') ),
+        templateAddFactura: _.template( ($('#add-facturacartera-asiento-tpl').html() || '') ),
+        templateCuotasFactura: _.template( ($('#add-cuotasfacturacartera-asiento-tpl').html() || '') ),
         // Inventario
         templateInventario: _.template( ($('#add-inventario-asiento-tpl').html() || '') ),
         templateAddItemRollo: _.template( ($('#add-itemrollo-asiento-tpl').html() || '') ),
@@ -29,6 +33,8 @@ app || (app = {});
             // Proveedores
             'submit #form-create-asiento-component-source': 'onStoreItemFacturap',
             'change input#facturap1_factura': 'facturapChanged',
+            // Cartera
+            'change select#factura_nueva': 'facturaNuevaChanged',
             // Inventario
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
             'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario'
@@ -49,6 +55,7 @@ app || (app = {});
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
+            this.$modalCt = this.$('#modal-asiento-cartera-component');
 
             // Collection cuotas
             this.cuotasFPList = new app.CuotasFPList();
@@ -107,6 +114,13 @@ app || (app = {});
 	                   	_this.referenceFacturap();
 
 	                },
+
+                    'cartera' : function() {
+                        _this.$modalCt.find('.content-modal').empty().html( _this.templateCartera( _this.parameters.data ) );
+
+                        // Reference cartera
+                        _this.referenceCartera();
+                    },
 
 	                'ordenp' : function() {
                         _this.$modalOp.find('.content-modal').empty().html( _this.templateOrdenp( _this.parameters.data ) );
@@ -248,6 +262,24 @@ app || (app = {});
             // Open modal
             this.$modalFp.modal('show');
         },
+
+        /**
+        * Reference cartera
+        */
+        referenceCartera: function( ) {
+            var _this = this;
+
+            this.$wraper = this.$('#modal-asiento-wrapper-cartera');
+            this.$wraperFormCt = this.$('#content-cartera');
+            this.$wraperErrorCt = this.$('#error-eval-cartera');
+
+            // Hide errors
+            this.$wraperErrorCt.hide().empty();
+
+            // Open modal
+            this.$modalCt.modal('show');
+        },
+
 
         /**
         * Reference orden
@@ -586,6 +618,24 @@ app || (app = {});
                     })(this)
                 });
             }
+        },
+
+        /*
+        * Factura nueva cartera changed
+        */
+        facturaNuevaChanged: function(e) {
+            // Hide errors
+            this.$wraperErrorCt.hide().empty();
+            // Empty Form
+            this.$wraperFormCt.empty();
+
+            if($(e.currentTarget).val() == 'N') {
+                this.$wraperFormCt.html( this.templateAddFactura( ) );
+            }else{
+                this.$wraperFormCt.html( this.templateCuotasFactura( ) );
+            }
+
+            this.ready();
         },
 
         /**

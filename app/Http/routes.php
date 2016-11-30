@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
 
-		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index']]);
+		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store']]);
 	});
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
 	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
+	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------
@@ -74,8 +75,14 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'asientos'], function()
 	{
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
-		Route::post('detalle/evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
-		Route::post('detalle/validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
+		Route::get('exportar/{asientos}', ['as' => 'asientos.exportar', 'uses' => 'Accounting\AsientoController@exportar']);
+
+		Route::group(['prefix' => 'detalle'], function()
+		{
+			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
+			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
+			Route::get('movimientos', ['as' => 'asientos.detalle.movimientos', 'uses' => 'Accounting\DetalleAsientoController@movimientos']);
+		});
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
@@ -103,7 +110,7 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
 	});
-	Route::resource('ordenes', 'Production\OrdenpController', ['only' => ['index']]);
+	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------

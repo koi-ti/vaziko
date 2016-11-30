@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp;
+use App\Models\Production\Ordenp, App\Models\Base\Tercero;
 
 class OrdenpController extends Controller
 {
@@ -49,7 +49,7 @@ class OrdenpController extends Controller
                 })
                 ->make(true);
         }
-        abort(404);
+        return view('production.ordenes.index');
     }
 
     /**
@@ -59,7 +59,7 @@ class OrdenpController extends Controller
      */
     public function create()
     {
-        //
+        return view('production.ordenes.create');
     }
 
     /**
@@ -70,7 +70,49 @@ class OrdenpController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $orden = new Ordenp;
+            if ($orden->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Recuperar tercero
+                    $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
+                    if(!$tercero instanceof Tercero) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Recuperar numero orden
+                    $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
+                    if(!is_integer($numero)) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar numero orden, por favor verifique la información o consulte al administrador.']);
+                    }
+                    $numero ++;
+
+                    // Orden de produccion
+                    $orden->fill($data);
+                    $orden->orden_cliente = $tercero->id;
+                    $orden->orden_ano = date('Y');
+                    $orden->orden_numero = $numero;
+                    $orden->orden_usuario_elaboro = Auth::user()->id;
+                    $orden->orden_fecha_elaboro = date('Y-m-d H:m:s');
+                    $orden->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $orden->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $orden->errors]);
+        }
+        abort(403);
     }
 
     /**

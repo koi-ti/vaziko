@@ -260,18 +260,28 @@
 
 							{{-- Tab contactos --}}
 							<div class="tab-pane" id="tab_contactos">
-								<div class="box">
+								<div class="box box-primary">
 									<div class="box-body table-responsive no-padding">
-										<table id="browse-contact-list" class="table table-hover">
-											{{-- Render contact list --}}
-										</table>
+										<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+								            <thead>
+									            <tr>
+									                <th>Nombre</th>
+									                <th>Email</th>
+									                <th>Teléfono</th>
+									                <th>Celular</th>
+									            </tr>
+								           </thead>
+								           <tbody>
+												{{-- Render contact list --}}
+								           </tbody>
+									    </table>
 									</div>
 								</div>
 							</div>
 
 							{{-- Tab proveedor --}}
 							<div class="tab-pane" id="tab_proveedor">
-								<div class="box">
+								<div class="box box-primary">
 									<div class="box-body table-responsive no-padding">
 										<table id="browse-facturap-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 								            <thead>

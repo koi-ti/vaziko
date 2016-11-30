@@ -8,6 +8,76 @@
     </div>
 </script>
 
+<script type="text/template" id="add-contacto-tpl">
+    <div class="row">
+		<div class="form-group col-md-4">
+			<label for="tcontacto_nombres" class="control-label">Nombres</label>
+			<input type="text" id="tcontacto_nombres" name="tcontacto_nombres" value="<%- tcontacto_nombres %>" placeholder="Nombres" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="tcontacto_apellidos" class="control-label">Apellidos</label>
+			<input type="text" id="tcontacto_apellidos" name="tcontacto_apellidos" value="<%- tcontacto_apellidos %>" placeholder="Apellidos" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+
+    <div class="row">
+    	<div class="form-group col-md-4">
+			<label for="tcontacto_direccion" class="control-label">Dirección</label>
+      		<div class="input-group input-group-sm">
+				<input id="tcontacto_direccion" value="<%- tcontacto_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tcontacto_direccion" type="text" maxlength="200" required>
+				<span class="input-group-btn">
+					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tcontacto_direccion">
+						<i class="fa fa-map-signs"></i>
+					</button>
+				</span>
+			</div>
+		</div>
+
+    	<div class="form-group col-md-4">
+			<label for="tcontacto_municipio" class="control-label">Municipio</label>
+			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control select2-default" required>
+				@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
+					<option value="{{ $key }}" <%- tcontacto_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="tcontacto_nombres" class="control-label">Email</label>
+			<input id="tcontacto_email" value="<%- tcontacto_email %>" placeholder="Email" class="form-control input-sm" name="tcontacto_email" type="email" maxlength="200">
+		    <div class="help-block with-errors"></div>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-4">
+			<label for="tcontacto_cargo" class="control-label">Cargo</label>
+			<input type="text" id="tcontacto_cargo" name="tcontacto_cargo" value="<%- tcontacto_cargo %>" placeholder="Apellidos" class="form-control input-sm input-toupper" maxlength="200">
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="tcontacto_telefono" class="control-label">Teléfono</label>
+			<div class="input-group">
+				<div class="input-group-addon">
+					<i class="fa fa-phone"></i>
+				</div>
+				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask required>
+			</div>
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="tcontacto_celular" class="control-label">Celular</label>
+			<div class="input-group">
+				<div class="input-group-addon">
+					<i class="fa fa-mobile"></i>
+				</div>
+				<input id="tcontacto_celular" value="<%- tcontacto_celular %>" class="form-control input-sm" name="tcontacto_celular" type="text" data-inputmask="'mask': '999 999-99-99'" data-mask>
+			</div>
+		</div>
+	</div>
+</script>
+
 <script type="text/template" id="add-tercero-tpl">
 	<div class="row">
 		<div class="form-group col-md-3">
@@ -304,10 +374,23 @@
 					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
 						{{-- Tab contactos --}}
 						<div class="tab-pane" id="tab_contactos">
-							<div class="box">
+
+
+
+							<div class="box box-primary">
 								<div class="box-body table-responsive no-padding">
-									<table id="browse-contact-list" class="table table-hover">
-										{{-- Render contact list --}}
+									<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+							            <thead>
+								            <tr>
+								                <th>Nombre</th>
+								                <th>Email</th>
+								                <th>Teléfono</th>
+								                <th>Celular</th>
+								            </tr>
+							           </thead>
+							           <tbody>
+											{{-- Render contact list --}}
+							           </tbody>
 									</table>
 								</div>
 							</div>
@@ -326,6 +409,27 @@
 	<td><%- tcontacto_celular %></td>
 	<td><%- tcontacto_email %></td>
 	<td><%- tcontacto_cargo %></td>
+</script>
+
+<script type="text/template" id="add-puntoventa-tpl">
+    <div class="row">
+		<div class="form-group col-md-6">
+			<label for="puntoventa_nombre" class="control-label">Nombre</label>
+			<input type="text" id="puntoventa_nombre" name="puntoventa_nombre" value="<%- puntoventa_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="puntoventa_prefijo" class="control-label">Prefijo</label>
+			<input type="text" id="puntoventa_prefijo" name="puntoventa_prefijo" value="<%- puntoventa_prefijo %>" placeholder="Prefijo" class="form-control input-sm input-toupper" maxlength="4">
+		</div>
+
+		<div class="form-group col-md-4">
+			<label for="puntoventa_resolucion_dian" class="control-label">Resolución de facturación DIAN</label>
+			<input type="text" id="puntoventa_resolucion_dian" name="puntoventa_resolucion_dian" value="<%- puntoventa_resolucion_dian %>" placeholder="Resolución de facturación DIAN" class="form-control input-sm input-toupper" maxlength="200">
+		</div>
+    </div>
 </script>
 
 {{-- Accounting templates --}}

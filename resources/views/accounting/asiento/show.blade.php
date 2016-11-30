@@ -13,11 +13,12 @@
 				<div class="col-md-2 col-sm-6 col-xs-6 text-left">
 					<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 				</div>
-				@if($asiento->asiento1_preguardado)
-					<div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-						<a href="{{ route('asientos.edit', ['asientos' => $asiento->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.continue') }}</a>
-					</div>
-				@endif
+
+				<div class="col-md-1 col-md-offset-9 col-sm-6 col-xs-6 text-right">
+					<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" class="btn btn-danger btn-sm btn-block">
+						<i class="fa fa-file-pdf-o"></i>
+					</a>
+				</div>
 			</div>
 		</div>
 

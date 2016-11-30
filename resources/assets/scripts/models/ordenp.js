@@ -16,7 +16,14 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'orden_codigo': '',
-            'orden_referencia': ''
+            'orden_referencia': '',
+            'tercero_nit': '',
+            'tercero_nombre': '',
+            'orden_fecha_inicio': moment().format('YYYY-MM-DD'),
+            'orden_fecha_entrega': moment().format('YYYY-MM-DD'),
+            'orden_hora_entrega': '',
+            'orden_observaciones': '',
+            'orden_terminado': ''
         }
     });
 
