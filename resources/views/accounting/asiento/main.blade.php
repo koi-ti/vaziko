@@ -38,6 +38,28 @@
 			</div>
 		</div>
 
+		<!-- Modal cartera -->
+		<div class="modal fade" id="modal-asiento-cartera-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+			<div class="modal-dialog modal-lg" role="document">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4>Cartera</h4>
+					</div>
+					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
+						<div class="modal-body box box-success" id="modal-asiento-wrapper-cartera">
+							<div id="error-eval-cartera" class="alert alert-danger"></div>
+							<div class="content-modal"></div>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+							<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+						</div>
+					{!! Form::close() !!}
+				</div>
+			</div>
+		</div>
+
 		<!-- Modal ordenp -->
 		<div class="modal fade" id="modal-asiento-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
@@ -105,13 +127,22 @@
     <script type="text/template" id="add-asiento-tpl">
     	<div class="box-header with-border">
         	<div class="row">
-				<div class="col-md-2 col-sm-6 col-xs-6 text-left">
+				<div class="col-md-2 col-sm-5 col-xs-5 text-left">
 					<a href="<%- window.Misc.urlFull( edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
 				</div>
+
+
 				<% if(edit) { %>
-				<div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-					<button type="button" class="btn btn-primary btn-sm btn-block submit-asiento">{{ trans('app.save') }}</button>
-				</div>
+
+					<div class="col-md-2 col-md-offset-7 col-sm-5 col-xs-5 text-right">
+						<button type="button" class="btn btn-primary btn-sm btn-block submit-asiento">{{ trans('app.save') }}</button>
+					</div>
+
+					<div class="col-md-1 col-sm-2 col-xs-2 text-right">
+						<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" class="btn btn-danger btn-sm btn-block">
+							<i class="fa fa-file-pdf-o"></i>
+						</a>
+					</div>
 				<% } %>
 			</div>
 		</div>
@@ -568,6 +599,13 @@
 	</script>
 
 	<script type="text/template" id="show-info-asiento2-tpl">
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label class="control-label">Naturaleza</label>
+				<div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
+			</div>
+		</div>
+
 		<!-- Orden -->
 		<% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
 			<div class="row">
@@ -606,19 +644,102 @@
 			</div>
 		<% } %>
 
-		<!-- div class="row">
-			<div class="col-sm-12">
+		<div class="row" id="browse-showinfo-asiento-insumo"></div>
+		<div class="row">
+			<div class="col-sm-6 col-md-offset-3 col-xs-12">
 				<div class="box-body table-responsive no-padding">
 					<table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
-			            <tr>
+			        	<tr>
 			                <th>Item</th>
 			                <th>Metros (m)</th>
-			                <th>Saldo (m)</th>
-			                <th></th>
 			            </tr>
 				    </table>
 				</div>
 			</div>
-		</div -->
+		</div>
+	</script>
+
+	<script type="text/template" id="show-info-asiento2-movimientos-tpl">
+		<% if(movimiento_tipo == 'FP') { %>
+			<td class="text-left"><%- movimiento_facturap %></td>
+			<td class="text-center"><%- movimiento_item %></td>
+			<td class="text-right"><%- window.Misc.currency(movimiento_valor ? movimiento_valor : 0) %></td>
+
+		<% }else if(movimiento_tipo == 'FP') {  %>
+			<td class="text-center"><%- movimiento_item %></td>
+			<td class="text-right"><%- movimiento_valor %></td>
+		<% }  %>
+	</script>
+
+	<script type="text/template" id="show-info-asiento2-movimientos-insumo-tpl">
+		<div class="form-group col-md-8">
+			<label class="control-label">Insumo</label>
+			<div><%- producto_codigo %> - <%- producto_nombre %></div>
+		</div>
+
+		<div class="form-group col-md-2">
+			<label class="control-label">Unidades</label>
+			<div><%- movimiento_valor %></div>
+		</div>
+
+		<div class="form-group col-md-2">
+			<label class="control-label">Sucursal</label>
+			<div><%- sucursal_nombre %></div>
+		</div>
+	</script>
+
+	<script type="text/template" id="rcartera-asiento-tpl">
+		<div class="row">
+			<div class="form-group col-md-12 text-center">
+				<strong>(<%- tercero_nit %> - <%- tercero_nombre %>)</strong>
+			</div>
+		</div>
+		<% if(asiento2_naturaleza == 'D') { %>
+			<div class="row">
+				<div class="form-group col-md-9">
+					<label for="factura_nueva" class="control-label">
+						Por favor seleccione tipo de factura para realizar Débito.
+					</label>
+					<div>
+						<select name="factura_nueva" id="factura_nueva" class="form-control" required>
+							<option value="">Seleccione</option>
+							<option value="N">Nueva</option>
+							<option value="E">Existente</option>
+						</select>
+					</div>
+				</div>
+				<div class="form-group col-md-3">
+					<label class="control-label">Valor</label>
+					<div><%- window.Misc.currency( asiento2_valor ) %></div>
+				</div>
+			</div>
+		<% } %>
+		<div id="content-cartera"></div>
+	</script>
+
+	<script type="text/template" id="add-facturacartera-asiento-tpl">
+		<div class="row">
+			<div class="form-group col-md-2">
+				<label for="factura_fecha" class="control-label">Fecha</label>
+				<input type="text" id="factura_fecha" name="factura_fecha" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+			</div>
+			<div class="form-group col-md-2">
+				<label for="factura_vencimiento" class="control-label">Vencimiento</label>
+				<input type="text" id="factura_vencimiento" name="factura_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+			</div>
+			<div class="form-group col-md-3">
+				<label for="factura_puntoventa" class="control-label">Punto de venta</label>
+				<select name="factura_puntoventa" id="factura_puntoventa" class="form-control" required>
+                    <option value="" selected>Punto de venta</option>
+                    @foreach( App\Models\Base\PuntoVenta::getPuntosVenta() as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+			</div>
+		</div>
+	</script>
+
+	<script type="text/template" id="add-cuotasfacturacartera-asiento-tpl">
+		Existente
 	</script>
 @stop

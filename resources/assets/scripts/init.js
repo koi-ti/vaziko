@@ -33,6 +33,7 @@ var app = app || {};
             this.initToUpper();
             this.initSpinner();
             this.initDatePicker();
+            this.initTimePicker();
         },
 
         /**
@@ -124,7 +125,7 @@ var app = app || {};
         },
 
         /**
-        * Init icheck
+        * Init Datepicker
         */
         initDatePicker: function () {
 
@@ -134,6 +135,17 @@ var app = app || {};
                 format: 'yyyy-mm-dd'
             });
         },
+
+        /**
+        * Init Timepicker
+        */
+        initTimePicker: function () {
+
+            $(".timepicker").timepicker({
+                showInputs: false,
+                showMeridian: false
+            });
+        }
     };
 
     //Init App Components

@@ -16,11 +16,17 @@ app || (app = {});
             'click .btn-add-resource-koi-component': 'addResource',
             'submit #form-create-resource-component': 'onStore'
 		},
+        parameters: {
+        },
 
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function(opts) {
+            // extends parameters
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
 			// Initialize
             this.$modalComponent = this.$('#modal-add-resource-component');
             this.$wraperError = this.$('#error-resource-component');
@@ -33,6 +39,7 @@ app || (app = {});
 		addResource: function(e) {
             this.resource = $(e.currentTarget).attr("data-resource");
             this.$resourceField = $("#"+$(e.currentTarget).attr("data-field"));
+            this.parameters = {};
 
             // stuffToDo resource
             var _this = this,
@@ -86,6 +93,17 @@ app || (app = {});
                         var template = _.template($('#add-producto-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     },
+                    'contacto' : function() {
+                        // References
+                        var tercero = $(e.currentTarget).attr("data-tercero");
+                        _this.parameters.tcontacto_tercero = tercero;
+
+                        _this.$modalComponent.find('.inner-title-modal').html('Contacto');
+
+                        _this.model = new app.ContactoModel();
+                        var template = _.template($('#add-contacto-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
 	            };
 
             if (stuffToDo[this.resource]) {
@@ -132,7 +150,8 @@ app || (app = {});
                 this.$wraperError.hide().empty();
 
                 e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
+                var data = $.extend({}, this.parameters, window.Misc.formToJson( e.target ));
+
                 this.model.save( data, {patch: true} );
             }
         },

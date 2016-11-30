@@ -40,7 +40,7 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function() {
 
         },
 
@@ -57,7 +57,6 @@ app || (app = {});
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.$el.html('');
             this.collection.forEach( this.addOne, this );
         },
 

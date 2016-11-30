@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Base\Departamento;
+use App\Models\Base\Tercero, App\Models\Base\Contacto;
 
-use DB;
+use DB, Log;
 
 class ContactoController extends Controller
 {
@@ -49,7 +49,37 @@ class ContactoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $contacto = new Contacto;
+            if ($contacto->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Recuperar tercero
+                    $tercero = Tercero::find($request->tcontacto_tercero)->first();
+                    if(!$tercero instanceof Tercero) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Contacto
+                    $contacto->fill($data);
+                    $contacto->tcontacto_tercero = $tercero->id;
+                    $contacto->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $contacto->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $contacto->errors]);
+        }
+        abort(403);
     }
 
     /**

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables, Auth;
+use DB, Log, Datatables, Auth, View, App;
 
 use App\Classes\AsientoContableDocumento;
 
@@ -295,5 +295,26 @@ class AsientoController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function exportar($id)
+    {
+        $asiento = Asiento::getAsiento($id);
+        if(!$asiento instanceof Asiento){
+            abort(404);
+        }
+        $detalle = Asiento2::getAsiento2($asiento->id);
+        $title = 'Asiento contable';
+
+        // Export pdf
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
+        return $pdf->download(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
     }
 }

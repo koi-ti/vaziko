@@ -22,6 +22,7 @@
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>
                     <div>{{ $sucursal->sucursal_nombre }}</div>
+                </div>
             </div>
         </div>
     </div>

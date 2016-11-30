@@ -16,7 +16,14 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-        	
+        	'tcontacto_nombres': '',
+        	'tcontacto_apellidos': '',
+        	'tcontacto_telefono': '',
+        	'tcontacto_celular': '',
+        	'tcontacto_municipio': '',
+        	'tcontacto_direccion': '',
+        	'tcontacto_email': '',
+        	'tcontacto_cargo': ''
         }
     });
 

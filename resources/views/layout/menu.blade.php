@@ -5,7 +5,7 @@
     </li>
 
     {{-- Administracion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['empresa', 'terceros', 'actividades', 'municipios', 'departamentos', 'sucursales']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['empresa', 'terceros', 'actividades', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
         <a href="{{ route('dashboard') }}">
             <i class="fa fa-cog"></i> <span>Administración</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -27,7 +27,7 @@
             </li>
 
             {{-- Referencias administracion --}}
-            <li class="{{ in_array(Request::segment(1), ['actividades', 'municipios', 'departamentos', 'sucursales']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['actividades', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -40,6 +40,9 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'municipios' ? 'active' : '' }}">
                         <a href="{{ route('municipios.index') }}"><i class="fa fa-circle-o"></i> Municipios</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'puntosventa' ? 'active' : '' }}">
+                        <a href="{{ route('puntosventa.index') }}"><i class="fa fa-circle-o"></i> Puntos de venta</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'sucursales' ? 'active' : '' }}">
                         <a href="{{ route('sucursales.index') }}"><i class="fa fa-circle-o"></i> Sucursales</a>
@@ -162,7 +165,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
-                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Orden</a>
+                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
                 </ul>
             </li>

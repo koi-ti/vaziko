@@ -23,24 +23,7 @@ class DetalleAsientoController extends Controller
         if ($request->ajax()) {
             $detalle = [];
             if($request->has('asiento')) {
-                $query = Asiento2::query();
-                $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 'tercero_nit',
-                    DB::raw("(CASE WHEN tercero_persona = 'N'
-                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                                (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                            )
-                        ELSE tercero_razonsocial END)
-                        AS tercero_nombre"),
-                    DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
-                    DB::raw("CONCAT(COALESCE(ordenproduccion0_numero, ''),'-',SUBSTRING(COALESCE(ordenproduccion0_ano,''), -2)) as ordenp_codigo")
-                );
-                $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
-                $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
-                $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
-                // Temporal join
-                $query->leftJoin('ordenproduccion0', 'asiento2_ordenp', '=', 'ordenproduccion0.id');
-                $query->where('asiento2_asiento', $request->asiento);
-                $detalle = $query->get();
+                $detalle = Asiento2::getAsiento2($request->asiento);
             }
             return response()->json($detalle);
         }
@@ -295,6 +278,12 @@ class DetalleAsientoController extends Controller
             $action->action = 'inventario';
             $action->success = false;
             $response->actions[] = $action;
+
+        // Cartera
+        }elseif($cuenta->plancuentas_tipo && $cuenta->plancuentas_tipo == 'C') {
+            $action->action = 'cartera';
+            $action->success = false;
+            $response->actions[] = $action;
         }
 
         $response->success = true;
@@ -369,5 +358,29 @@ class DetalleAsientoController extends Controller
 
         $response->errors = 'No es posible definir acción a validar, por favor verifique la información del asiento o consulte al administrador.';
         return response()->json($response);
+    }
+
+    /**
+     * Display a listing movimientos of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function movimientos(Request $request)
+    {
+        if ($request->ajax()) {
+            $movimientos = [];
+            if($request->has('asiento2')) {
+
+                $query = AsientoMovimiento::query();
+                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'sucursal_nombre');
+                $query->where('movimiento_asiento2', $request->asiento2);
+                $query->leftJoin('koi_producto', 'movimiento_producto', '=', 'koi_producto.id');
+                $query->leftJoin('koi_sucursal', 'movimiento_sucursal', '=', 'koi_sucursal.id');
+
+                $movimientos = $query->get();
+
+            }
+            return response()->json($movimientos);
+        }
     }
 }
