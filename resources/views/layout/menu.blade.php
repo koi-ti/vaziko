@@ -165,7 +165,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
-                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Ordenes</a>
+                        <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
                 </ul>
             </li>

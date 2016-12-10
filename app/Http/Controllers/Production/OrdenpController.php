@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp, App\Models\Base\Tercero;
+use App\Models\Production\Ordenp, App\Models\Base\Tercero, App\Models\Base\Contacto;
 
 class OrdenpController extends Controller
 {
@@ -22,7 +22,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select(DB::raw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) as ordenp_codigo"), 'ordenproduccion0_numero as ordenp_numero', 'ordenproduccion0_ano as ordenp_ano', 'ordenproduccion0_fecha_elaboro as ordenp_fecha',
+            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -30,21 +30,28 @@ class OrdenpController extends Controller
                     ELSE tercero_razonsocial END)
                 AS tercero_nombre")
             );
-            $query->join('koi_tercero', 'ordenproduccion0_tercero', '=', 'koi_tercero.id');
+            $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+
+            // Persistent data filter
+            if($request->has('persistent') && $request->persistent) {
+                session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
+                session(['searchordenp_tercero' => $request->has('orden_tercero_nit') ? $request->orden_tercero_nit : '']);
+                session(['searchordenp_tercero_nombre' => $request->has('orden_tercero_nombre') ? $request->orden_tercero_nombre : '']);
+            }
 
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Orden codigo
-                    if($request->has('ordenp_numero')) {
-                        $query->whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) LIKE '%{$request->ordenp_numero}%'");
+                    if($request->has('orden_numero')) {
+                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
                     // Tercero nit
-                    if($request->has('ordenp_tercero_nit')) {
-                        $query->where('tercero_nit', $request->ordenp_tercero_nit);
+                    if($request->has('orden_tercero_nit')) {
+                        $query->where('tercero_nit', $request->orden_tercero_nit);
                     }
                     // Tercero id
-                    if($request->has('ordenp_tercero_id')) {
-                        $query->whereRaw('ordenproduccion0_tercero', $request->ordenp_tercero_id);
+                    if($request->has('orden_cliente')) {
+                        $query->whereRaw('orden_cliente', $request->orden_cliente);
                     }
                 })
                 ->make(true);
@@ -84,19 +91,34 @@ class OrdenpController extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
 
+                    // Validar contacto
+                    $contacto = Contacto::find($request->orden_contacto);
+                    if(!$contacto instanceof Contacto) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
+                    }
+                    // Validar tercero contacto
+                    if($contacto->tcontacto_tercero != $tercero->id) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
+                    }
+
+                    // Actualizar telefono del contacto
+                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                        $contacto->tcontacto_telefono = $request->tcontacto_telefono;
+                        $contacto->save();
+                    }
+
                     // Recuperar numero orden
                     $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                    if(!is_integer($numero)) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar numero orden, por favor verifique la información o consulte al administrador.']);
-                    }
-                    $numero ++;
+                    $numero = !is_integer($numero) ? 1 : ($numero + 1);
 
                     // Orden de produccion
                     $orden->fill($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_ano = date('Y');
                     $orden->orden_numero = $numero;
+                    $orden->orden_contacto = $contacto->id;
                     $orden->orden_usuario_elaboro = Auth::user()->id;
                     $orden->orden_fecha_elaboro = date('Y-m-d H:m:s');
                     $orden->save();
@@ -121,9 +143,17 @@ class OrdenpController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $orden = Ordenp::getOrden($id);
+        if(!$orden instanceof Ordenp){
+            abort(404);
+        }
+
+        if ($request->ajax()) {
+            return response()->json($orden);
+        }
+        return view('production.ordenes.show', ['orden' => $orden]);
     }
 
     /**
@@ -134,7 +164,11 @@ class OrdenpController extends Controller
      */
     public function edit($id)
     {
-        //
+        $orden = Ordenp::findOrFail($id);
+        if($orden->orden_abierta == false || $orden->orden_anulada == true) {
+            return redirect()->route('ordenes.show', ['orden' => $orden]);
+        }
+        return view('production.ordenes.edit', ['orden' => $orden]);
     }
 
     /**
@@ -146,7 +180,57 @@ class OrdenpController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $orden = Ordenp::findOrFail($id);
+            if ($orden->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Recuperar tercero
+                    $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
+                    if(!$tercero instanceof Tercero) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Validar contacto
+                    $contacto = Contacto::find($request->orden_contacto);
+                    if(!$contacto instanceof Contacto) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
+                    }
+                    // Validar tercero contacto
+                    if($contacto->tcontacto_tercero != $tercero->id) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
+                    }
+
+                    // Actualizar telefono del contacto
+                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                        $contacto->tcontacto_telefono = $request->tcontacto_telefono;
+                        $contacto->save();
+                    }
+
+                    // Documento
+                    $orden->fill($data);
+                    $orden->orden_cliente = $tercero->id;
+                    $orden->orden_contacto = $contacto->id;
+                    $orden->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $orden->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $orden->errors]);
+        }
+        abort(403);
+
     }
 
     /**
@@ -176,8 +260,8 @@ class OrdenpController extends Controller
                     ELSE tercero_razonsocial END)
                 AS tercero_nombre")
             )
-            ->join('koi_tercero', 'ordenproduccion0_tercero', '=', 'koi_tercero.id')
-            ->whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->ordenp_codigo}'")->first();
+            ->join('koi_tercero', 'orden_tercero', '=', 'koi_tercero.id')
+            ->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->ordenp_codigo}'")->first();
             if($ordenp instanceof Ordenp) {
                 return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre]);
             }

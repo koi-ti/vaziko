@@ -53,7 +53,7 @@
     <div class="row">
 		<div class="form-group col-md-4">
 			<label for="tcontacto_cargo" class="control-label">Cargo</label>
-			<input type="text" id="tcontacto_cargo" name="tcontacto_cargo" value="<%- tcontacto_cargo %>" placeholder="Apellidos" class="form-control input-sm input-toupper" maxlength="200">
+			<input type="text" id="tcontacto_cargo" name="tcontacto_cargo" value="<%- tcontacto_cargo %>" placeholder="Cargos" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
 
 		<div class="form-group col-md-4">
@@ -375,7 +375,14 @@
 						{{-- Tab contactos --}}
 						<div class="tab-pane" id="tab_contactos">
 
-
+						    <!-- div class="row">
+								<div class="col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12">
+									<button type="button" class="btn btn-primary btn-block btn-sm btn-add-tcontacto" data-resource="contacto" data-tercero="<%- id %>">
+										<i class="fa fa-user-plus"></i>  Nuevo contacto
+									</button>
+								</div>
+							</div>
+							<br / -->
 
 							<div class="box box-primary">
 								<div class="box-body table-responsive no-padding">
@@ -383,7 +390,7 @@
 							            <thead>
 								            <tr>
 								                <th>Nombre</th>
-								                <th>Email</th>
+								                <th>Dirección</th>
 								                <th>Teléfono</th>
 								                <th>Celular</th>
 								            </tr>
@@ -403,12 +410,15 @@
 </script>
 
 <script type="text/template" id="contact-item-list-tpl">
-	<td><%- tcontacto_nombre %></td>
+	<td><%- tcontacto_nombres %> <%- tcontacto_apellidos %></td>
 	<td><%- tcontacto_direccion %></td>
 	<td><%- tcontacto_telefono %></td>
 	<td><%- tcontacto_celular %></td>
-	<td><%- tcontacto_email %></td>
-	<td><%- tcontacto_cargo %></td>
+	<!-- td class="text-center">
+		<a class="btn btn-default btn-xs btn-edit-tcontacto" data-resource="<%- id %>">
+			<span><i class="fa fa-pencil-square-o"></i></span>
+		</a>
+	</td -->
 </script>
 
 <script type="text/template" id="add-puntoventa-tpl">

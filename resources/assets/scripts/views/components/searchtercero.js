@@ -43,7 +43,8 @@ app || (app = {});
 
             this.$tercerosSearchTable = this.$modalComponent.find('#koi-search-tercero-component-table');
 			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
-			this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+            this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+            this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -102,6 +103,10 @@ app || (app = {});
 			this.$inputContent.val( data.tercero_nit );
 			this.$inputName.val( data.tercero_nombre );
 
+            if(this.$btnContact.length > 0) {
+                this.$btnContact.attr('data-tercero', data.id);
+            }
+
 			this.$modalComponent.modal('hide');
 		},
 
@@ -127,6 +132,11 @@ app || (app = {});
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
 
+            this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
+            if(this.$btnContact.length > 0) {
+                this.$btnContact.attr('data-tercero', '');
+            }
+
 			var tercero = this.$inputContent.val();
 
             // Before eval clear data
@@ -149,7 +159,10 @@ app || (app = {});
 	                    if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
 							_this.$inputName.val(resp.tercero_nombre);
 	                    }
-	                }
+                        if(_this.$btnContact.length > 0) {
+                            _this.$btnContact.attr('data-tercero', resp.id);
+                        }
+                    }
 	            })
 	            .fail(function(jqXHR, ajaxOptions, thrownError) {
 	                window.Misc.removeSpinner( _this.$wraperConten );

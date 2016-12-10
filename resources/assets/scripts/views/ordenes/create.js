@@ -96,7 +96,14 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('ordenes.show', { ordenes: resp.id})) );
+                // FacturapView undelegateEvents
+                if ( this.createOrdenpView instanceof Backbone.View ){
+                    this.createOrdenpView.stopListening();
+                    this.createOrdenpView.undelegateEvents();
+                }
+
+                // Redirect to edit orden
+                Backbone.history.navigate(Route.route('ordenes.edit', { ordenes: resp.id}), { trigger:true });
             }
         }
     });

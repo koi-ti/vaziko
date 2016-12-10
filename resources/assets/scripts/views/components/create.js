@@ -37,9 +37,19 @@ app || (app = {});
         * Display form modal resource
         */
 		addResource: function(e) {
+            // References
             this.resource = $(e.currentTarget).attr("data-resource");
             this.$resourceField = $("#"+$(e.currentTarget).attr("data-field"));
             this.parameters = {};
+
+            if(this.resource == 'contacto') {
+                this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
+                this.parameters.tcontacto_tercero = $(e.currentTarget).attr("data-tercero");
+                if( _.isUndefined(this.parameters.tcontacto_tercero) || _.isNull(this.parameters.tcontacto_tercero) || this.parameters.tcontacto_tercero == '') {
+                    alertify.error('Por favor ingrese cliente antes agregar contacto.');
+                    return;
+                }
+            }
 
             // stuffToDo resource
             var _this = this,
@@ -94,10 +104,7 @@ app || (app = {});
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     },
                     'contacto' : function() {
-                        // References
-                        var tercero = $(e.currentTarget).attr("data-tercero");
-                        _this.parameters.tcontacto_tercero = tercero;
-
+                        _this.$resourceName = $("#"+$(e.currentTarget).attr("data-name"));
                         _this.$modalComponent.find('.inner-title-modal').html('Contacto');
 
                         _this.model = new app.ContactoModel();
@@ -209,6 +216,14 @@ app || (app = {});
                     },
                     'producto' : function() {
                         _this.$resourceField.val(_this.model.get('producto_codigo')).trigger('change');
+                    },
+                    'contacto' : function() {
+                        _this.$resourceField.val(_this.model.get('id'));
+                        _this.$resourceName.val(_this.model.get('tcontacto_nombre'));
+
+                        if(_this.$inputPhone.length) {
+                            _this.$inputPhone.val( _this.model.get('tcontacto_telefono') );
+                        }
                     },
                 };
 
