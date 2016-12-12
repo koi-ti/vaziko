@@ -54,7 +54,7 @@ class AsientoContableDocumento {
 		}
 
     	if($this->documento->documento_tipo_consecutivo == 'M') {
-			$asiento = Asiento::where('asiento1_numero', $this->asiento->asiento1_numero)->where('asiento1_documento', $this->documento->id)->first();
+			$asiento = Asiento::where('asiento1_numero', $this->asiento->asiento1_numero)->where('asiento1_documento', $this->documento->id)->where('asiento1_preguardado', false)->first();
 			if($asiento instanceof Asiento) {
 	            $this->asiento_error = "Ya existe asiento con el numero {$this->asiento->asiento1_numero} para el documento {$this->documento->documento_nombre}, por favor verifique la información del asiento o consulte al administrador.";
 	            return;

@@ -14,7 +14,7 @@ app || (app = {});
         tagName: 'tr',
         template: _.template( ($('#contact-item-list-tpl').html() || '') ),
         events: {
-            
+            'click .btn-edit-tcontacto': 'editContacto',
         },
 
         /**
@@ -37,8 +37,16 @@ app || (app = {});
             this.$el.html( this.template(attributes) );
 
             return this;
+        },
+
+        editContacto: function() {
+            var view = new app.CreateTContactoView({
+                model: this.model
+            });
+
+            view.render();
         }
-  
+
     });
 
 })(jQuery, this, this.document);

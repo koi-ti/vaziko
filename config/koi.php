@@ -162,5 +162,12 @@ return [
                 'M' => 'Manual'
             ]
         ]
+    ],
+
+    'produccion' => [
+        'formaspago' => [
+            'CO' => 'Contado',
+            'CT' => 'Crédito'
+        ]
     ]
 ];

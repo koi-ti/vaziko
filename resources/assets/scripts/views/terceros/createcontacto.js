@@ -1,5 +1,5 @@
 /**
-* Class CreateTerceroView  of Backbone Router
+* Class CreateTContactoView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,23 +9,24 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateTerceroView = Backbone.View.extend({
+    app.CreateTContactoView = Backbone.View.extend({
 
-        el: '#tercero-create',
-        template: _.template( ($('#add-tercero-tpl').html() || '') ),
+        el: 'body',
+        template: _.template( ($('#add-contacto-tpl').html() || '') ),
         events: {
-            'submit #form-create-tercero': 'onStore',
-            'click .btn-add-tcontacto': 'addContacto'
+            'submit #form-tcontacto-component': 'onStore'
+        },
+        parameters: {
+        	tercero_id : null
         },
 
         /**
         * Constructor Method
         */
         initialize : function(opts) {
-
-            // Attributes
-            this.msgSuccess = 'Tercero guardado con exito!';
-            this.$wraperForm = this.$('#render-form-tercero');
+            // extends parameters
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events
             this.listenTo( this.model, 'change:id', this.render );
@@ -37,18 +38,17 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
+            // Attributes
+            this.$modalComponent = this.$('#modal-tcontacto-component');
+
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+            this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
+            this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
 
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                this.contactsList = new app.ContactsList();
-
-                // Reference views
-                this.referenceViews();
-            }
+            // to fire plugins
             this.ready();
+
+            this.$modalComponent.modal('show');
         },
 
         /**
@@ -64,63 +64,36 @@ app || (app = {});
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();
-
-            if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
         },
 
         /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Contact list
-            this.contactsListView = new app.ContactsListView( {
-                collection: this.contactsList,
-                parameters: {
-                    dataFilter: {
-                        'tercero_id': this.model.get('id')
-                    }
-               }
-            });
-        },
-
-        /**
-        * Event Create Forum Post
+        * Event Create Contact
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
 
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
+				if( !_.isUndefined(this.parameters.tercero_id) && !_.isNull(this.parameters.tercero_id) && this.parameters.tercero_id != '') {
+                	data.tcontacto_tercero = this.parameters.tercero_id;
+                }
                 this.model.save( data, {patch: true} );
             }
-        },
-
-        addContacto: function() {
-            this.contactoModel = new app.ContactoModel();
-            this.createTContactoView = new app.CreateTContactoView({
-                model: this.contactoModel,
-                collection: this.contactsList,
-                parameters: {
-                    'tercero_id': this.model.get('id')
-               }
-            });
-            this.createTContactoView.render();
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.$wraperContent );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.$wraperContent );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -134,7 +107,12 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('terceros.show', { terceros: resp.id})) );
+                if(this.collection instanceof Backbone.Collection) {
+	                // Add model in collection
+	            	this.collection.add(model);
+	            }
+
+            	this.$modalComponent.modal('hide');
             }
         }
     });

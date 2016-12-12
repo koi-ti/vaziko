@@ -44,7 +44,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
 
-		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store']]);
+		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
 	});
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
@@ -109,8 +109,10 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'ordenes'], function()
 	{
 		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
+		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------

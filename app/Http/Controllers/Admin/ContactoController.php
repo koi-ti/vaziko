@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Base\Tercero, App\Models\Base\Contacto;
 
-use DB, Log;
+use DB, Log, Datatables;
 
 class ContactoController extends Controller
 {
@@ -22,11 +22,40 @@ class ContactoController extends Controller
     {
         if ($request->ajax()) {
 
-            $contacts = DB::table('tercerocontacto')->select('tercerocontacto_item as id', DB::raw("CONCAT(tercerocontacto_nombres,' ',tercerocontacto_apellidos) as tcontacto_nombre"), 'tercerocontacto_direccion as tcontacto_direccion', 'tercerocontacto_telefono as tcontacto_telefono', 'tercerocontacto_celular as tcontacto_celular', 'tercerocontacto_cargo as tcontacto_cargo', 'tercerocontacto_email as tcontacto_email')
-                ->join('koi_tercero', 'tercero_nit', '=', 'tercerocontacto_tercero')
-                ->where('koi_tercero.id', $request->tercero_id)->get();
+            if($request->has('tercero_id')) {
+                // Collection
+                $query = Contacto::query();
+                $query->select('koi_tcontacto.*');
+                $query->where('tcontacto_tercero', $request->tercero_id);
+                $contacts = $query->get();
+                return response()->json($contacts);
 
-            return response()->json($contacts);
+            }else{
+                // Search datatables
+                $query = Contacto::query();
+                $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
+                $query->leftJoin('koi_municipio', 'tcontacto_municipio', '=', 'koi_municipio.id');
+                $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+
+                return Datatables::of($query)
+                    ->filter(function($query) use($request) {
+                        // Tercero
+                        if($request->has('tcontacto_tercero')) {
+                            $query->where('tcontacto_tercero', $request->tcontacto_tercero);
+                        }
+
+                        // Nombres
+                        if($request->has('tcontacto_nombres')) {
+                            $query->whereRaw("tcontacto_nombres LIKE '%{$request->tcontacto_nombres}%'");
+                        }
+
+                        // Apellidos
+                        if($request->has('tcontacto_apellidos')) {
+                            $query->whereRaw("tcontacto_apellidos LIKE '%{$request->tcontacto_apellidos}%'");
+                        }
+                    })
+                    ->make(true);
+            }
         }
         abort(404);
     }
@@ -57,7 +86,7 @@ class ContactoController extends Controller
                 DB::beginTransaction();
                 try {
                     // Recuperar tercero
-                    $tercero = Tercero::find($request->tcontacto_tercero)->first();
+                    $tercero = Tercero::find($request->tcontacto_tercero);
                     if(!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
@@ -68,9 +97,13 @@ class ContactoController extends Controller
                     $contacto->tcontacto_tercero = $tercero->id;
                     $contacto->save();
 
+
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $contacto->id]);
+                    return response()->json(['success' => true,
+                        'id' => $contacto->id,
+                        'tcontacto_nombre' => "{$contacto->tcontacto_nombres} {$contacto->tcontacto_apellidos}"
+                    ]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -113,7 +146,29 @@ class ContactoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $contacto = Contacto::findOrFail($id);
+            if ($contacto->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Documento
+                    $contacto->fill($data);
+                    $contacto->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $contacto->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $contacto->errors]);
+        }
+        abort(403);
     }
 
     /**

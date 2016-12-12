@@ -152,7 +152,7 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -164,6 +164,9 @@
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    {{-- <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
+                        <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>
+                    </li> --}}
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
                         <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>

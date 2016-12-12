@@ -79,6 +79,7 @@ app || (app = {});
             // Produccion
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
+            'ordenes/:orden/edit(/)': 'getOrdenesEdit',
         },
 
         /**
@@ -95,6 +96,7 @@ app || (app = {});
             this.componentTerceroView = new app.ComponentTerceroView();
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
+            this.componentSearchContactoView = new app.ComponentSearchContactoView();
             this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},
 
@@ -840,6 +842,22 @@ app || (app = {});
             this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
             this.createOrdenpView.render();
         },
+
+        /**
+        * show view edit ordenes
+        */
+        getOrdenesEdit: function (orden) {
+            this.ordenpModel = new app.OrdenpModel();
+            this.ordenpModel.set({'id': orden}, {'silent':true});
+
+            if ( this.createOrdenpView instanceof Backbone.View ){
+                this.createOrdenpView.stopListening();
+                this.createOrdenpView.undelegateEvents();
+            }
+
+            this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
+            this.ordenpModel.fetch();
+        }
     }) );
 
 })(jQuery, this, this.document);
