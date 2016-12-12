@@ -164,11 +164,11 @@
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
+                    {{-- <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
                         <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>
-                    </li>
+                    </li> --}}
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
-                        <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
+                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
                 </ul>
             </li>
