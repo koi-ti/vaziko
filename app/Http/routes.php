@@ -112,6 +112,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------

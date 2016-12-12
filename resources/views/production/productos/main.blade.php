@@ -1,11 +1,11 @@
 @extends('layout.layout')
 
-@section('title') Insumos @stop
+@section('title') Productos @stop
 
 @section('content')
     <section class="content-header">
         <h1>
-            Insumos <small>Administración de insumos</small>
+            Productos <small>Administración de productos</small>
         </h1>
         <ol class="breadcrumb">
             <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>

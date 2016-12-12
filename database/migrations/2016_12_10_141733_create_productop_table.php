@@ -45,9 +45,7 @@ class CreateProductopTable extends Migration
             $table->foreign('productop_3d_profundidad_med')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
             $table->foreign('productop_3d_ancho_med')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
             $table->foreign('productop_3d_alto_med')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
-
             $table->foreign('productop_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
-
         });
     }
 
