@@ -105,7 +105,7 @@ class ProductoController extends Controller
     public function show(Request $request, $id)
     {
         $producto = Producto::getProduct($id);
-        if($producto instanceof producto){
+        if($producto instanceof Producto){
             if ($request->ajax()) {
                 return response()->json($producto);
             }

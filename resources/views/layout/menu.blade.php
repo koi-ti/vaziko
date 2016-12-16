@@ -123,7 +123,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'productos' ? 'active' : '' }}">
-                        <a href="{{ route('productos.index') }}"><i class="fa fa-barcode"></i> Insumos</a>
+                        <a href="{{ route('productos.index') }}"><i class="fa fa-wrench"></i> Insumos</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'traslados' ? 'active' : '' }}">
                         <a href="{{ route('traslados.index') }}"><i class="fa fa-arrows"></i> Traslados</a>
@@ -152,23 +152,43 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    {{-- <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
+                    <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
                         <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>
-                    </li> --}}
+                    </li>
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
-                        <a href="http://192.168.10.3/vaziko/index.php"><i class="fa fa-building-o"></i> Ordenes</a>
+                        <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
+                    </li>
+                </ul>
+            </li>
+            {{-- Referencias produccion --}}
+            <li class="{{ in_array(Request::segment(1), ['areasp', 'acabadosp', 'maquinasp', 'materialesp']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'acabadosp' ? 'active' : '' }}">
+                        <a href="{{ route('acabadosp.index') }}"><i class="fa fa-circle-o"></i> Acabados</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'areasp' ? 'active' : '' }}">
+                        <a href="{{ route('areasp.index') }}"><i class="fa fa-circle-o"></i> Areas</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'maquinasp' ? 'active' : '' }}">
+                        <a href="{{ route('maquinasp.index') }}"><i class="fa fa-circle-o"></i> Maquinas</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'materialesp' ? 'active' : '' }}">
+                        <a href="{{ route('materialesp.index') }}"><i class="fa fa-circle-o"></i> Materiales</a>
                     </li>
                 </ul>
             </li>

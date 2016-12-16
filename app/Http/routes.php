@@ -112,6 +112,10 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
+	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
+	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
+	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
 	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*
