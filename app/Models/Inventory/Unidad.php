@@ -61,10 +61,7 @@ class Unidad extends Model
         return Cache::rememberForever( self::$key_cache , function() {
             $query = Unidad::query();
             $query->orderby('unidadmedida_nombre', 'asc');
-            $collection = $query->lists('unidadmedida_nombre', 'id');
-
-            $collection->prepend('', '');
-            return $collection;
+            return $query->lists('unidadmedida_nombre', 'id');
         });
     }
 }

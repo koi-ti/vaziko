@@ -5,19 +5,19 @@
 @stop
 
 @section('module')
-    <div id="productos-main">
+    <div id="productosp-main">
         <div class="box box-success">
             <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-producto-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
                     <div class="form-group">
-                        <label for="producto_codigo" class="col-md-1 control-label">Código</label>
+                        <label for="productop_codigo" class="col-md-1 control-label">Código</label>
                         <div class="col-md-2">
-                            {!! Form::text('producto_codigo', session('search_producto_codigo'), ['id' => 'producto_codigo', 'class' => 'form-control input-sm']) !!}
+                            {!! Form::text('productop_codigo', session('search_productop_codigo'), ['id' => 'productop_codigo', 'class' => 'form-control input-sm']) !!}
                         </div>
 
-                        <label for="producto_nombre" class="col-md-1 control-label">Nombre</label>
+                        <label for="productop_nombre" class="col-md-1 control-label">Nombre</label>
                         <div class="col-md-8">
-                            {!! Form::text('producto_nombre', session('search_producto_nombre'), ['id' => 'producto_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
+                            {!! Form::text('productop_nombre', session('search_productop_nombre'), ['id' => 'productop_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
                         </div>
                     </div>
 
@@ -37,7 +37,7 @@
                 {!! Form::close() !!}
 
                 <div class="table-responsive">
-                    <table id="productos-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                    <table id="productosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                         <thead>
                             <tr>
                                 <th>Código</th>

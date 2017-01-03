@@ -51,7 +51,10 @@ app || (app = {});
             this.$contactoSearchTable = this.$modalComponent.find('#koi-search-contacto-component-table');
 			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
+            this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
+            this.$inputAddress = this.$("#"+$(e.currentTarget).attr("data-address"));
+            this.$inputCity = this.$("#"+$(e.currentTarget).attr("data-city"));
+			this.$inputEmail = this.$("#"+$(e.currentTarget).attr("data-email"));
 
 			this.contactoSearchTable = this.$contactoSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -74,7 +77,9 @@ app || (app = {});
                     { data: 'tcontacto_nombre', name: 'tcontacto_nombre' },
                     { data: 'tcontacto_telefono', name: 'tcontacto_telefono' },
                     { data: 'municipio_nombre', name: 'municipio_nombre' },
-                    { data: 'tcontacto_direccion', name: 'tcontacto_direccion' }
+                    { data: 'tcontacto_direccion', name: 'tcontacto_direccion' },
+                    { data: 'tcontacto_municipio', name: 'tcontacto_municipio' },
+                    { data: 'tcontacto_email', name: 'tcontacto_email' }
                 ],
                 columnDefs: [
                     {
@@ -86,7 +91,7 @@ app || (app = {});
                         }
                     },
                 	{
-                        targets: [0,1,2],
+                        targets: [0,1,2,7,8],
                         visible: false
                     }
                 ]
@@ -104,8 +109,18 @@ app || (app = {});
 			this.$inputContent.val( data.id );
 			this.$inputName.val( data.tcontacto_nombre );
 			if(this.$inputPhone.length) {
-				this.$inputPhone.val( data.tcontacto_telefono );
+                this.$inputPhone.val( data.tcontacto_telefono );
+            }
+            if(this.$inputAddress.length) {
+                this.$inputAddress.val( data.tcontacto_direccion );
+            }
+            if(this.$inputCity.length) {
+                this.$inputCity.val( data.tcontacto_municipio ).trigger('change');
+            }
+            if(this.$inputEmail.length) {
+				this.$inputEmail.val( data.tcontacto_email );
 			}
+
 			this.$modalComponent.modal('hide');
 		},
 

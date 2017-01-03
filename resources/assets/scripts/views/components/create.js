@@ -111,6 +111,34 @@ app || (app = {});
                         var template = _.template($('#add-contacto-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     },
+                    'areap' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Área de producción');
+
+                        _this.model = new app.AreapModel();
+                        var template = _.template($('#add-areap-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
+                    'maquinap' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Máquina de producción');
+
+                        _this.model = new app.MaquinapModel();
+                        var template = _.template($('#add-maquinap-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
+                    'materialp' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Material de producción');
+
+                        _this.model = new app.MaterialpModel();
+                        var template = _.template($('#add-materialp-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
+                    'acabadop' : function() {
+                        _this.$modalComponent.find('.inner-title-modal').html('Acabado de producción');
+
+                        _this.model = new app.AcabadopModel();
+                        var template = _.template($('#add-acabadop-tpl').html());
+                        _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+                    },
 	            };
 
             if (stuffToDo[this.resource]) {
@@ -224,6 +252,22 @@ app || (app = {});
                         if(_this.$inputPhone.length) {
                             _this.$inputPhone.val( _this.model.get('tcontacto_telefono') );
                         }
+                    },
+                    'areap' : function() {
+                        _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('areap_nombre')}] }).trigger('change');
+                        _this.$resourceField.val(_this.model.get('id')).trigger('change');
+                    },
+                    'maquinap' : function() {
+                        _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('maquinap_nombre')}] }).trigger('change');
+                        _this.$resourceField.val(_this.model.get('id')).trigger('change');
+                    },
+                    'materialp' : function() {
+                        _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('materialp_nombre')}] }).trigger('change');
+                        _this.$resourceField.val(_this.model.get('id')).trigger('change');
+                    },
+                    'acabadop' : function() {
+                        _this.$resourceField.select2({ data: [{id: _this.model.get('id'), text: _this.model.get('acabadop_nombre')}] }).trigger('change');
+                        _this.$resourceField.val(_this.model.get('id')).trigger('change');
                     },
                 };
 

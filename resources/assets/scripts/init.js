@@ -7,7 +7,7 @@ var app = app || {};
 
 (function ($, window, document, undefined) {
 
-    var InitComponent = function(){
+    var InitComponent = function() {
 
         //Init Attributes
         $.ajaxSetup({
@@ -17,6 +17,13 @@ var app = app || {};
             }
         });
     }
+
+    String.prototype.replaceAll = function(search, replace)
+    {
+        if(!replace)
+            return this;
+        return this.replace(new RegExp('[' + search + ']', 'g'), replace);
+    };
 
     InitComponent.prototype = {
 

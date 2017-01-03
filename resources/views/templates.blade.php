@@ -835,3 +835,47 @@
 		</div>
 	</div>
 </script>
+
+{{-- Production templates --}}
+<script type="text/template" id="add-areap-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="areap_nombre" class="control-label">Nombre</label>
+			<input type="text" id="areap_nombre" name="areap_nombre" value="<%- areap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-acabadop-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="acabadop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="acabadop_nombre" name="acabadop_nombre" value="<%- acabadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="acabadop_descripcion" class="control-label">Descripción</label>
+            <textarea id="acabadop_descripcion" name="acabadop_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- acabadop_descripcion %></textarea>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-maquinap-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="maquinap_nombre" class="control-label">Nombre</label>
+			<input type="text" id="maquinap_nombre" name="maquinap_nombre" value="<%- maquinap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-materialp-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="materialp_nombre" class="control-label">Nombre</label>
+			<input type="text" id="materialp_nombre" name="materialp_nombre" value="<%- materialp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+    </div>
+</script>

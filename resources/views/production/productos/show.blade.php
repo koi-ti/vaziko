@@ -1,8 +1,8 @@
-@extends('inventory.productos.main')
+@extends('production.productos.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('productos.index')}}">Insumos</a></li>
-    <li class="active">{{ $producto->producto_codigo }}</li>
+    <li><a href="{{ route('productosp.index')}}">Productos</a></li>
+    <li class="active">{{ $producto->id }}</li>
 @stop
 
 @section('module')
@@ -10,91 +10,219 @@
         <div class="box-header with-border">
             <div class="row">
                 <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                    <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+                    <a href=" {{ route('productosp.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
                 <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    @if($producto->id == $producto->producto_referencia)
-                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
-                    @endif
+                    <a href="{{ route('productosp.edit', ['productosp' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
                 </div>
             </div>
         </div>
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label class="control-label">Código</label>
-                    <div>{{ $producto->producto_codigo }}</div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Código proveedor</label>
-                    <div>{{ $producto->producto_codigoori }}</div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Referencia</label>
-                    <div><a href="{{ route('productos.show', ['productos' => $producto->referencia_id]) }}" title="Ver referencia">{{ $producto->referencia_codigo }}</a></div>
-                </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-12">
                     <label class="control-label">Nombre</label>
-                    <div>{{ $producto->producto_nombre }}</div>
+                    <div>{{ $producto->productop_nombre }}</div>
                 </div>
             </div>
 
             <div class="row">
-                <div class="form-group col-md-3">
-                    <label class="control-label">Grupo</label>
-                    <div>{{ $producto->grupo_nombre }}</div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Subgrupo</label>
-                    <div>{{ $producto->subgrupo_nombre }}</div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-md-3">
-                    <label class="control-label">Unidad de medida</label>
-                    <div>{{ $producto->unidadmedida_nombre }} ({{ $producto->unidadmedida_sigla }})</div>
-                </div>
-                <div class="form-group col-md-3">
-                    <label class="control-label">Vida útil</label>
-                    <div>{{ $producto->producto_vidautil }}</div>
+                <div class="form-group col-md-12">
+                    <label class="control-label">Detalle</label>
+                    <div>{{ $producto->productop_observaciones }}</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-2">
-                    <label class="control-label">¿Maneja unidades?</label>
+                    <label class="control-label">Abierto</label>
                     <div>
-                        <input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" disabled {{ $producto->producto_unidades ? 'checked': '' }}>
+                        <input type="checkbox" id="productop_abierto" name="productop_abierto" value="productop_abierto" disabled {{ $producto->productop_abierto ? 'checked': '' }}>
                     </div>
                 </div>
                 <div class="form-group col-md-2">
-                    <label class="control-label">¿Meneja serie?</label>
-                    <div>
-                        <input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" disabled {{ $producto->producto_serie ? 'checked': '' }}>
-                    </div>
+                    <label class="control-label">Ancho</label>
+                    <div>{{ $producto->m1_nombre }}</div>
                 </div>
                 <div class="form-group col-md-2">
-                    <label class="control-label">¿Producto metrado?</label>
-                    <div>
-                        <input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" disabled {{ $producto->producto_metrado ? 'checked': '' }}>
-                    </div>
+                    <label class="control-label">Alto</label>
+                    <div>{{ $producto->m2_nombre }}</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-2">
-                    <label class="control-label">Precio</label>
-                    <div class="text-right">{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
+                    <label class="control-label">Cerrado</label>
+                    <div>
+                        <input type="checkbox" id="productop_cerrado" name="productop_cerrado" value="productop_cerrado" disabled {{ $producto->productop_cerrado ? 'checked': '' }}>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Ancho</label>
+                    <div>{{ $producto->m3_nombre }}</div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Alto</label>
+                    <div>{{ $producto->m4_nombre }}</div>
                 </div>
             </div>
 
             <div class="row">
                 <div class="form-group col-md-2">
-                    <label class="control-label">Costo promedio</label>
-                    <div class="text-right">{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
+                    <label class="control-label">3D</label>
+                    <div>
+                        <input type="checkbox" id="productop_3d" name="productop_3d" value="productop_3d" disabled {{ $producto->productop_3d ? 'checked': '' }}>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Ancho</label>
+                    <div>{{ $producto->m5_nombre }}</div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Alto</label>
+                    <div>{{ $producto->m6_nombre }}</div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Profundidad</label>
+                    <div>{{ $producto->m7_nombre }}</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-2">
+                    <label class="control-label">Tiro</label>
+                    <div>
+                        <input type="checkbox" id="productop_tiro" name="productop_tiro" value="productop_tiro" disabled {{ $producto->productop_tiro ? 'checked': '' }}>
+                    </div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Retiro</label>
+                    <div>
+                        <input type="checkbox" id="productop_retiro" name="productop_retiro" value="productop_retiro" disabled {{ $producto->productop_retiro ? 'checked': '' }}>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <div class="nav-tabs-custom">
+                        <ul class="nav nav-tabs">
+                            <li class="active"><a href="#tab_areas" data-toggle="tab">Áreas involucradas</a></li>
+                            <li><a href="#tab_tips" data-toggle="tab">Tips</a></li>
+                            <li><a href="#tab_maquinas" data-toggle="tab">Máquinas</a></li>
+                            <li><a href="#tab_materiales" data-toggle="tab">Materiales</a></li>
+                            <li><a href="#tab_acabados" data-toggle="tab">Acabados</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                            {{-- Content areas --}}
+                            <div class="tab-pane active" id="tab_areas">
+                                <div class="box box-primary" id="wrapper-productop-areas">
+                                    <div class="box-body">
+                                        <!-- table table-bordered table-striped -->
+                                        <div class="box-body table-responsive no-padding">
+                                            <table id="browse-areas-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="100px">Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{-- Render content areas --}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Content tips --}}
+                            <div class="tab-pane" id="tab_tips">
+                                <div class="box box-primary" id="wrapper-productop-tips">
+                                    <div class="box-body">
+                                        <!-- table table-bordered table-striped -->
+                                        <div class="box-body table-responsive no-padding">
+                                            <table id="browse-tips-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="100px">Tip</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{-- Render content tips --}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Content maquinas --}}
+                            <div class="tab-pane" id="tab_maquinas">
+                                <div class="box box-primary" id="wrapper-productop-maquinas">
+                                    <div class="box-body">
+                                        <!-- table table-bordered table-striped -->
+                                        <div class="box-body table-responsive no-padding">
+                                            <table id="browse-maquinas-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5px">Código</th>
+                                                        <th width="95px">Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{-- Render content maquinas --}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Content materiales --}}
+                            <div class="tab-pane" id="tab_materiales">
+                                <div class="box box-primary" id="wrapper-productop-materiales">
+                                    <div class="box-body">
+                                        <!-- table table-bordered table-striped -->
+                                        <div class="box-body table-responsive no-padding">
+                                            <table id="browse-materiales-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5px">Código</th>
+                                                        <th width="95px">Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{-- Render content materiales --}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Content acabados --}}
+                            <div class="tab-pane" id="tab_acabados">
+                                <div class="box box-primary" id="wrapper-productop-acabados">
+                                    <div class="box-body">
+                                        <!-- table table-bordered table-striped -->
+                                        <div class="box-body table-responsive no-padding">
+                                            <table id="browse-acabados-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="5px">Código</th>
+                                                        <th width="95px">Nombre</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {{-- Render content acabados --}}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

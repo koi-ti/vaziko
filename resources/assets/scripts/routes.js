@@ -77,9 +77,57 @@ app || (app = {});
             'traslados/:traslado(/)': 'getTrasladosShow',
 
             // Produccion
+            'areasp(/)': 'getAreaspMain',
+            'areasp/create(/)': 'getAreaspCreate',
+            'areasp/:areap/edit(/)': 'getAreaspEdit',
+
+            'acabadosp(/)': 'getAcabadospMain',
+            'acabadosp/create(/)': 'getAcabadospCreate',
+            'acabadosp/:acabadop/edit(/)': 'getAcabadospEdit',
+
+            'maquinasp(/)': 'getMaquinaspMain',
+            'maquinasp/create(/)': 'getMaquinaspCreate',
+            'maquinasp/:maquinap/edit(/)': 'getMaquinaspEdit',
+
+            'materialesp(/)': 'getMaterialespMain',
+            'materialesp/create(/)': 'getMaterialespCreate',
+            'materialesp/:materialp/edit(/)': 'getMaterialespEdit',
+
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
             'ordenes/:orden/edit(/)': 'getOrdenesEdit',
+            'ordenes/productos/create(/)(?*queryString)': 'getOrdenesProductoCreate',
+            'ordenes/productos/:producto/edit(/)': 'getOrdenesProductoEdit',
+
+            'productosp(/)': 'getProductospMain',
+            'productosp/create(/)': 'getProductospCreate',
+            'productosp/:producto(/)': 'getProductospShow',
+            'productosp/:producto/edit(/)': 'getProductospEdit',
+        },
+
+        /**
+        * Parse queryString to object
+        */
+        parseQueryString : function(queryString) {
+            var params = {};
+            if(queryString) {
+                _.each(
+                    _.map(decodeURI(queryString).split(/&/g),function(el,i){
+                        var aux = el.split('='), o = {};
+                        if(aux.length >= 1){
+                            var val = undefined;
+                            if(aux.length == 2)
+                                val = aux[1];
+                            o[aux[0]] = val;
+                        }
+                        return o;
+                    }),
+                    function(o){
+                        _.extend(params,o);
+                    }
+                );
+            }
+            return params;
         },
 
         /**
@@ -816,6 +864,183 @@ app || (app = {});
             this.showTrasladoView = new app.ShowTrasladoView({ model: this.trasladoModel });
         },
 
+        /* ######################### Produccion #########################
+        /**
+        * show view main areas produccion
+        */
+        getAreaspMain: function () {
+
+            if ( this.mainAreaspView instanceof Backbone.View ){
+                this.mainAreaspView.stopListening();
+                this.mainAreaspView.undelegateEvents();
+            }
+
+            this.mainAreaspView = new app.MainAreaspView( );
+        },
+
+        /**
+        * show view create areas de produccion
+        */
+        getAreaspCreate: function () {
+            this.areapModel = new app.AreapModel();
+
+            if ( this.createAreapView instanceof Backbone.View ){
+                this.createAreapView.stopListening();
+                this.createAreapView.undelegateEvents();
+            }
+
+            this.createAreapView = new app.CreateAreapView({ model: this.areapModel });
+            this.createAreapView.render();
+        },
+
+        /**
+        * show view edit areas de produccion
+        */
+        getAreaspEdit: function (areap) {
+            this.areapModel = new app.AreapModel();
+            this.areapModel.set({'id': areap}, {'silent':true});
+
+            if ( this.createAreapView instanceof Backbone.View ){
+                this.createAreapView.stopListening();
+                this.createAreapView.undelegateEvents();
+            }
+
+            this.createAreapView = new app.CreateAreapView({ model: this.areapModel });
+            this.areapModel.fetch();
+        },
+
+        /**
+        * show view main acabados produccion
+        */
+        getAcabadospMain: function () {
+
+            if ( this.mainAcabadospView instanceof Backbone.View ){
+                this.mainAcabadospView.stopListening();
+                this.mainAcabadospView.undelegateEvents();
+            }
+
+            this.mainAcabadospView = new app.MainAcabadospView( );
+        },
+
+        /**
+        * show view create acabados de produccion
+        */
+        getAcabadospCreate: function () {
+            this.acabadopModel = new app.AcabadopModel();
+
+            if ( this.createAcabadospView instanceof Backbone.View ){
+                this.createAcabadospView.stopListening();
+                this.createAcabadospView.undelegateEvents();
+            }
+
+            this.createAcabadospView = new app.CreateAcabadospView({ model: this.acabadopModel });
+            this.createAcabadospView.render();
+        },
+
+        /**
+        * show view edit areas de produccion
+        */
+        getAcabadospEdit: function (acabado) {
+            this.acabadopModel = new app.AcabadopModel();
+            this.acabadopModel.set({'id': acabado}, {'silent':true});
+
+            if ( this.createAcabadospView instanceof Backbone.View ){
+                this.createAcabadospView.stopListening();
+                this.createAcabadospView.undelegateEvents();
+            }
+
+            this.createAcabadospView = new app.CreateAcabadospView({ model: this.acabadopModel });
+            this.acabadopModel.fetch();
+        },
+
+        /**
+        * show view main maquinas produccion
+        */
+        getMaquinaspMain: function () {
+
+            if ( this.mainMaquinaspView instanceof Backbone.View ){
+                this.mainMaquinaspView.stopListening();
+                this.mainMaquinaspView.undelegateEvents();
+            }
+
+            this.mainMaquinaspView = new app.MainMaquinaspView( );
+        },
+
+        /**
+        * show view create maquinas de produccion
+        */
+        getMaquinaspCreate: function () {
+            this.maquinapModel = new app.MaquinapModel();
+
+            if ( this.createMaquinapView instanceof Backbone.View ){
+                this.createMaquinapView.stopListening();
+                this.createMaquinapView.undelegateEvents();
+            }
+
+            this.createMaquinapView = new app.CreateMaquinapView({ model: this.maquinapModel });
+            this.createMaquinapView.render();
+        },
+
+        /**
+        * show view edit maquinas de produccion
+        */
+        getMaquinaspEdit: function (maquinap) {
+            this.maquinapModel = new app.MaquinapModel();
+            this.maquinapModel.set({'id': maquinap}, {'silent':true});
+
+            if ( this.createMaquinapView instanceof Backbone.View ){
+                this.createMaquinapView.stopListening();
+                this.createMaquinapView.undelegateEvents();
+            }
+
+            this.createMaquinapView = new app.CreateMaquinapView({ model: this.maquinapModel });
+            this.maquinapModel.fetch();
+        },
+
+        /**
+        * show view main materiales produccion
+        */
+        getMaterialespMain: function () {
+
+            if ( this.mainMaterialespView instanceof Backbone.View ){
+                this.mainMaterialespView.stopListening();
+                this.mainMaterialespView.undelegateEvents();
+            }
+
+            this.mainMaterialespView = new app.MainMaterialespView( );
+        },
+
+        /**
+        * show view create materiales de produccion
+        */
+        getMaterialespCreate: function () {
+            this.materialpModel = new app.MaterialpModel();
+
+            if ( this.createMaterialpView instanceof Backbone.View ){
+                this.createMaterialpView.stopListening();
+                this.createMaterialpView.undelegateEvents();
+            }
+
+            this.createMaterialpView = new app.CreateMaterialpView({ model: this.materialpModel });
+            this.createMaterialpView.render();
+        },
+
+        /**
+        * show view edit materiales de produccion
+        */
+        getMaterialespEdit: function (materialp) {
+            this.materialpModel = new app.MaterialpModel();
+            this.materialpModel.set({'id': materialp}, {'silent':true});
+
+            if ( this.createMaterialpView instanceof Backbone.View ){
+                this.createMaterialpView.stopListening();
+                this.createMaterialpView.undelegateEvents();
+            }
+
+            this.createMaterialpView = new app.CreateMaterialpView({ model: this.materialpModel });
+            this.materialpModel.fetch();
+        },
+
         /**
         * show view main ordenes de produccion
         */
@@ -857,7 +1082,106 @@ app || (app = {});
 
             this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
             this.ordenpModel.fetch();
-        }
+        },
+
+        /**
+        * show view main productos produccion
+        */
+        getProductospMain: function () {
+
+            if ( this.mainProductospView instanceof Backbone.View ){
+                this.mainProductospView.stopListening();
+                this.mainProductospView.undelegateEvents();
+            }
+
+            this.mainProductospView = new app.MainProductospView( );
+        },
+
+        /**
+        * show view create productos en ordenes de produccion
+        */
+        getOrdenesProductoCreate: function (queryString) {
+            var queries = this.parseQueryString(queryString);
+            this.ordenp2Model = new app.Ordenp2Model();
+
+            if ( this.createOrdenp2View instanceof Backbone.View ){
+                this.createOrdenp2View.stopListening();
+                this.createOrdenp2View.undelegateEvents();
+            }
+
+            this.createOrdenp2View = new app.CreateOrdenp2View({
+                model: this.ordenp2Model,
+                parameters: {
+                    data : {
+                        orden2_orden: queries.ordenp,
+                        orden2_productop: queries.productop
+                    }
+                }
+            });
+            this.createOrdenp2View.render();
+        },
+
+        /**
+        * show view edit ordenes
+        */
+        getOrdenesProductoEdit: function (producto) {
+            this.ordenp2Model = new app.Ordenp2Model();
+            this.ordenp2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.createOrdenp2View instanceof Backbone.View ){
+                this.createOrdenp2View.stopListening();
+                this.createOrdenp2View.undelegateEvents();
+            }
+
+            this.createOrdenp2View = new app.CreateOrdenp2View({ model: this.ordenp2Model });
+            this.ordenp2Model.fetch();
+        },
+
+        /**
+        * show view create productos produccion
+        */
+        getProductospCreate: function () {
+            this.productopModel = new app.ProductopModel();
+
+            if ( this.createProductopView instanceof Backbone.View ){
+                this.createProductopView.stopListening();
+                this.createProductopView.undelegateEvents();
+            }
+
+            this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
+            this.createProductopView.render();
+        },
+
+        /**
+        * show view show tercero
+        */
+        getProductospShow: function (producto) {
+            this.productopModel = new app.ProductopModel();
+            this.productopModel.set({'id': producto}, {silent: true});
+
+            if ( this.showProductopView instanceof Backbone.View ){
+                this.showProductopView.stopListening();
+                this.showProductopView.undelegateEvents();
+            }
+
+            this.showProductopView = new app.ShowProductopView({ model: this.productopModel });
+        },
+
+        /**
+        * show view edit productos produccion
+        */
+        getProductospEdit: function (producto) {
+            this.productopModel = new app.ProductopModel();
+            this.productopModel.set({'id': producto}, {silent: true});
+
+            if ( this.createProductopView instanceof Backbone.View ){
+                this.createProductopView.stopListening();
+                this.createProductopView.undelegateEvents();
+            }
+
+            this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
+            this.productopModel.fetch();
+        },
     }) );
 
 })(jQuery, this, this.document);

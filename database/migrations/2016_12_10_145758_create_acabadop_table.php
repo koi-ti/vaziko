@@ -17,6 +17,7 @@ class CreateAcabadopTable extends Migration
 
             $table->increments('id');
             $table->string('acabadop_nombre', 250);
+            $table->text('acabadop_descripcion')->nullable();
         });
     }
 
