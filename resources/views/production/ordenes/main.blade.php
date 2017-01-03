@@ -22,15 +22,15 @@
             <div class="form-group col-md-12">
                 <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
-                        <li><a href="#tab_orden" data-toggle="tab">Orden</a></li>
+                        <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                         <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
-                            <li class="active"><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
+                            <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                         <% } %>
                     </ul>
 
                     <div class="tab-content">
                         {{-- Content orden --}}
-                        <div class="tab-pane" id="tab_orden">
+                        <div class="tab-pane active" id="tab_orden">
                             <div class="box box-whithout-border">
                                 <div class="box-header with-border">
                                     <div class="row">
@@ -233,7 +233,7 @@
 
                         {{-- Content despachos --}}
                         <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
-                            <div class="tab-pane active" id="tab_despachos">
+                            <div class="tab-pane" id="tab_despachos">
                                 <div class="box box-whithout-border">
                                     <div class="box-body">
                                         <form method="POST" accept-charset="UTF-8" id="form-despachosp" data-toggle="validator">
