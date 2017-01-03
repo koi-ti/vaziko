@@ -32,17 +32,6 @@
                         {{-- Content orden --}}
                         <div class="tab-pane active" id="tab_orden">
                             <div class="box box-whithout-border">
-                                <div class="box-header with-border">
-                                    <div class="row">
-                                        <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                                            <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
-                                        </div>
-                                        <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                                            <button type="button" class="btn btn-primary btn-sm btn-block submit-ordenp">{{ trans('app.save') }}</button>
-                                        </div>
-                                    </div>
-                                </div>
-
                                 <div class="box-body">
                                     <form method="POST" accept-charset="UTF-8" id="form-ordenes" data-toggle="validator">
                                         <div class="row">
@@ -165,6 +154,16 @@
                                             </div>
                                         </div>
                                     </form>
+
+                                    <div class="row">
+                                        <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+                                            <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+                                        </div>
+                                        <div class="col-md-2 col-sm-6 col-xs-6">
+                                            <button type="button" class="btn btn-primary btn-sm btn-block submit-ordenp">{{ trans('app.save') }}</button>
+                                        </div>
+                                    </div>
+                                    <br />
 
                                     <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                                         <div class="box box-success" id="wrapper-productop-orden">
