@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class Areap extends Model
 {
@@ -43,5 +43,21 @@ class Areap extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getAreas()
+    {
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = Areap::query();
+            $query->orderBy('areap_nombre', 'asc');
+            $collection = $query->lists('areap_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 }

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Production\Acabadop;
 
@@ -58,6 +58,9 @@ class AcabadospController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Acabadop::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $acabado->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -119,6 +122,9 @@ class AcabadospController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Acabadop::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $acabado->id]);
                 }catch(\Exception $e){
                     DB::rollback();

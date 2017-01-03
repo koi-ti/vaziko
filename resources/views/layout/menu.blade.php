@@ -182,10 +182,10 @@
                         <a href="{{ route('acabadosp.index') }}"><i class="fa fa-circle-o"></i> Acabados</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'areasp' ? 'active' : '' }}">
-                        <a href="{{ route('areasp.index') }}"><i class="fa fa-circle-o"></i> Areas</a>
+                        <a href="{{ route('areasp.index') }}"><i class="fa fa-circle-o"></i> Áreas</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'maquinasp' ? 'active' : '' }}">
-                        <a href="{{ route('maquinasp.index') }}"><i class="fa fa-circle-o"></i> Maquinas</a>
+                        <a href="{{ route('maquinasp.index') }}"><i class="fa fa-circle-o"></i> Máquinas</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'materialesp' ? 'active' : '' }}">
                         <a href="{{ route('materialesp.index') }}"><i class="fa fa-circle-o"></i> Materiales</a>

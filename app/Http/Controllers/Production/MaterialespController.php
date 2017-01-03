@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Production\Materialp;
 
@@ -58,6 +58,9 @@ class MaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Materialp::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $material->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -119,6 +122,9 @@ class MaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Materialp::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $material->id]);
                 }catch(\Exception $e){
                     DB::rollback();

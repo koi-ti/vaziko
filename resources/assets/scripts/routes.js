@@ -96,10 +96,38 @@ app || (app = {});
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
             'ordenes/:orden/edit(/)': 'getOrdenesEdit',
+            'ordenes/productos/create(/)(?*queryString)': 'getOrdenesProductoCreate',
+            'ordenes/productos/:producto/edit(/)': 'getOrdenesProductoEdit',
 
             'productosp(/)': 'getProductospMain',
             'productosp/create(/)': 'getProductospCreate',
+            'productosp/:producto(/)': 'getProductospShow',
             'productosp/:producto/edit(/)': 'getProductospEdit',
+        },
+
+        /**
+        * Parse queryString to object
+        */
+        parseQueryString : function(queryString) {
+            var params = {};
+            if(queryString) {
+                _.each(
+                    _.map(decodeURI(queryString).split(/&/g),function(el,i){
+                        var aux = el.split('='), o = {};
+                        if(aux.length >= 1){
+                            var val = undefined;
+                            if(aux.length == 2)
+                                val = aux[1];
+                            o[aux[0]] = val;
+                        }
+                        return o;
+                    }),
+                    function(o){
+                        _.extend(params,o);
+                    }
+                );
+            }
+            return params;
         },
 
         /**
@@ -1070,6 +1098,46 @@ app || (app = {});
         },
 
         /**
+        * show view create productos en ordenes de produccion
+        */
+        getOrdenesProductoCreate: function (queryString) {
+            var queries = this.parseQueryString(queryString);
+            this.ordenp2Model = new app.Ordenp2Model();
+
+            if ( this.createOrdenp2View instanceof Backbone.View ){
+                this.createOrdenp2View.stopListening();
+                this.createOrdenp2View.undelegateEvents();
+            }
+
+            this.createOrdenp2View = new app.CreateOrdenp2View({
+                model: this.ordenp2Model,
+                parameters: {
+                    data : {
+                        orden2_orden: queries.ordenp,
+                        orden2_productop: queries.productop
+                    }
+                }
+            });
+            this.createOrdenp2View.render();
+        },
+
+        /**
+        * show view edit ordenes
+        */
+        getOrdenesProductoEdit: function (producto) {
+            this.ordenp2Model = new app.Ordenp2Model();
+            this.ordenp2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.createOrdenp2View instanceof Backbone.View ){
+                this.createOrdenp2View.stopListening();
+                this.createOrdenp2View.undelegateEvents();
+            }
+
+            this.createOrdenp2View = new app.CreateOrdenp2View({ model: this.ordenp2Model });
+            this.ordenp2Model.fetch();
+        },
+
+        /**
         * show view create productos produccion
         */
         getProductospCreate: function () {
@@ -1082,6 +1150,21 @@ app || (app = {});
 
             this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
             this.createProductopView.render();
+        },
+
+        /**
+        * show view show tercero
+        */
+        getProductospShow: function (producto) {
+            this.productopModel = new app.ProductopModel();
+            this.productopModel.set({'id': producto}, {silent: true});
+
+            if ( this.showProductopView instanceof Backbone.View ){
+                this.showProductopView.stopListening();
+                this.showProductopView.undelegateEvents();
+            }
+
+            this.showProductopView = new app.ShowProductopView({ model: this.productopModel });
         },
 
         /**

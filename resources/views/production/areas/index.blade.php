@@ -1,7 +1,7 @@
 @extends('production.areas.main')
 
 @section('breadcrumb')
-    <li class="active">Areas</li>
+    <li class="active">Áreas</li>
 @stop
 
 @section('module')

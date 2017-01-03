@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('ordenes.index')}}">Ordenes</a></li>
-	<li class="active">{{ $orden->orden_ano }}-{{ $orden->orden_mes }}</li>
+	<li class="active">{{ $orden->orden_codigo }}</li>
 @stop
 
 
@@ -24,6 +24,10 @@
 
 		<div class="box-body">
 			<div class="row">
+				<div class="form-group col-md-2">
+					<label class="control-label">Código</label>
+					<div>{{ $orden->orden_codigo }}</div>
+				</div>
 				<div class="form-group col-md-9">
 					<label class="control-label">Referencia</label>
 					<div>{{ $orden->orden_referencia }}</div>

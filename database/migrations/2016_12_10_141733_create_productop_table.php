@@ -23,7 +23,6 @@ class CreateProductopTable extends Migration
 
             $table->boolean('productop_tiro')->default(false);
             $table->boolean('productop_retiro')->default(false);
-            $table->boolean('productop_colores')->default(false);
 
             $table->integer('productop_ancho_med')->unsigned()->nullable();
             $table->integer('productop_alto_med')->unsigned()->nullable();

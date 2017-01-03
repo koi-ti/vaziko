@@ -20,7 +20,6 @@ app || (app = {});
             'productop_observaciones': '',
             'productop_tiro': false,
             'productop_retiro': false,
-            'productop_colores': false,
             'productop_abierto': false,
             'productop_cerrado': false,
             'productop_3d': false,

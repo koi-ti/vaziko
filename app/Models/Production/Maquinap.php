@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class Maquinap extends Model
 {
@@ -16,6 +16,13 @@ class Maquinap extends Model
     protected $table = 'koi_maquinap';
 
     public $timestamps = false;
+
+    /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_machines_production';
 
     /**
      * The attributes that are mass assignable.
@@ -36,5 +43,21 @@ class Maquinap extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getMaquinas()
+    {
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = Maquinap::query();
+            $query->orderBy('maquinap_nombre', 'asc');
+            $collection = $query->lists('maquinap_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 }

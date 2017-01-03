@@ -110,12 +110,30 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
+
+		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
+		Route::resource('productos', 'Production\DetalleOrdenpController');
+
+		Route::group(['prefix' => 'despachos'], function()
+		{
+			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);
+		});
+		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'productosp'], function()
+	{
+		Route::resource('tips', 'Production\Productop2Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('areas', 'Production\Productop3Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
+	});
 	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*

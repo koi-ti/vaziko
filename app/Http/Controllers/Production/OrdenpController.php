@@ -153,6 +153,7 @@ class OrdenpController extends Controller
         if ($request->ajax()) {
             return response()->json($orden);
         }
+
         return view('production.ordenes.show', ['orden' => $orden]);
     }
 
@@ -164,11 +165,16 @@ class OrdenpController extends Controller
      */
     public function edit($id)
     {
-        $orden = Ordenp::findOrFail($id);
+        $orden = Ordenp::getOrden($id);
+        if(!$orden instanceof Ordenp) {
+            abort(404);
+        }
+
         if($orden->orden_abierta == false || $orden->orden_anulada == true) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
-        return view('production.ordenes.edit', ['orden' => $orden]);
+
+        return view('production.ordenes.edit', ['orden' => $orden, 'pendientes' => $orden->pendintesDespacho()]);
     }
 
     /**
@@ -230,7 +236,6 @@ class OrdenpController extends Controller
             return response()->json(['success' => false, 'errors' => $orden->errors]);
         }
         abort(403);
-
     }
 
     /**

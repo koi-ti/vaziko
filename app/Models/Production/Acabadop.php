@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class Acabadop extends Model
 {
@@ -16,6 +16,13 @@ class Acabadop extends Model
     protected $table = 'koi_acabadop';
 
     public $timestamps = false;
+
+    /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_acabados_production';
 
     /**
      * The attributes that are mass assignable.
@@ -41,5 +48,21 @@ class Acabadop extends Model
     public function setAcabadopDescripcionAttribute($descripcion)
     {
         $this->attributes['acabadop_descripcion'] = strtoupper($descripcion);
+    }
+
+    public static function getAcabados()
+    {
+        if (Cache::has( self::$key_cache )) {
+            return Cache::get( self::$key_cache );
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = Acabadop::query();
+            $query->orderBy('acabadop_nombre', 'asc');
+            $collection = $query->lists('acabadop_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 }

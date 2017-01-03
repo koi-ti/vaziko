@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Auth, DB, Log, Datatables;
+use Auth, DB, Log, Datatables, Cache;
 
 use App\Models\Production\Productop;
 
@@ -75,12 +75,16 @@ class ProductopController extends Controller
                     // grupo
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->setProperties();
                     $producto->productop_usuario_elaboro = Auth::user()->id;
                     $producto->productop_fecha_elaboro = date('Y-m-d H:m:s');
                     $producto->save();
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Productop::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -142,10 +146,14 @@ class ProductopController extends Controller
                     // Productop
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->setProperties();
                     $producto->save();
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Productop::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 }catch(\Exception $e){
                     DB::rollback();

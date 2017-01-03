@@ -33,7 +33,7 @@ class ContactoController extends Controller
             }else{
                 // Search datatables
                 $query = Contacto::query();
-                $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
+                $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_municipio', 'tcontacto_email');
                 $query->leftJoin('koi_municipio', 'tcontacto_municipio', '=', 'koi_municipio.id');
                 $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
 
