@@ -7,7 +7,7 @@ use Illuminate\Console\Command;
 use DB;
 
 use App\Models\Base\Tercero, App\Models\Base\Actividad;
- 
+
 class MigrateTerceros extends Command
 {
     /**
@@ -15,7 +15,7 @@ class MigrateTerceros extends Command
      *
      * @var string
      */
-    protected $signature = 'mterceros';
+    protected $signature = 'command:mterceros';
 
     /**
      * The console command description.
@@ -48,7 +48,7 @@ class MigrateTerceros extends Command
 
             $partners = DB::table('tercero')
                 ->select('tercero.*', DB::raw('COALESCE(koi_actividad.id, 327) as actividad'), 'usuario_cuenta', 'usuario_clave',
-                    DB::raw('(SELECT koi_municipio.id FROM koi_municipio 
+                    DB::raw('(SELECT koi_municipio.id FROM koi_municipio
                         WHERE koi_municipio.departamento_codigo = departamento.departamento_codigo AND koi_municipio.municipio_codigo = right(municipio.municipio_codigo,3)
                         ) as municipio')
                 )
@@ -63,9 +63,9 @@ class MigrateTerceros extends Command
                 ->leftJoin('usuario', 'usuario_cuenta', '=', 'tercerointerno_usuario')
                 // ->take(100)
                 ->get();
-            
+
             foreach ($partners as $partner) {
-                
+
                 $person = new Tercero;
                 $person->tercero_nit = $partner->tercero_nit;
                 $person->tercero_digito = $partner->tercero_digito;

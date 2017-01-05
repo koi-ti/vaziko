@@ -29,7 +29,7 @@ class Materialp extends Model
      *
      * @var array
      */
-    protected $fillable = ['materialp_nombre'];
+    protected $fillable = ['materialp_nombre', 'materialp_descripcion'];
 
     public function isValid($data)
     {

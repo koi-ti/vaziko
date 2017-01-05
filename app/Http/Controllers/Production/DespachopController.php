@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Auth, DB, Log;
+use Auth, DB, Log, App, View;
 
 use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\Contacto;
 
@@ -23,7 +23,7 @@ class DespachopController extends Controller
         if ($request->ajax())
         {
             $query = Despachop::query();
-            $query->select('koi_despachop1.id as id', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
+            $query->select('koi_despachop1.id as id', 'despachop1_fecha', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
             $query->join('koi_tcontacto', 'despachop1_contacto', '=', 'koi_tcontacto.id');
             $query->where('despachop1_anulado', false);
             $query->orderBy('koi_despachop1.id', 'asc');
@@ -144,7 +144,7 @@ class DespachopController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $despacho->id, 'tcontacto_nombre' => "$contacto->tcontacto_nombres $contacto->tcontacto_apellidos"]);
+                    return response()->json(['success' => true, 'id' => $despacho->id, 'tcontacto_nombre' => "$contacto->tcontacto_nombres $contacto->tcontacto_apellidos", 'despachop1_fecha' => $despacho->despachop1_fecha]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DespachopController', 'store', $e->getMessage()));
@@ -238,7 +238,27 @@ class DespachopController extends Controller
         abort(403);
     }
 
-        /**
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function pendientes(Request $request)
+    {
+        if ($request->ajax())
+        {
+            $pendientes = [];
+            if($request->has('orden2_orden')) {
+                $orden = Ordenp::findOrFail($request->orden2_orden);
+                $pendientes = $orden->pendintesDespacho();
+            }
+            return response()->json( $pendientes );
+        }
+        abort(404);
+    }
+
+    /**
      * Export pdf the specified resource.
      *
      * @param  int  $id
@@ -246,17 +266,17 @@ class DespachopController extends Controller
      */
     public function exportar($id)
     {
-        dd('generando PDF.....');
         // $asiento = Asiento::getAsiento($id);
         // if(!$asiento instanceof Asiento){
         //     abort(404);
         // }
         // $detalle = Asiento2::getAsiento2($asiento->id);
-        // $title = 'Asiento contable';
 
-        // // Export pdf
-        // $pdf = App::make('dompdf.wrapper');
-        // $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
-        // return $pdf->download(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
+        $title = "Remisión de mercancía No. 123";
+
+        // Export pdf
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML(View::make('production.despachos.export', compact('title'))->render());
+        return $pdf->download(sprintf('%s_%s.pdf', 'despachop', $id));
     }
 }

@@ -17,6 +17,7 @@ class CreateMaterialpTable extends Migration
 
             $table->increments('id');
             $table->string('materialp_nombre', 250);
+            $table->text('materialp_descripcion')->nullable();
         });
     }
 

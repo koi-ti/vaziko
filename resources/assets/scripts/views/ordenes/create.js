@@ -37,6 +37,7 @@ app || (app = {});
 
                 this.productopOrdenList = new app.ProductopOrdenList();
                 this.despachopOrdenList = new app.DespachopOrdenList();
+                this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
             }
 
             // Events
@@ -81,12 +82,23 @@ app || (app = {});
                }
             });
 
-            // Productos list
+            // Despachos pendientes list
+            this.despachospPendientesOrdenListView = new app.DespachospPendientesOrdenListView( {
+                collection: this.despachospPendientesOrdenList,
+                parameters: {
+                    dataFilter: {
+                        'orden2_orden': this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos list
             this.despachopOrdenListView = new app.DespachopOrdenListView( {
                 collection: this.despachopOrdenList,
                 parameters: {
                     edit: true,
                     wrapper: this.$el,
+                    collectionPendientes: this.despachospPendientesOrdenList,
                     dataFilter: {
                         'despachop1_orden': this.model.get('id')
                     }

@@ -17,6 +17,7 @@ app || (app = {});
         },
         parameters: {
         	wrapper: null,
+            collectionPendientes: null,
             edit: false,
             dataFilter: {}
         },
@@ -99,6 +100,8 @@ app || (app = {});
 
                         // Add model in collection
                         _this.collection.add(model);
+                        // Refresh other collection
+                        _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
                     }
                 },
                 error : function(model, error) {
@@ -131,6 +134,9 @@ app || (app = {});
 
                             model.view.remove();
                             _this.collection.remove(model);
+
+                            // Refresh other collection
+                            _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
                         }
                     }
                 });

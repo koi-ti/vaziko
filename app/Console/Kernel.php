@@ -13,7 +13,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\MigrateTerceros::class    
+        \App\Console\Commands\MigrateAcabados::class,
+        \App\Console\Commands\MigrateMaquinas::class,
+        \App\Console\Commands\MigrateMateriales::class,
+        \App\Console\Commands\MigrateTerceros::class
     ];
 
     /**

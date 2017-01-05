@@ -117,10 +117,12 @@ Route::group(['middleware' => 'auth'], function()
 		Route::group(['prefix' => 'despachos'], function()
 		{
 			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);
+			Route::get('pendientes', ['as' => 'ordenes.despachos.pendientes', 'uses' => 'Production\DespachopController@pendientes']);
 		});
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);

@@ -300,33 +300,22 @@
                                                 </div>
                                             </div>
 
-                                            @if(isset($pendientes))
-                                                <!-- table table-bordered table-striped -->
-                                                <div class="box-body table-responsive no-padding">
-                                                    <table class="table table-hover table-bordered" cellspacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="70%">Producto</th>
-                                                                <th width="10%">Cantidad</th>
-                                                                <th width="10%">Saldo</th>
-                                                                <th width="10%">Entregado</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            @foreach($pendientes as $item)
-                                                                <tr>
-                                                                    <td>{{ $item->productop_nombre }}</td>
-                                                                    <td class="text-center">
-                                                                        <input id="despachop2_cantidad_{{ $item->id }}" name="despachop2_cantidad_{{ $item->id }}" class="form-control input-sm" type="number" min="0" max="{{ $item->orden2_saldo }}" value="0" required>
-                                                                    </td>
-                                                                    <td class="text-center">{{ $item->orden2_saldo }}</td>
-                                                                    <td class="text-center">{{ $item->orden2_entregado }}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            @endif
+                                            <!-- table table-bordered table-striped -->
+                                            <div class="box-body table-responsive no-padding">
+                                                <table id="browse-orden-despachosp-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="70%">Producto</th>
+                                                            <th width="10%">Cantidad</th>
+                                                            <th width="10%">Saldo</th>
+                                                            <th width="10%">Entregado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{-- Render content productos --}}
+                                                    </tbody>
+                                                </table>
+                                            </div>
 
                                             <div class="row">
                                                 <div class="form-group col-md-6">
@@ -355,7 +344,8 @@
                                                             <tr>
                                                                 <th width="5%"></th>
                                                                 <th width="5%">Código</th>
-                                                                <th width="85%">Contacto</th>
+                                                                <th width="70%">Contacto</th>
+                                                                <th width="15%">Fecha</th>
                                                                 <th width="5%"></th>
                                                             </tr>
                                                         </thead>
@@ -403,10 +393,20 @@
         <% } %>
         <td class="text-center"><%- id %></td>
         <td><%- tcontacto_nombre %></td>
+        <td><%- despachop1_fecha %></td>
         <td>
             <a href="<%- window.Misc.urlFull( Route.route('ordenes.despachos.exportar', {despachos: id}) ) %>" class="btn btn-danger btn-xs" data-resource="<%- id %>">
                 <span><i class="fa fa-file-pdf-o"></i></span>
             </a>
         </td>
+    </script>
+
+    <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">
+        <td><%- productop_nombre %></td>
+        <td>
+            <input id="despachop2_cantidad_<%- id %>" name="despachop2_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_saldo %>" value="0" required>
+        </td>
+        <td><%- orden2_saldo %></td>
+        <td><%- orden2_entregado %></td>
     </script>
 @stop
