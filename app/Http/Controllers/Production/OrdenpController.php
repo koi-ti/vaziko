@@ -174,7 +174,7 @@ class OrdenpController extends Controller
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
 
-        return view('production.ordenes.edit', ['orden' => $orden, 'pendientes' => $orden->pendintesDespacho()]);
+        return view('production.ordenes.edit', ['orden' => $orden]);
     }
 
     /**

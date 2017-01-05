@@ -24,10 +24,19 @@
                     <div>{{ $material->id }}</div>
                 </div>
             </div>
+
             <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>
                     <div>{{ $material->materialp_nombre }}</div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label">Descripción</label>
+                    <div>{{ $material->materialp_descripcion }}</div>
+                </div>
             </div>
         </div>
     </div>

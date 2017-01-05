@@ -16,7 +16,8 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'materialp_nombre': ''
+            'materialp_nombre': '',
+            'materialp_descripcion': ''
         }
     });
 

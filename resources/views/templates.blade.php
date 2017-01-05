@@ -878,4 +878,11 @@
 			<input type="text" id="materialp_nombre" name="materialp_nombre" value="<%- materialp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
     </div>
+
+    <div class="row">
+		<div class="form-group col-md-8">
+			<label for="materialp_descripcion" class="control-label">Descripción</label>
+            <textarea id="materialp_descripcion" name="materialp_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- materialp_descripcion %></textarea>
+		</div>
+    </div>
 </script>

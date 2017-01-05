@@ -33,7 +33,7 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-12">
                     <label class="control-label">Descripción</label>
                     <div>{{ $acabado->acabadop_descripcion }}</div>
                 </div>
