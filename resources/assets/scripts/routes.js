@@ -95,6 +95,7 @@ app || (app = {});
 
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
+            'ordenes/:orden(/)': 'getOrdenesShow',
             'ordenes/:orden/edit(/)': 'getOrdenesEdit',
             'ordenes/productos/create(/)(?*queryString)': 'getOrdenesProductoCreate',
             'ordenes/productos/:producto/edit(/)': 'getOrdenesProductoEdit',
@@ -1066,6 +1067,21 @@ app || (app = {});
 
             this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
             this.createOrdenpView.render();
+        },
+
+        /**
+        * show view show orden
+        */
+        getOrdenesShow: function (orden) {
+            this.ordenpModel = new app.OrdenpModel();
+            this.ordenpModel.set({'id': orden}, {'silent':true});
+
+            if ( this.showOrdenesView instanceof Backbone.View ){
+                this.showOrdenesView.stopListening();
+                this.showOrdenesView.undelegateEvents();
+            }
+
+            this.showOrdenesView = new app.ShowOrdenesView({ model: this.ordenpModel });
         },
 
         /**

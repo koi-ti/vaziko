@@ -22,12 +22,18 @@ class DespachopController extends Controller
     {
         if ($request->ajax())
         {
-            $query = Despachop::query();
-            $query->select('koi_despachop1.id as id', 'despachop1_fecha', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
-            $query->join('koi_tcontacto', 'despachop1_contacto', '=', 'koi_tcontacto.id');
-            $query->where('despachop1_anulado', false);
-            $query->orderBy('koi_despachop1.id', 'asc');
-            return response()->json( $query->get() );
+            $despachos = [];
+            if($request->has('despachop1_orden'))
+            {
+                $query = Despachop::query();
+                $query->select('koi_despachop1.id as id', 'despachop1_fecha', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
+                $query->join('koi_tcontacto', 'despachop1_contacto', '=', 'koi_tcontacto.id');
+                $query->where('despachop1_anulado', false);
+                $query->where('despachop1_orden', $request->despachop1_orden);
+                $query->orderBy('koi_despachop1.id', 'asc');
+                $despachos = $query->get();
+            }
+            return response()->json( $despachos );
         }
         abort(404);
     }
@@ -266,17 +272,16 @@ class DespachopController extends Controller
      */
     public function exportar($id)
     {
-        // $asiento = Asiento::getAsiento($id);
-        // if(!$asiento instanceof Asiento){
-        //     abort(404);
-        // }
-        // $detalle = Asiento2::getAsiento2($asiento->id);
-
-        $title = "Remisión de mercancía No. 123";
+        $despacho = Despachop::getDespacho($id);
+        if(!$despacho instanceof Despachop){
+            abort(404);
+        }
+        $detalle = Despachop2::getDespacho2($despacho->id);
+        $title = sprintf('Despacho de mercancía %s-%s', $despacho->id, substr($despacho->despachop1_fecha, -8, 2));
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('production.despachos.export', compact('title'))->render());
-        return $pdf->download(sprintf('%s_%s.pdf', 'despachop', $id));
+        $pdf->loadHTML(View::make('production.despachos.export', compact('title', 'despacho', 'detalle'))->render());
+        return $pdf->download(sprintf('%s_%s.pdf', 'despachop', $despacho->id));
     }
 }

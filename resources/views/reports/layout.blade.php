@@ -8,7 +8,7 @@
 		@if($type == 'pdf')
 			<style type="text/css">
 				body {
-					font-size: 9;
+					font-size: 8;
 					font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 					font-weight: normal;
 				}
@@ -25,26 +25,33 @@
 				}
 
 				.company{
-					font-size: 16px;
+					font-size: 12;
 					font-weight: bold;
 					text-align: center;
 				}
 
 				.nit{
-					font-size: 12px;
+					font-size: 10;
 					font-weight: bold;
 					text-align: center;
 					border-bottom: 1px solid black;
 				}
 
 				.title{
-					font-size: 12px;
+					font-size: 10;
 					font-weight: bold;
 					text-align: center;
 				}
 
+				.titleespecial{
+					font-size: 10;
+					background-color: #000000;
+					color: #FFFFFF;
+				}
+
 				.rtable {
 					width: 100%;
+				    border-collapse: collapse;
 				}
 
 				.rtable th {
@@ -64,8 +71,23 @@
 					width: 100%;
 				}
 
-				.htable td, th, td {
+				.htable td, th {
 					text-align: left;
+				}
+
+				.brtable {
+					width: 100%;
+				    border-collapse: collapse;
+				}
+
+				.brtable th {
+					border: 1px solid black;
+					padding-left: 2px;
+				}
+
+				.brtable td {
+					border: 1px solid black;
+					padding-left: 2px;
 				}
 
 				.left {
@@ -83,18 +105,56 @@
 				.bold{
 					font-weight: bold;
 				}
+
+				.width-100 {
+					width: 100%;
+				}
+
+				.size-6 {
+					font-size: 6;
+				}
+
+				.size-7 {
+					font-size: 7;
+				}
+
+				.border-left {
+					border-left: 1px solid black;
+					padding-left: 2px;
+				}
+
+				.border-right {
+					border-right: 1px solid black;
+					padding-left: 2px;
+				}
+
+				.border-top {
+					border-top: 1px solid black;
+					padding-top: 2px;
+				}
+
+				.height-40 {
+					height: 40px;
+				}
+
+				.height-19 {
+					height: 19px;
+				}
+
+				.margin-top-60 {
+					margin-top: 60px;
+				}
+
+				.margin-bottom-60 {
+					margin-bottom: 60px;
+				}
 			</style>
 		@endif
 	</head>
 	<body>
+		{{-- Title --}}
 		{{--*/ $empresa = App\Models\Base\Empresa::getEmpresa(); /*--}}
-		<table class="tbtitle">
-			<thead>
-				<tr><td class="company">{{ $empresa->tercero_razonsocial }}</td></tr>
-				<tr><td class="nit">NIT: {{ $empresa->tercero_nit }}</td></tr>
-				<tr><td class="title">{{ $title }}</td></tr>
-			</thead>
-		</table>
+		@include('reports.title')
 		<br/>
 
 		@yield('content')

@@ -72,7 +72,7 @@
 				<div class="input-group-addon">
 					<i class="fa fa-mobile"></i>
 				</div>
-				<input id="tcontacto_celular" value="<%- tcontacto_celular %>" class="form-control input-sm" name="tcontacto_celular" type="text" data-inputmask="'mask': '999 999-99-99'" data-mask>
+				<input id="tcontacto_celular" value="<%- tcontacto_celular %>" class="form-control input-sm" name="tcontacto_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
 			</div>
 		</div>
 	</div>
@@ -218,7 +218,7 @@
 				<div class="input-group-addon">
 					<i class="fa fa-mobile"></i>
 				</div>
-				<input id="tercero_celular" value="<%- tercero_celular %>" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '999 999-99-99'" data-mask>
+				<input id="tercero_celular" value="<%- tercero_celular %>" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
 			</div>
 		</div>
 	</div>
