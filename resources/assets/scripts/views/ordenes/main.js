@@ -74,7 +74,13 @@ app || (app = {});
                     {
                         targets: [1, 2],
                         visible: false
-                    }
+                    },
+                    {
+                        targets: 7,
+                        render: function ( data, type, full, row ) {
+                            return window.moment(full.orden_fecha_elaboro, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD");
+                        }
+                    },
                 ]
 			});
         },

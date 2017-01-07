@@ -14,8 +14,11 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\MigrateAcabados::class,
+        \App\Console\Commands\MigrateContactos::class,
         \App\Console\Commands\MigrateMaquinas::class,
         \App\Console\Commands\MigrateMateriales::class,
+        \App\Console\Commands\MigrateOrdenes::class,
+        \App\Console\Commands\MigrateProductos::class,
         \App\Console\Commands\MigrateTerceros::class
     ];
 
