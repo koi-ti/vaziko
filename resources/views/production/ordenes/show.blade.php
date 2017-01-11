@@ -24,7 +24,12 @@
                                 	<div class="row">
 										<div class="form-group col-md-2">
 											<label class="control-label">Código</label>
-											<div>{{ $orden->orden_codigo }}</div>
+											<div>
+                                                {{ $orden->orden_codigo }}
+                                                 @if($orden->orden_anulada)
+                                                    <span class="label label-danger">ANULADA</span>
+                                                @endif
+                                            </div>
 										</div>
 										<div class="form-group col-md-9">
 											<label class="control-label">Referencia</label>

@@ -28,6 +28,7 @@ app || (app = {});
             this.$searchordenpOrden = this.$('#searchordenp_ordenp_numero');
             this.$searchordenpTercero = this.$('#searchordenp_tercero');
             this.$searchordenpTerceroName = this.$('#searchordenp_tercero_nombre');
+            this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
 
             this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -42,6 +43,7 @@ app || (app = {});
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                         data.orden_tercero_nombre = _this.$searchordenpTerceroName.val();
+                        data.orden_estado = _this.$searchordenpEstado.val();
                     }
                 },
                 columns: [
@@ -72,9 +74,21 @@ app || (app = {});
                     },
                     {
                         targets: [1, 2],
-                        visible: false
+                        visible: false,
+                        width: '10%',
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
                     }
-                ]
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( data.orden_abierta ) {
+                        $(row).css( {"color":"#00a65a"} );
+                    }else if ( data.orden_anulada ) {
+                        $(row).css( {"color":"red"} );
+                    }
+                }
 			});
         },
 

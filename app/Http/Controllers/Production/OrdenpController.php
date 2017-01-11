@@ -42,6 +42,7 @@ class OrdenpController extends Controller
                 session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
                 session(['searchordenp_tercero' => $request->has('orden_tercero_nit') ? $request->orden_tercero_nit : '']);
                 session(['searchordenp_tercero_nombre' => $request->has('orden_tercero_nombre') ? $request->orden_tercero_nombre : '']);
+                session(['searchordenp_ordenp_estado' => $request->has('orden_estado') ? $request->orden_estado : '']);
             }
 
             return Datatables::of($query)
@@ -57,6 +58,19 @@ class OrdenpController extends Controller
                     // Tercero id
                     if($request->has('orden_cliente')) {
                         $query->whereRaw('orden_cliente', $request->orden_cliente);
+                    }
+
+                    // Estado
+                    if($request->has('orden_estado')) {
+                        if($request->orden_estado == 'A') {
+                            $query->where('orden_abierta', true);
+                        }
+                        if($request->orden_estado == 'C') {
+                            $query->where('orden_abierta', false);
+                        }
+                        if($request->orden_estado == 'N') {
+                            $query->where('orden_anulada', true);
+                        }
                     }
                 })
                 ->make(true);
