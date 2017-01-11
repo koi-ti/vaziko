@@ -51,8 +51,7 @@ app || (app = {});
                     { data: 'orden_fecha_inicio', name: 'orden_fecha_inicio' },
                     { data: 'orden_fecha_entrega', name: 'orden_fecha_entrega' },
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'orden_fecha_elaboro', name: 'orden_fecha_elaboro' }
+                    { data: 'tercero_nombre', name: 'tercero_nombre' }
                 ],
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]
@@ -74,13 +73,7 @@ app || (app = {});
                     {
                         targets: [1, 2],
                         visible: false
-                    },
-                    {
-                        targets: 7,
-                        render: function ( data, type, full, row ) {
-                            return window.moment(full.orden_fecha_elaboro, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD");
-                        }
-                    },
+                    }
                 ]
 			});
         },

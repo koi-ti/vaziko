@@ -52,11 +52,10 @@
                             <th>Código</th>
                             <th>Ano</th>
                             <th>Numero</th>
-                            <th>F. Inicio</th>
-                            <th>F. Entrega</th>
-                            <th>H. Entrega</th>
+                            <th nowrap="nowrap">F. Inicio</th>
+                            <th nowrap="nowrap">F. Entrega</th>
+                            <th nowrap="nowrap">H. Entrega</th>
                             <th>Tercero</th>
-                            <th>Fecha</th>
                         </tr>
                     </thead>
                 </table>
