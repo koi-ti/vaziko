@@ -104,6 +104,7 @@ app || (app = {});
             this.$searchordenpOrden.val('');
             this.$searchordenpTercero.val('');
             this.$searchordenpTerceroName.val('');
+            this.$searchordenpEstado.val('');
 
             this.ordersSearchTable.ajax.reload();
         },
