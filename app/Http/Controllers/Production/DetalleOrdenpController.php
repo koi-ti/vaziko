@@ -167,6 +167,11 @@ class DetalleOrdenpController extends Controller
         if(!$producto instanceof Productop) {
             abort(404);
         }
+
+        // Validar orden
+        if($orden->orden_abierta == false) {
+            return redirect()->route('ordenes.productos.show', ['productos' => $ordenp2->id]);
+        }
         return view('production.ordenes.productos.edit', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
     }
 
@@ -182,26 +187,34 @@ class DetalleOrdenpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
+            // Recuperar orden2
             $orden2 = Ordenp2::findOrFail($id);
-            if ($orden2->isValid($data)) {
-                DB::beginTransaction();
-                try {
 
-                    // Orden2
-                    $orden2->fill($data);
-                    $orden2->fillBoolean($data);
-                    $orden2->save();
+            // Recuperar orden
+            $orden = Ordenp::findOrFail($orden2->orden2_orden);
 
-                    // Commit Transaction
-                    DB::commit();
-                    return response()->json(['success' => true, 'id' => $orden2->id]);
-                }catch(\Exception $e){
-                    DB::rollback();
-                    Log::error($e->getMessage());
-                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            if($orden->orden_abierta)
+            {
+                if ($orden2->isValid($data)) {
+                    DB::beginTransaction();
+                    try {
+                        // Orden2
+                        $orden2->fill($data);
+                        $orden2->fillBoolean($data);
+                        $orden2->save();
+
+                        // Commit Transaction
+                        DB::commit();
+                        return response()->json(['success' => true, 'id' => $orden2->id]);
+                    }catch(\Exception $e){
+                        DB::rollback();
+                        Log::error($e->getMessage());
+                        return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                    }
                 }
+                return response()->json(['success' => false, 'errors' => $orden2->errors]);
             }
-            return response()->json(['success' => false, 'errors' => $orden2->errors]);
+            abort(403);
         }
         abort(403);
     }
