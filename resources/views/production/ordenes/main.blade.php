@@ -25,6 +25,11 @@
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                         <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                             <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
+                            <li class="pull-right">
+                                <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
+                                    <i class="fa fa-file-pdf-o"></i>
+                                </button>
+                            </li>
                         <% } %>
                     </ul>
 
@@ -395,7 +400,7 @@
         <td><%- tcontacto_nombre %></td>
         <td><%- despachop1_fecha %></td>
         <td>
-            <a href="<%- window.Misc.urlFull( Route.route('ordenes.despachos.exportar', {despachos: id}) ) %>" class="btn btn-danger btn-xs" data-resource="<%- id %>">
+            <a href="<%- window.Misc.urlFull( Route.route('ordenes.despachos.exportar', {despachos: id}) ) %>"  target="_blank" class="btn btn-danger btn-xs" data-resource="<%- id %>">
                 <span><i class="fa fa-file-pdf-o"></i></span>
             </a>
         </td>

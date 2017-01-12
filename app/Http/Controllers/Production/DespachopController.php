@@ -282,6 +282,6 @@ class DespachopController extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.despachos.export', compact('title', 'despacho', 'detalle'))->render());
-        return $pdf->download(sprintf('%s_%s.pdf', 'despachop', $despacho->id));
+        return $pdf->stream(sprintf('%s_%s.pdf', 'despachop', $despacho->id));
     }
 }
