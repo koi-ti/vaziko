@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Auth, DB, Log, Datatables;
+use App, View, Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\Contacto;
 
 class OrdenpController extends Controller
 {
@@ -291,5 +291,26 @@ class OrdenpController extends Controller
             }
         }
         return response()->json(['success' => false]);
+    }
+
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function exportar($id)
+    {
+        $orden = Ordenp::getOrden($id);
+        if(!$orden instanceof Ordenp){
+            abort(404);
+        }
+        $detalle = Ordenp2::getOrdenesp2($orden->id);
+        $title = sprintf('Orden de producción %s', $orden->orden_codigo);
+
+        // Export pdf
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle' ,'title'))->render());
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'ordenp', $orden->id, date('Y_m_d'), date('H_m_s')));
     }
 }

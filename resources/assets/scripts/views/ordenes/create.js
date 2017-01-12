@@ -15,6 +15,7 @@ app || (app = {});
         template: _.template( ($('#add-ordenp-tpl').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
+            'click .export-ordenp': 'exportOrdenp',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho'
         },
@@ -161,6 +162,16 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+        },
+
+        /**
+        * export to PDF
+        */
+        exportOrdenp: function (e) {
+            e.preventDefault();
+
+            // Redirect to pdf
+            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
         },
 
         /**

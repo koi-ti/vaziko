@@ -14,6 +14,11 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                         <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
+                        <li class="pull-right">
+                            <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </button>
+                        </li>
                     </ul>
 
                     <div class="tab-content">
@@ -26,7 +31,7 @@
 											<label class="control-label">Código</label>
 											<div>
                                                 {{ $orden->orden_codigo }}
-                                                 @if($orden->orden_anulada)
+                                                @if($orden->orden_anulada)
                                                     <span class="label label-danger">ANULADA</span>
                                                 @endif
                                             </div>
