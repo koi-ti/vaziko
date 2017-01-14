@@ -13,7 +13,8 @@ app || (app = {});
 
         el: '#ordenes-show',
         events: {
-            'click .export-ordenp': 'exportOrdenp'
+            'click .export-ordenp': 'exportOrdenp',
+            'click .open-ordenp': 'openOrdenp',
         },
 
         /**
@@ -56,6 +57,56 @@ app || (app = {});
                     }
                }
             });
+        },
+
+        /**
+        * Open ordenp
+        */
+        openOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
+                    template: _.template( ($('#ordenp-open-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Reabir orden de producción',
+                    onConfirm: function () {
+                        // Open orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.abrir', { ordenes: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
         },
 
         /**

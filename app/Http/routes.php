@@ -110,6 +110,8 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
+		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
+		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 		Route::resource('productos', 'Production\DetalleOrdenpController');

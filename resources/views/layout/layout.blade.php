@@ -10,17 +10,17 @@
         <link rel="icon" type="image/png" href="{{ asset(config('koi.app.image.logo')) }}" />
 
         <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
-        
+
         {{-- Secure tags TuProyecto --}}
         <meta name="csrf-token" content="{{ csrf_token() }}" />
-        
+
         {{-- Icons css --}}
         <link href="{{ asset("/css/icons.min.css") }}" rel="stylesheet" type="text/css" />
         {{-- Vendor css --}}
         <link href="{{ asset("/css/vendor.min.css") }}" rel="stylesheet" type="text/css" />
         {{-- App css --}}
         <link href="{{ asset("/css/app.min.css") }}" rel="stylesheet" type="text/css" />
-        
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -28,7 +28,7 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
         <![endif]-->
     </head>
-    <body class="hold-transition skin-green sidebar-mini">
+    <body class="hold-transition skin-green sidebar-mini {{ Cookie::get('sidebar_toggle') }}">
         <div class="wrapper">
 
             {{-- Main Header --}}
@@ -40,14 +40,14 @@
 
                 {{-- Global templates --}}
                 @include('templates')
-                
+
                 {{-- Modals base --}}
                 @include('modals')
             </div>
 
             <!-- Main Footer -->
             @include('layout.footer')
-            
+
         </div>
 
         <script>window.document.url = "{{ URL::to('/') }}";</script>
