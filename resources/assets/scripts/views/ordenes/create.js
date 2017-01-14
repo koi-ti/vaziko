@@ -15,6 +15,7 @@ app || (app = {});
         template: _.template( ($('#add-ordenp-tpl').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
+            'click .close-ordenp': 'closeOrdenp',
             'click .export-ordenp': 'exportOrdenp',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho'
@@ -141,6 +142,66 @@ app || (app = {});
         },
 
         /**
+        * export to PDF
+        */
+        exportOrdenp: function (e) {
+            e.preventDefault();
+
+            // Redirect to pdf
+            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
+        },
+
+        /**
+        * Close ordenp
+        */
+        closeOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
+                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Cerrar orden de producción',
+                    onConfirm: function () {
+                        // Close orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
+        },
+
+        /**
         * fires libraries js
         */
         ready: function () {
@@ -162,16 +223,6 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
-        },
-
-        /**
-        * export to PDF
-        */
-        exportOrdenp: function (e) {
-            e.preventDefault();
-
-            // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
         },
 
         /**

@@ -136,6 +136,7 @@ app || (app = {});
         */
         initialize : function ( opts ){
             // Initialize resources
+            this.componentGlobalView = new app.ComponentGlobalView();
             this.componentAddressView = new app.ComponentAddressView();
             this.componentCreateResourceView = new app.ComponentCreateResourceView();
             this.componentSearchTerceroView = new app.ComponentSearchTerceroView();

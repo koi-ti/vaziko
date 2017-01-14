@@ -237,7 +237,7 @@ class OrdenpController extends Controller
                         $contacto->save();
                     }
 
-                    // Documento
+                    // Orden
                     $orden->fill($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_contacto = $contacto->id;
@@ -291,6 +291,62 @@ class OrdenpController extends Controller
             }
         }
         return response()->json(['success' => false]);
+    }
+
+    /**
+     * Cerrar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function cerrar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden = Ordenp::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Orden
+                $orden->orden_abierta = false;
+                $orden->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Orden cerrada con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
+     * Abrir the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function abrir(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden = Ordenp::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Orden
+                $orden->orden_abierta = true;
+                $orden->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 
     /**

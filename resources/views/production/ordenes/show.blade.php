@@ -19,6 +19,21 @@
                                 <i class="fa fa-file-pdf-o"></i>
                             </button>
                         </li>
+                        <li class="dropdown pull-right">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                Opciones <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li role="presentation">
+                                    <a role="menuitem" tabindex="-1" href="#" class="open-ordenp">
+                                        <i class="fa fa-unlock"></i>Reabrir orden
+                                    </a>
+                                    <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
+                                        <i class="fa fa-file-pdf-o"></i>Exportar
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
 
                     <div class="tab-content">
@@ -198,4 +213,8 @@
            	</div>
        	</div>
 	</div>
+
+    <script type="text/template" id="ordenp-open-confirm-tpl">
+        <p>¿Está seguro que desea reabrir la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
+    </script>
 @stop

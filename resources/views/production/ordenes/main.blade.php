@@ -30,6 +30,21 @@
                                     <i class="fa fa-file-pdf-o"></i>
                                 </button>
                             </li>
+                            <li class="dropdown pull-right">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Opciones <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li role="presentation">
+                                        <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
+                                            <i class="fa fa-lock"></i>Cerrar orden
+                                        </a>
+                                        <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
+                                            <i class="fa fa-file-pdf-o"></i>Exportar
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
                         <% } %>
                     </ul>
 
@@ -413,5 +428,9 @@
         </td>
         <td><%- orden2_saldo %></td>
         <td><%- orden2_entregado %></td>
+    </script>
+
+    <script type="text/template" id="ordenp-close-confirm-tpl">
+        <p>¿Está seguro que desea cerrar la orden de producción <b><%- orden_codigo %></b>?</p>
     </script>
 @stop
