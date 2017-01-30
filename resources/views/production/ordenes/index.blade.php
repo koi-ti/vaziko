@@ -43,6 +43,22 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="searchordenp_ordenp_referencia" class="col-md-1 control-label">Referencia</label>
+                        <div class="col-md-5">
+                            <input id="searchordenp_ordenp_referencia" placeholder="Referencia" class="form-control input-sm input-toupper" name="searchordenp_ordenp_referencia" type="text" maxlength="200" value="{{ session('searchordenp_ordenp_referencia') }}">
+                        </div>
+
+                        <label for="searchordenp_ordenp_productop" class="col-md-1 control-label">Producto</label>
+                        <div class="col-md-5">
+                            <select name="searchordenp_ordenp_productop" id="searchordenp_ordenp_productop" class="form-control select2-default-clear">
+                                @foreach( App\Models\Production\Productop::getProductos() as $key => $value)
+                                    <option value="{{ $key }}" {{ session('searchordenp_ordenp_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-md-offset-3 col-md-2 col-xs-4">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>

@@ -43,6 +43,8 @@ class OrdenpController extends Controller
                 session(['searchordenp_tercero' => $request->has('orden_tercero_nit') ? $request->orden_tercero_nit : '']);
                 session(['searchordenp_tercero_nombre' => $request->has('orden_tercero_nombre') ? $request->orden_tercero_nombre : '']);
                 session(['searchordenp_ordenp_estado' => $request->has('orden_estado') ? $request->orden_estado : '']);
+                session(['searchordenp_ordenp_referencia' => $request->has('orden_referencia') ? $request->orden_referencia : '']);
+                session(['searchordenp_ordenp_productop' => $request->has('orden_productop') ? $request->orden_productop : '']);
             }
 
             return Datatables::of($query)
@@ -51,13 +53,15 @@ class OrdenpController extends Controller
                     if($request->has('orden_numero')) {
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
+
                     // Tercero nit
                     if($request->has('orden_tercero_nit')) {
                         $query->where('tercero_nit', $request->orden_tercero_nit);
                     }
+
                     // Tercero id
                     if($request->has('orden_cliente')) {
-                        $query->whereRaw('orden_cliente', $request->orden_cliente);
+                        $query->where('orden_cliente', $request->orden_cliente);
                     }
 
                     // Estado
@@ -71,6 +75,17 @@ class OrdenpController extends Controller
                         if($request->orden_estado == 'N') {
                             $query->where('orden_anulada', true);
                         }
+                    }
+
+                    // Referencia
+                    if($request->has('orden_referencia')) {
+                        $query->whereRaw("orden_referencia LIKE '%{$request->orden_referencia}%'");
+                    }
+
+                    // Producto
+                    if($request->has('orden_productop')) {
+                        $query->whereRaw("$request->orden_productop IN ( SELECT orden2_productop
+                            FROM koi_ordenproduccion2 WHERE orden2_orden = koi_ordenproduccion.id) ");
                     }
                 })
                 ->make(true);

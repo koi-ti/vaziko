@@ -29,6 +29,8 @@ app || (app = {});
             this.$searchordenpTercero = this.$('#searchordenp_tercero');
             this.$searchordenpTerceroName = this.$('#searchordenp_tercero_nombre');
             this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
+            this.$searchordenpReferencia = this.$('#searchordenp_ordenp_referencia');
+            this.$searchordenpProductop = this.$('#searchordenp_ordenp_productop');
 
             this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -44,6 +46,8 @@ app || (app = {});
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                         data.orden_tercero_nombre = _this.$searchordenpTerceroName.val();
                         data.orden_estado = _this.$searchordenpEstado.val();
+                        data.orden_referencia = _this.$searchordenpReferencia.val();
+                        data.orden_productop = _this.$searchordenpProductop.val();
                     }
                 },
                 columns: [
@@ -105,6 +109,8 @@ app || (app = {});
             this.$searchordenpTercero.val('');
             this.$searchordenpTerceroName.val('');
             this.$searchordenpEstado.val('');
+            this.$searchordenpReferencia.val('');
+            this.$searchordenpProductop.val('').trigger('change');
 
             this.ordersSearchTable.ajax.reload();
         },
