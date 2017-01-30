@@ -44,6 +44,9 @@ app || (app = {});
 
             if(this.resource == 'contacto') {
                 this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
+                this.$inputAddress = this.$("#"+$(e.currentTarget).attr("data-address"));
+                this.$inputCity = this.$("#"+$(e.currentTarget).attr("data-city"));
+                this.$inputEmail = this.$("#"+$(e.currentTarget).attr("data-email"));
                 this.parameters.tcontacto_tercero = $(e.currentTarget).attr("data-tercero");
                 if( _.isUndefined(this.parameters.tcontacto_tercero) || _.isNull(this.parameters.tcontacto_tercero) || this.parameters.tcontacto_tercero == '') {
                     alertify.error('Por favor ingrese cliente antes agregar contacto.');
@@ -251,6 +254,18 @@ app || (app = {});
 
                         if(_this.$inputPhone.length) {
                             _this.$inputPhone.val( _this.model.get('tcontacto_telefono') );
+                        }
+
+                        if(_this.$inputAddress.length) {
+                            _this.$inputAddress.val( _this.model.get('tcontacto_direccion') );
+                        }
+
+                        if(_this.$inputEmail.length) {
+                            _this.$inputEmail.val( _this.model.get('tcontacto_email') );
+                        }
+
+                        if(_this.$inputCity.length) {
+                            _this.$inputCity.val( _this.model.get('tcontacto_municipio') ).trigger('change');
                         }
                     },
                     'areap' : function() {

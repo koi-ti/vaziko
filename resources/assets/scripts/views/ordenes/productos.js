@@ -64,7 +64,7 @@ app || (app = {});
                 }
             });
             ordenp2Model.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.append( view.render().el );
 
             // Update total
             this.totalize();
