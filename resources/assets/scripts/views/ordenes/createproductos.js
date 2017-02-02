@@ -22,6 +22,9 @@ app || (app = {});
             'submit #form-orden-producto': 'onStore'
         },
         parameters: {
+            data: {
+                orden2_productop: null
+            }
         },
 
         /**
@@ -34,6 +37,9 @@ app || (app = {});
 
             // Attributes
             this.$wraperForm = this.$('#render-form-orden-producto');
+            this.maquinasProductopList = new app.MaquinasProductopList();
+            this.materialesProductopList = new app.MaterialesProductopList();
+            this.acabadosProductopList = new app.AcabadosProductopList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -66,7 +72,47 @@ app || (app = {});
             this.$inputCyan2 = this.$('#orden2_cyan2');
             this.$inputKey2 = this.$('#orden2_key2');
 
+            // Reference views
+            this.referenceViews();
+
             this.ready();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            var dataFilter = { productop: this.parameters.data.orden2_productop };
+
+            // Model exist
+            if( this.model.id != undefined ) {
+                dataFilter.orden2 = this.model.get('id');
+                dataFilter.productop = this.model.get('orden2_productop');
+            }
+
+            // Maquinas list
+            this.maquinasProductopListView = new app.MaquinasProductopListView( {
+                collection: this.maquinasProductopList,
+                parameters: {
+                    dataFilter: dataFilter
+               }
+            });
+
+            // Materiales list
+            this.materialesProductopListView = new app.MaterialesProductopListView( {
+                collection: this.materialesProductopList,
+                parameters: {
+                    dataFilter: dataFilter
+               }
+            });
+
+            // Materiales list
+            this.acabadosProductopListView = new app.AcabadosProductopListView( {
+                collection: this.acabadosProductopList,
+                parameters: {
+                    dataFilter: dataFilter
+               }
+            });
         },
 
         /**

@@ -236,6 +236,69 @@
                 	{{ $ordenp2->orden2_observaciones }}
                 </div>
             </div>
+
+            <br/>
+            <div class="row">
+                {{-- Content maquinas --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Máquinas</h3>
+                        </div>
+                        <div class="box-body">
+                            @foreach( App\Models\Production\Ordenp3::getOrdenesp3($producto->id, $ordenp2->id) as $maquina)
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_{{ $maquina->id }}">
+                                            <input type="checkbox" id="orden3_maquinap_{{ $maquina->id }}" name="orden3_maquinap_{{ $maquina->id }}" value="orden3_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Content materiales --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Materiales</h3>
+                        </div>
+                        <div class="box-body">
+                            @foreach( App\Models\Production\Ordenp4::getOrdenesp4($producto->id, $ordenp2->id) as $material)
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_{{ $material->id }}">
+                                            <input type="checkbox" id="orden4_materialp_{{ $material->id }}" name="orden4_materialp_{{ $material->id }}" value="orden4_materialp_{{ $material->id }}" {{ $material->activo ? 'checked': '' }} disabled> {{ $material->materialp_nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Content acabados --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Acabados</h3>
+                        </div>
+                        <div class="box-body">
+                            @foreach( App\Models\Production\Ordenp5::getOrdenesp5($producto->id, $ordenp2->id) as $acabado)
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_{{ $acabado->id }}">
+                                            <input type="checkbox" id="orden5_acabadop_{{ $acabado->id }}" name="orden5_acabadop_{{ $acabado->id }}" value="orden5_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+            </div>
 		</div>
 	</div>
 @stop

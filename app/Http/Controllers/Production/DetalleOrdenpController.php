@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Auth, DB, Log;
 
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Productop;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6;
 
 class DetalleOrdenpController extends Controller
 {
@@ -51,6 +51,7 @@ class DetalleOrdenpController extends Controller
         if($orden->orden_abierta == false || $orden->orden_anulada == true) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
+
         return view('production.ordenes.productos.create', ['orden' => $orden, 'producto' => $producto]);
     }
 
@@ -92,6 +93,42 @@ class DetalleOrdenpController extends Controller
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
                     $orden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
                     $orden2->save();
+
+                    // Maquinas
+                    $maquinas = Ordenp3::getOrdenesp3($orden2->orden2_productop, $orden2->id);
+                    foreach ($maquinas as $maquina)
+                    {
+                        if($request->has("orden3_maquinap_$maquina->id")) {
+                            $orden3 = new Ordenp3;
+                            $orden3->orden3_orden2 = $orden2->id;
+                            $orden3->orden3_maquinap = $maquina->id;
+                            $orden3->save();
+                        }
+                    }
+
+                    // Materiales
+                    $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
+                    foreach ($materiales as $material)
+                    {
+                        if($request->has("orden4_materialp_$material->id")) {
+                            $orden4 = new Ordenp4;
+                            $orden4->orden4_orden2 = $orden2->id;
+                            $orden4->orden4_materialp = $material->id;
+                            $orden4->save();
+                        }
+                    }
+
+                    // Acabados
+                    $acabados = Ordenp5::getOrdenesp5($orden2->orden2_productop, $orden2->id);
+                    foreach ($acabados as $acabado)
+                    {
+                        if($request->has("orden5_acabadop_$acabado->id")) {
+                            $orden5 = new Ordenp5;
+                            $orden5->orden5_orden2 = $orden2->id;
+                            $orden5->orden5_acabadop = $acabado->id;
+                            $orden5->save();
+                        }
+                    }
 
                     // Commit Transaction
                     DB::commit();
@@ -202,6 +239,63 @@ class DetalleOrdenpController extends Controller
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->save();
+
+                        // Maquinas
+                        $maquinas = Ordenp3::getOrdenesp3($orden2->orden2_productop, $orden2->id);
+                        foreach ($maquinas as $maquina)
+                        {
+                            $orden3 = Ordenp3::where('orden3_orden2', $orden2->id)->where('orden3_maquinap', $maquina->id)->first();
+                            if($request->has("orden3_maquinap_$maquina->id")) {
+                                if(!$orden3 instanceof Ordenp3) {
+                                    $orden3 = new Ordenp3;
+                                    $orden3->orden3_orden2 = $orden2->id;
+                                    $orden3->orden3_maquinap = $maquina->id;
+                                    $orden3->save();
+                                }
+                            }else{
+                                if($orden3 instanceof Ordenp3) {
+                                    $orden3->delete();
+                                }
+                            }
+                        }
+
+                        // Materiales
+                        $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
+                        foreach ($materiales as $material)
+                        {
+                            $orden4 = Ordenp4::where('orden4_orden2', $orden2->id)->where('orden4_materialp', $material->id)->first();
+                            if($request->has("orden4_materialp_$material->id")) {
+                                if(!$orden4 instanceof Ordenp4) {
+                                    $orden4 = new Ordenp4;
+                                    $orden4->orden4_orden2 = $orden2->id;
+                                    $orden4->orden4_materialp = $material->id;
+                                    $orden4->save();
+                                }
+                            }else{
+                                if($orden4 instanceof Ordenp4) {
+                                    $orden4->delete();
+                                }
+                            }
+                        }
+
+                        // Acabados
+                        $acabados = Ordenp5::getOrdenesp5($orden2->orden2_productop, $orden2->id);
+                        foreach ($acabados as $acabado)
+                        {
+                            $orden5 = Ordenp5::where('orden5_orden2', $orden2->id)->where('orden5_acabadop', $acabado->id)->first();
+                            if($request->has("orden5_acabadop_$acabado->id")) {
+                                if(!$orden5 instanceof Ordenp5) {
+                                    $orden5 = new Ordenp5;
+                                    $orden5->orden5_orden2 = $orden2->id;
+                                    $orden5->orden5_acabadop = $acabado->id;
+                                    $orden5->save();
+                                }
+                            }else{
+                                if($orden5 instanceof Ordenp5) {
+                                    $orden5->delete();
+                                }
+                            }
+                        }
 
                         // Commit Transaction
                         DB::commit();

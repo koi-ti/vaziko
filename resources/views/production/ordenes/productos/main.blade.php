@@ -241,6 +241,69 @@
                     <textarea id="orden2_observaciones" name="orden2_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- orden2_observaciones %></textarea>
                 </div>
             </div>
+
+            <br/>
+            <div class="row">
+                {{-- Content maquinas --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Máquinas</h3>
+                        </div>
+                        <div class="box-body" id="browse-orden-producto-maquinas-list">
+                            {{-- render maquinas list --}}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Content materiales --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Materiales</h3>
+                        </div>
+                        <div class="box-body" id="browse-orden-producto-materiales-list">
+                            {{-- render materiales list --}}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Content acabados --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Acabados</h3>
+                        </div>
+                        <div class="box-body" id="browse-orden-producto-acabados-list">
+                            {{-- render acabados list --}}
+                        </div>
+                    </div>
+                </div>
+            </div>
         </form>
+    </script>
+
+    <script type="text/template" id="orden-producto-maquina-item-tpl">
+        <div class="form-group col-md-12">
+            <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_<%- id %>">
+                <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- activo ? 'checked': ''%>> <%- maquinap_nombre %>
+            </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="orden-producto-material-item-tpl">
+        <div class="form-group col-md-12">
+            <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- id %>">
+                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- activo ? 'checked': ''%>> <%- materialp_nombre %>
+            </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="orden-producto-acabado-item-tpl">
+        <div class="form-group col-md-12">
+            <label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_<%- id %>">
+                <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- activo ? 'checked': ''%>> <%- acabadop_nombre %>
+            </label>
+        </div>
     </script>
 @stop
