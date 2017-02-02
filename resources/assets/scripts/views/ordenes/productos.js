@@ -13,7 +13,8 @@ app || (app = {});
 
         el: '#browse-orden-productop-list',
         events: {
-            'click .item-orden-producto-remove': 'removeOne'
+            'click .item-orden-producto-remove': 'removeOne',
+            'click .item-orden-producto-clone': 'cloneOne'
         },
         parameters: {
         	wrapper: null,
@@ -77,7 +78,7 @@ app || (app = {});
             this.collection.forEach( this.addOne, this );
         },
 
-                /**
+        /**
         * Event remove item
         */
         removeOne: function (e) {
@@ -108,6 +109,42 @@ app || (app = {});
                 });
 
             }
+        },
+
+        /**
+        * Event clone item
+        */
+        cloneOne: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                data = { orden2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#ordenp-productop-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar producto orden de producción',
+                    onConfirm: function () {
+                        console.log( 'clone producto' );
+            //             // // Clone orden
+            //             // window.Misc.cloneOrden({
+            //             //     'data': data,
+            //             //     'wrap': _this.$el,
+            //             //     'callback': (function (_this) {
+            //             //         return function ( resp )
+            //             //         {
+            //             //             window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+            //             //         }
+            //             //     })(_this)
+            //             // });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         },
 
         /**

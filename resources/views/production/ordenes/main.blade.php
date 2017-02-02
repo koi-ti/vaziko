@@ -215,8 +215,9 @@
                                                         <thead>
                                                             <tr>
                                                                 <th width="5%"></th>
+                                                                <th width="5%"></th>
                                                                 <th width="5%">Código</th>
-                                                                <th width="60%">Nombre</th>
+                                                                <th width="55%">Nombre</th>
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Precio</th>
                                                                 <th width="10%">Total</th>
@@ -392,8 +393,13 @@
     <script type="text/template" id="ordenp-producto-item-list-tpl">
         <% if(edit) { %>
             <td class="text-center">
-                <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>">
+                <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                     <span><i class="fa fa-times"></i></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
+                    <span><i class="fa fa-clone"></i></span>
                 </a>
             </td>
         <% } %>
@@ -439,5 +445,9 @@
 
     <script type="text/template" id="ordenp-clone-confirm-tpl">
         <p>¿Está seguro que desea clonar la orden de producción <b><%- orden_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-productop-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar el producto <b><%- orden2_codigo %> - <%- productop_nombre %></b>?</p>
     </script>
 @stop
