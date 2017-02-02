@@ -28,6 +28,9 @@
                                     <a role="menuitem" tabindex="-1" href="#" class="open-ordenp">
                                         <i class="fa fa-unlock"></i>Reabrir orden
                                     </a>
+                                    <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                        <i class="fa fa-clone"></i>Clonar orden
+                                    </a>
                                     <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                         <i class="fa fa-file-pdf-o"></i>Exportar
                                     </a>

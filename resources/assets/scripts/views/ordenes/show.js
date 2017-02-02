@@ -15,6 +15,7 @@ app || (app = {});
         events: {
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
+            'click .clone-ordenp': 'cloneOrdenp'
         },
 
         /**
@@ -107,6 +108,39 @@ app || (app = {});
             });
 
             cancelConfirm.render();
+        },
+
+        /**
+        * Clone ordenp
+        */
+        cloneOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                data = { orden_codigo: this.model.get('id') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar orden de producción',
+                    onConfirm: function () {
+                        // Clone orden
+                        window.Misc.cloneOrden({
+                            'data': data,
+                            'wrap': _this.$el,
+                            'callback': (function (_this) {
+                                return function ( resp )
+                                {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         },
 
         /**
