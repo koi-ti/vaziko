@@ -128,18 +128,34 @@ app || (app = {});
                     template: _.template( ($('#ordenp-productop-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar producto orden de producción',
                     onConfirm: function () {
-                        console.log( 'clone producto' );
-            //             // // Clone orden
-            //             // window.Misc.cloneOrden({
-            //             //     'data': data,
-            //             //     'wrap': _this.$el,
-            //             //     'callback': (function (_this) {
-            //             //         return function ( resp )
-            //             //         {
-            //             //             window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
-            //             //         }
-            //             //     })(_this)
-            //             // });
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: data.orden2_codigo }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.parameters.wrapper );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            alertify.error(thrownError);
+                        });
                     }
                 }
             });

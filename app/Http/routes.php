@@ -118,6 +118,8 @@ Route::group(['middleware' => 'auth'], function()
 
 		Route::group(['prefix' => 'productos'], function()
 		{
+			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
+
 			Route::resource('maquinas', 'Production\DetalleMaquinasController', ['only' => ['index']]);
 			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
