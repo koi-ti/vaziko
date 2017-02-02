@@ -31,4 +31,13 @@ class Productop6 extends Model
         $this->errors = $validator->errors();
         return false;
     }
+
+    public static function getAcabados($productop)
+    {
+        $query = Productop6::query();
+        $query->orderBy('acabadop_nombre', 'asc');
+        $query->join('koi_acabadop', 'productop6_acabadop', '=', 'koi_acabadop.id');
+        $query->where('productop6_productop', $productop);
+        return $query->lists('acabadop_nombre', 'koi_acabadop.id');
+    }
 }

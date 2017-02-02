@@ -112,8 +112,16 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
+		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
 
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
+
+		Route::group(['prefix' => 'productos'], function()
+		{
+			Route::resource('maquinas', 'Production\DetalleMaquinasController', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index']]);
+			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
+		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 
 		Route::group(['prefix' => 'despachos'], function()

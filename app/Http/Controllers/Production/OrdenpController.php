@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App, View, Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto;
 
 class OrdenpController extends Controller
 {
@@ -383,5 +383,80 @@ class OrdenpController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle' ,'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'ordenp', $orden->id, date('Y_m_d'), date('H_m_s')));
+    }
+
+    /**
+     * Clonar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clonar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+
+            $orden = Ordenp::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Recuperar numero orden
+                $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
+                $numero = !is_integer($numero) ? 1 : ($numero + 1);
+
+                // Orden
+                $neworden = $orden->replicate();
+                $neworden->orden_abierta = true;
+                $neworden->orden_anulada = false;
+                $neworden->orden_ano = date('Y');
+                $neworden->orden_numero = $numero;
+                $neworden->orden_usuario_elaboro = Auth::user()->id;
+                $neworden->orden_fecha_elaboro = date('Y-m-d H:m:s');
+                $neworden->save();
+
+                // Orden2
+                $productos = Ordenp2::where('orden2_orden', $orden->id)->orderBy('id', 'asc')->get();
+                foreach ($productos as $orden2) {
+                    $neworden2 = $orden2->replicate();
+                    $neworden2->orden2_orden = $neworden->id;
+                    $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
+                    $neworden2->orden2_entregado = 0;
+                    $neworden2->orden2_usuario_elaboro = Auth::user()->id;
+                    $neworden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
+                    $neworden2->save();
+
+                    // Maquinas
+                    $maquinas = Ordenp3::where('orden3_orden2', $orden2->id)->get();
+                    foreach ($maquinas as $orden3) {
+                         $neworden3 = $orden3->replicate();
+                         $neworden3->orden3_orden2 = $neworden2->id;
+                         $neworden3->save();
+                    }
+
+                    // Materiales
+                    $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
+                    foreach ($materiales as $orden4) {
+                         $neworden4 = $orden4->replicate();
+                         $neworden4->orden4_orden2 = $neworden2->id;
+                         $neworden4->save();
+                    }
+
+                    // Acabados
+                    $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
+                    foreach ($acabados as $orden5) {
+                         $neworden5 = $orden5->replicate();
+                         $neworden5->orden5_orden2 = $neworden2->id;
+                         $neworden5->save();
+                    }
+                }
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden reabierta con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }

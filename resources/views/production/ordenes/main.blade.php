@@ -39,6 +39,9 @@
                                         <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
                                             <i class="fa fa-lock"></i>Cerrar orden
                                         </a>
+                                        <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                            <i class="fa fa-clone"></i>Clonar orden
+                                        </a>
                                         <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
                                         </a>
@@ -432,5 +435,9 @@
 
     <script type="text/template" id="ordenp-close-confirm-tpl">
         <p>¿Está seguro que desea cerrar la orden de producción <b><%- orden_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar la orden de producción <b><%- orden_codigo %></b>?</p>
     </script>
 @stop

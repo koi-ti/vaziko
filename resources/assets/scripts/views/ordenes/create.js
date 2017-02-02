@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'click .submit-ordenp': 'submitOrdenp',
             'click .close-ordenp': 'closeOrdenp',
+            'click .clone-ordenp': 'cloneOrdenp',
             'click .export-ordenp': 'exportOrdenp',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho'
@@ -199,6 +200,56 @@ app || (app = {});
             });
 
             cancelConfirm.render();
+        },
+
+        /**
+        * Clone ordenp
+        */
+        cloneOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
+                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar orden de producción',
+                    onConfirm: function () {
+                        // Clone orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         },
 
         /**

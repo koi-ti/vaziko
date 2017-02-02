@@ -11,7 +11,7 @@ app || (app = {});
     app.Ordenp2Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull (Route.route('ordenes.productos.index') );
+            return window.Misc.urlFull( Route.route('ordenes.productos.index') );
         },
         idAttribute: 'id',
         defaults: {

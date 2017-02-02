@@ -31,4 +31,13 @@ class Productop5 extends Model
         $this->errors = $validator->errors();
         return false;
     }
+
+    public static function getMateriales($productop)
+    {
+        $query = Productop5::query();
+        $query->orderBy('materialp_nombre', 'asc');
+        $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
+        $query->where('productop5_productop', $productop);
+        return $query->lists('materialp_nombre', 'koi_materialp.id');
+    }
 }
