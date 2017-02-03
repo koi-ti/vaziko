@@ -450,7 +450,7 @@ class OrdenpController extends Controller
 
                 // Commit Transaction
                 DB::commit();
-                return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden reabierta con exito.']);
+                return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden clonada con exito.']);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());

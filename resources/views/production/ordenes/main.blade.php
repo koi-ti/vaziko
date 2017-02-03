@@ -228,19 +228,19 @@
                                                         </tbody>
                                                         <tfoot>
                                                             <tr>
-                                                                <td colspan="2"></td>
+                                                                <td colspan="3"></td>
                                                                 <th class="text-right">Subtotal</th>
                                                                 <td class="text-center" id="subtotal-cantidad">0</td>
                                                                 <td></td>
                                                                 <td class="text-right" id="subtotal-total">0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="2"></td>
+                                                                <td colspan="3"></td>
                                                                 <th class="text-right">Iva</th>
                                                                 <td colspan="3" class="text-right" id="iva-total">0</td>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="2"></td>
+                                                                <td colspan="3"></td>
                                                                 <th class="text-right">Total</th>
                                                                 <td colspan="3" class="text-right" id="total-total">0</td>
                                                             </tr>

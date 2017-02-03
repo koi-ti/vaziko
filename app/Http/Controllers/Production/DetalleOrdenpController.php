@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Auth, DB, Log;
 
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2;
 
 class DetalleOrdenpController extends Controller
 {
@@ -324,11 +324,27 @@ class DetalleOrdenpController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-
                 $orden2 = Ordenp2::find($id);
-                if(!$orden2 instanceof Ordenp2){
+                if(!$orden2 instanceof Ordenp2) {
+                    DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle orden, por favor verifique la información del asiento o consulte al administrador.']);
                 }
+
+                // Validar despachos
+                $despacho = Despachop2::where('despachop2_orden2', $orden2->id)->first();
+                if($despacho instanceof Despachop2) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar producto, contiene despachos asociados, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+
+                // Maquinas
+                DB::table('koi_ordenproduccion3')->where('orden3_orden2', $orden2->id)->delete();
+
+                // Materiales
+                DB::table('koi_ordenproduccion4')->where('orden4_orden2', $orden2->id)->delete();
+
+                // Acabados
+                DB::table('koi_ordenproduccion5')->where('orden5_orden2', $orden2->id)->delete();
 
                 // Eliminar item orden2
                 $orden2->delete();
@@ -368,5 +384,60 @@ class DetalleOrdenpController extends Controller
             return response()->json(['precio_venta' => $valor]);
         }
         return response()->json(['precio_venta' => 0]);
+    }
+
+    /**
+     * Clonar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clonar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden2 = Ordenp2::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                $neworden2 = $orden2->replicate();
+                $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
+                $neworden2->orden2_entregado = 0;
+                $neworden2->orden2_usuario_elaboro = Auth::user()->id;
+                $neworden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
+                $neworden2->save();
+
+                // Maquinas
+                $maquinas = Ordenp3::where('orden3_orden2', $orden2->id)->get();
+                foreach ($maquinas as $orden3) {
+                     $neworden3 = $orden3->replicate();
+                     $neworden3->orden3_orden2 = $neworden2->id;
+                     $neworden3->save();
+                }
+
+                // Materiales
+                $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
+                foreach ($materiales as $orden4) {
+                     $neworden4 = $orden4->replicate();
+                     $neworden4->orden4_orden2 = $neworden2->id;
+                     $neworden4->save();
+                }
+
+                // Acabados
+                $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
+                foreach ($acabados as $orden5) {
+                     $neworden5 = $orden5->replicate();
+                     $neworden5->orden5_orden2 = $neworden2->id;
+                     $neworden5->save();
+                }
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'id' => $neworden2->id, 'msg' => 'Producto orden clonado con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }
