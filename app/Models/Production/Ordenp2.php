@@ -29,7 +29,7 @@ class Ordenp2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden2_referencia', 'orden2_cantidad', 'orden2_precio_formula', 'orden2_round_formula', 'orden2_precio_venta', 'orden2_observaciones', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro'];
+    protected $fillable = ['orden2_referencia', 'orden2_precio_formula', 'orden2_round_formula', 'orden2_precio_venta', 'orden2_observaciones', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro'];
 
     public function isValid($data)
     {

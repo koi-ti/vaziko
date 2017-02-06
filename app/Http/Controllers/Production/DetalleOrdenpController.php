@@ -89,6 +89,7 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
+                    $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
                     $orden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
@@ -238,6 +239,22 @@ class DetalleOrdenpController extends Controller
                         // Orden2
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
+
+                        // Validar despachos
+                        $query = Despachop2::query();
+                        $query->join('koi_despachop1', 'despachop2_despacho', '=', 'koi_despachop1.id');
+                        $query->where('despachop2_orden2', $orden2->id);
+                        $query->where('despachop1_anulado', false);
+                        $despacho = $query->first();
+
+                        if($despacho instanceof Despachop2) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible actualizar unidades para el producto, contiene despachos asociados, por favor verifique la información del asiento o consulte al administrador.']);
+                        }
+
+                        $orden2->orden2_cantidad = $request->orden2_cantidad;
+                        $orden2->orden2_saldo = $orden2->orden2_cantidad;
+
                         $orden2->save();
 
                         // Maquinas
