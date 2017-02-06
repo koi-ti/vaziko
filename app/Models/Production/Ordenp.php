@@ -91,6 +91,7 @@ class Ordenp extends Model
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->where('orden2_orden', $this->id);
         $query->where('orden2_saldo', '>', 0);
+        $query->orderBy('koi_ordenproduccion2.id', 'desc');
         return $query->get();
     }
 
