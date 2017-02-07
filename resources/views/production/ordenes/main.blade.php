@@ -163,7 +163,11 @@
                                             <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                                                 <label for="orden_iva" class="col-sm-1 control-label">Iva</label>
                                                 <div class="form-group col-sm-1">
-                                                    <input id="orden_iva" value="<%- orden_iva %>" class="form-control input-sm" name="orden_iva" type="number" min="0" max="19">
+                                                    <select name="orden_iva" id="orden_iva" class="form-control" required>
+                                                        @foreach( config('koi.contabilidad.iva') as $key => $value)
+                                                            <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                                                        @endforeach
+                                                    </select>
                                                 </div>
                                             <% } %>
                                         </div>
