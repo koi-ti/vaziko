@@ -91,14 +91,14 @@
 						//$tdebito += $ordenp2->ordenp2_debito;
 					/*--}}
 				@endforeach
-				{{--*/ $tiva = $tsubtotal * 0.16; /*--}}
+				{{--*/ $tiva = $tsubtotal * ($orden->orden_iva / 100); /*--}}
 				<tr>
 					<td colspan="2" class="right bold">Subtotal</td>
 					<td class="center bold">{{ $tunidades }}</td>
 					<td colspan="2" class="right bold">{{ number_format($tsubtotal,2,'.',',') }}</td>
 				</tr>
 				<tr>
-					<td colspan="2" class="right bold">Iva</td>
+					<td colspan="2" class="right bold">Iva ({{ $orden->orden_iva }}%)</td>
 					<td colspan="3" class="right bold">{{ number_format($tiva,2,'.',',') }}</td>
 				</tr>
 				<tr>
