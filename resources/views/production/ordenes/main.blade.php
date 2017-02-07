@@ -329,7 +329,8 @@
                                                 <table id="browse-orden-despachosp-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
                                                     <thead>
                                                         <tr>
-                                                            <th width="70%">Producto</th>
+                                                            <th width="5%">Código</th>
+                                                            <th width="65%">Producto</th>
                                                             <th width="10%">Cantidad</th>
                                                             <th width="10%">Saldo</th>
                                                             <th width="10%">Entregado</th>
@@ -431,6 +432,7 @@
     </script>
 
     <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">
+        <td><%- id %></td>
         <td><%- productop_nombre %></td>
         <td>
             <input id="despachop2_cantidad_<%- id %>" name="despachop2_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_saldo %>" value="0" required>
