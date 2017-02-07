@@ -22,9 +22,9 @@ class EmpresaController extends Controller
     {
         if ($request->ajax()) {
             $empresa = Empresa::getEmpresa();
-            return response()->json($empresa);    
-        }    
-        return view('admin.empresa.main');    
+            return response()->json($empresa);
+        }
+        return view('admin.empresa.main');
     }
 
     /**
@@ -56,7 +56,7 @@ class EmpresaController extends Controller
      */
     public function show(Request $request, $id)
     {
-        // 
+        //
     }
 
     /**
@@ -67,7 +67,7 @@ class EmpresaController extends Controller
      */
     public function edit($id)
     {
-           // 
+           //
     }
 
     /**
@@ -81,10 +81,9 @@ class EmpresaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $empresa = Empresa::findOrFail($id);
             $tercero = Tercero::findOrFail($empresa->empresa_tercero);
-
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
                 try {

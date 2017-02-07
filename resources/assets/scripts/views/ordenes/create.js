@@ -44,6 +44,7 @@ app || (app = {});
             }
 
             // Events
+            // this.listenTo( this.model, 'change:orden_iva', this.renderIva );
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -70,6 +71,14 @@ app || (app = {});
         },
 
         /**
+        * render iva
+        */
+        renderIva: function (model, value, opts) {
+            console.log( 'Ingreo renderIva' );
+            // this.productopOrdenList.fetch({ data: {orden2_orden: this.model.get('id')}, reset: true });
+        },
+
+        /**
         * reference to views
         */
         referenceViews: function () {
@@ -78,6 +87,7 @@ app || (app = {});
                 collection: this.productopOrdenList,
                 parameters: {
                     edit: true,
+                    iva: this.model.get('orden_iva'),
                     wrapper: this.$('#wrapper-productop-orden'),
                     dataFilter: {
                         'orden2_orden': this.model.get('id')

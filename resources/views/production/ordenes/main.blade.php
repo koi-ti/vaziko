@@ -149,10 +149,9 @@
 
                                         <div class="row">
                                             <label for="orden_suministran" class="col-sm-1 control-label">Suministran</label>
-                                            <div class="form-group col-sm-7">
+                                            <div class="form-group col-sm-6">
                                                 <input id="orden_suministran" placeholder="Suministran" class="form-control" name="orden_suministran" type="text" value="<%- orden_suministran %>" required maxlength="200">
                                             </div>
-
                                             <label for="orden_formapago" class="col-sm-1 control-label">Forma pago</label>
                                             <div class="form-group col-md-2">
                                                 <select name="orden_formapago" id="orden_formapago" class="form-control" required>
@@ -161,18 +160,24 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
+                                                <label for="orden_iva" class="col-sm-1 control-label">Iva</label>
+                                                <div class="form-group col-sm-1">
+                                                    <input id="orden_iva" value="<%- orden_iva %>" class="form-control input-sm" name="orden_iva" type="number" min="0" max="19">
+                                                </div>
+                                            <% } %>
                                         </div>
 
                                         <div class="row">
                                             <label for="orden_observaciones" class="col-sm-1 control-label">Detalle</label>
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-11">
                                                 <textarea id="orden_observaciones" name="orden_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- orden_observaciones %></textarea>
                                             </div>
                                         </div>
 
                                         <div class="row">
                                             <label for="orden_terminado" class="col-sm-1 control-label">Terminado</label>
-                                            <div class="form-group col-sm-10">
+                                            <div class="form-group col-sm-11">
                                                 <textarea id="orden_terminado" name="orden_terminado" class="form-control" rows="2" placeholder="Terminado"><%- orden_terminado %></textarea>
                                             </div>
                                         </div>
@@ -236,7 +241,7 @@
                                                             </tr>
                                                             <tr>
                                                                 <td colspan="3"></td>
-                                                                <th class="text-right">Iva</th>
+                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
                                                                 <td colspan="3" class="text-right" id="iva-total">0</td>
                                                             </tr>
                                                             <tr>

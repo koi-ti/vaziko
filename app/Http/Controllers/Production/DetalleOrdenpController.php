@@ -89,6 +89,7 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
+                    $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
                     $orden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
@@ -229,15 +230,29 @@ class DetalleOrdenpController extends Controller
 
             // Recuperar orden
             $orden = Ordenp::findOrFail($orden2->orden2_orden);
-
             if($orden->orden_abierta)
             {
                 if ($orden2->isValid($data)) {
                     DB::beginTransaction();
                     try {
+                        // Validar despachos
+                        $query = Despachop2::query();
+                        $query->select(DB::raw('COALESCE(sum(despachop2_cantidad),0) as despachadas'));
+                        $query->join('koi_despachop1', 'despachop2_despacho', '=', 'koi_despachop1.id');
+                        $query->where('despachop2_orden2', $orden2->id);
+                        $query->where('despachop1_anulado', false);
+                        $despacho = $query->first();
+
+                        if($request->orden2_cantidad < $despacho->despachadas) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => "No es posible actualizar unidades, cantidad mínima despachos ($despacho->despachadas), por favor verifique la información del asiento o consulte al administrador."]);
+                        }
+
                         // Orden2
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
+                        $orden2->orden2_cantidad = $request->orden2_cantidad;
+                        $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
                         $orden2->save();
 
                         // Maquinas

@@ -218,6 +218,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
+
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
         },
 
         /**

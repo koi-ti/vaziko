@@ -16,7 +16,7 @@ class CreateEmpresaTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('empresa_tercero')->unsigned();  
+            $table->integer('empresa_tercero')->unsigned();
             $table->integer('empresa_niif')->nullable()->comment = '1 - Plena, 2 - Pymes, 3 - Micro pymes';
             $table->string('empresa_cc_contador', 15)->nullable();
             $table->string('empresa_tj_contador', 15)->nullable();
@@ -24,6 +24,7 @@ class CreateEmpresaTable extends Migration
             $table->string('empresa_cc_revisor', 15)->nullable();
             $table->string('empresa_tj_revisor', 15)->nullable();
             $table->string('empresa_nm_revisor', 200)->nullable();
+            $table->integer('empresa_iva')->unsigned();
 
             $table->foreign('empresa_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
