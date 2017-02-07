@@ -22,7 +22,7 @@ class Ordenp extends Model
      *
      * @var array
      */
-    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_suministran', 'orden_observaciones', 'orden_terminado'];
+    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado'];
 
     public function isValid($data)
     {
@@ -32,6 +32,7 @@ class Ordenp extends Model
             'orden_contacto' => 'required',
             'tcontacto_telefono' => 'required',
             'orden_formapago' => 'required',
+            'orden_iva' => 'required|integer|min:0|max:19',
 	        'orden_fecha_inicio' => 'required|date_format:Y-m-d',
 	        'orden_suministran' => 'max:200',
             'orden_fecha_entrega' => 'required|date_format:Y-m-d',

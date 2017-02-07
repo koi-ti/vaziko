@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App, View, Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 
 class OrdenpController extends Controller
 {
@@ -118,6 +118,13 @@ class OrdenpController extends Controller
             if ($orden->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Recuperar empresa
+                    $empresa = Empresa::getEmpresa();
+                    if(!$empresa instanceof Empresa) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar empresa, por favor verifique la información o consulte al administrador.']);
+                    }
+
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
                     if(!$tercero instanceof Tercero) {
@@ -153,6 +160,7 @@ class OrdenpController extends Controller
                     $orden->orden_ano = date('Y');
                     $orden->orden_numero = $numero;
                     $orden->orden_contacto = $contacto->id;
+                    $orden->orden_iva = $empresa->empresa_iva;
                     $orden->orden_usuario_elaboro = Auth::user()->id;
                     $orden->orden_fecha_elaboro = date('Y-m-d H:m:s');
                     $orden->save();
@@ -260,7 +268,7 @@ class OrdenpController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $orden->id]);
+                    return response()->json(['success' => true, 'id' => $orden->id, 'orden_iva' => $orden->orden_iva]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());

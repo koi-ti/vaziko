@@ -38,9 +38,7 @@ app || (app = {});
         totalize: function() {
             var unidades = this.unidades();
             var subtotal = this.subtotal();
-            var iva = subtotal * 0.16;
-            var total = subtotal + iva;
-            return { 'unidades': unidades, 'subtotal': subtotal, 'iva': iva, 'total': total}
+            return { 'unidades': unidades, 'subtotal': subtotal}
         },
    });
 

@@ -19,6 +19,7 @@ app || (app = {});
         parameters: {
         	wrapper: null,
             edit: false,
+            iva: 0,
             dataFilter: {}
         },
 
@@ -177,12 +178,14 @@ app || (app = {});
                 this.$subtotal.html( window.Misc.currency(data.subtotal) );
             }
 
+            var iva = data.subtotal * (this.parameters.iva / 100);
             if(this.$iva.length) {
-                this.$iva.html( window.Misc.currency(data.iva) );
+                this.$iva.html( window.Misc.currency(iva) );
             }
 
+            var total = data.subtotal + iva;
             if(this.$total.length) {
-                this.$total.html( window.Misc.currency(data.total) );
+                this.$total.html( window.Misc.currency(total) );
             }
         },
 

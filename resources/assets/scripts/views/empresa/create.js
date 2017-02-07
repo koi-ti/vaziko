@@ -24,10 +24,10 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {                  
-            // Attributes 
+        initialize : function() {
+            // Attributes
             this.$wraperForm = this.$('#render-form-empresa');
-            
+
             // Events
             this.listenTo( this.model, 'change:id', this.render );
             this.listenTo( this.model, 'change:tercero_persona', this.renderName );
@@ -45,9 +45,9 @@ app || (app = {});
 
             // Reference to fields
             this.$dv = this.$('#tercero_digito');
-            this.$retecree = this.$('#tercero_retecree'); 
-            
-            this.ready();  
+            this.$retecree = this.$('#tercero_retecree');
+
+            this.ready();
         },
 
         /**
@@ -64,21 +64,21 @@ app || (app = {});
         ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper(); 
+                window.initComponent.initToUpper();
 
            	if( typeof window.initComponent.initInputMask == 'function' )
-                window.initComponent.initInputMask();  
+                window.initComponent.initInputMask();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();  
+                window.initComponent.initSelect2();
 
        		if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
         },
 
         nitChanged: function(e) {
             var _this = this;
-            
+
             $.ajax({
                 url: window.Misc.urlFull(Route.route('terceros.dv')),
                 type: 'GET',
@@ -87,7 +87,7 @@ app || (app = {});
                     window.Misc.setSpinner( _this.el );
                 }
             })
-            .done(function(resp) {  
+            .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
                 if(resp.success) {
                     // Dv
@@ -106,7 +106,7 @@ app || (app = {});
 
         actividadChanged: function(e) {
             var _this = this;
-            
+
             $.ajax({
                 url: window.Misc.urlFull(Route.route('terceros.rcree')),
                 type: 'GET',
@@ -115,7 +115,7 @@ app || (app = {});
                     window.Misc.setSpinner( _this.el );
                 }
             })
-            .done(function(resp) {  
+            .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
                 if(resp.success) {
                     // % cree
@@ -136,10 +136,10 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );                
+                this.model.save( data, {patch: true} );
             }
         },
 
@@ -168,7 +168,7 @@ app || (app = {});
 	                return;
 	            }
 
-                alertify.success('datos de empresa fueron actualizados con éxito.');
+                alertify.success('Empresa fue actualizada con éxito.');
 	     	}
         }
     });
