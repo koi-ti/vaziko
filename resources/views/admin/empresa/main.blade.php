@@ -204,7 +204,11 @@
 				    	    <div class="row">
 								<div class="form-group col-md-2">
 						    		<label for="empresa_iva" class="control-label">Iva</label>
-						    		<input id="empresa_iva" value="<%- empresa_iva %>" placeholder="Iva" class="form-control input-sm" name="empresa_iva" type="number" min="0">
+						    		<select name="empresa_iva" id="empresa_iva" class="form-control" required>
+                                        @foreach( config('koi.contabilidad.iva') as $key => $value)
+                                            <option value="{{ $key }}" <%- empresa_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                                        @endforeach
+                                    </select>
 						    	</div>
 						    	<div class="form-group col-md-10 col-sm-12 col-xs-12">
 									<label class="control-label"></label>
