@@ -100,6 +100,7 @@ class DetalleAsientoController extends Controller
                     // Validate asiento2
                     $result = Asiento2::validarAsiento2($request, $objCuenta);
                     if($result != 'OK') {
+                        DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
 
