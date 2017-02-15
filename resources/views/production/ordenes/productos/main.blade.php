@@ -77,7 +77,7 @@
                                 <label for="orden2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
-                                        <input id="orden2_ancho" value="<%- orden2_ancho %>" class="form-control input-sm" name="orden2_ancho" type="number" min="0" step="0.1" required>
+                                        <input id="orden2_ancho" value="<%- orden2_ancho %>" class="form-control input-sm" name="orden2_ancho" type="number" min="0" step="0.01" required>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
                                 </div>
@@ -85,7 +85,7 @@
                                 <label for="orden2_alto" class="col-sm-1 control-label text-right">Alto</label>
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
-                                        <input id="orden2_alto" value="<%- orden2_alto %>" class="form-control input-sm" name="orden2_alto" type="number" min="0" step="0.1" required>
+                                        <input id="orden2_alto" value="<%- orden2_alto %>" class="form-control input-sm" name="orden2_alto" type="number" min="0" step="0.01" required>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
                                 </div>
@@ -98,7 +98,7 @@
                                 <label for="orden2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
-                                        <input id="orden2_c_ancho" value="<%- orden2_c_ancho %>" class="form-control input-sm" name="orden2_c_ancho" type="number" min="0" step="0.1" required>
+                                        <input id="orden2_c_ancho" value="<%- orden2_c_ancho %>" class="form-control input-sm" name="orden2_c_ancho" type="number" min="0" step="0.01" required>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
                                 </div>
@@ -106,7 +106,7 @@
                                 <label for="orden2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
-                                        <input id="orden2_c_alto" value="<%- orden2_c_alto %>" class="form-control input-sm" name="orden2_c_alto" type="number" min="0" step="0.1" required>
+                                        <input id="orden2_c_alto" value="<%- orden2_c_alto %>" class="form-control input-sm" name="orden2_c_alto" type="number" min="0" step="0.01" required>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
                                 </div>
@@ -124,7 +124,7 @@
                             <label for="orden2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
-                                    <input id="orden2_3d_ancho" value="<%- orden2_3d_ancho %>" class="form-control input-sm" name="orden2_3d_ancho" type="number" min="0" step="0.1" required>
+                                    <input id="orden2_3d_ancho" value="<%- orden2_3d_ancho %>" class="form-control input-sm" name="orden2_3d_ancho" type="number" min="0" step="0.01" required>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
                             </div>
@@ -132,7 +132,7 @@
                             <label for="orden2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
-                                    <input id="orden2_3d_alto" value="<%- orden2_3d_alto %>" class="form-control input-sm" name="orden2_3d_alto" type="number" min="0" step="0.1" required>
+                                    <input id="orden2_3d_alto" value="<%- orden2_3d_alto %>" class="form-control input-sm" name="orden2_3d_alto" type="number" min="0" step="0.01" required>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
                             </div>
@@ -140,7 +140,7 @@
                             <label for="orden2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
-                                    <input id="orden2_3d_profundidad" value="<%- orden2_3d_profundidad %>" class="form-control input-sm" name="orden2_3d_profundidad" type="number" min="0" step="0.1" required>
+                                    <input id="orden2_3d_profundidad" value="<%- orden2_3d_profundidad %>" class="form-control input-sm" name="orden2_3d_profundidad" type="number" min="0" step="0.01" required>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
                             </div>
