@@ -23,6 +23,7 @@ module.exports = function(grunt) {
 			app: {
 				files: {
 					'../../public/js/vendor.min.js': [
+						'./bower_components/AdminLTE/plugins/jQuery/jquery-2.2.3.min.js',
 						'./bower_components/jquery-ui/ui/core.js',
 						'./bower_components/jquery-ui/ui/widget.js',
 						'./bower_components/jquery-ui/ui/spinner.js',
@@ -105,10 +106,6 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				files: [
-  					//move jQuery file to public/js/ directory
-  					{expand: true, cwd: './bower_components/AdminLTE/plugins/jQuery/', src: ['jQuery-2.2.0.min.js'], dest: '../../public/js/', filter: 'isFile',
-            			rename: function(dest, src) { return dest + 'jquery.min.js'; } },
-
             		// move awesome fonts to public/css/ directory
 					{expand: true, cwd: './bower_components/font-awesome/fonts/', src: ['**'], dest: '../../public/fonts/'},
 
