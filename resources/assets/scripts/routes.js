@@ -33,6 +33,8 @@ app || (app = {});
             'roles/create(/)': 'getRolesCreate',
             'roles/:rol/edit(/)': 'getRolesEdit',
 
+            'permisos(/)': 'getPermisosMain',
+
             'puntosventa(/)': 'getPuntosVentaMain',
             'puntosventa/create(/)': 'getPuntosVentaCreate',
             'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
@@ -410,6 +412,16 @@ app || (app = {});
 
             this.createRolView = new app.CreateRolView({ model: this.rolModel });
             this.rolModel.fetch();
+        },
+
+        getPermisosMain: function () {
+
+            if ( this.mainPermisoView instanceof Backbone.View ){
+                this.mainPermisoView.stopListening();
+                this.mainPermisoView.undelegateEvents();
+            }
+
+            this.mainPermisoView = new app.MainPermisoView( );
         },
 
         /**

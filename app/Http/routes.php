@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
+    Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
 
 	/*
 	|-------------------------
