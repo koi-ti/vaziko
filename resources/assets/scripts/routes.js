@@ -29,6 +29,10 @@ app || (app = {});
             'sucursales/create(/)': 'getSucursalesCreate',
             'sucursales/:sucursal/edit(/)': 'getSucursalesEdit',
 
+            'roles(/)': 'getRolesMain',
+            'roles/create(/)': 'getRolesCreate',
+            'roles/:rol/edit(/)': 'getRolesEdit',
+
             'puntosventa(/)': 'getPuntosVentaMain',
             'puntosventa/create(/)': 'getPuntosVentaCreate',
             'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
@@ -362,6 +366,50 @@ app || (app = {});
 
             this.createSucursalView = new app.CreateSucursalView({ model: this.sucursalModel });
             this.sucursalModel.fetch();
+        },
+
+        /**
+        * show view main roles
+        */
+        getRolesMain: function () {
+
+            if ( this.mainRolesView instanceof Backbone.View ){
+                this.mainRolesView.stopListening();
+                this.mainRolesView.undelegateEvents();
+            }
+
+            this.mainRolesView = new app.MainRolesView( );
+        },
+
+        /**
+        * show view create roles
+        */
+        getRolesCreate: function () {
+            this.rolModel = new app.RolModel();
+
+            if ( this.createRolView instanceof Backbone.View ){
+                this.createRolView.stopListening();
+                this.createRolView.undelegateEvents();
+            }
+
+            this.createRolView = new app.CreateRolView({ model: this.rolModel });
+            this.createRolView.render();
+        },
+
+        /**
+        * show view edit roles
+        */
+        getRolesEdit: function (rol) {
+            this.rolModel = new app.RolModel();
+            this.rolModel.set({'id': rol}, {silent: true});
+
+            if ( this.createRolView instanceof Backbone.View ){
+                this.createRolView.stopListening();
+                this.createRolView.undelegateEvents();
+            }
+
+            this.createRolView = new app.CreateRolView({ model: this.rolModel });
+            this.rolModel.fetch();
         },
 
         /**

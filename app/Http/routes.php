@@ -54,6 +54,8 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
+	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
+
 	/*
 	|-------------------------
 	| Accounting Routes
