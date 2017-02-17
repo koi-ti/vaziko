@@ -12,7 +12,7 @@ app || (app = {});
     app.RolModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('rol.index') );
+            return window.Misc.urlFull( Route.route('roles.index') );
         },
         idAttribute: 'id',
         defaults: {

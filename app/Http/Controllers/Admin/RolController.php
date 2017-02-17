@@ -47,7 +47,6 @@ class RolController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $rol = new Rol;
             if ($rol->isValid($data)) {
                 DB::beginTransaction();
@@ -92,7 +91,7 @@ class RolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $rol = Rol::findOrFail($id);
         return view('admin.roles.edit', ['rol' => $rol]);

@@ -21,15 +21,16 @@
             <div class="box-body" id="render-form-asientos">
                 <form method="POST" accept-charset="UTF-8" id="form-asientos" data-toggle="validator">
                     <div class="row">
-                        <label for="name" class="col-sm-1 control-label">Nombre</label>
-                        <div class="form-group col-sm-4">
-                            <input id="name" value="<%- name %>" placeholder="Nombre" class="form-control input-sm input-toupper" name="name" required>
-                        </div>
-
                         <label for="display_name" class="col-sm-1 control-label">Mostrar</label>
                         <div class="form-group col-sm-3">
-                            <input id="display_name" value="<%- display_name %>" placeholder="Mostrar nombre" class="form-control input-sm input-toupper" name="display_name" readonly>
+                            <input id="display_name" value="<%- display_name %>" placeholder="Mostrar nombre" class="form-control input-sm input-toupper" name="display_name" required>
                         </div>
+
+                        <label for="name" class="col-sm-1 control-label">Nombre</label>
+                        <div class="form-group col-sm-4">
+                            <input id="name" value="<%- name %>" placeholder="Nombre" class="form-control input-sm input-toupper" name="name" readonly>
+                        </div>
+
                     </div>
                     <div class="row">
                         <label for="display_name" class="col-sm-1 control-label">Descripcion</label>

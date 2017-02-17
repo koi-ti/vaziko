@@ -22,12 +22,13 @@ class Rol extends Model
      *
      * @var array
      */
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'display_name', 'description'];
 
     public function isValid($data)
     {
         $rules = [
-            'name' => 'required'
+            'name' => 'unique:koi_rol',
+            'display_name' => 'required',
         ];
 
         $validator = Validator::make($data, $rules);

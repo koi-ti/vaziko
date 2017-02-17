@@ -28,7 +28,9 @@ app || (app = {});
                 language: window.Misc.dataTableES(),
                 ajax: window.Misc.urlFull( Route.route('roles.index') ),
                 columns: [
-                    { data: 'name', name: 'name' }
+                    { data: 'display_name', name: 'display_name' },
+                    { data: 'name', name: 'name' },
+                    { data: 'description', name: 'description' }
                 ],
                 buttons: [
                     {
@@ -42,7 +44,7 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
+                        width: '25%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('roles.show', {roles: full.id }) )  +'">' + data + '</a>';
                         }
