@@ -53,19 +53,8 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {            
-            if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
         },
 
         /**

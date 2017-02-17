@@ -27,9 +27,15 @@ class Rol extends Model
     public function isValid($data)
     {
         $rules = [
-            'name' => 'unique:koi_rol',
+            'name' => 'alpha|unique:koi_rol',
             'display_name' => 'required',
         ];
+
+        if ($this->exists){
+            $rules['name'] .= ',name,' . $this->id;
+        }else{
+            $rules['name'] .= '|required';
+        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {

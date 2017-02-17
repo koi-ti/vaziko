@@ -11,8 +11,8 @@
                 <table id="roles-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th width="25%">Mostrar nombre</th>
                             <th width="25%">Nombre</th>
+                            <th width="25%">Key</th>
                             <th width="50%">Descripcion</th>
                         </tr>
                     </thead>
