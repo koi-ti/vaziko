@@ -46,13 +46,13 @@ class Asiento2 extends Model
                 ELSE tercero_razonsocial END)
                 AS tercero_nombre"),
             DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
-            DB::raw("CONCAT(COALESCE(ordenproduccion0_numero, ''),'-',SUBSTRING(COALESCE(ordenproduccion0_ano,''), -2)) as ordenp_codigo")
+            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as orden_codigo")
         );
         $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
         $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
         $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
         // Temporal join
-        $query->leftJoin('ordenproduccion0', 'asiento2_ordenp', '=', 'ordenproduccion0.id');
+        $query->leftJoin('koi_ordenproduccion', 'asiento2_ordenp', '=', 'koi_ordenproduccion.id');
         $query->where('asiento2_asiento', $asiento);
         return $query->get();
     }
@@ -206,7 +206,7 @@ class Asiento2 extends Model
         // Validate orden
         $ordenp = null;
         if($request->has('asiento2_orden')) {
-            $ordenp = Ordenp::whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->asiento2_orden}'")->first();
+            $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->asiento2_orden}'")->first();
         }
         if(!$ordenp instanceof Ordenp) {
             return 'No es posible recuperar orden de producción, por favor verifique la información o consulte al administrador.';

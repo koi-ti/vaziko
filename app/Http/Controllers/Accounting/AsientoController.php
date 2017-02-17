@@ -91,7 +91,7 @@ class AsientoController extends Controller
                             if($centrocosto->centrocosto_codigo == 'OP') {
                                 // Validate orden
                                 if($request->has('asiento2_orden')) {
-                                    $ordenp = Ordenp::whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->asiento2_orden}'")->first();
+                                    $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->asiento2_orden}'")->first();
                                 }
                                 if(!$ordenp instanceof Ordenp) {
                                     DB::rollback();

@@ -340,14 +340,14 @@
 
 			<div class="form-group">
 				<div class="col-md-12 table-responsive">
-					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0">
 		                <thead>
 				            <tr>
-				                <th>Código</th>
+				                <th width="10%">Código</th>
 			                	<th>Ano</th>
 				                <th>Numero</th>
-			                	<th>Tercero</th>
-			                	<th>Fecha</th>
+			                	<th width="70%">Tercero</th>
+			                	<th width="20%">Fecha</th>
 				            </tr>
 				        </thead>
 		            </table>
