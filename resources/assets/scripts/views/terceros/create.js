@@ -28,7 +28,8 @@ app || (app = {});
             this.$wraperForm = this.$('#render-form-tercero');
 
             // Events
-            this.listenTo( this.model, 'change:id', this.render );
+            // this.listenTo( this.model, 'change:id', this.render );
+            this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
@@ -93,7 +94,7 @@ app || (app = {});
 
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -134,7 +135,14 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('terceros.show', { terceros: resp.id})) );
+                // CreateTerceroView undelegateEvents
+                if ( this.createTerceroView instanceof Backbone.View ){
+                    this.createTerceroView.stopListening();
+                    this.createTerceroView.undelegateEvents();
+                }
+
+                // Redirect to edit orden
+                Backbone.history.navigate(Route.route('terceros.edit', { terceros: resp.id}), { trigger:true });
             }
         }
     });
