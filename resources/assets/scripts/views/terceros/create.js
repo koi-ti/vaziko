@@ -53,6 +53,7 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
 
             this.$form = this.$('#form-tercero');
+            this.$formAccounting = this.$('#form-accounting');
 
             // Model exist
             if( this.model.id != undefined ) {
@@ -105,7 +106,8 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
 
                 e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
+                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ));
+
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -151,6 +153,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
+
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
         },
 
         /**
