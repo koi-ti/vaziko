@@ -53,6 +53,7 @@ app || (app = {});
             'tercero_afiliado': false,
             'tercero_otro': false,
             'tercero_cual': '',
+            'display_name': '',
             'actividad_tarifa' : ''
         }
     });

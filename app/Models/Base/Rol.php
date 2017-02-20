@@ -4,7 +4,7 @@ namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, Cache;
 
 class Rol extends Model
 {
@@ -16,6 +16,13 @@ class Rol extends Model
     protected $table = 'koi_rol';
 
     public $timestamps = false;
+
+    /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache = '_troles';
 
     /**
      * The attributes that are mass assignable.
@@ -43,5 +50,21 @@ class Rol extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getRoles()
+    {
+        if ( Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
+        }
+
+        return Cache::rememberForever( self::$key_cache , function() {
+            $query = Rol::query();
+            $query->orderBy('display_name', 'asc');
+            $collection = $query->lists('display_name', 'koi_rol.id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 }
