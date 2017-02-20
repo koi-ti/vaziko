@@ -13,7 +13,6 @@ app || (app = {});
 
         url: function() {
             return window.Misc.urlFull( Route.route('terceros.roles.index') );
-            console.log('RolList');
         },
         model: app.UsuarioRolModel,
 

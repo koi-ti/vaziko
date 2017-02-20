@@ -77,8 +77,6 @@ app || (app = {});
         */
         storeOne: function (data) {
             var _this = this
-            console.log('storeOne');
-            console.log(data);
             // Set Spinner
             window.Misc.setSpinner( this.parameters.wrapper );
             

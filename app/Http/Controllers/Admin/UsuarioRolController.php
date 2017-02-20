@@ -42,7 +42,27 @@ class UsuarioRolController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            dd($data);
+            $usuariorol = new UsuarioRol;
+            if ($usuariorol->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Validar rol
+                    $usuariorol = UsuarioRol::find($request->display_name);
+                    if(!$usuariorol instanceof UsuarioRol) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar rol, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'user_id' => $usuariorol->user_id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $usuariorol->errors]);
         }
         abort(403);
     }

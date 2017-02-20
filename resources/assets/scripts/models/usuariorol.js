@@ -10,9 +10,11 @@ app || (app = {});
 (function (window, document, undefined) {
 
     app.UsuarioRolModel = Backbone.Model.extend({
-
         urlRoot: function () {
             return window.Misc.urlFull( Route.route('terceros.roles.index') );
+        },
+        idAttribute: 'user_id',
+        defaults: {
         }
     });
 
