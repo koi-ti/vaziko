@@ -79,334 +79,378 @@
 </script>
 
 <script type="text/template" id="add-tercero-tpl">
-	<div class="row">
-		<div class="form-group col-md-3">
-			<label for="tercero_nit" class="control-label">Documento</label>
-			<div class="row">
-				<div class="col-md-9">
-					<input id="tercero_nit" value="<%- tercero_nit %>" placeholder="Nit" class="form-control input-sm change-nit-koi-component" name="tercero_nit" type="text" required data-field="tercero_digito">
-				</div>
-				<div class="col-md-3">
-					<input id="tercero_digito" value="<%- tercero_digito %>" class="form-control input-sm" name="tercero_digito" type="text" readonly required>
-				</div>
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_tipo" class="control-label">Tipo</label>
-			<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
-				<option value="" selected>Seleccione</option>
-				@foreach( config('koi.terceros.tipo') as $key => $value)
-					<option value="{{ $key }}" <%- tercero_tipo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_persona" class="control-label">Persona</label>
-			<select name="tercero_persona" id="tercero_persona" class="form-control" required>
-				<option value="" selected>Seleccione</option>
-				@foreach( config('koi.terceros.persona') as $key => $value)
-					<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_regimen" class="control-label">Regimen</label>
-			<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
-				<option value="" selected>Seleccione</option>
-				@foreach( config('koi.terceros.regimen') as $key => $value)
-					<option value="{{ $key }}" <%- tercero_regimen == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-3">
-			<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
-			<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
-			<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
-			<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
-			<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-12">
-			<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
-			<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
-		</div>
-	</div>
-
-	<div class="row">
-		<div class="form-group col-md-3">
-			<label for="tercero_direccion" class="control-label">Dirección</label>
-      		<div class="input-group input-group-sm">
-				<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>
-				<span class="input-group-btn">
-					<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
-						<i class="fa fa-map-signs"></i>
-					</button>
-				</span>
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_municipio" class="control-label">Municipio</label>
-			<select name="tercero_municipio" id="tercero_municipio" class="form-control select2-default" required>
-				@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-					<option value="{{ $key }}" <%- tercero_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_email" class="control-label">Email</label>
-			<input id="tercero_email" value="<%- tercero_email %>" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
-		    <div class="help-block with-errors"></div>
-		</div>
-    </div>
-
-    <div class="row">
-    	<div class="form-group col-md-3">
-			<label for="tercero_telefono1" class="control-label">Teléfono</label>
-			<div class="input-group">
-				<div class="input-group-addon">
-					<i class="fa fa-phone"></i>
-				</div>
-				<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_telefono2" class="control-label">2do. Teléfono</label>
-			<div class="input-group">
-				<div class="input-group-addon">
-					<i class="fa fa-phone"></i>
-				</div>
-				<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_fax" class="control-label">Fax</label>
-			<div class="input-group">
-				<div class="input-group-addon">
-					<i class="fa fa-fax"></i>
-				</div>
-				<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
-			</div>
-		</div>
-
-		<div class="form-group col-md-3">
-			<label for="tercero_celular" class="control-label">Celular</label>
-			<div class="input-group">
-				<div class="input-group-addon">
-					<i class="fa fa-mobile"></i>
-				</div>
-				<input id="tercero_celular" value="<%- tercero_celular %>" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
-			</div>
-		</div>
-	</div>
-
-    <div class="row">
-		<div class="form-group col-md-6">
-			<label for="tercero_representante" class="control-label">Representante Legal</label>
-			<input id="tercero_representante" value="<%- tercero_representante %>" placeholder="Representante Legal" class="form-control input-sm input-toupper" name="tercero_representante" type="text" maxlength="200">
-		</div>
-		<div class="form-group col-md-3">
-    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
-    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
-    	</div>
-	</div>
-
-    <div class="row">
-    	<div class="form-group col-md-12">
-			<div class="nav-tabs-custom">
-				<ul class="nav nav-tabs">
-					<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
-					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
-						<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
-					<% } %>
-				</ul>
-				<div class="tab-content">
-
-					{{-- Tab contabilidad --}}
-					<div class="tab-pane active" id="tab_contabilidad">
-	    	    	    <div class="row">
-					    	<div class="form-group col-md-10">
-					    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-					    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default change-actividad-koi-component" required data-field="tercero_retecree">
-									@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
-										<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-									@endforeach
-								</select>
-					    	</div>
-					    	<div class="form-group col-md-2">
-					    		<label for="tercero_retecree" class="control-label">% Cree</label>
-					    		<div id="tercero_retecree"><%- actividad_tarifa %></div>
-					    	</div>
-					    </div>
-
-					    <div class="row">
-					    	<div class="form-group col-md-2">
-						    	<label class="checkbox-inline" for="tercero_activo">
-									<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- tercero_activo ? 'checked': ''%>> Activo
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_cliente">
-									<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente" <%- tercero_socio ? 'checked': ''%>> Cliente
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_acreedor">
-									<input type="checkbox" id="tercero_acreedor" name="tercero_acreedor" value="tercero_acreedor" <%- tercero_acreedor ? 'checked': ''%>> Acreedor
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_interno">
-									<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" <%- tercero_interno ? 'checked': ''%>> Interno
-								</label>
-							</div>
-
-							<div class="form-group col-md-3">
-								<label class="checkbox-inline" for="tercero_responsable_iva">
-									<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- tercero_responsable_iva ? 'checked': ''%>> Responsable de IVA
-								</label>
-							</div>
-					    </div>
-
-					    <div class="row">
-					    	<div class="form-group col-md-2">
-						    	<label class="checkbox-inline" for="tercero_empleado">
-									<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" <%- tercero_empleado ? 'checked': ''%>> Empleado
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_proveedor">
-									<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" <%- tercero_proveedor ? 'checked': ''%>> Proveedor
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_extranjero">
-									<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero" <%- tercero_extranjero ? 'checked': ''%>> Extranjero
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_afiliado">
-									<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" <%- tercero_afiliado ? 'checked': ''%>> Afiliado
-								</label>
-							</div>
-
-							<div class="form-group col-md-3">
-								<label class="checkbox-inline" for="tercero_autoretenedor_cree">
-									<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- tercero_autoretenedor_cree ? 'checked': ''%>> Autorretenedor CREE
-								</label>
-							</div>
-					    </div>
-
-						<div class="row">
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_socio">
-									<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" <%- tercero_socio ? 'checked': ''%>> Socio
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_mandatario">
-									<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" <%- tercero_mandatario ? 'checked': ''%>> Mandatario
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_gran_contribuyente">
-									<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- tercero_gran_contribuyente ? 'checked': ''%>> Gran contribuyente
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_autoretenedor_renta">
-									<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- tercero_autoretenedor_renta ? 'checked': ''%>> Autorretenedor renta
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_autoretenedor_ica">
-									<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- tercero_autoretenedor_ica ? 'checked': ''%>> Autorretenedor ICA
-								</label>
-							</div>
-					    </div>
-
-					    <div class="row">
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_otro">
-									<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- tercero_otro ? 'checked': ''%>> Otro
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
-							</div>
-					    </div>
+	<form method="POST" accept-charset="UTF-8" id="form-tercero" data-toggle="validator">
+		<div class="row">
+			<div class="form-group col-md-3">
+				<label for="tercero_nit" class="control-label">Documento</label>
+				<div class="row">
+					<div class="col-md-9">
+						<input id="tercero_nit" value="<%- tercero_nit %>" placeholder="Nit" class="form-control input-sm change-nit-koi-component" name="tercero_nit" type="text" required data-field="tercero_digito">
 					</div>
+					<div class="col-md-3">
+						<input id="tercero_digito" value="<%- tercero_digito %>" class="form-control input-sm" name="tercero_digito" type="text" readonly required>
+					</div>
+				</div>
+			</div>
 
-					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
-						{{-- Tab contactos --}}
-						<div class="tab-pane" id="tab_contactos">
+			<div class="form-group col-md-3">
+				<label for="tercero_tipo" class="control-label">Tipo</label>
+				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
+					<option value="" selected>Seleccione</option>
+					@foreach( config('koi.terceros.tipo') as $key => $value)
+						<option value="{{ $key }}" <%- tercero_tipo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
 
-						    <!-- div class="row">
-								<div class="col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12">
-									<button type="button" class="btn btn-primary btn-block btn-sm btn-add-tcontacto" data-resource="contacto" data-tercero="<%- id %>">
-										<i class="fa fa-user-plus"></i>  Nuevo contacto
-									</button>
-								</div>
-							</div>
-							<br / -->
+			<div class="form-group col-md-3">
+				<label for="tercero_persona" class="control-label">Persona</label>
+				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
+					<option value="" selected>Seleccione</option>
+					@foreach( config('koi.terceros.persona') as $key => $value)
+						<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
 
-							<div class="box box-primary">
-								<div class="box-body table-responsive no-padding">
-									<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-							            <thead>
-								            <tr>
-								                <th>Nombre</th>
-								                <th>Dirección</th>
-								                <th>Teléfono</th>
-								                <th>Celular</th>
-								            </tr>
-							           </thead>
-							           <tbody>
-											{{-- Render contact list --}}
-							           </tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					<% } %>
+			<div class="form-group col-md-3">
+				<label for="tercero_regimen" class="control-label">Regimen</label>
+				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
+					<option value="" selected>Seleccione</option>
+					@foreach( config('koi.terceros.regimen') as $key => $value)
+						<option value="{{ $key }}" <%- tercero_regimen == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-3">
+				<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
+				<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
+				<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
+				<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
+				<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
+				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="form-group col-md-3">
+				<label for="tercero_direccion" class="control-label">Dirección</label>
+	      		<div class="input-group input-group-sm">
+					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
+							<i class="fa fa-map-signs"></i>
+						</button>
+					</span>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_municipio" class="control-label">Municipio</label>
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control select2-default" required>
+					@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
+						<option value="{{ $key }}" <%- tercero_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_email" class="control-label">Email</label>
+				<input id="tercero_email" value="<%- tercero_email %>" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
+			    <div class="help-block with-errors"></div>
+			</div>
+	    </div>
+
+	    <div class="row">
+	    	<div class="form-group col-md-3">
+				<label for="tercero_telefono1" class="control-label">Teléfono</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-phone"></i>
+					</div>
+					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_telefono2" class="control-label">2do. Teléfono</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-phone"></i>
+					</div>
+					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_fax" class="control-label">Fax</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-fax"></i>
+					</div>
+					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+				</div>
+			</div>
+
+			<div class="form-group col-md-3">
+				<label for="tercero_celular" class="control-label">Celular</label>
+				<div class="input-group">
+					<div class="input-group-addon">
+						<i class="fa fa-mobile"></i>
+					</div>
+					<input id="tercero_celular" value="<%- tercero_celular %>" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
 				</div>
 			</div>
 		</div>
-    </div>
+
+	    <div class="row">
+			<div class="form-group col-md-6">
+				<label for="tercero_representante" class="control-label">Representante Legal</label>
+				<input id="tercero_representante" value="<%- tercero_representante %>" placeholder="Representante Legal" class="form-control input-sm input-toupper" name="tercero_representante" type="text" maxlength="200">
+			</div>
+			<div class="form-group col-md-3">
+	    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
+	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
+	    	</div>
+		</div>
+
+		<div class="row">
+	    	<div class="form-group col-md-12">
+				<div class="nav-tabs-custom">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
+						<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
+							<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
+							<li><a href="#tab_empleados" data-toggle="tab">Empleados</a></li>
+						<% } %>
+					</ul>
+
+					<div class="tab-content">
+						{{-- Tab contabilidad --}}
+						<div class="tab-pane active" id="tab_contabilidad">
+				    	    <div class="row">
+						    	<div class="form-group col-md-10">
+						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
+						    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default change-actividad-koi-component" required data-field="tercero_retecree">
+										@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
+											<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+										@endforeach
+									</select>
+						    	</div>
+						    	<div class="form-group col-md-2">
+						    		<label for="tercero_retecree" class="control-label">% Cree</label>
+						    		<div id="tercero_retecree"><%- actividad_tarifa %></div>
+						    	</div>
+						    </div>
+
+						    <div class="row">
+						    	<div class="form-group col-md-2">
+							    	<label class="checkbox-inline" for="tercero_activo">
+										<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- tercero_activo ? 'checked': ''%>> Activo
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_cliente">
+										<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente" <%- tercero_socio ? 'checked': ''%>> Cliente
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_acreedor">
+										<input type="checkbox" id="tercero_acreedor" name="tercero_acreedor" value="tercero_acreedor" <%- tercero_acreedor ? 'checked': ''%>> Acreedor
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_interno">
+										<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" <%- tercero_interno ? 'checked': ''%>> Interno
+									</label>
+								</div>
+
+								<div class="form-group col-md-3">
+									<label class="checkbox-inline" for="tercero_responsable_iva">
+										<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- tercero_responsable_iva ? 'checked': ''%>> Responsable de IVA
+									</label>
+								</div>
+						    </div>
+
+						    <div class="row">
+						    	<div class="form-group col-md-2">
+							    	<label class="checkbox-inline" for="tercero_empleado">
+										<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" <%- tercero_empleado ? 'checked': ''%>> Empleado
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_proveedor">
+										<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" <%- tercero_proveedor ? 'checked': ''%>> Proveedor
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_extranjero">
+										<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero" <%- tercero_extranjero ? 'checked': ''%>> Extranjero
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_afiliado">
+										<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" <%- tercero_afiliado ? 'checked': ''%>> Afiliado
+									</label>
+								</div>
+
+								<div class="form-group col-md-3">
+									<label class="checkbox-inline" for="tercero_autoretenedor_cree">
+										<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- tercero_autoretenedor_cree ? 'checked': ''%>> Autorretenedor CREE
+									</label>
+								</div>
+						    </div>
+
+							<div class="row">
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_socio">
+										<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" <%- tercero_socio ? 'checked': ''%>> Socio
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_mandatario">
+										<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" <%- tercero_mandatario ? 'checked': ''%>> Mandatario
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_gran_contribuyente">
+										<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- tercero_gran_contribuyente ? 'checked': ''%>> Gran contribuyente
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_autoretenedor_renta">
+										<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- tercero_autoretenedor_renta ? 'checked': ''%>> Autorretenedor renta
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_autoretenedor_ica">
+										<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- tercero_autoretenedor_ica ? 'checked': ''%>> Autorretenedor ICA
+									</label>
+								</div>
+						    </div>
+
+						    <div class="row">
+								<div class="form-group col-md-2">
+									<label class="checkbox-inline" for="tercero_otro">
+										<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- tercero_otro ? 'checked': ''%>> Otro
+									</label>
+								</div>
+
+								<div class="form-group col-md-2">
+									<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
+								</div>
+						    </div>	
+						</div>
+
+						<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
+							{{-- Tab contactos --}}
+							<div class="tab-pane" id="tab_contactos">
+							    <!-- div class="row">
+									<div class="col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12">
+										<button type="button" class="btn btn-primary btn-block btn-sm btn-add-tcontacto" data-resource="contacto" data-tercero="<%- id %>">
+											<i class="fa fa-user-plus"></i>  Nuevo contacto
+										</button>
+									</div>
+								</div>
+								<br / -->
+
+								<div class="box box-success">
+									<div class="box-body table-responsive no-padding">
+										<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+								            <thead>
+									            <tr>
+									                <th>Nombre</th>
+									                <th>Dirección</th>
+									                <th>Teléfono</th>
+									                <th>Celular</th>
+									            </tr>
+								           </thead>
+								           <tbody>
+												{{-- Render contact list --}}
+								           </tbody>
+										</table>
+									</div>
+								</div>
+							</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
+		{{-- Tab empleados --}}
+			<div class="tab-pane" id="tab_empleados">
+				<div class="box box-success">
+		            <div class="box-body">
+	                    <form method="POST" accept-charset="UTF-8" id="form-item-roles" data-toggle="validator">
+	                        <div class="row">
+	                        	<label for="display_name" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Nombre</label>
+	                            <div class="form-group col-sm-7 col-xs-10">
+	                                <select name="display_name" id="display_name" class="form-control select2-default" required>
+	                                    @foreach( App\Models\Base\Rol::getRoles() as $key => $value)
+	                                        <option value="{{ $key }}" <%- display_name == '{{ $value }}' ? 'selected': ''%> >{{ $value }}</option>
+	                                    @endforeach
+	                                </select>
+	                            </div>
+	                            <div class="form-group col-sm-1">
+	                                <button type="submit" class="btn btn-success btn-sm btn-block">
+	                                    <i class="fa fa-plus"></i>
+	                                </button>
+	                            </div>
+	                        </div>
+	                    </form>
+	                    <!-- table table-bordered table-striped -->
+	                    <div class="box-body table-responsive no-padding">
+	                        <table id="browse-roles-list" class="table table-hover table-bordered" cellspacing="0">
+	                            <thead>
+	                                <tr>
+	                                    <th width="5px"></th>
+	                                    <th width="95px">Nombre</th>
+	                                    <th width="95px">Key</th>
+	                                </tr>
+	                            </thead>
+	                            <tbody>
+	                                {{-- Render content roles --}}
+	                            </tbody>
+	                        </table>
+	                    </div>
+	                </div>
+	            </div>
+			</div>
+	<% } %>
 </script>
 
 <script type="text/template" id="contact-item-list-tpl">
@@ -419,6 +463,19 @@
 			<span><i class="fa fa-pencil-square-o"></i></span>
 		</a>
 	</td -->
+</script>
+
+<script type="text/template" id="roles-item-list-tpl">
+	<% if(edit) { %>
+        <td class="text-center">
+            <a class="btn btn-default btn-xs item-roles-remove" data-resource="<%- id %>">
+                <span><i class="fa fa-times"></i></span>
+            </a>
+    	</td>
+    <% } %>
+
+	<td><%- display_name %></td>
+	<td><%- name %></td>
 </script>
 
 <script type="text/template" id="add-puntoventa-tpl">

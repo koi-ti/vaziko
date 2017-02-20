@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Base\Rol;
 
@@ -57,6 +57,8 @@ class RolController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Rol::$key_cache );
 
                     return response()->json(['success' => true, 'id' => $rol->id]);
                 }catch(\Exception $e){
@@ -123,6 +125,8 @@ class RolController extends Controller
                     $rol->save();
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Rol::$key_cache );
                     
                     return response()->json(['success' => true, 'id' => $rol->id]);
                 }catch(\Exception $e){
