@@ -77,7 +77,7 @@ class UsuarioRolController extends Controller
 
                 // Commit Transaction
                 DB::commit();
-                return response()->json(['success' => true, 'id' => $request->tercero_id, 'display_name' =>$rol->display_name, 'name' => $rol->name]);
+                return response()->json(['success' => true, 'id' => $rol->id, 'display_name' =>$rol->display_name, 'name' => $rol->name]);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());
