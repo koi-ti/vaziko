@@ -78,7 +78,7 @@ app || (app = {});
             var _this = this
             // Set Spinner
             window.Misc.setSpinner( this.parameters.wrapper );
-            
+
             // Prepare data
             data.user_id = this.parameters.dataFilter.tercero_id;
 
@@ -119,10 +119,12 @@ app || (app = {});
 
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
-                _this = this;  
+                _this = this;
 
             if ( model instanceof Backbone.Model ) {
                 model.destroy({
+                    data: { user_id: this.parameters.dataFilter.tercero_id },
+                    processData: true,
                     success : function(model, resp) {
                         if(!_.isUndefined(resp.success)) {
                             window.Misc.removeSpinner( _this.parameters.wrapper );
@@ -136,7 +138,6 @@ app || (app = {});
                         }
                     }
                 });
-
             }
         },
 
