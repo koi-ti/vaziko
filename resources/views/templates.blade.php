@@ -379,7 +379,7 @@
 						<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
 							{{-- Tab empleados --}}
 							<div class="tab-pane" id="tab_empleados">
-								<div class="box box-success">
+								<div class="box box-success" id="wrapper-roles">
 						            <div class="box-body">
 					                    <form method="POST" accept-charset="UTF-8" id="form-item-roles" data-toggle="validator">
 					                        <div class="row">
