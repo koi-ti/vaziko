@@ -86,7 +86,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-roles'),
                     dataFilter: {
-                        'tercero_id': this.model.get('user_id')
+                        'tercero_id': this.model.get('id')
                     }
                }
             });

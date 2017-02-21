@@ -383,11 +383,11 @@
 						            <div class="box-body">
 					                    <form method="POST" accept-charset="UTF-8" id="form-item-roles" data-toggle="validator">
 					                        <div class="row">
-					                        	<label for="display_name" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Nombre</label>
+					                        	<label for="role_id" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Nombre</label>
 					                            <div class="form-group col-sm-7 col-xs-10">
-					                                <select name="display_name" id="display_name" class="form-control select2-default" required>
+					                                <select name="role_id" id="role_id" class="form-control select2-default" required>
 					                                    @foreach( App\Models\Base\Rol::getRoles() as $key => $value)
-					                                        <option value="{{ $key }}" <%- display_name == '{{ $value }}' ? 'selected': ''%> >{{ $value }}</option>
+					                                        <option value="{{ $key }}" <%- role_id == '{{ $value }}' ? 'selected': ''%> >{{ $value }}</option>
 					                                    @endforeach
 					                                </select>
 					                            </div>
@@ -468,7 +468,7 @@
 <script type="text/template" id="roles-item-list-tpl">
 	<% if(edit) { %>
         <td class="text-center">
-            <a class="btn btn-default btn-xs item-roles-remove" data-resource="<%- id %>">
+            <a class="btn btn-default btn-xs item-roles-remove" data-resource="<%- role_id %>">
                 <span><i class="fa fa-times"></i></span>
             </a>
     	</td>

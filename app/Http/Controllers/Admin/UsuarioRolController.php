@@ -9,6 +9,8 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables,Cache;
 use App\Models\Base\UsuarioRol;
+use App\Models\Base\Tercero;
+use App\Models\Base\Rol;
 
 class UsuarioRolController extends Controller
 {
@@ -17,9 +19,17 @@ class UsuarioRolController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        dd('hola');
+        if ($request->ajax()){
+            $query = UsuarioRol::query();
+            $query->select('koi_usuario_rol.*','koi_rol.display_name', 'koi_rol.name');
+            $query->join('koi_rol', 'koi_usuario_rol.role_id', '=', 'koi_rol.id');
+            $query->where('user_id', $request->tercero_id);
+            $query->orderBy('user_id', 'asc');
+            return response()->json( $query->get() );
+        }
+        abort(404);
     }
 
     /**
@@ -42,27 +52,32 @@ class UsuarioRolController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $usuariorol = new UsuarioRol;
-            if ($usuariorol->isValid($data)) {
-                DB::beginTransaction();
-                try {
-                    // Validar rol
-                    $usuariorol = UsuarioRol::find($request->display_name);
-                    if(!$usuariorol instanceof UsuarioRol) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar rol, por favor verifique la información o consulte al administrador.']);
-                    }
-
-                    // Commit Transaction
-                    DB::commit();
-                    return response()->json(['success' => true, 'user_id' => $usuariorol->user_id]);
-                }catch(\Exception $e){
+            DB::beginTransaction();
+            try {
+                // Validar rol
+                $rol = Rol::find($request->role_id);
+                if(!$rol instanceof Rol) {
                     DB::rollback();
-                    Log::error($e->getMessage());
-                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar rol, por favor verifique la información o consulte al administrador.']);
                 }
+
+                // Validar tercero
+                $tercero = Tercero::find($request->user_id);
+                if(!$tercero instanceof Tercero) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+                }
+
+                $tercero->attachRole($rol);
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'display_name' =>$rol->display_name, 'name' => $rol->name]);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
-            return response()->json(['success' => false, 'errors' => $usuariorol->errors]);
         }
         abort(403);
     }
@@ -107,8 +122,37 @@ class UsuarioRolController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                // Validar rol
+                $rol = UsuarioRol::find($request->role_id);
+                if(!$rol instanceof Rol) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar rol, por favor verifique la información o consulte al administrador.']);
+                }
+
+                // Validar tercero
+                $tercero = Tercero::find($request->user_id);
+                if(!$tercero instanceof Tercero) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+                }
+
+                // Eliminar item rol
+                $tercero->detachRoles($rol);
+
+                DB::commit();
+                return response()->json(['success' => true]);
+
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error(sprintf('%s -> %s: %s', 'UsuarioRolController', 'destroy', $e->getMessage()));
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }

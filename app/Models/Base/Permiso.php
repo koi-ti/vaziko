@@ -2,9 +2,9 @@
 
 namespace App\Models\Base;
 
-use Illuminate\Database\Eloquent\Model;
+use Zizaco\Entrust\EntrustPermission;
 
-class Permiso extends Model
+class Permiso extends EntrustPermission
 {
     /**
      * The database table used by the model.

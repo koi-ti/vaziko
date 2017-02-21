@@ -20,7 +20,7 @@ class UsuarioRol extends Model
     public function isValid($data)
     {
         $rules = [
-            'display_name' => 'required'
+            'role_id' => 'required'
         ];
 
         $validator = Validator::make($data, $rules);

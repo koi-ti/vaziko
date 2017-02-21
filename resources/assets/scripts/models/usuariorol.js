@@ -13,8 +13,10 @@ app || (app = {});
         urlRoot: function () {
             return window.Misc.urlFull( Route.route('terceros.roles.index') );
         },
-        idAttribute: 'user_id',
+        idAttribute: 'role_id',
         defaults: {
+        	'user_id': '',
+        	'role_id': ''
         }
     });
 

@@ -2,11 +2,12 @@
 
 namespace App\Models\Base;
 
-use Illuminate\Database\Eloquent\Model;
+use Zizaco\Entrust\EntrustRole;
+
 
 use Validator, Cache;
 
-class Rol extends Model
+class Rol extends EntrustRole
 {
     /**
      * The database table used by the model.

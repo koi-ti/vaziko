@@ -25,10 +25,11 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            this.parameters.wrapper
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -52,7 +53,6 @@ app || (app = {});
         * @param Object contactModel Model instance
         */
         addOne: function (usuariorolModel) {
-            console.log(usuariorolModel);
             var view = new app.RolItemView({
                 model: usuariorolModel,
                 parameters: {
@@ -68,7 +68,6 @@ app || (app = {});
         */
         addAll: function () {
             this.collection.forEach( this.addOne, this );
-            console.log('addAll');
         },
 
         /**
@@ -120,7 +119,7 @@ app || (app = {});
 
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
-                _this = this;
+                _this = this;  
 
             if ( model instanceof Backbone.Model ) {
                 model.destroy({
