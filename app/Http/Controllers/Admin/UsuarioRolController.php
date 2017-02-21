@@ -23,7 +23,7 @@ class UsuarioRolController extends Controller
     {
         if ($request->ajax()){
             $query = UsuarioRol::query();
-            $query->select('koi_usuario_rol.*','koi_rol.display_name', 'koi_rol.name');
+            $query->select('koi_usuario_rol.*','koi_rol.display_name', 'koi_rol.name', 'koi_rol.id as id');
             $query->join('koi_rol', 'koi_usuario_rol.role_id', '=', 'koi_rol.id');
             $query->where('user_id', $request->tercero_id);
             $query->orderBy('user_id', 'asc');
@@ -72,7 +72,7 @@ class UsuarioRolController extends Controller
 
                 // Commit Transaction
                 DB::commit();
-                return response()->json(['success' => true, 'display_name' =>$rol->display_name, 'name' => $rol->name]);
+                return response()->json(['success' => true, 'id' => $request->tercero_id, 'display_name' =>$rol->display_name, 'name' => $rol->name]);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());
@@ -128,21 +128,14 @@ class UsuarioRolController extends Controller
             DB::beginTransaction();
             try {
                 // Validar rol
-                $rol = UsuarioRol::find($request->role_id);
-                if(!$rol instanceof Rol) {
+                $rol = UsuarioRol::where('role_id', $id)->where('user_id', $request->user_id)->first();
+                if(!$rol instanceof UsuarioRol) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar rol, por favor verifique la información o consulte al administrador.']);
                 }
 
-                // Validar tercero
-                $tercero = Tercero::find($request->user_id);
-                if(!$tercero instanceof Tercero) {
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
-                }
-
                 // Eliminar item rol
-                $tercero->detachRoles($rol);
+                $rol->delete();
 
                 DB::commit();
                 return response()->json(['success' => true]);

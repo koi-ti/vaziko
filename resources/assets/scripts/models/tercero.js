@@ -54,6 +54,7 @@ app || (app = {});
             'tercero_otro': false,
             'tercero_cual': '',
             'role_id': '',
+            'id': '',
             'actividad_tarifa' : ''
         }
     });
