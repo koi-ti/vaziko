@@ -34,6 +34,7 @@ app || (app = {});
             'roles/:rol/edit(/)': 'getRolesEdit',
 
             'permisos(/)': 'getPermisosMain',
+            'modulos(/)': 'getModulosMain',
 
             'puntosventa(/)': 'getPuntosVentaMain',
             'puntosventa/create(/)': 'getPuntosVentaCreate',
@@ -414,6 +415,9 @@ app || (app = {});
             this.rolModel.fetch();
         },
 
+        /**
+        * show main view permisos
+        */
         getPermisosMain: function () {
 
             if ( this.mainPermisoView instanceof Backbone.View ){
@@ -422,6 +426,19 @@ app || (app = {});
             }
 
             this.mainPermisoView = new app.MainPermisoView( );
+        },
+
+        /**
+        * show main view modulos
+        */
+        getModulosMain: function () {
+
+            if ( this.mainModuloView instanceof Backbone.View ){
+                this.mainModuloView.stopListening();
+                this.mainModuloView.undelegateEvents();
+            }
+
+            this.mainModuloView = new app.MainModuloView( );
         },
 
         /**

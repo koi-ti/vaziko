@@ -57,6 +57,7 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
     Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
+    Route::resource('modulos', 'Admin\ModuloController', ['only' => ['index']]);
 
 	/*
 	|-------------------------
