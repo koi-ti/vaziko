@@ -189,7 +189,7 @@ app || (app = {});
                     this.createTerceroView.undelegateEvents();
                 }
 
-                // Redirect to edit orden
+                // Redirect to edit tercero
                 Backbone.history.navigate(Route.route('terceros.edit', { terceros: resp.id}), { trigger:true });
             }
         }

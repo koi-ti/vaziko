@@ -25,13 +25,13 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 ajax: window.Misc.urlFull( Route.route('modulos.index') ),
                 columns: [
-                    { data: 'name', name: 'name'},
-                    { data: 'display_name', name: 'display_name'}
+                    { data: 'display_name', name: 'display_name'},
+                    { data: 'name', name: 'name'}
                 ],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '15%'
+                        width: '25%'
                     }
                 ]
 			});

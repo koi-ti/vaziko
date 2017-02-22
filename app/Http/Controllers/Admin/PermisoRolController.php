@@ -11,7 +11,7 @@ use Datatables, DB;
 
 use App\Models\Base\Modulo;
 
-class ModuloController extends Controller
+class PermisoRolController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,12 +20,15 @@ class ModuloController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
+        if($request->ajax()){
             $query = Modulo::query();
-            $query->whereNotNull('name');
-            return Datatables::of($query)->make(true);
+            $query->where('nivel1', '!=', '0')
+                ->where('nivel2', '=', '0')
+                ->where('nivel3', '=', '0')
+                ->where('nivel4', '=', '0');
+            return response()->json($query->get());
         }
-        return view('admin.modulos.index');
+        abort(404);
     }
 
     /**

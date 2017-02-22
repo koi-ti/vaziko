@@ -14,7 +14,8 @@ app || (app = {});
         el: '#rol-create',
         template: _.template( ($('#add-rol-tpl').html() || '') ),
         events: {
-            'submit #form-rol': 'onStore'
+            'click .submit-rol': 'submitRol',
+            'submit #form-roles': 'onStore'
         },
         parameters: {
         },
@@ -30,10 +31,48 @@ app || (app = {});
             // Attributes
             this.$wraperForm = this.$('#render-form-rol');
 
+            if( this.model.id != undefined ) {
+                this.moduloList = new app.ModuloList();
+            }
+
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function() {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html( this.template(attributes) );
+            
+            this.$form = this.$('#form-roles');
+
+            // Model exist
+            if( this.model.id != undefined ) {
+
+                // Reference views
+                this.referenceViews();
+            }
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Tips list
+            this.modulosListView = new app.ModulosListView( {
+                collection: this.moduloList,
+                parameters: {
+                    edit: false,
+                    wrapper: this.$('#wrapper-modulos'),
+                    dataFilter: {
+                        'modulo_id': this.model.get('id')
+                    }
+               }
+            });
         },
 
         /**
@@ -49,12 +88,11 @@ app || (app = {});
             }
         },
 
-        /*
-        * Render View Element
+        /**
+        * Event submit productop
         */
-        render: function() {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+        submitRol: function (e) {
+            this.$form.submit();
         },
 
         /**
@@ -82,7 +120,8 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('roles.index')) );
+                // Redirect to edit rol
+                Backbone.history.navigate(Route.route('roles.edit', { roles: resp.id}), { trigger:true });
             }
         }
     });

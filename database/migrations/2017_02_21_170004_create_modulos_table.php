@@ -14,8 +14,13 @@ class CreateModulosTable extends Migration
     {
         Schema::create('koi_modulo', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name')->unique();
+            $table->string('name')->unique()->nullable();
             $table->string('display_name')->nullable();
+            
+            $table->integer('nivel1')->default(0);
+            $table->integer('nivel2')->default(0);
+            $table->integer('nivel3')->default(0);
+            $table->integer('nivel4')->default(0);
         });
     }
 
