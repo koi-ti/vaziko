@@ -125,20 +125,7 @@ app || (app = {});
         },
 
         addContacto: function() {
-
-            if ( this.createTContactoView instanceof Backbone.View ){
-                this.createTContactoView.stopListening();
-                this.createTContactoView.undelegateEvents();
-            }
-
-            this.createTContactoView = new app.CreateTContactoView({
-                model: new app.ContactoModel(),
-                collection: this.contactsList,
-                parameters: {
-                    'tercero_id': this.model.get('id')
-               }
-            });
-            this.createTContactoView.render();
+            this.contactsListView.trigger('createOne', this.model.get('id'));
         },
 
         changedTechnical: function(e) {

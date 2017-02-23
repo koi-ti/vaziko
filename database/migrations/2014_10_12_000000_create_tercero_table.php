@@ -44,6 +44,9 @@ class CreateTerceroTable extends Migration
             $table->boolean('tercero_activo')->default(false);
             $table->boolean('tercero_responsable_iva')->default(false);
             $table->boolean('tercero_autoretenedor_cree')->default(false);
+            $table->boolean('tercero_gran_contribuyente')->default(false);
+            $table->boolean('tercero_autoretenedor_renta')->default(false);
+            $table->boolean('tercero_autoretenedor_ica')->default(false);
             $table->boolean('tercero_socio')->default(false);
             $table->boolean('tercero_cliente')->default(false);
             $table->boolean('tercero_acreedor')->default(false);

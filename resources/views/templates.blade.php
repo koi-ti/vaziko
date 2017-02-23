@@ -487,11 +487,11 @@
 	<td><%- tcontacto_direccion %></td>
 	<td><%- tcontacto_telefono %></td>
 	<td><%- tcontacto_celular %></td>
-	<!-- td class="text-center">
+	<td class="text-center">
 		<a class="btn btn-default btn-xs btn-edit-tcontacto" data-resource="<%- id %>">
 			<span><i class="fa fa-pencil-square-o"></i></span>
 		</a>
-	</td -->
+	</td>
 </script>
 
 <script type="text/template" id="roles-item-list-tpl">

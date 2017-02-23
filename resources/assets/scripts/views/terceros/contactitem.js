@@ -13,9 +13,6 @@ app || (app = {});
 
         tagName: 'tr',
         template: _.template( ($('#contact-item-list-tpl').html() || '') ),
-        events: {
-            'click .btn-edit-tcontacto': 'editContacto',
-        },
 
         /**
         * Constructor Method
@@ -37,21 +34,7 @@ app || (app = {});
             this.$el.html( this.template(attributes) );
 
             return this;
-        },
-
-        editContacto: function() {
-            if ( this.createTContactoView instanceof Backbone.View ){
-                this.createTContactoView.stopListening();
-                this.createTContactoView.undelegateEvents();
-            }
-
-            this.createTContactoView = new app.CreateTContactoView({
-                model: this.model
-            });
-            console.log( this.createTContactoView );
-            this.createTContactoView.render();
         }
-
     });
 
 })(jQuery, this, this.document);
