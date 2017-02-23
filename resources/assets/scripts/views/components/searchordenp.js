@@ -55,16 +55,16 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
-                        data.ordenp_numero = _this.$searchordenpOrden.val();
-                        data.ordenp_tercero_nit = _this.$searchordenpTercero.val();
+                        data.orden_numero = _this.$searchordenpOrden.val();
+                        data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }
                 },
                 columns: [
-                    { data: 'ordenp_codigo', name: 'ordenp_codigo' },
-                    { data: 'ordenp_ano', name: 'ordenp_ano' },
-                    { data: 'ordenp_numero', name: 'ordenp_numero' },
+                    { data: 'orden_codigo', name: 'orden_codigo' },
+                    { data: 'orden_ano', name: 'orden_ano' },
+                    { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'ordenp_fecha', name: 'ordenp_fecha' }
+                    { data: 'orden_fecha', name: 'orden_fecha' }
                 ],
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]
@@ -81,8 +81,15 @@ app || (app = {});
                     {
                         targets: [1, 2],
                         visible: false
+                    },
+                    {
+                        targets: 4 ,
+                        render: function ( data, type, full, row ) {
+                            return window.moment(data).format('YYYY-MM-DD');
+                        } 
                     }
                 ]
+
 			});
 
             // Modal show
@@ -95,7 +102,7 @@ app || (app = {});
 
 	        var data = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
 
-			this.$inputContent.val( data.ordenp_codigo );
+			this.$inputContent.val( data.orden_codigo );
 			this.$inputName.val( data.tercero_nombre );
 
 			this.$modalComponent.modal('hide');
@@ -134,7 +141,7 @@ app || (app = {});
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.search')),
 	                type: 'GET',
-	                data: { ordenp_codigo: orden },
+	                data: { orden_codigo: orden },
 	                beforeSend: function() {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner( _this.$wraperConten );

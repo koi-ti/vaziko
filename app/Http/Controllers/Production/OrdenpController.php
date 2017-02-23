@@ -22,7 +22,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta',
+            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -298,7 +298,7 @@ class OrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('ordenp_codigo')) {
+        if($request->has('orden_codigo')) {
             $ordenp = Ordenp::select(
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
@@ -307,8 +307,8 @@ class OrdenpController extends Controller
                     ELSE tercero_razonsocial END)
                 AS tercero_nombre")
             )
-            ->join('koi_tercero', 'orden_tercero', '=', 'koi_tercero.id')
-            ->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->ordenp_codigo}'")->first();
+            ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id')
+            ->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'")->first();
             if($ordenp instanceof Ordenp) {
                 return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre]);
             }

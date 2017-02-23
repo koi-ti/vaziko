@@ -5,14 +5,14 @@
     </li>
 
     {{-- Administracion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['empresa', 'terceros', 'actividades', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['empresa', 'modulos', 'terceros', 'roles', 'permisos', 'actividades', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
         <a href="{{ route('dashboard') }}">
             <i class="fa fa-cog"></i> <span>Administración</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos administracion --}}
-            <li class="{{ in_array(Request::segment(1), ['empresa', 'terceros']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['empresa', 'terceros','roles']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -23,11 +23,14 @@
                     <li class="{{ Request::segment(1) == 'terceros' ? 'active' : '' }}">
                         <a href="{{ route('terceros.index') }}"><i class="fa fa-users"></i> Terceros</a>
                     </li>
+                    <li class="{{ Request::segment(1) == 'roles' ? 'active' : '' }}">
+                        <a href="{{ route('roles.index') }}"><i class="fa fa-address-card-o"></i> Roles</a>
+                    </li>
                 </ul>
             </li>
 
             {{-- Referencias administracion --}}
-            <li class="{{ in_array(Request::segment(1), ['actividades', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['actividades', 'modulos', 'permisos', 'municipios', 'departamentos', 'sucursales', 'puntosventa']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -38,8 +41,14 @@
                     <li class="{{ Request::segment(1) == 'departamentos' ? 'active' : '' }}">
                         <a href="{{ route('departamentos.index') }}"><i class="fa fa-circle-o"></i> Departamentos</a>
                     </li>
+                    <li class="{{ Request::segment(1) == 'modulos' ? 'active' : '' }}">
+                        <a href="{{ route('modulos.index') }}"><i class="fa fa-circle-o"></i> Modulos</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'municipios' ? 'active' : '' }}">
                         <a href="{{ route('municipios.index') }}"><i class="fa fa-circle-o"></i> Municipios</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'permisos' ? 'active' : '' }}">
+                        <a href="{{ route('permisos.index') }}"><i class="fa fa-circle-o"></i> Permisos</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'puntosventa' ? 'active' : '' }}">
                         <a href="{{ route('puntosventa.index') }}"><i class="fa fa-circle-o"></i> Puntos de venta</a>

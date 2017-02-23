@@ -52,6 +52,9 @@ app || (app = {});
             'tercero_extranjero': false,
             'tercero_afiliado': false,
             'tercero_otro': false,
+            'tercero_tecnico': false,
+            'tercero_coordinador': false,
+            'tercero_coordinador_por': '',
             'tercero_cual': '',
             'actividad_tarifa' : ''
         }

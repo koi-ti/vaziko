@@ -81,7 +81,7 @@ class DetalleAsientoController extends Controller
                         if($centrocosto->centrocosto_codigo == 'OP') {
                             // Validate orden
                             if($request->has('asiento2_orden')) {
-                                $ordenp = Ordenp::whereRaw("CONCAT(ordenproduccion0_numero,'-',SUBSTRING(ordenproduccion0_ano, -2)) = '{$request->asiento2_orden}'")->first();
+                                $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->asiento2_orden}'")->first();
                             }
                             if(!$ordenp instanceof Ordenp) {
                                 DB::rollback();
@@ -141,7 +141,7 @@ class DetalleAsientoController extends Controller
                         'asiento2_credito' => $asiento2->asiento2_credito,
                         'asiento2_debito' => $asiento2->asiento2_debito,
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
-                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->ordenproduccion0_numero}-".substr($ordenp->ordenproduccion0_ano,-2) : '')
+                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : '')
                     ]);
 
                 }catch(\Exception $e){

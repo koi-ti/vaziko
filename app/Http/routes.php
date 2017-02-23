@@ -43,9 +43,10 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
-
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
+		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
 	});
+	
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
     Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
@@ -53,6 +54,15 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
 	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'roles'], function()
+	{
+		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'store', 'destroy']]);
+	});	
+
+	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
+    Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
+    Route::resource('modulos', 'Admin\ModuloController', ['only' => ['index']]);
 
 	/*
 	|-------------------------

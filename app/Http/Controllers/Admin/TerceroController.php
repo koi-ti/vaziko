@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Accounting\Facturap2;
 
@@ -156,6 +156,9 @@ class TerceroController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache technical administrators
+                    Cache::forget( Tercero::$key_cache_tadministrators );
+
                     return response()->json(['success' => true, 'id' => $tercero->id]);
                 }catch(\Exception $e){
                     DB::rollback();

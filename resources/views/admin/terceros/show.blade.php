@@ -7,17 +7,6 @@
 
 @section('module')
 	<div class="box box-success">
-		<div class="box-header with-border">
-        	<div class="row">
-				<div class="col-md-2 col-sm-6 col-xs-6 text-left">
-					<a href="{{ route('terceros.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-				</div>
-				<div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-					<a href="{{ route('terceros.edit', ['terceros' => $tercero->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-				</div>
-			</div>
-		</div>
-
 		<div class="box-body">
 			<div class="row">
 				<div class="form-group col-md-3">
@@ -127,15 +116,25 @@
 	        </div>
 
 		    <div class="row">
+	            <div class="col-md-offset-4 col-md-2 col-sm-6 col-xs-6">
+					<a href="{{ route('terceros.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+	            </div>
+	            <div class="col-md-2 col-sm-6 col-xs-6">
+					<a href="{{ route('terceros.edit', ['terceros' => $tercero->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+	            </div>
+	        </div>
+
+	        <br/>
+		    <div class="row">
 		    	<div class="form-group col-md-12">
 					<div class="nav-tabs-custom">
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
+							<li><a href="#tab_empleados" data-toggle="tab" class="{{ $tercero->tercero_empleado || $tercero->tercero_interno ? '' : 'hide' }}">Empleado</a></li>
 							<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
 							<li><a href="#tab_proveedor" data-toggle="tab">Proveedor</a></li>
 						</ul>
 						<div class="tab-content">
-
 							{{-- Tab contabilidad --}}
 							<div class="tab-pane active" id="tab_contabilidad">
 					        	<div class="row">
@@ -151,12 +150,6 @@
 
 			        	        <div class="row">
 						        	<div class="form-group col-md-2">
-						        		<label class="checkbox-inline" for="tercero_activo">
-											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" disabled {{ $tercero->tercero_activo ? 'checked': '' }}> Activo
-										</label>
-						        	</div>
-
-    								<div class="form-group col-md-2">
 										<label class="checkbox-inline" for="tercero_cliente">
 											<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente" disabled {{ $tercero->tercero_cliente ? 'checked': '' }}> Cliente
 										</label>
@@ -169,8 +162,14 @@
 									</div>
 
 									<div class="form-group col-md-2">
-										<label class="checkbox-inline" for="tercero_interno">
-											<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" disabled {{ $tercero->tercero_interno ? 'checked': '' }}> Interno
+										<label class="checkbox-inline" for="tercero_proveedor">
+											<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" disabled {{ $tercero->tercero_proveedor ? 'checked': '' }}> Proveedor
+										</label>
+									</div>
+
+									<div class="form-group col-md-2">
+										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
+											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" disabled {{ $tercero->tercero_autoretenedor_ica ? 'checked': '' }}> Autorretenedor ICA
 										</label>
 									</div>
 
@@ -189,8 +188,8 @@
 									</div>
 
 									<div class="form-group col-md-2">
-										<label class="checkbox-inline" for="tercero_proveedor">
-											<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" disabled {{ $tercero->tercero_proveedor ? 'checked': '' }}> Proveedor
+										<label class="checkbox-inline" for="tercero_interno">
+											<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" disabled {{ $tercero->tercero_interno ? 'checked': '' }}> Interno
 										</label>
 									</div>
 
@@ -239,14 +238,6 @@
 									</div>
 
 									<div class="form-group col-md-2">
-										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
-											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" disabled {{ $tercero->tercero_autoretenedor_ica ? 'checked': '' }}> Autorretenedor ICA
-										</label>
-									</div>
-							    </div>
-
-							    <div class="row">
-									<div class="form-group col-md-2">
 										<label class="checkbox-inline" for="tercero_otro">
 											<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" disabled {{ $tercero->tercero_otro ? 'checked': '' }}> Otro
 										</label>
@@ -258,9 +249,59 @@
 							    </div>
 							</div>
 
+
+							{{-- Tab empleados --}}
+							<div class="tab-pane" id="tab_empleados">
+								<form method="POST" accept-charset="UTF-8" id="form-employee" data-toggle="validator">
+									<div class="row">
+								    	<div class="form-group col-md-2">
+							        		<label class="checkbox-inline" for="tercero_activo">
+												<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" disabled {{ $tercero->tercero_activo ? 'checked': '' }}> Activo
+											</label>
+							        	</div>
+							        	<div class="form-group col-md-2">
+							        		<label class="checkbox-inline" for="tercero_tecnico">
+												<input type="checkbox" id="tercero_tecnico" name="tercero_tecnico" value="tercero_tecnico" disabled {{ $tercero->tercero_tecnico ? 'checked': '' }}> Técnico
+											</label>
+							        	</div>
+									</div>
+
+									<div class="row">
+										<div class="form-group col-md-2">
+							        		<label class="checkbox-inline" for="tercero_coordinador">
+												<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" disabled {{ $tercero->tercero_coordinador ? 'checked': '' }}> Técnico
+											</label>
+							        	</div>
+
+		                               	<div class="form-group col-md-6 {{ $tercero->tercero_tecnico ? '' : 'hide' }}">
+											<label for="tercero_coordinador_por" class="control-label">Coordinado por</label>
+											<div>{{ $tercero->nombre_coordinador }}</div>
+				                        </div>
+									</div>
+								</form>
+
+								<br />
+								<div class="row">
+							    	<div class="form-group col-md-offset-2 col-md-8">
+										<div class="box box-success" id="wrapper-roles">
+											<div class="box-header with-border">
+												<h3 class="box-title">Roles de usuario</h3>
+											</div>
+						                    <div class="box-body table-responsive no-padding">
+						                        <table id="browse-roles-list" class="table table-hover table-bordered" cellspacing="0">
+						                            <tbody>
+						                                {{-- Render content roles --}}
+						                            </tbody>
+						                        </table>
+						                    </div>
+							            </div>
+						            </div>
+								</div>
+							</div>
+
 							{{-- Tab contactos --}}
 							<div class="tab-pane" id="tab_contactos">
-								<div class="box box-primary">
+								<div class="box box-success">
 									<div class="box-body table-responsive no-padding">
 										<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 								            <thead>
@@ -281,7 +322,7 @@
 
 							{{-- Tab proveedor --}}
 							<div class="tab-pane" id="tab_proveedor">
-								<div class="box box-primary">
+								<div class="box box-success">
 									<div class="box-body table-responsive no-padding">
 										<table id="browse-facturap-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 								            <thead>

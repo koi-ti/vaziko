@@ -32,6 +32,8 @@ app || (app = {});
             this.listenTo( this.model, 'change:id', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
+
+            this.$modalComponent = this.$('#modal-tcontacto-component');
         },
 
         /*
@@ -39,8 +41,6 @@ app || (app = {});
         */
         render: function(){
             // Attributes
-            this.$modalComponent = this.$('#modal-tcontacto-component');
-
             var attributes = this.model.toJSON();
             this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
             this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
@@ -49,6 +49,8 @@ app || (app = {});
             this.ready();
 
             this.$modalComponent.modal('show');
+
+            return this;
         },
 
         /**
