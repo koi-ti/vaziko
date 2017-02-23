@@ -13,7 +13,7 @@ app || (app = {});
 
         el: '#browse-contact-list',
         events: {
-            //
+            'click .btn-edit-tcontacto': 'editOne',
         },
         parameters: {
             dataFilter: {}
@@ -33,6 +33,9 @@ app || (app = {});
             this.listenTo( this.collection, 'reset', this.addAll );
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
+
+            // Trigger
+            this.on('createOne', this.createOne, this);
 
             this.collection.fetch({ data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true });
         },
@@ -58,6 +61,43 @@ app || (app = {});
         */
         addAll: function () {
             this.collection.forEach( this.addOne, this );
+        },
+
+
+        editOne: function(e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if ( this.createTContactoView instanceof Backbone.View ){
+                this.createTContactoView.stopListening();
+                this.createTContactoView.undelegateEvents();
+            }
+
+            this.createTContactoView = new app.CreateTContactoView({
+                model: model
+            });
+            this.createTContactoView.render();
+        },
+
+        createOne: function(tercero) {
+             var _this = this;
+
+            if ( this.createTContactoView instanceof Backbone.View ){
+                this.createTContactoView.stopListening();
+                this.createTContactoView.undelegateEvents();
+            }
+
+            this.createTContactoView = new app.CreateTContactoView({
+                model: new app.ContactoModel(),
+                collection: _this.collection,
+                parameters: {
+                    'tercero_id': tercero
+               }
+            });
+            this.createTContactoView.render();
         },
 
         /**
