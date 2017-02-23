@@ -10,7 +10,9 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.ModuloItemView = Backbone.View.extend({
-    	
+
+        tagName: 'div',
+        className : 'panel box box-whithout-border',
         template: _.template( ($('#roles-modulo-list-tpl').html() || '') ),
         parameters: {
             edit: false

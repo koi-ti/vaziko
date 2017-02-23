@@ -22,10 +22,11 @@ class PermisoRolController extends Controller
     {
         if($request->ajax()){
             $query = Modulo::query();
-            $query->where('nivel1', '!=', '0')
-                ->where('nivel2', '=', '0')
-                ->where('nivel3', '=', '0')
-                ->where('nivel4', '=', '0');
+            $query->where('nivel1', '!=', '0');
+            $query->where('nivel2', '=', '0');
+            $query->where('nivel3', '=', '0');
+            $query->where('nivel4', '=', '0');
+            $query->orderBy('nivel1', 'asc');
             return response()->json($query->get());
         }
         abort(404);

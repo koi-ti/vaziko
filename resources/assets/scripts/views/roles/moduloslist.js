@@ -11,7 +11,7 @@ app || (app = {});
 
     app.ModulosListView = Backbone.View.extend({
 
-        el: '#wrapper-modulos',
+        el: '#accordion-permisos',
         events: {
             'click .item-modulos-remove': 'removeOne'
         },
@@ -58,7 +58,7 @@ app || (app = {});
                 }
             });
             moduloModel.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.append( view.render().el );
         },
 
         /**

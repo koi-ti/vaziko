@@ -44,16 +44,12 @@
                     <div class="form-group col-md-12">
                         <div class="nav-tabs-custom">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#tab_modulos" data-toggle="tab">Modulos</a></li>
+                                <li class="active"><a href="#tab_modulos" data-toggle="tab">Permisos</a></li>
                             </ul>
-
                             <div class="tab-content">
-                                {{-- Content modulos --}}
                                 <div class="tab-pane active" id="tab_modulos">
-                                    <div class="box box-success" id="wrapper-modulos">
-                                        <div class="box-body">
-
-                                        </div>
+                                    <div class="box-group" id="accordion-permisos">
+                                        {{-- Content modulos --}}
                                     </div>
                                 </div>
                             </div>
@@ -73,20 +69,32 @@
                     </div>
                 </div>
             </div>
-
         </script>
 
         <script type="text/template" id="roles-modulo-list-tpl">
-        <div class="box box-default">
-            <div class="box-header with-border">
-                <div class="panel-heading">
-                    <a data-toggle="collapse" href="#collapse_<%- id %>"><%- display_name %></a>
-                </div>
-                <div id="collapse_<%- id %>" class="panel-collapse collapse">
-                    hola jajaj
+            <div class="box-header">
+                <h4 class="box-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- id %>"><%- display_name %></a>
+                </h4>
+            </div>
+            <div id="collapse_<%- id %>" class="panel-collapse collapse">
+                <div class="box-body">
+                    <table class="table table-condensed">
+                        <tr>
+                            <th><a href="#">Todos <%- display_name %></a></th>
+                        </tr>
+                        <tr>
+                            <td>Modulos</td>
+                        </tr>
+                        <tr>
+                            <td>Reportes</td>
+                        </tr>
+                        <tr>
+                            <td>Referencias</td>
+                        </tr>
+                    </table>
                 </div>
             </div>
-        </div>
         </script>
     </section>
 @stop
