@@ -73,6 +73,13 @@ class UsuarioRolController extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
                 }
 
+                // Validar unique
+                $usuariounique = UsuarioRol::where('user_id', $tercero->id)->where('role_id', $rol->id)->first();
+                if($usuariounique instanceof UsuarioRol) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => "El rol {$rol->display_name} ya se encuentra asociada a este tercero."]);
+                }
+
                 $tercero->attachRole($rol);
 
                 // Commit Transaction

@@ -8,9 +8,10 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Datatables, DB;
-use App\Models\Base\Permiso;
 
-class PermisoController extends Controller
+use App\Models\Base\Modulo;
+
+class ModuloController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -20,10 +21,11 @@ class PermisoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Permiso::query();
+            $query = Modulo::query();
+            $query->whereNotNull('name');
             return Datatables::of($query)->make(true);
         }
-        return view('admin.permisos.index');
+        return view('admin.modulos.index');
     }
 
     /**
