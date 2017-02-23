@@ -12,7 +12,7 @@ use Zizaco\Entrust\Traits\EntrustUserTrait;
 
 use App\Models\BaseModel;
 
-use Validator, DB;
+use Validator, DB, Cache;
 
 class Tercero extends BaseModel implements AuthenticatableContract,
                                     CanResetPasswordContract
@@ -28,18 +28,32 @@ class Tercero extends BaseModel implements AuthenticatableContract,
     protected $table = 'koi_tercero';
 
     /**
+     * The key used by cache store.
+     *
+     * @var static string
+     */
+    public static $key_cache_tadministrators = '_technical_administrators';
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'username', 'password'];
+    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'username', 'password', 'tercero_coordinador_por'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['tercero_activo', 'tercero_responsable_iva', 'tercero_autoretenedor_cree', 'tercero_gran_contribuyente', 'tercero_autoretenedor_renta', 'tercero_autoretenedor_ica', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_otro'];
+    protected $boolean = ['tercero_activo', 'tercero_responsable_iva', 'tercero_autoretenedor_cree', 'tercero_gran_contribuyente', 'tercero_autoretenedor_renta', 'tercero_autoretenedor_ica', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_tecnico', 'tercero_coordinador', 'tercero_otro'];
+
+    /**
+     * The attributes that are mass nullable fields to null.
+     *
+     * @var array
+     */
+    protected $nullable = ['tercero_coordinador_por'];
 
     /**
      * The attributes excluded from the model's JSON form.
@@ -94,10 +108,16 @@ class Tercero extends BaseModel implements AuthenticatableContract,
     public static function getTercero($id)
     {
         $query = Tercero::query();
-        $query->select('koi_tercero.*', 'actividad_nombre', 'actividad_tarifa', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"));
+        $query->select('koi_tercero.*', 'actividad_nombre', 'actividad_tarifa', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), DB::raw("(CASE WHEN tc.tercero_persona = 'N'
+                    THEN CONCAT(tc.tercero_nombre1,' ',tc.tercero_nombre2,' ',tc.tercero_apellido1,' ',tc.tercero_apellido2,
+                            (CASE WHEN (tc.tercero_razonsocial IS NOT NULL AND tc.tercero_razonsocial != '') THEN CONCAT(' - ', tc.tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tc.tercero_razonsocial END)
+                AS nombre_coordinador"));
         $query->leftJoin('koi_actividad', 'tercero_actividad', '=', 'koi_actividad.id');
         $query->leftJoin('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
         $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+        $query->leftJoin('koi_tercero as tc', 'koi_tercero.tercero_coordinador_por', '=', 'tc.id');
         $query->where('koi_tercero.id', $id);
         return $query->first();
     }
@@ -105,6 +125,32 @@ class Tercero extends BaseModel implements AuthenticatableContract,
     public function getName()
     {
         return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_apellido1'], $this->attributes['tercero_apellido2']);
+    }
+
+    public static function getTechnicalAdministrators()
+    {
+        if (Cache::has(self::$key_cache_tadministrators)) {
+            return Cache::get(self::$key_cache_tadministrators);
+        }
+
+        return Cache::rememberForever(self::$key_cache_tadministrators, function() {
+            $query = Tercero::query();
+            $query->select('id',
+                DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
+            );
+            $query->where('tercero_activo', true);
+            $query->where('tercero_coordinador', true);
+            $query->orderby('tercero_nombre', 'asc');
+            $collection = $query->lists('tercero_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
     }
 
     public function setTerceroNombre1Attribute($name)

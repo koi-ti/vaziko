@@ -77,6 +77,8 @@ app || (app = {});
                         _this.model = new app.TerceroModel();
                         var template = _.template($('#add-tercero-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
+
+                        _this.$formAccounting = _this.$modalComponent.find('#form-accounting');
                     },
                     'grupo' : function() {
                         _this.$modalComponent.find('.inner-title-modal').html('Grupo inventario');
@@ -189,6 +191,10 @@ app || (app = {});
 
                 e.preventDefault();
                 var data = $.extend({}, this.parameters, window.Misc.formToJson( e.target ));
+
+                if (this.resource == 'tercero') {
+                    data = $.extend({}, data, window.Misc.formToJson( this.$formAccounting ));
+                }
 
                 this.model.save( data, {patch: true} );
             }

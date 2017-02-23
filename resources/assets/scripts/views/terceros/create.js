@@ -14,9 +14,10 @@ app || (app = {});
         el: '#tercero-create',
         template: _.template( ($('#add-tercero-tpl').html() || '') ),
         events: {
-            'click .submit-tercero': 'submitTercero',
             'submit #form-tercero': 'onStore',
             'submit #form-item-roles': 'onStoreRol',
+            'ifChanged .change_employee': 'changedEmployee',
+            'ifChanged #tercero_tecnico': 'changedTechnical',
             'click .btn-add-tcontacto': 'addContacto'
         },
 
@@ -39,7 +40,6 @@ app || (app = {});
             }
 
             // Events
-            // this.listenTo( this.model, 'change:id', this.render );
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -54,6 +54,13 @@ app || (app = {});
 
             this.$form = this.$('#form-tercero');
             this.$formAccounting = this.$('#form-accounting');
+            this.$formEmployee = this.$('#form-employee');
+
+            this.$checkEmployee = this.$('#tercero_empleado');
+            this.$checkInternal = this.$('#tercero_interno');
+
+            this.$wrapperEmployes = this.$('#wrapper-empleados');
+            this.$wrapperCoordinador = this.$('#wrapper-coordinador');
 
             // Model exist
             if( this.model.id != undefined ) {
@@ -93,21 +100,13 @@ app || (app = {});
         },
 
         /**
-        * Event submit productop
-        */
-        submitTercero: function (e) {
-            this.$form.submit();
-        },
-
-        /**
         * Event Create Forum Post
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
 
                 e.preventDefault();
-                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ));
-
+                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ), window.Misc.formToJson( this.$formEmployee ));
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -126,15 +125,38 @@ app || (app = {});
         },
 
         addContacto: function() {
-            this.contactoModel = new app.ContactoModel();
+
+            if ( this.createTContactoView instanceof Backbone.View ){
+                this.createTContactoView.stopListening();
+                this.createTContactoView.undelegateEvents();
+            }
+
             this.createTContactoView = new app.CreateTContactoView({
-                model: this.contactoModel,
+                model: new app.ContactoModel(),
                 collection: this.contactsList,
                 parameters: {
                     'tercero_id': this.model.get('id')
                }
             });
             this.createTContactoView.render();
+        },
+
+        changedTechnical: function(e) {
+            var selected = $(e.target).is(':checked');
+            if( selected ) {
+                this.$wrapperCoordinador.removeClass('hide');
+            }else{
+                this.$wrapperCoordinador.addClass('hide');
+            }
+        },
+
+        changedEmployee: function(e) {
+            // Active if internal or employee
+            if( this.$checkInternal.is(':checked') || this.$checkEmployee.is(':checked') ) {
+                this.$wrapperEmployes.removeClass('hide')
+            }else{
+                this.$wrapperEmployes.addClass('hide')
+            }
         },
 
         /**

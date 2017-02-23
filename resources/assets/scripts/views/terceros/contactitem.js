@@ -40,11 +40,16 @@ app || (app = {});
         },
 
         editContacto: function() {
-            var view = new app.CreateTContactoView({
+            if ( this.createTContactoView instanceof Backbone.View ){
+                this.createTContactoView.stopListening();
+                this.createTContactoView.undelegateEvents();
+            }
+
+            this.createTContactoView = new app.CreateTContactoView({
                 model: this.model
             });
-
-            view.render();
+            console.log( this.createTContactoView );
+            this.createTContactoView.render();
         }
 
     });
