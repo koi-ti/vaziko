@@ -74,23 +74,25 @@
         <script type="text/template" id="roles-modulo-list-tpl">
             <div class="box-header">
                 <h4 class="box-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- id %>"><%- display_name %></a>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- nivel1 %>"><%- display_name %></a>
                 </h4>
             </div>
-            <div id="collapse_<%- id %>" class="panel-collapse collapse">
+            <div id="collapse_<%- nivel1 %>" class="panel-collapse collapse">
                 <div class="box-body">
                     <table class="table table-condensed">
                         <tr>
                             <th><a href="#">Todos <%- display_name %></a></th>
                         </tr>
                         <tr>
-                            <td>Modulos</td>
+                            <td><a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- nivel2 %>">Modulos</a></td>
                         </tr>
                         <tr>
-                            <td>Reportes</td>
+                        <% if(nivel1 == 2) { %>
+                            <td><a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- nivel2 %>">Reportes</a></td>
+                        <% } %>
                         </tr>
                         <tr>
-                            <td>Referencias</td>
+                            <td><a data-toggle="collapse" data-parent="#accordion" href="#collapse_<%- nivel2 %>">Referencias</a></td>
                         </tr>
                     </table>
                 </div>
