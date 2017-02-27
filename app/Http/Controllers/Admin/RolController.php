@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables, Cache;
 
-use App\Models\Base\Rol;
+use App\Models\Base\Rol, App\Models\Base\Permiso;
 
 class RolController extends Controller
 {
@@ -82,6 +82,7 @@ class RolController extends Controller
     {
         $rol = Rol::findOrFail($id);
         if ($request->ajax()) {
+            $rol->permissions = Permiso::get()->toArray();
             return response()->json($rol);
         }
         return view('admin.roles.show', ['rol' => $rol]);
@@ -127,7 +128,7 @@ class RolController extends Controller
                     DB::commit();
                     // Forget cache
                     Cache::forget( Rol::$key_cache );
-                    
+
                     return response()->json(['success' => true, 'id' => $rol->id]);
                 }catch(\Exception $e){
                     DB::rollback();

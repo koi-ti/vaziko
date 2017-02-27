@@ -1,5 +1,5 @@
 /**
-* Class ModuloItemView  of Backbone Router
+* Class PermisosRolItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,11 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ModuloItemView = Backbone.View.extend({
+    app.PermisosRolItemView = Backbone.View.extend({
 
-        tagName: 'div',
-        className : 'panel box box-whithout-border',
-        template: _.template( ($('#roles-modulo-list-tpl').html() || '') ),
+        tagName: 'tr',
+        template: _.template( ($('#permissions-rol-list-tpl').html() || '') ),
         parameters: {
             edit: false
         },

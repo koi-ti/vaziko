@@ -20,14 +20,18 @@ class PermisoRolController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
+        if($request->ajax())
+        {
             $query = Modulo::query();
-            $query->where('nivel1', '!=', '0');
-            $query->where('nivel2', '=', '0');
-            $query->where('nivel3', '=', '0');
+            $query->select('koi_modulo.id', 'display_name');
+            $query->where('nivel1', '=', $request->nivel1);
+            $query->where('nivel2', '=', $request->nivel2);
+            $query->where('nivel3', '!=', '0');
             $query->where('nivel4', '=', '0');
-            $query->orderBy('nivel1', 'asc');
-            return response()->json($query->get());
+            $query->orderBy('nivel3', 'asc');
+            $data = $query->get();
+
+            return response()->json($data);
         }
         abort(404);
     }
