@@ -14,6 +14,8 @@ app || (app = {});
         tagName: 'tr',
         template: _.template( ($('#permissions-rol-list-tpl').html() || '') ),
         parameters: {
+            father: null,
+            permissions: [],
             edit: false
         },
 
@@ -35,6 +37,9 @@ app || (app = {});
         render: function(){
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
+            attributes.father = this.parameters.father;
+            attributes.permissions = this.parameters.permissions;
+
             this.$el.html( this.template(attributes) );
             return this;
         }

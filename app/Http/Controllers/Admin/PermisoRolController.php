@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Datatables, DB;
 
-use App\Models\Base\Modulo;
+use App\Models\Base\Modulo, App\Models\Base\PermisoRol;
 
 class PermisoRolController extends Controller
 {
@@ -29,8 +29,23 @@ class PermisoRolController extends Controller
             $query->where('nivel3', '!=', '0');
             $query->where('nivel4', '=', '0');
             $query->orderBy('nivel3', 'asc');
-            $data = $query->get();
+            $modules = $query->get();
 
+            $data = [];
+            foreach ($modules as $module)
+            {
+                $object = new \stdClass();
+                $object->id = $module->id;
+                $object->display_name = $module->display_name;
+
+                $query = PermisoRol::query();
+                $query->where('role_id', 1);
+                $query->where('module_id', $module->id);
+                $query->orderBy('permission_id', 'asc');
+                $object->mpermissions = $query->lists('permission_id');
+
+                $data[] = $object;
+            }
             return response()->json($data);
         }
         abort(404);

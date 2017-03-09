@@ -16,6 +16,27 @@
     <section class="content">
         @yield ('module')
 
+        <!-- Modal add permisorol -->
+        <div class="modal fade" id="modal-permisorol-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" id="content-permisorol-component">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="inner-title-modal">Permisos</h4>
+                    </div>
+                    {!! Form::open(['id' => 'form-permisorol-component', 'data-toggle' => 'validator']) !!}
+                        <div class="modal-body box box-success">
+                            <div class="content-modal"></div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+                        </div>
+                    {!! Form::close() !!}
+                </div>
+            </div>
+        </div>
+
         {{-- Templates --}}
         <script type="text/template" id="add-rol-tpl">
             <div class="box-body">
@@ -82,7 +103,7 @@
                                                                                     <tr>
                                                                                         <th style="width: 30%"></th>
                                                                                         <% _.each(permissions, function(permission) { %>
-                                                                                            <th style="width: 10%"><%- permission.display_name %></th>
+                                                                                            <th style="width: 10%" class="text-center"><%- permission.display_name %></th>
                                                                                         <% }); %>
                                                                                     </tr>
                                                                                 </thead>
@@ -110,14 +131,14 @@
         </script>
 
         <script type="text/template" id="permissions-rol-list-tpl">
-            <th><%- display_name %></th>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th><a href="#" class="btn-set-permission" data-father="<%- father %>" data-resource="<%- id %>"><%- display_name %></a></th>
+            <% _.each(permissions, function(permission) { %>
+                <td class="text-center">
+                    <span class="label label-<%- mpermissions.indexOf(permission.id) != -1 ? 'success' : 'danger'  %>">
+                        <i class="fa fa-fw fa-<%- mpermissions.indexOf(permission.id) != -1 ? 'check' : 'close'  %>"></i>
+                    </span>
+                </td>
+            <% }); %>
         </script>
     </section>
 @stop

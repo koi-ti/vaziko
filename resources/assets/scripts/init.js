@@ -95,9 +95,9 @@ var app = app || {};
         * Init toUpper
         */
         initToUpper: function () {
-            $('.input-toupper').keyup(function(){
-                $(this).val( $(this).val().toUpperCase() );
-            });
+           $('.input-toupper').change(function(){
+               $(this).val( $(this).val().toUpperCase() );
+           });
         },
 
         /**

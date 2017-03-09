@@ -16,7 +16,9 @@ app || (app = {});
         },
         parameters: {
             wrapper: null,
+            father: null,
             edit: false,
+            permissions: [],
             dataFilter: {}
         },
 
@@ -53,6 +55,8 @@ app || (app = {});
             var view = new app.PermisosRolItemView({
                 model: moduloModel,
                 parameters: {
+                    father: this.parameters.father,
+                    permissions: this.parameters.permissions,
                     edit: this.parameters.edit
                 }
             });

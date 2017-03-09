@@ -15,7 +15,8 @@ app || (app = {});
         template: _.template( ($('#add-rol-tpl').html() || '') ),
         events: {
             'submit #form-roles': 'onStore',
-            'click .toggle-children': 'toggleChildren'
+            'click .toggle-children': 'toggleChildren',
+            'click .btn-set-permission': 'changePermissions'
         },
         parameters: {
         },
@@ -82,7 +83,10 @@ app || (app = {});
                     collection: this.stuffToDo[resource],
                     parameters: {
                         wrapper: this.$('#wrapper-father-'+father),
+                        permissions: this.model.get('permissions'),
+                        father: resource,
                         dataFilter: {
+                            'role_id': this.model.get('id'),
                             'nivel1': nivel1,
                             'nivel2': nivel2
                         }
@@ -90,6 +94,25 @@ app || (app = {});
                 });
             }
 
+        },
+
+        changePermissions: function(e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                father = $(e.currentTarget).attr("data-father"),
+                model = this.stuffToDo[father].get(resource),
+                _this = this;
+
+            if ( this.createPermisoRolView instanceof Backbone.View ){
+                this.createPermisoRolView.stopListening();
+                this.createPermisoRolView.undelegateEvents();
+            }
+
+            this.createPermisoRolView = new app.CreatePermisoRolView({
+                model: model
+            });
+            this.createPermisoRolView.render();
         },
 
         /**

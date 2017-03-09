@@ -1,0 +1,115 @@
+/**
+* Class CreatePermisoRolView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreatePermisoRolView = Backbone.View.extend({
+
+        el: '#modal-permisorol-component',
+        // template: _.template( ($('#add-contacto-tpl').html() || '') ),
+        events: {
+            // 'submit #form-tcontacto-component': 'onStore'
+        },
+        parameters: {
+        	// tercero_id : null
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize : function(opts) {
+            // extends parameters
+            // if( opts !== undefined && _.isObject(opts.parameters) )
+            //     this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // // Events
+            // this.listenTo( this.model, 'change:id', this.render );
+            // this.listenTo( this.model, 'sync', this.responseServer );
+            // this.listenTo( this.model, 'request', this.loadSpinner );
+
+            // this.$modalComponent = this.$('#modal-tcontacto-component');
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function(){
+            // // Attributes
+            // var attributes = this.model.toJSON();
+            // this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
+            // this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
+
+            // to fire plugins
+            this.ready();
+
+            this.$el.modal('show');
+
+            return this;
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // if( typeof window.initComponent.initSelect2 == 'function' )
+            //     window.initComponent.initSelect2();
+        },
+
+        /**
+        * Event Create Contact
+        */
+        onStore: function (e) {
+    //         if (!e.isDefaultPrevented()) {
+
+    //             e.preventDefault();
+
+    //             var data = window.Misc.formToJson( e.target );
+				// if( !_.isUndefined(this.parameters.tercero_id) && !_.isNull(this.parameters.tercero_id) && this.parameters.tercero_id != '') {
+    //             	data.tcontacto_tercero = this.parameters.tercero_id;
+    //             }
+    //             this.model.save( data, {patch: true} );
+    //         }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            // window.Misc.setSpinner( this.$wraperContent );
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function ( model, resp, opts ) {
+            // window.Misc.removeSpinner( this.$wraperContent );
+
+            // if(!_.isUndefined(resp.success)) {
+            //     // response success or error
+            //     var text = resp.success ? '' : resp.errors;
+            //     if( _.isObject( resp.errors ) ) {
+            //         text = window.Misc.parseErrors(resp.errors);
+            //     }
+
+            //     if( !resp.success ) {
+            //         alertify.error(text);
+            //         return;
+            //     }
+
+            //     if(this.collection instanceof Backbone.Collection) {
+	           //      // Add model in collection
+	           //  	this.collection.add(model);
+	           //  }
+
+            // 	this.$modalComponent.modal('hide');
+            // }
+        }
+    });
+
+})(jQuery, this, this.document);
