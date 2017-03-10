@@ -1,5 +1,5 @@
 /**
-* Class ModuloList of Backbone Collection
+* Class PermisosRolList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,7 +9,7 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.ModuloList = Backbone.Collection.extend({
+    app.PermisosRolList = Backbone.Collection.extend({
 
         url: function() {
             return window.Misc.urlFull( Route.route('roles.permisos.index') );

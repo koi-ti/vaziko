@@ -14,8 +14,9 @@ app || (app = {});
         el: '#rol-create',
         template: _.template( ($('#add-rol-tpl').html() || '') ),
         events: {
-            'click .submit-rol': 'submitRol',
-            'submit #form-roles': 'onStore'
+            'submit #form-roles': 'onStore',
+            'click .toggle-children': 'toggleChildren',
+            'click .btn-set-permission': 'changePermissions'
         },
         parameters: {
         },
@@ -29,11 +30,9 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
+            this.stuffToDo = { };
+            this.stuffToVw = { };
             this.$wraperForm = this.$('#render-form-rol');
-
-            if( this.model.id != undefined ) {
-                this.moduloList = new app.ModuloList();
-            }
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -47,32 +46,8 @@ app || (app = {});
         render: function() {
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-            
+
             this.$form = this.$('#form-roles');
-
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                // Reference views
-                this.referenceViews();
-            }
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Tips list
-            this.modulosListView = new app.ModulosListView( {
-                collection: this.moduloList,
-                parameters: {
-                    edit: false,
-                    wrapper: this.$('#wrapper-modulos'),
-                    dataFilter: {
-                        'modulo_id': this.model.get('id')
-                    }
-               }
-            });
         },
 
         /**
@@ -89,10 +64,66 @@ app || (app = {});
         },
 
         /**
-        * Event submit productop
+        * Event toggle children
         */
-        submitRol: function (e) {
-            this.$form.submit();
+        toggleChildren: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                father = $(e.currentTarget).attr("data-father"),
+                nivel1 = $(e.currentTarget).attr("data-nivel1"),
+                nivel2 = $(e.currentTarget).attr("data-nivel2"),
+                _this = this;
+
+            if ( (this.stuffToVw[resource] instanceof Backbone.View) == false )
+            {
+                this.stuffToDo[resource] = new app.PermisosRolList();
+                this.stuffToVw[resource] = new app.PermisosRolListView({
+                    el: '#wrapper-permisions-'+resource,
+                    collection: this.stuffToDo[resource],
+                    parameters: {
+                        wrapper: this.$('#wrapper-father-'+father),
+                        permissions: this.model.get('permissions'),
+                        father: resource,
+                        dataFilter: {
+                            'role_id': this.model.get('id'),
+                            'nivel1': nivel1,
+                            'nivel2': nivel2
+                        }
+                   }
+                });
+            }
+
+        },
+
+        changePermissions: function(e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                father = $(e.currentTarget).attr("data-father"),
+                collection = this.stuffToDo[father],
+                model = collection.get(resource),
+                _this = this;
+
+            if ( this.createPermisoRolView instanceof Backbone.View ){
+                this.createPermisoRolView.stopListening();
+                this.createPermisoRolView.undelegateEvents();
+            }
+
+            console.log( model );
+            this.createPermisoRolView = new app.CreatePermisoRolView({
+                model: model,
+                collection: collection,
+                parameters: {
+                    permissions: this.model.get('permissions'),
+                    dataFilter: {
+                        'role_id': this.model.get('id'),
+                        'nivel1': model.get('nivel1'),
+                        'nivel2': model.get('nivel2')
+                    }
+                }
+            });
+            this.createPermisoRolView.render();
         },
 
         /**

@@ -94,6 +94,9 @@ class TerceroController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    // Forget cache
+                    Cache::forget( Tercero::$key_cache_tadministrators );
+
                     return response()->json(['success' => true, 'id' => $tercero->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -156,7 +159,7 @@ class TerceroController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    // Forget cache technical administrators
+                    // Forget cache
                     Cache::forget( Tercero::$key_cache_tadministrators );
 
                     return response()->json(['success' => true, 'id' => $tercero->id]);

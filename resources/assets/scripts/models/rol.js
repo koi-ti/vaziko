@@ -18,7 +18,8 @@ app || (app = {});
         defaults: {
             'name': '',
             'display_name': '',
-            'description': ''
+            'description': '',
+            'permissions': []
         }
     });
 
