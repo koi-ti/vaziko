@@ -18,11 +18,11 @@
 
         <!-- Modal add permisorol -->
         <div class="modal fade" id="modal-permisorol-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" id="content-permisorol-component">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="inner-title-modal">Permisos</h4>
+                        <h4 class="inner-title-modal"></h4>
                     </div>
                     {!! Form::open(['id' => 'form-permisorol-component', 'data-toggle' => 'validator']) !!}
                         <div class="modal-body box box-success">
@@ -139,6 +139,29 @@
                     </span>
                 </td>
             <% }); %>
+        </script>
+
+        <script type="text/template" id="edit-permissions-tpl">
+            <div class="table-responsive no-padding">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <% _.each(permissions, function(permission) { %>
+                                <th class="text-center"><%- permission.display_name %></th>
+                            <% }); %>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <% _.each(permissions, function(permission) { %>
+                                <td class="text-center">
+                                    <input type="checkbox" id="permiso_<%- permission.id %>" name="permiso_<%- permission.id %>" value="permiso_<%- permission.id %>" <%- mpermissions.indexOf(permission.id) != -1 ? 'checked': ''%>>
+                                </td>
+                            <% }); %>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </script>
     </section>
 @stop

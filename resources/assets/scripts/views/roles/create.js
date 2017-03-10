@@ -101,7 +101,8 @@ app || (app = {});
 
             var resource = $(e.currentTarget).attr("data-resource"),
                 father = $(e.currentTarget).attr("data-father"),
-                model = this.stuffToDo[father].get(resource),
+                collection = this.stuffToDo[father],
+                model = collection.get(resource),
                 _this = this;
 
             if ( this.createPermisoRolView instanceof Backbone.View ){
@@ -109,8 +110,18 @@ app || (app = {});
                 this.createPermisoRolView.undelegateEvents();
             }
 
+            console.log( model );
             this.createPermisoRolView = new app.CreatePermisoRolView({
-                model: model
+                model: model,
+                collection: collection,
+                parameters: {
+                    permissions: this.model.get('permissions'),
+                    dataFilter: {
+                        'role_id': this.model.get('id'),
+                        'nivel1': model.get('nivel1'),
+                        'nivel2': model.get('nivel2')
+                    }
+                }
             });
             this.createPermisoRolView.render();
         },

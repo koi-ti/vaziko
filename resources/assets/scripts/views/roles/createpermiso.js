@@ -12,12 +12,13 @@ app || (app = {});
     app.CreatePermisoRolView = Backbone.View.extend({
 
         el: '#modal-permisorol-component',
-        // template: _.template( ($('#add-contacto-tpl').html() || '') ),
+        template: _.template( ($('#edit-permissions-tpl').html() || '') ),
         events: {
-            // 'submit #form-tcontacto-component': 'onStore'
+            'submit #form-permisorol-component': 'onStore'
         },
         parameters: {
-        	// tercero_id : null
+        	permissions : [],
+            dataFilter: {}
         },
 
         /**
@@ -25,25 +26,26 @@ app || (app = {});
         */
         initialize : function(opts) {
             // extends parameters
-            // if( opts !== undefined && _.isObject(opts.parameters) )
-            //     this.parameters = $.extend({},this.parameters, opts.parameters);
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            // // Events
-            // this.listenTo( this.model, 'change:id', this.render );
-            // this.listenTo( this.model, 'sync', this.responseServer );
-            // this.listenTo( this.model, 'request', this.loadSpinner );
+            this.$el.find('.inner-title-modal').empty().html( this.model.get('display_name') );
+            this.$wraperContent = this.$el.find('.modal-body');
 
-            // this.$modalComponent = this.$('#modal-tcontacto-component');
+            // Events
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
         },
 
         /*
         * Render View Element
         */
         render: function(){
-            // // Attributes
-            // var attributes = this.model.toJSON();
-            // this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
-            // this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
+            // Attributes
+            var attributes = this.model.toJSON();
+            attributes.permissions = this.parameters.permissions;
+
+            this.$el.find('.content-modal').empty().html( this.template( attributes ) );
 
             // to fire plugins
             this.ready();
@@ -57,58 +59,53 @@ app || (app = {});
         * fires libraries js
         */
         ready: function () {
-            // if( typeof window.initComponent.initSelect2 == 'function' )
-            //     window.initComponent.initSelect2();
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
         },
 
         /**
         * Event Create Contact
         */
         onStore: function (e) {
-    //         if (!e.isDefaultPrevented()) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
 
-    //             e.preventDefault();
+                var data = window.Misc.formToJson( e.target );
+                data.role_id = this.parameters.dataFilter.role_id;
 
-    //             var data = window.Misc.formToJson( e.target );
-				// if( !_.isUndefined(this.parameters.tercero_id) && !_.isNull(this.parameters.tercero_id) && this.parameters.tercero_id != '') {
-    //             	data.tcontacto_tercero = this.parameters.tercero_id;
-    //             }
-    //             this.model.save( data, {patch: true} );
-    //         }
+                this.model.save( data, {patch: true} );
+            }
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            // window.Misc.setSpinner( this.$wraperContent );
+            window.Misc.setSpinner( this.$wraperContent );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            // window.Misc.removeSpinner( this.$wraperContent );
+            window.Misc.removeSpinner( this.$wraperContent );
 
-            // if(!_.isUndefined(resp.success)) {
-            //     // response success or error
-            //     var text = resp.success ? '' : resp.errors;
-            //     if( _.isObject( resp.errors ) ) {
-            //         text = window.Misc.parseErrors(resp.errors);
-            //     }
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
 
-            //     if( !resp.success ) {
-            //         alertify.error(text);
-            //         return;
-            //     }
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
 
-            //     if(this.collection instanceof Backbone.Collection) {
-	           //      // Add model in collection
-	           //  	this.collection.add(model);
-	           //  }
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
 
-            // 	this.$modalComponent.modal('hide');
-            // }
+            	this.$el.modal('hide');
+            }
         }
     });
 

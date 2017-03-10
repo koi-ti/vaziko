@@ -46,7 +46,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
 		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
 	});
-	
+
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
     Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
@@ -57,8 +57,8 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::group(['prefix' => 'roles'], function()
 	{
-		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'store', 'destroy']]);
-	});	
+		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'update', 'destroy']]);
+	});
 
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
     Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
