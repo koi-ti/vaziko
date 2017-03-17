@@ -22,7 +22,7 @@ app || (app = {});
             'click .koi-component-remove-last': 'removeLastItem',
             'click .koi-component-remove': 'removeItem',
             'click .koi-component-add': 'listeningAddress'
-		},
+        },
 
         /**
         * Constructor Method
@@ -30,6 +30,7 @@ app || (app = {});
         initialize: function() {
             // Initialize            
             this.$modalComponent = this.$('#modal-address-component');
+            this.$modalComponentValidacion = this.$('#modal-address-component-validacion');
         },
 
         focusComponent: function(e) {
@@ -94,14 +95,22 @@ app || (app = {});
                 this.num = [];
                 for (var i = 0; i < this.validaciones.length; i++) {
                     if($(e.target).text().trim() == this.validaciones[i]){
-                        var attributes = { name: $(e.target).text().trim() };
-                        this.$wraperSelectComponent.html( this.templateSelect( attributes ));
+                        this.$modalComponentValidacion.find('.modal-content').html( this.templateSelect( { } ));
+                        this.$modalComponentValidacion.find('.modal-title').text( $(e.target).text().trim() );
+                        this.$modalComponentValidacion.modal('show');
                     }
                 }
 
                 if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
-                    this.addressData.push( $(e.target).text().trim() );
-                    this.addressDataNm.push( $(e.target).attr('data-key') );
+                    
+                    if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
+                        this.addressData.push( $(e.target).text().trim() );
+                        this.addressDataNm.push( ' ' );
+                    }else{
+                        this.addressData.push( $(e.target).text().trim() );
+                        this.addressDataNm.push( $(e.target).attr('data-key') );
+                    }
+
                 }else{
                     alertify.error('No puede seleccionar dos nomenclaturas iguales ni más de dos letras seguidas');
                 }
@@ -121,13 +130,12 @@ app || (app = {});
                     _this.addressData.push( dato.val() );
                     _this.addressDataNm.push( dato.val() );
                     _this.buildAddress();
-                    _this.$wraperSelectComponent.empty();
+                    _this.$modalComponentValidacion.modal('hide');
                 });
-
             }else if($(e.target).val() == 'no'){
-                _this.$component.hide();
-                _this.$wraperSelectComponent.empty();
+                _this.$modalComponentValidacion.modal('hide');
             }else{
+                return false;
             }
         },
 
