@@ -970,3 +970,21 @@
 		</div>
     </div>
 </script>
+
+<script type="text/template" id="koi-component-select-tpl">
+	<div class="row">
+		<div class="form-group col-md-12">
+			<label class="col-md-offset-2 col-md-2 col-xs-12 control-label"><%- name %> con nombre?</label>
+			<div class="col-md-3">
+			    <select name="component-select" id="component-select" class="form-control" required>
+                    <option value="" selected>Seleccione</option>
+                    <option value="si">Si</option>
+                    <option value="no">No</option>
+                </select>
+			</div>
+			<div class="col-md-3" id="component-input" hidden>
+				<input type="text" class="form-control input-sm" name="component-input-text" id="component-input-text">
+			</div>
+		</div>
+	</div>	
+</script>

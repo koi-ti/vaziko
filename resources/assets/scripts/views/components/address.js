@@ -13,170 +13,154 @@ app || (app = {});
         
       	el: 'body',
         template: _.template( ($('#koi-address-component-tpl').html() || '') ),
-
+        templateSelect: _.template( ($('#koi-component-select-tpl').html() || '') ),
 		events: {
-        	// 'focus input.address-koi-component': 'addressChanged',
+        	'focus input.address-koi-component': 'addressChanged',
             'click .btn-address-koi-component': 'focusComponent',
             'submit #form-address-component': 'addAddress',
-
-            'change select#koi_nomenclatura1': 'nomenclatura1Changed',
-            'change input#koi_numero1': 'numero1Changed',
-            'change select#koi_alfabeto1': 'alfabeto1Changed',
-            'change select#koi_bis': 'bisChanged',
-            'change select#koi_alfabeto2': 'alfabeto2Changed',
-            'change select#koi_cardinales1': 'cardinales1Changed',
-            'change input#koi_numero2': 'numero2Changed',
-            'change select#koi_alfabeto3': 'alfabeto3Changed',
-            'change input#koi_numero3': 'numero3Changed',
-            'change select#koi_cardinales2': 'cardinales2Changed',
-
-            'click .btn-address-component-add-complement': 'addComplement',
-            'click .btn-address-component-remove-item': 'removeItem'
+            'change select#component-select': 'ChangeSelect',
+            'click .koi-component-remove-last': 'removeLastItem',
+            'click .koi-component-remove': 'removeItem',
+            'click .koi-component-add': 'listeningAddress'
 		},
 
         /**
         * Constructor Method
         */
-		initialize: function() {
-			// Initialize            
+        initialize: function() {
+            // Initialize            
             this.$modalComponent = this.$('#modal-address-component');
-		},
+        },
 
-		focusComponent: function(e) {
-			$("#"+$(e.currentTarget).attr("data-field")).focus();
-		},
-	
-		addressChanged: function(e) {
-			this.inputContent = $(e.currentTarget);
+        focusComponent: function(e) {
+            $("#"+$(e.currentTarget).attr("data-field")).focus();
+        },
+    
+        addressChanged: function(e) {
+            this.inputContent = $(e.currentTarget);
 
             this.$modalComponent.find('.content-modal').html( this.template({ }) );
 
             // References
             this.$addressField = this.$modalComponent.find('#koi_direccion');
-            this.$postalField = this.$modalComponent.find('#koi_postal');
+            this.$addressNomenclaturaField = this.$modalComponent.find('#koi_direccion_nm');
+
+            this.$wraperSelectComponent = this.$('#render-component-select');
             this.$formComponent = this.$modalComponent.find('#form-address-component');
 
             // Initialize
-            this.addressData = new Array(10);
+            this.addressData = new Array();
+            this.addressDataNm = new Array();
+            this.num = new Array();
+
+            // Validate nomenclaturas name required
+            this.validaciones = ['Agencia','Agrupación','Almacen','Autopista','Avenida','Avenida Carrera','Barrio','Boulevar','Calle','Camino','Carrera','Carretera','Casa','Celula','Centro Comercial','Ciudadela','Conjunto','Conjunto Residencial','Corregimiento','Departamento','Deposito','Edificio','Entrada','Etapa','Finca','Hacienda','Lote','Modulo','Municipio','Parcela','Parque','Parqueadero','Pasaje','Paseo','Predio','Puente','Puesto','Salón','Salón Comunal','Sector','Suite','Terminal','Terraza','Torre','Unidad','Unidad Residencial','Urbanización','Variante','Vereda','Zona','Zona Franca'];
 
             // to fire plugins
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
-
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
+
+            if( typeof window.initComponent.initAlertify == 'function' )
+                window.initComponent.initAlertify();
 
             this.$formComponent.validator();
 
             // Modal show
-			this.$modalComponent.modal('show');
-		},
+            this.$modalComponent.modal('show');
+        },
 
-		addAddress: function(e) {
+        addAddress: function(e) {
             if (!e.isDefaultPrevented()) {
             
                 e.preventDefault();
-    			this.inputContent.val(this.$addressField.val());
-    			this.$modalComponent.modal('hide');               
+                this.inputContent.val(this.$addressNomenclaturaField.val());
+                this.$modalComponent.modal('hide');               
             }
-		},
-
-		/**
-        * Built changed funtions
-        */
-        nomenclatura1Changed: function (e) {
-        	this.addressData[0] = $(e.currentTarget).val();
-            this.buildAddress();
         },
 
-        numero1Changed: function(e) {
-        	this.addressData[1] = $(e.currentTarget).val().trim();
-            this.buildAddress();
-        },
+        listeningAddress: function(e){  
+            this.$wraperSelectComponent.empty();
 
-        alfabeto1Changed: function (e) {
-        	this.addressData[2] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-
-        bisChanged: function (e) {
-        	this.addressData[3] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-        
-        alfabeto2Changed: function (e) {
-        	this.addressData[4] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-
-        cardinales1Changed: function (e) {
-        	this.addressData[5] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-
-        numero2Changed: function(e) {
-        	this.addressData[6] = $(e.currentTarget).val().trim();
-            this.buildAddress();
-        },
-
-        alfabeto3Changed: function (e) {
-        	this.addressData[7] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-
-        numero3Changed: function(e) {
-        	this.addressData[8] = $(e.currentTarget).val().trim();
-            this.buildAddress();
-        },
-
-        cardinales2Changed: function (e) {
-        	this.addressData[9] = $(e.currentTarget).val();
-            this.buildAddress();
-        },
-
-        /**
-        * Add complement
-        */
-		addComplement: function(e) {
-            e.preventDefault();
-
-            if( !_.isUndefined(this.$('#koi_complementos1').val()) && !_.isNull(this.$('#koi_complementos1').val()) && this.$('#koi_complementos1').val() != '' ) {
-                this.addressData.push(this.$('#koi_complementos1').val());
-
-                if( !_.isUndefined(this.$('#koi_complementos2').val()) && !_.isNull(this.$('#koi_complementos2').val()) && this.$('#koi_complementos2').val() != '' ) {
-                    this.addressData.push(this.$('#koi_complementos2').val());
+            if( parseInt($(e.target).text().trim()) > 0 || parseInt($(e.target).text().trim()) < 9 ){
+                this.num = $(e.target).text().trim();
+                if( parseInt(this.addressData[this.addressData.length-1]) > 0 || parseInt(this.addressData[this.addressData.length-1]) < 9){
+                    this.addressData[this.addressData.length-1] += this.num;
+                    this.addressDataNm[this.addressDataNm.length-1] += this.num;
+                }else{
+                    this.addressData.push( this.num );
+                    this.addressDataNm.push( this.num );
                 }
-    			
-                this.$('#koi_complementos1').val('');
-    			this.$('#koi_complementos2').val('');
-    			
-    			this.buildAddress();
-            }
+            }else{
+                this.num = [];
+                for (var i = 0; i < this.validaciones.length; i++) {
+                    if($(e.target).text().trim() == this.validaciones[i]){
+                        var attributes = { name: $(e.target).text().trim() };
+                        this.$wraperSelectComponent.html( this.templateSelect( attributes ));
+                    }
+                }
 
-		},
+                if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
+                    this.addressData.push( $(e.target).text().trim() );
+                    this.addressDataNm.push( $(e.target).attr('data-key') );
+                }else{
+                    alertify.error('No puede seleccionar dos nomenclaturas iguales ni más de dos letras seguidas');
+                }
+            }
+            this.buildAddress();
+        },
+
+        ChangeSelect: function(e){
+            var _this = this;
+            this.$component = this.$('div#component-input').hide();
+            
+            if($(e.target).val() == 'si'){
+                _this.$component.show();
+
+                $('input#component-input-text').change(function(){
+                    var dato = $(this).val( $(this).val().toUpperCase() );
+                    _this.addressData.push( dato.val() );
+                    _this.addressDataNm.push( dato.val() );
+                    _this.buildAddress();
+                    _this.$wraperSelectComponent.empty();
+                });
+
+            }else if($(e.target).val() == 'no'){
+                _this.$component.hide();
+                _this.$wraperSelectComponent.empty();
+            }else{
+            }
+        },
 
         /**
         * remove last item 
         */
-        removeItem: function(e) {
+        removeLastItem: function(e) {
             e.preventDefault();
-
             this.addressData.pop();
+            this.addressDataNm.pop();
             this.buildAddress();
         },
-        
+
+        /**
+        * remove item 
+        */
+        removeItem: function(e) {
+            e.preventDefault();
+            this.addressData.length = 0;
+            this.addressDataNm.length = 0;
+            this.num.length = 0;
+            this.buildAddress();
+        },
+
      	/**
         * Built address
         */
 		buildAddress: function() {
-			// console.log('buildAddress', this.addressData, this.addressData.join());
             var addreess = $.grep(this.addressData, Boolean).join(' ').trim();
             this.$addressField.val( addreess );
-            
-            // console.log('buildAddress', this.addressData, addreess);
-            console.log(this.$postalField.val())
+
+            var addreessNm = $.grep(this.addressDataNm, Boolean).join(' ').trim();
+            this.$addressNomenclaturaField.val( addreessNm );
 		}
     });
-
-
 })(jQuery, this, this.document);
