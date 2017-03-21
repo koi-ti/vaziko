@@ -43,7 +43,7 @@ class PermisoRolController extends Controller
                 $object->nivel4 = $module->nivel4;
 
                 $query = PermisoRol::query();
-                $query->where('role_id', 1);
+                $query->where('role_id', $request->role_id);
                 $query->where('module_id', $module->id);
                 $query->orderBy('permission_id', 'asc');
                 $object->mpermissions = $query->lists('permission_id');
