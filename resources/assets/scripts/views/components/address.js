@@ -10,13 +10,13 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.ComponentAddressView = Backbone.View.extend({
-        
+
       	el: 'body',
         template: _.template( ($('#koi-address-component-tpl').html() || '') ),
         templateSelect: _.template( ($('#koi-component-select-tpl').html() || '') ),
 		events: {
-        	'focus input.address-koi-component': 'addressChanged',
-            'click .btn-address-koi-component': 'focusComponent',
+        	// 'focus input.address-koi-component': 'addressChanged',
+            // 'click .btn-address-koi-component': 'focusComponent',
             'submit #form-address-component': 'addAddress',
             'change select#component-select': 'ChangeSelect',
             'click .koi-component-remove-last': 'removeLastItem',
@@ -28,7 +28,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function() {
-            // Initialize            
+            // Initialize
             this.$modalComponent = this.$('#modal-address-component');
             this.$modalComponentValidacion = this.$('#modal-address-component-validacion');
         },
@@ -36,7 +36,7 @@ app || (app = {});
         focusComponent: function(e) {
             $("#"+$(e.currentTarget).attr("data-field")).focus();
         },
-    
+
         addressChanged: function(e) {
             this.inputContent = $(e.currentTarget);
 
@@ -72,14 +72,14 @@ app || (app = {});
 
         addAddress: function(e) {
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 this.inputContent.val(this.$addressNomenclaturaField.val());
-                this.$modalComponent.modal('hide');               
+                this.$modalComponent.modal('hide');
             }
         },
 
-        listeningAddress: function(e){  
+        listeningAddress: function(e){
             this.$wraperSelectComponent.empty();
 
             if( parseInt($(e.target).text().trim()) > 0 || parseInt($(e.target).text().trim()) < 9 ){
@@ -102,7 +102,7 @@ app || (app = {});
                 }
 
                 if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
-                    
+
                     if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
                         this.addressData.push( $(e.target).text().trim() );
                         this.addressDataNm.push( ' ' );
@@ -121,7 +121,7 @@ app || (app = {});
         ChangeSelect: function(e){
             var _this = this;
             this.$component = this.$('div#component-input').hide();
-            
+
             if($(e.target).val() == 'si'){
                 _this.$component.show();
 
@@ -140,7 +140,7 @@ app || (app = {});
         },
 
         /**
-        * remove last item 
+        * remove last item
         */
         removeLastItem: function(e) {
             e.preventDefault();
@@ -150,7 +150,7 @@ app || (app = {});
         },
 
         /**
-        * remove item 
+        * remove item
         */
         removeItem: function(e) {
             e.preventDefault();
