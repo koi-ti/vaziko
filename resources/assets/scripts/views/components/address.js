@@ -10,7 +10,7 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.ComponentAddressView = Backbone.View.extend({
-        
+
       	el: 'body',
         template: _.template( ($('#koi-address-component-tpl').html() || '') ),
         templateSelect: _.template( ($('#koi-component-select-tpl').html() || '') ),
@@ -28,7 +28,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function() {
-            // Initialize            
+            // Initialize
             this.$modalComponent = this.$('#modal-address-component');
             this.$modalComponentValidacion = this.$('#modal-address-component-validacion');
         },
@@ -36,7 +36,7 @@ app || (app = {});
         focusComponent: function(e) {
             $("#"+$(e.currentTarget).attr("data-field")).focus();
         },
-    
+
         addressChanged: function(e) {
             this.inputContent = $(e.currentTarget);
             this.inputContentNm = this.$("#"+this.inputContent.attr("data-nm-name"));
@@ -73,7 +73,6 @@ app || (app = {});
         addAddress: function(e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-
                 this.inputContent.val( this.$addressField.val() );
                 this.inputContentNm.text( this.$addressNomenclaturaField.val() );
                 this.inputContentNmValue.val( this.$addressNomenclaturaField.val() );
@@ -100,7 +99,6 @@ app || (app = {});
                         this.$modalComponentValidacion.modal('show');
                     }
                 }
-
                 if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
                     if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
                         this.addressData.push( $(e.target).text().trim() );
@@ -120,10 +118,9 @@ app || (app = {});
             var _this = this;
             this.$component = this.$('#component-input').hide();
             var valor = '';
-            
+
             if($(e.target).val() == 'si'){
                 _this.$component.show();
-
                 $('input#component-input-text').change(function(){
                     var dato = $(this).val( $(this).val().toUpperCase() );
                     var reg = /[^A-Za-z0-9&]/i;
@@ -148,7 +145,7 @@ app || (app = {});
         },
 
         /**
-        * remove last item 
+        * remove last item
         */
         removeLastItem: function(e) {
             if (!e.isDefaultPrevented()) {
@@ -160,7 +157,7 @@ app || (app = {});
         },
 
         /**
-        * remove item 
+        * remove item
         */
         removeItem: function(e) {
             if (!e.isDefaultPrevented()) {
