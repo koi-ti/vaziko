@@ -21,7 +21,8 @@ app || (app = {});
         	'tcontacto_telefono': '',
         	'tcontacto_celular': '',
             'tcontacto_municipio': '',
-        	'tcontacto_direccion': '',
+            'tcontacto_direccion': '',
+        	'tcontacto_direccion_nomenclatura': '',
         	'tcontacto_email': '',
         	'tcontacto_cargo': ''
         }

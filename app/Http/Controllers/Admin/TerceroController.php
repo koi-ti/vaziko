@@ -82,7 +82,6 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tercero = new Tercero;
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
@@ -147,7 +146,6 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tercero = Tercero::findOrFail($id);
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();

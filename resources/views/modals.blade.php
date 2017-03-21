@@ -42,8 +42,16 @@
 </div>
 
 <!-- Modal address -->
-<div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog modal-sm" style="width: 70%" role="document">
+<div class="modal fade koi-address" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog" style="width: 70%" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal-address-component-validacion" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
 		</div>
@@ -126,7 +134,7 @@
 		</div>
 		<br>
 		<div class="row">
-			<div class="form-group col-md-12">
+			<div class="form-group col-md-12 col-sm-12 col-xs-12">
 		    	@foreach(config('koi.direcciones.nomenclatura') as $key => $value)
 		    		<div class="col-md-2 col-sm-4 col-xs-6 koi-component-add">
 		    			<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
@@ -139,11 +147,11 @@
 			<label for="koi_nomenclatura_digitos" class="col-md-1 col-xs-12 control-label">DIGITOS</label>
 			<div class="form-group col-md-5">
 		    	@for($i=1; $i<=9; $i++)
-		    		<div class="col-md-1 col-xs-3 koi-component-add address-numbers">
+		    		<div class="col-md-1 col-xs-1 koi-component-add address-numbers">
 		    			<a class="btn btn-default">{{ $i }}</a>
 		    		</div>
 		    	@endfor
-		    	<div class="col-md-1 col-xs-3 koi-component-add address-numbers">
+		    	<div class="col-md-1 col-xs-1 koi-component-add address-numbers">
 	    			<a class="btn btn-default">0</a>
 	    		</div>
 		    </div>
@@ -151,7 +159,7 @@
 			<label for="koi_nomenclatura_letras" class="col-md-1 col-xs-12 control-label">LETRAS</label>
 			<div class="form-group col-md-5">
 		    	@foreach(config('koi.direcciones.alfabeto') as $key => $value)
-		    		<div class="col-md-1 col-xs-3 koi-component-add address-letter">
+		    		<div class="col-md-1 col-xs-1 koi-component-add address-letter">
 		    			<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
 		    		</div>
 		    	@endforeach
@@ -424,14 +432,6 @@
 		</div>
 	{!! Form::close() !!}
 </script>
-
-<div class="modal fade" id="modal-address-component-validacion" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog modal-md" role="document">
-		<div class="modal-content">
-			<div class="content-modal"></div>
-		</div>
-	</div>
-</div>
 
 <script type="text/template" id="koi-component-select-tpl">
 	<div class="modal-header">
