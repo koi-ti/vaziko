@@ -42,7 +42,7 @@
 </div>
 
 <!-- Modal address -->
-<div class="modal fade koi-address" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog" style="width: 70%" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>

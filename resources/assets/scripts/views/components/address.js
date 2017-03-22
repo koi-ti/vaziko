@@ -71,12 +71,17 @@ app || (app = {});
         },
 
         addAddress: function(e) {
+            var _this = this;
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
+
                 this.inputContent.val( this.$addressField.val() );
                 this.inputContentNm.text( this.$addressNomenclaturaField.val() );
                 this.inputContentNmValue.val( this.$addressNomenclaturaField.val() );
-                this.$modalComponent.modal('hide');               
+                this.$modalComponent.modal('hide');
+                if( $('.modal.in').length > 0){
+                    setTimeout( function () { _this.$el.addClass('modal-open') }, 500);
+                }
             }
         },
 
@@ -135,12 +140,17 @@ app || (app = {});
                     _this.addressDataNm.push( valor );
                     _this.buildAddress();
                     _this.$modalComponentValidacion.modal('hide');
-                });
 
+                    setTimeout(function() { _this.$el.addClass('modal-open'); }, 500);
+                });
             }else if($(e.target).val() == 'no'){
                 _this.$modalComponentValidacion.modal('hide');
             }else{
                 return false;
+            }
+
+            if( _this.$modalComponent.length > 0 ){
+                setTimeout(function() { _this.$el.addClass('modal-open'); }, 500);
             }
         },
 
