@@ -15,8 +15,8 @@ app || (app = {});
         template: _.template( ($('#koi-address-component-tpl').html() || '') ),
         templateSelect: _.template( ($('#koi-component-select-tpl').html() || '') ),
 		events: {
-        	// 'focus input.address-koi-component': 'addressChanged',
-            // 'click .btn-address-koi-component': 'focusComponent',
+        	'focus input.address-koi-component': 'addressChanged',
+            'click .btn-address-koi-component': 'focusComponent',
             'submit #form-address-component': 'addAddress',
             'change select#component-select': 'ChangeSelect',
             'click .koi-component-remove-last': 'removeLastItem',
