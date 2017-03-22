@@ -88,6 +88,7 @@ class TerceroController extends Controller
                 try {
                     // Tercero
                     $tercero->fill($data);
+                    $tercero->password = password_hash($request->password, PASSWORD_DEFAULT);
                     $tercero->fillBoolean($data);
                     $tercero->save();
 
@@ -152,6 +153,7 @@ class TerceroController extends Controller
                 try {
                     // Tercero
                     $tercero->fill($data);
+                    $tercero->password = password_hash($request->password, PASSWORD_DEFAULT);
                     $tercero->fillBoolean($data);
                     $tercero->save();
 

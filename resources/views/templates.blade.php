@@ -401,6 +401,24 @@
 		                                </select>
 			                        </div>
 								</div>
+
+								<div class="row">
+									<div class="form-group col-md-3">
+									<label for="username" class="control-label">Cuenta de usuario</label>
+										<input type="text" name="username" id="username" class="form-control input-lower" value="<%- username %>">
+									</div>
+									<div class="form-group col-md-3">
+									<label for="password" class="control-label">Contraseña</label>
+										<input type="password" name="password" class="form-control">
+									</div>
+									<div class="form-group col-md-3">
+									<label for="password_confirmation" class="control-label">Verificar contraseña</label>
+										<input type="password" name="password_confirmation" class="form-control">
+									</div>
+									<div class="col-md-2">
+										<button type="button" class="btn btn-default">Cambiar</button>
+									</div>
+								</div>
 							</form>
 
 							<br />
