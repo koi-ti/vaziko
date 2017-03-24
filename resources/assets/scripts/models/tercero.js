@@ -58,7 +58,6 @@ app || (app = {});
             'tercero_coordinador_por': '',
             'tercero_cual': '',
             'username': '',
-            'password': '',
             'actividad_tarifa' : ''
         }
     });

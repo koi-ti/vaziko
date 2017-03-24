@@ -18,7 +18,8 @@ app || (app = {});
             'submit #form-item-roles': 'onStoreRol',
             'ifChanged .change_employee': 'changedEmployee',
             'ifChanged #tercero_tecnico': 'changedTechnical',
-            'click .btn-add-tcontacto': 'addContacto'
+            'click .btn-add-tcontacto': 'addContacto',
+            'click .change-pass': 'changedPassword'
         },
 
         /**
@@ -58,6 +59,10 @@ app || (app = {});
 
             this.$checkEmployee = this.$('#tercero_empleado');
             this.$checkInternal = this.$('#tercero_interno');
+
+            this.$username = this.$('#username');
+            this.$password = this.$('#password');
+            this.$password_confirmation = this.$('#password_confirmation');
 
             this.$wrapperEmployes = this.$('#wrapper-empleados');
             this.$wrapperCoordinador = this.$('#wrapper-coordinador');
@@ -143,6 +148,47 @@ app || (app = {});
                 this.$wrapperEmployes.removeClass('hide')
             }else{
                 this.$wrapperEmployes.addClass('hide')
+            }
+        },
+
+        changedPassword: function(e) {
+            var _this = this;
+
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                $.ajax({
+                    type: "POST",
+                    url: window.Misc.urlFull( Route.route('terceros.setpassword') ),
+                    data: {
+                        id: _this.model.get('id'),
+                        username: _this.$username.val(), 
+                        password: _this.$password.val(),
+                        password_confirmation: _this.$password_confirmation.val(),
+                    },
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.$wrapperEmployes );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.el );
+                    if(!_.isUndefined(resp.success)) {
+                        // response success or error
+                        var text = resp.success ? '' : resp.errors;
+                        if( _.isObject( resp.errors ) ) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
+
+                        if( !resp.success ) {
+                            alertify.error(text);
+                            return;
+                        }
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.el );
+                    alertify.error(thrownError);
+                });
             }
         },
 

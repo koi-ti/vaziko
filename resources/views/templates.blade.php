@@ -384,7 +384,6 @@
 										</label>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_coordinador">
@@ -409,14 +408,17 @@
 									</div>
 									<div class="form-group col-md-3">
 									<label for="password" class="control-label">Contraseña</label>
-										<input type="password" name="password" class="form-control">
+										<input type="password" name="password" id="password" class="form-control" minlength="6" maxlength="15" required>
+										<div class="help-block">Minimo de 6 caracteres</div>
 									</div>
 									<div class="form-group col-md-3">
 									<label for="password_confirmation" class="control-label">Verificar contraseña</label>
-										<input type="password" name="password_confirmation" class="form-control">
+										<input type="password" name="password_confirmation" id="password_confirmation" class="form-control" data-match="#password" data-match-error="Whoops, no coinciden la contraseña" minlength="6" maxlength="15" required>
+										<div class="help-block with-errors"></div>
 									</div>
 									<div class="col-md-2">
-										<button type="button" class="btn btn-default">Cambiar</button>
+										<br>
+										<button type="submit" class="btn btn-default change-pass">Cambiar</button>
 									</div>
 								</div>
 							</form>

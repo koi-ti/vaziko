@@ -74,7 +74,6 @@ class Tercero extends BaseModel implements AuthenticatableContract,
             'tercero_municipio' => 'required',
             'tercero_actividad' => 'required',
             'username' => 'unique:koi_tercero',
-            'password' => 'min:6|confirmed',
         ];
 
         if ($this->exists){
@@ -102,6 +101,20 @@ class Tercero extends BaseModel implements AuthenticatableContract,
                     return false;
                 }
             }
+            return true;
+        }
+        $this->errors = $validator->errors();
+        return false;
+    }
+
+    public function isValidPass($data)
+    {
+        $rules = [
+            'password' => 'required|min:6|max:15|confirmed'
+        ];
+
+        $validator = Validator::make($data, $rules);
+        if ($validator->passes()) {
             return true;
         }
         $this->errors = $validator->errors();

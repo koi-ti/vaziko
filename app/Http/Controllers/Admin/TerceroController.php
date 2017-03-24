@@ -88,7 +88,6 @@ class TerceroController extends Controller
                 try {
                     // Tercero
                     $tercero->fill($data);
-                    $tercero->password = password_hash($request->password, PASSWORD_DEFAULT);
                     $tercero->fillBoolean($data);
                     $tercero->save();
 
@@ -153,7 +152,6 @@ class TerceroController extends Controller
                 try {
                     // Tercero
                     $tercero->fill($data);
-                    $tercero->password = password_hash($request->password, PASSWORD_DEFAULT);
                     $tercero->fillBoolean($data);
                     $tercero->save();
 
@@ -283,5 +281,36 @@ class TerceroController extends Controller
             return response()->json($facturap);
         }
         abort(404);
+    }
+
+    public function setpassword(Request $request)
+    {
+        if ($request->ajax()) { 
+            $data = $request->all();
+            $tercero = Tercero::findOrFail($request->id);
+            if ($tercero->isValidPass($data)) {
+                DB::beginTransaction();
+                try {
+                    if(!$tercero instanceof Tercero) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información del asiento o consulte al administrador.']);
+                    }
+
+                    $tercero->password = bcrypt($request->password);
+                    $tercero->save();
+
+                    // Commit Transaction
+                    DB::commit();
+
+                    return response()->json(['success' => true, 'id' => $tercero->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $tercero->errors]);
+        }
+        abort(403);
     }
 }
