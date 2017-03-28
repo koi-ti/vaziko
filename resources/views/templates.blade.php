@@ -384,7 +384,6 @@
 										</label>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_coordinador">
@@ -405,7 +404,44 @@
 
 							<br />
 							<div class="row">
-						    	<div class="form-group col-md-offset-2 col-md-8">
+								<div class="form-group col-md-6">
+					            	<div class="box box-success" id="wrapper-password">
+										<div class="box-header with-border">
+											<h3 class="box-title">Datos de acceso</h3>
+										</div>
+										<div class="box-body">
+											<form method="POST" accept-charset="UTF-8" id="form-changed-password" data-toggle="validator">
+												<div class="row">
+													<div class="form-group col-md-12">
+														<label for="username" class="control-label">Cuenta de usuario</label>
+														<input type="text" name="username" id="username" class="form-control input-lower" value="<%- username %>" minlength="4" maxlength="20" required>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="form-group col-md-6">
+													<label for="password" class="control-label">Contraseña</label>
+														<input type="password" name="password" id="password" class="form-control" minlength="6" maxlength="15">
+														<div class="help-block">Minimo de 6 caracteres</div>
+													</div>
+
+													<div class="form-group col-md-6">
+													<label for="password_confirmation" class="control-label">Verificar contraseña</label>
+														<input type="password" name="password_confirmation" id="password_confirmation" class="form-control" data-match="#password" data-match-error="Oops, no coinciden la contraseña" minlength="6" maxlength="15">
+														<div class="help-block with-errors"></div>
+													</div>
+												</div>
+
+												<div class="row">
+													<div class="col-md-12 text-center">
+														<button type="submit" class="btn btn-success change-pass">Cambiar</button>
+													</div>
+												</div>
+											</form>
+										</div>
+									</div>
+								</div>
+						    	<div class="form-group col-md-6">
 									<div class="box box-success" id="wrapper-roles">
 										<div class="box-header with-border">
 											<h3 class="box-title">Roles de usuario</h3>

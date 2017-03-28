@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'submit #form-tercero': 'onStore',
             'submit #form-item-roles': 'onStoreRol',
+            'submit #form-changed-password': 'onStorePassword',
             'ifChanged .change_employee': 'changedEmployee',
             'ifChanged #tercero_tecnico': 'changedTechnical',
             'click .btn-add-tcontacto': 'addContacto'
@@ -58,6 +59,10 @@ app || (app = {});
 
             this.$checkEmployee = this.$('#tercero_empleado');
             this.$checkInternal = this.$('#tercero_interno');
+
+            this.$username = this.$('#username');
+            this.$password = this.$('#password');
+            this.$password_confirmation = this.$('#password_confirmation');
 
             this.$wrapperEmployes = this.$('#wrapper-empleados');
             this.$wrapperCoordinador = this.$('#wrapper-coordinador');
@@ -143,6 +148,47 @@ app || (app = {});
                 this.$wrapperEmployes.removeClass('hide')
             }else{
                 this.$wrapperEmployes.addClass('hide')
+            }
+        },
+
+        onStorePassword: function(e) {
+            var _this = this;
+
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                data.id = this.model.get('id');
+
+                $.ajax({
+                    type: "POST",
+                    url: window.Misc.urlFull( Route.route('terceros.setpassword') ),
+                    data: data,
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.$('#wrapper-password') );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.el );
+                    if(!_.isUndefined(resp.success)) {
+                        // response success or error
+                        var text = resp.success ? '' : resp.errors;
+                        if( _.isObject( resp.errors ) ) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
+
+                        if( !resp.success ) {
+                            alertify.error(text);
+                            return;
+                        }
+
+                        alertify.success(resp.message);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.$('#wrapper-password') );
+                    alertify.error(thrownError);
+                });
             }
         },
 

@@ -133,16 +133,15 @@
 			</div>
 		</div>
 		<br>
-		<div class="row">
+		<div class="row" id="margin">
 			<div class="form-group col-md-12 col-sm-12 col-xs-12">
 		    	@foreach(config('koi.direcciones.nomenclatura') as $key => $value)
-		    		<div class="col-md-2 col-sm-4 col-xs-6 koi-component-add">
+		    		<div class="col-md-2 col-sm-4 col-xs-6 koi-component-add address-nomenclatura">
 		    			<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
 		    		</div>
 		    	@endforeach
 		    </div>	
 		</div>
-		<br>
 		<div class="row">
 			<label for="koi_nomenclatura_digitos" class="col-md-1 col-xs-12 control-label">DIGITOS</label>
 			<div class="form-group col-md-5">
@@ -165,7 +164,6 @@
 		    	@endforeach
 		    </div>	
 		</div>
-		<br>
 		<div id="render-component-select"></div>
 		
 		<div class="row">
@@ -174,7 +172,7 @@
 				{!! Form::text('koi_direccion_nm', null, ['id' => 'koi_direccion_nm', 'class' => 'form-control input-sm','disabled']) !!}	
 			</div>
 			<div class="col-md-2 koi-component-remove-last">
-				<a class="btn btn-default btn-block"><i class="fa fa-backward"> Limpiar Ultima</i></a>
+				<a class="btn btn-default btn-block"><i class="fa fa-backward"> Regresar</i></a>
 			</div>
 			<div class="col-md-2 koi-component-remove">
 				<a class="btn btn-default btn-block"><i class="fa fa-trash-o"> Limpiar</i></a>

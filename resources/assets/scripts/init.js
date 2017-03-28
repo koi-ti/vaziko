@@ -98,6 +98,19 @@ var app = app || {};
            $('.input-toupper').change(function(){
                $(this).val( $(this).val().toUpperCase() );
            });
+
+           $('.input-lower').change(function(){
+                var dato = $(this).val( $(this).val().toLowerCase() );
+                var reg = /[^a-z0-9]/i;
+                var valor = '';
+                for(var i=0; i <= dato.val().length-1; i++){
+                    if( !reg.test(dato.val().charAt(i)) ){
+                        dato.val().replace(reg,'');
+                        valor += dato.val().charAt(i);
+                    }
+                }
+                $(this).val( valor );
+           });
         },
 
         /**

@@ -97,14 +97,15 @@ app || (app = {});
                 }
             }else{
                 this.num = [];
-                for (var i = 0; i < this.validaciones.length; i++) {
-                    if($(e.target).text().trim() == this.validaciones[i]){
-                        this.$modalComponentValidacion.find('.modal-content').html( this.templateSelect( { } ));
-                        this.$modalComponentValidacion.find('.modal-title').text( $(e.target).text().trim() );
-                        this.$modalComponentValidacion.modal('show');
-                    }
-                }
                 if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
+                    for (var i = 0; i < this.validaciones.length; i++) {
+                        if($(e.target).text().trim() == this.validaciones[i]){
+                            this.$modalComponentValidacion.find('.modal-content').html( this.templateSelect( { } ));
+                            this.$modalComponentValidacion.find('.modal-title').text( $(e.target).text().trim() );
+                            this.$modalComponentValidacion.modal('show');
+                        }
+                    }
+                    
                     if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
                         this.addressData.push( $(e.target).text().trim() );
                         this.addressDataNm.push( ' ' );
