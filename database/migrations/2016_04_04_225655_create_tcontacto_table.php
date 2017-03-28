@@ -21,6 +21,7 @@ class CreateTcontactoTable extends Migration
             $table->string('tcontacto_apellidos', 200)->nullable();
             $table->integer('tcontacto_municipio')->unsigned()->nullable();
             $table->string('tcontacto_direccion', 200)->nullable();
+            $table->string('tcontacto_direccion_nomenclatura', 200)->nullable();
             $table->string('tcontacto_telefono', 15)->nullable();
             $table->string('tcontacto_celular', 15)->nullable();
             $table->string('tcontacto_email', 200)->nullable();
