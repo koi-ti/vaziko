@@ -140,47 +140,57 @@ label {
 	border-top-color: #00a65a;
 }
 
-.address-numbers {
-	padding: 0px 1px 0px 1px;
+@media (min-width: 992px) {
+  .modal-xlg {
+    width: 1050px;
+  }
 }
 
-.address-numbers .btn{
-	padding: 5px 10px;
-	font-size: 12px;
+#modal-address-component {
+
+	.modal-header {
+		padding: 10px;
+	}
+
+	.modal-body {
+		padding: 10px;
+	}
+
+	.small-box {
+		margin-bottom: 0px;
+	}
+
+	.address-nomenclatura {
+		padding: 1px 1px 1px 1px;
+
+		.btn {
+			padding: 2px;
+			font-size: 12px;
+		}
+	}
+
+	.address-digitos {
+
+		>li {
+			width: 50px;
+			padding-right: 0px;
+			padding-bottom: 2px;
+
+			.btn {
+				padding: 3px 12px;
+				font-size: 12px;
+			}
+		}
+	}
+
+	.other-controls {
+		.btn {
+			padding: 3px 12px;
+		}
+	}
+
+	.modal-footer {
+		padding: 10px;
+	}
 }
 
-.address-letter {
-	padding: 0px 1px 0px 1px;
-}
-
-.address-letter .btn{
-	padding: 5px;
-	font-size: 12px;
-}
-
-.address-nomenclatura{
-	padding: 0px 1px 0px 1px;
-}
-
-.address-nomenclatura .btn{
-	padding: 5px 10px;
-	font-size: 12px;
-}
-
-#margin {
-	margin-left: 0px;
-	margin-right: -25px;
-}
-
-.icon-close-koi {
-	opacity: 1;
-	color: #FFFFFF;
-}
-
-.koi-component-remove-last .btn{
-	font-size: 12px;
-}
-
-.koi-component-remove .btn{
-	font-size: 12px;
-}
