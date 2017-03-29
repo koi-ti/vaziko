@@ -39,7 +39,7 @@ class Tercero extends BaseModel implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'username', 'password', 'tercero_coordinador_por'];
+    protected $fillable = ['tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion','tercero_dir_nomenclatura', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'tercero_coordinador_por'];
 
     /**
      * The attributes that are mass boolean assignable.
@@ -99,6 +99,25 @@ class Tercero extends BaseModel implements AuthenticatableContract,
                     return false;
                 }
             }
+            return true;
+        }
+        $this->errors = $validator->errors();
+        return false;
+    }
+
+    public function isValidPass($data)
+    {
+        $rules = [
+            'username' => 'required|min:4|max:20|unique:koi_tercero',
+            'password' => 'min:6|max:15|confirmed'
+        ];
+
+        if ($this->exists){
+            $rules['username'] .= ',username,' . $this->id;
+        }
+
+        $validator = Validator::make($data, $rules);
+        if ($validator->passes()) {
             return true;
         }
         $this->errors = $validator->errors();

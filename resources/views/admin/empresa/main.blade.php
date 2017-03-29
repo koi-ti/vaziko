@@ -87,9 +87,10 @@
 
 		<div class="row">
 			<div class="form-group col-md-3">
-				<label for="tercero_direccion" class="control-label">Dirección</label>
+				<label for="tercero_direccion" class="control-label">Dirección</label> <small id="tercero_nomenclatura"><%- tercero_dir_nomenclatura %></small>
 	      		<div class="input-group input-group-sm">
-					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" required>
+	      		<input type="hidden" id="tercero_dir_nomenclatura" name="tercero_dir_nomenclatura" value="<%- tercero_dir_nomenclatura %>">
+					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" data-nm-name="tercero_nomenclatura" data-nm-value="tercero_dir_nomenclatura" required>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
 							<i class="fa fa-map-signs"></i>

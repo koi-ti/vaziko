@@ -66,7 +66,7 @@
 
 			<div class="row">
 				<div class="form-group col-md-3">
-					<label class="control-label">Dirección</label>
+					<label class="control-label">Dirección</label> <small>{{ $tercero->tercero_dir_nomenclatura }}</small>
 					<div>{{ $tercero->tercero_direccion }}</div>
 				</div>
 
@@ -278,6 +278,12 @@
 											<div>{{ $tercero->nombre_coordinador }}</div>
 				                        </div>
 									</div>
+									<div class="row">
+										<div class="form-group col-md-6">
+											<label for="username" class="control-label">Cuenta de usuario</label>
+											<div>{{ $tercero->username }}</div>
+										</div>
+									</div>	
 								</form>
 
 								<br />

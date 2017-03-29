@@ -43,6 +43,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
+		Route::post('setpassword', ['as' => 'terceros.setpassword', 'uses' => 'Admin\TerceroController@setpassword']);
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
 		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
 	});
