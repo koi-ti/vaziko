@@ -43,7 +43,7 @@
 
 <!-- Modal address -->
 <div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog" style="width: 70%" role="document">
+	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
 		</div>
@@ -122,54 +122,51 @@
 		<h4><strong>Generador de direcciones</strong></h4>
 	</div>
 
-	{!! Form::open(['id' => 'form-address-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-	<div class="modal-body">
+	{!! Form::open(['id' => 'form-address-component', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+	<div class="modal-body koi-component-address-modal-body">
 		<div class="row">
-			<div class=" col-md-offset-2">
-			<label for="koi_direccion" class="col-md-1 control-label">Direccion</label>
-				<div class="col-md-8">
+			<div class="col-md-offset-2">
+				<label for="koi_direccion" class="col-md-1 control-label">Direccion</label>
+				<div class="form-group col-md-8">
 					{!! Form::text('koi_direccion', null, ['id' => 'koi_direccion', 'class' => 'form-control input-sm','disabled']) !!}
 				</div>
 			</div>
 		</div>
-		<br>
-		<div class="row" id="margin">
-			<div class="form-group col-md-12 col-sm-12 col-xs-12">
-		    	@foreach(config('koi.direcciones.nomenclatura') as $key => $value)
-		    		<div class="col-md-2 col-sm-4 col-xs-6 koi-component-add address-nomenclatura">
-		    			<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
-		    		</div>
-		    	@endforeach
-		    </div>	
-		</div>
-		<div class="row">
-			<label for="koi_nomenclatura_digitos" class="col-md-1 col-xs-12 control-label">DIGITOS</label>
-			<div class="form-group col-md-5">
-		    	@for($i=1; $i<=9; $i++)
-		    		<div class="col-md-1 col-xs-1 koi-component-add address-numbers">
-		    			<a class="btn btn-default">{{ $i }}</a>
-		    		</div>
-		    	@endfor
-		    	<div class="col-md-1 col-xs-1 koi-component-add address-numbers">
-	    			<a class="btn btn-default">0</a>
-	    		</div>
-		    </div>
 
-			<label for="koi_nomenclatura_letras" class="col-md-1 col-xs-12 control-label">LETRAS</label>
-			<div class="form-group col-md-5">
-		    	@foreach(config('koi.direcciones.alfabeto') as $key => $value)
-		    		<div class="col-md-1 col-xs-1 koi-component-add address-letter">
-		    			<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
-		    		</div>
-		    	@endforeach
-		    </div>	
-		</div>
-		<div id="render-component-select"></div>
-		
 		<div class="row">
-			<label for="koi_direccion" class="col-md-2 col-xs-12 control-label">Dirección DIAN</label>
+			<div class="form-group col-md-12 col-sm-12 col-xs-12">
+				@foreach(config('koi.direcciones.nomenclatura') as $key => $value)
+					<div class="col-md-2 col-sm-4 col-xs-6 koi-component-add address-nomenclatura">
+						<a class="btn btn-default btn-block" data-key="{{$key}}">{{ $value }}</a>
+					</div>
+				@endforeach
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-md-12">
+				<ul class="list-inline address-digitos">
+					<!-- Leters -->
+					@foreach(config('koi.direcciones.alfabeto') as $key => $value)
+						<li>
+							<a class="btn btn-default btn-block koi-component-add" data-key="{{$key}}">{{ $value }}</a>
+						</li>
+					@endforeach
+
+					<!-- Numbers -->
+					@for($i=0; $i<=9; $i++)
+						<li>
+							<a class="btn btn-default btn-block koi-component-add">{{ $i }}</a>
+						</li>
+					@endfor
+				</ul>
+			</div>
+		</div>
+
+		<div class="row other-controls ">
+			<label for="koi_direccion" class="col-md-2 col-xs-12 control-label text-right">Dirección DIAN</label>
 			<div class="col-md-6">
-				{!! Form::text('koi_direccion_nm', null, ['id' => 'koi_direccion_nm', 'class' => 'form-control input-sm','disabled']) !!}	
+				{!! Form::text('koi_direccion_nm', null, ['id' => 'koi_direccion_nm', 'class' => 'form-control input-sm','disabled']) !!}
 			</div>
 			<div class="col-md-2 koi-component-remove-last">
 				<a class="btn btn-default btn-block"><i class="fa fa-backward"> Regresar</i></a>
