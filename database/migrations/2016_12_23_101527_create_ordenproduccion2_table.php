@@ -25,6 +25,7 @@ class CreateOrdenproduccion2Table extends Migration
             $table->string('orden2_round_formula', 10);
             $table->double('orden2_precio_venta')->default(0);
             $table->integer('orden2_entregado')->default(0);
+            $table->integer('orden2_facturados')->default(0);
             $table->text('orden2_observaciones')->nullable();
 
             $table->boolean('orden2_tiro')->default(false);
