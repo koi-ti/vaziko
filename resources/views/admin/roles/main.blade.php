@@ -71,7 +71,7 @@
                     </div>
                 </form>
 
-                <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
+                <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' && name != 'admin' ) { %>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <div class="nav-tabs-custom">

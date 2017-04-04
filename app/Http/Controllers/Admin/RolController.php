@@ -82,7 +82,10 @@ class RolController extends Controller
     {
         $rol = Rol::findOrFail($id);
         if ($request->ajax()) {
-            $rol->permissions = Permiso::get()->toArray();
+
+            if(!in_array($rol->name, ['admin'])) {
+                $rol->permissions = Permiso::get()->toArray();
+            }
             return response()->json($rol);
         }
         return view('admin.roles.show', ['rol' => $rol]);

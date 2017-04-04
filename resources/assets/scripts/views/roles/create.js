@@ -110,7 +110,6 @@ app || (app = {});
                 this.createPermisoRolView.undelegateEvents();
             }
 
-            console.log( model );
             this.createPermisoRolView = new app.CreatePermisoRolView({
                 model: model,
                 collection: collection,
