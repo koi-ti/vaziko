@@ -18,9 +18,9 @@ class TerceroController extends Controller
      */
     public function __construct()
     {
-        // $this->middleware('ability:admin,consultar');
-        // $this->middleware('ability:admin,crear', ['only' => 'create', 'store']);
-        // $this->middleware('ability:admin,editar', ['only' => 'edit', 'update']);
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear', ['only' => 'create', 'store']);
+        $this->middleware('ability:admin,editar', ['only' => 'edit', 'update']);
     }
 
     /**
