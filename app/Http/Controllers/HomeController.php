@@ -10,6 +10,14 @@ use App\Http\Controllers\Controller;
 class HomeController extends Controller
 {
     /**
+     * Instantiate a new HomeController instance.
+     */
+    public function __construct()
+    {
+        //
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
