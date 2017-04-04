@@ -68,12 +68,7 @@ app || (app = {});
                         width: '10%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
-                            // if( !full.orden_abierta || full.orden_anulada ) {
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
-                            // }else{
-                                // return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.edit', {ordenes: full.id }) )  +'">' + data +'</a>';
-                            // }
-
+                            return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
                         }
                     },
                     {
