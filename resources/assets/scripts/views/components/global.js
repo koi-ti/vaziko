@@ -13,7 +13,8 @@ app || (app = {});
 
       	el: 'body',
 		events: {
-            'click .sidebar-toggle': 'clickSidebar'
+            'click .sidebar-toggle': 'clickSidebar',
+            'click .history-back': 'clickHistoryBack'
 		},
 
         /**
@@ -31,7 +32,13 @@ app || (app = {});
 
 			// Create or update the cookie:
 			document.cookie = "sidebar_toggle=" + (this.$el.hasClass('sidebar-collapse') ? '' : 'sidebar-collapse') + "; path=/; expires=" + expiration.toUTCString();
-		}
+		},
+
+		clickHistoryBack: function(e) {
+			e.preventDefault();
+
+			window.history.back();
+		},
     });
 
 
