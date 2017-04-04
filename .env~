@@ -1,5 +1,5 @@
 PP_ENV=production
-APP_DEBUG=true
+APP_DEBUG=false
 APP_KEY=q57iimGRVcCODxIIqXPh6vEgfdtQFBQx
 
 DB_HOST=192.168.10.3
