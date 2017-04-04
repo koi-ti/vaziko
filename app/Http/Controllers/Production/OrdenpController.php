@@ -196,6 +196,10 @@ class OrdenpController extends Controller
             return response()->json($orden);
         }
 
+        if($orden->orden_abierta == true && $orden->orden_anulada == false && Auth::user()->can('editar', 'ordenes')) {
+            return redirect()->route('ordenes.edit', ['orden' => $orden]);
+        }
+
         return view('production.ordenes.show', ['orden' => $orden]);
     }
 
