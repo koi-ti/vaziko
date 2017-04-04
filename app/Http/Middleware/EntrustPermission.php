@@ -27,9 +27,9 @@ class EntrustPermission
      * @param  $permissions
      * @return mixed
      */
-    public function handle($request, Closure $next, $permissions)
+    public function handle($request, Closure $next, $permissions, $module = null)
     {
-        if ($this->auth->guest() || !$request->user()->can(explode('|', $permissions), $request->segment(1)) ) {
+        if ($this->auth->guest() || !$request->user()->can(explode('|', $permissions), ($module ? : $request->segment(1))) ) {
             abort(403);
         }
 
