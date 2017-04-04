@@ -11,7 +11,7 @@
 		<div class="box-header with-border">
             <div class="row">
                 <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                    <a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+                    <a href="{{ route('ordenes.show', ['ordenes' => $orden->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
                 @if($orden->orden_abierta)
 	                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
