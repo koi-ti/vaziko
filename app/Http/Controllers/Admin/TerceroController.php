@@ -14,16 +14,6 @@ use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Accounting\Fa
 class TerceroController extends Controller
 {
     /**
-     * Instantiate a new RolController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => 'create', 'store']);
-        $this->middleware('ability:admin,editar', ['only' => 'edit', 'update']);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

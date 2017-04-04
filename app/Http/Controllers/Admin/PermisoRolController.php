@@ -14,16 +14,6 @@ use App\Models\Base\Modulo, App\Models\Base\Rol, App\Models\Base\PermisoRol, App
 class PermisoRolController extends Controller
 {
     /**
-     * Instantiate a new PermisoRolController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => 'create', 'store']);
-        $this->middleware('ability:admin,editar', ['only' => 'edit', 'update']);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

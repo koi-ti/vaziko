@@ -13,16 +13,6 @@ use App\Models\Base\Permiso;
 class PermisoController extends Controller
 {
     /**
-     * Instantiate a new PermisoController instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => 'create', 'store']);
-        $this->middleware('ability:admin,editar', ['only' => 'edit', 'update']);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
