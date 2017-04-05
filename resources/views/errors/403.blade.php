@@ -9,7 +9,7 @@
 
     <section class="content">
 		<p>
-			No ha sido autorizado a ingresar a este módulo. Puedes revisar los permisos con el <strong>administrador</strong>.
+			No ha sido autorizado a ingresar a este módulo. Puedes revisar los permisos con el <strong>administrador</strong>. <button type="button" class="btn btn-default btn-sm history-back">{{ trans('app.comeback') }}</button>
 		</p>
 	</section>
 @stop
