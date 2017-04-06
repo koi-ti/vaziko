@@ -261,6 +261,8 @@ class Tercero extends BaseModel implements AuthenticatableContract,
             $validateAll = false;
         }
 
+        // dd($this->can('crear', 'ordenes'));
+
         // Return based on option
         if ($options['return_type'] == 'boolean') {
             return $validateAll;

@@ -39,9 +39,11 @@
                                         <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
                                             <i class="fa fa-lock"></i>Cerrar orden
                                         </a>
-                                        <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                            <i class="fa fa-clone"></i>Clonar orden
-                                        </a>
+                                        @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                            <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                                <i class="fa fa-clone"></i>Clonar orden
+                                            </a>
+                                        @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
                                         </a>
