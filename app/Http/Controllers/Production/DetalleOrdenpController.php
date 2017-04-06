@@ -177,7 +177,7 @@ class DetalleOrdenpController extends Controller
         }
 
         // Validar orden
-        if($orden->orden_abierta == true && Auth::user()->can('editar', 'ordenes')) {
+        if( $orden->orden_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
             return redirect()->route('ordenes.productos.edit', ['productos' => $ordenp2->id]);
         }
         return view('production.ordenes.productos.show', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
