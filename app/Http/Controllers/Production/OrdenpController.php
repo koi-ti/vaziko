@@ -14,6 +14,17 @@ use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Prod
 class OrdenpController extends Controller
 {
     /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'clonar']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'cerrar']]);
+         $this->middleware('ability:admin,opcional1', ['only' => ['abrir']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

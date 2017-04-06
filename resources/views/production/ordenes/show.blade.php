@@ -25,12 +25,17 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li role="presentation">
-                                    <a role="menuitem" tabindex="-1" href="#" class="open-ordenp">
-                                        <i class="fa fa-unlock"></i>Reabrir orden
-                                    </a>
-                                    <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                        <i class="fa fa-clone"></i>Clonar orden
-                                    </a>
+                                    @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                                        <a role="menuitem" tabindex="-1" href="#" class="open-ordenp">
+                                            <i class="fa fa-unlock"></i>Reabrir orden
+                                        </a>
+                                    @endif
+
+                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                        <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                            <i class="fa fa-clone"></i>Clonar orden
+                                        </a>
+                                    @endif
                                     <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                         <i class="fa fa-file-pdf-o"></i>Exportar
                                     </a>
@@ -51,6 +56,10 @@
                                                 {{ $orden->orden_codigo }}
                                                 @if($orden->orden_anulada)
                                                     <span class="label label-danger">ANULADA</span>
+                                                @elseif($orden->orden_abierta)
+                                                    <span class="label label-success">ABIERTA</span>
+                                                @else
+                                                    <span class="label label-warning">CERRADA</span>
                                                 @endif
                                             </div>
 										</div>
