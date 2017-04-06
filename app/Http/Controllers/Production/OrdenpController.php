@@ -196,7 +196,7 @@ class OrdenpController extends Controller
             return response()->json($orden);
         }
 
-        if($orden->orden_abierta == true && $orden->orden_anulada == false && Auth::user()->can('editar', 'ordenes')) {
+        if( $orden->orden_abierta == true && $orden->orden_anulada == false && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
             return redirect()->route('ordenes.edit', ['orden' => $orden]);
         }
 
