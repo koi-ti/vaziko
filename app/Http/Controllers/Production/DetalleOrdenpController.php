@@ -27,6 +27,7 @@ class DetalleOrdenpController extends Controller
             }
             return response()->json($detalle);
         }
+        abort(404);
     }
 
     /**

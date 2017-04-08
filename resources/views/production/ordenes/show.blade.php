@@ -164,8 +164,10 @@
                                                             <th width="5%">Código</th>
                                                             <th width="65%">Nombre</th>
                                                             <th width="10%">Cantidad</th>
-                                                            <th width="10%">Precio</th>
-                                                            <th width="10%">Total</th>
+                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                <th width="10%">Precio</th>
+                                                                <th width="10%">Total</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -176,19 +178,23 @@
                                                             <td></td>
                                                             <th class="text-right">Subtotal</th>
                                                             <td class="text-center" id="subtotal-cantidad">0</td>
-                                                            <td></td>
-                                                            <td class="text-right" id="subtotal-total">0</td>
+                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                <td></td>
+                                                                <td class="text-right" id="subtotal-total">0</td>
+                                                            @endif
                                                         </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <th class="text-right">Iva</th>
-                                                            <td colspan="3" class="text-right" id="iva-total">0</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <th class="text-right">Total</th>
-                                                            <td colspan="3" class="text-right" id="total-total">0</td>
-                                                        </tr>
+                                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                            <tr>
+                                                                <td></td>
+                                                                <th class="text-right">Iva</th>
+                                                                <td colspan="3" class="text-right" id="iva-total">0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td></td>
+                                                                <th class="text-right">Total</th>
+                                                                <td colspan="3" class="text-right" id="total-total">0</td>
+                                                            </tr>
+                                                        @endif
                                                     </tfoot>
                                                 </table>
                                             </div>

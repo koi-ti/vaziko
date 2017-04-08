@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use App\Models\BaseModel;
 
-use Validator, DB;
+use Validator, DB, Auth;
 
 class Ordenp2 extends BaseModel
 {
@@ -58,7 +58,10 @@ class Ordenp2 extends BaseModel
     public static function getOrdenesp2($orden)
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_cantidad', 'orden2_precio_venta', DB::raw('(orden2_cantidad*orden2_precio_venta) as orden2_precio_total'),
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_cantidad',
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_precio_venta' : DB::raw('0 as orden2_precio_venta') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_cantidad * orden2_precio_venta) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN

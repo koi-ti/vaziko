@@ -195,7 +195,7 @@ app || (app = {});
 
                 e.preventDefault();
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save( data, {silent: true} );
             }
         },
 

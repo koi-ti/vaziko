@@ -44,24 +44,26 @@
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="form-group col-md-10">
-					<label class="control-label">Fórmula</label>
-					<div>{{ $ordenp2->orden2_precio_formula }}</div>
-				</div>
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+    			<div class="row">
+    				<div class="form-group col-md-10">
+    					<label class="control-label">Fórmula</label>
+    					<div>{{ $ordenp2->orden2_precio_formula }}</div>
+    				</div>
 
-				<div class="form-group col-md-2">
-					<label class="control-label">Redondear</label>
-					<div>{{ $ordenp2->orden2_round_formula }}</div>
-				</div>
-			</div>
+    				<div class="form-group col-md-2">
+    					<label class="control-label">Redondear</label>
+    					<div>{{ $ordenp2->orden2_round_formula }}</div>
+    				</div>
+    			</div>
 
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Referencia</label>
-					<div>{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</div>
-				</div>
-			</div>
+    			<div class="row">
+    				<div class="form-group col-md-12">
+    					<label class="control-label">Referencia</label>
+    					<div>{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</div>
+    				</div>
+    			</div>
+            @endif
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
 				<div class="box box-primary">
