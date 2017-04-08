@@ -50,23 +50,25 @@
                 </div>
             </div>
 
-            <div class="row">
-                <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                <div class="form-group col-md-8">
-                	<input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm" name="orden2_precio_formula" type="text" maxlength="200">
-           		</div>
-           		<label for="orden2_round_formula" class="col-sm-1 control-label">Redondear</label>
-                <div class="form-group col-md-1">
-                    <input id="orden2_round_formula" value="<%- orden2_round_formula %>" class="form-control input-sm" name="orden2_round_formula" type="text" maxlength="5">
-                </div>
-           </div>
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                <div class="row">
+                    <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
+                    <div class="form-group col-md-8">
+                    	<input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm" name="orden2_precio_formula" type="text" maxlength="200">
+               		</div>
+               		<label for="orden2_round_formula" class="col-sm-1 control-label">Redondear</label>
+                    <div class="form-group col-md-1">
+                        <input id="orden2_round_formula" value="<%- orden2_round_formula %>" class="form-control input-sm" name="orden2_round_formula" type="text" maxlength="5">
+                    </div>
+               </div>
 
-           <div class="row">
-                <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                <div class="form-group col-md-3">
-                	<input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
-           		</div>
-           	</div>
+               <div class="row">
+                    <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
+                    <div class="form-group col-md-3">
+                    	<input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
+               		</div>
+               	</div>
+            @endif
 
             @if($producto->productop_abierto || $producto->productop_cerrado)
                 <div class="box box-primary">

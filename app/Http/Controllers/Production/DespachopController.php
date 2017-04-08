@@ -14,6 +14,17 @@ use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Model
 class DespachopController extends Controller
 {
     /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
+        $this->middleware('ability:admin,opcional3', ['only' => ['destroy']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

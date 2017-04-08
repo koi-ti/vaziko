@@ -230,8 +230,10 @@
                                                                 <th width="5%">Código</th>
                                                                 <th width="55%">Nombre</th>
                                                                 <th width="10%">Cantidad</th>
-                                                                <th width="10%">Precio</th>
-                                                                <th width="10%">Total</th>
+                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                    <th width="10%">Precio</th>
+                                                                    <th width="10%">Total</th>
+                                                                @endif
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -242,19 +244,23 @@
                                                                 <td colspan="3"></td>
                                                                 <th class="text-right">Subtotal</th>
                                                                 <td class="text-center" id="subtotal-cantidad">0</td>
-                                                                <td></td>
-                                                                <td class="text-right" id="subtotal-total">0</td>
+                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                    <td></td>
+                                                                    <td class="text-right" id="subtotal-total">0</td>
+                                                                @endif
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="3"></td>
-                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                <td colspan="3" class="text-right" id="iva-total">0</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td colspan="3"></td>
-                                                                <th class="text-right">Total</th>
-                                                                <td colspan="3" class="text-right" id="total-total">0</td>
-                                                            </tr>
+                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                <tr>
+                                                                    <td colspan="3"></td>
+                                                                    <th class="text-right">Iva (<%- orden_iva %>%)</th>
+                                                                    <td colspan="3" class="text-right" id="iva-total">0</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td colspan="3"></td>
+                                                                    <th class="text-right">Total</th>
+                                                                    <td colspan="3" class="text-right" id="total-total">0</td>
+                                                                </tr>
+                                                            @endif
                                                         </tfoot>
                                                     </table>
                                                 </div>
@@ -378,7 +384,9 @@
                                                     <table id="browse-orden-despachosp-list" class="table table-hover table-bordered" cellspacing="0">
                                                         <thead>
                                                             <tr>
-                                                                <th width="5%"></th>
+                                                                @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
+                                                                    <th width="5%"></th>
+                                                                @endif
                                                                 <th width="5%">Código</th>
                                                                 <th width="70%">Contacto</th>
                                                                 <th width="15%">Fecha</th>
@@ -420,17 +428,21 @@
         </td>
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- orden2_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( orden2_precio_venta ) %></td>
-        <td class="text-right"><%- window.Misc.currency( orden2_precio_total ) %></td>
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+            <td class="text-right"><%- window.Misc.currency( orden2_precio_venta ) %></td>
+            <td class="text-right"><%- window.Misc.currency( orden2_precio_total ) %></td>
+        @endif
     </script>
 
     <script type="text/template" id="ordenp-despacho-item-list-tpl">
         <% if(edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
+            @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            @endif
         <% } %>
         <td class="text-center"><%- id %></td>
         <td><%- tcontacto_nombre %></td>
