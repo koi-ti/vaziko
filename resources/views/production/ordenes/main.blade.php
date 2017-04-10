@@ -413,14 +413,19 @@
     <script type="text/template" id="ordenp-producto-item-list-tpl">
         <% if(edit) { %>
             <td class="text-center">
-                <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
+                @if( Auth::user()->ability('admin', 'eliminar', ['module' => 'ordenes']) )
+                    <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                @endif
             </td>
+
             <td class="text-center">
-                <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
-                    <span><i class="fa fa-clone"></i></span>
-                </a>
+                @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                    <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
+                        <span><i class="fa fa-clone"></i></span>
+                    </a>
+                @endif
             </td>
         <% } %>
         <td>
