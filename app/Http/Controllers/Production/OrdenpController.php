@@ -48,6 +48,11 @@ class OrdenpController extends Controller
             );
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
 
+            // Permisions
+            if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
+                $query->where('orden_abierta', true);
+            }
+
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
@@ -205,6 +210,11 @@ class OrdenpController extends Controller
 
         if ($request->ajax()) {
             return response()->json($orden);
+        }
+
+        // Permisions
+        if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) && $orden->orden_abierta == false) {
+            abort(403);
         }
 
         if( $orden->orden_abierta == true && $orden->orden_anulada == false && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
