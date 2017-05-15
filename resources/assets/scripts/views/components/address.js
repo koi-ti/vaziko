@@ -129,7 +129,7 @@ app || (app = {});
                 _this.$component.show();
                 $('input#component-input-text').change(function(){
                     var dato = $(this).val( $(this).val().toUpperCase() );
-                    var reg = /[^A-Za-z0-9&]/i;
+                    var reg = /[^A-Za-z0-9&ÑñáéíóúÁÉÍÓÚ/\s/]/i;
                     for(var i=0; i <= dato.val().length-1; i++){
                         if( !reg.test(dato.val().charAt(i)) ){
                             dato.val().replace(reg,'');
