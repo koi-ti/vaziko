@@ -85,7 +85,7 @@ app || (app = {});
             }
         },
 
-        listeningAddress: function(e){  
+        listeningAddress: function(e){
             if( parseInt($(e.target).text().trim()) > 0 || parseInt($(e.target).text().trim()) < 9 ){
                 this.num = $(e.target).text().trim();
                 if( parseInt(this.addressData[this.addressData.length-1]) > 0 || parseInt(this.addressData[this.addressData.length-1]) < 9){
@@ -105,7 +105,7 @@ app || (app = {});
                             this.$modalComponentValidacion.modal('show');
                         }
                     }
-                    
+
                     if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
                         this.addressData.push( $(e.target).text().trim() );
                         this.addressDataNm.push( ' ' );

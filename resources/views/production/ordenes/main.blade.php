@@ -133,7 +133,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-sm-1 col-xs-2">
-                                                <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="orden_contacto" data-name="tcontacto_nombre" data-tercero="<%- orden_cliente %>" data-phone="tcontacto_telefono">
+                                                <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="orden_contacto" data-name="tcontacto_nombre" data-tercero="<%- orden_cliente %>" data-phone="tcontacto_telefono" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_dir_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -284,7 +284,7 @@
                                                         <div class="col-sm-11 col-xs-10">
                                                             <div class="input-group input-group-sm">
                                                                 <span class="input-group-btn">
-                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-contacto-component-table" data-field="despachop1_contacto" data-name="despachop1_nombre" data-phone="despachop1_telefono" data-address="despachop1_direccion" data-city="despachop1_municipio" data-email="despachop1_email" data-tercero="btn-add-contact">
+                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-contacto-component-table" data-field="despachop1_contacto" data-name="despachop1_nombre" data-phone="despachop1_telefono" data-address="despachop1_direccion" data-nomenclatura="despachop1_direccion_nomenclatura" data-name-nomenclatura="despachop1_nomenclatura" data-city="despachop1_municipio" data-email="despachop1_email" data-tercero="btn-add-contact">
                                                                         <i class="fa fa-address-book"></i>
                                                                     </button>
                                                                 </span>
@@ -294,7 +294,7 @@
                                                         </div>
 
                                                         <div class="col-sm-1 col-xs-2">
-                                                            <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="despachop1_contacto" data-name="despachop1_nombre" data-tercero="<%- orden_cliente %>" data-phone="despachop1_telefono" data-address="despachop1_direccion" data-city="despachop1_municipio" data-email="despachop1_email">
+                                                            <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="despachop1_contacto" data-name="despachop1_nombre" data-tercero="<%- orden_cliente %>" data-phone="despachop1_telefono" data-address="despachop1_direccion" data-name-nomenclatura="despachop1_nomenclatura" data-city="despachop1_municipio" data-email="despachop1_email" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_dir_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>
@@ -315,8 +315,10 @@
                                             <div class="row">
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_direccion" class="control-label">Dirección</label>
+                                                    <small id="despachop1_nomenclatura"></small>
                                                     <div class="input-group input-group-sm">
-                                                        <input id="despachop1_direccion" placeholder="Dirección" class="form-control address-koi-component" name="despachop1_direccion" type="text" maxlength="200" required>
+                                                        <input type="hidden" id="despachop1_direccion_nomenclatura" name="despachop1_direccion_nomenclatura">
+                                                        <input id="despachop1_direccion" placeholder="Dirección" class="form-control address-koi-component" name="despachop1_direccion" data-nm-name="despachop1_nomenclatura" data-nm-value="despachop1_direccion_nomenclatura" type="text" maxlength="200" required>
                                                         <span class="input-group-btn">
                                                             <button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="despachop1_direccion">
                                                                 <i class="fa fa-map-signs"></i>

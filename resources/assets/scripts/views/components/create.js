@@ -43,6 +43,7 @@ app || (app = {});
             this.parameters = {};
 
             if(this.resource == 'contacto') {
+                var address = null, nomenclatura = null, municipio = null;
                 this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
                 this.$inputAddress = this.$("#"+$(e.currentTarget).attr("data-address"));
                 this.$inputCity = this.$("#"+$(e.currentTarget).attr("data-city"));
@@ -52,6 +53,11 @@ app || (app = {});
                     alertify.error('Por favor ingrese cliente antes agregar contacto.');
                     return;
                 }
+
+                // Get default values form
+                address = $(e.currentTarget).attr("data-address-default");
+                nomenclatura = $(e.currentTarget).attr("data-address-nomenclatura-default");
+                municipio = $(e.currentTarget).attr("data-municipio-default");
             }
 
             // stuffToDo resource
@@ -112,7 +118,11 @@ app || (app = {});
                         _this.$resourceName = $("#"+$(e.currentTarget).attr("data-name"));
                         _this.$modalComponent.find('.inner-title-modal').html('Contacto');
 
-                        _this.model = new app.ContactoModel();
+                        _this.model = new app.ContactoModel({
+                            tcontacto_direccion: address,
+                            tcontacto_direccion_nomenclatura: nomenclatura,
+                            tcontacto_municipio: municipio
+                        });
                         var template = _.template($('#add-contacto-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
                     },

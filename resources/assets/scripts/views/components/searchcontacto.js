@@ -53,6 +53,8 @@ app || (app = {});
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
             this.$inputPhone = this.$("#"+$(e.currentTarget).attr("data-phone"));
             this.$inputAddress = this.$("#"+$(e.currentTarget).attr("data-address"));
+            this.$inputNomenclatura = this.$("#"+$(e.currentTarget).attr("data-nomenclatura"));
+            this.$labelNomenclatura = this.$("#"+$(e.currentTarget).attr("data-name-nomenclatura"));
             this.$inputCity = this.$("#"+$(e.currentTarget).attr("data-city"));
 			this.$inputEmail = this.$("#"+$(e.currentTarget).attr("data-email"));
 
@@ -113,6 +115,12 @@ app || (app = {});
             }
             if(this.$inputAddress.length) {
                 this.$inputAddress.val( data.tcontacto_direccion );
+            }
+            if(this.$inputNomenclatura.length) {
+                this.$inputNomenclatura.val( data.tcontacto_direccion_nomenclatura );
+            }
+            if(this.$labelNomenclatura.length) {
+                this.$labelNomenclatura.text( data.tcontacto_direccion_nomenclatura );
             }
             if(this.$inputCity.length) {
                 this.$inputCity.val( data.tcontacto_municipio ).trigger('change');
