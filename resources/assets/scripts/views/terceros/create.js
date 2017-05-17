@@ -130,7 +130,12 @@ app || (app = {});
         },
 
         addContacto: function() {
-            this.contactsListView.trigger('createOne', this.model.get('id'));
+            this.contactsListView.trigger('createOne',
+                this.model.get('id'),
+                this.model.get('tercero_direccion'),
+                this.model.get('tercero_dir_nomenclatura'),
+                this.model.get('tercero_municipio')
+            );
         },
 
         changedTechnical: function(e) {

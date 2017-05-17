@@ -103,10 +103,10 @@ class DespachopController extends Controller
                     // Contacto
                     $contacto->tcontacto_telefono = $request->despachop1_telefono;
                     $contacto->tcontacto_direccion = $request->despachop1_direccion;
+                    $contacto->tcontacto_direccion_nomenclatura = $request->despachop1_direccion_nomenclatura;
                     $contacto->tcontacto_municipio = $request->despachop1_municipio;
                     $contacto->tcontacto_email = $request->despachop1_email;
                     $contacto->save();
-
 
                     // Despacho
                     $despacho->fill($data);

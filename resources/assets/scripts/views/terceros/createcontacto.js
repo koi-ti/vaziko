@@ -42,6 +42,7 @@ app || (app = {});
         render: function(){
             // Attributes
             var attributes = this.model.toJSON();
+
             this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
             this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
 
