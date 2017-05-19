@@ -27,7 +27,12 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('actividades.index') ),
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('actividades.index') ),
+                    data: function( data ) {
+                        data.datatables = true;
+                    }
+                },
                 columns: [
                     { data: 'actividad_codigo', name: 'actividad_codigo' },
                     { data: 'actividad_nombre', name: 'actividad_nombre'},

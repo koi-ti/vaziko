@@ -20,12 +20,14 @@
 		<div class="modal fade" id="modal-asiento-facturap-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-md" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>Factura proveedor</h4>
+					<div class="modal-header small-box {{ config('koi.template.bg') }}">
+						<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="inner-title-modal modal-title">Factura proveedor</h4>
 					</div>
 					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
-						<div class="modal-body box box-success" id="modal-asiento-wrapper-facturap">
+						<div class="modal-body" id="modal-asiento-wrapper-facturap">
 							<div id="error-eval-facturap" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
@@ -42,12 +44,14 @@
 		<div class="modal fade" id="modal-asiento-cartera-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>Cartera</h4>
+					<div class="modal-header small-box {{ config('koi.template.bg') }}">
+						<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="inner-title-modal modal-title">Cartera</h4>
 					</div>
 					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
-						<div class="modal-body box box-success" id="modal-asiento-wrapper-cartera">
+						<div class="modal-body" id="modal-asiento-wrapper-cartera">
 							<div id="error-eval-cartera" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
@@ -64,12 +68,14 @@
 		<div class="modal fade" id="modal-asiento-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>Ordenes de producción</h4>
+					<div class="modal-header small-box {{ config('koi.template.bg') }}">
+						<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="inner-title-modal modal-title">Ordenes de producción</h4>
 					</div>
 					{!! Form::open(['id' => 'form-create-ordenp-asiento-component-source', 'class' => 'form-horizontal', 'data-toggle' => 'validator']) !!}
-						<div class="modal-body box box-success" id="modal-asiento-wrapper-ordenp">
+						<div class="modal-body" id="modal-asiento-wrapper-ordenp">
 							<div id="error-search-orden-asiento2" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
@@ -86,12 +92,14 @@
 		<div class="modal fade" id="modal-asiento-inventario-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>Inventario</h4>
+					<div class="modal-header small-box {{ config('koi.template.bg') }}">
+						<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="inner-title-modal modal-title">Inventario</h4>
 					</div>
 					{!! Form::open(['id' => 'form-create-inventario-asiento-component-source', 'data-toggle' => 'validator']) !!}
-						<div class="modal-body box box-success" id="modal-asiento-wrapper-inventario">
+						<div class="modal-body" id="modal-asiento-wrapper-inventario">
 							<div id="error-inventario-asiento2" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
 						</div>
@@ -108,11 +116,13 @@
 		<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-md" role="document">
 				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4>Detalle item asiento</h4>
+					<div class="modal-header small-box {{ config('koi.template.bg') }}">
+						<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
 					</div>
-					<div class="modal-body box box-success" id="modal-asiento-wrapper-show-info">
+					<div class="modal-body" id="modal-asiento-wrapper-show-info">
 						<div class="content-modal"></div>
 					</div>
 					<div class="modal-footer">
@@ -125,27 +135,6 @@
 
     {{-- Templates --}}
     <script type="text/template" id="add-asiento-tpl">
-    	<div class="box-header with-border">
-        	<div class="row">
-				<div class="col-md-2 col-sm-5 col-xs-5 text-left">
-					<a href="<%- window.Misc.urlFull( edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
-				</div>
-
-
-				<% if(edit) { %>
-
-					<div class="col-md-2 col-md-offset-7 col-sm-5 col-xs-5 text-right">
-						<button type="button" class="btn btn-primary btn-sm btn-block submit-asiento">{{ trans('app.save') }}</button>
-					</div>
-
-					<div class="col-md-1 col-sm-2 col-xs-2 text-right">
-						<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" class="btn btn-danger btn-sm btn-block">
-							<i class="fa fa-file-pdf-o"></i>
-						</a>
-					</div>
-				<% } %>
-			</div>
-		</div>
     	<div class="box-body" id="render-form-asientos">
 			<form method="POST" accept-charset="UTF-8" id="form-asientos" data-toggle="validator">
 				<div class="row">
@@ -170,9 +159,11 @@
 						</select>
 					</div>
 
-					<% if(asiento1_preguardado) { %>
-						<div class="form-group col-md-offset-4 col-md-2 text-right">
-							<span class="label label-warning">PRE-GUARDADO</span>
+					<% if(edit) { %>
+						<div class="col-md-1 col-sm-2 col-xs-2 text-right pull-right">
+							<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" class="btn btn-danger btn-sm btn-block">
+								<i class="fa fa-file-pdf-o"></i>
+							</a>
 						</div>
 					<% } %>
 				</div>
@@ -202,6 +193,12 @@
 					<div class="form-group col-sm-2">
 						<input id="asiento1_numero" name="asiento1_numero" value="<%- asiento1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
 					</div>
+
+					<% if(asiento1_preguardado) { %>
+						<div class="col-md-1 text-right pull-right">
+							<span class="label label-warning">PRE-GUARDADO</span>
+						</div>
+					<% } %>
 	            </div>
 
 				<div class="row">
@@ -354,6 +351,19 @@
 						</tfoot>
 				    </table>
 				</div>
+			</div>
+		</div>
+		<div class="box-footer with-border">
+        	<div class="row">
+				<div class="col-md-2 <%- (edit) ? 'col-md-offset-4' : 'col-md-offset-5' %> col-sm-6 col-xs-6 text-left">
+					<a href="<%- window.Misc.urlFull( edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+				</div>
+
+				<% if(edit) { %>
+					<div class="col-md-2 col-sm-6 col-xs-6 text-right">
+						<button type="button" class="btn btn-primary btn-sm btn-block submit-asiento">{{ trans('app.save') }}</button>
+					</div>
+				<% } %>
 			</div>
 		</div>
 	</script>
