@@ -98,6 +98,15 @@
             return text;
         },
 
+         /*
+        * Open multimodal
+        */
+        multiModal: function( modal ){
+            if( $(modal).length > 0 ){
+                setTimeout( function () { $('body').addClass('modal-open') }, 500);
+            }
+        },
+
         /**
         *  Sets a loading spinner in a box
         * @param { selector } String|Object Selector jQuery

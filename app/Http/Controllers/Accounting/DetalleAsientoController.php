@@ -338,6 +338,17 @@ class DetalleAsientoController extends Controller
                     return response()->json($response);
                 break;
 
+                case 'cartera':
+                    // Valido movimiento cartera
+                    $result = Asiento2::validarFactura($request);
+                    if($result != 'OK') {
+                        $response->errors = $result;
+                        return response()->json($response);
+                    }
+                    $response->success = true;
+                    return response()->json($response);
+                break;
+
                 case 'inventario':
                     // Valido movimiento inventario
                     $result = Asiento2::validarInventario($request);

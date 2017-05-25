@@ -50,7 +50,7 @@
 						</button>
 						<h4 class="inner-title-modal modal-title">Cartera</h4>
 					</div>
-					{!! Form::open(['id' => 'form-create-asiento-component-source', 'data-toggle' => 'validator']) !!}
+					{!! Form::open(['id' => 'form-create-cartera-component-source', 'data-toggle' => 'validator']) !!}
 						<div class="modal-body" id="modal-asiento-wrapper-cartera">
 							<div id="error-eval-cartera" class="alert alert-danger"></div>
 							<div class="content-modal"></div>
@@ -418,7 +418,7 @@
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
+					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-factura="false" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
 				</div>
 			</div>
 			<div class="col-sm-6">
@@ -678,7 +678,10 @@
 		<% }else if(movimiento_tipo == 'FP') {  %>
 			<td class="text-center"><%- movimiento_item %></td>
 			<td class="text-right"><%- movimiento_valor %></td>
-		<% }  %>
+		<% }else if(movimiento_tipo == 'FH') { %>
+			<td class="text-center"><%- movimiento_ordenp2 %></td>
+			<td class="text-right"><%- movimiento_item %></td>
+		<% } %>
 	</script>
 
 	<script type="text/template" id="show-info-asiento2-movimientos-insumo-tpl">
@@ -730,26 +733,70 @@
 	<script type="text/template" id="add-facturacartera-asiento-tpl">
 		<div class="row">
 			<div class="form-group col-md-2">
-				<label for="factura_fecha" class="control-label">Fecha</label>
-				<input type="text" id="factura_fecha" name="factura_fecha" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+				<label for="factura1_fecha" class="control-label">Fecha</label>
+				<input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker" required>
 			</div>
 			<div class="form-group col-md-2">
-				<label for="factura_vencimiento" class="control-label">Vencimiento</label>
-				<input type="text" id="factura_vencimiento" name="factura_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+				<label for="factura1_fecha_vencimiento" class="control-label">Vencimiento</label>
+				<input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
 			</div>
 			<div class="form-group col-md-3">
-				<label for="factura_puntoventa" class="control-label">Punto de venta</label>
-				<select name="factura_puntoventa" id="factura_puntoventa" class="form-control" required>
-                    <option value="" selected>Punto de venta</option>
+				<label for="factura1_puntoventa" class="control-label">Punto de venta</label>
+				<select name="factura1_puntoventa" id="factura1_puntoventa" class="form-control" required>
+                    <option value="" selected>Seleccione</option>
                     @foreach( App\Models\Base\PuntoVenta::getPuntosVenta() as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
                     @endforeach
                 </select>
 			</div>
 		</div>
+		<div class="row">
+            <div class="form-group col-md-2 col-sm-8 col-xs-8">
+			<label for="factura1_beneficiario" class="control-label">Orden</label><br>
+                <div class="input-group input-group-sm">
+                    <span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="factura1_orden">
+							<i class="fa fa-building-o"></i>
+						</button>
+					</span>
+					<input id="factura1_orden" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="factura1_orden" type="text" maxlength="15" data-factura="true" data-wrapper="modal-asiento-wrapper-ordenp" data-name="factura1_orden_beneficiario" required>
+                </div>
+            </div>
+            <div class="col-sm-5 col-md-5 col-xs-10"><br>
+                <input id="factura1_orden_beneficiario" name="factura1_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+            </div>
+		</div>
+
+		<!-- table table-bordered table-striped -->
+        <div id="wrapper-table-orden" class="box-body table-responsive no-padding" hidden>
+            <table id="browse-orden-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th width="5%">Código</th>
+                        <th width="65%">Producto</th>
+                        <th width="10%">Cantidad</th>
+                        <th width="10%">Saldo</th>
+                        <th width="10%">Facturadas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{-- Render content ordenes --}}
+                </tbody>
+            </table>
+        </div>
 	</script>
 
 	<script type="text/template" id="add-cuotasfacturacartera-asiento-tpl">
 		Existente
 	</script>
+
+    <script type="text/template" id="ordenp-factura-pendiente-item-list-tpl">
+        <td><%- id %></td>
+        <td><%- productop_nombre %></td>
+        <td>
+            <input id="despachop2_cantidad_<%- id %>" name="despachop2_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_cantidad %>" value="0" required>
+        </td>
+        <td><%- orden2_cantidad %></td>
+        <td><%- orden2_facturado %></td>
+    </script>
 @stop
