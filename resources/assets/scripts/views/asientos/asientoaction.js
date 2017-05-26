@@ -54,8 +54,6 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend( {} , this.parameters, opts.parameters);
 
-            console.log(this.parameters);
-
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -635,7 +633,7 @@ app || (app = {});
                 e.preventDefault();
 
                 // Extend attributes 
-                this.parameters.data = _.assign( {}, this.parameters.data, window.Misc.formToJson( e.target ));
+                this.parameters.data = $.extend( {}, this.parameters.data, window.Misc.formToJson( e.target ));
 
                 // Evaluate account
                 this.validateAction({
