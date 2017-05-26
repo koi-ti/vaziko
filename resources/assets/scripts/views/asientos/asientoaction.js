@@ -52,7 +52,9 @@ app || (app = {});
         initialize : function( opts ) {
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.parameters = $.extend( {} , this.parameters, opts.parameters);
+
+            console.log(this.parameters);
 
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
@@ -195,7 +197,7 @@ app || (app = {});
         },
 
         /**
-        * Validate action item asiento2 (facturap, ordenp, inventario)
+        * Validate action item asiento2 (facturap, ordenp, inventario, cartera)
         */
         validateAction: function ( options ) {
 
@@ -632,8 +634,8 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                // Prepare global data
-                this.parameters.data = $.extend({}, this.parameters.data, window.Misc.formToJson( e.target ));
+                // Extend attributes 
+                this.parameters.data = _.assign( {}, this.parameters.data, window.Misc.formToJson( e.target ));
 
                 // Evaluate account
                 this.validateAction({
@@ -732,8 +734,6 @@ app || (app = {});
                     this.$modalIn.modal('hide');
                     this.$modalFp.modal('hide');
                     this.$modalCt.modal('hide');
-
-
                 }
             }
         }

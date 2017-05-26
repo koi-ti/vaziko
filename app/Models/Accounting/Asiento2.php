@@ -292,11 +292,6 @@ class Asiento2 extends Model
             if(!$tercero instanceof Tercero) {
                 return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
             }
-            // Recuperar CentroCosto
-            $centrocosto = CentroCosto::findOrFail($request->asiento2_centro);
-            if(!$centrocosto instanceof CentroCosto) {
-                return "No es posible recuperar centro de costo, por favor verifique la información del asiento o consulte al administrador.";
-            }
             
             // Recuperar puntoventa
             $puntoventa = PuntoVenta::findOrFail($request->factura1_puntoventa);
@@ -338,7 +333,7 @@ class Asiento2 extends Model
                 }
             }
         }else{
-            dd('jajjajajaja');
+            
         }
         return 'OK';
     }
@@ -715,16 +710,19 @@ class Asiento2 extends Model
                                 $response->error = "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
                                 return $response;
                             }
-                         
-                            $datamov['Orden'] = $item->id;
-                            $datamov['Cantidad'] = $request->get("despachop2_cantidad_{$item->id}");
 
-                            $movimiento = new AsientoMovimiento;
-                            $result = $movimiento->store($this, $datamov);
-                            if(!$result->success) {
-                                $response->error = $result->error;
-                                return $response;
+                            if($request->get("despachop2_cantidad_{$item->id}") > 0){
+                                $datamov['Orden'] = $item->id;
+                                $datamov['Cantidad'] = $request->get("despachop2_cantidad_{$item->id}");
+                             
+                                $movimiento = new AsientoMovimiento;
+                                $result = $movimiento->store($this, $datamov);
+                                if(!$result->success) {
+                                    $response->error = $result->error;
+                                    return $response;
+                                }
                             }
+
                         }
                     }
                 }else{

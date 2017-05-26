@@ -308,11 +308,11 @@ class DetalleAsientoController extends Controller
         if($request->has('plancuentas_cuenta')) {
             $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
         }
+
         if(!$cuenta instanceof PlanCuenta) {
             $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
             return response()->json($response);
         }
-
         if($request->has('action'))
         {
             switch ($request->action) {
