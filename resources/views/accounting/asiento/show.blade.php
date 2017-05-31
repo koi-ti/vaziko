@@ -8,20 +8,6 @@
 
 @section('module')
 	<div class="box box-success" id="asientos-show">
-		<div class="box-header with-border">
-        	<div class="row">
-				<div class="col-md-2 col-sm-6 col-xs-6 text-left">
-					<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-				</div>
-
-				<div class="col-md-1 col-md-offset-9 col-sm-6 col-xs-6 text-right">
-					<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" class="btn btn-danger btn-sm btn-block">
-						<i class="fa fa-file-pdf-o"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-
 		<div class="box-body">
 			<div class="row">
 				<div class="form-group col-md-1">
@@ -36,11 +22,12 @@
 					<label for="asiento1_dia" class="control-label">Día</label>
 					<div>{{ $asiento->asiento1_dia }}</div>
 				</div>
-				@if($asiento->asiento1_preguardado)
-					<div class="form-group col-md-offset-7 col-md-2 text-right">
-						<span class="label label-warning">PRE-GUARDADO</span>
-					</div>
-				@endif
+
+				<div class="col-md-1 col-md-offset-8 col-sm-6 col-xs-6 text-right">
+					<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" class="btn btn-danger btn-sm btn-block">
+						<i class="fa fa-file-pdf-o"></i>
+					</a>
+				</div>
 			</div>
 
 			<div class="row">
@@ -58,6 +45,11 @@
 					<label for="asiento1_numero" class="control-label">Número</label>
 					<div>{{ $asiento->asiento1_numero }}</div>
 				</div>
+				@if($asiento->asiento1_preguardado)
+					<div class="form-group col-md-offset-2 col-md-2 text-right">
+						<span class="label label-warning">PRE-GUARDADO</span>
+					</div>
+				@endif
 			</div>
 
 			<div class="row">
@@ -114,6 +106,13 @@
 						</tr>
 					</tfoot>
 			    </table>
+			</div>
+		</div>
+		<div class="box-footer with-border">
+        	<div class="row">
+				<div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
+					<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+				</div>
 			</div>
 		</div>
 	</div>

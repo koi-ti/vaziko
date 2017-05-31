@@ -23,8 +23,6 @@ class CreatePermisoRolTable extends Migration
 
             $table->primary(['module_id', 'permission_id', 'role_id']);
         });
-
-
     }
 
     /**

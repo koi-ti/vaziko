@@ -38,10 +38,7 @@
 
     	<div class="form-group col-md-4">
 			<label for="tcontacto_municipio" class="control-label">Municipio</label>
-			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control select2-default" required>
-				@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-					<option value="{{ $key }}" <%- tcontacto_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
+			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tcontacto_municipio %>">
 			</select>
 		</div>
 
@@ -171,10 +168,7 @@
 
 			<div class="form-group col-md-3">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
-				<select name="tercero_municipio" id="tercero_municipio" class="form-control select2-default" required>
-					@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-						<option value="{{ $key }}" <%- tercero_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-					@endforeach
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
 				</select>
 			</div>
 
@@ -267,10 +261,7 @@
 				    	    <div class="row">
 						    	<div class="form-group col-md-10">
 						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-						    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default change-actividad-koi-component" required data-field="tercero_retecree">
-										@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
-											<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-										@endforeach
+									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('actividades.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
 									</select>
 						    	</div>
 						    	<div class="form-group col-md-2">
@@ -790,7 +781,7 @@
     </div>
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="actividad_tarifa" class="control-label">% Cree</label>
+			<label for="actividad_tarifa" class="control-label">% Cree</label><br>
 			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm spinner-percentage" maxlength="4" required>
 		</div>
     	<div class="form-group col-md-2">

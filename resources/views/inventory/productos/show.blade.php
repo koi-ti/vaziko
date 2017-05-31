@@ -7,18 +7,6 @@
 
 @section('module')
     <div class="box box-success">
-        <div class="box-header with-border">
-            <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                    <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-                </div>
-                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    @if($producto->id == $producto->producto_referencia)
-                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
-                    @endif
-                </div>
-            </div>
-        </div>
         <div class="box-body">
             <div class="row">
                 <div class="form-group col-md-3">
@@ -95,6 +83,18 @@
                 <div class="form-group col-md-2">
                     <label class="control-label">Costo promedio</label>
                     <div class="text-right">{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer with-border">
+            <div class="row">
+                <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                    <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+                </div>
+                <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                    @if($producto->id == $producto->producto_referencia)
+                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                    @endif
                 </div>
             </div>
         </div>

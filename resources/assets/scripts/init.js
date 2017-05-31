@@ -87,8 +87,67 @@ var app = app || {};
         * Init select2
         */
         initSelect2: function () {
-            $('.select2-default').select2({ language: 'es', placeholder: 'Seleccione', allowClear: false });
-            $('.select2-default-clear').select2({ language: 'es', placeholder: 'Seleccione', allowClear: true });
+            var _this = this,
+                config = {
+                  '.select2-default' : { language: 'es', placeholder: 'Seleccione', allowClear: false },
+                  '.select2-default-clear'  : { language: 'es', placeholder: 'Seleccione', allowClear: true },
+                  '.choice-select-autocomplete': {
+                    language: "es",
+                    placeholder:'Seleccione una opción',
+                    ajax: {
+                        delay: 250,
+                        data: function (params) {
+                            return {
+                                q: params.term,
+                                page: params.page
+                            };
+                        },
+                        processResults: function (data, params) {
+                            params.page = params.page || 1;
+                            return {
+                                results: data,
+                                pagination: {
+                                    more: (params.page * 30) < data.total_count
+                                }
+                            };
+                        },
+                        escapeMarkup: function (markup) { return markup; },
+                        cache: true,
+                        minimumInputLength: 1
+                    }
+                  }
+                };
+
+            // Instance selects to choice plugin
+            for (var selector in config){
+                $(selector).each(function(index, el) {
+                    var $el = $(el);
+
+                    if( $el.data('select2') == undefined ){
+                        $el.select2(config[selector]);
+
+                        // set default option
+                        if(selector == '.choice-select-autocomplete') {
+
+                            var initialId = $el.data('initial-value');
+                            var $option = null;
+
+                            if(initialId) {
+                                var ajaxOptions = $el.data('select2').dataAdapter.ajaxOptions;
+
+                                $option = $('<option selected>Cargando...</option>').val(initialId);
+                                $el.append($option).trigger('change');
+
+                                $.get( ajaxOptions.url, {id:initialId}, function(data) {
+                                    $option.text(data[0].text).val(data[0].id);
+                                    $option.removeData();
+                                    $el.trigger('change');
+                                });
+                            }
+                        }
+                    }
+                });
+            }
         },
 
         /**

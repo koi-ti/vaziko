@@ -45,6 +45,14 @@ class AsientoMovimiento extends Model
                 $response->error = $result;
                 return $response;
             }
+
+        // Movimientos factura padre F, factura hijos FH
+        }else if( in_array($data['Tipo'], ['F', 'FH'])){
+            $result = $this->storeFactura($asiento2, $data);
+            if($result != 'OK') {
+                $response->error = $result;
+                return $response;
+            }
         }
 
         $this->movimiento_tipo = $data['Tipo'];
@@ -165,5 +173,62 @@ class AsientoMovimiento extends Model
             break;
         }
         return 'OK';
+    }
+
+    public function storeFactura(Asiento2 $asiento2, Array $data)
+    {
+        if($data['Nuevo'] == true) 
+        {
+            switch ($data['Tipo']) {
+                // Factura padre
+                case 'F':
+                    // Validar valor
+                    if(!isset($data['Valor']) || !is_numeric($data['Valor']) || $data['Valor'] <= 0) {
+                        return "Valor no puede ser menor o igual a 0.";
+                    }
+
+                    // Validar naturaleza
+                    if(!isset($data['Naturaleza']) || trim($data['Naturaleza']) == '') {
+                        return "Naturaleza es obligatoria.";
+                    }
+
+                    // Validar fecha
+                    if(!isset($data['Fecha']) || trim($data['Fecha']) == '') {
+                        return "Fecha es obligatoria.";
+                    }
+
+                    // Validar Ordenp
+                    if(!isset($data['Orden']) || trim($data['Orden']) == '') {
+                        return "Orden es obligatoria.";
+                    }
+
+                    // Validar vencimiento
+                    if(!isset($data['Vencimiento']) || trim($data['Vencimiento']) == '') {
+                        return "Vencimiento es obligatoria.";
+                    }
+
+                $this->movimiento_fecha = $data['Fecha'];
+                $this->movimiento_vencimiento = $data['Vencimiento'];
+                $this->movimiento_puntoventa = $data['PuntoVenta'];
+                $this->movimiento_ordenp = $data['Orden'];
+                $this->movimiento_valor = $data['Valor'];
+                break;
+
+                // Factura hijo
+                case 'FH':
+                    // Validar ordenp2
+                    if(isset($data['Orden']) || trim($data['Orden']) != '') {
+                        $this->movimiento_ordenp2 = $data['Orden'];
+                    }
+
+                    if(isset($data['Cantidad']) && trim($data['Cantidad']) != '') {
+                        $this->movimiento_item = $data['Cantidad'];
+                    }
+                break;
+            }
+
+            $this->movimiento_nuevo = $data['Nuevo'];
+            return 'OK';
+        }
     }
 }

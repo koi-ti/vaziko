@@ -308,11 +308,11 @@ class DetalleAsientoController extends Controller
         if($request->has('plancuentas_cuenta')) {
             $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
         }
+
         if(!$cuenta instanceof PlanCuenta) {
             $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
             return response()->json($response);
         }
-
         if($request->has('action'))
         {
             switch ($request->action) {
@@ -330,6 +330,17 @@ class DetalleAsientoController extends Controller
                 case 'facturap':
                     // Valido movimiento facturap
                     $result = Asiento2::validarFacturap($request);
+                    if($result != 'OK') {
+                        $response->errors = $result;
+                        return response()->json($response);
+                    }
+                    $response->success = true;
+                    return response()->json($response);
+                break;
+
+                case 'cartera':
+                    // Valido movimiento cartera
+                    $result = Asiento2::validarFactura($request);
                     if($result != 'OK') {
                         $response->errors = $result;
                         return response()->json($response);

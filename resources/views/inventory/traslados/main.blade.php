@@ -18,16 +18,6 @@
     </section>
 
     <script type="text/template" id="add-traslado-tpl">
-        <div class="box-header with-border">
-            <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                    <a href="<%- window.Misc.urlFull( Route.route('traslados.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
-                </div>
-                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    <button type="button" class="btn btn-primary btn-sm btn-block submit-traslado">{{ trans('app.save') }}</button>
-                </div>
-            </div>
-        </div>
         <div class="box-body" id="render-form-traslados">
             <form method="POST" accept-charset="UTF-8" id="form-traslado" data-toggle="validator">
                 <div class="box-body">
@@ -74,6 +64,17 @@
                     </div>
                 </div>
             </form>
+
+            <div class="box-footer with-border">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                        <a href="<%- window.Misc.urlFull( Route.route('traslados.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                        <button type="button" class="btn btn-primary btn-sm btn-block submit-traslado">{{ trans('app.save') }}</button>
+                    </div>
+                </div>
+            </div><br>
 
             <!-- Detalle -->
             <div class="box box-success">

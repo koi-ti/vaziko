@@ -34,7 +34,9 @@ app || (app = {});
             'submit #form-create-asiento-component-source': 'onStoreItemFacturap',
             'change input#facturap1_factura': 'facturapChanged',
             // Cartera
+            'submit #form-create-cartera-component-source': 'onStoreItemFactura',
             'change select#factura_nueva': 'facturaNuevaChanged',
+            'change .orden-change-koi': 'ordenChange',
             // Inventario
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
             'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario'
@@ -50,7 +52,7 @@ app || (app = {});
         initialize : function( opts ) {
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.parameters = $.extend( {} , this.parameters, opts.parameters);
 
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
@@ -62,10 +64,13 @@ app || (app = {});
 			// Collection item rollo
             this.itemRolloINList = new app.ItemRolloINList();
             // Collection series producto
-			this.productoSeriesINList = new app.ProductoSeriesINList();
+            this.productoSeriesINList = new app.ProductoSeriesINList();
+            // Collection pendientes factura
+			this.facturaList = new app.FacturaList();
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
+            this.listenTo( this.facturaList, 'reset', this.addAllFactura );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
 
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -99,7 +104,7 @@ app || (app = {});
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
         },
-
+        
 		/**
         * Run actions
         */
@@ -190,7 +195,7 @@ app || (app = {});
         },
 
         /**
-        * Validate action item asiento2 (facturap, ordenp, inventario)
+        * Validate action item asiento2 (facturap, ordenp, inventario, cartera)
         */
         validateAction: function ( options ) {
 
@@ -620,6 +625,40 @@ app || (app = {});
             }
         },
 
+        /**
+        * Event add item cartera
+        */
+        onStoreItemFactura: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                // Extend attributes 
+                this.parameters.data = $.extend( {}, this.parameters.data, window.Misc.formToJson( e.target ));
+
+                // Evaluate account
+                this.validateAction({
+                    'action': 'cartera',
+                    'callback': (function (_this) {
+                        return function ( resp )
+                        {
+                            if(resp.success) {
+                                // Set action success
+                                _this.setSuccessAction('cartera', _this.parameters.actions);
+
+                                if( !_this.isLastAction('cartera') ){
+                                    // Close modal
+                                    _this.$modalCt.modal('hide');
+                                }
+
+                                // Next action
+                                _this.runAction();
+                            }
+                        }
+                    })(this)
+                });
+            }
+        },
+
         /*
         * Factura nueva cartera changed
         */
@@ -636,6 +675,36 @@ app || (app = {});
             }
 
             this.ready();
+        },
+
+        ordenChange: function(e) {
+            var factura1_orden = this.$(e.currentTarget).val();
+            this.$('#wrapper-table-orden').removeAttr('hidden');
+            this.facturaList.reset();
+
+            this.facturaList.fetch({ reset: true, data: { factura1_orden: factura1_orden } });
+            this.$wraper = this.$('#browse-orden-pendientes-list');
+        },
+
+        /**
+        * Render view task by model
+        * @param Object Facturap2Model Model instance
+        */
+        addOneFactura: function (FacturaModel) {
+            var view = new app.FacturaPendienteOrdenItemView({
+                model: FacturaModel
+            });
+
+            this.$wraper.append( view.render().el );
+            this.ready();
+        },
+
+        /**
+        * Render all view tast of the collection
+        */
+        addAllFactura: function () {
+            this.$wraper.find('tbody').html('');
+            this.facturaList.forEach( this.addOneFactura, this );
         },
 
         /**
@@ -662,6 +731,7 @@ app || (app = {});
                     this.$modalOp.modal('hide');
                     this.$modalIn.modal('hide');
                     this.$modalFp.modal('hide');
+                    this.$modalCt.modal('hide');
                 }
             }
         }

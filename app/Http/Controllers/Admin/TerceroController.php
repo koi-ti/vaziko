@@ -21,7 +21,6 @@ class TerceroController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
             $query = Tercero::query();
             $query->select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_dir_nomenclatura', 'tercero_municipio',
                 DB::raw("(CASE WHEN tercero_persona = 'N'

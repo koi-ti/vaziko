@@ -24,7 +24,12 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('municipios.index') ),
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('municipios.index') ),
+                    data: function( data ) {
+                        data.datatables = true;
+                    }
+                },
                 columns: [
                     { data: 'departamento_codigo', name: 'koi_departamento.departamento_codigo'},
                     { data: 'departamento_nombre', name: 'departamento_nombre'},

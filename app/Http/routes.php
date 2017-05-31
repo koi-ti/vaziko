@@ -94,6 +94,12 @@ Route::group(['middleware' => 'auth'], function()
 			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
 			Route::get('movimientos', ['as' => 'asientos.detalle.movimientos', 'uses' => 'Accounting\DetalleAsientoController@movimientos']);
 		});
+
+		Route::group(['prefix' => 'facturas'], function()
+		{
+			Route::get('pendientes', ['as' => 'asientos.facturas.pendientes', 'uses' => 'Accounting\FacturaController@pendientes']);
+		});
+		Route::resource('facturas', 'Accounting\FacturaController', ['except' => ['destroy']]);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 

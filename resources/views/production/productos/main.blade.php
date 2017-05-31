@@ -18,17 +18,6 @@
     </section>
 
     <script type="text/template" id="add-productop-tpl">
-        <div class="box-header with-border">
-            <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
-                    <a href="<%- window.Misc.urlFull( (typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') ? Route.route('productosp.show', { productosp: id}) : Route.route('productosp.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
-                </div>
-                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-                    <button type="button" class="btn btn-primary btn-sm btn-block submit-productosp">{{ trans('app.save') }}</button>
-                </div>
-            </div>
-        </div>
-
         <div class="box-body">
             <form method="POST" accept-charset="UTF-8" id="form-productosp" data-toggle="validator">
                 <div class="row">
@@ -147,7 +136,18 @@
                         <input type="checkbox" id="productop_retiro" name="productop_retiro" value="productop_retiro" <%- productop_retiro ? 'checked': ''%>>
                     </div>
                 </div>
-            </form>
+            </form><br>
+
+            <div class="box-footer with-border">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                        <a href="<%- window.Misc.urlFull( (typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') ? Route.route('productosp.show', { productosp: id}) : Route.route('productosp.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                        <button type="button" class="btn btn-primary btn-sm btn-block submit-productosp">{{ trans('app.save') }}</button>
+                    </div>
+                </div>
+            </div>
 
             <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                 <div class="row">
