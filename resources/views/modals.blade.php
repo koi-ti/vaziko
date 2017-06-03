@@ -329,7 +329,7 @@
 
 			<div class="form-group">
 				<div class="col-md-12 table-responsive">
-					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0">
+					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
 		                <thead>
 				            <tr>
 				                <th width="10%">Código</th>

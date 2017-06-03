@@ -18,19 +18,19 @@ app || (app = {});
         defaults: {
         	'asiento2_asiento': '',
             'asiento2_cuenta': '',
-        	'plancuentas_cuenta': '',
-        	'plancuentas_nombre': '',
             'asiento2_beneficiario': '',
-            'tercero_nit': '',
-        	'tercero_nombre': '',
-        	'asiento2_debito': 0,
-        	'asiento2_credito': 0,
-        	'asiento2_centro': '',
-        	'centrocosto_nombre': '',
-        	'asiento2_base': 0,
+            'asiento2_debito': 0,
+            'asiento2_credito': 0,
+            'asiento2_centro': '',
+            'asiento2_base': 0,
             'asiento2_detalle': '',
             'asiento2_orden': '',
-        	'ordenp_codigo': ''
+        	'plancuentas_cuenta': '',
+        	'plancuentas_nombre': '',
+            'tercero_nit': '',
+        	'tercero_nombre': '',
+            'centrocosto_nombre': '',
+            'ordenp_codigo': ''
         }
     });
 

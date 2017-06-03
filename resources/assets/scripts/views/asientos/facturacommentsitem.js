@@ -1,5 +1,5 @@
 /**
-* Class FacturaPendienteOrdenItemView  of Backbone Router
+* Class FacturaCommentItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,19 +9,19 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.FacturaPendienteOrdenItemView = Backbone.View.extend({
+    app.FacturaCommentItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#factura-item-list-tpl').html() || '') ),
+        template: _.template( ($('#add-comments-item-tpl').html() || '') ),
         parameters: {
-            edit: false,
+            edit: false
         },
 
         /**
         * Constructor Method
         */
-        initialize: function(opts){
-	        // Extends parameters
+        initialize: function(opts) {
+        	// Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
@@ -36,8 +36,8 @@ app || (app = {});
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
-
             return this;
-        },
+        }
     });
+
 })(jQuery, this, this.document);

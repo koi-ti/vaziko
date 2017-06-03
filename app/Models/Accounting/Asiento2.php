@@ -322,13 +322,13 @@ class Asiento2 extends Model
                     return "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
                 }
 
-                if( $request->has("despachop2_cantidad_{$item->id}") ){
-                    if($request->get("despachop2_cantidad_{$item->id}") < 0){
+                if( $request->has("facturado_cantidad_{$item->id}") ){
+                    if($request->get("facturado_cantidad_{$item->id}") < 0){
                         return "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
                     }
 
-                    if($request->get("despachop2_cantidad_{$item->id}") > $item->orden2_cantidad){
-                        return "La cantidad no puede superar al saldo que esta registrado en esta orden {$item->id}, por favor verifique la información del asiento o consulte al administrador.";
+                    if($request->get("facturado_cantidad_{$item->id}") > $item->orden2_cantidad){
+                        return "La cantidad ingresada no puede superar el saldo en esta orden {$item->id}, por favor verifique la información ó consulte al administrador.";
                     }
                 }
             }
@@ -699,21 +699,21 @@ class Asiento2 extends Model
                     // Traer ordenp2
                     $orden2 = Ordenp2::getOrdenesp2($orden->id);
                     foreach ($orden2 as $item) {
-                        if( $request->has("despachop2_cantidad_{$item->id}") ){
+                        if( $request->has("facturado_cantidad_{$item->id}") ){
                             
                             if($item->orden2_orden != $orden->id){
                                 $response->error = "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
                                 return $response;
                             }
 
-                            if($request->get("despachop2_cantidad_{$item->id}") < 0){
+                            if($request->get("facturado_cantidad_{$item->id}") < 0){
                                 $response->error = "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
                                 return $response;
                             }
 
-                            if($request->get("despachop2_cantidad_{$item->id}") > 0){
+                            if($request->get("facturado_cantidad_{$item->id}") > 0){
                                 $datamov['Orden'] = $item->id;
-                                $datamov['Cantidad'] = $request->get("despachop2_cantidad_{$item->id}");
+                                $datamov['Cantidad'] = $request->get("facturado_cantidad_{$item->id}");
                              
                                 $movimiento = new AsientoMovimiento;
                                 $result = $movimiento->store($this, $datamov);
@@ -1044,7 +1044,7 @@ class Asiento2 extends Model
             $factura->save();
 
             // Factura2 (items)
-            $result = $factura->storeFactura2($movchildren);
+            $result = $factura->storeFactura2($movchildren, $movfather->movimiento_ordenp);
             if(!$result->success) {
                 return $result->error;
             }

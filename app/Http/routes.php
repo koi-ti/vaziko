@@ -98,6 +98,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::group(['prefix' => 'facturas'], function()
 		{
 			Route::get('pendientes', ['as' => 'asientos.facturas.pendientes', 'uses' => 'Accounting\FacturaController@pendientes']);
+			Route::resource('detalle', 'Accounting\Factura3Controller', ['only' => ['index', 'store']]);
 		});
 		Route::resource('facturas', 'Accounting\FacturaController', ['except' => ['destroy']]);
 	});

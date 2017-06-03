@@ -11,7 +11,7 @@ app || (app = {});
 
     app.AsientoActionView = Backbone.View.extend({
 
-        el: '#asiento-content-section',
+        el: '#asiento-content',
         // Produccion
         templateOrdenp: _.template( ($('#searchordenp-asiento-tpl').html() || '') ),
         // Proveedores
@@ -22,6 +22,8 @@ app || (app = {});
         templateCartera: _.template( ($('#rcartera-asiento-tpl').html() || '') ),
         templateAddFactura: _.template( ($('#add-facturacartera-asiento-tpl').html() || '') ),
         templateCuotasFactura: _.template( ($('#add-cuotasfacturacartera-asiento-tpl').html() || '') ),
+        templateCommentsFactura: _.template( ($('#add-comments-tpl').html() || '') ),
+
         // Inventario
         templateInventario: _.template( ($('#add-inventario-asiento-tpl').html() || '') ),
         templateAddItemRollo: _.template( ($('#add-itemrollo-asiento-tpl').html() || '') ),
@@ -37,6 +39,12 @@ app || (app = {});
             'submit #form-create-cartera-component-source': 'onStoreItemFactura',
             'change select#factura_nueva': 'facturaNuevaChanged',
             'change .orden-change-koi': 'ordenChange',
+
+            //Events Modal Comments
+            'click .add-comments': 'addComments',
+            'click .item-factura-remove': 'removeComment',
+            'submit #form-comments-component': 'onStoreComment',
+
             // Inventario
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
             'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario'
@@ -52,8 +60,8 @@ app || (app = {});
         initialize : function( opts ) {
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend( {} , this.parameters, opts.parameters);
-
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+            
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -61,12 +69,12 @@ app || (app = {});
 
             // Collection cuotas
             this.cuotasFPList = new app.CuotasFPList();
-			// Collection item rollo
+            // Collection item rollo
             this.itemRolloINList = new app.ItemRolloINList();
             // Collection series producto
             this.productoSeriesINList = new app.ProductoSeriesINList();
             // Collection pendientes factura
-			this.facturaList = new app.FacturaList();
+            this.facturaList = new app.FacturaList();
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
@@ -628,13 +636,13 @@ app || (app = {});
         /**
         * Event add item cartera
         */
-        onStoreItemFactura: function (e) {
+        onStoreItemFactura: function (e) {    
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                // Extend attributes 
-                this.parameters.data = $.extend( {}, this.parameters.data, window.Misc.formToJson( e.target ));
-
+                // Extend attributes
+                this.parameters.data = $.extend({}, this.parameters.data, window.Misc.formToJson( e.target ));
+                
                 // Evaluate account
                 this.validateAction({
                     'action': 'cartera',
@@ -677,6 +685,7 @@ app || (app = {});
             this.ready();
         },
 
+
         ordenChange: function(e) {
             var factura1_orden = this.$(e.currentTarget).val();
             this.$('#wrapper-table-orden').removeAttr('hidden');
@@ -685,6 +694,51 @@ app || (app = {});
             this.facturaList.fetch({ reset: true, data: { factura1_orden: factura1_orden } });
             this.$wraper = this.$('#browse-orden-pendientes-list');
         },
+
+
+        addComments: function(e){
+            this.$modalCtComments = this.$('#modal-comments-component');
+            this.asientoFacturaCommentsList = new app.AsientoFacturaCommentsList();
+
+            var id = this.$(e.currentTarget).attr('data-resource');
+
+            this.$modalCtComments.find('.content-modal').empty().html( this.templateCommentsFactura({ }) );
+            this.$modalCtComments.find('.modal-title').text( 'Orden #' + id );
+            this.$modalCtComments.modal('show');
+
+            this.wrapp = $('#render_comments_'+id);
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Detalle list
+            this.facturaCommentsListView = new app.FacturaCommentsListView({
+                collection: this.asientoFacturaCommentsList,
+                parameters: {
+                    el: this.wrapp,
+                    edit: true,
+                }
+            });
+        },
+
+        onStoreComment: function(e){
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.asientoFacturaCommentsList.trigger( 'store', data );
+            }
+        },
+
+        // removeComment: function(e){
+        //     e.preventDefault();
+
+        //     // var resource = $(e.currentTarget).attr("data-resource");
+        //     this.asientoFacturaCommentsList.eliminar( resource );
+        // },
 
         /**
         * Render view task by model

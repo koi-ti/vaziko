@@ -188,7 +188,7 @@ class AsientoController extends Controller
             return redirect()->route('asientos.show', ['asiento' => $asiento]);
         }
 
-        return view('accounting.asiento.edit', ['asiento' => $asiento]);
+        return view('accounting.asiento.create', ['asiento' => $asiento]);
     }
 
     /**
