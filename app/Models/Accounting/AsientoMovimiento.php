@@ -202,6 +202,11 @@ class AsientoMovimiento extends Model
                         return "Orden es obligatoria.";
                     }
 
+                    // Validar Ordenp
+                    if(!isset($data['Cuotas']) || $data['Valor'] <= 0 || !is_numeric($data['Cuotas'])) {
+                        return "Cuotas es obligatoria y no puede ser menor a 0.";
+                    }
+
                     // Validar vencimiento
                     if(!isset($data['Vencimiento']) || trim($data['Vencimiento']) == '') {
                         return "Vencimiento es obligatoria.";
@@ -212,6 +217,7 @@ class AsientoMovimiento extends Model
                 $this->movimiento_puntoventa = $data['PuntoVenta'];
                 $this->movimiento_ordenp = $data['Orden'];
                 $this->movimiento_valor = $data['Valor'];
+                $this->movimiento_item = $data['Cuotas'];
                 break;
 
                 // Factura hijo
@@ -226,9 +232,32 @@ class AsientoMovimiento extends Model
                     }
                 break;
             }
+        }else{
+            switch ($data['Tipo']) {
+                // Factura padre
+                case 'F':
+                    // Validar factura
+                    if(!isset($data['Factura']) || trim($data['Factura']) == '') {
+                        return "Factura es obligatoria.";
+                    }
 
-            $this->movimiento_nuevo = $data['Nuevo'];
-            return 'OK';
+                    $this->movimiento_factura = $data['Factura'];
+                break;
+
+                 // Factura hijo
+                case 'FH':
+                    // Validar factura -> child
+                    if(isset($data['FacturaChild']) && trim($data['FacturaChild']) != '') {
+                        $this->movimiento_factura4 = $data['FacturaChild'];
+                    }
+
+                    if(isset($data['Valor']) && trim($data['Valor']) != '') {
+                        $this->movimiento_valor = $data['Valor'];
+                    }
+                break;
+            }
         }
+        $this->movimiento_nuevo = $data['Nuevo'];
+        return 'OK';
     }
 }

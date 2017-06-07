@@ -62,6 +62,15 @@
 	</div>
 </div>
 
+<!-- Modal search factura -->
+<div class="modal fade" id="modal-search-factura-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-xlg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal search ordenp -->
 <div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -463,4 +472,80 @@
 			</div>
 		</div>
 	</div>
+</script>
+
+<script type="text/template" id="koi-search-factura-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador de facturas</h4>
+	</div>
+
+	{!! Form::open(['id' => 'form-koi-search-factura-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="row">
+				<label for="searchfactura_tercero" class="col-sm-1 control-label">Tercero</label>
+				<div class="col-md-3">
+		      		<div class="input-group input-group-sm">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="searchfactura_tercero">
+								<i class="fa fa-user"></i>
+							</button>
+						</span>
+						<input id="searchfactura_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="searchfactura_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="searchfactura_tercero_nombre">
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<input id="searchfactura_tercero_nombre" name="searchfactura_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+				</div>
+
+				<label for="searchfactura_numero" class="col-sm-1 control-label">Numero</label>
+				<div class="col-md-2">
+					<input id="searchfactura_numero" placeholder="Numero" class="form-control input-sm" name="searchfactura_numero" type="text" maxlength="15">
+				</div>
+			</div>
+			<div class="row"><br>
+				<label for="searchfactura_ordenp" class="col-sm-1 control-label">Orden</label>
+				<div class="col-md-3 col-sm-8 col-xs-8">
+	                <div class="input-group input-group-sm">
+	                    <span class="input-group-btn">
+							<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="searchfactura_ordenp">
+								<i class="fa fa-building-o"></i>
+							</button>
+						</span>
+						<input id="searchfactura_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="searchfactura_ordenp" type="text" maxlength="15" data-name="searchfactura_ordenp_beneficiario" required>
+	                </div>
+	            </div>
+	            <div class="col-sm-5 col-md-5 col-xs-10">
+	                <input id="searchfactura_ordenp_beneficiario" name="searchfactura_ordenp_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+	            </div>
+			</div>
+
+			<div class="row"><br>
+				<div class="form-group">
+					<div class="col-md-offset-4 col-md-2 col-xs-6">
+						<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-factura-component">Buscar</button>
+					</div>
+					<div class="col-md-2 col-xs-6">
+						<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-factura-component">Limpiar</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-factura-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="10%">Numero</th>
+			                	<th width="10%">Orden</th>
+			                	<th width="80%">Tercero</th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
 </script>

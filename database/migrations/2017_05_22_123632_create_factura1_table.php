@@ -18,11 +18,14 @@ class CreateFactura1Table extends Migration
             $table->increments('id');
             $table->date('factura1_fecha');
             $table->date('factura1_fecha_vencimiento');
+            $table->integer('factura1_cuotas')->unsigned()->default(0);
             $table->integer('factura1_puntoventa')->unsigned();
+            $table->integer('factura1_tercero')->unsigned();
             $table->integer('factura1_orden')->unsigned();
             $table->double('factura1_valor')->default(0);
 
             $table->foreign('factura1_puntoventa')->references('id')->on('koi_puntoventa')->onDelete('restrict');
+            $table->foreign('factura1_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('factura1_orden')->references('id')->on('koi_ordenproduccion')->onDelete('restrict');
         });
     }

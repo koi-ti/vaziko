@@ -81,6 +81,14 @@ var app = app || {};
                 unmaskAsNumber: true,
                 min: 0
             });
+
+            $("[data-currency-negative]").inputmask({
+                radixPoint: ",",
+                alias: 'currency',
+                prefix: '',
+                removeMaskOnSubmit: true,
+                unmaskAsNumber: true,
+            });
         },
 
         /**

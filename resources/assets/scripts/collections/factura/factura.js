@@ -12,7 +12,7 @@ app || (app = {});
     app.FacturaList = Backbone.Collection.extend({
 
         url: function() {
-            return window.Misc.urlFull( Route.route('asientos.facturas.pendientes') );
+            return window.Misc.urlFull( Route.route('asientos.facturas.facturadas') );
         },
         model: app.FacturaModel,
 

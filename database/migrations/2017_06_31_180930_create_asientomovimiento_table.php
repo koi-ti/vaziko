@@ -20,6 +20,8 @@ class CreateAsientomovimientoTable extends Migration
             $table->string('movimiento_tipo', 2);
             $table->boolean('movimiento_nuevo')->default(false)->nullable();
             $table->string('movimiento_facturap', 200)->nullable();
+            $table->integer('movimiento_factura')->nullable()->unsigned();
+            $table->integer('movimiento_factura4')->nullable()->unsigned();
             $table->integer('movimiento_sucursal')->nullable()->unsigned();
             $table->integer('movimiento_ordenp')->nullable()->unsigned();
             $table->integer('movimiento_ordenp2')->nullable()->unsigned();
@@ -34,6 +36,8 @@ class CreateAsientomovimientoTable extends Migration
             $table->text('movimiento_observaciones')->nullable();
 
             $table->foreign('movimiento_asiento2')->references('id')->on('koi_asiento2')->onDelete('restrict');
+            $table->foreign('movimiento_factura')->references('id')->on('koi_factura1')->onDelete('restrict');
+            $table->foreign('movimiento_factura4')->references('id')->on('koi_factura4')->onDelete('restrict');
             $table->foreign('movimiento_producto')->references('id')->on('koi_producto')->onDelete('restrict');
             $table->foreign('movimiento_ordenp')->references('id')->on('koi_ordenproduccion')->onDelete('restrict');
             $table->foreign('movimiento_ordenp2')->references('id')->on('koi_ordenproduccion2')->onDelete('restrict');

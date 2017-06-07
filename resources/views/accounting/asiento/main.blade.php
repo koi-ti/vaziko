@@ -572,9 +572,15 @@
 			<td class="text-center"><%- movimiento_item %></td>
 			<td class="text-right"><%- movimiento_valor %></td>
 		<% }else if(movimiento_tipo == 'FH') { %>
-			<td class="text-center"><%- movimiento_ordenp2 %></td>
-			<td class="text-right"><%- movimiento_item %></td>
+			<% if( !_.isNull(movimiento_factura4) ) { %>
+				<td class="text-center"><%- movimiento_factura4 %></td>
+				<td class="text-right"><%- movimiento_valor %></td>				
+			<% } else if ( !_.isNull(movimiento_ordenp2) ) { %>
+				<td class="text-center"><%- movimiento_ordenp2 %></td>
+				<td class="text-right"><%- movimiento_item %></td>
+			<% } %>				
 		<% } %>
+			
 	</script>
 
 	<script type="text/template" id="show-info-asiento2-movimientos-insumo-tpl">
@@ -642,6 +648,10 @@
                     @endforeach
                 </select>
 			</div>
+            <div class="form-group col-sm-1 col-md-1">     
+				<label for="factura1_cuotas" class="control-label">Cuotas</label>
+                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="0" required>
+            </div>
 		</div>
 		<div class="row">
             <div class="form-group col-md-2 col-sm-8 col-xs-8">
@@ -662,7 +672,7 @@
 
 		<!-- table table-bordered table-striped -->
         <div id="wrapper-table-orden" class="box-body table-responsive no-padding" hidden>
-            <table id="browse-orden-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
+            <table id="browse-orden-pendientes-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th width="5%">Código</th>
@@ -677,10 +687,6 @@
                 </tbody>
             </table>
         </div>
-	</script>
-
-	<script type="text/template" id="add-cuotasfacturacartera-asiento-tpl">
-		Existente
 	</script>
 
     <script type="text/template" id="factura-item-list-tpl">
@@ -699,6 +705,26 @@
 			</a>
 		</td>
     </script>
+    
+	<!-- Modal info -->
+	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<div class="modal-header small-box {{ config('koi.template.bg') }}">
+					<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
+				</div>
+				<div class="modal-body" id="modal-asiento-wrapper-show-info">
+					<div class="content-modal"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
     <script type="text/template" id="add-comments-item-tpl">
     	<td class="text-center">
@@ -708,4 +734,51 @@
 		</td>
     	<td><%- factura3_observaciones %></td>
     </script>
+
+    <script type="text/template" id="add-cuotasfacturacartera-asiento-tpl">
+		<div class="row"><br>
+			<label for="factura_koi" class="col-sm-offset-2 col-sm-1 control-label">Factura</label>
+			<div class="form-group col-sm-2">
+	      		<div class="input-group input-group-sm">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-factura-component-table" data-field="factura_orden">
+							<i class="fa fa-building-o"></i>
+						</button>
+					</span>
+					<input id="factura_orden" placeholder="Factura" class="form-control factura-koi-component" name="factura_orden" type="text" maxlength="15" data-factura="true" data-name="factura_orden_beneficiario" required>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<input id="factura_orden_beneficiario" name="factura_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+			</div>
+		</div>
+
+		<!-- table table-bordered table-striped -->
+        <div id="wrapper-table-factura-exists" class="box-body table-responsive no-padding" hidden>
+            <table id="browse-factura-exists-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="10%">Fecha</th>
+                        <th width="10%">Vencimiento</th>
+                        <th width="10%">Numero</th>
+                        <th width="10%">Cuota</th>
+                        <th width="10%">Saldo</th>
+                        <th width="10%">A pagar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {{-- Render content ordenes --}}
+                </tbody>
+            </table>
+        </div>
+	</script>
+
+	<script type="text/template" id="add-item-factura-exists-tpl">
+		<td><%- factura1_fecha %></td>
+	    <td><%- factura4_vencimiento %></td>
+	    <td><%- factura4_factura1 %></td>
+	    <td><%- factura4_cuota %></td>
+	    <td><%- window.Misc.currency(factura4_saldo) %></td>
+	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
+	</script>
 @stop

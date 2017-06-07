@@ -309,6 +309,11 @@ class Asiento2 extends Model
                 return "Fecha vencimiento es obligatoria.";
             }
 
+            // Validar cuotas
+            if(!isset($request->factura1_cuotas) || !is_numeric($request->factura1_cuotas) || $request->factura1_cuotas <= 0) {
+                return "Cuotas es obligatoria y no puede ser menor a 0.";
+            }
+
             // Recuperar Ordenp
             $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
             if(!$orden instanceof Ordenp){
@@ -332,8 +337,12 @@ class Asiento2 extends Model
                     }
                 }
             }
-        }else{
-            
+        }else if($request->factura_nueva == 'E'){
+            // Recuperar factura1 -> Padre
+            $factura = Factura1::find($request->factura_orden);
+            if(!$factura instanceof Factura1){
+                return "No es posible recuperar la factura, por favor verifique la información o consulte al administrador.";
+            }
         }
         return 'OK';
     }
@@ -663,70 +672,160 @@ class Asiento2 extends Model
                 }
             }
         }elseif ($objCuenta->plancuentas_tipo == 'C') {
-            if($request->has('factura_nueva')){
+            if($request->asiento2_naturaleza == 'D'){
+                if($request->has('factura_nueva')) {
+                    $orden = null;
+                    if($request->factura_nueva == 'N'){
+                        $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
+                        if(!$orden instanceof Ordenp){
+                            $response->error = "No es posible recuperar numero de orden, por favor verifique la información del asiento o consulte al administrador.";
+                            return $response;
+                        }
 
-                $orden = null;
-                if($request->factura_nueva == 'N'){
-                    $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-                    if(!$orden instanceof Ordenp){
-                        $response->error = "No es posible recuperar numero de orden, por favor verifique la información del asiento o consulte al administrador.";
-                        return $response;
-                    }
+                        // Preparar movimiento Factura
+                        $datamov = [];
+                        $datamov['Tipo'] = 'F';
+                        $datamov['Naturaleza'] = $request->asiento2_naturaleza;
+                        $datamov['Nuevo'] = true;
+                        $datamov['Fecha'] = $request->factura1_fecha;
+                        $datamov['Vencimiento'] = $request->factura1_fecha_vencimiento;
+                        $datamov['Valor'] = $request->asiento2_valor;
+                        $datamov['Cuotas'] = $request->factura1_cuotas;
+                        $datamov['PuntoVenta'] = $request->factura1_puntoventa;
+                        $datamov['Orden'] = $orden->id;
 
-                    // Preparar movimiento Factura
-                    $datamov = [];
-                    $datamov['Tipo'] = 'F';
-                    $datamov['Naturaleza'] = $request->asiento2_naturaleza;
-                    $datamov['Nuevo'] = true;
-                    $datamov['Fecha'] = $request->factura1_fecha;
-                    $datamov['Vencimiento'] = $request->factura1_fecha_vencimiento;
-                    $datamov['Valor'] = $request->asiento2_valor;
-                    $datamov['PuntoVenta'] = $request->factura1_puntoventa;
-                    $datamov['Orden'] = $orden->id;
+                        $movimiento = new AsientoMovimiento;
+                        $result = $movimiento->store($this, $datamov);
+                        if(!$result->success) {
+                            $response->error = $result->error;
+                            return $response;
+                        }
 
-                    $movimiento = new AsientoMovimiento;
-                    $result = $movimiento->store($this, $datamov);
-                    if(!$result->success) {
-                        $response->error = $result->error;
-                        return $response;
-                    }
+                        // Preparar movimientos hijos
+                        $datamov = [];
+                        $datamov['Tipo'] = 'FH';
+                        $datamov['Nuevo'] = true;
 
-                    // Preparar movimientos hijos
-                    $datamov = [];
-                    $datamov['Tipo'] = 'FH';
-                    $datamov['Nuevo'] = true;
-
-                    // Traer ordenp2
-                    $orden2 = Ordenp2::getOrdenesp2($orden->id);
-                    foreach ($orden2 as $item) {
-                        if( $request->has("facturado_cantidad_{$item->id}") ){
-                            
-                            if($item->orden2_orden != $orden->id){
-                                $response->error = "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
-                                return $response;
-                            }
-
-                            if($request->get("facturado_cantidad_{$item->id}") < 0){
-                                $response->error = "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
-                                return $response;
-                            }
-
-                            if($request->get("facturado_cantidad_{$item->id}") > 0){
-                                $datamov['Orden'] = $item->id;
-                                $datamov['Cantidad'] = $request->get("facturado_cantidad_{$item->id}");
-                             
-                                $movimiento = new AsientoMovimiento;
-                                $result = $movimiento->store($this, $datamov);
-                                if(!$result->success) {
-                                    $response->error = $result->error;
+                        // Traer ordenp2
+                        $orden2 = Ordenp2::getOrdenesp2($orden->id);
+                        foreach ($orden2 as $item) {
+                            if( $request->has("facturado_cantidad_{$item->id}") ){
+                                
+                                if($item->orden2_orden != $orden->id){
+                                    $response->error = "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
                                     return $response;
                                 }
-                            }
 
+                                if($request->get("facturado_cantidad_{$item->id}") < 0){
+                                    $response->error = "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
+                                    return $response;
+                                }
+
+                                if($request->get("facturado_cantidad_{$item->id}") > 0){
+                                    $datamov['Orden'] = $item->id;
+                                    $datamov['Cantidad'] = $request->get("facturado_cantidad_{$item->id}");
+                                 
+                                    $movimiento = new AsientoMovimiento;
+                                    $result = $movimiento->store($this, $datamov);
+                                    if(!$result->success) {
+                                        $response->error = $result->error;
+                                        return $response;
+                                    }
+                                }
+
+                            }
+                        }
+                    }else if($request->factura_nueva == 'E'){
+                        // Preparar movimiento Factura
+                        $datamov = [];
+                        $datamov['Tipo'] = 'F';
+                        $datamov['Naturaleza'] = $request->asiento2_naturaleza;
+                        $datamov['Nuevo'] = false;
+                        $datamov['Factura'] = $request->factura_orden;
+                        $datamov['Valor'] = $request->factura1_pagar;
+                        
+                        $movimiento = new AsientoMovimiento;
+                        $result = $movimiento->store($this, $datamov);
+                        if(!$result->success) {
+                            $response->error = $result->error;
+                            return $response;
+                        }
+
+                        // Preparar movimientos hijos
+                        $datamov = [];
+                        $datamov['Tipo'] = 'FH';
+                        $datamov['Nuevo'] = false;
+
+                        // Recuperar Factura1 ->Padre
+                        $factura = Factura1::find($request->factura_orden);
+                        if(!$factura instanceof Factura1){
+                            $response->error = "No es posible recuperar la factura, por favor verifique la información o consulte al administrador";
+                            return $response;
+                        }
+
+                        // Recuperar Factura4 -> Hijo
+                        $factura4 = Factura4::where('factura4_factura1', $factura->id)->get();
+                        foreach ($factura4 as $item) {
+                            if($request->has("factura4_pagar_{$item->id}")){
+                                if($request->get("factura4_pagar_{$item->id}") != 0){
+                                    $datamov['FacturaChild'] = $item->id;
+                                    $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
+                                 
+                                    $movimiento = new AsientoMovimiento;
+                                    $result = $movimiento->store($this, $datamov);
+                                    if(!$result->success) {
+                                        $response->error = $result->error;
+                                        return $response;
+                                    }
+                                }
+                            }
                         }
                     }
-                }else{
+                }
+            }else{
+                // Preparar movimiento Factura
+                $datamov = [];
+                $datamov['Tipo'] = 'F';
+                $datamov['Naturaleza'] = $request->asiento2_naturaleza;
+                $datamov['Nuevo'] = false;
+                $datamov['Factura'] = $request->factura_orden;
+                $datamov['Valor'] = $request->factura1_pagar;
+                
+                $movimiento = new AsientoMovimiento;
+                $result = $movimiento->store($this, $datamov);
+                if(!$result->success) {
+                    $response->error = $result->error;
+                    return $response;
+                }
 
+                // Preparar movimientos hijos
+                $datamov = [];
+                $datamov['Tipo'] = 'FH';
+                $datamov['Nuevo'] = false;
+
+                // Recuperar Factura1 ->Padre
+                $factura = Factura1::find($request->factura_orden);
+                if(!$factura instanceof Factura1){
+                    $response->error = "No es posible recuperar la factura, por favor verifique la información o consulte al administrador";
+                    return $response;
+                }
+
+                // Recuperar Factura4 -> Hijo
+                $factura4 = Factura4::where('factura4_factura1', $factura->id)->get();
+                foreach ($factura4 as $item) {
+                    if($request->has("factura4_pagar_{$item->id}")){
+                        if($request->get("factura4_pagar_{$item->id}") != 0){
+                            $datamov['FacturaChild'] = $item->id;
+                            $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
+                         
+                            $movimiento = new AsientoMovimiento;
+                            $result = $movimiento->store($this, $datamov);
+                            if(!$result->success) {
+                                $response->error = $result->error;
+                                return $response;
+                            }
+                        }
+                    }
                 }
             }
         }  
@@ -1027,6 +1126,7 @@ class Asiento2 extends Model
             return "No es posible recuperar movimiento padre de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
+        // Recuperar hijos de factura FH
         $movchildren = $movements->where('movimiento_tipo', 'FH');
         if($movchildren->count() <= 0) {
             return "No es posible recuperar movimientos detalle de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
@@ -1034,6 +1134,20 @@ class Asiento2 extends Model
 
         // Nuevo registro en factura
         if($movfather->movimiento_nuevo == true) {
+
+            // Recuperar Tercero
+            $tercero = Tercero::where('tercero_nit', $this->tercero_nit)->first();
+            if(!$tercero instanceof Tercero){
+                return "No es posible recuperar el tercero, para almacenar la factura, por favor verifique la informacion o consulte al administrador.";
+            }
+
+            // Consecutivo Punto de venta
+            $puntoventa = PuntoVenta::findOrFail($movfather->movimiento_puntoventa);
+            if(!$puntoventa instanceof PuntoVenta){
+                return "No es posible recuperar el punto de venta, por favor verifique la informacion o consulte al administrador.";
+            }
+            $consecutive = $puntoventa->puntoventa_numero + 1;
+
             // Factura
             $factura = new Factura1;
             $factura->factura1_fecha = $movfather->movimiento_fecha;
@@ -1041,11 +1155,35 @@ class Asiento2 extends Model
             $factura->factura1_puntoventa = $movfather->movimiento_puntoventa;
             $factura->factura1_orden = $movfather->movimiento_ordenp;
             $factura->factura1_valor = $movfather->movimiento_valor;
+            $factura->factura1_cuotas = $movfather->movimiento_item;
+            $factura->factura1_tercero = $tercero->id;
             $factura->save();
 
             // Factura2 (items)
             $result = $factura->storeFactura2($movchildren, $movfather->movimiento_ordenp);
             if(!$result->success) {
+                return $result->error;
+            }
+
+            // Factura4 (cuotas)
+            $resultFactu4 = $factura->storeFactura4($factura);
+            if(!$resultFactu4->success) {
+                return $resultFactu4->error;
+            }
+
+            // Update consecutive puntoventa_numero
+            $puntoventa->puntoventa_numero = $consecutive;
+            $puntoventa->save();
+        }else{
+            // Recuperar factura1 -> Padre
+            $factura = Factura1::find($movfather->movimiento_factura);
+            if(!$factura instanceof Factura1){
+                return "No es posible recuperar la factura, por favor verifique la informacion o consulte con el administrador.";
+            }
+
+            // Actualizar factura4 
+            $result = $factura->actualizarFactura4($movchildren, $this->asiento2_naturaleza);
+            if(!$result->success){
                 return $result->error;
             }
         }

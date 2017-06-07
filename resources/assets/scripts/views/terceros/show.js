@@ -23,6 +23,7 @@ app || (app = {});
                 this.contactsList = new app.ContactsList();
                 this.facturaptList = new app.FacturaptList();
                 this.rolList = new app.RolList();
+                this.detalleFacturaList = new app.DetalleFactura4List();
 
                 // Reference views
                 this.referenceViews();
@@ -63,6 +64,17 @@ app || (app = {});
                         'tercero_id': this.model.get('id')
                     }
                }
+            });
+
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFacturaList,
+                parameters: {
+                    edit: false,
+                    dataFilter: {
+                        'tercero': this.model.get('id'),
+                    }
+                }
             });
         }
     });

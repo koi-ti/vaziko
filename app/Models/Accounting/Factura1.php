@@ -52,4 +52,47 @@ class Factura1 extends Model
         $response->success = true;
         return $response;
     }
+
+    public function storeFactura4(Factura1 $factura)
+    {
+        $response = new \stdClass();
+        $response->success = false;
+
+        if ($factura->factura1_cuotas > 0) {
+            $valor = $factura->factura1_valor / $factura->factura1_cuotas;
+            $fecha = $factura->factura1_fecha_vencimiento; 
+            for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
+                $factura4 = new Factura4;
+                $factura4->factura4_factura1 = $factura->id;
+                $factura4->factura4_cuota = $i;
+                $factura4->factura4_valor = $valor;
+                $factura4->factura4_saldo = $valor;
+                $factura4->factura4_vencimiento = $fecha;
+                $fechavencimiento = date('Y-m-d',strtotime('+1 months', strtotime($fecha)));
+                $fecha = $fechavencimiento;
+                $factura4->save();
+            }
+        }
+        
+        $response->success = true;
+        return $response;
+    }
+
+    public function actualizarFactura4($movchildren, $naturaleza){
+        $response = new \stdClass();
+        $response->success = false;
+
+        foreach ($movchildren as $item) {
+            $factura = Factura4::find($item->movimiento_factura4);
+            if($naturaleza == 'D'){
+                $factura->factura4_saldo = $factura->factura4_saldo + $item->movimiento_valor;
+            }else{
+                $factura->factura4_saldo = $factura->factura4_saldo - $item->movimiento_valor;
+            }
+            $factura->save();
+        }
+
+        $response->success = true;
+        return $response;
+    }
 }

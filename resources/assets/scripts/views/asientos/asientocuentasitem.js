@@ -31,6 +31,7 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
+
             //Init Attributes
             this.$modalInfo = $('#modal-asiento-show-info-component');
             this.asientoMovimientosList = new app.AsientoMovimientosList();

@@ -97,8 +97,10 @@ Route::group(['middleware' => 'auth'], function()
 
 		Route::group(['prefix' => 'facturas'], function()
 		{
-			Route::get('pendientes', ['as' => 'asientos.facturas.pendientes', 'uses' => 'Accounting\FacturaController@pendientes']);
+			Route::get('facturadas', ['as' => 'asientos.facturas.facturadas', 'uses' => 'Accounting\FacturaController@facturadas']);
+			Route::get('search', ['as' => 'asientos.facturas.search', 'uses' => 'Accounting\FacturaController@search']);
 			Route::resource('detalle', 'Accounting\Factura3Controller', ['only' => ['index', 'store']]);
+			Route::resource('factura', 'Accounting\Factura4Controller', ['only' => ['index']]);
 		});
 		Route::resource('facturas', 'Accounting\FacturaController', ['except' => ['destroy']]);
 	});

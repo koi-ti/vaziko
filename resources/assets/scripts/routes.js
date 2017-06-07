@@ -151,6 +151,7 @@ app || (app = {});
             this.componentDocumentView = new app.ComponentDocumentView();
             this.componentReportView = new app.ComponentReportView();
             this.componentTerceroView = new app.ComponentTerceroView();
+            this.componentSearchFacturaView = new app.ComponentSearchFacturaView();
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
             this.componentSearchContactoView = new app.ComponentSearchContactoView();
