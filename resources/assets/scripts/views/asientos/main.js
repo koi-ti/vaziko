@@ -54,7 +54,7 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         render: function ( data, type, full, row ) {
-                            if( parseInt(full.asiento1_preguardado) ) {
+                            if( full.asiento1_preguardado ) {
                                 return '<a href="'+ window.Misc.urlFull( Route.route('asientos.edit', {asientos: full.id }) )  +'">' + data + ' <span class="label label-warning">PRE</span></a>';
                             }else{
                                 return '<a href="'+ window.Misc.urlFull( Route.route('asientos.show', {asientos: full.id }) )  +'">' + data + '</a>';

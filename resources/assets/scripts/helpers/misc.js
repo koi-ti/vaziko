@@ -121,6 +121,16 @@
         },
 
         /**
+        *   ClearFields the forms
+        */
+        // clearForm: function( form ){
+        //     $("[data-currency]").val('');
+        //     form.find('.select2-default-clear').select2('destroy');
+        //     form.find('.select2-default-clear').select2().trigger('change');
+        //     form.trigger('reset');
+        // },
+
+        /**
         * Display the DataTables interface in Spanish
         */
         dataTableES: function(){

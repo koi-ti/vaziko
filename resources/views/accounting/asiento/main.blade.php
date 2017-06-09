@@ -451,6 +451,7 @@
 		<div id="content-detail-inventory"></div>
 	</script>
 
+	<!-- Render table inventario -->
 	<script type="text/template" id="add-itemrollo-asiento-tpl">
 		<div class="row">
 			<div class="col-sm-4 col-md-offset-4 col-xs-12">
@@ -547,57 +548,261 @@
 			</div>
 		<% } %>
 
-		<div class="row" id="browse-showinfo-asiento-insumo"></div>
-		<div class="row">
-			<div class="col-sm-6 col-md-offset-3 col-xs-12">
-				<div class="box-body table-responsive no-padding">
-					<table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
-			        	<tr>
-			                <th>Item</th>
-			                <th>Metros (m)</th>
-			            </tr>
-				    </table>
+		<div class="row" id="render-info-facturap"></div>
+		<div class="row" id="render-info-factura"></div>
+		<div class="row" id="render-info-inventario"></div>
+	</script>
+
+	<!-- Facturas, Facturap, Inventario -> Padres -->
+	<script type="text/template" id="add-info-facturap-item">
+		<div class="box box-success">
+			<div class="box-body">
+				<div class="box-header with-border">
+		            <h3 class="box-title">
+		            	<b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)
+		            </h5>
+		        </div>
+				<div class="box-body">
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label class="control-label">Factura proveedor</label>
+							<div><%- movimiento_facturap %></div>
+						</div>
+						<% if( naturaleza == 'C') { %>
+							<div class="form-group col-md-6">
+								<label class="control-label">Valor</label>
+								<div><%- window.Misc.currency( movimiento_valor ) %></div>
+							</div>
+						<% } %>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="control-label">Tercero</label>
+							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+						</div>
+					</div>
+					<% if( naturaleza == 'C') { %>
+						<div class="row">
+							<div class="form-group col-md-4">
+								<label class="control-label">Vencimiento</label>
+								<div><%- movimiento_fecha %></div>
+							</div>
+							<div class="form-group col-md-4">
+								<label class="control-label">Cuotas</label>
+								<div><%- movimiento_item %></div>
+							</div>
+							<div class="form-group col-md-4">
+								<label class="control-label">Periodicidad</label>
+								<div><%- movimiento_periodicidad %></div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="form-group col-md-12">
+								<label class="control-label">Observaciones</label>
+								<div><%- movimiento_observaciones %></div>
+							</div>
+						</div>
+					<% } %>
 				</div>
+		    </div>
+		</div>
+		<% if( naturaleza == 'D') { %>
+			<div class="box box-success">
+				<div class="box-body">
+					<div class="box-header with-border">
+			              <h3 class="box-title"><b>Informacion adicional</b></h3>
+			        </div>
+
+			        <div class="box-body table-responsive no-padding">
+			            <table id="browse-showinfo-facturap-list" class="table table-hover table-bordered" cellspacing="0">
+		                	<thead>
+					        	<tr>
+									<th class="text-center">Factura</th>
+									<th class="text-center">Cuota No.</th>
+					                <th class="text-center">Pago</th>
+					            </tr>
+					       	</thead>
+					       	<tbody>
+					       		
+					       	</tbody>
+					    </table>
+			        </div>
+				</div>
+			</div>
+		<% } %>
+	</script>
+
+	<script type="text/template" id="add-info-factura-item">
+		<div class="box box-success">
+			<div class="box-body">
+				<div class="box-header with-border">
+					<h3 class="box-title">
+						<b>Factura </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+					</h3>
+					<div class="pull-right">
+						<% if ( !_.isNull(movimiento_factura) ) { %> 
+							<b>Numero </b><small># <%- movimiento_factura %></small>
+						<% } %>
+						<b>Prefijo </b><small><%- _.isNull(movimiento_factura) ? puntoventa_prefijoN : puntoventa_prefijoE %></small>
+					</div>
+		        </div>
+				<div class="box-body">
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label class="control-label">Fecha</label>
+							<div><%- _.isNull( movimiento_factura ) ? movimiento_fecha : factura1_fecha %></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Vencimiento</label>
+							<div><%- _.isNull( movimiento_factura ) ? movimiento_vencimiento : factura1_fecha_vencimiento %></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-4">
+							<label class="control-label">Punto de venta</label>
+							<div><%- _.isNull( movimiento_factura ) ? puntoventa_nombreN : puntoventa_nombreE %></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label class="control-label">Valor</label>
+							<div><%- window.Misc.currency( _.isNull( movimiento_factura ) ? movimiento_valor : factura1_valor ) %></div>
+						</div>
+						<div class="form-group col-md-4">
+							<label class="control-label">Cuotas</label>
+							<div><%- _.isNull( movimiento_factura ) ? movimiento_item : factura1_cuotas %></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="control-label">Orden</label>
+							<% if ( _.isNull(movimiento_factura) ) { %> 
+								<div><%- factura_ordenpN %> - <%- orden_referenciaN %></div>
+							<% }else{ %>
+								<div><%- factura_ordenpE %> - <%- orden_referenciaE %></div>
+							<% } %>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="control-label">Tercero</label>
+							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+						</div>
+					</div>
+				</div>
+		    </div>
+		</div>
+
+		<div class="box box-success">
+			<div class="box-body">
+				<div class="box-header with-border">
+		            <h3 class="box-title"><b>Informacion adicional</b></h3>
+		        </div>
+
+		        <div class="box-body table-responsive no-padding">
+		            <table id="browse-showinfo-factura-list" class="table table-hover table-bordered" cellspacing="0">
+	                	<thead>
+				        	<tr>
+				                <% if ( !_.isNull( movimiento_factura ) ) { %> 
+				                	<th class="text-center">Factura No.</th>
+									<th class="text-center">Cuota No.</th>
+					                <th class="text-center">Pago</th>
+				                <% }else{ %>
+					                <th class="text-center">#</th>
+					                <th class="text-left">Producto</th>
+					                <th class="text-center">Facturado</th>
+				                <% } %>
+				            </tr>
+				       	</thead>
+				       	<tbody></tbody>
+				    </table>
+		        </div>
 			</div>
 		</div>
 	</script>
 
-	<script type="text/template" id="show-info-asiento2-movimientos-tpl">
-		<% if(movimiento_tipo == 'FP') { %>
-			<td class="text-left"><%- movimiento_facturap %></td>
-			<td class="text-center"><%- movimiento_item %></td>
-			<td class="text-right"><%- window.Misc.currency(movimiento_valor ? movimiento_valor : 0) %></td>
+	<script type="text/template" id="add-info-inventario-item">
+		<div class="box box-success">
+			<div class="box-body">
+				<div class="box-header with-border">
+		            <h3 class="box-title">
+		              	<b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+		            </h3>
+		        </div>
+				<div class="box-body">
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="control-label">Tercero</label>
+							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-12">
+							<label class="control-label">Producto</label>
+							<div><%- producto_codigo %> - <%- producto_nombre %></div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group col-md-6">
+							<label class="control-label">Sucursal</label>
+							<div><%- sucursal_nombre %></div>
+						</div>
+						<div class="form-group col-md-6">
+							<label class="control-label">Cantidad</label>
+							<div><%- movimiento_valor %></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-		<% }else if(movimiento_tipo == 'FP') {  %>
-			<td class="text-center"><%- movimiento_item %></td>
-			<td class="text-right"><%- movimiento_valor %></td>
-		<% }else if(movimiento_tipo == 'FH') { %>
-			<% if( !_.isNull(movimiento_factura4) ) { %>
-				<td class="text-center"><%- movimiento_factura4 %></td>
-				<td class="text-right"><%- movimiento_valor %></td>				
-			<% } else if ( !_.isNull(movimiento_ordenp2) ) { %>
-				<td class="text-center"><%- movimiento_ordenp2 %></td>
-				<td class="text-right"><%- movimiento_item %></td>
-			<% } %>				
-		<% } %>
-			
+		<div class="box box-success">
+			<div class="box-body">
+				<div class="box-header with-border">
+		              <h3 class="box-title"><b>Informacion adicional</b></h3>
+		        </div>
+
+		        <div class="box-body table-responsive no-padding">
+					<table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
+	                	<thead>
+                			<tr>
+				                <th class="text-center first-row"></th>
+				                <th class="text-center second-row"></th>
+				            </tr>
+				       	</thead>
+				       	<tbody></tbody>
+				    </table>
+		        </div>
+			</div>
+		</div>
 	</script>
 
-	<script type="text/template" id="show-info-asiento2-movimientos-insumo-tpl">
-		<div class="form-group col-md-8">
-			<label class="control-label">Insumo</label>
-			<div><%- producto_codigo %> - <%- producto_nombre %></div>
-		</div>
+	<!-- Detalles de las Facturas, Facturap, Inventario -> Hijos -->
+	<script type="text/template" id="show-info-detalle-factura">
+		<% if( !_.isNull(movimiento_factura4) ) { %>
+			<td class="text-center"><%- factura4_factura1 %></td>
+			<td class="text-center"><%- factura4_cuota %></td>
+			<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>				
+		<% } else if ( !_.isNull(movimiento_ordenp2) ) { %>
+			<td class="text-center"><%- movimiento_ordenp2 %></td>
+			<td class="text-left"><%- productop_nombre %></td>
+			<td class="text-center"><%- movimiento_item %></td>
+		<% } %>
+	</script>
 
-		<div class="form-group col-md-2">
-			<label class="control-label">Unidades</label>
-			<div><%- movimiento_valor %></div>
-		</div>
+	<script type="text/template" id="show-info-detalle-facturap">
+		<td class="text-center"><%- movimiento_facturap %></td>
+		<td class="text-center"><%- movimiento_item %></td>
+		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>
+	</script>
 
-		<div class="form-group col-md-2">
-			<label class="control-label">Sucursal</label>
-			<div><%- sucursal_nombre %></div>
-		</div>
+	<script type="text/template" id="show-info-detalle-inventario">
+		<% if ( !_.isNull( movimiento_serie ) ) { %>
+			<td class="text-center"><%- movimiento_item %></td>
+			<td class="text-center"><%- movimiento_serie %></td>
+		<% }else{ %>
+			<td class="text-center"><%- movimiento_item %></td>
+			<td class="text-center"><%- movimiento_valor %></td>
+		<% } %>
 	</script>
 
 	<script type="text/template" id="rcartera-asiento-tpl">
@@ -705,26 +910,6 @@
 			</a>
 		</td>
     </script>
-    
-	<!-- Modal info -->
-	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-		<div class="modal-dialog modal-md" role="document">
-			<div class="modal-content">
-				<div class="modal-header small-box {{ config('koi.template.bg') }}">
-					<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
-				</div>
-				<div class="modal-body" id="modal-asiento-wrapper-show-info">
-					<div class="content-modal"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 
     <script type="text/template" id="add-comments-item-tpl">
     	<td class="text-center">
@@ -772,6 +957,26 @@
             </table>
         </div>
 	</script>
+
+	<!-- Modal info -->
+	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+		<div class="modal-dialog modal-md" role="document">
+			<div class="modal-content">
+				<div class="modal-header small-box {{ config('koi.template.bg') }}">
+					<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
+				</div>
+				<div class="modal-body" id="modal-asiento-wrapper-show-info">
+					<div class="content-modal"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 	<script type="text/template" id="add-item-factura-exists-tpl">
 		<td><%- factura1_fecha %></td>

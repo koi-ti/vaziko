@@ -14,7 +14,13 @@ app || (app = {});
         tagName: 'tr',
         template: _.template( ($('#add-asiento2-item-tpl').html() || '') ),
         templateInfo: _.template( ($('#show-info-asiento2-tpl').html() || '') ),
-        templateInfoInsumo: _.template( ($('#show-info-asiento2-movimientos-insumo-tpl').html() || '') ),
+
+        // Factura
+        templateInfoFacturaItem: _.template( ($('#add-info-factura-item').html() || '') ),
+        // Facturap
+        templateInfoFacturapItem: _.template( ($('#add-info-facturap-item').html() || '') ),
+        // Inventario
+        templateInfoInventarioItem: _.template( ($('#add-info-inventario-item').html() || '') ),
 
         events: {
             'click .item-asiento2-show-info': 'showInfo'
@@ -30,7 +36,6 @@ app || (app = {});
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
-
 
             //Init Attributes
             this.$modalInfo = $('#modal-asiento-show-info-component');
@@ -51,8 +56,10 @@ app || (app = {});
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
 
-            this.$el.html( this.template(attributes) );
+            this.$tercero = {tercero_nit: attributes.tercero_nit, tercero_nombre: attributes.tercero_nombre};
+            this.$naturaleza = attributes.asiento2_naturaleza;
 
+            this.$el.html( this.template(attributes) );
             return this;
         },
 
@@ -65,8 +72,10 @@ app || (app = {});
             // Render info
             this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( attributes ) );
 
-            this.$wrapperList = this.$modalInfo.find('#browse-showinfo-asiento-list');
-            this.$wrapperInsumo = this.$modalInfo.find('#browse-showinfo-asiento-insumo');
+            // Wrapper Infos
+            this.$wrapFactura = this.$modalInfo.find('#render-info-factura');
+            this.$wrapFacturap = this.$modalInfo.find('#render-info-facturap');
+            this.$wrapInventario = this.$modalInfo.find('#render-info-inventario');
 
             // Get movimientos list
             this.asientoMovimientosList.fetch({ reset: true, data: { asiento2: this.model.get('id') } });
@@ -80,18 +89,37 @@ app || (app = {});
         * @param Object mentoringTaskModel Model instance
         */
         addOne: function (AsientoMovModel) {
-            // var attributes = AsientoMovModel.toJSON();
+            var attributes = AsientoMovModel.toJSON();
+                attributes.tercero = this.$tercero;
+                attributes.naturaleza = this.$naturaleza;
 
-            // if( $.inArray( AsientoMovModel.get('movimiento_tipo'), ['IP'] ) != -1 ) {
-            //     this.$wrapperInsumo.empty().html(  this.templateInfoInsumo( attributes ) );
+            if( attributes.movimiento_tipo == 'F'){
 
-            // }else if( $.inArray( AsientoMovModel.get('movimiento_tipo'), ['IH', 'FP'] ) != -1 ) {
-                var view = new app.AsientoMovimientosItemView({
-                    model: AsientoMovModel,
-                });
+                this.$wrapFactura.empty().html(  this.templateInfoFacturaItem( attributes ) );
+                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-factura-list');
 
-                this.$wrapperList.append( view.render().el );
-            // }
+            }else if ( attributes.movimiento_tipo == 'FP' && !_.isNull(attributes.movimiento_sucursal) ){
+
+                this.$wrapFacturap.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                return;
+
+            }else if ( attributes.movimiento_tipo == 'FP' && _.isNull(attributes.movimiento_sucursal) ){
+
+                this.$wrapFacturap.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-facturap-list');
+
+            }
+            else if ( attributes.movimiento_tipo == 'IP') {
+
+                this.$wrapInventario.empty().html(  this.templateInfoInventarioItem( attributes ) );
+                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-asiento-list');
+                
+            }
+            
+            var view = new app.AsientoMovimientosItemView({
+                model: AsientoMovModel,
+            });
+            this.$wrapperList.append( view.render().el );
         },
 
         /**
