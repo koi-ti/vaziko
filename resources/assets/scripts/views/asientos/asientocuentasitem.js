@@ -72,10 +72,11 @@ app || (app = {});
             // Render info
             this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( attributes ) );
 
-            // Wrapper Infos
-            this.$wrapFactura = this.$modalInfo.find('#render-info-factura');
-            this.$wrapFacturap = this.$modalInfo.find('#render-info-facturap');
-            this.$wrapInventario = this.$modalInfo.find('#render-info-inventario');
+            // Wrapper Info
+            this.$wrapGeneral = this.$modalInfo.find('#render-info-modal');
+
+            // Count
+            this.count = 0;
 
             // Get movimientos list
             this.asientoMovimientosList.fetch({ reset: true, data: { asiento2: this.model.get('id') } });
@@ -93,25 +94,28 @@ app || (app = {});
                 attributes.tercero = this.$tercero;
                 attributes.naturaleza = this.$naturaleza;
 
+
             if( attributes.movimiento_tipo == 'F'){
 
-                this.$wrapFactura.empty().html(  this.templateInfoFacturaItem( attributes ) );
+                this.$wrapGeneral.empty().html(  this.templateInfoFacturaItem( attributes ) );
                 this.$wrapperList = this.$modalInfo.find('#browse-showinfo-factura-list');
 
-            }else if ( attributes.movimiento_tipo == 'FP' && !_.isNull(attributes.movimiento_sucursal) ){
+            }else if ( attributes.movimiento_tipo == 'FP' ){
 
-                this.$wrapFacturap.empty().html(  this.templateInfoFacturapItem( attributes ) );
-                return;
+                if (attributes.movimiento_nuevo){
+                    this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                    return;
+                }else{
+                    if ( this.count == 0){
+                        this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                        this.$wrapperList = this.$modalInfo.find('#browse-showinfo-facturap-list');
+                        this.count = this.count + 1;
+                    }
+                }
 
-            }else if ( attributes.movimiento_tipo == 'FP' && _.isNull(attributes.movimiento_sucursal) ){
+            }else if ( attributes.movimiento_tipo == 'IP') {
 
-                this.$wrapFacturap.empty().html(  this.templateInfoFacturapItem( attributes ) );
-                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-facturap-list');
-
-            }
-            else if ( attributes.movimiento_tipo == 'IP') {
-
-                this.$wrapInventario.empty().html(  this.templateInfoInventarioItem( attributes ) );
+                this.$wrapGeneral.empty().html(  this.templateInfoInventarioItem( attributes ) );
                 this.$wrapperList = this.$modalInfo.find('#browse-showinfo-asiento-list');
                 
             }
@@ -119,6 +123,7 @@ app || (app = {});
             var view = new app.AsientoMovimientosItemView({
                 model: AsientoMovModel,
             });
+
             this.$wrapperList.append( view.render().el );
         },
 

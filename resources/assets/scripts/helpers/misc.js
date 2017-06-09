@@ -123,12 +123,26 @@
         /**
         *   ClearFields the forms
         */
-        // clearForm: function( form ){
-        //     $("[data-currency]").val('');
-        //     form.find('.select2-default-clear').select2('destroy');
-        //     form.find('.select2-default-clear').select2().trigger('change');
-        //     form.trigger('reset');
-        // },
+        clearForm: function( form ){
+
+            form.find(':input').each(function(){
+                field_type = $(this);
+
+                if ( field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == ''){
+                    field_type.val('');
+                }
+
+                if( field_type.attr('checked') ){
+                    field_type.iCheck('check');
+                }
+
+                if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
+                    field_type.select2('destroy').val('').select2();
+                }
+
+            });
+            form.trigger('reset');
+        },
 
         /**
         * Display the DataTables interface in Spanish

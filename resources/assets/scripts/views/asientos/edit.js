@@ -205,7 +205,7 @@ app || (app = {});
                         }
                     })(this)
                 });
-                // window.Misc.clearForm( this.$formItem );
+                window.Misc.clearForm( this.$formItem );
             }
         },
 

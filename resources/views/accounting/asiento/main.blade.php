@@ -198,7 +198,7 @@
 									</div>
 
 									<div class="form-group col-sm-2">
-										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
+										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency-negative readonly="readonly" type="text">
 										<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
 									</div>
 								</div>
@@ -548,9 +548,7 @@
 			</div>
 		<% } %>
 
-		<div class="row" id="render-info-facturap"></div>
-		<div class="row" id="render-info-factura"></div>
-		<div class="row" id="render-info-inventario"></div>
+		<div class="row" id="render-info-modal"></div>
 	</script>
 
 	<!-- Facturas, Facturap, Inventario -> Padres -->
@@ -559,8 +557,8 @@
 			<div class="box-body">
 				<div class="box-header with-border">
 		            <h3 class="box-title">
-		            	<b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)
-		            </h5>
+		            	<b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+		            </h3>
 		        </div>
 				<div class="box-body">
 					<div class="row">
@@ -568,7 +566,7 @@
 							<label class="control-label">Factura proveedor</label>
 							<div><%- movimiento_facturap %></div>
 						</div>
-						<% if( naturaleza == 'C') { %>
+						<% if( movimiento_nuevo ) { %>
 							<div class="form-group col-md-6">
 								<label class="control-label">Valor</label>
 								<div><%- window.Misc.currency( movimiento_valor ) %></div>
@@ -581,7 +579,7 @@
 							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
 						</div>
 					</div>
-					<% if( naturaleza == 'C') { %>
+					<% if( movimiento_nuevo ) { %>
 						<div class="row">
 							<div class="form-group col-md-4">
 								<label class="control-label">Vencimiento</label>
@@ -606,30 +604,28 @@
 				</div>
 		    </div>
 		</div>
-		<% if( naturaleza == 'D') { %>
+		<% if ( !movimiento_nuevo ) { %>
 			<div class="box box-success">
 				<div class="box-body">
 					<div class="box-header with-border">
-			              <h3 class="box-title"><b>Informacion adicional</b></h3>
+			            <h3 class="box-title"><b>Informacion adicional</b></h3>
 			        </div>
 
 			        <div class="box-body table-responsive no-padding">
 			            <table id="browse-showinfo-facturap-list" class="table table-hover table-bordered" cellspacing="0">
 		                	<thead>
 					        	<tr>
-									<th class="text-center">Factura</th>
-									<th class="text-center">Cuota No.</th>
+									<th class="text-center">Cuota</th>
 					                <th class="text-center">Pago</th>
 					            </tr>
 					       	</thead>
 					       	<tbody>
-					       		
 					       	</tbody>
 					    </table>
 			        </div>
 				</div>
 			</div>
-		<% } %>
+		 <% } %>
 	</script>
 
 	<script type="text/template" id="add-info-factura-item">
@@ -790,8 +786,7 @@
 	</script>
 
 	<script type="text/template" id="show-info-detalle-facturap">
-		<td class="text-center"><%- movimiento_facturap %></td>
-		<td class="text-center"><%- movimiento_item %></td>
+		<td class="text-center"><%- facturap2_cuota %></td>
 		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>
 	</script>
 
