@@ -16,15 +16,16 @@ class Factura1 extends Model
 
     public $timestamps = false;
 
-    public function storeFactura2($children, $fatherOrdenp)
+    public function storeFactura2($children, $fatherOrdenp, Factura1 $factura)
     {
         $response = new \stdClass();
         $response->success = false;
 
+        $subtotal = 0;
         foreach ($children as $item) {
-        	if ($item->movimiento_item < 0) {
-            	$response->error = "La cantidad del item no puede ser menor a 0, por favor verifique la información del asiento o consulte al administrador.";
-            	return $response;
+            if ($item->movimiento_item < 0) {
+                $response->error = "La cantidad del item no puede ser menor a 0, por favor verifique la información del asiento o consulte al administrador.";
+                return $response;
             }
 
             // Insertar factura
@@ -37,17 +38,26 @@ class Factura1 extends Model
             // Recuperar ordenp2
             $ordenp2 = Ordenp2::getOrdenpf2($item->movimiento_ordenp2);
             if ($item->movimiento_item > $ordenp2->orden2_cantidad){
-            	$response->error = "El saldo ingresado en la cuenta {$detalle->plancuentas_cuenta} del cliente {$detalle->tercero_nit} es de {$item->movimiento_item} y la cantidad disponible es {$ordenp2->orden2_cantidad}, por favor verifique la información o consulte al administrador.";
-            	return $response;	
+                $response->error = "El saldo ingresado en la cuenta {$detalle->plancuentas_cuenta} del cliente {$detalle->tercero_nit} es de {$item->movimiento_item} y la cantidad disponible es {$ordenp2->orden2_cantidad}, por favor verifique la información o consulte al administrador.";
+                return $response;   
             }
 
-        	$factura2->factura2_cantidad = $item->movimiento_item;
+            $subtotal += $item->movimiento_item * $ordenp2->orden2_precio_venta;
+
+            $factura2->factura2_cantidad = $item->movimiento_item;
             $factura2->save();
 
             $ordenp2->orden2_facturado = $ordenp2->orden2_facturado + $item->movimiento_item;
 			$ordenp2->save();
         }
 
+        $iva = $subtotal * 0.19;
+        $total = $subtotal + $iva;
+
+        $factura->factura1_subtotal = $subtotal;
+        $factura->factura1_iva = $iva;
+        $factura->factura1_total = $total;
+        $factura->save();
 
         $response->success = true;
         return $response;
@@ -59,7 +69,7 @@ class Factura1 extends Model
         $response->success = false;
 
         if ($factura->factura1_cuotas > 0) {
-            $valor = $factura->factura1_valor / $factura->factura1_cuotas;
+            $valor = $factura->factura1_total / $factura->factura1_cuotas;
             $fecha = $factura->factura1_fecha_vencimiento; 
             for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
                 $factura4 = new Factura4;

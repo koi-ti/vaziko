@@ -139,7 +139,7 @@
                 if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
                     field_type.select2('destroy').val('').select2();
                 }
-
+                // else if( field_type.hasClass('choice-select-autocomplete') ){ }
             });
             form.trigger('reset');
         },

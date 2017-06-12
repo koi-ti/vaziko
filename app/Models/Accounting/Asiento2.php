@@ -278,6 +278,10 @@ class Asiento2 extends Model
     
     public static function validarFactura(Request $request)
     {
+        // Prepare response
+        $response = new \stdClass();
+        $response->success = false;
+
         if ($request->factura_nueva == 'N'){
             // Recuperar tercero
             $tercero = null;
@@ -321,6 +325,10 @@ class Asiento2 extends Model
             }
 
             // Recuperar ordenp2
+
+            // Calcular total
+            $subtotal = 0;
+
             $orden2 = Ordenp2::getOrdenesf2($orden->id);
             foreach ($orden2 as $item) {
                 if($item->orden2_orden != $orden->id){
@@ -335,8 +343,17 @@ class Asiento2 extends Model
                     if($request->get("facturado_cantidad_{$item->id}") > $item->orden2_cantidad){
                         return "La cantidad ingresada no puede superar el saldo en esta orden {$item->id}, por favor verifique la información ó consulte al administrador.";
                     }
+
+                    $subtotal += $request->get("facturado_cantidad_{$item->id}") * $item->orden2_precio_venta;
                 }
             }
+
+            $iva = $subtotal * 0.19;
+            $total = $subtotal + $iva;
+            
+            // Costo 
+            $response->asiento2_valor = $total;
+
         }else if($request->factura_nueva == 'E'){
             // Recuperar factura1 -> Padre
             $factura = Factura1::find($request->factura_orden);
@@ -344,7 +361,9 @@ class Asiento2 extends Model
                 return "No es posible recuperar la factura, por favor verifique la información o consulte al administrador.";
             }
         }
-        return 'OK';
+
+        $response->success = true;
+        return $response;
     }
 
     public static function validarInventario(Request $request)
@@ -1154,13 +1173,14 @@ class Asiento2 extends Model
             $factura->factura1_fecha_vencimiento = $movfather->movimiento_vencimiento;
             $factura->factura1_puntoventa = $movfather->movimiento_puntoventa;
             $factura->factura1_orden = $movfather->movimiento_ordenp;
-            $factura->factura1_valor = $movfather->movimiento_valor;
             $factura->factura1_cuotas = $movfather->movimiento_item;
+            $factura->factura1_usuario_elaboro = Auth::user()->id;
+            $factura->factura1_fh_elaboro = date('Y-m-d H:m:s');
             $factura->factura1_tercero = $tercero->id;
             $factura->save();
 
             // Factura2 (items)
-            $result = $factura->storeFactura2($movchildren, $movfather->movimiento_ordenp);
+            $result = $factura->storeFactura2($movchildren, $movfather->movimiento_ordenp, $factura);
             if(!$result->success) {
                 return $result->error;
             }

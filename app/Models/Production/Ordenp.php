@@ -99,7 +99,7 @@ class Ordenp extends Model
     public function paraFacturar()
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado',
+        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta', 
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -141,7 +141,7 @@ class Ordenp extends Model
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->where('orden2_orden', $this->id);
         $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
-        $query->orderBy('koi_ordenproduccion2.id', 'desc');
+        $query->orderBy('koi_ordenproduccion2.id', 'asc');
         return $query->get();
     }
 

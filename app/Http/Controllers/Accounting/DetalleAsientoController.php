@@ -341,10 +341,16 @@ class DetalleAsientoController extends Controller
                 case 'cartera':
                     // Valido movimiento cartera
                     $result = Asiento2::validarFactura($request);
-                    if($result != 'OK') {
+                    if($result != true) {
                         $response->errors = $result;
                         return response()->json($response);
                     }
+
+                    // Inventario modifica valor item asiento por el valor del costo del movimiento
+                    if(isset($result->asiento2_valor) && $result->asiento2_valor != $request->asiento2_valor){
+                        $response->asiento2_valor = $result->asiento2_valor;
+                    }
+
                     $response->success = true;
                     return response()->json($response);
                 break;

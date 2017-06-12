@@ -663,6 +663,11 @@ app || (app = {});
                                     _this.$modalCt.modal('hide');
                                 }
 
+                                // Inventario modifica valor item asiento por el valor del costo del movimiento
+                                if(!_.isUndefined(resp.asiento2_valor) && !_.isNull(resp.asiento2_valor) && resp.asiento2_valor != _this.parameters.data.asiento2_valor) {
+                                    _this.parameters.data.asiento2_valor = resp.asiento2_valor;
+                                }
+
                                 // Next action
                                 _this.runAction();
                             }

@@ -660,7 +660,7 @@
 						</div>
 						<div class="form-group col-md-4">
 							<label class="control-label">Valor</label>
-							<div><%- window.Misc.currency( _.isNull( movimiento_factura ) ? movimiento_valor : factura1_valor ) %></div>
+							<div><%- window.Misc.currency( _.isNull( movimiento_factura ) ? movimiento_valor : factura1_total ) %></div>
 						</div>
 						<div class="form-group col-md-4">
 							<label class="control-label">Cuotas</label>
@@ -876,10 +876,12 @@
                 <thead>
                     <tr>
                         <th width="5%">Código</th>
-                        <th width="65%">Producto</th>
+                        <th width="60%">Producto</th>
                         <th width="10%">Cantidad</th>
-                        <th width="10%">Saldo</th>
-                        <th width="10%">Facturadas</th>
+                        <th width="5%">Saldo</th>
+                        <th class="text-center" width="5%">Facturado</th>
+                        <th class="text-center" width="10%">V. Unitario</th>
+                        <th width="5%"></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -897,8 +899,9 @@
         <td>
             <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_cantidad %>" value="0" required>
         </td>
-        <td><%- orden2_cantidad %></td>
-        <td><%- orden2_facturado %></td>
+        <td class="text-center"><%- orden2_cantidad %></td>
+        <td class="text-center"><%- orden2_facturado %></td>
+        <td><%- window.Misc.currency( orden2_precio_venta ) %></td>
         <td class="text-center">
         	<a class="btn btn-default btn-xs add-comments" data-resource="<%- id %>">
 				<span><i class="fa fa-comment"></i></span>
