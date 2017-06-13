@@ -37,7 +37,7 @@
                 <div class="row">
                     <label for="productop_abierto" class="col-sm-1 control-label">Abierto</label>
                     <div class="form-group col-md-1">
-                        <input type="checkbox" id="productop_abierto" name="productop_abierto" value="productop_abierto" <%- productop_abierto ? 'checked': ''%> class="change-productop-abierto-koi-component">
+                        <input type="checkbox" id="productop_abierto" name="productop_abierto" value="productop_abierto" <%- parseInt(productop_abierto) ? 'checked': ''%> class="change-productop-abierto-koi-component">
                     </div>
 
                     <label for="productop_ancho_med" class="col-sm-1 control-label">Ancho</label>
@@ -64,7 +64,7 @@
                 <div class="row">
                     <label for="productop_cerrado" class="col-sm-1 control-label">Cerrado</label>
                     <div class="form-group col-md-1">
-                        <input type="checkbox" id="productop_cerrado" name="productop_cerrado" value="productop_cerrado" <%- productop_cerrado ? 'checked': ''%> class="change-productop-cerrado-koi-component">
+                        <input type="checkbox" id="productop_cerrado" name="productop_cerrado" value="productop_cerrado" <%- parseInt(productop_cerrado) ? 'checked': ''%> class="change-productop-cerrado-koi-component">
                     </div>
 
                     <label for="productop_c_med_ancho" class="col-sm-1 control-label">Ancho</label>
@@ -91,7 +91,7 @@
                 <div class="row">
                     <label for="productop_3d" class="col-sm-1 control-label">3D</label>
                     <div class="form-group col-md-1">
-                        <input type="checkbox" id="productop_3d" name="productop_3d" value="productop_3d" <%- productop_3d ? 'checked': ''%> class="change-productop-3d-koi-component">
+                        <input type="checkbox" id="productop_3d" name="productop_3d" value="productop_3d" <%- parseInt(productop_3d) ? 'checked': ''%> class="change-productop-3d-koi-component">
                     </div>
 
                     <label for="productop_3d_ancho_med" class="col-sm-1 control-label">Ancho</label>
@@ -128,12 +128,12 @@
                 <div class="row">
                     <label for="productop_tiro" class="col-sm-1 control-label">Tiro</label>
                     <div class="form-group col-md-1">
-                        <input type="checkbox" id="productop_tiro" name="productop_tiro" value="productop_tiro" <%- productop_tiro ? 'checked': ''%>>
+                        <input type="checkbox" id="productop_tiro" name="productop_tiro" value="productop_tiro" <%- parseInt(productop_tiro) ? 'checked': ''%>>
                     </div>
 
                     <label for="productop_retiro" class="col-sm-1 control-label">Retiro</label>
                     <div class="form-group col-md-1">
-                        <input type="checkbox" id="productop_retiro" name="productop_retiro" value="productop_retiro" <%- productop_retiro ? 'checked': ''%>>
+                        <input type="checkbox" id="productop_retiro" name="productop_retiro" value="productop_retiro" <%- parseInt(productop_retiro) ? 'checked': ''%>>
                     </div>
                 </div>
             </form><br>

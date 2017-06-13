@@ -128,18 +128,29 @@
             form.find(':input').each(function(){
                 field_type = $(this);
 
+                // Inputmask data-currency
                 if ( field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == ''){
                     field_type.val('');
                 }
 
+                // Checkbox && radiobutton
                 if( field_type.attr('checked') ){
                     field_type.iCheck('check');
+                }else{
+                    field_type.iCheck('uncheck');
                 }
 
+                // Select2
                 if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
                     field_type.select2('destroy').val('').select2();
+
+                    // Select2 with ajax
+                }else if( field_type.hasClass('choice-select-autocomplete') ){
+                    field_type.empty();
+                    id = field_type.attr('id');
+                    $('#select2-'+id+'-container').removeAttr('title');
                 }
-                // else if( field_type.hasClass('choice-select-autocomplete') ){ }
+
             });
             form.trigger('reset');
         },

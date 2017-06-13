@@ -550,13 +550,13 @@ app || (app = {});
                     window.Misc.removeSpinner( _this.$wraperFormIn );
 
                     if(resp.success) {
-                        if(!resp.producto_unidades) {
+                        if( !parseInt(resp.producto_unidades) ) {
                             // Unidades
                             _this.$wraperErrorIn.empty().append( 'No es posible realizar movimientos para productos que no manejan unidades' );
                             _this.$wraperErrorIn.show();
                             return;
 
-                        }else if( resp.producto_metrado ){
+                        }else if( parseInt(resp.producto_metrado) ){
                             // Metrado
                             if(_this.parameters.data.asiento2_naturaleza == 'D') {
                                 // Items rollo view
@@ -576,7 +576,7 @@ app || (app = {});
                                 // Get item rollo list
                                 _this.itemRolloINList.fetch({ reset: true, data: { producto: resp.id, sucursal: sucursal } });
                             }
-                        }else if( resp.producto_serie ){
+                        }else if( parseInt(resp.producto_serie) ){
                             // Series
                             if(_this.parameters.data.asiento2_naturaleza == 'D') {
                                 // Items series view

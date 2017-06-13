@@ -168,25 +168,25 @@
                             <div class="row">
                                 <div class="col-sm-offset-2 col-md-1">
                                     <label for="orden2_tiro" class="control-label">T</label>
-                                    <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- orden2_tiro ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- parseInt(orden2_tiro) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- orden2_yellow ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- orden2_magenta ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- parseInt(orden2_magenta) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- orden2_cyan ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- parseInt(orden2_cyan) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- orden2_key ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- parseInt(orden2_key) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- orden2_color1 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- parseInt(orden2_color1) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- orden2_color2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- parseInt(orden2_color2) ? 'checked': ''%>>
                                 </div>
                             </div>
                         @endif
@@ -195,25 +195,25 @@
                             <div class="row">
                                 <div class="col-sm-offset-2 col-md-1">
                                     <label for="orden2_retiro" class="control-label">R</label>
-                                    <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- orden2_retiro ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- parseInt(orden2_retiro) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- orden2_yellow2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- orden2_magenta2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- parseInt(orden2_magenta2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- orden2_cyan2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- parseInt(orden2_cyan2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- orden2_key2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- parseInt(orden2_key2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- orden2_color12 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- parseInt(orden2_color12) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- orden2_color22 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- parseInt(orden2_color22) ? 'checked': ''%>>
                                 </div>
                             </div>
                         @endif

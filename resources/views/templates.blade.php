@@ -367,19 +367,19 @@
 								<div class="row">
 							    	<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_activo">
-											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- tercero_activo ? 'checked': ''%>> Activo
+											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- parseInt(tercero_activo) ? 'checked': ''%>> Activo
 										</label>
 									</div>
 							    	<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_tecnico">
-											<input type="checkbox" id="tercero_tecnico" name="tercero_tecnico" value="tercero_tecnico" <%- tercero_tecnico ? 'checked': ''%>> Técnico
+											<input type="checkbox" id="tercero_tecnico" name="tercero_tecnico" value="tercero_tecnico" <%- parseInt(tercero_tecnico) ? 'checked': ''%>> Técnico
 										</label>
 									</div>
 								</div>
 								<div class="row">
 									<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_coordinador">
-											<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" <%- tercero_coordinador ? 'checked': ''%>> Coordinador
+											<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" <%- parseInt(tercero_coordinador) ? 'checked': ''%>> Coordinador
 										</label>
 									</div>
 
@@ -619,7 +619,7 @@
 		</div>
 		<div class="form-group col-md-2 col-xs-8 col-sm-3">
 			<br><label class="checkbox-inline" for="centrocosto_activo">
-				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- centrocosto_activo ? 'checked': ''%>> Activo
+				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- parseInt(centrocosto_activo) ? 'checked': ''%>> Activo
 			</label>
 		</div>
     </div>
@@ -935,17 +935,17 @@
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-12">
 			<label for="producto_unidades" class="control-label">¿Maneja unidades?</label>
-			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- producto_unidades ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- parseInt(producto_unidades) ? 'checked': ''%>></div>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="producto_serie" class="control-label">¿Meneja serie?</label>
-			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- producto_serie ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- parseInt(producto_serie) ? 'checked': ''%>></div>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="producto_metrado" class="control-label">¿Producto metrado?</label>
-			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- producto_metrado ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- parseInt(producto_metrado) ? 'checked': ''%>></div>
 		</div>
 	</div>
 </script>

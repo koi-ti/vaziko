@@ -270,7 +270,7 @@
 									<div class="row">
 										<div class="form-group col-md-2">
 							        		<label class="checkbox-inline" for="tercero_coordinador">
-												<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" disabled {{ $tercero->tercero_coordinador ? 'checked': '' }}> Técnico
+												<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" disabled {{ $tercero->tercero_coordinador ? 'checked': '' }}> Coordinador
 											</label>
 							        	</div>
 
