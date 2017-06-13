@@ -34,6 +34,7 @@ app || (app = {});
 
             // References
             this.$unidades = this.$('#subtotal-cantidad');
+            this.$facturado = this.$('#subtotal-facturado');
             this.$subtotal = this.$('#subtotal-total');
             this.$iva = this.$('#iva-total');
             this.$total = this.$('#total-total');
@@ -171,7 +172,11 @@ app || (app = {});
             var data = this.collection.totalize();
 
             if(this.$unidades.length) {
-                this.$unidades.html( data.unidades );
+                this.$unidades.html( parseInt(data.unidades) );
+            }
+
+            if(this.$facturado.length) {
+                this.$facturado.html( parseInt(data.facturado) );
             }
 
             if(this.$subtotal.length) {

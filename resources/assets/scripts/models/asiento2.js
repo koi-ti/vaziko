@@ -30,7 +30,7 @@ app || (app = {});
             'tercero_nit': '',
         	'tercero_nombre': '',
             'centrocosto_nombre': '',
-            'ordenp_codigo': ''
+            'ordenp_codigo': '',
         }
     });
 

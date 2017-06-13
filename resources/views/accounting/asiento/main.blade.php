@@ -346,7 +346,7 @@
 		<div class="row">
 			<div class="form-group col-md-2">
 				<label for="factura1_fecha" class="control-label">Fecha</label>
-				<input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker" required>
+				<input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker"  value="<%- moment().format('YYYY-MM-DD') %>" required>
 			</div>
 			<div class="form-group col-md-2">
 				<label for="factura1_fecha_vencimiento" class="control-label">Vencimiento</label>
@@ -363,7 +363,7 @@
 			</div>
             <div class="form-group col-sm-1 col-md-1">     
 				<label for="factura1_cuotas" class="control-label">Cuotas</label>
-                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="0" required>
+                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="1" step="1" value="1" required>
             </div>
 		</div>
 		<div class="row">

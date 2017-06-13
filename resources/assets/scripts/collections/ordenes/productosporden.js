@@ -29,6 +29,12 @@ app || (app = {});
             }, 0);
         },
 
+        facturado: function() {
+            return this.reduce(function(sum, model) {
+                return sum + model.get('orden2_facturado')
+            }, 0);
+        },
+
         subtotal: function() {
             return this.reduce(function(sum, model) {
                 return sum + parseFloat(model.get('orden2_precio_total'))
@@ -37,8 +43,9 @@ app || (app = {});
 
         totalize: function() {
             var unidades = this.unidades();
+            var facturado = this.facturado();
             var subtotal = this.subtotal();
-            return { 'unidades': unidades, 'subtotal': subtotal}
+            return { 'unidades': unidades, 'facturado': facturado, 'subtotal': subtotal}
         },
    });
 
