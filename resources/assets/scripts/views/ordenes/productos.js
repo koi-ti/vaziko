@@ -172,11 +172,11 @@ app || (app = {});
             var data = this.collection.totalize();
 
             if(this.$unidades.length) {
-                this.$unidades.html( parseInt(data.unidades) );
+                this.$unidades.html( data.unidades );
             }
 
             if(this.$facturado.length) {
-                this.$facturado.html( parseInt(data.facturado) );
+                this.$facturado.html( data.facturado );
             }
 
             if(this.$subtotal.length) {
