@@ -17,6 +17,7 @@ app || (app = {});
         defaults: {
             'orden2_referencia': '',
             'orden2_cantidad': 0,
+            'orden2_facturado': 0,
             'orden2_precio_formula': '',
             'orden2_round_formula': '',
             'orden2_precio_venta': '',
