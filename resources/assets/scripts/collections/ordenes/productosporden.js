@@ -31,7 +31,7 @@ app || (app = {});
 
         facturado: function() {
             return this.reduce(function(sum, model) {
-                return sum + model.get('orden2_facturado')
+                return sum + parseInt(model.get('orden2_facturado'))
             }, 0);
         },
 
