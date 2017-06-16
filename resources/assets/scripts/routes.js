@@ -40,6 +40,10 @@ app || (app = {});
             'puntosventa/create(/)': 'getPuntosVentaCreate',
             'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
 
+            // Cartera
+            'facturas(/)': 'getFacturasMain',
+            'facturas/:facturas(/)': 'getFacturaShow',
+
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',
             'plancuentas/create(/)': 'getPlanCuentasCreate',
@@ -1277,6 +1281,32 @@ app || (app = {});
 
             this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
             this.productopModel.fetch();
+        },
+
+        /**
+        * Cartera
+        */
+
+        // Facturas
+        getFacturasMain: function () {
+
+            if ( this.mainFacturaView instanceof Backbone.View ){
+                this.mainFacturaView.stopListening();
+                this.mainFacturaView.undelegateEvents();
+            }
+
+            this.mainFacturaView = new app.MainFacturasView( );
+        },
+
+        getFacturaShow: function(facturas){
+            this.facturaModel = new app.FacturaModel();
+            this.facturaModel.set({'id': facturas}, {'silent':true});
+            if ( this.showFacturasView instanceof Backbone.View ){
+                this.showFacturasView.stopListening();
+                this.showFacturasView.undelegateEvents();
+            }
+
+            this.showFacturasView = new app.ShowFacturaView({ model: this.facturaModel });
         },
     }) );
 

@@ -350,7 +350,7 @@
 			</div>
 			<div class="form-group col-md-2">
 				<label for="factura1_fecha_vencimiento" class="control-label">Vencimiento</label>
-				<input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" required>
+				<input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" value="<%- moment().format('YYYY-MM-DD') %>" required>
 			</div>
 			<div class="form-group col-md-3">
 				<label for="factura1_puntoventa" class="control-label">Punto de venta</label>
@@ -699,7 +699,7 @@
 					</h3>
 					<div class="pull-right">
 						<% if ( !_.isNull(movimiento_factura) ) { %> 
-							<b>Numero </b><small># <%- movimiento_factura %></small>
+							<b>Numero </b><small># <%- factura1_id %></small>
 						<% } %>
 						<b>Prefijo </b><small><%- _.isNull(movimiento_factura) ? puntoventa_prefijoN : puntoventa_prefijoE %></small>
 					</div>
@@ -899,7 +899,7 @@
         	<div id="render_comments_<%- id %>"></div>
         </td>
         <td>
-            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_cantidad %>" value="0" required>
+            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required>
         </td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>

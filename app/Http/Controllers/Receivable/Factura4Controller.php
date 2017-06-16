@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Accounting;
+namespace App\Http\Controllers\Receivable;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Accounting\Factura4, App\Models\Base\Tercero;
+use App\Models\Receivable\Factura4, App\Models\Base\Tercero;
 use DB;
 
 

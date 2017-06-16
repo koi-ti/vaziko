@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Controllers\Accounting;
+namespace App\Http\Controllers\Receivable;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Accounting\Factura1, App\Models\Accounting\Factura4;
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
 use App\Models\Production\Ordenp;
 
-use DB, Log, Datatables;
+use App, View, Auth, DB, Log, Datatables;
 
-class FacturaController extends Controller
+class Factura1Controller extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -23,15 +23,36 @@ class FacturaController extends Controller
     {
         if($request->ajax()){
             $query = Factura1::query();
-            $query->select('koi_factura1.*',DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as factura_ordenp"), 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+            $query->select('koi_factura1.*', 't.tercero_nit', 'puntoventa_prefijo', 'orden_referencia', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("(CASE WHEN t.tercero_persona = 'N'
+                    THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
+                            (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
                         )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
+                    ELSE t.tercero_razonsocial END)
+                AS tercero_nombre"), DB::raw("
+                    CONCAT(
+                        (CASE WHEN to.tercero_persona = 'N'
+                            THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
+                                (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
+                            )
+                            ELSE to.tercero_razonsocial
+                        END),
+                    ' (', orden_referencia ,')'
+                    ) AS orden_beneficiario"
+                )
             );
-            $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
+            $query->join('koi_tercero as t', 'factura1_tercero', '=', 't.id');
+            $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
             $query->join('koi_ordenproduccion', 'factura1_orden', '=', 'koi_ordenproduccion.id');
+            $query->join('koi_tercero as to', 'orden_cliente', '=', 'to.id');
+
+            // Persistent data filter
+            if($request->has('persistent') && $request->persistent) {
+                session(['searchfactura_tercero' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
+                session(['searchfactura_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
+                session(['searchfactura_numero' => $request->has('id') ? $request->id : '']);
+                session(['searchfactura_ordenp' => $request->has('orden_codigo') ? $request->orden_codigo : '']);
+                session(['searchfactura_ordenp_beneficiario' => $request->has('orden_tercero') ? $request->orden_tercero : '']);
+            }
 
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
@@ -42,18 +63,18 @@ class FacturaController extends Controller
                     }
 
                     // Orden
-                    if($request->has('factura_orden')){
-                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura_orden}'");
+                    if($request->has('orden_codigo')){
+                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
                     }
 
                     // Documento
-                    if($request->has('factura_tercero_nit')) {
-                        $query->whereRaw("tercero_nit LIKE '%{$request->factura_tercero_nit}%'");
+                    if($request->has('tercero_nit')) {
+                        $query->whereRaw("t.tercero_nit LIKE '%{$request->tercero_nit}%'");
                     }
                 })
                 ->make(true);
         }
-        abort(404);
+        return view('receivable.facturas.index');
     }
 
     /**
@@ -83,9 +104,16 @@ class FacturaController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $id)
     {
-        //
+        $factura = Factura1::getFactura($id);
+        if(!$factura instanceof Factura1) {
+            abort(404);
+        }
+         if($request->ajax()) {
+            return response()->json($factura);
+        }
+        return view('receivable.facturas.show', ['factura' => $factura]);
     }
 
     /**
@@ -179,4 +207,25 @@ class FacturaController extends Controller
         return response()->json(['success' => false]);
     }
 
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function exportar($id)
+    {
+        $factura = Factura1::getFactura($id);
+        if(!$factura instanceof Factura1){
+            abort(404);
+        }
+
+        $detalle = Factura2::getFactura2($factura->id);
+        $title = sprintf('Factura %s', $factura->factura1_orden);
+
+        // Export pdf
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML(View::make('receivable.facturas.export',  compact('factura', 'detalle', 'title'))->render());
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')));
+    }
 }

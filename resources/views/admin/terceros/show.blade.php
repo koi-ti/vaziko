@@ -353,7 +353,7 @@
 							<div class="tab-pane" id="tab_cartera">
 								<div class="box-body">
 									<div class="box-body table-responsive">
-										<table id="browse-factura4-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+										<table id="browse-factura4-list" class="table table-bordered" cellspacing="0" width="100%">
 								            <thead>
 									            <tr>
 					                                <th width="95px">Numero</th>

@@ -61,6 +61,27 @@
         </ul>
     </li>
 
+    {{-- Cartera --}}
+    <li class="treeview {{ in_array(Request::segment(1), ['facturas']) ? 'active' : '' }}">
+        <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Cartera</span><i class="fa fa-angle-left pull-right"></i>
+        </a>
+
+        <ul class="treeview-menu">
+            {{-- Modulos contabilidad --}}
+            <li class="{{ in_array(Request::segment(1), ['facturas']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'facturas' ? 'active' : '' }}">
+                        <a href="{{ route('facturas.index') }}"><i class="fa fa-pencil-square-o"></i> Facturas</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
     {{-- Contabilidad --}}
     <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
         <a href="#">

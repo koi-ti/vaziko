@@ -389,7 +389,7 @@ class DetalleAsientoController extends Controller
             $movimientos = [];
             if($request->has('asiento2')) {
                 $query = AsientoMovimiento::query();
-                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'sucursal_nombre', 'opN.orden_referencia as orden_referenciaN', 'opE.orden_referencia as orden_referenciaE', 'pvN.puntoventa_nombre as puntoventa_nombreN', 'pvN.puntoventa_prefijo as puntoventa_prefijoN', 'pvE.puntoventa_nombre as puntoventa_nombreE', 'pvE.puntoventa_prefijo as puntoventa_prefijoE', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', DB::raw("CONCAT(opN.orden_numero,'-',SUBSTRING(opN.orden_ano, -2)) as factura_ordenpN"), DB::raw("CONCAT(opE.orden_numero,'-',SUBSTRING(opE.orden_ano, -2)) as factura_ordenpE"), DB::raw("
+                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'koi_factura1.id as factura1_id', 'sucursal_nombre', 'opN.orden_referencia as orden_referenciaN', 'opE.orden_referencia as orden_referenciaE', 'pvN.puntoventa_nombre as puntoventa_nombreN', 'pvN.puntoventa_prefijo as puntoventa_prefijoN', 'pvE.puntoventa_nombre as puntoventa_nombreE', 'pvE.puntoventa_prefijo as puntoventa_prefijoE', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', DB::raw("CONCAT(opN.orden_numero,'-',SUBSTRING(opN.orden_ano, -2)) as factura_ordenpN"), DB::raw("CONCAT(opE.orden_numero,'-',SUBSTRING(opE.orden_ano, -2)) as factura_ordenpE"), DB::raw("
                         CASE
                             WHEN productop_3d != 0 THEN
                                     CONCAT(
@@ -423,7 +423,7 @@ class DetalleAsientoController extends Controller
                 $query->where('movimiento_asiento2', $request->asiento2);
                 $query->leftJoin('koi_producto', 'movimiento_producto', '=', 'koi_producto.id');
                 $query->leftJoin('koi_sucursal', 'movimiento_sucursal', '=', 'koi_sucursal.id');
-                
+
                 // Factura
                 $query->leftJoin('koi_ordenproduccion as opN', 'movimiento_ordenp', '=', 'opN.id');
                 $query->leftJoin('koi_ordenproduccion2', 'movimiento_ordenp2', '=', 'koi_ordenproduccion2.id');

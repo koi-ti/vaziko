@@ -227,8 +227,8 @@ class AsientoMovimiento extends Model
                         $this->movimiento_ordenp2 = $data['Orden'];
                     }
 
-                    if(isset($data['Cantidad']) && trim($data['Cantidad']) != '') {
-                        $this->movimiento_item = $data['Cantidad'];
+                    if(isset($data['Cantidad']) && trim($data['Cantidad']) != '' ) {
+                        $this->movimiento_item = (Int)$data['Cantidad'];
                     }
                 break;
             }

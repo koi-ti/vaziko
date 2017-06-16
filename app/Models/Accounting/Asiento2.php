@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Validator, Auth, DB;
 
-use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Accounting\Factura1, App\Models\Accounting\Factura2;
+use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
 
 class Asiento2 extends Model
 {
@@ -348,11 +348,12 @@ class Asiento2 extends Model
                 }
             }
 
+
             $iva = $subtotal * 0.19;
             $total = $subtotal + $iva;
             
             // Costo 
-            $response->asiento2_valor = $total;
+            $response->asiento2_valor = round($total);
 
         }else if($request->factura_nueva == 'E'){
             // Recuperar factura1 -> Padre

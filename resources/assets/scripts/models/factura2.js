@@ -1,5 +1,5 @@
 /**
-* Class Factura3Model extend of Backbone Model
+* Class Factura2Model extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.Factura3Model = Backbone.Model.extend({
+    app.Factura2Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('facturas.comentario.index') );
+            return window.Misc.urlFull( Route.route('facturas.facturado.index') );
         },
         idAttribute: 'id',
         defaults: {

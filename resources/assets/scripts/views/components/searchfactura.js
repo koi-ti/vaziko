@@ -56,16 +56,16 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('asientos.facturas.index') ),
+                    url: window.Misc.urlFull( Route.route('facturas.index') ),
                     data: function( data ) {
                         data.id = _this.$searchfacturaNumero.val();
-                        data.factura_orden = _this.$searchfacturaOrdenp.val();
-                        data.factura_tercero_nit = _this.$searchfacturaTercero.val();
+                        data.orden_codigo = _this.$searchfacturaOrdenp.val();
+                        data.tercero_nit = _this.$searchfacturaTercero.val();
                     }
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'factura_ordenp', name: 'factura_ordenp' },
+                    { data: 'orden_codigo', name: 'orden_codigo' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                 ],
                 columnDefs: [
@@ -133,7 +133,7 @@ app || (app = {});
 			if(!_.isUndefined(factura) && !_.isNull(factura) && factura != '') {
 				// Get Factura
 	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('asientos.facturas.search')),
+	                url: window.Misc.urlFull(Route.route('facturas.search')),
 	                type: 'GET',
 	                data: { factura_numero: factura },
 	                beforeSend: function() {
