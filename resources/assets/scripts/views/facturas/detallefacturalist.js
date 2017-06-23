@@ -1,5 +1,5 @@
 /**
-* Class FacturaDetalle2View  of Backbone Router
+* Class DetalleFacturaView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,7 +9,7 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.FacturaDetalle2View = Backbone.View.extend({
+    app.DetalleFacturaView = Backbone.View.extend({
 
         el: '#browse-detalle-factura-list',
         parameters: {
@@ -29,9 +29,12 @@ app || (app = {});
 
             // References
             this.$facturado = this.$('#subtotal-facturado');
-            this.$subtotal = this.$('#subtotal-total');
-            this.$iva = this.$('#iva-total');
-            this.$total = this.$('#total-total');
+            // this.$subtotal = this.$('#subtotal-total');
+            // this.$iva = this.$('#iva-total');
+            // this.$rtfuente = this.$('#rtfuente-total');
+            // this.$rtica = this.$('#rtica-total');
+            // this.$rtiva = this.$('#rtiva-total');
+            // this.$total = this.$('#total-total');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -39,8 +42,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            if( !_.isUndefined(this.parameters.dataFilter.factura2) && !_.isNull(this.parameters.dataFilter.factura2) ){
-                this.confCollection.data.factura2 = this.parameters.dataFilter.factura2;
+            if( !_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter) ){
+                this.confCollection.data = this.parameters.dataFilter;
                 this.collection.fetch( this.confCollection );
             }
         },
@@ -52,6 +55,9 @@ app || (app = {});
         addOne: function (factura2Model) {
             var view = new app.DetalleFacturaItemView({
                 model: factura2Model,
+                parameters:{
+                    call: this.parameters.call,
+                }
             });
             factura2Model.view = view;
             this.$el.append( view.render().el );
@@ -78,19 +84,19 @@ app || (app = {});
                 this.$facturado.html( data.facturado );
             }
 
-            if(this.$subtotal.length) {
-                this.$subtotal.html( window.Misc.currency( Math.round( data.subtotal ) ) );
-            }
+            // if(this.$subtotal.length) {
+            //     this.$subtotal.html( window.Misc.currency( Math.round( data.subtotal ) ) );
+            // }
 
-            var iva = data.subtotal * 0.19;
-            if(this.$iva.length) {
-                this.$iva.html( window.Misc.currency( Math.round( iva ) ) );
-            }
+            // var iva = data.subtotal * 0.19;
+            // if(this.$iva.length) {
+            //     this.$iva.html( window.Misc.currency( Math.round( iva ) ) );
+            // }
 
-            var total = data.subtotal + iva;
-            if(this.$total.length) {
-                this.$total.html( window.Misc.currency( Math.round( total ) ) );
-            }
+            // var total = data.subtotal + iva;
+            // if(this.$total.length) {
+            //     this.$total.html( window.Misc.currency( Math.round( total ) ) );
+            // }
         },
 
         /**

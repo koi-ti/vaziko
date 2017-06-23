@@ -109,14 +109,13 @@ Route::group(['middleware' => 'auth'], function()
    	*/
 	Route::group(['prefix' => 'facturas'], function()
 	{
-		Route::get('facturadas', ['as' => 'facturas.facturadas', 'uses' => 'Receivable\Factura1Controller@facturadas']);
 		Route::get('search', ['as' => 'facturas.search', 'uses' => 'Receivable\Factura1Controller@search']);
 		Route::get('exportar/{facturas}', ['as' => 'facturas.exportar', 'uses' => 'Receivable\Factura1Controller@exportar']);
 		Route::resource('comentario', 'Receivable\Factura3Controller', ['only' => ['index', 'store']]);
-		Route::resource('facturado', 'Receivable\Factura2Controller', ['only' => ['index']]);
+		Route::resource('facturado', 'Receivable\Factura2Controller', ['only' => ['index', 'store']]);
 		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);
 	});
-	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show']]);
+	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show','create','store']]);
    	/*
 	|-------------------------
 	| Supplier invoice Routes

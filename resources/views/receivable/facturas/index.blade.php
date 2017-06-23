@@ -7,7 +7,7 @@
 @section('module')
     <div id="facturas-main">
         <div class="box box-success">
-            <div class="box-body table-responsive">
+            <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-factura-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
                     <div class="row">
                         <label for="searchfactura_tercero" class="col-sm-1 control-label">Tercero</label>
@@ -50,27 +50,34 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-4 col-md-2 col-xs-4">
+                        <div class="col-md-offset-3 col-md-2 col-xs-4">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
                         <div class="col-md-2 col-xs-4">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
+                        <div class="col-md-2 col-xs-4">
+                            <a href="{{ route('facturas.create') }}" class="btn btn-default btn-block btn-sm">
+                                <i class="fa fa-pencil-square-o"></i> Nueva factura
+                            </a>
+                        </div>
                     </div>
+            </div>
                 {!! Form::close() !!}
 
-                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th >Numero</th>
-                            <th >Nit</th>
-                            <th >Cliente</th>
-                            <th >Orden</th>
-                            <th >Prefijo</th>
-                        </tr>
-                    </thead>
-                </table>
+                <div class="box-body table-index">
+                    <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th >Numero</th>
+                                <th >Nit</th>
+                                <th >Cliente</th>
+                                <th >Orden</th>
+                                <th >Prefijo</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
             </div>
-        </div>
     </div>
 @stop

@@ -35,10 +35,11 @@ app || (app = {});
         */
         referenceViews: function () {
             // Detalle factura list
-            this.facturaDetalle2View = new app.FacturaDetalle2View({
+            this.detalleFacturaView = new app.DetalleFacturaView({
                 collection: this.detalleFactura2List,
                 parameters: {
                     edit: false,
+                    call: 'show',
                     dataFilter: {
                         factura2: this.model.get('id')
                     }

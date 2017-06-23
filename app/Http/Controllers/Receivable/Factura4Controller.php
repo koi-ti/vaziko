@@ -21,8 +21,11 @@ class Factura4Controller extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
+            $facturadas = [];
+
             $query = Factura4::query();
             if ($request->has('tercero')) {
+                // Pestaña Cartera tercero
                 $tercero = Tercero::find($request->tercero);
                 if(!$tercero instanceof Tercero){
                     return response()->json(['success' => false, 'errors' => 'No se pudo recuperar el cliente, por favor verifique la informacion o consulte al administrador']);
@@ -31,12 +34,21 @@ class Factura4Controller extends Controller
                 $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
                 $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
                 $query->where('factura1_tercero', $tercero->id);
+                $query->where('factura4_saldo', '<>',  0);
+                $query->orderBy('factura4_vencimiento', 'desc');
+                $facturadas = $query->get();
             }
-            $query->where('factura4_saldo', '<>',  0);
-            $query->orderBy('factura4_vencimiento', 'desc');
-            $factura = $query->get();
+
+            if($request->has('factura1_id')){
+                $query->select('koi_factura4.*', 'koi_factura1.factura1_fecha');
+                $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
+                $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
+                $query->where('factura4_saldo', '<>',  0);
+                $query->where('factura4_factura1', $request->factura1_id);
+                $facturadas = $query->get();
+            }
 
         }
-        return response()->json($factura);
+        return response()->json($facturadas);
     }
 }

@@ -18,6 +18,7 @@ class CreateFacturap1Table extends Migration
             $table->increments('id');
             $table->integer('facturap1_sucursal')->unsigned();
             $table->integer('facturap1_tercero')->unsigned();
+            $table->integer('facturap1_asiento')->unsigned();
             $table->string('facturap1_factura', 200);
             $table->date('facturap1_fecha');
             $table->smallInteger('facturap1_cuotas');
@@ -28,6 +29,7 @@ class CreateFacturap1Table extends Migration
 
             $table->foreign('facturap1_sucursal')->references('id')->on('koi_sucursal')->onDelete('restrict');
             $table->foreign('facturap1_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
+            $table->foreign('facturap1_asiento')->references('id')->on('koi_asiento1')->onDelete('restrict');
             $table->foreign('facturap1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
     }

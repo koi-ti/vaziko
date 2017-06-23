@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Production\Ordenp;
 use App\Models\Receivable\Factura2;
 use DB;
 
@@ -20,6 +21,7 @@ class Factura2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            
             $detalle = [];
             if($request->has('factura2')) {
                 $query = Factura2::query();
@@ -69,6 +71,13 @@ class Factura2Controller extends Controller
 
                 $query->where('factura2_factura1', $request->factura2);
                 $detalle = $query->get();
+            }
+
+            if($request->has('factura1_orden')) {
+                $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
+                if($orden instanceof Ordenp){
+                    $detalle = $orden->paraFacturar();
+                }
             }
             return response()->json($detalle);
         }

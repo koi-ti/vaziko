@@ -28,11 +28,11 @@ app || (app = {});
             }, 0);
         },
 
-        subtotal: function() {
-            return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('orden2_precio_venta')) * parseInt(model.get('factura2_cantidad'))
-            }, 0);
-        },
+        // subtotal: function() {
+        //     return this.reduce(function(sum, model) {
+        //         return sum + parseFloat(model.get('orden2_precio_venta')) * parseInt(model.get('factura2_cantidad'))
+        //     }, 0);
+        // },
 
         renderSubtotal: function(){
             _.each(this.models, function(item){
@@ -43,9 +43,9 @@ app || (app = {});
 
         totalize: function() {
             var facturado = this.facturado();
-            var subtotal = this.subtotal();
+            // var subtotal = this.subtotal();
             this.renderSubtotal();
-            return { 'facturado': facturado, 'subtotal': subtotal }
+            return { 'facturado': facturado }
         },
    });
 

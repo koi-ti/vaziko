@@ -15,7 +15,6 @@ app || (app = {});
         template: _.template( ($('#factura-item-list-tpl').html() || '') ),
         parameters: {
             edit: false,
-            call: null,
         },
 
         /**
@@ -25,10 +24,6 @@ app || (app = {});
 	        // Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            if ( this.parameters.call == 'facturaChange' ){
-                this.template = _.template( ($('#add-item-factura-exists-tpl').html() || '') );
-            }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
@@ -40,13 +35,7 @@ app || (app = {});
         render: function(){
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
-            attributes.call = this.parameters.call;
-            
-            if(attributes == 'facturaChange'){
-                this.$el.html( this.template(attributes) );
-            }else{
-                this.$el.html( this.template(attributes) );
-            }
+            this.$el.html( this.template(attributes) );
             return this;
         },
     });

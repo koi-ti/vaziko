@@ -25,6 +25,7 @@ class AsientoContableDocumento {
 
         if (!$this->asiento->isValid($data)) {
         	$this->asiento_error = $this->asiento->errors;
+        	return;
         }
         $this->asiento->fill($data);
 

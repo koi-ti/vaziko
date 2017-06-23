@@ -342,59 +342,49 @@
 		<div id="content-invoice"></div>
 	</script>
 
-	<script type="text/template" id="add-facturacartera-asiento-tpl">
+	<script type="text/template" id="rcartera-asiento-tpl">
 		<div class="row">
-			<div class="form-group col-md-2">
-				<label for="factura1_fecha" class="control-label">Fecha</label>
-				<input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker"  value="<%- moment().format('YYYY-MM-DD') %>" required>
+			<div class="form-group col-md-12 text-center">
+				<strong>(<%- tercero_nit %> - <%- tercero_nombre %>)</strong>
 			</div>
-			<div class="form-group col-md-2">
-				<label for="factura1_fecha_vencimiento" class="control-label">Vencimiento</label>
-				<input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" value="<%- moment().format('YYYY-MM-DD') %>" required>
-			</div>
-			<div class="form-group col-md-3">
-				<label for="factura1_puntoventa" class="control-label">Punto de venta</label>
-				<select name="factura1_puntoventa" id="factura1_puntoventa" class="form-control" required>
-                    <option value="" selected>Seleccione</option>
-                    @foreach( App\Models\Base\PuntoVenta::getPuntosVenta() as $key => $value)
-                        <option value="{{ $key }}">{{ $value }}</option>
-                    @endforeach
-                </select>
-			</div>
-            <div class="form-group col-sm-1 col-md-1">     
-				<label for="factura1_cuotas" class="control-label">Cuotas</label>
-                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="1" step="1" value="1" required>
-            </div>
 		</div>
+
 		<div class="row">
-            <div class="form-group col-md-2 col-sm-8 col-xs-8">
-			<label for="factura1_beneficiario" class="control-label">Orden</label><br>
-                <div class="input-group input-group-sm">
-                    <span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="factura1_orden">
+			<div class="col-md-12 text-center">
+				<label class="control-label">
+					Seleccione factura del cliente <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+				</label>
+			</div>
+		</div>
+
+		<div class="row"><br>
+			<label for="factura_koi" class="col-sm-offset-2 col-sm-1 control-label">Factura</label>
+			<div class="form-group col-sm-2">
+	      		<div class="input-group input-group-sm">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-factura-component-table" data-field="factura1_orden">
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="factura1_orden" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="factura1_orden" type="text" maxlength="15" data-factura="true" data-wrapper="modal-asiento-wrapper-ordenp" data-name="factura1_orden_beneficiario" required>
-                </div>
-            </div>
-            <div class="col-sm-5 col-md-5 col-xs-10"><br>
-                <input id="factura1_orden_beneficiario" name="factura1_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
-            </div>
+					<input id="factura1_orden" placeholder="Factura" class="form-control factura-koi-component" name="factura1_orden" type="text" maxlength="15" data-factura="true" data-name="factura1_orden_beneficiario" required>
+				</div>
+			</div>
+			<div class="col-sm-4">
+				<input id="factura1_orden_beneficiario" name="factura1_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+			</div>
 		</div>
 
 		<!-- table table-bordered table-striped -->
-        <div id="wrapper-table-orden" class="box-body table-responsive no-padding" hidden>
-            <table id="browse-orden-pendientes-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+        <div id="wrapper-table-factura" class="box-body table-responsive no-padding" hidden>
+            <table id="browse-factura-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
-                        <th width="5%">Código</th>
-                        <th width="60%">Producto</th>
-                        <th width="10%">Cantidad</th>
-                        <th width="5%">Saldo</th>
-                        <th class="text-center" width="5%">Facturado</th>
-                        <th class="text-center" width="10%">V. Unitario</th>
-                        <th width="5%"></th>
+                        <th width="10%">Fecha</th>
+                        <th width="10%">Vencimiento</th>
+                        <th width="10%">Numero</th>
+                        <th width="10%">Cuota</th>
+                        <th width="10%">Saldo</th>
+                        <th width="10%">A pagar</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -701,49 +691,45 @@
 						<% if ( !_.isNull(movimiento_factura) ) { %> 
 							<b>Numero </b><small># <%- factura1_id %></small>
 						<% } %>
-						<b>Prefijo </b><small><%- _.isNull(movimiento_factura) ? puntoventa_prefijoN : puntoventa_prefijoE %></small>
+						<b>Prefijo </b><small><%- puntoventa_prefijo %></small>
 					</div>
 		        </div>
 				<div class="box-body">
 					<div class="row">
 						<div class="form-group col-md-6">
 							<label class="control-label">Fecha</label>
-							<div><%- _.isNull( movimiento_factura ) ? movimiento_fecha : factura1_fecha %></div>
+							<div><%- factura1_fecha %></div>
 						</div>
 						<div class="form-group col-md-6">
 							<label class="control-label">Vencimiento</label>
-							<div><%- _.isNull( movimiento_factura ) ? movimiento_vencimiento : factura1_fecha_vencimiento %></div>
+							<div><%- factura1_fecha_vencimiento %></div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md-4">
 							<label class="control-label">Punto de venta</label>
-							<div><%- _.isNull( movimiento_factura ) ? puntoventa_nombreN : puntoventa_nombreE %></div>
+							<div><%- puntoventa_nombre %></div>
 						</div>
 						<div class="form-group col-md-4">
 							<label class="control-label">Valor</label>
-							<div><%- window.Misc.currency( _.isNull( movimiento_factura ) ? movimiento_valor : factura1_total ) %></div>
+							<div><%- window.Misc.currency( factura1_total ) %></div>
 						</div>
 						<div class="form-group col-md-4">
 							<label class="control-label">Cuotas</label>
-							<div><%- _.isNull( movimiento_factura ) ? movimiento_item : factura1_cuotas %></div>
+							<div><%- factura1_cuotas %></div>
 						</div>
 					</div>
 					<div class="row">
 						<div class="form-group col-md-12">
 							<label class="control-label">Orden</label>
-							<% if ( _.isNull(movimiento_factura) ) { %> 
-								<div><%- factura_ordenpN %> - <%- orden_referenciaN %></div>
-							<% }else{ %>
-								<div><%- factura_ordenpE %> - <%- orden_referenciaE %></div>
-							<% } %>
+							<div><%- orden_codigo %> - <%- orden_beneficiario %></div>
 						</div>
 					</div>
 
 					<div class="row">
 						<div class="form-group col-md-12">
 							<label class="control-label">Tercero</label>
-							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+							<div><%- tercero_nit %> - <%- tercero_nombre %></div>
 						</div>
 					</div>
 				</div>
@@ -760,15 +746,8 @@
 		            <table id="browse-showinfo-factura-list" class="table table-hover table-bordered" cellspacing="0">
 	                	<thead>
 				        	<tr>
-				                <% if ( !_.isNull( movimiento_factura ) ) { %> 
-				                	<th class="text-center">Factura No.</th>
-									<th class="text-center">Cuota No.</th>
-					                <th class="text-center">Pago</th>
-				                <% }else{ %>
-					                <th class="text-center">#</th>
-					                <th class="text-left">Producto</th>
-					                <th class="text-center">Facturado</th>
-				                <% } %>
+								<th class="text-center">Cuota No.</th>
+				                <th class="text-center">Pago</th>
 				            </tr>
 				       	</thead>
 				       	<tbody></tbody>
@@ -836,15 +815,8 @@
 
 	<!-- Detalles de las Facturas, Facturap, Inventario -> Hijos -->
 	<script type="text/template" id="show-info-detalle-factura">
-		<% if( !_.isNull(movimiento_factura4) ) { %>
-			<td class="text-center"><%- factura4_factura1 %></td>
-			<td class="text-center"><%- factura4_cuota %></td>
-			<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>				
-		<% } else if ( !_.isNull(movimiento_ordenp2) ) { %>
-			<td class="text-center"><%- movimiento_ordenp2 %></td>
-			<td class="text-left"><%- productop_nombre %></td>
-			<td class="text-center"><%- movimiento_item %></td>
-		<% } %>
+		<td class="text-center"><%- factura4_cuota %></td>
+		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>				
 	</script>
 
 	<script type="text/template" id="show-info-detalle-facturap">
@@ -862,53 +834,13 @@
 		<% } %>
 	</script>
 
-	<script type="text/template" id="rcartera-asiento-tpl">
-		<div class="row">
-			<div class="form-group col-md-12 text-center">
-				<strong>(<%- tercero_nit %> - <%- tercero_nombre %>)</strong>
-			</div>
-		</div>
-		<% if(asiento2_naturaleza == 'D') { %>
-			<div class="row">
-				<div class="form-group col-md-9">
-					<label for="factura_nueva" class="control-label">
-						Por favor seleccione tipo de factura para realizar Débito.
-					</label>
-					<div>
-						<select name="factura_nueva" id="factura_nueva" class="form-control" required>
-							<option value="">Seleccione</option>
-							<option value="N">Nueva</option>
-							<option value="E">Existente</option>
-						</select>
-					</div>
-				</div>
-				<div class="form-group col-md-3">
-					<label class="control-label">Valor</label>
-					<div><%- window.Misc.currency( asiento2_valor ) %></div>
-				</div>
-			</div>
-		<% } %>
-		<div id="content-cartera"></div>
-	</script>
-
-
-
     <script type="text/template" id="factura-item-list-tpl">
-        <td><%- id %></td>
-        <td><%- productop_nombre %>
-        	<div id="render_comments_<%- id %>"></div>
-        </td>
-        <td>
-            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required>
-        </td>
-        <td class="text-center"><%- orden2_cantidad %></td>
-        <td class="text-center"><%- orden2_facturado %></td>
-        <td><%- window.Misc.currency( orden2_precio_venta ) %></td>
-        <td class="text-center">
-        	<a class="btn btn-default btn-xs add-comments" data-resource="<%- id %>">
-				<span><i class="fa fa-comment"></i></span>
-			</a>
-		</td>
+        <td><%- factura1_fecha %></td>
+	    <td><%- factura4_vencimiento %></td>
+	    <td><%- factura4_factura1 %></td>
+	    <td><%- factura4_cuota %></td>
+	    <td><%- window.Misc.currency(factura4_saldo) %></td>
+	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
     </script>
 
     <script type="text/template" id="add-comments-item-tpl">
@@ -919,44 +851,6 @@
 		</td>
     	<td><%- factura3_observaciones %></td>
     </script>
-
-    <script type="text/template" id="add-cuotasfacturacartera-asiento-tpl">
-		<div class="row"><br>
-			<label for="factura_koi" class="col-sm-offset-2 col-sm-1 control-label">Factura</label>
-			<div class="form-group col-sm-2">
-	      		<div class="input-group input-group-sm">
-					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-factura-component-table" data-field="factura_orden">
-							<i class="fa fa-building-o"></i>
-						</button>
-					</span>
-					<input id="factura_orden" placeholder="Factura" class="form-control factura-koi-component" name="factura_orden" type="text" maxlength="15" data-factura="true" data-name="factura_orden_beneficiario" required>
-				</div>
-			</div>
-			<div class="col-sm-4">
-				<input id="factura_orden_beneficiario" name="factura_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
-			</div>
-		</div>
-
-		<!-- table table-bordered table-striped -->
-        <div id="wrapper-table-factura-exists" class="box-body table-responsive no-padding" hidden>
-            <table id="browse-factura-exists-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th width="10%">Fecha</th>
-                        <th width="10%">Vencimiento</th>
-                        <th width="10%">Numero</th>
-                        <th width="10%">Cuota</th>
-                        <th width="10%">Saldo</th>
-                        <th width="10%">A pagar</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {{-- Render content ordenes --}}
-                </tbody>
-            </table>
-        </div>
-	</script>
 
 	<!-- Modal info -->
 	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
@@ -977,13 +871,4 @@
 			</div>
 		</div>
 	</div>
-
-	<script type="text/template" id="add-item-factura-exists-tpl">
-		<td><%- factura1_fecha %></td>
-	    <td><%- factura4_vencimiento %></td>
-	    <td><%- factura4_factura1 %></td>
-	    <td><%- factura4_cuota %></td>
-	    <td><%- window.Misc.currency(factura4_saldo) %></td>
-	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
-	</script>
 @stop

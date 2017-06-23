@@ -6,9 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Classes\AsientoContableDocumento;
 
 use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
-use App\Models\Production\Ordenp;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Receivable\ReteFuente, App\Models\Receivable\ReteIva;
 
 use App, View, Auth, DB, Log, Datatables;
 
@@ -84,7 +85,7 @@ class Factura1Controller extends Controller
      */
     public function create()
     {
-        //
+        return view('receivable.facturas.create');
     }
 
     /**
@@ -95,7 +96,191 @@ class Factura1Controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $factura = new Factura1;
+            if ($factura->isValid($data)) {
+                DB::beginTransaction();
+                try {
+                    // Recuperar Tercero
+                    $tercero = Tercero::where('tercero_nit', $request->factura1_tercero)->first();
+                    if(!$tercero instanceof Tercero){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Recuperar orden
+                    $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
+                    if(!$ordenp instanceof Ordenp){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Recuperar Puntoventa
+                    $puntoventa = PuntoVenta::find($request->factura1_puntoventa);
+                    if(!$puntoventa instanceof PuntoVenta){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el punto de venta, por favor verifique la información o consulte al administrador.']);
+                    }
+                    $consecutive = $puntoventa->puntoventa_numero + 1;
+
+                    // Recuperar iva Empresa
+                    $empresa = Empresa::getEmpresa();
+                    if(!$empresa instanceof Empresa){
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>'No es posible recuperar informacion de la empresa, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Validar Cuotas
+                    if($request->factura1_cuotas <= 0){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'La cantidad cuotas no puede ser menor ó igual a 0.']);
+                    }
+
+                    $factura->fill($data);
+                    $factura->factura1_tercero = $tercero->id;
+                    $factura->factura1_puntoventa = $puntoventa->id;
+                    $factura->factura1_orden = $ordenp->id;
+                    $factura->factura1_numero = $puntoventa->puntoventa_numero;
+                    $factura->factura1_prefijo = $puntoventa->puntoventa_prefijo;
+                    $factura->factura1_porcentaje_iva = $empresa->empresa_iva;
+                    $factura->factura1_usuario_elaboro = Auth::user()->id;
+                    $factura->factura1_fh_elaboro = date('Y-m-d H:m:s');
+                    $factura->save();
+
+                    // Calcular subtotal factura
+                    $subtotal = 0;
+
+                    // Recuperar Ordenp2 para el detalle de la factura
+                    $ordenp2 = Ordenp2::getOrdenesf2($ordenp->id);
+
+                    // Validar que no se ingrese factura vacia
+                    if( count($ordenp2) == 0 ){
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>'El detalle de la factura no puede ir vacio, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    foreach ($ordenp2 as $item) {
+                        // Validar que no se ingrese factura vacia
+                        if( $item->orden2_cantidad == 0 ){
+                            DB::rollback();
+                            return response()->json(['success'=>false, 'errors'=>'El detalle de la factura no puede ir vacio, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        if( $request->has("facturado_cantidad_{$item->id}") ){
+                            if( $request->get("facturado_cantidad_{$item->id}") > $item->orden2_cantidad || $request->get("facturado_cantidad_{$item->id}") < 0){
+                                DB::rollback();
+                                return response()->json(['success'=>false, 'errors'=>'La cantidad ingresada supera o es menor a la cantidad disponible.']);
+                            }
+
+                            if( $request->get("facturado_cantidad_{$item->id}") != 0){
+                                $factura2 = new Factura2;
+                                $factura2->factura2_factura1 = $factura->id;
+                                $factura2->factura2_orden2 = $item->id;
+                                $factura2->factura2_cantidad = $request->get("facturado_cantidad_{$item->id}");
+                                $factura2->save();
+
+                                $subtotal += $request->get("facturado_cantidad_{$item->id}") * $item->orden2_precio_venta;
+
+                                // Actualizar orden2_facturado de Orden2
+                                $item->orden2_facturado = $item->orden2_facturado + $request->get("facturado_cantidad_{$item->id}");
+                                $item->save();
+                            }
+                        }
+                    }
+
+                    // Validar que se ingrese un item en el detalle de la factura
+                    if($subtotal == 0){
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>'Por favor ingrese al menos un producto a facturar.']);
+                    }
+
+                    // Calcular Retefuente, Reteiva, Reteica, Iva, Total
+                    $iva = ( round($subtotal) * $empresa->empresa_iva ) / 100;
+
+                    $rtfuente = 0;
+                    if( $tercero->tercero_regimen == 2 && config('koi.terceros.regimen')[$tercero->tercero_regimen] == 'Común' && $subtotal >= $empresa->empresa_base_retefuente_factura){
+                        $rtfuente = ($subtotal * $empresa->empresa_porcentaje_retefuente_factura) / 100;
+                    }
+
+                    $rtiva = 0;
+                    if( $tercero->tercero_gran_contribuyente && $subtotal >= $empresa->empresa_base_reteiva_factura ){
+                        $rtiva = ($iva * $empresa->empresa_porcentaje_reteiva_factura) / 100;
+                    }
+
+                    $rtica = 0;
+                    if( $subtotal >= $empresa->empresa_base_ica_compras && $tercero->tercero_municipio == $empresa->tercero_municipio){
+                        $rtica = ($subtotal * $empresa->actividad_tarifa) / 1000;
+                    }
+
+                    $total = round($subtotal) + round($iva) - round($rtfuente) - round($rtica) - round($rtiva);
+
+                    // Actualizar factura--iva subtotal
+                    $factura->factura1_subtotal = round($subtotal);
+                    $factura->factura1_iva = round($iva);
+                    $factura->factura1_retefuente = round($rtfuente);
+                    $factura->factura1_reteica = round($rtica);
+                    $factura->factura1_reteiva = round($rtiva);
+                    $factura->factura1_total = round($total);
+                    $factura->save();
+
+                    // Crear Factura4 -> cuotas
+                    $result = $factura->storeFactura4($factura);
+                    if(!$result->success){
+                        DB::rollback();
+                        return $result->error;
+                    }
+
+                    // Update consecutive puntoventa_numero
+                    $puntoventa->puntoventa_numero = $consecutive;
+                    $puntoventa->save();
+
+                    // Prepara data asiento
+                    $dataAsiento = $factura->prepararAsiento();
+
+                    // Creo el objeto para manejar el asiento
+                    $objAsiento = new AsientoContableDocumento($dataAsiento->data);
+                    if($objAsiento->asiento_error) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                    }
+
+                    // Preparar asiento
+                    $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
+                    if($result != 'OK'){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
+
+                    // Insertar asiento
+                    $result = $objAsiento->insertarAsiento();
+                    if($result != 'OK') {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
+
+                    // Recuperar el Id del asiento y guardar en la factura
+                    $factura->factura1_asiento = $objAsiento->asiento->id;
+                    $factura->save();
+                    
+                    if( !isset($factura->factura1_asiento) || $factura->id == null ) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
+                    }
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $factura->id]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $factura->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -107,10 +292,7 @@ class Factura1Controller extends Controller
     public function show(Request $request, $id)
     {
         $factura = Factura1::getFactura($id);
-        if(!$factura instanceof Factura1) {
-            abort(404);
-        }
-         if($request->ajax()) {
+        if($request->ajax()) {
             return response()->json($factura);
         }
         return view('receivable.facturas.show', ['factura' => $factura]);
@@ -149,37 +331,6 @@ class Factura1Controller extends Controller
     {
         //
     }
-
-    /**
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function facturadas(Request $request)
-    {
-        if ($request->ajax())
-        {
-            $facturadas = [];
-            if($request->has('factura1_orden')) {
-                $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-                if($orden instanceof Ordenp){
-                    $facturadas = $orden->paraFacturar();
-                }
-            }
-
-            if($request->has('factura1_id')){
-                $query = Factura4::query();
-                $query->select('koi_factura4.*', 'koi_factura1.factura1_fecha');
-                $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
-                $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
-                $query->where('factura4_saldo', '<>',  0);
-                $query->where('factura4_factura1', $request->factura1_id);
-                $facturadas = $query->get();
-            }
-            return response()->json( $facturadas );
-        }
-        abort(404);
-    }
-
 
     /**
      * Search factura.
@@ -225,7 +376,7 @@ class Factura1Controller extends Controller
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('receivable.facturas.export',  compact('factura', 'detalle', 'title'))->render());
+        $pdf->loadHTML(View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')));
     }
 }

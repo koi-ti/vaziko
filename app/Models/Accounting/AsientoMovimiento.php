@@ -177,85 +177,28 @@ class AsientoMovimiento extends Model
 
     public function storeFactura(Asiento2 $asiento2, Array $data)
     {
-        if($data['Nuevo'] == true) 
-        {
-            switch ($data['Tipo']) {
-                // Factura padre
-                case 'F':
-                    // Validar valor
-                    if(!isset($data['Valor']) || !is_numeric($data['Valor']) || $data['Valor'] <= 0) {
-                        return "Valor no puede ser menor o igual a 0.";
-                    }
+        switch ($data['Tipo']) {
+            // Factura padre
+            case 'F':
+                // Validar factura
+                if(!isset($data['Factura']) || trim($data['Factura']) == '') {
+                    return "Factura es obligatoria.";
+                }
 
-                    // Validar naturaleza
-                    if(!isset($data['Naturaleza']) || trim($data['Naturaleza']) == '') {
-                        return "Naturaleza es obligatoria.";
-                    }
+                $this->movimiento_factura = $data['Factura'];
+            break;
 
-                    // Validar fecha
-                    if(!isset($data['Fecha']) || trim($data['Fecha']) == '') {
-                        return "Fecha es obligatoria.";
-                    }
+             // Factura hijo
+            case 'FH':
+                // Validar factura -> child
+                if(isset($data['FacturaChild']) && trim($data['FacturaChild']) != '') {
+                    $this->movimiento_factura4 = $data['FacturaChild'];
+                }
 
-                    // Validar Ordenp
-                    if(!isset($data['Orden']) || trim($data['Orden']) == '') {
-                        return "Orden es obligatoria.";
-                    }
-
-                    // Validar Ordenp
-                    if(!isset($data['Cuotas']) || $data['Valor'] <= 0 || !is_numeric($data['Cuotas'])) {
-                        return "Cuotas es obligatoria y no puede ser menor a 0.";
-                    }
-
-                    // Validar vencimiento
-                    if(!isset($data['Vencimiento']) || trim($data['Vencimiento']) == '') {
-                        return "Vencimiento es obligatoria.";
-                    }
-
-                $this->movimiento_fecha = $data['Fecha'];
-                $this->movimiento_vencimiento = $data['Vencimiento'];
-                $this->movimiento_puntoventa = $data['PuntoVenta'];
-                $this->movimiento_ordenp = $data['Orden'];
-                $this->movimiento_valor = $data['Valor'];
-                $this->movimiento_item = $data['Cuotas'];
-                break;
-
-                // Factura hijo
-                case 'FH':
-                    // Validar ordenp2
-                    if(isset($data['Orden']) || trim($data['Orden']) != '') {
-                        $this->movimiento_ordenp2 = $data['Orden'];
-                    }
-
-                    if(isset($data['Cantidad']) && trim($data['Cantidad']) != '' ) {
-                        $this->movimiento_item = (Int)$data['Cantidad'];
-                    }
-                break;
-            }
-        }else{
-            switch ($data['Tipo']) {
-                // Factura padre
-                case 'F':
-                    // Validar factura
-                    if(!isset($data['Factura']) || trim($data['Factura']) == '') {
-                        return "Factura es obligatoria.";
-                    }
-
-                    $this->movimiento_factura = $data['Factura'];
-                break;
-
-                 // Factura hijo
-                case 'FH':
-                    // Validar factura -> child
-                    if(isset($data['FacturaChild']) && trim($data['FacturaChild']) != '') {
-                        $this->movimiento_factura4 = $data['FacturaChild'];
-                    }
-
-                    if(isset($data['Valor']) && trim($data['Valor']) != '') {
-                        $this->movimiento_valor = $data['Valor'];
-                    }
-                break;
-            }
+                if(isset($data['Valor']) && trim($data['Valor']) != '') {
+                    $this->movimiento_valor = $data['Valor'];
+                }
+            break;
         }
         $this->movimiento_nuevo = $data['Nuevo'];
         return 'OK';

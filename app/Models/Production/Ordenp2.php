@@ -108,7 +108,7 @@ class Ordenp2 extends BaseModel
     public static function getOrdenesf2($orden)
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'),
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden2_facturado', 'orden2_precio_venta', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_precio_venta' : DB::raw('0 as orden2_precio_venta') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_cantidad * orden2_precio_venta) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
 

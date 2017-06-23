@@ -42,6 +42,7 @@ app || (app = {});
 
             // Cartera
             'facturas(/)': 'getFacturasMain',
+            'facturas/create(/)': 'getFacturaCreate',
             'facturas/:facturas(/)': 'getFacturaShow',
 
             // Contabilidad
@@ -1296,6 +1297,17 @@ app || (app = {});
             }
 
             this.mainFacturaView = new app.MainFacturasView( );
+        },
+
+        getFacturaCreate: function () {
+            this.facturaModel = new app.FacturaModel();
+            if ( this.createFacturaView instanceof Backbone.View ){
+                this.createFacturaView.stopListening();
+                this.createFacturaView.undelegateEvents();
+            }
+
+            this.createFacturaView = new app.CreateFacturaView({ model: this.facturaModel });
+            this.createFacturaView.render();
         },
 
         getFacturaShow: function(facturas){

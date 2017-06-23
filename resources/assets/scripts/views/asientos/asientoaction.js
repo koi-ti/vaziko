@@ -20,8 +20,6 @@ app || (app = {});
         templateCuotasFacturap: _.template( ($('#add-rfacturap2-asiento-tpl').html() || '') ),
         // Cartera
         templateCartera: _.template( ($('#rcartera-asiento-tpl').html() || '') ),
-        templateAddFactura: _.template( ($('#add-facturacartera-asiento-tpl').html() || '') ),
-        templateCuotasFactura: _.template( ($('#add-cuotasfacturacartera-asiento-tpl').html() || '') ),
         templateCommentsFactura: _.template( ($('#add-comments-tpl').html() || '') ),
 
         // Inventario
@@ -37,14 +35,7 @@ app || (app = {});
             'change input#facturap1_factura': 'facturapChanged',
             // Cartera
             'submit #form-create-cartera-component-source': 'onStoreItemFactura',
-            'change select#factura_nueva': 'facturaNuevaChanged',
-            'change .orden-change-koi': 'ordenChange',
             'change .factura-koi-component': 'facturaChange',
-
-            //Events Modal Comments
-            'click .add-comments': 'addComments',
-            'click .item-factura-remove': 'removeComment',
-            'submit #form-comments-component': 'onStoreComment',
 
             // Inventario
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
@@ -75,11 +66,11 @@ app || (app = {});
             // Collection series producto
             this.productoSeriesINList = new app.ProductoSeriesINList();
             // Collection pendientes factura
-            this.facturaList = new app.FacturaList();
+            this.detalleFactura4List = new app.DetalleFactura4List();
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
-            this.listenTo( this.facturaList, 'reset', this.addAllFactura );
+            this.listenTo( this.detalleFactura4List, 'reset', this.addAllFactura );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
 
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -292,10 +283,6 @@ app || (app = {});
 
             // Open modal
             this.$modalCt.modal('show');
-
-            if (this.parameters.data.asiento2_naturaleza == 'C'){
-                this.$wraperFormCt.html( this.templateCuotasFactura( ) );
-            }
         },
 
 
@@ -663,11 +650,6 @@ app || (app = {});
                                     _this.$modalCt.modal('hide');
                                 }
 
-                                // Inventario modifica valor item asiento por el valor del costo del movimiento
-                                if(!_.isUndefined(resp.asiento2_valor) && !_.isNull(resp.asiento2_valor) && resp.asiento2_valor != _this.parameters.data.asiento2_valor) {
-                                    _this.parameters.data.asiento2_valor = resp.asiento2_valor;
-                                }
-
                                 // Next action
                                 _this.runAction();
                             }
@@ -677,100 +659,25 @@ app || (app = {});
             }
         },
 
-        /*
-        * Factura nueva cartera changed
-        */
-        facturaNuevaChanged: function(e) {
-            // Hide errors
-            this.$wraperErrorCt.hide().empty();
-            // Empty Form
-            this.$wraperFormCt.empty();
-
-            if($(e.currentTarget).val() == 'N') {
-                this.$wraperFormCt.html( this.templateAddFactura( ) );
-            }else{
-                this.$wraperFormCt.html( this.templateCuotasFactura( ) );
-            }
-
-            this.ready();
-        },
-
-        /**
-        * Change orden Cartera
-        */
-        ordenChange: function(e) {
-            var factura1_orden = this.$(e.currentTarget).val();
-            this.$('#wrapper-table-orden').removeAttr('hidden');
-            this.facturaList.reset();
-
-            this.facturaList.fetch({ reset: true, data: { factura1_orden: factura1_orden } });
-            this.$wraper = this.$('#browse-orden-pendientes-list');
-            this.$call = 'ordenChange';
-        },
-
-        /**
-        *   Open Modal Comments Cartera
-        */
-        addComments: function(e){
-            this.$modalCtComments = this.$('#modal-comments-component');
-            this.asientoFacturaCommentsList = new app.AsientoFacturaCommentsList();
-
-            var id = this.$(e.currentTarget).attr('data-resource');
-
-            this.$modalCtComments.find('.content-modal').empty().html( this.templateCommentsFactura({ }) );
-            this.$modalCtComments.find('.modal-title').text( 'Orden #' + id );
-            this.$modalCtComments.modal('show');
-
-            this.wrapp = $('#render_comments_'+id);
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Detalle list
-            this.facturaCommentsListView = new app.FacturaCommentsListView({
-                collection: this.asientoFacturaCommentsList,
-                parameters: {
-                    el: this.wrapp,
-                    edit: true,
-                }
-            });
-        },
-
-        onStoreComment: function(e){
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.asientoFacturaCommentsList.trigger( 'store', data );
-            }
-        },
-
         /**
         *   Change Factura Exists Cartera
         */
         facturaChange: function(e) {
             var factura1_id = this.$(e.currentTarget).val();
-            this.$('#wrapper-table-factura-exists').removeAttr('hidden');
-            this.facturaList.reset();
+            this.$('#wrapper-table-factura').removeAttr('hidden');
+            this.detalleFactura4List.reset();
 
-            this.facturaList.fetch({ reset: true, data: { factura1_id: factura1_id } });
-            this.$wraper = this.$('#browse-factura-exists-list');
-            this.$call = 'facturaChange';
+            this.detalleFactura4List.fetch({ reset: true, data: { factura1_id: factura1_id } });
+            this.$wraper = this.$('#browse-factura-list');
         },
 
         /**
         * Render view task by model
         * @param Object Facturap2Model Model instance
         */
-        addOneFactura: function (FacturaModel) {
+        addOneFactura: function (Factura4Model) {
             var view = new app.FacturaPendienteOrdenItemView({
-                model: FacturaModel,
-                parameters:{
-                    call: this.$call,
-                }
+                model: Factura4Model
             });
 
             this.$wraper.append( view.render().el );
@@ -782,7 +689,7 @@ app || (app = {});
         */
         addAllFactura: function () {
             this.$wraper.find('tbody').html('');
-            this.facturaList.forEach( this.addOneFactura, this );
+            this.detalleFactura4List.forEach( this.addOneFactura, this );
         },
 
         /**

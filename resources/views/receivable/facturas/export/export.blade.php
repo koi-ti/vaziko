@@ -1,4 +1,4 @@
-@extends('receivable.facturas.layout', ['type' => 'pdf', 'title' => $title])
+@extends('receivable.facturas.export.layout', ['type' => 'pdf', 'title' => $title])
 
 @section('content')
 
@@ -59,7 +59,6 @@
 
 	<div class="container-body">
 		@if(count($detalle) > 0)
-			{{--*/ $subtotal = 0; /*--}}
 			
 			{{--*/ $i = 0; /*--}}
 			@foreach($detalle as $ordenp2)
@@ -72,7 +71,6 @@
 					<td width="13%" class="right">{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</td>
 					<td width="17%"class="right">{{ number_format($totalRow,2,'.',',') }}</td>
 				</tr>
-				{{--*/ $subtotal += $totalRow; /*--}}
 
 				{{--*/ if( ++$i == 12 ) break; /*--}}
 			@endforeach
@@ -81,34 +79,31 @@
 	</div>
 
 	<div class="container-footer">
-			{{--*/ $iva = $subtotal * 0.19; /*--}}
-			{{--*/ $total = $subtotal + $iva; /*--}}
-			
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format($subtotal,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_subtotal,2,'.',',') }}</td>
 			</tr>
 
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format($iva,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_iva,2,'.',',') }}</td>
 			</tr>
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format(0,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_retefuente,2,'.',',') }}</td>
 			</tr>
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format(0,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_reteica,2,'.',',') }}</td>
 			</tr>
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format(0,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_reteiva,2,'.',',') }}</td>
 			</tr>
 
 			<tr>
 				<th width="83%" class="right"></th>
-				<td width="17%" class="right">{{ number_format($total,2,'.',',') }}</td>
+				<td width="17%" class="right">{{ number_format($factura->factura1_total,2,'.',',') }}</td>
 			</tr>
 	</div>
 @stop

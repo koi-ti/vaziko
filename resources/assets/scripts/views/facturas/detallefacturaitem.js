@@ -12,8 +12,9 @@ app || (app = {});
     app.DetalleFacturaItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#add-factura-item-tpl').html() || '') ),
+        template: _.template( ($('#facturado-item-list-tpl').html() || '') ),
         parameters: {
+            call: null,
         },
 
         /**
@@ -23,6 +24,10 @@ app || (app = {});
 	        // Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            if(this.parameters.call == 'show'){
+                this.template = _.template( ($('#add-factura-item-tpl').html() || '') );
+            }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );

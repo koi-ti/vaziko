@@ -106,7 +106,7 @@ app || (app = {});
             this.$inputName.val( data.tercero_nombre );
 
             if(this.$factura == 'true'){
-                this.$inputContent.trigger('change'); 
+                this.$inputContent.trigger('change');
             }
 
 			this.$modalComponent.modal('hide');

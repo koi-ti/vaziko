@@ -98,21 +98,36 @@
 		                    </tbody>
 		                    <tfoot>
 		                    	<tr>
+                                    <td></td>
+                                    <th class="text-right">SUBTOTAL</th>
+                                    <td class="text-center" id="subtotal-facturado">0</td>
+                                    <td></td>
+                                    <td class="text-right">{{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
 	                                <td></td>
-	                                <th class="text-right">Subtotal</th>
-	                                <td class="text-center" id="subtotal-facturado">0</td>
-	                                <td></td>
-	                                <td class="text-right" id="subtotal-total">0</td>
+	                                <th class="text-right">IVA ({{ $factura->factura1_porcentaje_iva }}%)</th>
+	                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_iva, '2', ',', '.') }}</td>
 	                            </tr>
-		                        <tr>
-	                                <td></td>
-	                                <th class="text-right">Iva (19%)</th>
-	                                <td colspan="3" class="text-right" id="iva-total">0</td>
-	                            </tr>
+                                <tr>
+                                    <td></td>
+                                    <th class="text-right">RTE FTE</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_retefuente, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th class="text-right">RTE ICA</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteica, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <th class="text-right">RTE IVA</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteiva, '2', ',', '.') }}</td>
+                                </tr>
 	                            <tr>
 	                                <td></td>
-	                                <th class="text-right">Total</th>
-	                                <td colspan="3" class="text-right" id="total-total">0</td>
+	                                <th class="text-right">TOTAL</th>
+	                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_total, '2', ',', '.') }}</td>
 	                            </tr>
 		                    </tfoot>
 		                </table>
@@ -121,4 +136,17 @@
 	    	</div>
         </div>
     </div>        
+
+    <div class="box box-solid">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <h4><a href="{{ route('asientos.show', ['asientos' =>  $factura->factura1_asiento ]) }}" target="_blanck" title="Ver Asiento"> Ver asiento contable </a></h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                    <h4><b>{{ $factura->documento_nombre }} - {{ $factura->asiento1_numero }}</b></h4>
+                </div>
+            </div>
+        </div>
+    </div>
 @stop

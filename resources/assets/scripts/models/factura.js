@@ -16,6 +16,10 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+            'factura1_fecha': moment().format('YYYY-MM-DD'),
+            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD'),
+            'tercero_nit': '',
+            'tercero_nombre': '',
         }
     });
 
