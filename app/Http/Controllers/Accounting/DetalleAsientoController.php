@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Log, DB;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 
 class DetalleAsientoController extends Controller
 {

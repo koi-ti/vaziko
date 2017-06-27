@@ -44,7 +44,6 @@ app || (app = {});
         parameters: {
             data: { },
             actions: { },
-            form: null, 
         },
 
         /**
@@ -720,7 +719,7 @@ app || (app = {});
                     this.$modalFp.modal('hide');
                     this.$modalCt.modal('hide');
 
-                    window.Misc.clearForm( this.parameters.form );
+                    window.Misc.clearForm( $('#form-item-asiento') );
                 }
             }
         }

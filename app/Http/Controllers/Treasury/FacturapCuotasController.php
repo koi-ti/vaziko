@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Http\Controllers\Accounting;
+namespace App\Http\Controllers\Treasury;
 
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Accounting\Facturap2;
+use App\Models\Treasury\Facturap2;
 
 class FacturapCuotasController extends Controller
 {

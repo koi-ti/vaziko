@@ -1,5 +1,5 @@
 /**
-* Class DetalleFacturaView  of Backbone Router
+* Class DetalleFacturapView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,9 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.DetalleFacturaView = Backbone.View.extend({
+    app.DetalleFacturapView = Backbone.View.extend({
 
-        el: '#browse-detalle-factura-list',
+        el: '#browse-detalle-facturap-list',
         parameters: {
             dataFilter: {}
         },
@@ -26,9 +26,6 @@ app || (app = {});
 
             //Init Attributes
             this.confCollection = { reset: true, data: {} };
-
-            // References
-            this.$facturado = this.$('#subtotal-facturado');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -46,37 +43,20 @@ app || (app = {});
         * Render view contact by model
         * @param Object detallePedidocModel Model instance
         */
-        addOne: function (factura2Model) {
-            var view = new app.DetalleFacturaItemView({
-                model: factura2Model,
-                parameters:{
-                    call: this.parameters.call,
-                }
+        addOne: function (facturap2Model) {
+            var view = new app.DetalleFacturapItemView({
+                model: facturap2Model,
             });
-            factura2Model.view = view;
+            facturap2Model.view = view;
             this.$el.append( view.render().el );
 
-            //totalize actually in collection
-            this.totalize();
         },
 
         /**
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
-        },
-
-        /**
-        * Render totalize valores
-        */
-        totalize: function () {
-            var data = this.collection.totalize();
-
-            if(this.$facturado.length) {
-                this.$facturado.html( data.facturado );
-            }
         },
 
         /**

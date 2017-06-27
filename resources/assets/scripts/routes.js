@@ -116,6 +116,10 @@ app || (app = {});
             'productosp/create(/)': 'getProductospCreate',
             'productosp/:producto(/)': 'getProductospShow',
             'productosp/:producto/edit(/)': 'getProductospEdit',
+
+            // Treasury
+            'facturap(/)': 'getFacturaspMain',
+            'facturap(/):facturap(/)': 'getFacturaspShow',
         },
 
         /**
@@ -1319,6 +1323,30 @@ app || (app = {});
             }
 
             this.showFacturasView = new app.ShowFacturaView({ model: this.facturaModel });
+        },
+
+        /**
+        * Treasury
+        */
+        getFacturaspMain: function() {
+            if ( this.mainFacturaspView instanceof Backbone.View ){
+                this.mainFacturaspView.stopListening();
+                this.mainFacturaspView.undelegateEvents();
+            }
+
+            this.mainFacturaspView = new app.MainFacturaspView();
+        },
+
+        getFacturaspShow: function(facturap){
+            this.facturapModel = new app.FacturapModel();
+            this.facturapModel.set({'id': facturap}, {'silent':true});
+
+            if( this.showFacturapView instanceof Backbone.View ){
+                this.showFacturapView.stopListening();
+                this.showFacturapView.undelegateEvents();
+            }
+
+            this.showFacturapView = new app.ShowFacturapView({ model: this.facturapModel });
         },
     }) );
 

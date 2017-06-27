@@ -44,7 +44,7 @@
                 </div>
 		        <div class="form-group col-md-6">
                     <label class="control-label">Cliente</label>
-                    <div><a href="{{ route('terceros.show', ['terceros' =>  $factura->factura1_tercero ]) }}" title="Ver tercero">{{ $factura->tercero_nit }} </a> - {{ $factura->tercero_nombre }} </div>
+                    <div><a href="{{ route('terceros.show', ['terceros' =>  $factura->factura1_tercero ]) }}" target="_blanck" title="Ver tercero">{{ $factura->tercero_nit }} </a> - {{ $factura->tercero_nombre }} </div>
                 </div>
         	</div>
 

@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables, Cache;
 
-use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Accounting\Facturap2;
+use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Treasury\Facturap2;
 
 class TerceroController extends Controller
 {

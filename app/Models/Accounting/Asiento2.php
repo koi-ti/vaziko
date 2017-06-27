@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Validator, Auth, DB;
 
-use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
+use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
 
 class Asiento2 extends Model
 {

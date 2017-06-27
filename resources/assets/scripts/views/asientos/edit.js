@@ -167,7 +167,6 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var form = this.$formItem;
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
                 data.asiento1_id = this.model.get('id');
@@ -195,7 +194,6 @@ app || (app = {});
                                     collection: _this.asientoCuentasList,
                                     parameters: {
                                         data: data,
-                                        form: form,
                                         actions: actions
                                     }
                                 });

@@ -123,10 +123,10 @@ Route::group(['middleware' => 'auth'], function()
 	*/
 	Route::group(['prefix' => 'facturap'], function()
 	{
-		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Accounting\FacturapController@search']);
-		Route::resource('cuotas', 'Accounting\FacturapCuotasController', ['only' => ['index']]);
+		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Treasury\FacturapController@search']);
+		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
-	Route::resource('facturap', 'Accounting\FacturapController', ['only' => ['index']]);
+	Route::resource('facturap', 'Treasury\FacturapController', ['only' => ['index','show']]);
 
 	/*
 	|-------------------------

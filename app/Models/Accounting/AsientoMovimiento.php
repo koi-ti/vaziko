@@ -4,7 +4,7 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Inventory\Producto;
+use App\Models\Inventory\Producto, App\Models\Treasury\Facturap;
 
 class AsientoMovimiento extends Model
 {
