@@ -38,21 +38,30 @@ class Asiento2 extends Model
     public static function getAsiento2($asiento)
     {
         $query = Asiento2::query();
-        $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 'tercero_nit',
-            DB::raw("(CASE WHEN tercero_persona = 'N'
-                THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+        $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+            DB::raw("(CASE WHEN t.tercero_persona = 'N'
+                THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
+                        (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
                     )
-                ELSE tercero_razonsocial END)
+                ELSE t.tercero_razonsocial END)
                 AS tercero_nombre"),
             DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
-            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as orden_codigo")
+            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as ordenp_codigo"),
+            DB::raw("CONCAT( (CASE WHEN to.tercero_persona = 'N'
+                        THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
+                            (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
+                        )
+                        ELSE to.tercero_razonsocial
+                    END),
+                ' (', orden_referencia ,')'
+           ) AS ordenp_beneficiario")
         );
-        $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
+        $query->join('koi_tercero as t', 'asiento2_beneficiario', '=', 't.id');
         $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
         $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
         // Temporal join
         $query->leftJoin('koi_ordenproduccion', 'asiento2_ordenp', '=', 'koi_ordenproduccion.id');
+        $query->leftJoin('koi_tercero as to', 'orden_cliente', '=', 'to.id');
         $query->where('asiento2_asiento', $asiento);
         return $query->get();
     }

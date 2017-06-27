@@ -31,6 +31,7 @@ app || (app = {});
         	'tercero_nombre': '',
             'centrocosto_nombre': '',
             'ordenp_codigo': '',
+            'ordenp_beneficiario': '',
         }
     });
 

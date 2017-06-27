@@ -9,7 +9,7 @@
         <div class="box box-success">
             <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-factura-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-                    <div class="row">
+                    <div class="form-group">
                         <label for="searchfactura_tercero" class="col-sm-1 control-label">Tercero</label>
                         <div class="col-sm-2">
                             <div class="input-group input-group-sm">
@@ -42,7 +42,7 @@
                         </div>
                     </div>
 
-                    <div class="row"><br>
+                    <div class="form-group">
                         <label for="searchfactura_numero" class="col-sm-1 control-label">Numero</label>
                         <div class="col-sm-2">
                             <input id="searchfactura_numero" placeholder="Numero" class="form-control input-sm" name="searchfactura_numero" type="text" maxlength="15" value="{{ session('searchfactura_numero') }}">
@@ -62,22 +62,22 @@
                             </a>
                         </div>
                     </div>
-            </div>
                 {!! Form::close() !!}
-
-                <div class="box-body table-index">
-                    <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
-                        <thead>
-                            <tr>
-                                <th >Numero</th>
-                                <th >Nit</th>
-                                <th >Cliente</th>
-                                <th >Orden</th>
-                                <th >Prefijo</th>
-                            </tr>
-                        </thead>
-                    </table>
-                </div>
             </div>
+
+            <div class="box-body table-index">
+                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                    <thead>
+                        <tr>
+                            <th >Numero</th>
+                            <th >Nit</th>
+                            <th >Cliente</th>
+                            <th >Orden</th>
+                            <th >Prefijo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
     </div>
 @stop

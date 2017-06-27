@@ -565,9 +565,9 @@
 		<!-- Orden -->
 		<% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
 			<div class="row">
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-12">
 					<label class="control-label">Orden de producción</label>
-					<div><%- ordenp_codigo %></div>
+					<div><%- ordenp_codigo %> - <%- ordenp_beneficiario %></div>
 				</div>
 			</div>
 		<% } %>

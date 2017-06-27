@@ -43,7 +43,8 @@ app || (app = {});
         },
         parameters: {
             data: { },
-            actions: { }
+            actions: { },
+            form: null, 
         },
 
         /**
@@ -712,11 +713,14 @@ app || (app = {});
         responseServer: function ( model, resp, opts ) {
             if(!_.isUndefined(resp.success)) {
                 if( resp.success ) {
+
                     // Close modals
                     this.$modalOp.modal('hide');
                     this.$modalIn.modal('hide');
                     this.$modalFp.modal('hide');
                     this.$modalCt.modal('hide');
+
+                    window.Misc.clearForm( this.parameters.form );
                 }
             }
         }

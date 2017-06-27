@@ -141,7 +141,8 @@ class DetalleAsientoController extends Controller
                         'asiento2_credito' => $asiento2->asiento2_credito,
                         'asiento2_debito' => $asiento2->asiento2_debito,
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
-                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : '')
+                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : ''),
+                        'ordenp_beneficiario' => $request->asiento2_orden_beneficiario
                     ]);
                 }catch(\Exception $e){
                     DB::rollback();
