@@ -64,5 +64,18 @@
 	    		</div>
         	</div>
     	</div>
-    </div>        
+    </div>
+
+    <div class="box box-solid">
+        <div class="box-body">
+            <div class="row">
+                <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                    <h4><a href="{{ route('asientos.show', ['asientos' =>  $facturap->facturap1_asiento ]) }}" target="_blanck" title="Ver Asiento"> Ver asiento contable </a></h4>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                    <h4><b>{{ $facturap->documento_nombre }} - {{ $facturap->asiento1_numero }}</b></h4>
+                </div>
+            </div>
+        </div>
+    </div>       
 @stop

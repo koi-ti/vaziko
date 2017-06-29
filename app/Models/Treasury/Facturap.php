@@ -65,7 +65,7 @@ class Facturap extends Model
 
     public static function getFacturap($id){
         $query = Facturap::query();
-        $query->select('koi_facturap1.*', 'tercero_nit','sucursal_nombre', DB::raw("(CASE WHEN tercero_persona = 'N'
+        $query->select('koi_facturap1.*', 'tercero_nit','documento_nombre', 'asiento1_numero','sucursal_nombre', DB::raw("(CASE WHEN tercero_persona = 'N'
                 THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                         (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                     )
@@ -73,6 +73,8 @@ class Facturap extends Model
             AS tercero_nombre")
         );
         $query->join('koi_sucursal', 'facturap1_sucursal', '=', 'koi_sucursal.id');
+        $query->join('koi_asiento1', 'facturap1_asiento', '=', 'koi_asiento1.id');
+        $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
         $query->join('koi_tercero', 'facturap1_tercero', '=', 'koi_tercero.id');
         $query->where('koi_facturap1.id', $id);
 

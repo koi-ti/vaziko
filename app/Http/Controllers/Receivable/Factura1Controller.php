@@ -153,7 +153,7 @@ class Factura1Controller extends Controller
                     $subtotal = 0;
 
                     // Recuperar Ordenp2 para el detalle de la factura
-                    $ordenp2 = Ordenp2::getOrdenesf2($ordenp->id);
+                    $ordenp2 = $ordenp->paraFacturar();
 
                     // Validar que no se ingrese factura vacia
                     if( count($ordenp2) == 0 ){
@@ -162,13 +162,9 @@ class Factura1Controller extends Controller
                     }
 
                     foreach ($ordenp2 as $item) {
-                        // Validar que no se ingrese factura vacia
-                        if( $item->orden2_cantidad == 0 ){
-                            DB::rollback();
-                            return response()->json(['success'=>false, 'errors'=>'El detalle de la factura no puede ir vacio, por favor verifique la información o consulte al administrador.']);
-                        }
 
                         if( $request->has("facturado_cantidad_{$item->id}") ){
+
                             if( $request->get("facturado_cantidad_{$item->id}") > $item->orden2_cantidad || $request->get("facturado_cantidad_{$item->id}") < 0){
                                 DB::rollback();
                                 return response()->json(['success'=>false, 'errors'=>'La cantidad ingresada supera o es menor a la cantidad disponible.']);

@@ -36,6 +36,7 @@ class FacturapController extends Controller
                 session(['searchfacturap_tercero' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
                 session(['searchfacturap_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
                 session(['searchfacturap_referencia' => $request->has('referencia') ? $request->referencia : '']);
+                session(['searchfacturap_fecha' => $request->has('facturap_fecha') ? $request->facturap_fecha : '']);
             }
 
             return Datatables::of($query)
@@ -43,6 +44,11 @@ class FacturapController extends Controller
                     // Referencia 
                     if($request->has('referencia')){
                         $query->whereRaw("facturap1_factura LIKE '%{$request->referencia}%'");
+                    }
+
+                    // Fecha 
+                    if($request->has('facturap_fecha')){
+                        $query->whereRaw("facturap1_fecha LIKE '%{$request->facturap_fecha}%'");
                     }
 
                     // Documento Tercero

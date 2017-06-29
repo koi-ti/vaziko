@@ -29,6 +29,11 @@
                         <div class="col-sm-2">
                             <input id="searchfacturap_referencia" placeholder="Referencia" class="form-control input-sm" name="searchfacturap_referencia" type="text" maxlength="15" value="{{ session('searchfacturap_referencia') }}">
                         </div>
+
+                        <label for="searchfacturap_fecha" class="col-sm-1 control-label">Fecha</label>
+                        <div class="col-sm-2">
+                            <input id="searchfacturap_fecha" placeholder="Fecha" class="form-control input-sm datepicker" name="searchfacturap_fecha" type="text" value="{{ session('searchfacturap_fecha') }}">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -50,6 +55,7 @@
                             <th >Cliente</th>
                             <th >Sucursal</th>
                             <th >Factura</th>
+                            <th >Fecha</th>
                         </tr>
                     </thead>
                 </table>

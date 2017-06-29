@@ -45,6 +45,12 @@ class ModulosTableSeeder extends Seeder
         	'nivel1' => 5
     	]);
 
+        Modulo::create([
+            'name' => 'tesoreria',
+            'display_name' => 'Tesorería',
+            'nivel1' => 6
+        ]);
+
     	// Administracion
     	Modulo::create([
         	'display_name' => 'Modulos',
@@ -352,5 +358,21 @@ class ModulosTableSeeder extends Seeder
         	'nivel2' => 2,
         	'nivel3' => 4
     	]);
+
+        //Tesoreria
+        Modulo::create([
+            'display_name' => 'Modulos',
+            'nivel1' => 6,
+            'nivel2' => 1
+        ]);
+
+        // Modulos
+        Modulo::create([
+            'name' => 'facturap',
+            'display_name' => 'Factura proveedor',
+            'nivel1' => 6,
+            'nivel2' => 1,
+            'nivel3' => 1
+        ]);
     }
 }

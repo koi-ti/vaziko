@@ -28,6 +28,7 @@ app || (app = {});
 
             // References
             this.$searchfacturapReferencia = this.$('#searchfacturap_referencia');
+            this.$searchfacturapFecha = this.$('#searchfacturap_fecha');
             this.$searchfacturapTercero = this.$('#searchfacturap_tercero');
             this.$searchfacturapTerceroNombre = this.$('#searchfacturap_tercero_nombre');
             
@@ -42,6 +43,7 @@ app || (app = {});
                     data: function( data ) {
                         data.persistent = true;
                         data.referencia = _this.$searchfacturapReferencia.val();
+                        data.facturap_fecha = _this.$searchfacturapFecha.val();
                         data.tercero_nit = _this.$searchfacturapTercero.val();
                         data.tercero_nombre = _this.$searchfacturapTerceroNombre.val();
                     }
@@ -51,6 +53,7 @@ app || (app = {});
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'sucursal_nombre', name: 'sucursal_nombre' },
                     { data: 'facturap1_factura', name: 'facturap1_factura' },
+                    { data: 'facturap1_fecha', name: 'facturap1_fecha' },
                 ],
                 columnDefs: [
                     {
@@ -74,6 +77,7 @@ app || (app = {});
             e.preventDefault();
 
             this.$searchfacturapReferencia.val('');
+            this.$searchfacturapFecha.val('');
             this.$searchfacturapTercero.val('');
             this.$searchfacturapTerceroNombre.val('');
 
