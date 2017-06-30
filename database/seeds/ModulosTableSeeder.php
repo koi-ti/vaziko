@@ -74,8 +74,8 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'tercero',
-        	'display_name' => 'Tercero',
+        	'name' => 'terceros',
+        	'display_name' => 'Terceros',
         	'nivel1' => 1,
         	'nivel2' => 1,
         	'nivel3' => 2
@@ -131,7 +131,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'puntosdeventa',
+        	'name' => 'puntosventa',
         	'display_name' => 'Puntos de venta',
         	'nivel1' => 1,
         	'nivel2' => 2,
@@ -193,7 +193,7 @@ class ModulosTableSeeder extends Seeder
 
     	//Reportes
     	Modulo::create([
-        	'name' => 'plancuentas',
+        	'name' => 'rplancuentas',
         	'display_name' => 'Plan cuentas',
         	'nivel1' => 3,
         	'nivel2' => 2,
@@ -201,7 +201,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'mayorybalance',
+        	'name' => 'rmayorbalance',
         	'display_name' => 'Mayor y Balance',
         	'nivel1' => 3,
         	'nivel2' => 2,
@@ -210,7 +210,7 @@ class ModulosTableSeeder extends Seeder
 
     	//referencias
     	Modulo::create([
-        	'name' => 'centrosdecosto',
+        	'name' => 'centroscosto',
         	'display_name' => 'Centros de costo',
         	'nivel1' => 3,
         	'nivel2' => 3,
@@ -234,7 +234,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'plandecuentas',
+        	'name' => 'plancuentas',
         	'display_name' => 'Plan de cuentas',
         	'nivel1' => 3,
         	'nivel2' => 3,
@@ -256,7 +256,7 @@ class ModulosTableSeeder extends Seeder
 
     	//Modulos
     	Modulo::create([
-        	'name' => 'insumos',
+        	'name' => 'productos',
         	'display_name' => 'Insumos',
         	'nivel1' => 4,
         	'nivel2' => 1,
@@ -311,7 +311,7 @@ class ModulosTableSeeder extends Seeder
 
     	//Modulos
     	Modulo::create([
-        	'name' => 'productos',
+        	'name' => 'productosp',
         	'display_name' => 'Productos',
         	'nivel1' => 5,
         	'nivel2' => 1,
@@ -328,7 +328,7 @@ class ModulosTableSeeder extends Seeder
 
     	//Referencias
     	Modulo::create([
-        	'name' => 'acabados',
+        	'name' => 'acabadosp',
         	'display_name' => 'Acabados',
         	'nivel1' => 5,
         	'nivel2' => 2,
@@ -336,7 +336,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'areas',
+        	'name' => 'areasp',
         	'display_name' => 'Areas',
         	'nivel1' => 5,
         	'nivel2' => 2,
@@ -344,7 +344,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'maquinas',
+        	'name' => 'maquinasp',
         	'display_name' => 'Maquinas',
         	'nivel1' => 5,
         	'nivel2' => 2,
@@ -352,7 +352,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'materiales',
+        	'name' => 'materialesp',
         	'display_name' => 'Materiales',
         	'nivel1' => 5,
         	'nivel2' => 2,

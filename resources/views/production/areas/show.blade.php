@@ -19,6 +19,11 @@
                     <label class="control-label">Nombre</label>
                     <div>{{ $area->areap_nombre }}</div>
                 </div>
+
+                <div class="form-group col-md-3">
+                    <label class="control-label">Valor</label>
+                    <div>$ {{ number_format($area->areap_valor,2,',','.') }}</div>
+                </div>
             </div>
         </div>
         <div class="box-footer with-border">

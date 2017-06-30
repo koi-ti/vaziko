@@ -28,6 +28,7 @@ class CreateFactura1Table extends Migration
 
             $table->double('factura1_subtotal')->default(0);
             $table->double('factura1_iva')->default(0);
+            $table->integer('factura1_porcentaje_iva')->unsigned();
             $table->double('factura1_descuento')->default(0);
             $table->double('factura1_total')->default(0);
 

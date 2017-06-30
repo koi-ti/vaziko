@@ -957,6 +957,11 @@
 			<label for="areap_nombre" class="control-label">Nombre</label>
 			<input type="text" id="areap_nombre" name="areap_nombre" value="<%- areap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
+
+		<div class="form-group col-md-3">
+			<label for="areap_nombre" class="control-label">Valor</label>
+			<input type="text" id="areap_valor" name="areap_valor" value="<%- areap_valor %>" placeholder="Nombre" class="form-control input-sm input-toupper" data-currency required>
+		</div>
     </div>
 </script>
 
@@ -991,12 +996,36 @@
 			<label for="materialp_nombre" class="control-label">Nombre</label>
 			<input type="text" id="materialp_nombre" name="materialp_nombre" value="<%- materialp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
+
+		<div class="form-group col-md-4">
+			<label for="materialp_tipomaterial" class="control-label">Tipo de material</label>
+			<select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\TipoMaterial::getTiposMaterial() as $key => $value)
+					<option value="{{ $key }}" <%- materialp_tipomaterial == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
     </div>
 
     <div class="row">
 		<div class="form-group col-md-8">
 			<label for="materialp_descripcion" class="control-label">Descripción</label>
             <textarea id="materialp_descripcion" name="materialp_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- materialp_descripcion %></textarea>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-tipomaterialp-tpl">
+	<div class="row">
+		<div class="form-group col-md-4">
+			<label for="tipomaterial_nombre" class="control-label">Nombre</label>
+			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="tipomaterial_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="tipomaterial_activo" name="tipomaterial_activo" value="tipomaterial_activo" <%- parseInt(tipomaterial_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>

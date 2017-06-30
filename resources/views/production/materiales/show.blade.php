@@ -20,6 +20,11 @@
                     <label class="control-label">Nombre</label>
                     <div>{{ $material->materialp_nombre }}</div>
                 </div>
+
+                <div class="form-group col-md-4">
+                    <label class="control-label">Tipo de material</label>
+                    <div>{{ $material->tipomaterial_nombre }}</div>
+                </div>
             </div>
 
             <div class="row">

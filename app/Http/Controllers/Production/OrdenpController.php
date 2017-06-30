@@ -70,6 +70,11 @@ class OrdenpController extends Controller
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
 
+                    // Ordenes a facturar
+                    if($request->has('factura') && $request->factura == 'true') {
+                        $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('(orden2_cantidad - orden2_facturado) > 0'));
+                    }
+
                     // Tercero nit
                     if($request->has('orden_tercero_nit')) {
                         $query->where('tercero_nit', $request->orden_tercero_nit);

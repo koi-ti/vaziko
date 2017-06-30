@@ -1,5 +1,5 @@
 /**
-* Class AreapModel extend of Backbone Model
+* Class TipoMaterialpModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,15 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AreapModel = Backbone.Model.extend({
+    app.TipoMaterialpModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('areasp.index') );
+            return window.Misc.urlFull( Route.route('tiposmaterialp.index') );
         },
         idAttribute: 'id',
         defaults: {
-            'areap_nombre': '',
-            'areap_valor': 0
+            'tipomaterial_nombre': '',
+            'tipomaterial_activo': 1
         }
     });
 

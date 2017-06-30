@@ -1,5 +1,5 @@
 /**
-* Class AreapModel extend of Backbone Model
+* Class Cotizacion3Model extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,13 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AreapModel = Backbone.Model.extend({
+    app.Cotizacion3Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('areasp.index') );
+            return window.Misc.urlFull( Route.route('cotizaciones.detallearea.index') );
         },
         idAttribute: 'id',
         defaults: {
-            'areap_nombre': '',
-            'areap_valor': 0
         }
     });
 

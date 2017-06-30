@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAreapTable extends Migration
+class CreateTipomaterialCreate extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateAreapTable extends Migration
      */
     public function up()
     {
-        Schema::create('koi_areap', function (Blueprint $table) {
+        Schema::create('koi_tipomaterial', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('areap_nombre', 250);
-            $table->double('areap_valor')->default(0);
+            $table->string('tipomaterial_nombre', 25);
+            $table->boolean('tipomaterial_activo')->default(false);
         });
     }
 
@@ -28,6 +28,6 @@ class CreateAreapTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('koi_areap');
+        Schema::dropIfExists('koi_tipomaterial');
     }
 }

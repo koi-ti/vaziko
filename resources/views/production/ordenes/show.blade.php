@@ -164,6 +164,7 @@
                                                             <th width="5%">Código</th>
                                                             <th width="65%">Nombre</th>
                                                             <th width="10%">Cantidad</th>
+                                                            <th width="10%">Facturado</th>
                                                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                                                 <th width="10%">Precio</th>
                                                                 <th width="10%">Total</th>

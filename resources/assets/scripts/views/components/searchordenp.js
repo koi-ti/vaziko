@@ -56,6 +56,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
+                        data.factura = _this.$factura;
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }

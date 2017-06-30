@@ -166,6 +166,15 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
+	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'cotizaciones'], function()
+	{
+		Route::resource('detalle', 'Production\Cotizacion2Controller', ['only' => ['index', 'store']]);
+		Route::resource('detallearea', 'Production\Cotizacion3Controller', ['only' => ['index', 'store']]);
+
+	});
+	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'productosp'], function()
 	{

@@ -114,7 +114,7 @@ class Factura1Controller extends Controller
                     $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
                     if(!$ordenp instanceof Ordenp){
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden, por favor verifique la información o consulte al administrador.']);
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Recuperar Puntoventa

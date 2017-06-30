@@ -1,5 +1,5 @@
 /**
-* Class CreateMaterialpView  of Backbone Router
+* Class CreateTipoMaterialpView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,12 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateMaterialpView = Backbone.View.extend({
+    app.CreateTipoMaterialpView = Backbone.View.extend({
 
-        el: '#materialesp-create',
-        template: _.template( ($('#add-materialp-tpl').html() || '') ),
+        el: '#tiposmaterialp-create',
+        template: _.template( ($('#add-tipomaterialp-tpl').html() || '') ),
         events: {
-            'submit #form-materialesp': 'onStore'
+            'submit #form-tipomaterialp': 'onStore'
         },
         parameters: {
         },
@@ -28,7 +28,7 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-materialp');
+            this.$wraperForm = this.$('#render-form-tipomaterialp');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -68,8 +68,11 @@ app || (app = {});
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
+
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
         },
 
         /**
@@ -97,7 +100,9 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('materialesp.show', { materialesp: resp.id})) );
+                window.Misc.cleanForm( this.$('#form-tipomaterialp'));
+
+                window.Misc.redirect( window.Misc.urlFull( Route.route('tiposmaterialp.index' )) );
             }
         }
     });

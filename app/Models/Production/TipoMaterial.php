@@ -4,16 +4,18 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\BaseModel;
+
 use Validator, Cache;
 
-class Areap extends Model
+class TipoMaterial extends BaseModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'koi_areap';
+    protected $table = 'koi_tipomaterial';
 
     public $timestamps = false;
 
@@ -22,20 +24,26 @@ class Areap extends Model
      *
      * @var static string
      */
-    public static $key_cache = '_areas_production';
+    public static $key_cache = '_typemachines_production';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['areap_nombre', 'areap_valor'];
+    protected $fillable = ['tipomaterial_nombre'];
+
+    /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['tipomaterial_activo'];
 
     public function isValid($data)
     {
         $rules = [
-            'areap_nombre' => 'required|max:200',
-            'areap_valor' => 'required'
+            'tipomaterial_nombre' => 'required|max:25',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -46,16 +54,17 @@ class Areap extends Model
         return false;
     }
 
-    public static function getAreas()
+    public static function getTiposMaterial()
     {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }
 
         return Cache::rememberForever( self::$key_cache , function() {
-            $query = Areap::query();
-            $query->orderBy('areap_nombre', 'asc');
-            $collection = $query->lists('areap_nombre', 'id');
+            $query = TipoMaterial::query();
+            $query->orderBy('tipomaterial_nombre', 'asc');
+            $query->where('tipomaterial_activo', true);
+            $collection = $query->lists('tipomaterial_nombre', 'id');
 
             $collection->prepend('', '');
             return $collection;
