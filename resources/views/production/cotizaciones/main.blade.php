@@ -154,7 +154,7 @@
                     <h4 class="col-md-offset-2 col-md-2"><b>Seleccione un tipo</b></h4>
 
                     <div class="col-md-2 col-sm-6 col-xs-6 text-center">
-                        <h4><a class="btn btn-primary btn-block add-producto">Producto</a></h4>
+                        <h4><a class="btn btn-default btn-block add-producto">Producto</a></h4>
                     </div>
                     <div class="col-md-2 col-sm-6 col-xs-6 text-center">
                         <h4><a class="btn btn-default btn-block add-producto">Material</a></h4>
