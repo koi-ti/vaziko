@@ -50,10 +50,15 @@ app || (app = {});
                     }
                 },
                 columns: [ 
-                    { data: 'id', name: 'id' },
+                    { data: 'cotizacion_codigo', name: 'cotizacion_codigo' },
+                    { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
+                    { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'cotizacion1_fecha', name: 'cotizacion1_fecha' },
                     { data: 'cotizacion1_entrega', name: 'cotizacion1_entrega' },
+                ],
+                order: [
+                    [ 1, 'desc' ], [ 2, 'desc' ]
                 ],
                 columnDefs: [
                     {
@@ -63,7 +68,20 @@ app || (app = {});
                            return '<a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.id }) )  +'">' + data + '</a>';
                         },
                     },
-                ]
+                    {
+                        targets: [1,2],
+                        visible: false,
+                    },
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( data.cotizacion1_aprobada ) {
+                        $(row).css( {"color":"#00a65a"} );
+                    }else if ( data.cotizacion1_anulada ) {
+                        $(row).css( {"color":"red"} );
+                    }else{
+                        $(row).css( {"color":"black"} );
+                    }
+                }
             });
         },
 

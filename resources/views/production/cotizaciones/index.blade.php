@@ -68,6 +68,8 @@
                             <thead>
                                 <tr>
                                     <th width="5%">Código</th>
+                                    <th width="5%">Numero</th>
+                                    <th width="5%">Año</th>
                                     <th width="65%">Cliente</th>
                                     <th width="15%">Fecha</th>
                                     <th width="15%">F. Entrega</th>

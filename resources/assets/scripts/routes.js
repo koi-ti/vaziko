@@ -123,8 +123,8 @@ app || (app = {});
 
             'cotizaciones(/)': 'getCotizacionesMain',
             'cotizaciones/create(/)': 'getCotizacionesCreate',
-            'cotizaciones/:cotizacion(/)': 'getCotizacionesShow',
-            'cotizaciones/:cotizacion/edit(/)': 'getCotizacionesEdit',
+            'cotizaciones/:cotizaciones(/)': 'getCotizacionesShow',
+            'cotizaciones/:cotizaciones/edit(/)': 'getCotizacionesEdit',
 
             // Treasury
             'facturap(/)': 'getFacturaspMain',
@@ -1389,14 +1389,19 @@ app || (app = {});
         */
         getCotizacionesEdit: function (cotizacion) {
             this.cotizacionModel = new app.CotizacionModel();
-            this.cotizacionModel.set({'id': cotizacion}, {silent: true});
+            this.cotizacionModel.set({'id': cotizacion}, {'silent':true});
+
+            if ( this.editCotizacionView instanceof Backbone.View ){
+                this.editCotizacionView.stopListening();
+                this.editCotizacionView.undelegateEvents();
+            }
 
             if ( this.createCotizacionView instanceof Backbone.View ){
                 this.createCotizacionView.stopListening();
                 this.createCotizacionView.undelegateEvents();
             }
 
-            this.createCotizacionView = new app.CreateCotizacionView({ model: this.cotizacionModel });
+            this.editCotizacionView = new app.EditCotizacionView({ model: this.cotizacionModel });
             this.cotizacionModel.fetch();
         },
 

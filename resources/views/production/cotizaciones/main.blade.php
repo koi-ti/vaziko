@@ -15,7 +15,7 @@
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
                     <li><a href="{{ route('cotizaciones.index') }}">Cotizaciones</a></li>
                 <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                    <li><a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', { cotizaciones: id}) ) %>"><%- id %></a></li>
+                    <li><a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', { cotizaciones: id}) ) %>"><%- cotizacion_codigo %></a></li>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nuevo</li>
@@ -28,10 +28,12 @@
                 <div class="box-body">
                     <form method="POST" accept-charset="UTF-8" id="form-cotizacion" data-toggle="validator">
                         <div class="row">
-                            <label for="cotizacion1_numero" class="col-sm-1 control-label">Número</label>
-                            <div class="form-group col-sm-1">
-                                <input id="cotizacion1_numero" name="cotizacion1_numero" value="<%- cotizacion1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" min="0" step="1" required>
-                            </div>
+                            <% if( typeof(cotizacion1_numero) !== 'undefined' && !_.isUndefined(cotizacion1_numero) && !_.isNull(cotizacion1_numero) && cotizacion1_numero != '') { %>
+                                <label class="col-sm-1 control-label">Código</label>
+                                <div class="form-group col-md-1">
+                                    <%- cotizacion_codigo %>
+                                </div>
+                            <% } %>
 
                             <label for="cotizacion1_ano" class="col-sm-1 control-label">Año</label>
                             <div class="form-group col-sm-1">
@@ -40,13 +42,36 @@
 
                             <label for="cotizacion1_fecha" class="col-sm-1 control-label">Fecha</label>
                             <div class="form-group col-md-2 col-sm-4 col-xs-4">
-                                <input type="text" id="cotizacion1_fecha" name="cotizacion1_fecha" class="form-control text-center input-sm datepicker" value="<%- cotizacion1_fecha %>" required>
+                                <input type="text" id="cotizacion1_fecha" name="cotizacion1_fecha" class="form-control input-sm datepicker" value="<%- cotizacion1_fecha %>" required>
                             </div>
 
                             <label for="cotizacion1_entrega" class="col-sm-1 control-label">F. Entrega</label>
                             <div class="form-group col-md-2 col-sm-4 col-xs-4">
-                                <input type="text" id="cotizacion1_entrega" name="cotizacion1_entrega" class="form-control text-center input-sm datepicker" value="<%- cotizacion1_entrega %>" required>
+                                <input type="text" id="cotizacion1_entrega" name="cotizacion1_entrega" class="form-control input-sm datepicker" value="<%- cotizacion1_entrega %>" required>
                             </div>
+
+                            <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                @if( Auth::user()->ability('admin', ['module' => 'cotizaciones']) )
+                                    <div class="form-group col-sm-2">
+                                        <div class="dropdown pull-right">
+                                            <a class="dropdown-toggle a-color" data-toggle="dropdown" href="#">
+                                                Opciones <span class="caret"></span>
+                                            </a>
+                                            <ul class="dropdown-menu">
+                                                <li role="presentation">
+                                                    <a role="menuitem" tabindex="-1" href="#" class="aprobar-cotizacion">
+                                                        <i class="fa fa-check"></i>Aprobar
+                                                    </a>
+                                                    <a role="menuitem" tabindex="-1" href="#" class="anular-cotizacion">
+                                                        <i class="fa fa-ban"></i>Anular
+                                                    </a>
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                @endif
+                            <% } %>
                         </div>
 
                         <div class="row">
@@ -76,7 +101,7 @@
                                         </button>
                                     </span>
                                     <input id="cotizacion1_contacto" name="cotizacion1_contacto" type="hidden" value="<%- cotizacion1_contacto %>">
-                                    <input id="tcontacto_nombre" placeholder="Contacto" class="form-control" name="tcontacto_nombre" type="text" readonly required>
+                                    <input id="tcontacto_nombre" placeholder="Contacto" class="form-control" name="tcontacto_nombre" value="<%- tcontacto_nombre %>" type="text" readonly required>
                                 </div>
                             </div>
                             <div class="col-sm-1 col-md-1 col-xs-2">
@@ -91,7 +116,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
                                     </div>
-                                    <input id="tcontacto_telefono" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask readonly required>
+                                    <input id="tcontacto_telefono" class="form-control input-sm" name="tcontacto_telefono" value="<%- tcontacto_telefono %>" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask readonly required>
                                 </div>
                             </div>
                         </div>
@@ -106,11 +131,11 @@
                         <div class="box-footer with-border">
                             <div class="row">
                                 <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                                    <a href="<%- window.Misc.urlFull( edit ? Route.route('cotizaciones.show', { cotizaciones: id}) : Route.route('cotizaciones.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+                                    <a href="{{ route('cotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
                                 </div>
 
                                 <div class="col-md-2 col-sm-6 col-xs-6 text-right">
-                                    <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
+                                    <button type="button" class="btn btn-primary btn-sm btn-block submit-cotizacion">{{ trans('app.save') }}</button>
                                 </div>
                             </div>
                         </div><br>
@@ -126,31 +151,21 @@
         <div class="box box-success">
             <div class="box-body">
                 <div class="row">
-                    <div class="col-md-offset-3 col-md-6">
-                        <div class="box box-solid">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Seleccione un tipo</h3>
-                            </div>
+                    <h4 class="col-md-offset-2 col-md-2"><b>Seleccione un tipo</b></h4>
 
-                            <div class="box-body">
-                                <div class="row">
-                                    <div class="col-md-6 col-sm-6 col-xs-6 text-center">
-                                        <h4><a class="btn btn-default add-producto">Producto</a></h4>
-                                    </div>
-                                    <div class="col-md-6 col-sm-6 col-xs-6 text-center">
-                                        <h4><a class="btn btn-default add-producto">Material</a></h4>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-center">
+                        <h4><a class="btn btn-primary btn-block add-producto">Producto</a></h4>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-center">
+                        <h4><a class="btn btn-default btn-block add-producto">Material</a></h4>
                     </div>
                 </div>
             </div>
         </div>
 
         <!-- table table-bordered table-striped -->
-        <div class="box-body table-responsive no-padding" hidden>
-            <table id="browse-cotizacion2-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+        <div class="box-body table-responsive no-padding">
+            <table id="browse-cotizacion2-list" class="table table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th></th>
@@ -159,17 +174,18 @@
                         <th>Medida</th>
                         <th>Cantidad</th>
                         <th>Valor</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="4"></td>
-                        <th class="text-left">Total</th>
-                        <td></td>
+                        <td colspan="5"></td>
+                        <th class="text-right">Total</th>
+                        <th class="text-right" id="total">0</th>
                     </tr>
                 </tfoot>
             </table>
-        </div>
+        </div><br>
 
         <div class="box box-success">
             <div class="box-body">
@@ -177,7 +193,7 @@
                     <div class="row">
                         <div class="form-group col-md-3">
                             <label for="cotizacion3_areap" class="control-label">Área</label>
-                            <select name="cotizacion3_areap" id="cotizacion3_areap" class="form-control select2-default-clear" required>
+                            <select name="cotizacion3_areap" id="cotizacion3_areap" class="form-control select2-default-clear">
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
@@ -187,12 +203,12 @@
 
                         <div class="form-group col-sm-4">
                             <label for="cotizacion3_nombre" class="control-label">Nombre</label>
-                            <input id="cotizacion3_nombre" name="cotizacion3_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" required maxlength="20">
+                            <input id="cotizacion3_nombre" name="cotizacion3_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
                         </div>
                         
                         <div class="form-group col-sm-2">
                             <label for="cotizacion3_horas" class="control-label">Horas</label>
-                            <input id="cotizacion3_horas" name="cotizacion3_horas" placeholder="Horas" class="form-control input-sm" type="number" step="1" min="0" required>
+                            <input id="cotizacion3_horas" name="cotizacion3_horas" placeholder="Horas" class="form-control input-sm" type="number" step="1" min="1" required>
                         </div>
 
                         <div class="form-group col-sm-2">
@@ -219,13 +235,14 @@
                         <th>Nombre</th>
                         <th>Horas</th>
                         <th>Valor</th>
+                        <th>Total</th>
                     </tr>
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="3"></td>
-                        <th class="text-left">Total</th>
-                        <td></td>
+                        <td colspan="4"></td>
+                        <th class="text-right">Total</th>
+                        <th class="text-right" id="total">0</th>
                     </tr>
                 </tfoot>
             </table>
@@ -244,7 +261,8 @@
         <td><%- materialp_nombre %></td>
         <td><%- cotizacion2_medida %></td>
         <td><%- cotizacion2_cantidad %></td>
-        <td><%- windows.Misc.currency( cotizacion2_valor ) %></td>
+        <td><%- window.Misc.currency( cotizacion2_valor ) %></td>
+        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
 
     <script type="text/template" id="detalle-area-item-list-tpl">
@@ -258,43 +276,80 @@
         <td><%- areap_nombre %></td>
         <td><%- cotizacion3_nombre %></td>
         <td><%- cotizacion3_horas %></td>
-        <td><%- windows.Misc.currency( cotizacion3_valor ) %></td>
+        <td class="text-right"><%- window.Misc.currency( cotizacion3_valor ) %></td>
+        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
 
-   <!--  <form method="POST" accept-charset="UTF-8" id="form-cotizacion2" data-toggle="validator">
-    <div class="row">
-        <label for="cotizacion2_productoc" class="col-sm-1 control-label">Producto</label>
-        <div class="form-group col-sm-5">
-            <input id="cotizacion2_productoc" name="cotizacion2_productoc" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" required>
+    <script type="text/template" id="add-producto-cotizacion-tpl">
+        <div class="row">
+            <div class="form-group col-sm-6">
+                <label for="cotizacion2_productoc" class="control-label">Producto</label>
+                <input id="cotizacion2_productoc" name="cotizacion2_productoc" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" required>
+            </div>
+
+            <div class="form-group col-sm-4">
+                <label for="cotizacion2_medida" class="control-label">Medida</label>
+                <input id="cotizacion2_medida" name="cotizacion2_medida" placeholder="Medida" class="form-control input-sm" type="text" required maxlength="25">
+            </div>
+            
+            <div class="form-group col-sm-2">
+                <label for="cotizacion2_cantidad" class="control-label text-right">Cantidad</label>
+                <input id="cotizacion2_cantidad" name="cotizacion2_cantidad" placeholder="Cantidad" class="form-control input-sm" type="number" min="0" step="1" value="1" required>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="add-material-cotizacion-tpl">
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label for="materialp_tipomaterial" class="control-label">Tipo</label>
+                <select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear change-tipomaterial" required>
+                <option value="" selected>Seleccione</option>
+                @foreach( App\Models\Production\TipoMaterial::getTiposMaterial() as $key => $value)
+                    <option value="{{ $key }}">{{ $value }}</option>
+                @endforeach
+                </select>
+            </div>
+
+            <div class="form-group col-md-3">
+                <label for="cotizacion2_materialp" class="control-label">Material</label>
+                <select name="cotizacion2_materialp" id="cotizacion2_materialp" class="form-control select2-default" required>
+                    <option value="" selected>Seleccione</option>
+                </select>
+            </div>
+
+            <div class="form-group col-sm-6">
+                <label for="cotizacion2_productoc" class="control-label">Producto</label>
+                <select name="cotizacion2_productoc" id="cotizacion2_productoc" class="form-control select2-default" required>
+                    <option value="" selected>Seleccione</option>
+                </select>
+            </div>
         </div>
 
-        <label for="cotizacion2_materialp" class="col-sm-1 control-label text-right">Material</label>
-        <div class="form-group col-md-4">
-            <select name="cotizacion2_materialp" id="cotizacion2_materialp" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('materialesp.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione">
-            </select>
-        </div>
-    </div>
-    <div class="row">
-        <label for="cotizacion2_medida" class="col-sm-1 control-label">Medida</label>
-        <div class="form-group col-sm-4">
-            <input id="cotizacion2_medida" name="cotizacion2_medida" placeholder="Medida" class="form-control input-sm input-toupper" type="text" required maxlength="25">
-        </div>
 
-        <label for="cotizacion2_cantidad" class="col-sm-1 control-label text-right">Cantidad</label>
-        <div class="form-group col-sm-2">
-            <input id="cotizacion2_cantidad" name="cotizacion2_cantidad" placeholder="Cantidad" class="form-control input-sm" type="number" min="0" step="1" required>
-        </div>
+        <div class="row">
+            <div class="form-group col-sm-4">
+                <label for="cotizacion2_medida" class="control-label">Medida</label>
+                <input id="cotizacion2_medida" name="cotizacion2_medida" placeholder="Medida" class="form-control input-sm" type="text" required maxlength="25">
+            </div>
+            
+            <div class="form-group col-sm-2">
+                <label for="cotizacion2_cantidad" class="control-label text-right">Cantidad</label>
+                <input id="cotizacion2_cantidad" name="cotizacion2_cantidad" placeholder="Cantidad" class="form-control input-sm" type="number" min="0" step="1" value="1" required>
+            </div>
 
-        <label for="cotizacion2_valor" class="col-sm-1 control-label text-right">Valor</label>
-        <div class="form-group col-sm-2">
-            <input id="cotizacion2_valor" name="cotizacion2_valor" class="form-control input-sm" type="text" required data-currency>
+            <div class="form-group col-sm-4">
+                <label for="cotizacion2_valor" class="control-label text-right">Valor</label>
+                <input id="cotizacion2_valor" name="cotizacion2_valor" class="form-control input-sm" type="text" required data-currency>
+            </div>
         </div>
-        <div class="form-group col-sm-1">
-            <button type="submit" class="btn btn-success btn-sm btn-block disabled">
-                <i class="fa fa-plus"></i>
-            </button>
-        </div>                                
-    </div>
-</form> -->
+    </script>
 
+    <script type="text/template" id="cotizacion-cancel-confirm-tpl">
+        <p>¿Está seguro que desea anular la cotización <b><%- cotizacion_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="cotizacion-approve-confirm-tpl">
+        <p>¿Está seguro que desea aprobar la cotización <b><%- cotizacion_codigo %></b>?</p>
+    </script>
 @stop

@@ -22,29 +22,17 @@ class MaterialespController extends Controller
     {
         if ($request->ajax()) {
             $query = Materialp::query();
+            return Datatables::of($query)
+            ->filter(function($query) use ($request){
 
-            if( $request->has('datatables') ) {
-                return Datatables::of($query)->make(true);
-            }
-
-            $data = [];
-            $query->select('koi_materialp.id as id', 'materialp_nombre as text');
-
-            if($request->has('q')) {
-                $query->where( function($query) use($request) {
-                    $query->whereRaw("materialp_nombre like '%".$request->q."%'");
-                });
-            }
-
-            if(empty($request->q) && empty($request->id)) {
-                $query->take(50);
-            }
-
-            $query->orderby('materialp_nombre','asc');
-            return response()->json($query->get());
-
-            return $data;
+                // Tipo Material
+                if($request->has('tipo')){
+                    $query->where('materialp_tipomaterial', $request->tipo );
+                }
+                
+            })->make(true);
         }
+
         return view('production.materiales.index');
     }
 

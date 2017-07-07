@@ -310,12 +310,20 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	//Modulos
+        Modulo::create([
+            'name' => 'cotizaciones',
+            'display_name' => 'Cotizaciones',
+            'nivel1' => 5,
+            'nivel2' => 1,
+            'nivel3' => 1
+        ]);
+
     	Modulo::create([
         	'name' => 'productosp',
         	'display_name' => 'Productos',
         	'nivel1' => 5,
         	'nivel2' => 1,
-        	'nivel3' => 1
+        	'nivel3' => 2
     	]);
 
     	Modulo::create([
@@ -323,7 +331,7 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Ordenes',
         	'nivel1' => 5,
         	'nivel2' => 1,
-        	'nivel3' => 2
+        	'nivel3' => 3
     	]);
 
     	//Referencias

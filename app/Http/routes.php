@@ -170,8 +170,11 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::group(['prefix' => 'cotizaciones'], function()
 	{
-		Route::resource('detalle', 'Production\Cotizacion2Controller', ['only' => ['index', 'store']]);
-		Route::resource('detallearea', 'Production\Cotizacion3Controller', ['only' => ['index', 'store']]);
+		Route::get('cancel/{cotizaciones}', ['as' => 'cotizaciones.cancel', 'uses' => 'Production\Cotizacion1Controller@cancel']);
+		Route::get('approve/{cotizaciones}', ['as' => 'cotizaciones.approve', 'uses' => 'Production\Cotizacion1Controller@approve']);
+		Route::get('open/{cotizaciones}', ['as' => 'cotizaciones.open', 'uses' => 'Production\Cotizacion1Controller@open']);
+		Route::resource('detalle', 'Production\Cotizacion2Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('detallearea', 'Production\Cotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
 
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);

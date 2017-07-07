@@ -18,7 +18,7 @@ class CreateCotizacion3Create extends Migration
             $table->increments('id');
             $table->integer('cotizacion3_cotizacion1')->unsigned();
             $table->integer('cotizacion3_areap')->unsigned()->nullable();
-            $table->string('cotizacion3_nombre', 20);
+            $table->string('cotizacion3_nombre', 20)->nullable();
             $table->integer('cotizacion3_horas')->default(0);
             $table->double('cotizacion3_valor')->default(0);
 

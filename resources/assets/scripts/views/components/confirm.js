@@ -61,7 +61,7 @@ app || (app = {});
             e.preventDefault();
             var _this = this;
 
-			this.$el.modal('hide');
+            this.$el.modal('hide');
 
             if( typeof this.parameters.onConfirm == 'function' ) {
                 this.parameters.onConfirm.call(null, this.parameters.dataFilter );

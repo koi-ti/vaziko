@@ -12,6 +12,9 @@ app || (app = {});
     app.DetalleCotizacion3ListView = Backbone.View.extend({
 
         el: '#browse-cotizacion3-list',
+        events: {
+            'click .item-cotizacion3-remove': 'removeOne'
+        },
         parameters: {
         	wrapper: null,
             dataFilter: {}
@@ -26,9 +29,13 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
+            // References
+            this.$total = this.$('#total');
+
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
@@ -48,10 +55,16 @@ app || (app = {});
         */
         addOne: function (cotizacion3Model) {
             var view = new app.DetalleAreaCotizacionItemView({
-                model: cotizacion3Model
+                model: cotizacion3Model,
+                parameters:{
+                    edit: this.parameters.edit,
+                }
             });
             cotizacion3Model.view = view;
             this.$el.prepend( view.render().el );
+
+            // Totaliza
+            this.totalize();
         },
 
         /**
@@ -63,17 +76,93 @@ app || (app = {});
         },
 
         /**
+        * storescuenta
+        * @param form element
+        */
+        storeOne: function ( data ) {
+            var _this = this;
+
+            // Set Spinner
+            window.Misc.setSpinner( this.parameters.wrapper );
+
+            // Add model in collection
+            var cotizacion3Model = new app.Cotizacion3Model();
+            cotizacion3Model.save(data, {
+                success : function(model, resp) {
+                    if(!_.isUndefined(resp.success)) {
+                        window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                        var text = resp.success ? '' : resp.errors;
+                        if( _.isObject( resp.errors ) ) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
+
+                        if( !resp.success ) {
+                            alertify.error(text);
+                            return;
+                        }
+                        // Add model in collection
+                        _this.collection.add(model);
+                    }
+                },
+                error : function(model, error) {
+                    window.Misc.removeSpinner( _this.parameters.wrapper );
+                    alertify.error(error.statusText)
+                }
+            });
+        },
+
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if ( model instanceof Backbone.Model ) {
+                model.destroy({
+                    success : function(model, resp) {
+                        if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                            if( !resp.success ) {
+                                alertify.error(resp.errors);
+                                return;
+                            }
+
+                            model.view.remove();
+                            _this.totalize();
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
+        *Render totales the collection
+        */
+        totalize: function(){
+            var data = this.collection.totalize();
+            this.$total.empty().html( window.Misc.currency(data.total) );
+        },
+
+        /**
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.$el );
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.$el );
+            window.Misc.removeSpinner( this.parameters.wrapper );
+
+            window.Misc.clearForm( $('#form-cotizacion3') );
         }
    });
 

@@ -21,6 +21,25 @@ app || (app = {});
         */
         initialize : function(){
         },
+
+        total: function() {
+            return this.reduce(function(sum, model) {
+                return sum + parseInt(model.get('cotizacion3_horas')) * parseFloat(model.get('cotizacion3_valor'));
+            }, 0);
+        },
+
+        totalRow: function( ){
+            _.each(this.models, function(item){
+                var total = parseInt(item.get('cotizacion3_horas')) * parseFloat(item.get('cotizacion3_valor'));
+                item.set('total', total);
+            });
+        },
+
+        totalize: function() {
+            var total = this.total();
+            this.totalRow();
+            return { 'total': total }
+        },
    });
 
 })(this, this.document);

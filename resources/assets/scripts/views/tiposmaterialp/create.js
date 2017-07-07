@@ -100,8 +100,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.cleanForm( this.$('#form-tipomaterialp'));
-
+                window.Misc.clearForm( this.$('#form-tipomaterialp'));
                 window.Misc.redirect( window.Misc.urlFull( Route.route('tiposmaterialp.index' )) );
             }
         }

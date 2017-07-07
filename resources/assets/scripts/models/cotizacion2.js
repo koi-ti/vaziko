@@ -16,6 +16,13 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+        	'cotizacion2_productoc': '',
+        	'cotizacion2_medida': '',
+        	'cotizacion2_cantidad': '',
+            'cotizacion2_materialp': '',
+            'total': 0,
+        	'materialp_nombre': '',
+        	'cotizacion2_valor': 0,
         }
     });
 

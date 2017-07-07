@@ -142,7 +142,9 @@
 
                 // Select2
                 if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
-                    field_type.select2('destroy').val('').select2();
+                    var name = field_type.attr('id');
+                    field_type.val('').trigger('change');
+                    $('#select2-'+name+'-container').removeAttr('title');
 
                     // Select2 with ajax
                 }else if( field_type.hasClass('choice-select-autocomplete') ){

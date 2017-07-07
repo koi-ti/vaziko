@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use Validator, DB;
 
 class Cotizacion1 extends Model
 {
@@ -17,10 +17,16 @@ class Cotizacion1 extends Model
 
     public $timestamps = false;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['cotizacion1_ano', 'cotizacion1_fecha', 'cotizacion1_entrega', 'cotizacion1_descripcion'];
+
     public function isValid($data)
     {
         $rules = [
-            'cotizacion1_numero' => 'required|integer',
             'cotizacion1_ano' => 'required|integer',
             'cotizacion1_fecha' => 'required',
             'cotizacion1_entrega' => 'required',
@@ -28,23 +34,24 @@ class Cotizacion1 extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-
-            // // Validar Carritos
-            // $cotizacion2 = isset($data['cotizacion2']) ? $data['cotizacion2'] : null;
-            // if(!isset($cotizacion2) || $cotizacion2 == null || !is_array($cotizacion2) || count($cotizacion2) == 0) {
-            //     $this->errors = 'Por favor ingrese toda la informacion del detalle.';
-            //     return false;
-            // }
-
-            // $cotizacion3 = isset($data['cotizacion3']) ? $data['cotizacion3'] : null;
-            // if(!isset($cotizacion3) || $cotizacion3 == null || !is_array($cotizacion3) || count($cotizacion3) == 0) {
-            //     $this->errors = 'Por favor ingrese toda la informacion del detalle.';
-            //     return false;
-            // }
-
             return true;
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getCotizacion($id){
+        $query = Cotizacion1::query();
+        $query->select('koi_cotizacion1.*', 'tercero_nit', 'tcontacto_telefono' ,DB::raw("CONCAT(cotizacion1_numero,' - ',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos ) as tcontacto_nombre"), DB::raw("(CASE WHEN tercero_persona = 'N'
+                THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                    )
+                ELSE tercero_razonsocial END)
+            AS tercero_nombre")
+        );
+        $query->join('koi_tercero','cotizacion1_cliente','=','koi_tercero.id');
+        $query->join('koi_tcontacto','cotizacion1_contacto','=','koi_tcontacto.id');
+        $query->where('koi_cotizacion1.id', $id);
+        return $query->first();
     }
 }

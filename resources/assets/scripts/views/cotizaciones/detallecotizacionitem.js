@@ -36,6 +36,11 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
+
+            if( attributes.cotizacion2_productoc != '' && _.isNull(attributes.materialp_nombre) ){
+                this.$el.addClass('bg-aqua');
+            }
+            
             this.$el.html( this.template(attributes) );
             return this;
         }

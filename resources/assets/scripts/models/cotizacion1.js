@@ -16,7 +16,7 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'cotizacion1_numero': 0,
+            'cotizacion1_numero': '',
             'cotizacion1_ano': moment().format('YYYY'),
             'cotizacion1_fecha': moment().format('YYYY-MM-DD'),
             'cotizacion1_entrega': moment().format('YYYY-MM-DD'),

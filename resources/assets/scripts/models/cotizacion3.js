@@ -16,6 +16,12 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+        	'cotizacion3_areap': '',
+        	'cotizacion3_nombre': '',
+        	'cotizacion3_cantidad': '',
+            'cotizacion3_valor': 0,
+        	'total': 0,
+        	'areap_nombre': '',
         }
     });
 

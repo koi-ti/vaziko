@@ -18,7 +18,7 @@ class CreateCotizacion2Create extends Migration
             $table->increments('id');
             $table->integer('cotizacion2_cotizacion1')->unsigned();
             $table->string('cotizacion2_productoc', 200);
-            $table->integer('cotizacion2_materialp')->unsigned();
+            $table->integer('cotizacion2_materialp')->unsigned()->nullable();
             $table->string('cotizacion2_medida', 25);
             $table->double('cotizacion2_cantidad')->default(0);
             $table->double('cotizacion2_valor')->default(0);
