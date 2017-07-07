@@ -44,8 +44,9 @@ class Cotizacion3Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
+            
             $cotizacion3 = new Cotizacion3;
-            if ($cotizacion3->isValid($data)) {
+            if ( $cotizacion3->isValid($data) ) {
                 DB::beginTransaction();
                 try {
                     $areap_nombre = null;
@@ -60,17 +61,30 @@ class Cotizacion3Controller extends Controller
                     $cotizacion3->fill($data);
                     $cotizacion3->cotizacion3_cotizacion1 = $cotizacion->id;
 
+                    if(empty(trim($request->cotizacion3_valor)) || is_null(trim($request->cotizacion3_valor))){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'El campo valor es obligatorio.']);
+                    }
+
                     // Recuperar areap
                     if( !empty($request->cotizacion3_areap) ){
                         $areap = Areap::find($request->cotizacion3_areap);
-                        if(!$areap instanceof Areap){
+                        if( !$areap instanceof Areap){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el area.']);
                         }
 
                         $areap_nombre = $areap->areap_nombre;
-
                         $cotizacion3->cotizacion3_areap = $areap->id;
+
+
+                    }else{
+
+                        $result = $cotizacion3->whenAreap();
+                        if($result != 'OK'){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result]);
+                        }
                     }
 
                     $cotizacion3->save();

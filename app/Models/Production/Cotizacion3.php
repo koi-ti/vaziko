@@ -35,7 +35,6 @@ class Cotizacion3 extends Model
     {
         $rules = [
             'cotizacion3_horas' => 'required|integer',
-            'cotizacion3_valor' => 'required',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -44,5 +43,13 @@ class Cotizacion3 extends Model
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public function whenAreap(){
+        if(empty(trim($this->cotizacion3_nombre)) || is_null(trim($this->cotizacion3_nombre))){
+            return 'El campo nombre es obligatorio cuando no tiene area.';
+        }
+
+        return 'OK';
     }
 }
