@@ -74,9 +74,9 @@ app || (app = {});
                     },
                 ],
                 fnRowCallback: function( row, data ) {
-                    if ( data.cotizacion1_aprobada ) {
+                    if ( parseInt(data.cotizacion1_aprobada) ) {
                         $(row).css( {"color":"#00a65a"} );
-                    }else if ( data.cotizacion1_anulada ) {
+                    }else if ( parseInt(data.cotizacion1_anulada) ) {
                         $(row).css( {"color":"red"} );
                     }else{
                         $(row).css( {"color":"black"} );
