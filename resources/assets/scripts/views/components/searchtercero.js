@@ -45,10 +45,11 @@ app || (app = {});
 			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
+            this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
-               		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
@@ -74,7 +75,7 @@ app || (app = {});
                         width: '15%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
-                        	return '<a href="#" class="a-koi-search-tercero-component-table">' + data + '</a>';
+                            return '<a href="#" class="a-koi-search-tercero-component-table">' + data + '</a>';
                         }
                     },
                     {
@@ -92,16 +93,20 @@ app || (app = {});
 
             // Modal show
             this.ready();
-			this.$modalComponent.modal('show');
-		},
+            this.$modalComponent.modal('show');
+        },
 
-		setTercero: function(e) {
-			e.preventDefault();
+        setTercero: function(e) {
+            e.preventDefault();
 
-	        var data = this.tercerosSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+            var data = this.tercerosSearchTable.row( $(e.currentTarget).parents('tr') ).data();
 
-			this.$inputContent.val( data.tercero_nit );
-			this.$inputName.val( data.tercero_nombre );
+            this.$inputContent.val( data.tercero_nit );
+            this.$inputName.val( data.tercero_nombre );
+
+            if(this.$inputOrden.length > 0) {
+                this.$inputOrden.attr('data-tercero', data.id);
+            }
 
             if(this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', data.id);
@@ -110,32 +115,33 @@ app || (app = {});
                 this.$btnContact.attr('data-municipio-default', data.tercero_municipio);
             }
 
-			this.$modalComponent.modal('hide');
-		},
+            this.$modalComponent.modal('hide');
+        },
 
-		search: function(e) {
-			e.preventDefault();
-
-		    this.tercerosSearchTable.ajax.reload();
-		},
-
-		clear: function(e) {
-			e.preventDefault();
-
-			this.$searchNit.val('');
-			this.$searchName.val('');
+        search: function(e) {
+            e.preventDefault();
 
             this.tercerosSearchTable.ajax.reload();
-		},
+        },
 
-		terceroChanged: function(e) {
-			var _this = this;
+        clear: function(e) {
+            e.preventDefault();
 
-			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+            this.$searchNit.val('');
+            this.$searchName.val('');
 
+            this.tercerosSearchTable.ajax.reload();
+        },
+
+        terceroChanged: function(e) {
+            var _this = this;
+
+            this.$inputContent = $(e.currentTarget);
+            this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
+            this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
+            this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
+
             if(this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
                 this.$btnContact.attr('data-address-default', '');
@@ -143,33 +149,40 @@ app || (app = {});
                 this.$btnContact.attr('data-municipio-default', '');
             }
 
-			var tercero = this.$inputContent.val();
+            if(this.$inputOrden.length > 0) {
+                this.$inputOrden.attr('data-tercero', '');
+            }
+
+            var tercero = this.$inputContent.val();
 
             // Before eval clear data
             this.$inputName.val('');
 
-			if(!_.isUndefined(tercero) && !_.isNull(tercero) && tercero != '') {
-				// Get tercero
-	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('terceros.search')),
-	                type: 'GET',
-	                data: { tercero_nit: tercero },
-	                beforeSend: function() {
-						_this.$inputName.val('');
-	                    window.Misc.setSpinner( _this.$wraperConten );
-	                }
-	            })
-	            .done(function(resp) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                if(resp.success) {
-	                    if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
-							_this.$inputName.val(resp.tercero_nombre);
-	                    }
+            if(!_.isUndefined(tercero) && !_.isNull(tercero) && tercero != '') {
+                // Get tercero
+                $.ajax({
+                    url: window.Misc.urlFull(Route.route('terceros.search')),
+                    type: 'GET',
+                    data: { tercero_nit: tercero },
+                    beforeSend: function() {
+                        _this.$inputName.val('');
+                        window.Misc.setSpinner( _this.$wraperConten );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.$wraperConten );
+                    if(resp.success) {
+                        if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
+                            _this.$inputName.val(resp.tercero_nombre);
+                        }
                         if(_this.$btnContact.length > 0) {
                             _this.$btnContact.attr('data-tercero', resp.id);
                             _this.$btnContact.attr('data-address-default', resp.tercero_direccion);
                             _this.$btnContact.attr('data-address-nomenclatura-default', resp.tercero_dir_nomenclatura);
                             _this.$btnContact.attr('data-municipio-default', resp.tercero_municipio);
+                        }
+                        if(_this.$inputOrden.length > 0) {
+                            _this.$inputOrden.attr('data-tercero', resp.id);
                         }
                     }
 	            })
@@ -177,7 +190,6 @@ app || (app = {});
 	                window.Misc.removeSpinner( _this.$wraperConten );
 	                alertify.error(thrownError);
 	            });
-
 	     	}
 		},
 

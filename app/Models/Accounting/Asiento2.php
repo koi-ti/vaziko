@@ -138,7 +138,7 @@ class Asiento2 extends Model
 
                     $objOrdenp = Ordenp::find($data['Orden']);
                     if(!$objOrdenp instanceof Ordenp) {
-                        $response->error = "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador..";
+                        $response->error = "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador.";
                         return $response;
                     }
 

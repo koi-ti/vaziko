@@ -719,12 +719,6 @@
 							<div><%- factura1_cuotas %></div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="control-label">Orden</label>
-							<div><%- orden_codigo %> - <%- orden_beneficiario %></div>
-						</div>
-					</div>
 
 					<div class="row">
 						<div class="form-group col-md-12">

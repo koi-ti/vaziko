@@ -39,8 +39,6 @@ app || (app = {});
 
             // References
             this.$searchfacturaNumero = this.$('#searchfactura_numero');
-            this.$searchfacturaOrdenp = this.$('#searchfactura_ordenp');
-            this.$searchfacturaOrdenpBeneficiario = this.$('#searchfactura_ordenp_beneficiario');
             this.$searchfacturaTercero = this.$('#searchfactura_tercero');
             this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
 
@@ -59,14 +57,13 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('facturas.index') ),
                     data: function( data ) {
                         data.id = _this.$searchfacturaNumero.val();
-                        data.orden_codigo = _this.$searchfacturaOrdenp.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
                     }
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'orden_codigo', name: 'orden_codigo' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
                 ],
                 columnDefs: [
                     {
@@ -110,8 +107,6 @@ app || (app = {});
 			e.preventDefault();
 
             this.$searchfacturaNumero.val('');
-            this.$searchfacturaOrdenp.val('');
-            this.$searchfacturaOrdenpBeneficiario.val('');
             this.$searchfacturaTercero.val('');
             this.$searchfacturaTerceroNombre.val('');
 

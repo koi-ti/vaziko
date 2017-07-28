@@ -12,6 +12,7 @@ app || (app = {});
     app.DetalleFacturaItemView = Backbone.View.extend({
 
         tagName: 'tr',
+        className: 'form-group',
         template: _.template( ($('#facturado-item-list-tpl').html() || '') ),
         parameters: {
             call: null,

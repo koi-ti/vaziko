@@ -172,6 +172,16 @@ class Cotizacion1Controller extends Controller
     public function edit($id)
     {
         $cotizacion = Cotizacion1::findOrFail($id);
+
+        // Permisions
+        if( !Auth::user()->ability('admin', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_aprobada == false) {
+            abort(403);
+        }
+
+        if( $cotizacion->cotizacion1_aprobada == true || $cotizacion->cotizacion1_anulada == true ) {
+            return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
+        }
+
         return view('production.cotizaciones.create', ['cotizacion' => $cotizacion]);
     }
 

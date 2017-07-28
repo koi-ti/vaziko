@@ -7,8 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Ordenp;
-use App\Models\Receivable\Factura2;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Receivable\Factura2;
 use DB;
 
 class Factura2Controller extends Controller
@@ -83,4 +82,46 @@ class Factura2Controller extends Controller
         }
         abort(404);
     }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        if ($request->ajax()) {
+            $data = $request->all();
+
+            $factura2 = new Factura2;
+            DB::beginTransaction();
+            try {
+                //Recuperar ordenp2
+                $ordenp2 = Ordenp2::getDetail($request->factura1_orden);
+                if(!$ordenp2 instanceof Ordenp2){
+                    DB::rollback();
+                    return response()->json(['success'=>false, 'errors'=>'No es posible recuperar la orden, por favor verifique la informacion o consulte al administrador.']);
+                }
+
+                // Commit Transaction
+                DB::commit();
+
+                return response()->json(['success' => true, 
+                    'id' => $ordenp2->id,
+                    'productop_nombre' => $ordenp2->productop_nombre,
+                    'orden2_cantidad' => $ordenp2->orden2_cantidad,
+                    'orden2_facturado' => $ordenp2->orden2_facturado,
+                    'orden2_precio_venta' => $ordenp2->orden2_precio_venta,
+                    'orden_codigo' => $ordenp2->orden_codigo]);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+            return response()->json(['success' => false, 'errors' => $factura2->errors]);
+        }
+        abort(403);
+    }
+
 }

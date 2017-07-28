@@ -28,11 +28,22 @@ app || (app = {});
             }, 0);
         },
 
-        // subtotal: function() {
-        //     return this.reduce(function(sum, model) {
-        //         return sum + parseFloat(model.get('orden2_precio_venta')) * parseInt(model.get('factura2_cantidad'))
-        //     }, 0);
-        // },
+        validar: function( data ){
+            var response = {success: false, error: ''}
+
+            // Validate exist
+            var modelExits = _.find(this.models, function( item ) {
+                return item.get('id') == data.factura1_orden;
+            });
+
+            if(modelExits instanceof Backbone.Model ) {
+                response.error = 'La orden No. '+ data.factura1_orden +' ya se encuentra registrada.';
+                return response;
+            }
+
+            response.success = true;
+            return response;
+        },
 
         renderSubtotal: function(){
             _.each(this.models, function(item){

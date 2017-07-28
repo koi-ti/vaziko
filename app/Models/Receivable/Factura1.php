@@ -37,6 +37,13 @@ class Factura1 extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
+            // Validar Datos form
+            // $detalle = isset($data['data']) ? $data['data'] : null;
+            // if(!isset($detalle) || $detalle == null || !is_array($detalle) || count($detalle) == 0) {
+            //     $this->errors = 'Por favor ingrese toda la informacion para la factura.';
+            //     return false;
+            // }
+
             return true;
         }
         $this->errors = $validator->errors();
@@ -89,30 +96,20 @@ class Factura1 extends Model
 
     public static function getFactura($id){
         $query = Factura1::query();
-        $query->select('koi_factura1.*','puntoventa_nombre','puntoventa_prefijo','documento_nombre', 'asiento1_numero','orden_referencia','t.tercero_telefono1', 't.tercero_nit', 't.tercero_direccion', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular',
-                DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("(CASE WHEN t.tercero_persona = 'N'
-                    THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
-                            (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
+        $query->select('koi_factura1.*','puntoventa_nombre','puntoventa_prefijo','documento_nombre', 'asiento1_numero','tercero_telefono1', 'tercero_nit', 'tercero_direccion', 'tercero_municipio', 'tercero_telefono1', 'tercero_telefono2', 'tercero_celular',
+                DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                         )
-                    ELSE t.tercero_razonsocial END)
-                AS tercero_nombre"), DB::raw("
-                    CONCAT(
-                        (CASE WHEN to.tercero_persona = 'N'
-                            THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
-                                (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
-                            )
-                            ELSE to.tercero_razonsocial
-                        END),
-                    ' (', orden_referencia ,')'
-                    ) AS orden_beneficiario"
-                )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
             );
         $query->join('koi_tercero as t', 'factura1_tercero', '=', 't.id');
         $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
-        $query->join('koi_ordenproduccion', 'factura1_orden', '=', 'koi_ordenproduccion.id');
         $query->leftJoin('koi_asiento1', 'factura1_asiento', '=', 'koi_asiento1.id');
         $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
-        $query->join('koi_tercero as to', 'orden_cliente', '=', 'to.id');
+        $query->leftJoin('koi_municipio','tercero_municipio','=', 'koi_municipio.id');
+        $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
         $query->where('koi_factura1.id',$id);
 
         return $query->first();
@@ -163,7 +160,7 @@ class Factura1 extends Model
         $subtotalobase['Base'] = '';
         $subtotalobase['Credito'] = $this->factura1_subtotal;
         $subtotalobase['Debito'] = '';
-        $subtotalobase['Orden'] = $this->factura1_orden;
+        $subtotalobase['Orden'] = '';
         $object->cuentas[] = $subtotalobase;
 
         // Iva
@@ -176,7 +173,7 @@ class Factura1 extends Model
         $iva['Base'] = $this->factura1_subtotal;
         $iva['Credito'] = $this->factura1_iva;
         $iva['Debito'] = '';
-        $iva['Orden'] = $this->factura1_orden;
+        $iva['Orden'] = '';
         $object->cuentas[] = $iva;
 
         // rtfuente
@@ -190,7 +187,7 @@ class Factura1 extends Model
             $rtfuente['Base'] = $this->factura1_subtotal;
             $rtfuente['Credito'] = '';
             $rtfuente['Debito'] = $this->factura1_retefuente;
-            $rtfuente['Orden'] = $this->factura1_orden;
+            $rtfuente['Orden'] = '';
             $object->cuentas[] = $rtfuente;
         }
 
@@ -205,7 +202,7 @@ class Factura1 extends Model
             $rtiva['Base'] = $this->factura1_subtotal;
             $rtiva['Credito'] = '';
             $rtiva['Debito'] = $this->factura1_reteiva;
-            $rtiva['Orden'] = $this->factura1_orden;
+            $rtiva['Orden'] = '';
             $object->cuentas[] = $rtiva;
         }
 
@@ -220,7 +217,7 @@ class Factura1 extends Model
             $rtica['Base'] = $this->factura1_subtotal;
             $rtica['Credito'] = '';
             $rtica['Debito'] = $this->factura1_reteica;
-            $rtica['Orden'] = $this->factura1_orden;
+            $rtica['Orden'] = '';
             $object->cuentas[] = $rtica;
         }
 
@@ -234,7 +231,7 @@ class Factura1 extends Model
         $clientenacionales['Base'] = '';
         $clientenacionales['Credito'] = '';
         $clientenacionales['Debito'] = $this->factura1_total;
-        $clientenacionales['Orden'] = $this->factura1_orden;
+        $clientenacionales['Orden'] = '';
         $object->cuentas[] = $clientenacionales;
 
         return $object;

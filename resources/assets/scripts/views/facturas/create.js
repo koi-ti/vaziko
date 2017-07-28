@@ -13,10 +13,11 @@ app || (app = {});
 
         el: '#factura-create',
         template: _.template(($('#add-facturas-tpl').html() || '') ),
-
+        templateDetail: _.template(($('#add-detail-factura').html() || '') ),
         events: {
-            'submit #form-factura1' :'onStore',
-            'change #factura1_orden' :'changeOrden',
+            'click .submit-factura' :'submitFactura',
+            'submit #form-factura' :'onStore',
+            'submit #form-detail-factura' :'onStoreItem',
         },
         parameters: {
         },
@@ -27,13 +28,12 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.$wraperForm = this.$('#render-form-factura');
-
             this.detalleFactura2List = new app.DetalleFactura2List();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );            
+            this.listenTo( this.model, 'request', this.loadSpinner );
         },
 
         /*
@@ -41,11 +41,24 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            
             this.$wraperForm.html( this.template(attributes) );
             
-            this.$form = this.$('#form-factura1');
+            // Render Detail factura
+            this.$renderDetail = this.$('#render-detail');
+            this.$renderDetail.html( this.templateDetail({}) );
+
+            this.$form = this.$('#form-factura');
+            this.$formDetail = this.$('#form-detail-factura');
+
+            this.referenceView();
             this.ready();
+        },
+
+        /**
+        * Event submit factura1
+        */
+        submitFactura: function (e) {
+            this.$form.submit();
         },
 
         /**
@@ -56,24 +69,35 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
+                    data.detail = window.Misc.formToJson( this.$formDetail );
+
                 this.model.save( data, {patch: true, silent: true} );
             }   
         },  
 
-        changeOrden: function(e){
-            this.$ordenp_codigo = this.$(e.currentTarget).val();
-            
+         /**
+        * reference to views
+        */
+        referenceView: function(){
             // Detalle factura list
             this.detalleFacturaView = new app.DetalleFacturaView({
                 collection: this.detalleFactura2List,
                 parameters: {
                     edit: false,
-                    call: 'create',
                     dataFilter: {
-                        factura1_orden: this.$ordenp_codigo
+                        'factura1_orden': this.model.get('id')
                     }
                 }
             });
+        },
+
+        onStoreItem: function(e){
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.detalleFactura2List.trigger( 'store', data );
+            }
         },
 
         /**
@@ -81,7 +105,6 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
             
@@ -116,8 +139,15 @@ app || (app = {});
                     alertify.error(text);
                     return; 
                 }
+
+                // CreateFacturaView undelegateEvents
+                if ( this.createFacturaView instanceof Backbone.View ){
+                    this.createFacturaView.stopListening();
+                    this.createFacturaView.undelegateEvents();
+                }
+
+                window.Misc.redirect( window.Misc.urlFull( Route.route('facturas.show', { facturas: resp.id})) );
             }
-            window.Misc.redirect( window.Misc.urlFull( Route.route('facturas.show', { facturas: resp.id})) );
         }
     });
 })(jQuery, this, this.document);

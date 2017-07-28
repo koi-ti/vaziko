@@ -24,35 +24,21 @@ class Factura1Controller extends Controller
     {
         if($request->ajax()){
             $query = Factura1::query();
-            $query->select('koi_factura1.*', 't.tercero_nit', 'puntoventa_prefijo', 'orden_referencia', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("(CASE WHEN t.tercero_persona = 'N'
-                    THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
-                            (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
+            $query->select('koi_factura1.*', 'tercero_nit', 'puntoventa_prefijo', DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                         )
-                    ELSE t.tercero_razonsocial END)
-                AS tercero_nombre"), DB::raw("
-                    CONCAT(
-                        (CASE WHEN to.tercero_persona = 'N'
-                            THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
-                                (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
-                            )
-                            ELSE to.tercero_razonsocial
-                        END),
-                    ' (', orden_referencia ,')'
-                    ) AS orden_beneficiario"
-                )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre")
             );
-            $query->join('koi_tercero as t', 'factura1_tercero', '=', 't.id');
+            $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
             $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
-            $query->join('koi_ordenproduccion', 'factura1_orden', '=', 'koi_ordenproduccion.id');
-            $query->join('koi_tercero as to', 'orden_cliente', '=', 'to.id');
 
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['searchfactura_tercero' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
                 session(['searchfactura_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
                 session(['searchfactura_numero' => $request->has('id') ? $request->id : '']);
-                session(['searchfactura_ordenp' => $request->has('orden_codigo') ? $request->orden_codigo : '']);
-                session(['searchfactura_ordenp_beneficiario' => $request->has('orden_tercero') ? $request->orden_tercero : '']);
             }
 
             return Datatables::of($query)
@@ -63,14 +49,9 @@ class Factura1Controller extends Controller
                         $query->whereRaw("koi_factura1.id LIKE '%{$request->id}%'");
                     }
 
-                    // Orden
-                    if($request->has('orden_codigo')){
-                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
-                    }
-
                     // Documento
                     if($request->has('tercero_nit')) {
-                        $query->whereRaw("t.tercero_nit LIKE '%{$request->tercero_nit}%'");
+                        $query->whereRaw("tercero_nit LIKE '%{$request->tercero_nit}%'");
                     }
                 })
                 ->make(true);
@@ -110,13 +91,6 @@ class Factura1Controller extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    // Recuperar orden
-                    $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-                    if(!$ordenp instanceof Ordenp){
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden, por favor verifique la información o consulte al administrador.']);
-                    }
-
                     // Recuperar Puntoventa
                     $puntoventa = PuntoVenta::find($request->factura1_puntoventa);
                     if(!$puntoventa instanceof PuntoVenta){
@@ -141,7 +115,6 @@ class Factura1Controller extends Controller
                     $factura->fill($data);
                     $factura->factura1_tercero = $tercero->id;
                     $factura->factura1_puntoventa = $puntoventa->id;
-                    $factura->factura1_orden = $ordenp->id;
                     $factura->factura1_numero = $puntoventa->puntoventa_numero;
                     $factura->factura1_prefijo = $puntoventa->puntoventa_prefijo;
                     $factura->factura1_porcentaje_iva = $empresa->empresa_iva;
@@ -152,36 +125,33 @@ class Factura1Controller extends Controller
                     // Calcular subtotal factura
                     $subtotal = 0;
 
-                    // Recuperar Ordenp2 para el detalle de la factura
-                    $ordenp2 = $ordenp->paraFacturar();
+                    $detail = null;
 
-                    // Validar que no se ingrese factura vacia
-                    if( count($ordenp2) == 0 ){
-                        DB::rollback();
-                        return response()->json(['success'=>false, 'errors'=>'El detalle de la factura no puede ir vacio, por favor verifique la información o consulte al administrador.']);
-                    }
+                    // Recuperar ordenesp2
+                    $ordenp2 = Ordenp2::getDetails()->get();
+                    foreach ($ordenp2 as $child) {
 
-                    foreach ($ordenp2 as $item) {
+                        if( $request->has("detail.facturado_cantidad_$child->id") ) {
+                            // Declarar variable ->get($array, $default = null, depp->mantener)
+                            $detail = $request->get("detail[facturado_cantidad_$child->id]", null, true);
 
-                        if( $request->has("facturado_cantidad_{$item->id}") ){
-
-                            if( $request->get("facturado_cantidad_{$item->id}") > $item->orden2_cantidad || $request->get("facturado_cantidad_{$item->id}") < 0){
+                            if( $detail > $child->orden2_cantidad || $detail < 0){
                                 DB::rollback();
-                                return response()->json(['success'=>false, 'errors'=>'La cantidad ingresada supera o es menor a la cantidad disponible.']);
+                                return response()->json(['success' => false, 'errors' => "La cantidad ingresada en la orden No. $child->id no es correcta, por favor verifique la información o consulte al administrador."]);
                             }
 
-                            if( $request->get("facturado_cantidad_{$item->id}") != 0){
+                            if( $detail != 0 ){
                                 $factura2 = new Factura2;
                                 $factura2->factura2_factura1 = $factura->id;
-                                $factura2->factura2_orden2 = $item->id;
-                                $factura2->factura2_cantidad = $request->get("facturado_cantidad_{$item->id}");
+                                $factura2->factura2_orden2 = $child->id;
+                                $factura2->factura2_cantidad = $detail;
                                 $factura2->save();
 
-                                $subtotal += $request->get("facturado_cantidad_{$item->id}") * $item->orden2_precio_venta;
+                                $subtotal += $detail * $child->orden2_precio_venta;
 
                                 // Actualizar orden2_facturado de Orden2
-                                $item->orden2_facturado = $item->orden2_facturado + $request->get("facturado_cantidad_{$item->id}");
-                                $item->save();
+                                $child->orden2_facturado = $child->orden2_facturado + $detail;
+                                $child->save();
                             }
                         }
                     }
@@ -232,41 +202,45 @@ class Factura1Controller extends Controller
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
 
-                    // Prepara data asiento
-                    $dataAsiento = $factura->prepararAsiento();
+                    // // Prepara data asiento
+                    // $dataAsiento = $factura->prepararAsiento();
 
-                    // Creo el objeto para manejar el asiento
-                    $objAsiento = new AsientoContableDocumento($dataAsiento->data);
-                    if($objAsiento->asiento_error) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
-                    }
+                    // // Creo el objeto para manejar el asiento
+                    // $objAsiento = new AsientoContableDocumento($dataAsiento->data);
+                    // if($objAsiento->asiento_error) {
+                    //     DB::rollback();
+                    //     return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                    // }
 
-                    // Preparar asiento
-                    $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
-                    if($result != 'OK'){
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $result]);
-                    }
+                    // // Preparar asiento
+                    // $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
+                    // if($result != 'OK'){
+                    //     DB::rollback();
+                    //     return response()->json(['success' => false, 'errors' => $result]);
+                    // }
 
-                    // Insertar asiento
-                    $result = $objAsiento->insertarAsiento();
-                    if($result != 'OK') {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $result]);
-                    }
+                    // // Insertar asiento
+                    // $result = $objAsiento->insertarAsiento();
+                    // if($result != 'OK') {
+                    //     DB::rollback();
+                    //     return response()->json(['success' => false, 'errors' => $result]);
+                    // }
 
-                    // Recuperar el Id del asiento y guardar en la factura
-                    $factura->factura1_asiento = $objAsiento->asiento->id;
-                    $factura->save();
+                    // // Recuperar el Id del asiento y guardar en la factura
+                    // $factura->factura1_asiento = $objAsiento->asiento->id;
+                    // $factura->save();
                     
-                    if( !isset($factura->factura1_asiento) || $factura->id == null ) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
-                    }
+                    // if( !isset($factura->factura1_asiento) || $factura->id == null ) {
+                    //     DB::rollback();
+                    //     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
+                    // }
+
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => '!OK Bitchessss!, hoy chicas?']);
 
                     // Commit Transaction
                     DB::commit();
+
                     return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -372,7 +346,7 @@ class Factura1Controller extends Controller
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render());
-        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')));
+        $pdf->loadHTML( View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render() );
+        return $pdf->stream( sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')) );
     }
 }

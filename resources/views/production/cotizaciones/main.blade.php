@@ -30,7 +30,7 @@
                         <div class="row">
                             <% if( typeof(cotizacion1_numero) !== 'undefined' && !_.isUndefined(cotizacion1_numero) && !_.isNull(cotizacion1_numero) && cotizacion1_numero != '') { %>
                                 <label class="col-sm-1 control-label">Código</label>
-                                <div class="form-group col-md-1">
+                                <div class="form-group col-sm-1">
                                     <%- cotizacion_codigo %>
                                 </div>
                             <% } %>
@@ -41,12 +41,12 @@
                             </div>
 
                             <label for="cotizacion1_fecha" class="col-sm-1 control-label">Fecha</label>
-                            <div class="form-group col-md-2 col-sm-4 col-xs-4">
+                            <div class="form-group col-sm-2">
                                 <input type="text" id="cotizacion1_fecha" name="cotizacion1_fecha" class="form-control input-sm datepicker" value="<%- cotizacion1_fecha %>" required>
                             </div>
 
                             <label for="cotizacion1_entrega" class="col-sm-1 control-label">F. Entrega</label>
-                            <div class="form-group col-md-2 col-sm-4 col-xs-4">
+                            <div class="form-group col-sm-2">
                                 <input type="text" id="cotizacion1_entrega" name="cotizacion1_entrega" class="form-control input-sm datepicker" value="<%- cotizacion1_entrega %>" required>
                             </div>
 

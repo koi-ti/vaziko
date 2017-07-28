@@ -12,50 +12,56 @@
 				    margin: 0px 0px 0px 25px:
 				}
 
-				@page{
+				@page {
 					size: letter;
 				}
 
-				.container-factura{
+				.container-factura {
 					display: table;
 					width: 100%;
 					margin-top: 22px;
 				}
 
-				.container-encabezado {
-					margin-top: 64px;
-					height: 100px;
-				}
-
-				.tercero-info {
-					display: table;
-					border-spacing: 7;
-					margin-left: 29px;
-				}
-
-				.tercero-info2 {
-					display: table;
+				.rtable {
+					margin: 16px 5px 0px 2px;
+					font-size: 6;
 					width: 100%;
+				    border-collapse: collapse;
 				}
 
-				.tercero-info3 {
-					display: table;
-					padding-top: 10px;
-					width: 100%;
+				.rtable th {
+					padding-left: 2px;
 				}
 
-				.container-body {
-					display: table;
-					width: 100%;
-					margin: 24px 15px 0px 5px;
-					height: 383px;
+				.rtable td, th {
+					height: 16px;
 				}
 
-				.container-footer {
-					display: table;
+				.rtable tfoot {
+					font-size: 8;
+				}
+
+				tfoot td {
+					padding: 2px 0px 0px 2px;
+				}
+
+				.htable {
+					margin-top: 65px;
 					width: 100%;
-					border-spacing: 3;
-					height: 110px;
+					font-size: 8;
+				    border-collapse: collapse;
+				}
+
+				.htable th {
+					padding: 9px 0px 0px 2px;
+				}
+
+				.htable td, th {
+					height: 14px;
+				}
+
+				.rtable tbody {
+					page-break-after: always;
 				}
 
 				.left {
@@ -66,7 +72,7 @@
 					text-align: right;
 				}
 
-				.center{
+				.center {
 					text-align: center;
 				}
 			</style>

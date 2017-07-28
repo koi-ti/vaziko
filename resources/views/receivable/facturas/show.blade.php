@@ -38,21 +38,17 @@
                 </div>
         	</div>
         	<div class="row">
+		        <div class="form-group col-md-6">
+                    <label class="control-label">Cliente</label>
+                    <div>Documento: <a href="{{ route('terceros.show', ['terceros' =>  $factura->factura1_tercero ]) }}" target="_blanck" title="Ver tercero">{{ $factura->tercero_nit }} </a> <br> Nombre: {{ $factura->tercero_nombre }} </div>
+                </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Punto de venta</label>
                     <div>{{ $factura->puntoventa_prefijo }} - {{ $factura->puntoventa_nombre }}</div>
                 </div>
-		        <div class="form-group col-md-6">
-                    <label class="control-label">Cliente</label>
-                    <div><a href="{{ route('terceros.show', ['terceros' =>  $factura->factura1_tercero ]) }}" target="_blanck" title="Ver tercero">{{ $factura->tercero_nit }} </a> - {{ $factura->tercero_nombre }} </div>
-                </div>
         	</div>
 
         	<div class="row">
-        		<div class="form-group col-md-6">
-                    <label class="control-label">Orden</label>
-                    <div>{{ $factura->orden_codigo }} - {{ $factura->orden_beneficiario }}</div>
-                </div>
                 <div class="form-group col-md-3">
                     <label class="control-label">Subtotal</label>
                     <div>$ {{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</div>
@@ -61,9 +57,6 @@
                     <label class="control-label">Iva</label>
                     <div>$ {{ number_format($factura->factura1_iva, '2', ',', '.') }}</div>
                 </div>
-        	</div>
-
-        	<div class="row">
                 <div class="form-group col-md-3">
                     <label class="control-label">Descuento</label>
                     <div>$ {{ number_format($factura->factura1_descuento, '2', ',', '.') }}</div>
@@ -74,11 +67,13 @@
                 </div>
         	</div>
 
-	        <div class="row">
-	            <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
-	                <a href=" {{ route('facturas.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-	            </div>
-	        </div><br>
+            <div class="box-footer with-border">
+    	        <div class="row">
+    	            <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
+    	                <a href=" {{ route('facturas.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+    	            </div>
+    	        </div>
+            </div>
 
 	        <div class="box box-solid">
 	        	<div class="box-body">

@@ -385,22 +385,12 @@ class DetalleAsientoController extends Controller
             $movimientos = [];
             if($request->has('asiento2')) {
                 $query = AsientoMovimiento::query();
-                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'koi_factura1.id as factura1_id', 'sucursal_nombre', 'orden_referencia', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"),'t.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N'
-                        THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
-                                (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
+                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'koi_factura1.id as factura1_id', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
+                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                                (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                             )
-                        ELSE t.tercero_razonsocial END)
+                        ELSE tercero_razonsocial END)
                     AS tercero_nombre"), DB::raw("
-                    CONCAT(
-                        (CASE WHEN to.tercero_persona = 'N'
-                            THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
-                                (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
-                            )
-                            ELSE to.tercero_razonsocial
-                        END),
-                    ' (', orden_referencia ,')'
-                    ) AS orden_beneficiario"
-                    ), DB::raw("
                         CASE
                             WHEN productop_3d != 0 THEN
                                     CONCAT(
@@ -438,9 +428,7 @@ class DetalleAsientoController extends Controller
                 // Factura
                 $query->leftJoin('koi_factura1', 'movimiento_factura', '=', 'koi_factura1.id');
                 $query->leftJoin('koi_factura4', 'movimiento_factura4', '=', 'koi_factura4.id');
-                $query->leftJoin('koi_tercero as t', 'factura1_tercero', '=', 't.id');
-                $query->leftJoin('koi_ordenproduccion', 'factura1_orden', '=', 'koi_ordenproduccion.id');
-                $query->leftJoin('koi_tercero as to', 'orden_cliente', '=', 'to.id');
+                $query->leftJoin('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
                 $query->leftJoin('koi_ordenproduccion2', 'movimiento_ordenp2', '=', 'koi_ordenproduccion2.id');
                 $query->leftJoin('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
 

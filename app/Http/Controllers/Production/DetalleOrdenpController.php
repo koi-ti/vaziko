@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Auth, DB, Log;
+use Auth, DB, Log, Datatables;
 
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2;
 
@@ -22,6 +22,20 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
+
+            if( $request->has('datatables') ) {
+                $query = Ordenp2::getDetails();
+
+                return Datatables::of($query)
+                ->filter(function($query) use($request) {
+                    // Orden
+                    if($request->has('search_ordenp')) {
+                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
+                    }
+                })
+                ->make(true);
+            }
+
             if($request->has('orden2_orden')) {
                 $detalle = Ordenp2::getOrdenesp2($request->orden2_orden);
             }
@@ -455,5 +469,21 @@ class DetalleOrdenpController extends Controller
             }
         }
         abort(403);
+    }
+
+    /**
+     * Search orden2.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('orden2_id')) {
+            $ordenp2 = Ordenp2::getDetail($request->orden2_id);
+            if($ordenp2 instanceof Ordenp2) {
+                return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
+            }
+        }
+        return response()->json(['success' => false]);
     }
 }
