@@ -3,7 +3,7 @@
 namespace App\Models\Receivable;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Production\Ordenp2, App\Models\Accounting\Asiento2, App\Models\Base\Empresa, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Accounting\Asiento2, App\Models\Base\Empresa, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto, App\Models\Receivable\Factura2;
 
 use DB, Validator;
 
@@ -37,13 +37,6 @@ class Factura1 extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-            // Validar Datos form
-            // $detalle = isset($data['data']) ? $data['data'] : null;
-            // if(!isset($detalle) || $detalle == null || !is_array($detalle) || count($detalle) == 0) {
-            //     $this->errors = 'Por favor ingrese toda la informacion para la factura.';
-            //     return false;
-            // }
-
             return true;
         }
         $this->errors = $validator->errors();
@@ -138,6 +131,37 @@ class Factura1 extends Model
             throw new \Exception('No es posible recuperar el centro costo.');
         }
 
+        // Recuperar Hijos
+        $factura2 = factura2::where('factura2_factura1', $this->id)->get();
+        foreach ($factura2 as $item) {
+            // Recuperar ordenp2
+            $ordenp2 = Ordenp2::find($item->factura2_orden2);
+            if(!$ordenp2 instanceof Ordenp2){
+                throw new \Exception('No es posible recuperar la ordenp2.');
+            }
+
+            // Recuperar ordenp
+            $ordenp = Ordenp::find($ordenp2->orden2_orden);
+            if(!$ordenp instanceof Ordenp){
+                throw new \Exception('No es posible recuperar la ordenp.');
+            }
+
+            $totalF2 = $ordenp2->orden2_precio_venta * $item->factura2_cantidad;
+
+            // Subtotal
+            $subtotalobase = [];
+            $subtotalobase['Cuenta'] = '41209510';
+            $subtotalobase['Tercero'] = $tercero->tercero_nit;
+            $subtotalobase['CentroCosto'] = $centrocosto->id;
+            $subtotalobase['Detalle'] = '';
+            $subtotalobase['Naturaleza'] = 'C';
+            $subtotalobase['Base'] = '';
+            $subtotalobase['Credito'] = $totalF2;
+            $subtotalobase['Debito'] = '';
+            $subtotalobase['Orden'] = $ordenp->id;
+            $object->cuentas[] = $subtotalobase;
+        }
+
         $object->data = [
             'asiento1_mes' => (Int) date('m'),
             'asiento1_ano' => (Int) date('Y'),
@@ -150,24 +174,11 @@ class Factura1 extends Model
             'asiento1_beneficiario' => $tercero->tercero_nit,
         ];
 
-        // Subtotal
-        $subtotalobase = [];
-        $subtotalobase['Cuenta'] = '41209510';
-        $subtotalobase['Tercero'] = $tercero->tercero_nit;
-        $subtotalobase['CentroCosto'] = $centrocosto->id;
-        $subtotalobase['Detalle'] = '';
-        $subtotalobase['Naturaleza'] = 'C';
-        $subtotalobase['Base'] = '';
-        $subtotalobase['Credito'] = $this->factura1_subtotal;
-        $subtotalobase['Debito'] = '';
-        $subtotalobase['Orden'] = '';
-        $object->cuentas[] = $subtotalobase;
-
         // Iva
         $iva = [];
         $iva['Cuenta'] = '24081010';
         $iva['Tercero'] = $tercero->tercero_nit;
-        $iva['CentroCosto'] = $centrocosto->id;
+        $iva['CentroCosto'] = '';
         $iva['Detalle'] = '';
         $iva['Naturaleza'] = 'C';
         $iva['Base'] = $this->factura1_subtotal;
@@ -181,7 +192,7 @@ class Factura1 extends Model
             $rtfuente = [];
             $rtfuente['Cuenta'] = '13551506';
             $rtfuente['Tercero'] = $tercero->tercero_nit;
-            $rtfuente['CentroCosto'] = $centrocosto->id;
+            $rtfuente['CentroCosto'] = '';
             $rtfuente['Detalle'] = '';
             $rtfuente['Naturaleza'] = 'D';
             $rtfuente['Base'] = $this->factura1_subtotal;
@@ -196,7 +207,7 @@ class Factura1 extends Model
             $rtiva = [];
             $rtiva['Cuenta'] = '13551709';
             $rtiva['Tercero'] = $tercero->tercero_nit;
-            $rtiva['CentroCosto'] = $centrocosto->id;
+            $rtiva['CentroCosto'] = '';
             $rtiva['Detalle'] = '';
             $rtiva['Naturaleza'] = 'D';
             $rtiva['Base'] = $this->factura1_subtotal;
@@ -211,7 +222,7 @@ class Factura1 extends Model
             $rtica = [];
             $rtica['Cuenta'] = '13551801';
             $rtica['Tercero'] = $tercero->tercero_nit;
-            $rtica['CentroCosto'] = $centrocosto->id;
+            $rtica['CentroCosto'] = '';
             $rtica['Detalle'] = '';
             $rtica['Naturaleza'] = 'D';
             $rtica['Base'] = $this->factura1_subtotal;
@@ -225,7 +236,7 @@ class Factura1 extends Model
         $clientenacionales = [];
         $clientenacionales['Cuenta'] = '130505';
         $clientenacionales['Tercero'] = $tercero->tercero_nit;
-        $clientenacionales['CentroCosto'] = $centrocosto->id;
+        $clientenacionales['CentroCosto'] = '';
         $clientenacionales['Detalle'] = '';
         $clientenacionales['Naturaleza'] = 'D';
         $clientenacionales['Base'] = '';

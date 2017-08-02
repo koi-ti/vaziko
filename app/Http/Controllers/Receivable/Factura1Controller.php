@@ -132,7 +132,7 @@ class Factura1Controller extends Controller
                     foreach ($ordenp2 as $child) {
 
                         if( $request->has("detail.facturado_cantidad_$child->id") ) {
-                            // Declarar variable ->get($array, $default = null, depp->mantener)
+                            // Declarar variable request->get($array, $default = null, depp->mantener)
                             $detail = $request->get("detail[facturado_cantidad_$child->id]", null, true);
 
                             if( $detail > $child->orden2_cantidad || $detail < 0){
@@ -202,41 +202,38 @@ class Factura1Controller extends Controller
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
 
-                    // // Prepara data asiento
-                    // $dataAsiento = $factura->prepararAsiento();
+                    // Prepara data asiento
+                    $dataAsiento = $factura->prepararAsiento();
 
-                    // // Creo el objeto para manejar el asiento
-                    // $objAsiento = new AsientoContableDocumento($dataAsiento->data);
-                    // if($objAsiento->asiento_error) {
-                    //     DB::rollback();
-                    //     return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
-                    // }
+                    // Creo el objeto para manejar el asiento
+                    $objAsiento = new AsientoContableDocumento($dataAsiento->data);
+                    if($objAsiento->asiento_error) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                    }
 
-                    // // Preparar asiento
-                    // $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
-                    // if($result != 'OK'){
-                    //     DB::rollback();
-                    //     return response()->json(['success' => false, 'errors' => $result]);
-                    // }
+                    // Preparar asiento
+                    $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
+                    if($result != 'OK'){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
 
-                    // // Insertar asiento
-                    // $result = $objAsiento->insertarAsiento();
-                    // if($result != 'OK') {
-                    //     DB::rollback();
-                    //     return response()->json(['success' => false, 'errors' => $result]);
-                    // }
+                    // Insertar asiento
+                    $result = $objAsiento->insertarAsiento();
+                    if($result != 'OK') {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
 
-                    // // Recuperar el Id del asiento y guardar en la factura
-                    // $factura->factura1_asiento = $objAsiento->asiento->id;
-                    // $factura->save();
+                    // Recuperar el Id del asiento y guardar en la factura
+                    $factura->factura1_asiento = $objAsiento->asiento->id;
+                    $factura->save();
                     
-                    // if( !isset($factura->factura1_asiento) || $factura->id == null ) {
-                    //     DB::rollback();
-                    //     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
-                    // }
-
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => '!OK Bitchessss!, hoy chicas?']);
+                    if( !isset($factura->factura1_asiento) || $factura->id == null ) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
+                    }
 
                     // Commit Transaction
                     DB::commit();

@@ -47,7 +47,11 @@
 			<th width="20%" class="center">{{ $factura->factura1_fecha_vencimiento }}</th>
 			
 			<th width="8%" class="left"></th>
-			<th colspan="2" class="center">xxxxxxx</th>
+			@if( ($factura->factura1_cuotas == 1) )
+				<th colspan="2" class="center">CONTADO</th>
+			@else
+				<th colspan="2" class="center">CREDITO</th>
+			@endif
 		</tr>
 	</table>
 
