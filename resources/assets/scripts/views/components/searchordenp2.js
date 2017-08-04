@@ -71,7 +71,7 @@ app || (app = {});
                     { data: 'orden_ano', name: 'orden_ano' },
                     { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'productop_nombre', name: 'productop_nombre' },
-                    { data: 'orden2_saldo', name: 'orden2_saldo' },
+                    { data: 'orden2_cantidad', name: 'orden2_cantidad' },
                     { data: 'orden2_facturado', name: 'orden2_facturado' },
                 ],
                 order: [
