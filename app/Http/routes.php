@@ -168,6 +168,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
 	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
+	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'cotizaciones'], function()
 	{

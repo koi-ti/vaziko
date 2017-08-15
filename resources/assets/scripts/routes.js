@@ -109,6 +109,10 @@ app || (app = {});
             'tiposmaterialp/create(/)': 'getTiposMaterialpCreate',
             'tiposmaterialp/:tiposmaterialp/edit(/)': 'getTiposMaterialpEdit',
 
+            'tipoproductosp(/)': 'getTipoProductopMain',
+            'tipoproductosp/create(/)': 'getTipoProductopCreate',
+            'tipoproductosp/:tipoproductosp/edit(/)': 'getTipoProductopEdit',
+
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
             'ordenes/:orden(/)': 'getOrdenesShow',
@@ -1186,6 +1190,50 @@ app || (app = {});
         },
 
         /**
+        * show view main tipos de producto produccion
+        */
+        getTipoProductopMain: function () {
+
+            if ( this.mainTipoProductospView instanceof Backbone.View ){
+                this.mainTipoProductospView.stopListening();
+                this.mainTipoProductospView.undelegateEvents();
+            }
+
+            this.mainTipoProductospView = new app.MainTipoProductospView( );
+        },
+
+        /**
+        * show view create tipos de producto de produccion
+        */
+        getTipoProductopCreate: function () {
+            this.tipoproductopModel = new app.TipoProductopModel();
+
+            if ( this.createTipoProductopView instanceof Backbone.View ){
+                this.createTipoProductopView.stopListening();
+                this.createTipoProductopView.undelegateEvents();
+            }
+
+            this.createTipoProductopView = new app.CreateTipoProductopView({ model: this.tipoproductopModel });
+            this.createTipoProductopView.render();
+        },
+
+        /**
+        * show view edit tipos de producto de produccion
+        */
+        getTipoProductopEdit: function ( tipoproductosp ) {
+            this.tipoproductopModel = new app.TipoProductopModel();
+            this.tipoproductopModel.set({'id': tipoproductosp }, {'silent':true});
+
+            if ( this.createTipoProductopView instanceof Backbone.View ){
+                this.createTipoProductopView.stopListening();
+                this.createTipoProductopView.undelegateEvents();
+            }
+
+            this.createTipoProductopView = new app.CreateTipoProductopView({ model: this.tipoproductopModel });
+            this.tipoproductopModel.fetch();
+        },
+
+        /**
         * show view main ordenes de produccion
         */
         getOrdenesMain: function () {
@@ -1239,7 +1287,12 @@ app || (app = {});
                 this.createOrdenpView.undelegateEvents();
             }
 
-            this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
+            if ( this.editOrdenpView instanceof Backbone.View ){
+                this.editOrdenpView.stopListening();
+                this.editOrdenpView.undelegateEvents();
+            }
+
+            this.editOrdenpView = new app.EditOrdenpView({ model: this.ordenpModel });
             this.ordenpModel.fetch();
         },
 

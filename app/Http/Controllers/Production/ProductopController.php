@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Production\Productop,  App\Models\Production\TipoProductop;
 use Auth, DB, Log, Datatables, Cache;
-
-use App\Models\Production\Productop;
 
 class ProductopController extends Controller
 {
@@ -72,19 +71,27 @@ class ProductopController extends Controller
             if ($producto->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Tipo Productop
+                    $typeproduct = TipoProductop::find( $request->productop_tipoproductop );
+                    if(!$typeproduct instanceof TipoProductop){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion ó consulte al administrador.']);
+                    }
+
                     // grupo
                     $producto->fill($data);
                     $producto->fillBoolean($data);
                     $producto->setProperties();
+                    $producto->productop_tipoproductop = $typeproduct->id;
                     $producto->productop_usuario_elaboro = Auth::user()->id;
                     $producto->productop_fecha_elaboro = date('Y-m-d H:m:s');
                     $producto->save();
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Productop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -143,10 +150,18 @@ class ProductopController extends Controller
             if ($producto->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Tipo Productop
+                    $typeproduct = TipoProductop::find( $request->productop_tipoproductop );
+                    if(!$typeproduct instanceof TipoProductop){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion ó consulte al administrador.']);
+                    }
+
                     // Productop
                     $producto->fill($data);
                     $producto->fillBoolean($data);
                     $producto->setProperties();
+                    $producto->productop_tipoproductop = $typeproduct->id;
                     $producto->save();
 
                     // Commit Transaction

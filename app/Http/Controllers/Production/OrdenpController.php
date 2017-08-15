@@ -246,7 +246,7 @@ class OrdenpController extends Controller
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
 
-        return view('production.ordenes.edit', ['orden' => $orden]);
+        return view('production.ordenes.create', ['orden' => $orden]);
     }
 
     /**

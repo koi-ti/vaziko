@@ -16,7 +16,11 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-5">
+                    <label class="control-label">Tipo de producto</label>
+                    <div>{{ $producto->tipoproductop_nombre }}</div>
+                </div>
+                <div class="form-group col-md-7">
                     <label class="control-label">Detalle</label>
                     <div>{{ $producto->productop_observaciones }}</div>
                 </div>

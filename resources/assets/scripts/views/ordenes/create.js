@@ -15,38 +15,15 @@ app || (app = {});
         template: _.template( ($('#add-ordenp-tpl').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
-            'click .close-ordenp': 'closeOrdenp',
-            'click .clone-ordenp': 'cloneOrdenp',
-            'click .export-ordenp': 'exportOrdenp',
             'submit #form-ordenes': 'onStore',
-            'submit #form-despachosp': 'onStoreDespacho'
-        },
-        parameters: {
         },
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-            // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-orden');
-
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                this.productopOrdenList = new app.ProductopOrdenList();
-                this.despachopOrdenList = new app.DespachopOrdenList();
-                this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
-            }
-
+        initialize : function() {
             // Events
-            // this.listenTo( this.model, 'change:orden_iva', this.renderIva );
             this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
 
@@ -54,69 +31,14 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = false;
 
+            this.$el.html( this.template(attributes) );
             this.$form = this.$('#form-ordenes');
-
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                // Reference views
-                this.referenceViews();
-            }
+            this.spinner = this.$('#spinner-main');
 
             this.ready();
-        },
-
-        /**
-        * render iva
-        */
-        renderIva: function (model, value, opts) {
-            console.log( 'Ingreo renderIva' );
-            // this.productopOrdenList.fetch({ data: {orden2_orden: this.model.get('id')}, reset: true });
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Productos list
-            this.productopOrdenListView = new app.ProductopOrdenListView( {
-                collection: this.productopOrdenList,
-                parameters: {
-                    edit: true,
-                    iva: this.model.get('orden_iva'),
-                    wrapper: this.$('#wrapper-productop-orden'),
-                    dataFilter: {
-                        'orden2_orden': this.model.get('id')
-                    }
-               }
-            });
-
-            // Despachos pendientes list
-            this.despachospPendientesOrdenListView = new app.DespachospPendientesOrdenListView( {
-                collection: this.despachospPendientesOrdenList,
-                parameters: {
-                    dataFilter: {
-                        'orden2_orden': this.model.get('id')
-                    }
-               }
-            });
-
-            // Despachos list
-            this.despachopOrdenListView = new app.DespachopOrdenListView( {
-                collection: this.despachopOrdenList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$el,
-                    collectionPendientes: this.despachospPendientesOrdenList,
-                    dataFilter: {
-                        'despachop1_orden': this.model.get('id')
-                    }
-               }
-            });
         },
 
         /**
@@ -136,113 +58,6 @@ app || (app = {});
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }
-        },
-
-        /**
-        * Event Create despacho
-        */
-        onStoreDespacho: function (e) {
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
-                data.despachop1_orden = this.model.get('id');
-
-                this.despachopOrdenList.trigger( 'store', data );
-            }
-        },
-
-        /**
-        * export to PDF
-        */
-        exportOrdenp: function (e) {
-            e.preventDefault();
-
-            // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
-        },
-
-        /**
-        * Close ordenp
-        */
-        closeOrdenp: function (e) {
-            e.preventDefault();
-
-            var _this = this;
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
-                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Cerrar orden de producción',
-                    onConfirm: function () {
-                        // Close orden
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: _this.model.get('id') }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.el );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.el );
-
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.el );
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-
-            cancelConfirm.render();
-        },
-
-        /**
-        * Clone ordenp
-        */
-        cloneOrdenp: function (e) {
-            e.preventDefault();
-
-            var _this = this
-                data = { orden_codigo: this.model.get('id') };
-
-            var cloneConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: data,
-                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Clonar orden de producción',
-                    onConfirm: function () {
-                        // Clone orden
-                        window.Misc.cloneOrden({
-                            'data': data,
-                            'wrap': _this.$el,
-                            'callback': (function (_this) {
-                                return function ( resp )
-                                {
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
-                                }
-                            })(_this)
-                        });
-                    }
-                }
-            });
-
-            cloneConfirm.render();
         },
 
         /**
@@ -273,14 +88,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -294,7 +109,7 @@ app || (app = {});
                     return;
                 }
 
-                // FacturapView undelegateEvents
+                // createOrdenpView undelegateEvents
                 if ( this.createOrdenpView instanceof Backbone.View ){
                     this.createOrdenpView.stopListening();
                     this.createOrdenpView.undelegateEvents();

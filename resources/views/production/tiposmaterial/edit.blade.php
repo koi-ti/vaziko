@@ -1,7 +1,7 @@
 @extends('production.tiposmaterial.main')
 
 @section('breadcrumb')
-	<li><a href="{{ route('tiposmaterialp.index') }}">Áreas</a></li>
+	<li><a href="{{ route('tiposmaterialp.index') }}">Tipo de material</a></li>
 	<li><a href="{{ route('tiposmaterialp.show', ['tiposmaterialp' => $tipomaterial->id]) }}">{{ $tipomaterial->id }}</a></li>
 	<li class="active">Editar</li>
 @stop

@@ -3,27 +3,31 @@
 @section('title') Ordenes de producción @stop
 
 @section('content')
-    <section class="content-header">
-        <h1>
-            Ordenes de producción <small>Administración de ordenes de producción</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
-            @yield('breadcrumb')
-        </ol>
-    </section>
-
-    <section class="content">
-        @yield ('module')
-    </section>
+    @yield ('module')
 
     <script type="text/template" id="add-ordenp-tpl">
-        <div class="row">
-            <div class="form-group col-md-12">
+        <section class="content-header">
+            <h1>
+                Ordenes de producción <small>Administración de ordenes de producción</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
+                <li><a href="{{ route('ordenes.index') }}">Orden</a></li>
+                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                    <li><a href="<%- window.Misc.urlFull( Route.route('ordenes.show', { ordenes: id}) ) %>"><%- orden_codigo %></a></li>
+                    <li class="active">Editar</li>
+                <% }else{ %>
+                    <li class="active">Nuevo</li>
+                <% } %>
+            </ol>
+        </section>
+
+        <section class="content">
+            <div class="box box-solid" id="spinner-main">
                 <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
-                        <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
+                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                             <li class="pull-right">
                                 <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
@@ -40,9 +44,9 @@
                                             <i class="fa fa-lock"></i>Cerrar orden
                                         </a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
-                                            <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                                <i class="fa fa-clone"></i>Clonar orden
-                                            </a>
+                                        <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                            <i class="fa fa-clone"></i>Clonar orden
+                                        </a>
                                         @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
@@ -52,7 +56,6 @@
                             </li>
                         <% } %>
                     </ul>
-
                     <div class="tab-content">
                         {{-- Content orden --}}
                         <div class="tab-pane active" id="tab_orden">
@@ -158,7 +161,7 @@
                                             <div class="form-group col-md-2">
                                                 <select name="orden_formapago" id="orden_formapago" class="form-control" required>
                                                     @foreach( config('koi.produccion.formaspago') as $key => $value)
-                                                        <option value="{{ $key }}" <%- orden_formapago == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                                                    <option value="{{ $key }}" <%- orden_formapago == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
@@ -167,7 +170,7 @@
                                                 <div class="form-group col-sm-1">
                                                     <select name="orden_iva" id="orden_iva" class="form-control" required>
                                                         @foreach( config('koi.contabilidad.iva') as $key => $value)
-                                                            <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                                                        <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -197,10 +200,10 @@
                                             <button type="button" class="btn btn-primary btn-sm btn-block submit-ordenp">{{ trans('app.save') }}</button>
                                         </div>
                                     </div>
-                                    <br />
+                                    <br>
 
-                                    <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
-                                        <div class="box box-success" id="wrapper-productop-orden">
+                                    <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                        <div class="box box-success">
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
@@ -209,7 +212,7 @@
                                                             <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
                                                             <select name="productop" id="productop" class="form-control select2-default" required>
                                                                 @foreach( App\Models\Production\Productop::getProductos() as $key => $value)
-                                                                    <option value="{{ $key }}">{{ $value }}</option>
+                                                                <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -232,8 +235,8 @@
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Facturado</th>
                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                                    <th width="10%">Precio</th>
-                                                                    <th width="10%">Total</th>
+                                                                <th width="10%">Precio</th>
+                                                                <th width="10%">Total</th>
                                                                 @endif
                                                             </tr>
                                                         </thead>
@@ -246,22 +249,22 @@
                                                                 <th class="text-right">Subtotal</th>
                                                                 <td class="text-center" id="subtotal-cantidad">0</td>
                                                                 <td class="text-center" id="subtotal-facturado">0</td>
-                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                                    <td></td>
-                                                                    <td class="text-right" id="subtotal-total">0</td>
+                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                <td></td>
+                                                                <td class="text-right" id="subtotal-total">0</td>
                                                                 @endif
                                                             </tr>
                                                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                                <tr>
-                                                                    <td colspan="3"></td>
-                                                                    <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                    <td colspan="4" class="text-right" id="iva-total">0</td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td colspan="3"></td>
-                                                                    <th class="text-right">Total</th>
-                                                                    <td colspan="4" class="text-right" id="total-total">0</td>
-                                                                </tr>
+                                                            <tr>
+                                                                <td colspan="3"></td>
+                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
+                                                                <td colspan="4" class="text-right" id="iva-total">0</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td colspan="3"></td>
+                                                                <th class="text-right">Total</th>
+                                                                <td colspan="4" class="text-right" id="total-total">0</td>
+                                                            </tr>
                                                             @endif
                                                         </tfoot>
                                                     </table>
@@ -274,7 +277,7 @@
                         </div>
 
                         {{-- Content despachos --}}
-                        <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
+                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <div class="tab-pane" id="tab_despachos">
                                 <div class="box box-whithout-border">
                                     <div class="box-body">
@@ -333,7 +336,7 @@
                                                     <label for="despachop1_municipio" class="control-label">Municipio</label>
                                                     <select name="despachop1_municipio" id="despachop1_municipio" class="form-control select2-default" required>
                                                         @foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-                                                            <option value="{{ $key }}">{{ $value }}</option>
+                                                        <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
@@ -379,9 +382,9 @@
                                                     <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
                                                 </div>
                                             </div>
-                                        </form>
-                                        <br/>
-                                        <div class="box box-success" id="wrapper-productop-orden">
+                                        </form><br/>
+
+                                        <div class="box box-success">
                                             <div class="box-body">
                                                 <!-- table table-bordered table-striped -->
                                                 <div class="box-body table-responsive no-padding">
@@ -389,7 +392,7 @@
                                                         <thead>
                                                             <tr>
                                                                 @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
-                                                                    <th width="5%"></th>
+                                                                <th width="5%"></th>
                                                                 @endif
                                                                 <th width="5%">Código</th>
                                                                 <th width="70%">Contacto</th>
@@ -411,7 +414,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     </script>
 
     <script type="text/template" id="ordenp-producto-item-list-tpl">

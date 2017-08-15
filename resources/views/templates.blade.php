@@ -1029,3 +1029,18 @@
 		</div>
     </div>
 </script>
+
+{{-- Template TipoProductop --}}
+<script type="text/template" id="add-tipoproductop-tpl">
+	<div class="row">
+		<div class="form-group col-md-4">
+			<label for="tipoproductop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="tipoproductop_nombre" name="tipoproductop_nombre" value="<%- tipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="tipoproductop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="tipoproductop_activo" name="tipoproductop_activo" value="tipoproductop_activo" <%- parseInt(tipoproductop_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
