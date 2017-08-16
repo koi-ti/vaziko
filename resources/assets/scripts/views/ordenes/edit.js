@@ -18,6 +18,7 @@ app || (app = {});
             'click .close-ordenp': 'closeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
             'click .export-ordenp': 'exportOrdenp',
+            'change #typeproductop': 'changeTypeProduct',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho'
         },
@@ -51,6 +52,7 @@ app || (app = {});
                 attributes.edit = true;
             this.$el.html( this.template(attributes) );
 
+            this.$product = this.$('#productop');
             this.$form = this.$('#form-ordenes');
             this.spinner = this.$('#spinner-main');
 
@@ -129,6 +131,36 @@ app || (app = {});
                 var data = window.Misc.formToJson( e.target );
                 data.despachop1_orden = this.model.get('id');
                 this.despachopOrdenList.trigger( 'store', data );
+            }
+        },
+
+        changeTypeProduct: function(e) {
+            var _this = this,
+                typeproduct = this.$(e.currentTarget).val();
+
+            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productosp.index', {typeproduct: typeproduct}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$product.empty().val(0);
+
+                    _this.$product.append("<option value=></option>");
+                    _.each(resp.data, function(item){
+                        _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
+                    });
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
             }
         },
 
@@ -253,14 +285,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( $('#spinner-main') );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( $('#spinner-main') );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -275,7 +307,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit orden
-                window.Misc.Redirect( window.Misc.FullUrl( Route.route('ordenes.edit', { ordenes: resp.id}), { trigger:true } ));
+                window.Misc.redirect( window.Misc.urlFull( Route.route('ordenes.edit', { ordenes: resp.id}), { trigger:true } ));
             }
         }
     });

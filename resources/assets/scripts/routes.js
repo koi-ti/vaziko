@@ -1391,7 +1391,12 @@ app || (app = {});
                 this.createProductopView.undelegateEvents();
             }
 
-            this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
+            if ( this.editProductopView instanceof Backbone.View ){
+                this.editProductopView.stopListening();
+                this.editProductopView.undelegateEvents();
+            }
+
+            this.editProductopView = new app.EditProductopView({ model: this.productopModel });
             this.productopModel.fetch();
         },
 

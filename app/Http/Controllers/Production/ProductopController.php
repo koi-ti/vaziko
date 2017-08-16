@@ -40,6 +40,11 @@ class ProductopController extends Controller
                     if($request->has('productop_nombre')) {
                         $query->whereRaw("productop_nombre LIKE '%{$request->productop_nombre}%'");
                     }
+
+                    // TypeProduct
+                    if($request->has('typeproduct')) {
+                        $query->where('productop_tipoproductop', $request->typeproduct);
+                    }
                 })
                 ->make(true);
         }
@@ -131,7 +136,7 @@ class ProductopController extends Controller
     public function edit($id)
     {
         $producto = Productop::findOrFail($id);
-        return view('production.productos.edit', ['producto' => $producto]);
+        return view('production.productos.create', ['producto' => $producto]);
     }
 
     /**

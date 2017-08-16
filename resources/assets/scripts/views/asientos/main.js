@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {            
+        initialize : function() {
             this.$asientosSearchTable = this.$('#asientos-search-table');
 
             this.$asientosSearchTable.DataTable({
@@ -41,7 +41,7 @@ app || (app = {});
                     { data: 'asiento1_preguardado', name: 'asiento1_preguardado' }
                 ],
 				buttons: [
-					{ 
+					{
 						text: '<i class="fa fa-user-plus"></i> Nueva asiento',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
@@ -63,11 +63,11 @@ app || (app = {});
                     },
                     {
                         targets: [1, 2],
-                        width: '10%'                    
+                        width: '10%'
                     },
                     {
                         targets: 3,
-                        width: '15%'                    
+                        width: '15%'
                     },
                     {
                         targets: 4,

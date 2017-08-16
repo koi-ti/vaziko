@@ -24,6 +24,7 @@ app || (app = {});
         initialize : function() {
             // Events
             this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
 

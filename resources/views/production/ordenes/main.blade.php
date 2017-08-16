@@ -109,7 +109,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="ordenes-create" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" value="<%- tercero_nit %>" required>
+                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" value="<%- tercero_nit %>" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-5 col-xs-10">
@@ -207,15 +207,22 @@
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
-                                                        <label for="productop" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Producto</label>
-                                                        <div class="form-group col-sm-8 col-xs-11">
-                                                            <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
-                                                            <select name="productop" id="productop" class="form-control select2-default" required>
-                                                                @foreach( App\Models\Production\Productop::getProductos() as $key => $value)
-                                                                <option value="{{ $key }}">{{ $value }}</option>
+                                                        <label for="typeproductop" class="control-label col-sm-1">Tipo </label>
+                                                        <div class="form-group col-sm-3 col-xs-11">
+                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default" required>
+                                                                @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                                                    <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+
+                                                        <label for="productop" class="control-label col-sm-1">Producto</label>
+                                                        <div class="form-group col-sm-6 col-xs-11">
+                                                            <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
+                                                            <select name="productop" id="productop" class="form-control select2-default-clear" required>
+                                                            </select>
+                                                        </div>
+
                                                         <div class="form-group col-sm-1">
                                                             <button type="submit" class="btn btn-success btn-sm btn-block">
                                                                 <i class="fa fa-plus"></i>
