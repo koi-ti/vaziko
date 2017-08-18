@@ -1,5 +1,5 @@
 /**
-* Class DetalleCotizacionItemView  of Backbone Router
+* Class DespachopPendienteCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.DetalleCotizacionItemView = Backbone.View.extend({
+    app.DespachopPendienteCotizacionItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#detalle-item-list-tpl').html() || '') ),
+        template: _.template( ($('#cotizacion-despacho-pendiente-item-list-tpl').html() || '') ),
         parameters: {
             edit: false
         },
@@ -33,14 +33,8 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
-
             var attributes = this.model.toJSON();
-            attributes.edit = this.parameters.edit;
-
-            if( attributes.cotizacion2_productoc != '' && _.isNull(attributes.materialp_nombre) ){
-                this.$el.addClass('bg-aqua');
-            }
-            
+                attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
             return this;
         }

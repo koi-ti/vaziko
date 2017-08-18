@@ -44,7 +44,7 @@ class Factura1Controller extends Controller
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
 
-                    // Numero 
+                    // Numero
                     if($request->has('id')){
                         $query->whereRaw("koi_factura1.id LIKE '%{$request->id}%'");
                     }
@@ -125,6 +125,9 @@ class Factura1Controller extends Controller
                     // Calcular subtotal factura
                     $subtotal = 0;
 
+                    // Validate cantidad
+                    $cantidad = 0;
+
                     $detail = null;
 
                     // Recuperar ordenesp2
@@ -148,6 +151,7 @@ class Factura1Controller extends Controller
                                 $factura2->save();
 
                                 $subtotal += $detail * $child->orden2_precio_venta;
+                                $cantidad += $detail;
 
                                 // Actualizar orden2_facturado de Orden2
                                 $child->orden2_facturado = $child->orden2_facturado + $detail;
@@ -157,7 +161,7 @@ class Factura1Controller extends Controller
                     }
 
                     // Validar que se ingrese un item en el detalle de la factura
-                    if($subtotal == 0){
+                    if($cantidad == 0){
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>'Por favor ingrese al menos un producto a facturar.']);
                     }
@@ -229,7 +233,7 @@ class Factura1Controller extends Controller
                     // Recuperar el Id del asiento y guardar en la factura
                     $factura->factura1_asiento = $objAsiento->asiento->id;
                     $factura->save();
-                    
+
                     if( !isset($factura->factura1_asiento) || $factura->id == null ) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);

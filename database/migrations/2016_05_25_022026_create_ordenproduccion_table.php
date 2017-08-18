@@ -24,6 +24,7 @@ class CreateOrdenproduccionTable extends Migration
             $table->date('orden_fecha_entrega');
             $table->time('orden_hora_entrega');
             $table->integer('orden_contacto')->unsigned();
+            $table->integer('orden_iva')->unsigned();
             $table->string('orden_formapago', 2)->comment = 'CT: Credito, Contado: CO';
             $table->string('orden_suministran', 200)->nullable();
             $table->boolean('orden_anulada')->default(false);

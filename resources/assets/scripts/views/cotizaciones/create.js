@@ -15,17 +15,14 @@ app || (app = {});
         template: _.template( ($('#add-cotizacion-tpl').html() || '') ),
         events: {
             'click .submit-cotizacion': 'submitCotizacion',
-            'submit #form-cotizacion': 'onStore',
+            'submit #form-cotizaciones': 'onStore',
         },
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-            // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
+        initialize : function() {
+            // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -36,17 +33,33 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            attributes.edit = false;
+                attributes.edit = false;
+
             this.$el.html( this.template(attributes) );
-
-            this.$form = this.$('#form-cotizacion');
-
-            // spinner 
+            this.$form = this.$('#form-cotizaciones');
             this.spinner = this.$('#spinner-main');
 
-            // to fire plugins
             this.ready();
-		},
+        },
+
+        /**
+        * Event submit productop
+        */
+        submitCotizacion: function (e) {
+            this.$form.submit();
+        },
+
+        /**
+        * Event Create orden
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true, silent: true} );
+            }
+        },
 
         /**
         * fires libraries js
@@ -56,31 +69,20 @@ app || (app = {});
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
+            if( typeof window.initComponent.initTimePicker == 'function' )
+                window.initComponent.initTimePicker();
+
+            if( typeof window.initComponent.initSelect2 == 'function' )
+                window.initComponent.initSelect2();
+
             if( typeof window.initComponent.initValidator == 'function' )
                 window.initComponent.initValidator();
 
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
+
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
-        },
-
-        /**
-        * Event submit Asiento
-        */
-        submitCotizacion: function (e) {
-            this.$form.submit();
-        },
-
-        /**
-        * Event Create cotizacion
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
-            }
         },
 
         /**
@@ -108,13 +110,13 @@ app || (app = {});
                     return;
                 }
 
-                // FacturapView undelegateEvents
+                // createOrdenpView undelegateEvents
                 if ( this.createCotizacionView instanceof Backbone.View ){
                     this.createCotizacionView.stopListening();
                     this.createCotizacionView.undelegateEvents();
                 }
 
-                // Redirect to Content Course
+                // Redirect to edit cotizaciones
                 Backbone.history.navigate(Route.route('cotizaciones.edit', { cotizaciones: resp.id}), { trigger:true });
             }
         }

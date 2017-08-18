@@ -170,19 +170,32 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 
-	Route::group(['prefix' => 'cotizaciones'], function()
-	{
-		Route::get('cancel/{cotizaciones}', ['as' => 'cotizaciones.cancel', 'uses' => 'Production\Cotizacion1Controller@cancel']);
-		Route::get('approve/{cotizaciones}', ['as' => 'cotizaciones.approve', 'uses' => 'Production\Cotizacion1Controller@approve']);
-		Route::get('open/{cotizaciones}', ['as' => 'cotizaciones.open', 'uses' => 'Production\Cotizacion1Controller@open']);
-		Route::resource('detalle', 'Production\Cotizacion2Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('detallearea', 'Production\Cotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
+	Route::group(['prefix' => 'cotizaciones'], function(){
+		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
+		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
+		Route::get('cerrar/{cotizaciones}', ['as' => 'cotizaciones.cerrar', 'uses' => 'Production\Cotizacion1Controller@cerrar']);
+		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
+		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
 
+		Route::get('productos/formula', ['as' => 'cotizaciones.productos.formula', 'uses' => 'Production\Cotizacion2Controller@formula']);
+
+		Route::group(['prefix' => 'productos'], function(){
+			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
+			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index']]);
+			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
+		});
+		Route::resource('productos', 'Production\Cotizacion2Controller');
+
+		Route::group(['prefix' => 'despachos'], function(){
+			Route::get('exportar/{despachos}', ['as' => 'cotizaciones.despachos.exportar', 'uses' => 'Production\DespachoCotizacionController@exportar']);
+			Route::get('pendientes', ['as' => 'cotizaciones.despachos.pendientes', 'uses' => 'Production\DespachoCotizacionController@pendientes']);
+		});
+		Route::resource('despachos', 'Production\DespachoCotizacionController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
 
-	Route::group(['prefix' => 'productosp'], function()
-	{
+	Route::group(['prefix' => 'productosp'], function(){
 		Route::resource('tips', 'Production\Productop2Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('areas', 'Production\Productop3Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);

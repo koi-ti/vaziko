@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 
-use Validator;
+use DB;
 
 class Cotizacion3 extends Model
 {
@@ -17,39 +17,21 @@ class Cotizacion3 extends Model
 
     public $timestamps = false;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['cotizacion3_horas', 'cotizacion3_valor', 'cotizacion3_nombre'];
-
-    /**
-     * The attributes that are mass nullable fields to null.
-     *
-     * @var array
-     */
-    protected $nullable = ['cotizacion3_areap'];
-
-    public function isValid($data)
+    public static function getCotizaciones3($productop = null, $cotizacion2 = null)
     {
-        $rules = [
-            'cotizacion3_horas' => 'required|integer',
-        ];
+        $query = Productop4::query();
+        $query->select('koi_maquinap.id as id', 'maquinap_nombre', ($cotizacion2 != null ? DB::raw("CASE WHEN koi_cotizacion3.id IS NOT NULL THEN true ELSE false END as activo") : DB::raw('false AS activo')) );
 
-        $validator = Validator::make($data, $rules);
-        if ($validator->passes()) {
-            return true;
-        }
-        $this->errors = $validator->errors();
-        return false;
-    }
+        $query->join('koi_maquinap', 'productop4_maquinap', '=', 'koi_maquinap.id');
+        if($cotizacion2 != null) {
+	        $query->leftjoin('koi_cotizacion3', function($join) use($cotizacion2) {
+				$join->on('cotizacion3_maquinap', '=', 'koi_maquinap.id')
+					->where('cotizacion3_cotizacion2', '=', $cotizacion2);
+	        });
+	  	}
 
-    public function whenAreap(){
-        if(empty(trim($this->cotizacion3_nombre)) || is_null(trim($this->cotizacion3_nombre))){
-            return 'El campo nombre es obligatorio cuando no tiene area.';
-        }
-
-        return 'OK';
+        $query->where('productop4_productop', $productop);
+        $query->orderBy('maquinap_nombre', 'asc');
+        return $query->get();
     }
 }

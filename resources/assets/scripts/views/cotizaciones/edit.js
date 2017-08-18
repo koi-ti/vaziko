@@ -13,33 +13,31 @@ app || (app = {});
 
         el: '#cotizaciones-create',
         template: _.template( ($('#add-cotizacion-tpl').html() || '') ),
-        templateFp: _.template( ($('#add-detalle-cotizacion-tpl').html() || '') ),
-      	templateCP: _.template( ($('#add-producto-cotizacion-tpl').html() || '') ),
-      	templateCM: _.template( ($('#add-material-cotizacion-tpl').html() || '') ),
         events: {
             'click .submit-cotizacion': 'submitCotizacion',
-            'submit #form-cotizacion': 'onStore',
-
-            'submit #form-cotizacion3': 'onStoreItem3',
-            'change #cotizacion3_areap': 'changeAreap',
-
-            //Event Option cotizacion
-            'click .aprobar-cotizacion': 'approveCotizacion',
-            'click .anular-cotizacion': 'cancelCotizacion',
-
-            'click .add-producto': 'addProducto',
+            'click .close-cotizacion': 'closeCotizacion',
+            'click .clone-cotizacion': 'cloneCotizacion',
+            'click .export-cotizacion': 'exportCotizacion',
+            'change #typeproductop': 'changeTypeProduct',
+            'submit #form-cotizaciones': 'onStore',
+            'submit #form-despachosp': 'onStoreDespacho'
+        },
+        parameters: {
         },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize : function(opts) {
             // Initialize
-            this.$modalProducto = $('#modal-producto-component');
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
 
-            this.detalleCotizacion2 = new app.DetalleCotizacion2List();
-            this.detalleCotizacion3 = new app.DetalleCotizacion3List();
+            this.productopCotizacionList = new app.ProductopCotizacionList();
+            this.despachopCotizacionList = new app.DespachopCotizacionList();
+            this.despachospPendientesCotizacionList = new app.DespachospPendientesCotizacionList();
 
+            // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -51,28 +49,61 @@ app || (app = {});
         render: function() {
 
             var attributes = this.model.toJSON();
-            attributes.edit = true;
+                attributes.edit = true;
             this.$el.html( this.template(attributes) );
 
-            this.$wrapperDetalle = this.$('#render-detalle');
-            this.$wrapperDetalle.html( this.templateFp({}) );
-
-            this.$form = this.$('#form-cotizacion');
-            this.$nombreC3 = this.$('#cotizacion3_nombre');
-            this.$valorC3 = this.$('#cotizacion3_valor');
-
-            // Spinner
+            this.$product = this.$('#productop');
+            this.$form = this.$('#form-cotizaciones');
             this.spinner = this.$('#spinner-main');
 
-            // Reference views
+            // Reference views and ready
             this.referenceViews();
-
-            // to fire plugins
             this.ready();
-		},
+        },
 
         /**
-        * Event submit Asiento
+        * reference to views
+        */
+        referenceViews: function () {
+            // Productos list
+            this.productopCotizacionListView = new app.ProductopCotizacionListView( {
+                collection: this.productopCotizacionList,
+                parameters: {
+                    edit: true,
+                    iva: this.model.get('cotizacion1_iva'),
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        'cotizacion2_cotizacion': this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos pendientes list
+            this.despachospPendientesCotizacionListView = new app.DespachospPendientesCotizacionListView( {
+                collection: this.despachospPendientesCotizacionList,
+                parameters: {
+                    dataFilter: {
+                        'cotizacion2_cotizacion': this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos list
+            this.despachopCotizacionListView = new app.DespachopCotizacionListView( {
+                collection: this.despachopCotizacionList,
+                parameters: {
+                    edit: true,
+                    wrapper: this.spinner,
+                    collectionPendientes: this.despachospPendientesCotizacionList,
+                    dataFilter: {
+                        'despachoc1_cotizacion': this.model.get('id')
+                    }
+               }
+            });
+        },
+
+        /**
+        * Event submit productop
         */
         submitCotizacion: function (e) {
             this.$form.submit();
@@ -85,72 +116,31 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                // Prepare global data
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
 
-        addProducto: function(e){
-        	var text = this.$(e.target).text().trim();
-            this.call = null;
-
-            if (text == 'Producto'){
-                this.$modalProducto.find('.modal-title').text( 'Cotización - ' + text );
-                this.$modalProducto.find('.content-modal').html( this.templateCP() );
-                this.call = 'P';
-            }else if( text == 'Material'){
-                this.$modalProducto.find('.modal-title').text( 'Cotización - ' + text );
-                this.$modalProducto.find('.content-modal').html( this.templateCM() );
-                this.call = 'M';
-            }else{
-        		return;
-        	}
-
-    		this.$modalProducto.modal('show');
-    		this.ready();
-
-            // productosView undelegateEvents
-            if ( this.productosView instanceof Backbone.View ){
-                this.productosView.stopListening();
-                this.productosView.undelegateEvents();
-            }
-
-            this.productosView = new app.ProductosView({
-            	collection: this.detalleCotizacion2,
-            	parameters:{
-	            	cotizacion: this.model.get('id'),
-                    call: this.call,
-            	}
-            });
-
-            this.productosView.render();
-        },
-
-
         /**
-        * Event Create cotizacion
+        * Event Create despacho
         */
-        onStoreItem3: function (e) {
+        onStoreDespacho: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                    data.cotizacion1 = this.model.get('id');
-                this.detalleCotizacion3.trigger( 'store' , data );
+                data.despachoc1_cotizacion = this.model.get('id');
+                this.despachopCotizacionList.trigger( 'store', data );
             }
         },
 
-        changeAreap: function(e){
-            var _this = this;
-                id = this.$(e.currentTarget).val();
-            
-            this.$nombreC3.val('');
-            
-            if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
+        changeTypeProduct: function(e) {
+            var _this = this,
+                typeproduct = this.$(e.currentTarget).val();
+
+            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
+                    url: window.Misc.urlFull( Route.route('productosp.index', {typeproduct: typeproduct}) ),
                     type: 'GET',
                     beforeSend: function() {
                         window.Misc.setSpinner( _this.spinner );
@@ -159,145 +149,114 @@ app || (app = {});
                 .done(function(resp) {
                     window.Misc.removeSpinner( _this.spinner );
 
-                    _this.$nombreC3.attr('readonly', true);
-                    _this.$valorC3.val( resp.areap_valor );
+                    _this.$product.empty().val(0);
+
+                    _this.$product.append("<option value=></option>");
+                    _.each(resp.data, function(item){
+                        _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
+                    });
+
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
-            }else{
-                _this.$nombreC3.attr('readonly', false);
             }
         },
 
         /**
-        * cancel cotizacion
+        * export to PDF
         */
-        cancelCotizacion: function (e) {
+        exportCotizacion: function (e) {
             e.preventDefault();
 
-            var _this = this;
-            var cancelCotizacion = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo') },
-                    template: _.template( ($('#cotizacion-cancel-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Anular cotizacion',
-                    onConfirm: function () {
-                        // Close orden
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.cancel', { cotizaciones: _this.model.get('id') }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: _this.model.get('id') })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-
-            cancelCotizacion.render();
-        },
-
-        approveCotizacion: function(e){
-            e.preventDefault();
-
-            var _this = this;
-            var approveCotizacion = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo') },
-                    template: _.template( ($('#cotizacion-approve-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Aprobar cotizacion',
-                    onConfirm: function () {
-                        // Close orden
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.approve', { cotizaciones: _this.model.get('id') }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: _this.model.get('id') })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-
-            approveCotizacion.render();
-
+            // Redirect to pdf
+            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.model.get('id') })), '_blank');
         },
 
         /**
-        * reference to views
+        * Close cotizacion
         */
-        referenceViews: function () {
-            // Detalle cotizacion2 list
-            this.detalleCotizacion2ListView = new app.DetalleCotizacion2ListView({
-                collection: this.detalleCotizacion2,
+        closeCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    wrapper: this.spinner,
-                    edit: true,
-                    model: this.model,
-                    dataFilter: {
-                        'cotizacion': this.model.get('id')
+                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo') },
+                    template: _.template( ($('#cotizacion-close-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Cerrar cotización',
+                    onConfirm: function () {
+                        // Close cotizacion
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('cotizaciones.cerrar', { cotizaciones: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.spinner );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.spinner );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.spinner );
+                            alertify.error(thrownError);
+                        });
                     }
                 }
             });
 
-            // Detalle cotizacion3 list
-            this.detalleCotizacion3ListView = new app.DetalleCotizacion3ListView({
-                collection: this.detalleCotizacion3,
+            cancelConfirm.render();
+        },
+
+        /**
+        * Clone cotizacion
+        */
+        cloneCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this
+                data = { cotizacion_codigo: this.model.get('id') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    wrapper: this.spinner,
-                    edit: true,
-                    dataFilter: {
-                        'cotizacion': this.model.get('id')
+                    dataFilter: data,
+                    template: _.template( ($('#cotizacion-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar cotización',
+                    onConfirm: function () {
+                        // Clone cotizacion
+                        window.Misc.cloneCotizacion({
+                            'data': data,
+                            'wrap': _this.spinner,
+                            'callback': (function (_this) {
+                                return function ( resp )
+                                {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id })) );
+                                }
+                            })(_this)
+                        });
                     }
                 }
             });
+
+            cloneConfirm.render();
         },
+
         /**
         * fires libraries js
         */
@@ -306,20 +265,20 @@ app || (app = {});
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
+            if( typeof window.initComponent.initTimePicker == 'function' )
+                window.initComponent.initTimePicker();
+
+            if( typeof window.initComponent.initSelect2 == 'function' )
+                window.initComponent.initSelect2();
 
             if( typeof window.initComponent.initValidator == 'function' )
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
-                window.initComponent.initDatePicker();
-
             if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
+            if( typeof window.initComponent.initDatePicker == 'function' )
+                window.initComponent.initDatePicker();
         },
 
         /**
@@ -347,8 +306,8 @@ app || (app = {});
                     return;
                 }
 
-				// Redirect to show view                
-				window.Misc.redirect( window.Misc.urlFull( Route.route('cotizaciones.edit', { cotizaciones: resp.id}) ) );
+                // Redirect to edit cotizacion
+                window.Misc.redirect( window.Misc.urlFull( Route.route('cotizaciones.edit', { cotizaciones: resp.id}), { trigger:true } ));
             }
         }
     });

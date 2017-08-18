@@ -17,7 +17,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            
+
             this.$municipiosSearchTable = this.$('#municipios-search-table');
 
             this.$municipiosSearchTable.DataTable({

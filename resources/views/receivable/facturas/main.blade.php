@@ -58,9 +58,9 @@
                     </div>
 
                     <label for="factura1_cuotas" class="col-md-1 control-label">Cuotas</label>
-                    <div class="form-group col-sm-1 col-md-1">     
+                    <div class="form-group col-sm-1 col-md-1">
                         <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="1" step="1" value="1" required>
-                    </div>  
+                    </div>
                 </div>
 
                 <div class="box-footer with-border">
@@ -102,7 +102,7 @@
                             <button type="submit" class="btn btn-success btn-sm btn-block disabled">
                                 <i class="fa fa-plus"></i>
                             </button>
-                        </div>  
+                        </div>
                     </div>
 
                     <!-- table table-bordered table-striped -->

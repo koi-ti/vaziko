@@ -1,5 +1,5 @@
 /**
-* Class ProductosView  of Backbone
+* Class ProductopCotizacionListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,122 +9,203 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ProductosView = Backbone.View.extend({
+    app.ProductopCotizacionListView = Backbone.View.extend({
 
-      	el: '#cotizaciones-content',
-      	parameters:{
-            cotizacion: null,
-            call: null,
-      	},
-		events: {
-            'submit #form-producto-component': 'addProducto',
-            'change .change-tipomaterial': 'changeTipomaterial',
+        el: '#browse-cotizacion-productop-list',
+        events: {
+            'click .item-cotizacion-producto-remove': 'removeOne',
+            'click .item-cotizacion-producto-clone': 'cloneOne'
+        },
+        parameters: {
+        	wrapper: null,
+            edit: false,
+            iva: 0,
+            dataFilter: {}
         },
 
         /**
         * Constructor Method
         */
-        initialize: function(opts) {
-        	// Extends parameters
+        initialize : function(opts){
+            // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            this.$modalProducto = $('#modal-producto-component');
+            // References
+            this.$unidades = this.$('#subtotal-cantidad');
+            this.$facturado = this.$('#subtotal-facturado');
+            this.$subtotal = this.$('#subtotal-total');
+            this.$iva = this.$('#iva-total');
+            this.$total = this.$('#total-total');
 
-            this.$material = this.$('#cotizacion2_materialp');
-        	this.$productoc = this.$('#cotizacion2_productoc');
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
 
-            if( this.parameters.call == 'M'){
-                this.changeProducto( this.parameters.cotizacion );
-            }
-
-            this.listenTo( this.collection, 'sync', this.responseServer );
+            this.collection.fetch({ data: {cotizacion2_cotizacion: this.parameters.dataFilter.cotizacion2_cotizacion}, reset: true });
         },
 
-        addProducto: function(e){
-        	if (!e.isDefaultPrevented()) {
-                e.preventDefault();
+        /*
+        * Render View Element
+        */
+        render: function() {
 
-                var data = window.Misc.formToJson( e.target );
-                    data.cotizacion1 = this.parameters.cotizacion;
-                this.collection.trigger( 'store' , data );
-            }
         },
 
-        changeTipomaterial:function (e){
-            var _this = this;
-            var tipo = this.$(e.currentTarget).val();
-
-            if( typeof(tipo) !== 'undefined' && !_.isUndefined(tipo) && !_.isNull(tipo) && tipo != '' ){
-                $.ajax({
-                    url: window.Misc.urlFull( Route.route('materialesp.index', {tipo: tipo}) ),
-                    type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
-                    }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
-
-                    _this.$material.empty().val(0);
-
-                    _this.$material.append("<option value=></option>");
-                    _.each(resp.data, function(item){
-                        _this.$material.append("<option value="+item.id+">"+item.materialp_nombre+"</option>");
-                    });
-
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
-                    alertify.error(thrownError);
-                });
-            }   
-        },
-
-        changeProducto: function( id ){
-            var _this = this;
-            
-            $.ajax({
-                url: window.Misc.urlFull( Route.route('cotizaciones.detalle.index', {cotizacion_id: id}) ),
-                type: 'GET',
-                beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+        /**
+        * Render view contact by model
+        * @param Object cotizacion2Model Model instance
+        */
+        addOne: function (cotizacion2Model) {
+            var view = new app.ProductopCotizacionItemView({
+                model: cotizacion2Model,
+                parameters: {
+                    edit: this.parameters.edit
                 }
-            })
-            .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+            });
+            cotizacion2Model.view = view;
+            this.$el.append( view.render().el );
 
-                _this.$productoc.empty().val(0);
+            // Update total
+            this.totalize();
+        },
 
-                _this.$productoc.append("<option value=></option>");
-                _.each(resp, function(item){
-                    _this.$productoc.append("<option value="+item.cotizacion2_productoc+">"+item.cotizacion2_productoc+"</option>");
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.collection.forEach( this.addOne, this );
+        },
+
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if ( model instanceof Backbone.Model ) {
+                model.destroy({
+                    success : function(model, resp) {
+                        if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                            if( !resp.success ) {
+                                alertify.error(resp.errors);
+                                return;
+                            }
+
+                            model.view.remove();
+                            _this.collection.remove(model);
+
+                            // Update total
+                            _this.totalize();
+                        }
+                    }
                 });
 
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.el );
-                alertify.error(thrownError);
+            }
+        },
+
+        /**
+        * Event clone item
+        */
+        cloneOne: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                data = { cotizacion2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#cotizacion-productop-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar producto cotización',
+                    onConfirm: function () {
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('cotizaciones.productos.clonar', { productos: data.cotizacion2_codigo }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.parameters.wrapper );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.productos.show', { productos: resp.id })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
             });
+
+            cloneConfirm.render();
+        },
+
+        /**
+        * Render totalize valores
+        */
+        totalize: function () {
+            var data = this.collection.totalize();
+
+            if(this.$unidades.length) {
+                this.$unidades.html( data.unidades );
+            }
+
+            if(this.$facturado.length) {
+                this.$facturado.html( data.facturado );
+            }
+
+            if(this.$subtotal.length) {
+                this.$subtotal.html( window.Misc.currency(data.subtotal) );
+            }
+
+            var iva = data.subtotal * (this.parameters.iva / 100);
+            if(this.$iva.length) {
+                this.$iva.html( window.Misc.currency(iva) );
+            }
+
+            var total = data.subtotal + iva;
+            if(this.$total.length) {
+                this.$total.html( window.Misc.currency(total) );
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function ( target, xhr, opts ) {
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            if(!_.isUndefined(resp.success)) {
-                if( resp.success ) {
-                    
-                    // productosView undelegateEvents
-                    if ( this.productosView instanceof Backbone.View ){
-                        this.productosView.stopListening();
-                        this.productosView.undelegateEvents();
-                    }
-
-                    // Close modals
-                    this.$modalProducto.modal('hide');
-                }
-            }
+        responseServer: function ( target, resp, opts ) {
+            window.Misc.removeSpinner( this.parameters.wrapper );
         }
-    });
+   });
+
 })(jQuery, this, this.document);

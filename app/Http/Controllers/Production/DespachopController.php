@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Auth, DB, Log, App, View;
-
 use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\Contacto;
 
 class DespachopController extends Controller

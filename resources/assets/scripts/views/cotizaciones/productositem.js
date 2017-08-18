@@ -1,5 +1,5 @@
 /**
-* Class DetalleAreaCotizacionItemView  of Backbone Router
+* Class ProductopCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.DetalleAreaCotizacionItemView = Backbone.View.extend({
+    app.ProductopCotizacionItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#detalle-area-item-list-tpl').html() || '') ),
+        template: _.template( ($('#cotizacion-producto-item-list-tpl').html() || '') ),
         parameters: {
             edit: false
         },
@@ -33,9 +33,8 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
-
             var attributes = this.model.toJSON();
-            attributes.edit = this.parameters.edit;
+                attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
             return this;
         }

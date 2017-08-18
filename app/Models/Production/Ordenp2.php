@@ -200,6 +200,7 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
+        $query->whereRaw('orden2_precio_venta <> 0');
         $query->where('orden_abierta', true);
         return $query;
     }
@@ -252,6 +253,7 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
+        $query->whereRaw('orden2_precio_venta <> 0');
         $query->where('orden_abierta', true);
         $query->where('koi_ordenproduccion2.id', $id);
         return $query->first();

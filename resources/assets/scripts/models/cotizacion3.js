@@ -12,16 +12,11 @@ app || (app = {});
     app.Cotizacion3Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('cotizaciones.detallearea.index') );
+            return window.Misc.urlFull( Route.route('cotizaciones.productos.maquinas.index') );
         },
         idAttribute: 'id',
         defaults: {
-        	'cotizacion3_areap': '',
-        	'cotizacion3_nombre': '',
-        	'cotizacion3_cantidad': '',
-            'cotizacion3_valor': 0,
-        	'total': 0,
-        	'areap_nombre': '',
+
         }
     });
 

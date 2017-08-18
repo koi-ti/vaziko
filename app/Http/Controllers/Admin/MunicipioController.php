@@ -26,10 +26,9 @@ class MunicipioController extends Controller
 
             if( $request->has('datatables') ) {
                 $query->select('koi_departamento.departamento_codigo', 'municipio_codigo', 'municipio_nombre', 'departamento_nombre', 'koi_departamento.id as departamento_id');
-                return Datatables::of($query)->make(true);
+                return Datatables::of($query->get())->make(true);
             }
 
-            $data = [];
             $query->select('koi_municipio.id as id', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as text"));
             if($request->has('id')){
                 $query->where('koi_municipio.id', $request->id);
@@ -49,8 +48,6 @@ class MunicipioController extends Controller
             $query->orderby('departamento_nombre','asc');
             $query->orderby('municipio_nombre','asc');
             return response()->json($query->get());
-
-            return $data;
         }
         return view('admin.municipios.index');
     }

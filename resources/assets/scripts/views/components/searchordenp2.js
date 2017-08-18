@@ -133,6 +133,13 @@ app || (app = {});
 
 			var orden2_id = this.$inputContent.val();
 
+            // Validate tercero
+            var tercero = this.$inputContent.attr("data-tercero");
+            if( _.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
+                alertify.error('Por favor ingrese cliente antes agregar una orden.');
+                return;
+            }
+
             // Before eval clear data
             this.$inputName.val('');
 

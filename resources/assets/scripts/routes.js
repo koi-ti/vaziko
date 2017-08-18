@@ -129,6 +129,8 @@ app || (app = {});
             'cotizaciones/create(/)': 'getCotizacionesCreate',
             'cotizaciones/:cotizaciones(/)': 'getCotizacionesShow',
             'cotizaciones/:cotizaciones/edit(/)': 'getCotizacionesEdit',
+            'cotizaciones/productos/create(/)(?*queryString)': 'getCotizacionesProductoCreate',
+            'cotizaciones/productos/:producto/edit(/)': 'getCotizacionesProductoEdit',
 
             // Treasury
             'facturap(/)': 'getFacturaspMain',
@@ -1462,6 +1464,46 @@ app || (app = {});
 
             this.editCotizacionView = new app.EditCotizacionView({ model: this.cotizacionModel });
             this.cotizacionModel.fetch();
+        },
+
+        /**
+        * show view create productos en cotizaciones
+        */
+        getCotizacionesProductoCreate: function (queryString) {
+            var queries = this.parseQueryString(queryString);
+            this.cotizacion2Model = new app.Cotizacion2Model();
+
+            if ( this.createCotizacion2View instanceof Backbone.View ){
+                this.createCotizacion2View.stopListening();
+                this.createCotizacion2View.undelegateEvents();
+            }
+
+            this.createCotizacion2View = new app.CreateCotizacion2View({
+                model: this.cotizacion2Model,
+                parameters: {
+                    data : {
+                        cotizacion2_cotizacion: queries.cotizacion,
+                        cotizacion2_productop: queries.productop
+                    }
+                }
+            });
+            this.createCotizacion2View.render();
+        },
+
+        /**
+        * show view edit cotizaciones
+        */
+        getCotizacionesProductoEdit: function (producto) {
+            this.cotizacion2Model = new app.Cotizacion2Model();
+            this.cotizacion2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.createCotizacion2View instanceof Backbone.View ){
+                this.createCotizacion2View.stopListening();
+                this.createCotizacion2View.undelegateEvents();
+            }
+
+            this.createCotizacion2View = new app.CreateCotizacion2View({ model: this.cotizacion2Model });
+            this.cotizacion2Model.fetch();
         },
 
         /**

@@ -24,7 +24,7 @@ class DocumentoController extends Controller
             $query = Documento::query();
             $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre', 'folder_codigo', 'koi_folder.id as folder_id');
             $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
-            return Datatables::of($query)->make(true);
+            return Datatables::of($query->get())->make(true);
         }
         return view("accounting.documentos.index");
     }
@@ -49,7 +49,7 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $documento = new Documento;
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
@@ -83,8 +83,8 @@ class DocumentoController extends Controller
         $documento = Documento::getDocument($id);
         if($documento instanceof Documento){
             if ($request->ajax()) {
-                return response()->json($documento);    
-            }        
+                return response()->json($documento);
+            }
             return view('accounting.documentos.show', ['documento' => $documento]);
         }
         abort(404);
@@ -99,7 +99,7 @@ class DocumentoController extends Controller
     public function edit($id)
     {
         $documento = Documento::findOrFail($id);
-        return view('accounting.documentos.edit', ['documento' => $documento]);   
+        return view('accounting.documentos.edit', ['documento' => $documento]);
     }
 
     /**
@@ -113,7 +113,7 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $documento = Documento::findOrFail($id);
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
@@ -153,7 +153,7 @@ class DocumentoController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function filter(Request $request)
-    {          
+    {
         if($request->has('folder')) {
             $data = Documento::select('id', 'documento_nombre')->where('documento_folder', $request->folder)->get();
             return response()->json(['success' => true, 'documents' => $data]);

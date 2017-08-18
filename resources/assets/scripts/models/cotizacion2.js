@@ -12,17 +12,39 @@ app || (app = {});
     app.Cotizacion2Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('cotizaciones.detalle.index') );
+            return window.Misc.urlFull( Route.route('cotizaciones.productos.index') );
         },
         idAttribute: 'id',
         defaults: {
-        	'cotizacion2_productoc': '',
-        	'cotizacion2_medida': '',
-        	'cotizacion2_cantidad': '',
-            'cotizacion2_materialp': '',
-            'total': 0,
-        	'materialp_nombre': '',
-        	'cotizacion2_valor': 0,
+            'cotizacion2_referencia': '',
+            'cotizacion2_cantidad': 0,
+            'cotizacion2_precio_formula': '',
+            'cotizacion2_round_formula': '',
+            'cotizacion2_precio_venta': '',
+            'cotizacion2_observaciones': '',
+            'cotizacion2_ancho': 0,
+            'cotizacion2_alto': 0,
+            'cotizacion2_c_ancho': 0,
+            'cotizacion2_c_alto': 0,
+            'cotizacion2_3d_ancho': 0,
+            'cotizacion2_3d_alto': 0,
+            'cotizacion2_3d_profundidad': 0,
+            'cotizacion2_tiro': false,
+            'cotizacion2_yellow': false,
+            'cotizacion2_magenta': false,
+            'cotizacion2_cyan': false,
+            'cotizacion2_key': false,
+            'cotizacion2_color1': false,
+            'cotizacion2_color2': false,
+            'cotizacion2_nota_tiro': '',
+            'cotizacion2_retiro': false,
+            'cotizacion2_yellow2': false,
+            'cotizacion2_magenta2': false,
+            'cotizacion2_cyan2': false,
+            'cotizacion2_key2': false,
+            'cotizacion2_color12': false,
+            'cotizacion2_color22': false,
+            'cotizacion2_nota_retiro': '',
         }
     });
 

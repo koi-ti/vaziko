@@ -16,19 +16,25 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'cotizacion1_numero': '',
-            'cotizacion1_ano': moment().format('YYYY'),
-            'cotizacion1_fecha': moment().format('YYYY-MM-DD'),
-            'cotizacion1_entrega': moment().format('YYYY-MM-DD'),
-            'cotizacion1_descripcion': '',
+            'cotizacion1_codigo': '',
+            'cotizacion1_referencia': '',
             'cotizacion1_cliente': '',
-            'cotizacion1_contacto': '',
-            'cotizacion1_aprobada': 1,
-            'cotizacion1_anulada': 1,
             'tercero_nit': '',
             'tercero_nombre': '',
+            'tercero_direccion': '',
+            'tercero_dir_nomenclatura': '',
+            'tercero_municipio': '',
+            'cotizacion1_fecha_inicio': moment().format('YYYY-MM-DD'),
+            'cotizacion1_fecha_entrega': moment().format('YYYY-MM-DD'),
+            'cotizacion1_hora_entrega': '',
+            'cotizacion1_formapago': 'CO',
+            'cotizacion1_iva': '',
+            'cotizacion1_contacto': '',
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',
+            'cotizacion1_suministran': '',
+            'cotizacion1_observaciones': '',
+            'cotizacion1_terminado': ''
         }
     });
 

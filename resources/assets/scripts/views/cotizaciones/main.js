@@ -26,13 +26,13 @@ app || (app = {});
 
             // Rerefences
             this.$cotizacionesSearchTable = this.$('#cotizaciones-search-table');
-
-            // References
-            this.$searchcotizacionCodigo = this.$('#searchcotizacion_numero');
-            this.$searchcotizacionEstado = this.$('#searchcotizacion_estado');
+            this.$searchcotizacionCotizacion = this.$('#searchcotizacion_numero');
             this.$searchcotizacionTercero = this.$('#searchcotizacion_tercero');
-            this.$searchcotizacionTerceroNombre = this.$('#searchcotizacion_tercero_nombre');
-            
+            this.$searchcotizacionTerceroName = this.$('#searchcotizacion_tercero_nombre');
+            this.$searchcotizacionEstado = this.$('#searchcotizacion_estado');
+            this.$searchcotizacionReferencia = this.$('#searchcotizacion_referencia');
+            this.$searchcotizacionProductop = this.$('#searchcotizacion_productop');
+
             this.cotizacionesSearchTable = this.$cotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -43,19 +43,22 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('cotizaciones.index') ),
                     data: function( data ) {
                         data.persistent = true;
-                        data.cotizacion_numero = _this.$searchcotizacionCodigo.val();
-                        data.estado = _this.$searchcotizacionEstado.val();
-                        data.tercero_nit = _this.$searchcotizacionTercero.val();
-                        data.tercero_nombre = _this.$searchcotizacionTerceroNombre.val();
+                        data.cotizacion_numero = _this.$searchcotizacionCotizacion.val();
+                        data.cotizacion_tercero_nit = _this.$searchcotizacionTercero.val();
+                        data.cotizacion_tercero_nombre = _this.$searchcotizacionTerceroName.val();
+                        data.cotizacion_estado = _this.$searchcotizacionEstado.val();
+                        data.cotizacion_referencia = _this.$searchcotizacionReferencia.val();
+                        data.cotizacion_productop = _this.$searchcotizacionProductop.val();
                     }
                 },
-                columns: [ 
+                columns: [
                     { data: 'cotizacion_codigo', name: 'cotizacion_codigo' },
                     { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
                     { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'cotizacion1_fecha', name: 'cotizacion1_fecha' },
-                    { data: 'cotizacion1_entrega', name: 'cotizacion1_entrega' },
+                    { data: 'cotizacion1_fecha_inicio', name: 'cotizacion1_fecha_inicio' },
+                    { data: 'cotizacion1_fecha_entrega', name: 'cotizacion1_fecha_entrega' },
+                    { data: 'cotizacion1_hora_entrega', name: 'cotizacion1_hora_entrega' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' }
                 ],
                 order: [
                     [ 1, 'desc' ], [ 2, 'desc' ]
@@ -63,18 +66,23 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '5%',
+                        width: '10%',
                         render: function ( data, type, full, row ) {
                            return '<a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.id }) )  +'">' + data + '</a>';
                         },
                     },
                     {
-                        targets: [1,2],
+                        targets: [1, 2],
                         visible: false,
+                        width: '10%',
                     },
+                    {
+                        targets: 3,
+                        width: '10%',
+                    }
                 ],
                 fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.cotizacion1_aprobada) ) {
+                    if ( parseInt(data.cotizacion1_abierta) ) {
                         $(row).css( {"color":"#00a65a"} );
                     }else if ( parseInt(data.cotizacion1_anulada) ) {
                         $(row).css( {"color":"red"} );
@@ -94,10 +102,12 @@ app || (app = {});
         clear: function(e) {
             e.preventDefault();
 
-            this.$searchcotizacionCodigo.val('');
-            this.$searchcotizacionEstado.val('');
+            this.$searchcotizacionCotizacion.val('');
             this.$searchcotizacionTercero.val('');
-            this.$searchcotizacionTerceroNombre.val('');
+            this.$searchcotizacionTerceroName.val('');
+            this.$searchcotizacionEstado.val('');
+            this.$searchcotizacionReferencia.val('');
+            this.$searchcotizacionProductop.val('').trigger('change');
 
             this.cotizacionesSearchTable.ajax.reload();
         },
