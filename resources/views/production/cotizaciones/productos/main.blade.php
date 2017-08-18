@@ -288,7 +288,7 @@
     <script type="text/template" id="cotizacion-producto-maquina-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_<%- id %>">
-                <input type="checkbox" id="cotizacion3_maquinap_<%- id %>" name="cotizacion3_maquinap_<%- id %>" value="cotizacion3_maquinap_<%- id %>" <%- activo ? 'checked': ''%>> <%- maquinap_nombre %>
+                <input type="checkbox" id="cotizacion3_maquinap_<%- id %>" name="cotizacion3_maquinap_<%- id %>" value="cotizacion3_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
     </script>
@@ -296,7 +296,7 @@
     <script type="text/template" id="cotizacion-producto-material-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_<%- id %>">
-                <input type="checkbox" id="cotizacion4_materialp_<%- id %>" name="cotizacion4_materialp_<%- id %>" value="cotizacion4_materialp_<%- id %>" <%- activo ? 'checked': ''%>> <%- materialp_nombre %>
+                <input type="checkbox" id="cotizacion4_materialp_<%- id %>" name="cotizacion4_materialp_<%- id %>" value="cotizacion4_materialp_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
     </script>
@@ -304,7 +304,7 @@
     <script type="text/template" id="cotizacion-producto-acabado-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="cotizacion5_acabadop_<%- id %>">
-                <input type="checkbox" id="cotizacion5_acabadop_<%- id %>" name="cotizacion5_acabadop_<%- id %>" value="cotizacion5_acabadop_<%- id %>" <%- activo ? 'checked': ''%>> <%- acabadop_nombre %>
+                <input type="checkbox" id="cotizacion5_acabadop_<%- id %>" name="cotizacion5_acabadop_<%- id %>" value="cotizacion5_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
         </div>
     </script>
