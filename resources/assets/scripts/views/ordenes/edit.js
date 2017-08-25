@@ -231,7 +231,7 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this
-                data = { orden_codigo: _this.model.get('orden_codigo') };
+                data = { orden_codigo: _this.model.get('id') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
