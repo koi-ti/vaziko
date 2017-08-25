@@ -246,20 +246,27 @@
 
             <br/>
             <div class="row">
-                {{-- Content maquinas --}}
-                <div class="col-sm-4">
+                {{-- Content areasp --}}
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
+                            <h3 class="box-title">Áreas</h3>
                         </div>
-                        <div class="box-body" id="browse-cotizacion-producto-maquinas-list">
-                            {{-- render maquinas list --}}
+                        <div class="box-body" id="browse-cotizacion-producto-areas-list">
+                            {{-- render areasp list --}}
+                        </div>
+                        <div class="box-footer">
+                            <div class="row">
+                                <div class="col-sm-12 text-right">
+                                    <div id="total-areap">0</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {{-- Content materiales --}}
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales</h3>
@@ -269,15 +276,29 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+            <div class="row">
                 {{-- Content acabados --}}
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados</h3>
                         </div>
                         <div class="box-body" id="browse-cotizacion-producto-acabados-list">
                             {{-- render acabados list --}}
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Content maquinas --}}
+                <div class="col-sm-6">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Máquinas</h3>
+                        </div>
+                        <div class="box-body" id="browse-cotizacion-producto-maquinas-list">
+                            {{-- render maquinas list --}}
                         </div>
                     </div>
                 </div>
@@ -306,6 +327,25 @@
             <label class="checkbox-inline without-padding white-space-normal" for="cotizacion5_acabadop_<%- id %>">
                 <input type="checkbox" id="cotizacion5_acabadop_<%- id %>" name="cotizacion5_acabadop_<%- id %>" value="cotizacion5_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="cotizacion-producto-areas-item-tpl">
+        <div class="form-group col-sm-3" >
+            <label class="checkbox-inline without-padding white-space-normal" for="cotizacion6_areap_<%- id %>">
+                <input type="checkbox" class="check-areap" id="cotizacion6_areap_<%- id %>" name="cotizacion6_areap_<%- id %>" value="cotizacion6_areap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- areap_nombre %>
+            </label>
+        </div>
+        <div class="form-group col-sm-3" >
+            <input id="cotizacion6_nombre_<%- id %>" name="cotizacion6_nombre_<%- id %>" placeholder="Nombre" class="form-control input-sm input-toupper" value="<%- cotizacion6_nombre %>" type="text" maxlength="20">
+        </div>
+
+        <div class="form-group col-sm-3">
+            <input id="cotizacion6_horas_<%- id %>" name="cotizacion6_horas_<%- id %>" placeholder="Horas" class="form-control input-sm item-area" value="<%- cotizacion6_horas %>" type="number" step="1">
+        </div>
+
+        <div class="form-group col-sm-3">
+            <input id="cotizacion6_valor_<%- id %>" name="cotizacion6_valor_<%- id %>" placeholder="Valor" class="form-control input-sm item-area" value="<%- cotizacion6_valor %>" type="text" data-currency>
         </div>
     </script>
 @stop

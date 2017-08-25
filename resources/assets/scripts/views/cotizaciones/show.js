@@ -24,7 +24,6 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.productopCotizacionList = new app.ProductopCotizacionList();
-            this.despachopCotizacionList = new app.DespachopCotizacionList();
 
             // Reference views
             this.referenceViews();
@@ -41,17 +40,6 @@ app || (app = {});
                     wrapper: this.$('#wrapper-productop-cotizacion'),
                     dataFilter: {
                         'cotizacion2_cotizacion': this.model.get('id')
-                    }
-               }
-            });
-
-            // Despachos list
-            this.despachopCotizacionListView = new app.DespachopCotizacionListView( {
-                collection: this.despachopCotizacionList,
-                parameters: {
-                    wrapper: this.$el,
-                    dataFilter: {
-                        'despachop1_cotizacion': this.model.get('id')
                     }
                }
             });

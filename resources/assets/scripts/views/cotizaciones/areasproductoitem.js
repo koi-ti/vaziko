@@ -1,5 +1,5 @@
 /**
-* Class DespachopPendienteCotizacionItemView  of Backbone Router
+* Class AreassProductopCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,11 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.DespachopPendienteCotizacionItemView = Backbone.View.extend({
+    app.AreasProductopCotizacionItemView = Backbone.View.extend({
 
-        tagName: 'tr',
-        template: _.template( ($('#cotizacion-despacho-pendiente-item-list-tpl').html() || '') ),
+        tagName: 'div',
+        className: 'row',
+        template: _.template( ($('#cotizacion-producto-areas-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },
@@ -33,11 +34,12 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
+
             var attributes = this.model.toJSON();
                 attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
             return this;
-        }
+        },
     });
 
 })(jQuery, this, this.document);

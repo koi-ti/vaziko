@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 use App, View, Auth, DB, Log, Datatables;
 
 class Cotizacion1Controller extends Controller
@@ -467,6 +467,14 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion5 = $cotizacion5->replicate();
                          $newcotizacion5->cotizacion5_cotizacion2 = $newcotizacion2->id;
                          $newcotizacion5->save();
+                    }
+
+                    // Areasp
+                    $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($areasp as $cotizacion6) {
+                         $newcotizacion6 = $cotizacion6->replicate();
+                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion6->save();
                     }
                 }
 

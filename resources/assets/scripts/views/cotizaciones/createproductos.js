@@ -19,7 +19,8 @@ app || (app = {});
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
             'click .submit-cotizacion2': 'submitCotizacion2',
-            'submit #form-cotizacion-producto': 'onStore'
+            'submit #form-cotizacion-producto': 'onStore',
+            'ifChanged .check-areap': 'changeAreap',
         },
         parameters: {
             data: {
@@ -40,6 +41,7 @@ app || (app = {});
             this.maquinasProductopCotizacionList = new app.MaquinasProductopCotizacionList();
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.acabadosProductopCotizacionList = new app.AcabadosProductopCotizacionList();
+            this.areasProductopCotizacionList = new app.AreasProductopCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -108,6 +110,14 @@ app || (app = {});
             // Materiales list
             this.acabadosProductopCotizacionListView = new app.AcabadosProductopCotizacionListView( {
                 collection: this.acabadosProductopCotizacionList,
+                parameters: {
+                    dataFilter: dataFilter
+               }
+            });
+
+            // Materiales list
+            this.areasProductopCotizacionListView = new app.AreasProductopCotizacionListView( {
+                collection: this.areasProductopCotizacionList,
                 parameters: {
                     dataFilter: dataFilter
                }
@@ -191,12 +201,49 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                 this.model.save( data, {silent: true} );
             }
         },
+
+        changeAreap: function(e){
+            var _this = this,
+                selected = this.$(e.currentTarget).prop('checked'),
+                id = this.$(e.currentTarget).attr('id'),
+                id = id.split("_");
+
+            this.$nombre = this.$('#cotizacion6_nombre_'+id[2]);
+            this.$horas = this.$('#cotizacion6_horas_'+id[2]);
+            this.$valor = this.$('#cotizacion6_valor_'+id[2]);
+
+            if( selected ) {
+                this.$horas.attr('required', 'required');
+                this.$valor.attr('required', 'required');
+
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id[2]}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$valor.val( resp.areap_valor );
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$nombre.val('');
+                this.$horas.val('').removeAttr('required');
+                this.$valor.val('').removeAttr('required');
+            }
+       },
 
         /**
         * fires libraries js

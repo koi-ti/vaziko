@@ -13,6 +13,7 @@
                         <tr>
                             <th>Código</th>
                             <th>Nombre</th>
+                            <th>Valor</th>
                         </tr>
                     </thead>
                 </table>

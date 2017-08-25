@@ -184,14 +184,9 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
 			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
+			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
-
-		Route::group(['prefix' => 'despachos'], function(){
-			Route::get('exportar/{despachos}', ['as' => 'cotizaciones.despachos.exportar', 'uses' => 'Production\DespachoCotizacionController@exportar']);
-			Route::get('pendientes', ['as' => 'cotizaciones.despachos.pendientes', 'uses' => 'Production\DespachoCotizacionController@pendientes']);
-		});
-		Route::resource('despachos', 'Production\DespachoCotizacionController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
 

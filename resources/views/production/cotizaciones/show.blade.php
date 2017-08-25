@@ -18,7 +18,6 @@
             <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
-                    <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                     <li class="dropdown pull-right">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                             Opciones <span class="caret"></span>
@@ -204,29 +203,6 @@
                             </div>
                       	</div>
                   	</div>
-
-                  	<div class="tab-pane" id="tab_despachos">
-                        <div class="box box-whithout-border">
-                            <div class="box-body">
-                            	<!-- table table-bordered table-striped -->
-                                <div class="box-body table-responsive no-padding">
-                                    <table id="browse-cotizacion-despachosp-list" class="table table-hover table-bordered" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th width="5%">Código</th>
-                                                <th width="75%">Contacto</th>
-                                                <th width="15%">Fecha</th>
-                                                <th width="5%"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {{-- Render content productos --}}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                	</div>
         	</div>
         </div>

@@ -31,7 +31,7 @@ class AuthController extends Controller
     protected $loginPath = '/login';
 
     protected $redirectPath = '/';
-    
+
 
     /**
      * Create a new authentication controller instance.
@@ -72,12 +72,10 @@ class AuthController extends Controller
             // Support md5 passwords
             $user = Tercero::where('username', $request->username)->first();
             if( $user instanceof Tercero && $user->password == md5($request->password) ) {
-                $user->password = bcrypt($request->password);
-                $user->save();
-
                 Auth::login($user);
-            } 
+            }
         }
+
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this

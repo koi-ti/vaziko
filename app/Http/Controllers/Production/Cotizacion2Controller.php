@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\DespachoCotizacion2;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
 use Auth, DB, Log, Datatables;
 
 class Cotizacion2Controller extends Controller
@@ -130,6 +130,31 @@ class Cotizacion2Controller extends Controller
                         }
                     }
 
+                    // Areap
+                    $areasp = Cotizacion6::getCotizaciones6($cotizacion2->cotizacion2_productop, $cotizacion2->id);
+                    foreach ($areasp as $areap)
+                    {
+                        if($request->has("cotizacion6_areap_$areap->id")) {
+                            if($request->get("cotizacion6_horas_$areap->id") <= 0){
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => "La cantidad de horas es obligatorio en el area $areap->areap_nombre."]);
+                            }
+
+                            if($request->get("cotizacion6_valor_$areap->id") <= 0){
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => "El valor es obligatorio del area $areap->areap_nombre."]);
+                            }
+
+                            $cotizacion6 = new Cotizacion6;
+                            $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                            $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
+                            $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
+                            $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
+                            $cotizacion6->cotizacion6_areap = $areap->id;
+                            $cotizacion6->save();
+                        }
+                    }
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true]);
@@ -208,7 +233,7 @@ class Cotizacion2Controller extends Controller
         if($cotizacion->cotizacion1_abierta == false) {
             return redirect()->route('cotizaciones.productos.show', ['productos' => $cotizacion2->id]);
         }
-        return view('production.cotizaciones.productos.edit', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
+        return view('production.cotizaciones.productos.create', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
     }
 
     /**
@@ -233,24 +258,12 @@ class Cotizacion2Controller extends Controller
                 if ($cotizacion2->isValid($data)) {
                     DB::beginTransaction();
                     try {
-                        // Validar despachos
-                        $query = DespachoCotizacion2::query();
-                        $query->select(DB::raw('COALESCE(sum(despachoc2_cantidad),0) as despachadas'));
-                        $query->join('koi_despachocotizacion1', 'despachoc2_despacho', '=', 'koi_despachocotizacion1.id');
-                        $query->where('despachoc2_cotizacion2', $cotizacion2->id);
-                        $query->where('despachoc1_anulado', false);
-                        $despacho = $query->first();
-
-                        if($request->cotizacion2_cantidad < $despacho->despachadas) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => "No es posible actualizar unidades, cantidad mínima despachos ($despacho->despachadas), por favor verifique la información del asiento o consulte al administrador."]);
-                        }
 
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
-                        $cotizacion2->cotizacion2_saldo = $cotizacion2->cotizacion2_cantidad - $despacho->despachadas;
+                        $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
                         $cotizacion2->save();
 
                         // Maquinas
@@ -310,6 +323,44 @@ class Cotizacion2Controller extends Controller
                             }
                         }
 
+                        // Areap
+                        $areasp = Cotizacion6::getCotizaciones6($cotizacion2->cotizacion2_productop, $cotizacion2->id);
+                        foreach ($areasp as $areap)
+                        {
+                            $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_areap', $areap->id)->first();
+                            if($request->has("cotizacion6_areap_$areap->id")){
+
+                                if($request->get("cotizacion6_horas_$areap->id") <= 0){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => "La cantidad de horas es obligatorio en el area $areap->areap_nombre."]);
+                                }
+
+                                if($request->get("cotizacion6_valor_$areap->id") <= 0){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => "El valor es obligatorio del area $areap->areap_nombre."]);
+                                }
+
+                                if(!$cotizacion6 instanceof Cotizacion6) {
+                                    $cotizacion6 = new Cotizacion6;
+                                    $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                                    $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
+                                    $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
+                                    $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
+                                    $cotizacion6->cotizacion6_areap = $areap->id;
+                                    $cotizacion6->save();
+                                }else{
+                                    $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
+                                    $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
+                                    $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
+                                    $cotizacion6->save();
+                                }
+                            }else{
+                                if($cotizacion6 instanceof Cotizacion6) {
+                                    $cotizacion6->delete();
+                                }
+                            }
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $cotizacion2->id]);
@@ -343,13 +394,6 @@ class Cotizacion2Controller extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle la cotizacion, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                // Validar despachos
-                $despacho = DespachoCotizacion2::where('despachoc2_cotizacion2', $cotizacion2->id)->first();
-                if($despacho instanceof DespachoCotizacion2) {
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar producto, contiene despachos asociados, por favor verifique la información del asiento o consulte al administrador.']);
-                }
-
                 // Maquinas
                 DB::table('koi_cotizacion3')->where('cotizacion3_cotizacion2', $cotizacion2->id)->delete();
 
@@ -358,6 +402,9 @@ class Cotizacion2Controller extends Controller
 
                 // Acabados
                 DB::table('koi_cotizacion5')->where('cotizacion5_cotizacion2', $cotizacion2->id)->delete();
+
+                // Areasp
+                DB::table('koi_cotizacion6')->where('cotizacion6_cotizacion2', $cotizacion2->id)->delete();
 
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
@@ -440,6 +487,14 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion5 = $cotizacion5->replicate();
                      $newcotizacion5->cotizacion5_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion5->save();
+                }
+
+                // Areasp
+                $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
+                foreach ($areasp as $cotizacion6) {
+                     $newcotizacion6 = $cotizacion6->replicate();
+                     $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                     $newcotizacion6->save();
                 }
 
                 // Commit Transaction

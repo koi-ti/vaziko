@@ -68,26 +68,29 @@
 	            <th>Código</th>
 	            <th>Nombre</th>
 	            <th>Cantidad</th>
+	            <th>Facturado</th>
 	            <th>Precio</th>
 	            <th>Total</th>
 	        </tr>
        	<thead>
    		<tbody>
 			@if(count($detalle) > 0)
-				{{--*/ $tunidades = $tsubtotal = $tcredito = 0; /*--}}
+				{{--*/ $tunidades = $tfacturado = $tsubtotal = $tcredito = 0; /*--}}
 				@foreach($detalle as $ordenp2)
 					<tr>
 						<td class="left">{{ $ordenp2->id }}</td>
 						<td class="left">{{ $ordenp2->productop_nombre }}</td>
 						<td class="center">{{ $ordenp2->orden2_cantidad }}</td>
-						<td class="right">{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</td>
-						<td class="right">{{ number_format($ordenp2->orden2_precio_total,2,'.',',') }}</td>
+						<td class="center">{{ $ordenp2->orden2_facturado }}</td>
+						<td class="right">{{ number_format($ordenp2->orden2_precio_venta,2,',','.') }}</td>
+						<td class="right">{{ number_format($ordenp2->orden2_precio_total,2,',','.') }}</td>
 					</tr>
 
 					{{-- Calculo totales --}}
 					{{--*/
 						$tunidades += $ordenp2->orden2_cantidad;
 						$tsubtotal += $ordenp2->orden2_precio_total;
+						$tfacturado += $ordenp2->orden2_facturado;
 						//$tdebito += $ordenp2->ordenp2_debito;
 					/*--}}
 				@endforeach
@@ -95,15 +98,16 @@
 				<tr>
 					<td colspan="2" class="right bold">Subtotal</td>
 					<td class="center bold">{{ $tunidades }}</td>
-					<td colspan="2" class="right bold">{{ number_format($tsubtotal,2,'.',',') }}</td>
+					<td class="center bold">{{ $tfacturado }}</td>
+					<td colspan="2" class="right bold">{{ number_format($tsubtotal,2,',','.') }}</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="right bold">Iva ({{ $orden->orden_iva }}%)</td>
-					<td colspan="3" class="right bold">{{ number_format($tiva,2,'.',',') }}</td>
+					<td colspan="4" class="right bold">{{ number_format($tiva,2,',','.') }}</td>
 				</tr>
 				<tr>
 					<td colspan="2" class="right bold">Total</td>
-					<td colspan="3" class="right bold">{{ number_format(($tsubtotal + $tiva),2,'.',',') }}</td>
+					<td colspan="4" class="right bold">{{ number_format(($tsubtotal + $tiva),2,',','.') }}</td>
 				</tr>
 			@endif
 		</tbody>

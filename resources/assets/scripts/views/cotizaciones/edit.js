@@ -20,7 +20,6 @@ app || (app = {});
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
             'submit #form-cotizaciones': 'onStore',
-            'submit #form-despachosp': 'onStoreDespacho'
         },
         parameters: {
         },
@@ -34,8 +33,6 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             this.productopCotizacionList = new app.ProductopCotizacionList();
-            this.despachopCotizacionList = new app.DespachopCotizacionList();
-            this.despachospPendientesCotizacionList = new app.DespachospPendientesCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -77,29 +74,6 @@ app || (app = {});
                     }
                }
             });
-
-            // Despachos pendientes list
-            this.despachospPendientesCotizacionListView = new app.DespachospPendientesCotizacionListView( {
-                collection: this.despachospPendientesCotizacionList,
-                parameters: {
-                    dataFilter: {
-                        'cotizacion2_cotizacion': this.model.get('id')
-                    }
-               }
-            });
-
-            // Despachos list
-            this.despachopCotizacionListView = new app.DespachopCotizacionListView( {
-                collection: this.despachopCotizacionList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.spinner,
-                    collectionPendientes: this.despachospPendientesCotizacionList,
-                    dataFilter: {
-                        'despachoc1_cotizacion': this.model.get('id')
-                    }
-               }
-            });
         },
 
         /**
@@ -118,19 +92,6 @@ app || (app = {});
 
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
-        /**
-        * Event Create despacho
-        */
-        onStoreDespacho: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                data.despachoc1_cotizacion = this.model.get('id');
-                this.despachopCotizacionList.trigger( 'store', data );
             }
         },
 
@@ -231,7 +192,7 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this
-                data = { cotizacion_codigo: this.model.get('id') };
+                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {

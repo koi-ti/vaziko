@@ -28,7 +28,6 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                            <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                             <li class="dropdown pull-right">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                     Opciones <span class="caret"></span>
@@ -277,142 +276,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        {{-- Content despachos --}}
-                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                            <div class="tab-pane" id="tab_despachos">
-                                <div class="box box-whithout-border">
-                                    <div class="box-body">
-                                        <form method="POST" accept-charset="UTF-8" id="form-despachosp" data-toggle="validator">
-                                            <div class="row">
-                                                <div class="form-group col-sm-8 col-xs-12">
-                                                    <label for="despachoc1_nombre" class="control-label">Enviar a</label>
-                                                    <div class="row">
-                                                        <div class="col-sm-11 col-xs-10">
-                                                            <div class="input-group input-group-sm">
-                                                                <span class="input-group-btn">
-                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-contacto-component-table" data-field="despachoc1_contacto" data-name="despachoc1_nombre" data-phone="despachoc1_telefono" data-address="despachoc1_direccion" data-nomenclatura="despachoc1_direccion_nomenclatura" data-name-nomenclatura="despachoc1_nomenclatura" data-city="despachoc1_municipio" data-email="despachoc1_email" data-tercero="btn-add-contact">
-                                                                        <i class="fa fa-address-book"></i>
-                                                                    </button>
-                                                                </span>
-                                                                <input id="despachoc1_contacto" name="despachoc1_contacto" type="hidden">
-                                                                <input id="despachoc1_nombre" placeholder="Contacto" class="form-control" name="despachoc1_nombre" type="text" readonly required>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="col-sm-1 col-xs-2">
-                                                            <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="despachoc1_contacto" data-name="despachoc1_nombre" data-tercero="<%- cotizacion1_cliente %>" data-phone="despachoc1_telefono" data-address="despachoc1_direccion" data-name-nomenclatura="despachoc1_nomenclatura" data-city="despachoc1_municipio" data-email="despachoc1_email" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_dir_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label for="despachoc1_telefono" class="control-label">Teléfono</label>
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-phone"></i>
-                                                        </div>
-                                                        <input id="despachoc1_telefono" class="form-control input-sm" name="despachoc1_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask required>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-4">
-                                                    <label for="despachoc1_direccion" class="control-label">Dirección</label>
-                                                    <small id="despachoc1_nomenclatura"></small>
-                                                    <div class="input-group input-group-sm">
-                                                        <input type="hidden" id="despachoc1_direccion_nomenclatura" name="despachoc1_direccion_nomenclatura">
-                                                        <input id="despachoc1_direccion" placeholder="Dirección" class="form-control address-koi-component" name="despachoc1_direccion" data-nm-name="despachoc1_nomenclatura" data-nm-value="despachoc1_direccion_nomenclatura" type="text" maxlength="200" required>
-                                                        <span class="input-group-btn">
-                                                            <button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="despachoc1_direccion">
-                                                                <i class="fa fa-map-signs"></i>
-                                                            </button>
-                                                        </span>
-                                                    </div>
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label for="despachoc1_municipio" class="control-label">Municipio</label>
-                                                    <select name="despachoc1_municipio" id="despachoc1_municipio" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-                                                        <option value="{{ $key }}">{{ $value }}</option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
-
-                                                <div class="form-group col-md-4">
-                                                    <label for="despachoc1_email" class="control-label">Email</label>
-                                                    <input id="despachoc1_email" placeholder="Email" class="form-control input-sm" name="despachoc1_email" type="email" maxlength="200">
-                                                    <div class="help-block with-errors"></div>
-                                                </div>
-                                            </div>
-
-                                            <!-- table table-bordered table-striped -->
-                                            <div class="box-body table-responsive no-padding">
-                                                <table id="browse-cotizacion-despachosp-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th width="5%">Código</th>
-                                                            <th width="65%">Producto</th>
-                                                            <th width="10%">Cantidad</th>
-                                                            <th width="10%">Saldo</th>
-                                                            <th width="10%">Entregado</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        {{-- Render content productos --}}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="form-group col-md-6">
-                                                    <label for="despachoc1_observacion" class="control-label">Detalle</label>
-                                                    <textarea id="despachoc1_observacion" name="despachoc1_observacion" class="form-control" rows="2" placeholder="Detalle"></textarea>
-                                                </div>
-                                                <div class="form-group col-md-6">
-                                                    <label for="despachoc1_transporte" class="control-label">Transporte</label>
-                                                    <input id="despachoc1_transporte" placeholder="Transporte" class="form-control input-sm input-toupper" name="despachoc1_transporte" type="text" maxlength="200">
-                                                </div>
-                                            </div>
-
-                                            <div class="row">
-                                                <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
-                                                    <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
-                                                </div>
-                                            </div>
-                                        </form><br/>
-
-                                        <div class="box box-success">
-                                            <div class="box-body">
-                                                <!-- table table-bordered table-striped -->
-                                                <div class="box-body table-responsive no-padding">
-                                                    <table id="browse-cotizacion-despachosp-list" class="table table-hover table-bordered" cellspacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']) )
-                                                                <th width="5%"></th>
-                                                                @endif
-                                                                <th width="5%">Código</th>
-                                                                <th width="70%">Contacto</th>
-                                                                <th width="15%">Fecha</th>
-                                                                <th width="5%"></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {{-- Render content productos --}}
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        <% } %>
                     </div>
                 </div>
             </div>
@@ -447,36 +310,6 @@
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_venta ) %></td>
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_total ) %></td>
         @endif
-    </script>
-
-    <script type="text/template" id="cotizacion-despacho-item-list-tpl">
-        <% if(edit) { %>
-            @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']) )
-                <td class="text-center">
-                    <a class="btn btn-default btn-xs item-cotizacion-despacho-remove" data-resource="<%- id %>">
-                        <span><i class="fa fa-times"></i></span>
-                    </a>
-                </td>
-            @endif
-        <% } %>
-        <td class="text-center"><%- id %></td>
-        <td><%- tcontacto_nombre %></td>
-        <td><%- despachoc1_fecha %></td>
-        <td>
-            <a href="<%- window.Misc.urlFull( Route.route('cotizaciones.despachos.exportar', {despachos: id}) ) %>"  target="_blank" class="btn btn-danger btn-xs" data-resource="<%- id %>">
-                <span><i class="fa fa-file-pdf-o"></i></span>
-            </a>
-        </td>
-    </script>
-
-    <script type="text/template" id="cotizacion-despacho-pendiente-item-list-tpl">
-        <td><%- id %></td>
-        <td><%- productop_nombre %></td>
-        <td>
-            <input id="despachoc2_cantidad_<%- id %>" name="despachoc2_cantidad_<%- id %>" class="form-control input-sm" type="number" min="0" max="<%- cotizacion2_saldo %>" value="0" required>
-        </td>
-        <td><%- cotizacion2_saldo %></td>
-        <td><%- cotizacion2_entregado %></td>
     </script>
 
     <script type="text/template" id="cotizacion-close-confirm-tpl">

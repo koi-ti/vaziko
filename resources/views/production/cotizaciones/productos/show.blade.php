@@ -240,21 +240,33 @@
             </div>
 
             <br/>
+
             <div class="row">
-                {{-- Content maquinas --}}
-                <div class="col-sm-4">
+				{{-- Content materiales --}}
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
+                            <h3 class="box-title">Areas</h3>
                         </div>
                         <div class="box-body">
-                            @foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
+                            @foreach( App\Models\Production\Cotizacion6::getCotizaciones6($producto->id, $cotizacion2->id) as $areap)
                                 <div class="row">
-                                    <div class="form-group col-md-12">
-                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_{{ $maquina->id }}">
-                                            <input type="checkbox" id="cotizacion3_maquinap_{{ $maquina->id }}" name="cotizacion3_maquinap_{{ $maquina->id }}" value="cotizacion3_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
+                                    <div class="form-group col-sm-3">
+                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion6_areap_{{ $areap->id }}">
+                                            <input type="checkbox" id="cotizacion6_areap_{{ $areap->id }}" name="cotizacion6_areap_{{ $areap->id }}" value="cotizacion6_areap_{{ $areap->id }}" {{ $areap->activo ? 'checked': '' }} disabled> {{ $areap->areap_nombre }}
                                         </label>
                                     </div>
+									<div class="form-group col-sm-3" >
+							            <input id="cotizacion6_nombre_{{ $areap->id }}" disabled name="cotizacion6_nombre_{{ $areap->id }}" placeholder="Nombre" class="form-control input-sm input-toupper" value="{{ $areap->cotizacion6_nombre }}" type="text" maxlength="20">
+							        </div>
+
+							        <div class="form-group col-sm-3">
+							            <input id="cotizacion6_horas_{{ $areap->id }}" disabled name="cotizacion6_horas_{{ $areap->id }}" placeholder="Horas" class="form-control input-sm item-area" value="{{ $areap->cotizacion6_horas }}" type="number" step="1">
+							        </div>
+
+							        <div class="form-group col-sm-3">
+							            <input id="cotizacion6_valor_{{ $areap->id }}" disabled name="cotizacion6_valor_{{ $areap->id }}" placeholder="Valor" class="form-control input-sm item-area" value="{{ $areap->cotizacion6_valor }}" type="text" data-currency>
+							        </div>
                                 </div>
                             @endforeach
                         </div>
@@ -262,7 +274,7 @@
                 </div>
 
                 {{-- Content materiales --}}
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales</h3>
@@ -280,9 +292,11 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
+			<div class="row">
                 {{-- Content acabados --}}
-                <div class="col-sm-4">
+                <div class="col-sm-6">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados</h3>
@@ -293,6 +307,26 @@
                                     <div class="form-group col-md-12">
                                         <label class="checkbox-inline without-padding white-space-normal" for="cotizacion5_acabadop_{{ $acabado->id }}">
                                             <input type="checkbox" id="cotizacion5_acabadop_{{ $acabado->id }}" name="cotizacion5_acabadop_{{ $acabado->id }}" value="cotizacion5_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
+                                        </label>
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                    </div>
+                </div>
+
+				{{-- Content maquinas --}}
+                <div class="col-sm-6">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Máquinas</h3>
+                        </div>
+                        <div class="box-body">
+                            @foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_{{ $maquina->id }}">
+                                            <input type="checkbox" id="cotizacion3_maquinap_{{ $maquina->id }}" name="cotizacion3_maquinap_{{ $maquina->id }}" value="cotizacion3_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
                                         </label>
                                     </div>
                                 </div>
