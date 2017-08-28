@@ -167,6 +167,7 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                     $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
                     $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
+                    dd($cotizacion, $numero);
                     $cotizacion->save();
 
                     // Commit Transaction
