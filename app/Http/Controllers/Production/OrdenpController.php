@@ -173,7 +173,7 @@ class OrdenpController extends Controller
 
                     // Recuperar numero orden
                     $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                    $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // Orden de produccion
                     $orden->fill($data);
@@ -438,7 +438,7 @@ class OrdenpController extends Controller
             try {
                 // Recuperar numero orden
                 $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                 // Orden
                 $neworden = $orden->replicate();
