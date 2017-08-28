@@ -156,7 +156,7 @@ class Cotizacion1Controller extends Controller
 
                     // Recuperar numero cotizacion
                     $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
-                    $numero = !is_int($numero) ? 1 : ($numero + 1);
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // cotizacion
                     $cotizacion->fill($data);
@@ -167,7 +167,6 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                     $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
                     $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
-                    dd($cotizacion, $numero);
                     $cotizacion->save();
 
                     // Commit Transaction
