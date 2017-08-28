@@ -192,7 +192,7 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this
-                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo') };
+                data = { cotizacion_codigo: _this.model.get('id') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
