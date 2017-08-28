@@ -30,6 +30,8 @@ app || (app = {});
             'cotizacion1_formapago': 'CO',
             'cotizacion1_iva': '',
             'cotizacion1_contacto': '',
+            'cotizacion1_numero': 0,
+            'cotizacion1_ano': 0,
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',
             'cotizacion1_suministran': '',

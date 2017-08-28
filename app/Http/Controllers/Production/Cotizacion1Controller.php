@@ -155,7 +155,7 @@ class Cotizacion1Controller extends Controller
                     }
 
                     // Recuperar numero cotizacion
-                    $numero = Cotizacion1::where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
+                    $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
                     $numero = !is_integer($numero) ? 1 : ($numero + 1);
 
                     // cotizacion
