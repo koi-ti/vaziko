@@ -158,7 +158,7 @@ class Cotizacion1Controller extends Controller
                     $query = Cotizacion1::query();
                     $query->where('cotizacion1_ano', date('Y'));
                     $hola = $query->max('cotizacion1_numero');
-                    $hola = !is_integer($hola) ? 1 : ($hola + 1);
+                    $hola = $hola + 1;
 
 
                     $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
@@ -168,7 +168,7 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->fill($data);
                     $cotizacion->cotizacion1_cliente = $tercero->id;
                     $cotizacion->cotizacion1_ano = date('Y');
-                    $cotizacion->cotizacion1_numero = $numero;
+                    $cotizacion->cotizacion1_numero = $hola;
                     $cotizacion->cotizacion1_contacto = $contacto->id;
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                     $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
