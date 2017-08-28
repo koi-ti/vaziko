@@ -288,7 +288,7 @@
     <script type="text/template" id="orden-producto-maquina-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_<%- id %>">
-                <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- activo ? 'checked': ''%>> <%- maquinap_nombre %>
+                <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
     </script>
@@ -296,7 +296,7 @@
     <script type="text/template" id="orden-producto-material-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- id %>">
-                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- activo ? 'checked': ''%>> <%- materialp_nombre %>
+                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
     </script>
@@ -304,7 +304,7 @@
     <script type="text/template" id="orden-producto-acabado-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_<%- id %>">
-                <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- activo ? 'checked': ''%>> <%- acabadop_nombre %>
+                <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
         </div>
     </script>
