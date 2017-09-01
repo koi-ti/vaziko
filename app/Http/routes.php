@@ -184,7 +184,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
 			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
-			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index']]);
+			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
 	});

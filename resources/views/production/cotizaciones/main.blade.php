@@ -152,16 +152,28 @@
                                                 <input id="cotizacion1_suministran" placeholder="Suministran" class="form-control" name="cotizacion1_suministran" type="text" value="<%- cotizacion1_suministran %>" required maxlength="200">
                                             </div>
                                             <label for="cotizacion1_formapago" class="col-sm-1 control-label">Forma pago</label>
-                                            <div class="form-group col-md-2">
+                                            <div class="form-group col-md-3">
                                                 <select name="cotizacion1_formapago" id="cotizacion1_formapago" class="form-control" required>
                                                     @foreach( config('koi.produccion.formaspago') as $key => $value)
                                                     <option value="{{ $key }}" <%- cotizacion1_formapago == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <label for="cotizacion1_transporte" class="col-sm-1 control-label">Transporte</label>
+                                            <div class="form-group col-md-3">
+                                            	<input id="cotizacion1_transporte" value="<%- cotizacion1_transporte %>" class="form-control input-sm" name="cotizacion1_transporte" type="text" maxlength="30" data-currency>
+                                       		</div>
+
+                                            <label for="cotizacion1_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                                            <div class="form-group col-md-3">
+                                            	<input id="cotizacion1_viaticos" value="<%- cotizacion1_viaticos %>" class="form-control input-sm" name="cotizacion1_viaticos" type="text" maxlength="30" data-currency>
+                                       		</div>
                                             <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                                 <label for="cotizacion1_iva" class="col-sm-1 control-label">Iva</label>
-                                                <div class="form-group col-sm-1">
+                                                <div class="form-group col-sm-2">
                                                     <select name="cotizacion1_iva" id="cotizacion1_iva" class="form-control" required>
                                                         @foreach( config('koi.contabilidad.iva') as $key => $value)
                                                         <option value="{{ $key }}" <%- cotizacion1_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>

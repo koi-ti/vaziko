@@ -20,24 +20,47 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(){
+        },
 
+        validar: function( data ) {
+            var error = { success: false, message: '' };
+
+            // Validate exist
+            if( !_.isNull(data.cotizacion6_areap) && !_.isUndefined(data.cotizacion6_areap) && data.cotizacion6_areap != ''){
+                var modelExits = _.find(this.models, function(item) {
+                    return item.get('cotizacion6_areap') == data.cotizacion6_areap;
+                });
+            }else{
+                var modelExits = _.find(this.models, function(item) {
+                    return item.get('cotizacion6_nombre') == data.cotizacion6_nombre;
+                });
+            }
+
+            if(modelExits instanceof Backbone.Model ) {
+                error.message = 'El area que intenta ingresar ya existe.'
+                return error;
+            }
+
+            error.success = true;
+            return error;
         },
 
         total: function() {
             return this.reduce(function(sum, model) {
-                if( _.isNull(model.get('cotizacion6_horas')) || _.isNull(model.get('cotizacion6_valor'))){
-                    horas = 0;
-                    valor = 0;
-                }else{
-                    horas = model.get('cotizacion6_horas');
-                    valor = model.get('cotizacion6_valor');
-                }
-                return sum + parseInt(horas) * parseFloat(valor);
+                return sum + parseInt(model.get('cotizacion6_horas')) * parseFloat(model.get('cotizacion6_valor'));
             }, 0);
+        },
+
+        totalRow: function( ){
+            _.each(this.models, function(item){
+                var total = parseInt(item.get('cotizacion6_horas')) * parseFloat(item.get('cotizacion6_valor'));
+                item.set('total', total);
+            });
         },
 
         totalize: function() {
             var total = this.total();
+            this.totalRow();
             return { 'total': total }
         },
    });

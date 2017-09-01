@@ -29,7 +29,7 @@ class Cotizacion2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_precio_formula', 'cotizacion2_round_formula', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro'];
+    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_precio_formula', 'cotizacion2_round_formula', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos'];
 
     public function isValid($data)
     {
@@ -38,6 +38,8 @@ class Cotizacion2 extends BaseModel
             'cotizacion2_cantidad' => 'required|min:1|integer',
             'cotizacion2_round_formula' => 'integer',
             'cotizacion2_precio_venta' => 'required',
+            'cotizacion2_viaticos' => 'required',
+            'cotizacion2_transporte' => 'required',
             'cotizacion2_ancho' => 'numeric|min:0',
         ];
 

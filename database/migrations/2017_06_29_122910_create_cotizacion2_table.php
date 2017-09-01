@@ -24,6 +24,8 @@ class CreateCotizacion2Table extends Migration
             $table->integer('cotizacion2_facturado')->default(0);
             $table->text('cotizacion2_precio_formula');
             $table->string('cotizacion2_round_formula', 10);
+            $table->double('cotizacion2_viaticos')->default(0);
+            $table->integer('cotizacion2_transporte')->default(0);
             $table->double('cotizacion2_precio_venta')->default(0);
             $table->integer('cotizacion2_entregado')->default(0);
             $table->text('cotizacion2_observaciones')->nullable();

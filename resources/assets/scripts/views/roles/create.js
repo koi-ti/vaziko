@@ -15,27 +15,14 @@ app || (app = {});
         template: _.template( ($('#add-rol-tpl').html() || '') ),
         events: {
             'submit #form-roles': 'onStore',
-            'click .toggle-children': 'toggleChildren',
-            'click .btn-set-permission': 'changePermissions'
-        },
-        parameters: {
         },
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-            // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.stuffToDo = { };
-            this.stuffToVw = { };
-            this.$wraperForm = this.$('#render-form-rol');
+        initialize : function() {
 
             // Events
-            this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
@@ -45,16 +32,16 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = false;
+            this.$el.html( this.template(attributes) );
 
-            this.$form = this.$('#form-roles');
+            this.spinner = this.$('#spinner-main');
         },
 
         /**
         * Event Create Folder
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
 
                 e.preventDefault();
@@ -64,79 +51,17 @@ app || (app = {});
         },
 
         /**
-        * Event toggle children
-        */
-        toggleChildren: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                father = $(e.currentTarget).attr("data-father"),
-                nivel1 = $(e.currentTarget).attr("data-nivel1"),
-                nivel2 = $(e.currentTarget).attr("data-nivel2"),
-                _this = this;
-
-            if ( (this.stuffToVw[resource] instanceof Backbone.View) == false )
-            {
-                this.stuffToDo[resource] = new app.PermisosRolList();
-                this.stuffToVw[resource] = new app.PermisosRolListView({
-                    el: '#wrapper-permisions-'+resource,
-                    collection: this.stuffToDo[resource],
-                    parameters: {
-                        wrapper: this.$('#wrapper-father-'+father),
-                        permissions: this.model.get('permissions'),
-                        father: resource,
-                        dataFilter: {
-                            'role_id': this.model.get('id'),
-                            'nivel1': nivel1,
-                            'nivel2': nivel2
-                        }
-                   }
-                });
-            }
-
-        },
-
-        changePermissions: function(e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                father = $(e.currentTarget).attr("data-father"),
-                collection = this.stuffToDo[father],
-                model = collection.get(resource),
-                _this = this;
-
-            if ( this.createPermisoRolView instanceof Backbone.View ){
-                this.createPermisoRolView.stopListening();
-                this.createPermisoRolView.undelegateEvents();
-            }
-
-            this.createPermisoRolView = new app.CreatePermisoRolView({
-                model: model,
-                collection: collection,
-                parameters: {
-                    permissions: this.model.get('permissions'),
-                    dataFilter: {
-                        'role_id': this.model.get('id'),
-                        'nivel1': model.get('nivel1'),
-                        'nivel2': model.get('nivel2')
-                    }
-                }
-            });
-            this.createPermisoRolView.render();
-        },
-
-        /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -151,7 +76,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit rol
-                Backbone.history.navigate(Route.route('roles.edit', { roles: resp.id}), { trigger:true });
+                Backbone.history.navigate(Route.route('roles.edit', { roles: resp.id}), { trigger: true });
             }
         }
     });

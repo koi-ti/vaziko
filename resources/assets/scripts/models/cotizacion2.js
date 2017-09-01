@@ -21,6 +21,8 @@ app || (app = {});
             'cotizacion2_precio_formula': '',
             'cotizacion2_round_formula': '',
             'cotizacion2_precio_venta': '',
+            'cotizacion2_transporte': 0,
+            'cotizacion2_viaticos': '',
             'cotizacion2_observaciones': '',
             'cotizacion2_ancho': 0,
             'cotizacion2_alto': 0,

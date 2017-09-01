@@ -13,6 +13,7 @@
                 <div class="col-md-2 col-sm-6 col-xs-6 text-left">
                     <a href="{{ route('cotizaciones.show', ['cotizaciones' => $cotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
+
                 @if($cotizacion->cotizacion1_abierta)
 	                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
 	                    <a href="{{ route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
@@ -23,46 +24,54 @@
 
         <div class="box-body">
 			<div class="row">
+				<label class="control-label col-md-1">Código</label>
 				<div class="form-group col-md-1">
-					<label class="control-label">Código</label>
 					<div>{{ $cotizacion->cotizacion_codigo }}</div>
 				</div>
-				<div class="form-group col-md-9">
-					<label class="control-label">Producto</label>
+				<label class="control-label col-md-1">Producto</label>
+				<div class="form-group col-md-7">
 					<div>{{ $cotizacion2->productop_nombre }}</div>
-				</div>
-				<div class="form-group col-md-2">
-					<label class="control-label">Cantidad</label>
-					<div>{{ $cotizacion2->cotizacion2_cantidad }}</div>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Referencia</label>
+				<label class="control-label col-md-1">Referencia</label>
+				<div class="form-group col-md-8">
 					<div>{{ $cotizacion2->cotizacion2_referencia }}</div>
+				</div>
+				<label class="control-label col-md-1">Cantidad</label>
+				<div class="form-group col-md-1">
+					<div>{{ $cotizacion2->cotizacion2_cantidad }}</div>
 				</div>
 			</div>
 
             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
     			<div class="row">
-    				<div class="form-group col-md-10">
-    					<label class="control-label">Fórmula</label>
+					<label class="control-label col-md-1">Fórmula</label>
+    				<div class="form-group col-md-8">
     					<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
     				</div>
 
+					<label class="control-label col-md-1">Redondear</label>
     				<div class="form-group col-md-2">
-    					<label class="control-label">Redondear</label>
     					<div>{{ $cotizacion2->cotizacion2_round_formula }}</div>
     				</div>
     			</div>
 
     			<div class="row">
-    				<div class="form-group col-md-12">
-    					<label class="control-label">Referencia</label>
-    					<div>{{ number_format($cotizacion2->cotizacion2_precio_venta,2,'.',',') }}</div>
+					<label class="control-label col-md-1">Precio</label>
+					<div class="form-group col-md-4">
+    					<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
     				</div>
-    			</div>
+					<label class="control-label col-md-1">Transporte</label>
+					<div class="form-group col-md-1">
+    					<div>{{ $cotizacion2->cotizacion2_transporte }}</div>
+    				</div>
+					<label class="control-label col-md-1">Viaticos</label>
+					<div class="form-group col-md-4">
+    					<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
+    				</div>
+    			</div><br>
             @endif
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
@@ -242,39 +251,8 @@
             <br/>
 
             <div class="row">
-				{{-- Content materiales --}}
-                <div class="col-sm-6">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Areas</h3>
-                        </div>
-                        <div class="box-body">
-                            @foreach( App\Models\Production\Cotizacion6::getCotizaciones6($producto->id, $cotizacion2->id) as $areap)
-                                <div class="row">
-                                    <div class="form-group col-sm-3">
-                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion6_areap_{{ $areap->id }}">
-                                            <input type="checkbox" id="cotizacion6_areap_{{ $areap->id }}" name="cotizacion6_areap_{{ $areap->id }}" value="cotizacion6_areap_{{ $areap->id }}" {{ $areap->activo ? 'checked': '' }} disabled> {{ $areap->areap_nombre }}
-                                        </label>
-                                    </div>
-									<div class="form-group col-sm-3" >
-							            <input id="cotizacion6_nombre_{{ $areap->id }}" disabled name="cotizacion6_nombre_{{ $areap->id }}" placeholder="Nombre" class="form-control input-sm input-toupper" value="{{ $areap->cotizacion6_nombre }}" type="text" maxlength="20">
-							        </div>
-
-							        <div class="form-group col-sm-3">
-							            <input id="cotizacion6_horas_{{ $areap->id }}" disabled name="cotizacion6_horas_{{ $areap->id }}" placeholder="Horas" class="form-control input-sm item-area" value="{{ $areap->cotizacion6_horas }}" type="number" step="1">
-							        </div>
-
-							        <div class="form-group col-sm-3">
-							            <input id="cotizacion6_valor_{{ $areap->id }}" disabled name="cotizacion6_valor_{{ $areap->id }}" placeholder="Valor" class="form-control input-sm item-area" value="{{ $areap->cotizacion6_valor }}" type="text" data-currency>
-							        </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
                 {{-- Content materiales --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales</h3>
@@ -292,11 +270,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-			<div class="row">
                 {{-- Content acabados --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados</h3>
@@ -316,7 +292,7 @@
                 </div>
 
 				{{-- Content maquinas --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Máquinas</h3>
@@ -335,6 +311,65 @@
                     </div>
                 </div>
             </div>
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">Áreas</h3>
+				</div>
+				<div class="box-body">
+					<div class="box-body table-responsive no-padding">
+	                    <table id="browse-cotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+	                        <thead>
+	                            <tr>
+	                                <th>Área</th>
+	                                <th>Nombre</th>
+	                                <th>Horas</th>
+	                                <th>Valor</th>
+	                                <th>Total</th>
+	                            </tr>
+	                        </thead>
+							<tbody>
+								{{--*/ $trow = $total = 0; /*--}}
+								@foreach( App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
+									{{--*/ $trow = $areap->cotizacion6_horas * $areap->cotizacion6_valor /*--}}
+									{{--*/ $total += $trow /*--}}
+
+									<tr>
+										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
+		                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
+		                                <td class="text-center">{{ $areap->cotizacion6_horas }}</td>
+										<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
+		                                <td class="text-right">{{ number_format($trow, 2, ',', '.') }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+	                        <tfoot>
+	                            <tr>
+	                                <td colspan="3"></td>
+	                                <th class="text-right">Total</th>
+	                                <th class="text-right">{{ number_format($total, 2, ',', '.') }}</th>
+	                            </tr>
+	                        </tfoot>
+	                    </table>
+	                </div>
+				</div>
+			</div>
+
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">Info Cotizacion</h3>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						{{--*/ $totalCotizacion = 0; /*--}}
+						<label class="label label-success col-md-1">Total cotizacion</label>
+						<div class="form-group col-md-10">
+							{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $cotizacion2->cotizacion2_viaticos + $cotizacion2->cotizacion2_transporte /*--}}
+							<div>$ {{ number_format($totalCotizacion, 2, ',', '.') }}</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 @stop

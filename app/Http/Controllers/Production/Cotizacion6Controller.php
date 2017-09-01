@@ -18,8 +18,12 @@ class Cotizacion6Controller extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax()) {
-            return response()->json( Cotizacion6::getCotizaciones6($request->productop, $request->cotizacion2) );
+        if($request->ajax()){
+            $cotizacion = [];
+            if($request->has('cotizacion2')) {
+                $cotizacion = Cotizacion6::getCotizaciones6($request->cotizacion2);
+            }
+            return response()->json($cotizacion);
         }
         abort(404);
     }
@@ -42,7 +46,40 @@ class Cotizacion6Controller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        if ($request->ajax()) {
+            $data = $request->all();
+            $cotizacion6 = new Cotizacion6;
+            if ( $cotizacion6->isValid($data) ) {
+                try {
+                    $areap_nombre = null;
+
+                    if(empty(trim($request->cotizacion6_valor)) || is_null(trim($request->cotizacion6_valor))){
+                        return response()->json(['success' => false, 'errors' => 'El campo valor es obligatorio.']);
+                    }
+
+                    // Recuperar areap
+                    if( !empty($request->cotizacion6_areap) ){
+                        $areap = Areap::find($request->cotizacion6_areap);
+                        if( !$areap instanceof Areap){
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el area.']);
+                        }
+                        $areap_nombre = $areap->areap_nombre;
+                    }else{
+                        if(empty(trim($request->cotizacion6_nombre)) || is_null(trim($request->cotizacion6_nombre))){
+                            return response()->json(['success' => false, 'errors' => 'El campo nombre es obligatorio cuando no tiene area.']);
+                        }
+                    }
+
+                    // Commit Transaction
+                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre'=>$areap_nombre]);
+                }catch(\Exception $e){
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $cotizacion6->errors]);
+        }
+        abort(403);
     }
 
     /**
@@ -85,8 +122,28 @@ class Cotizacion6Controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                $cotizacion6 = Cotizacion6::find($id);
+                if(!$cotizacion6 instanceof Cotizacion6){
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+
+                // Eliminar item productop4
+                $cotizacion6->delete();
+
+                DB::commit();
+                return response()->json(['success' => true]);
+
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error(sprintf('%s -> %s: %s', 'Cotizacion6Controller', 'destroy', $e->getMessage()));
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }

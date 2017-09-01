@@ -131,28 +131,14 @@ class Cotizacion2Controller extends Controller
                     }
 
                     // Areap
-                    $areasp = Cotizacion6::getCotizaciones6($cotizacion2->cotizacion2_productop, $cotizacion2->id);
+                    $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
                     foreach ($areasp as $areap)
                     {
-                        if($request->has("cotizacion6_areap_$areap->id")) {
-                            if($request->get("cotizacion6_horas_$areap->id") <= 0){
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => "La cantidad de horas es obligatorio en el area $areap->areap_nombre."]);
-                            }
-
-                            if($request->get("cotizacion6_valor_$areap->id") <= 0){
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => "El valor es obligatorio del area $areap->areap_nombre."]);
-                            }
-
-                            $cotizacion6 = new Cotizacion6;
-                            $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                            $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
-                            $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
-                            $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
-                            $cotizacion6->cotizacion6_areap = $areap->id;
-                            $cotizacion6->save();
-                        }
+                        $cotizacion6 = new Cotizacion6;
+                        $cotizacion6->fill($areap);
+                        (!empty($areap['cotizacion6_areap'])) ? $cotizacion6->cotizacion6_areap = $areap['cotizacion6_areap'] : $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
+                        $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                        $cotizacion6->save();
                     }
 
                     // Commit Transaction
@@ -258,7 +244,6 @@ class Cotizacion2Controller extends Controller
                 if ($cotizacion2->isValid($data)) {
                     DB::beginTransaction();
                     try {
-
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
@@ -323,40 +308,32 @@ class Cotizacion2Controller extends Controller
                             }
                         }
 
-                        // Areap
-                        $areasp = Cotizacion6::getCotizaciones6($cotizacion2->cotizacion2_productop, $cotizacion2->id);
-                        foreach ($areasp as $areap)
-                        {
-                            $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_areap', $areap->id)->first();
-                            if($request->has("cotizacion6_areap_$areap->id")){
-
-                                if($request->get("cotizacion6_horas_$areap->id") <= 0){
+                        // Areas
+                        $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
+                        foreach ($areasp as $areap) {
+                            if(!empty($areap['cotizacion6_areap'])){
+                                $area = Areap::find($areap['cotizacion6_areap']);
+                                if(!$area instanceof Areap){
                                     DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => "La cantidad de horas es obligatorio en el area $areap->areap_nombre."]);
+                                    return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
                                 }
 
-                                if($request->get("cotizacion6_valor_$areap->id") <= 0){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => "El valor es obligatorio del area $areap->areap_nombre."]);
-                                }
-
+                                $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_areap', $area->id)->first();
                                 if(!$cotizacion6 instanceof Cotizacion6) {
                                     $cotizacion6 = new Cotizacion6;
+                                    $cotizacion6->fill($areap);
                                     $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                                    $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
-                                    $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
-                                    $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
-                                    $cotizacion6->cotizacion6_areap = $areap->id;
-                                    $cotizacion6->save();
-                                }else{
-                                    $cotizacion6->cotizacion6_nombre = $request->get("cotizacion6_nombre_$areap->id");
-                                    $cotizacion6->cotizacion6_horas = $request->get("cotizacion6_horas_$areap->id");
-                                    $cotizacion6->cotizacion6_valor = $request->get("cotizacion6_valor_$areap->id");
+                                    $cotizacion6->cotizacion6_areap = $area->id;
                                     $cotizacion6->save();
                                 }
                             }else{
-                                if($cotizacion6 instanceof Cotizacion6) {
-                                    $cotizacion6->delete();
+                                $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_nombre', $areap['cotizacion6_nombre'])->first();
+                                if(!$cotizacion6 instanceof Cotizacion6) {
+                                    $cotizacion6 = new Cotizacion6;
+                                    $cotizacion6->fill($areap);
+                                    $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
+                                    $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                                    $cotizacion6->save();
                                 }
                             }
                         }

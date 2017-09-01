@@ -433,12 +433,17 @@ app || (app = {});
             this.rolModel = new app.RolModel();
             this.rolModel.set({'id': rol}, {silent: true});
 
+            if ( this.editRolView instanceof Backbone.View ){
+                this.editRolView.stopListening();
+                this.editRolView.undelegateEvents();
+            }
+
             if ( this.createRolView instanceof Backbone.View ){
                 this.createRolView.stopListening();
                 this.createRolView.undelegateEvents();
             }
 
-            this.createRolView = new app.CreateRolView({ model: this.rolModel });
+            this.editRolView = new app.EditRolView({ model: this.rolModel });
             this.rolModel.fetch();
         },
 

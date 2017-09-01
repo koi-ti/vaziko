@@ -20,6 +20,7 @@ app || (app = {});
             'cotizacion6_horas': 0,
             'cotizacion6_valor': 0,
         	'areap_nombre': '',
+        	'total': 0,
         }
     });
 

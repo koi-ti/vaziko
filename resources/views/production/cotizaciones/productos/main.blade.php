@@ -33,7 +33,7 @@
 
             <div class="row">
                 <label class="col-sm-1 control-label">Producto</label>
-                <div class="form-group col-md-11">
+                <div class="form-group col-md-10">
                 	{{ $producto->productop_nombre }}
                 </div>
             </div>
@@ -65,7 +65,17 @@
                <div class="row">
                     <label for="cotizacion2_precio_venta" class="col-sm-1 control-label">Precio</label>
                     <div class="form-group col-md-3">
-                    	<input id="cotizacion2_precio_venta" value="<%- cotizacion2_precio_venta %>" placeholder="Precio" class="form-control input-sm" name="cotizacion2_precio_venta" type="text" maxlength="30" data-currency required>
+                    	<input id="cotizacion2_precio_venta" value="<%- cotizacion2_precio_venta %>" placeholder="Precio" class="form-control input-sm event-price" name="cotizacion2_precio_venta" type="text" maxlength="30" data-currency required>
+               		</div>
+
+                    <label for="cotizacion2_transporte" class="col-sm-1 control-label">Transporte</label>
+                    <div class="form-group col-md-3">
+                    	<input id="cotizacion2_transporte" value="<%- cotizacion2_transporte %>" class="form-control input-sm event-price" name="cotizacion2_transporte" type="text" maxlength="30" data-currency required>
+               		</div>
+
+                    <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                    <div class="form-group col-md-3">
+                    	<input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm event-price" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency required>
                		</div>
                	</div>
             @endif
@@ -246,27 +256,8 @@
 
             <br/>
             <div class="row">
-                {{-- Content areasp --}}
-                <div class="col-sm-6">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Áreas</h3>
-                        </div>
-                        <div class="box-body" id="browse-cotizacion-producto-areas-list">
-                            {{-- render areasp list --}}
-                        </div>
-                        <div class="box-footer">
-                            <div class="row">
-                                <div class="col-sm-12 text-right">
-                                    <div id="total-areap">0</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
                 {{-- Content materiales --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales</h3>
@@ -276,11 +267,9 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row">
                 {{-- Content acabados --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados</h3>
@@ -292,7 +281,7 @@
                 </div>
 
                 {{-- Content maquinas --}}
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
                             <h3 class="box-title">Máquinas</h3>
@@ -304,6 +293,112 @@
                 </div>
             </div>
         </form>
+
+        {{-- Content areasp --}}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Áreas</h3>
+            </div>
+            <div class="box-body">
+                <form method="POST" accept-charset="UTF-8" id="form-cotizacion6-producto" data-toggle="validator">
+                    <div class="row">
+                        <label for="cotizacion6_areap" class="control-label col-sm-1">Área</label>
+                        <div class="form-group col-sm-3">
+                            <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear">
+                                <option value="" selected>Seleccione</option>
+                                @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-sm-4">
+                            <input id="cotizacion6_nombre" name="cotizacion6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
+                        </div>
+
+                        <div class="form-group col-sm-1">
+                            <input id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Horas" class="form-control input-sm" type="number" step="1" min="1" required>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <input id="cotizacion6_valor" name="cotizacion6_valor" class="form-control input-sm" type="text" required data-currency>
+                        </div>
+                        <div class="form-group col-sm-1">
+                            <button type="submit" class="btn btn-success btn-sm btn-block disabled">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- table table-bordered table-striped -->
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-cotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Área</th>
+                                <th>Nombre</th>
+                                <th>Horas</th>
+                                <th>Valor</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4"></td>
+                                <th class="text-right">Total</th>
+                                <th class="text-right" id="total">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Informacion Adicional</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Precio</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-precio"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Transporte</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-transporte"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Viaticos</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-viaticos"></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6 control-label">Total</label>
+                                <div class="form-group col-md-6">
+                                    <input id="total-price" class="form-control input-sm" data-currency disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <script type="text/template" id="cotizacion-producto-maquina-item-tpl">
@@ -330,22 +425,22 @@
         </div>
     </script>
 
+    <script type="text/template" id="cotizacion-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el area <b><%- cotizacion6_areap %> <%- cotizacion6_nombre %></b>?</p>
+    </script>
+
     <script type="text/template" id="cotizacion-producto-areas-item-tpl">
-        <div class="form-group col-sm-3" >
-            <label class="checkbox-inline without-padding white-space-normal" for="cotizacion6_areap_<%- id %>">
-                <input type="checkbox" class="check-areap" id="cotizacion6_areap_<%- id %>" name="cotizacion6_areap_<%- id %>" value="cotizacion6_areap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- areap_nombre %>
-            </label>
-        </div>
-        <div class="form-group col-sm-3" >
-            <input id="cotizacion6_nombre_<%- id %>" name="cotizacion6_nombre_<%- id %>" placeholder="Nombre" class="form-control input-sm input-toupper" value="<%- cotizacion6_nombre %>" type="text" maxlength="20">
-        </div>
-
-        <div class="form-group col-sm-3">
-            <input id="cotizacion6_horas_<%- id %>" name="cotizacion6_horas_<%- id %>" placeholder="Horas" class="form-control input-sm item-area" value="<%- cotizacion6_horas %>" type="number" step="1">
-        </div>
-
-        <div class="form-group col-sm-3">
-            <input id="cotizacion6_valor_<%- id %>" name="cotizacion6_valor_<%- id %>" placeholder="Valor" class="form-control input-sm item-area" value="<%- cotizacion6_valor %>" type="text" data-currency>
-        </div>
+        <% if(edit) { %>
+           <td class="text-center">
+               <a class="btn btn-default btn-xs item-producto-areas-remove" data-resource="<%- id %>">
+                   <span><i class="fa fa-times"></i></span>
+               </a>
+           </td>
+       <% } %>
+       <td><%- areap_nombre %></td>
+       <td><%- cotizacion6_nombre %></td>
+       <td><%- cotizacion6_horas %></td>
+       <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
+       <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
 @stop

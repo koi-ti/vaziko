@@ -34,6 +34,8 @@ app || (app = {});
             'tcontacto_telefono': '',
             'cotizacion1_suministran': '',
             'cotizacion1_observaciones': '',
+            'cotizacion1_transporte': '',
+            'cotizacion1_viaticos': '',
             'cotizacion1_terminado': ''
         }
     });
