@@ -73,15 +73,14 @@
 										<label class="control-label">F. Inicio</label>
 										<div>{{ $cotizacion->cotizacion1_fecha_inicio }}</div>
 									</div>
-									<div class="form-group col-md-3">
-										<label class="control-label">F. Entrega</label>
-										<div>{{ $cotizacion->cotizacion1_fecha_entrega }}</div>
-									</div>
-
-									<div class="form-group col-md-3">
-										<label class="control-label">H. Entrega</label>
-										<div>{{ $cotizacion->cotizacion1_hora_entrega }}</div>
-									</div>
+                                    <div class="form-group col-md-3">
+                                        <label class="control-label">Transporte</label>
+                                        <div>{{ number_format($cotizacion->cotizacion1_transporte, 2, ',', '.') }}</div>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label class="control-label">Viaticos</label>
+                                        <div>{{ number_format($cotizacion->cotizacion1_viaticos, 2, ',', '.') }}</div>
+                                    </div>
 								</div>
 
 								<div class="row">
@@ -107,13 +106,9 @@
 								</div>
 
 								<div class="row">
-									<div class="form-group col-md-6">
+									<div class="form-group col-md-12">
 										<label class="control-label">Suministran</label>
 										<div>{{ $cotizacion->cotizacion1_suministran }}</div>
-									</div>
-									<div class="form-group col-md-6">
-										<label class="control-label">Forma pago</label>
-										<div>{{ $cotizacion->cotizacion1_formapago ? config('koi.produccion.formaspago')[$cotizacion->cotizacion1_formapago] : ''  }}</div>
 									</div>
 								</div>
 
@@ -129,6 +124,7 @@
 										<label class="control-label">Terminado</label>
 										<div>{{ $cotizacion->cotizacion1_terminado }}</div>
 									</div>
+                                    <input type="hidden" id="cotizacion1_iva" value="{{ $cotizacion->cotizacion1_iva }}">
 								</div>
 
 								<div class="row">
@@ -161,9 +157,11 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="5%">Código</th>
-                                                        <th width="65%">Nombre</th>
+                                                        <th width="40%">Nombre</th>
                                                         <th width="10%">Cantidad</th>
                                                         <th width="10%">Facturado</th>
+                                                        <th width="10%">Transporte</th>
+                                                        <th width="10%">Viaticos</th>
                                                         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                                             <th width="10%">Precio</th>
                                                             <th width="10%">Total</th>
@@ -177,22 +175,25 @@
                                                     <tr>
                                                         <td></td>
                                                         <th class="text-right">Subtotal</th>
-                                                        <td class="text-center" id="subtotal-cantidad">0</td>
+                                                        <th class="text-center" id="subtotal-cantidad">0</th>
+                                                        <th class="text-center" id="subtotal-facturado">0</th>
                                                         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                                                            <td colspan="2"></td>
-                                                            <td class="text-right" id="subtotal-total">0</td>
+                                                            <th class="text-right" id="subtotal-transporte">0</th>
+                                                            <th class="text-right" id="subtotal-viaticos">0</th>
+                                                            <td></td>
+                                                            <th class="text-right" id="subtotal-total">0</th>
                                                         @endif
                                                     </tr>
                                                     @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                                         <tr>
                                                             <td></td>
-                                                            <th class="text-right">Iva</th>
-                                                            <td colspan="4" class="text-right" id="iva-total">0</td>
+                                                            <th class="text-right">Iva ({{ $cotizacion->cotizacion1_iva }}%)</th>
+                                                            <th colspan="6" class="text-right" id="iva-total"></th>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
                                                             <th class="text-right">Total</th>
-                                                            <td colspan="4" class="text-right" id="total-total">0</td>
+                                                            <th colspan="6" class="text-right" id="total-total">0</th>
                                                         </tr>
                                                     @endif
                                                 </tfoot>

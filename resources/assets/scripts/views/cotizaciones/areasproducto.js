@@ -31,6 +31,8 @@ app || (app = {});
 
             // References
             this.$total = this.$('#total');
+            this.$infoareas = $('#info-areas');
+            this.$renderCot2 = $('#total-price');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -125,8 +127,8 @@ app || (app = {});
         removeOne: function (e) {
             e.preventDefault();
 
-            var resource = $(e.currentTarget).attr("data-resource");
-            var model = this.collection.get(resource);
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
 
             if( _.isUndefined(this.parameters.dataFilter.cotizacion2) ){
                 if ( model instanceof Backbone.Model ) {
@@ -135,14 +137,23 @@ app || (app = {});
                     this.totalize();
                 }
             }else{
-                this.areaDelete(model);
+                var reg = /[A-Za-z]/;
+                if( !reg.test(resource) ){
+                    this.areaDelete(model);
+                }else{
+                    if ( model instanceof Backbone.Model ) {
+                        model.view.remove();
+                        this.collection.remove(model);
+                        this.totalize();
+                    }
+                }
             }
         },
 
         /**
         * modal confirm delete area
         */
-        areaDelete: function(model) {
+        areaDelete: function(model, cotizacion2) {
             var _this = this;
 
             var cancelConfirm = new window.app.ConfirmWindow({
@@ -179,9 +190,13 @@ app || (app = {});
         *Render totales the collection
         */
         totalize: function(){
+            var precioCot2 = parseFloat( $('#cotizacion2_precio_venta').inputmask('unmaskedvalue') ) + parseFloat( $('#cotizacion2_viaticos').inputmask('unmaskedvalue') ) + parseFloat( $('#cotizacion2_transporte').inputmask('unmaskedvalue'));
             var data = this.collection.totalize();
-            this.$total.empty().html( window.Misc.currency(data.total) );
-            // this.$x = parseFloat( data.total ) + parseFloat( this.$price.inputmask('unmaskedvalue') );
+            var cotizacion2 = this.collection.totalcotizacion( precioCot2 , data.total );
+
+            this.$total.empty().html( window.Misc.currency( data.total ) );
+            this.$infoareas.empty().html( window.Misc.currency( data.total ) );
+            this.$renderCot2.val( cotizacion2 );
         },
 
         /**

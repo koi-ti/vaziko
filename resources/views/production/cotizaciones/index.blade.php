@@ -88,8 +88,6 @@
                                     <th>Ano</th>
                                     <th>Numero</th>
                                     <th nowrap="nowrap">F. Inicio</th>
-                                    <th nowrap="nowrap">F. Entrega</th>
-                                    <th nowrap="nowrap">H. Entrega</th>
                                     <th>Tercero</th>
                                 </tr>
                             </thead>

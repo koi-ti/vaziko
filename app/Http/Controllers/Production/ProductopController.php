@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Productop,  App\Models\Production\TipoProductop;
+use App\Models\Production\Productop, App\Models\Production\TipoProductop, App\Models\Production\SubtipoProductop;
 use Auth, DB, Log, Datatables, Cache;
 
 class ProductopController extends Controller
@@ -42,8 +42,8 @@ class ProductopController extends Controller
                     }
 
                     // TypeProduct
-                    if($request->has('typeproduct')) {
-                        $query->where('productop_tipoproductop', $request->typeproduct);
+                    if($request->has('subtypeproduct')) {
+                        $query->where('productop_subtipoproductop', $request->subtypeproduct);
                     }
                 })
                 ->make(true);
@@ -83,11 +83,24 @@ class ProductopController extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion ó consulte al administrador.']);
                     }
 
+                    // Subtipo Productop
+                    $subtypeproduct = SubtipoProductop::find( $request->productop_subtipoproductop );
+                    if(!$subtypeproduct instanceof SubtipoProductop){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subtipo de producto, por favor verifique la informacion ó consulte al administrador.']);
+                    }
+
+                    if($subtypeproduct->subtipoproductop_tipoproductop != $typeproduct->id){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => "El subtipo $subtypeproduct->subtipoproductop_nombre no se encuentra asociado a $typeproduct->tipoproductop_nombre, por favor verifique la informacion ó consulte al administrador."]);
+                    }
+
                     // grupo
                     $producto->fill($data);
                     $producto->fillBoolean($data);
                     $producto->setProperties();
                     $producto->productop_tipoproductop = $typeproduct->id;
+                    $producto->productop_subtipoproductop = $subtypeproduct->id;
                     $producto->productop_usuario_elaboro = Auth::user()->id;
                     $producto->productop_fecha_elaboro = date('Y-m-d H:m:s');
                     $producto->save();
@@ -162,18 +175,31 @@ class ProductopController extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion ó consulte al administrador.']);
                     }
 
+                    // Subtipo Productop
+                    $subtypeproduct = SubtipoProductop::find( $request->productop_subtipoproductop );
+                    if(!$subtypeproduct instanceof SubtipoProductop){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subtipo de producto, por favor verifique la informacion ó consulte al administrador.']);
+                    }
+
+                    if($subtypeproduct->subtipoproductop_tipoproductop != $typeproduct->id){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => "El subtipo $subtypeproduct->subtipoproductop_nombre no se encuentra asociado a $typeproduct->tipoproductop_nombre, por favor verifique la informacion ó consulte al administrador."]);
+                    }
+
                     // Productop
                     $producto->fill($data);
                     $producto->fillBoolean($data);
                     $producto->setProperties();
                     $producto->productop_tipoproductop = $typeproduct->id;
+                    $producto->productop_subtipoproductop = $subtypeproduct->id;
                     $producto->save();
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Productop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 }catch(\Exception $e){
                     DB::rollback();

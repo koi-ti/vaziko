@@ -58,7 +58,12 @@ app || (app = {});
             });
         },
 
-        totalize: function() {
+        totalcotizacion: function( cotizacion2, carrito ){
+            var total = 0;
+            return total = parseFloat(cotizacion2) + parseFloat(carrito);
+        },
+
+        totalize: function(  ) {
             var total = this.total();
             this.totalRow();
             return { 'total': total }

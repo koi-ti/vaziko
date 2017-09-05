@@ -367,7 +367,7 @@
                             <div class="col-md-12">
                                 <label class="col-sm-6">Precio</label>
                                 <div class="col-md-6 text-right">
-                                    <label id="info-precio"></label>
+                                    <label id="info-precio">0</label>
                                 </div>
                             </div>
                         </div>
@@ -375,7 +375,7 @@
                             <div class="col-md-12">
                                 <label class="col-sm-6">Transporte</label>
                                 <div class="col-md-6 text-right">
-                                    <label id="info-transporte"></label>
+                                    <label id="info-transporte">0</label>
                                 </div>
                             </div>
                         </div>
@@ -383,7 +383,15 @@
                             <div class="col-md-12">
                                 <label class="col-sm-6">Viaticos</label>
                                 <div class="col-md-6 text-right">
-                                    <label id="info-viaticos"></label>
+                                    <label id="info-viaticos">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Áreas</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-areas">0,00</label>
                                 </div>
                             </div>
                         </div>

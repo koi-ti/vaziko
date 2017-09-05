@@ -1044,3 +1044,28 @@
 		</div>
     </div>
 </script>
+
+{{-- Template SubtipoProductop --}}
+<script type="text/template" id="add-subtipoproductop-tpl">
+	<div class="row">
+        <div class="form-group col-md-4">
+			<label for="subtipoproductop_tipoproductop" class="control-label">Tipo de producto</label>
+			<select name="subtipoproductop_tipoproductop" id="subtipoproductop_tipoproductop" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+					<option value="{{ $key }}" <%- subtipoproductop_tipoproductop == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<div class="form-group col-md-5">
+			<label for="subtipoproductop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subtipoproductop_nombre" name="subtipoproductop_nombre" value="<%- subtipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="subtipoproductop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" <%- parseInt(subtipoproductop_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>

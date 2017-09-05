@@ -60,15 +60,15 @@
 
     			<div class="row">
 					<label class="control-label col-md-1">Precio</label>
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
     					<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
     				</div>
 					<label class="control-label col-md-1">Transporte</label>
-					<div class="form-group col-md-1">
-    					<div>{{ $cotizacion2->cotizacion2_transporte }}</div>
+					<div class="form-group col-md-3">
+    					<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
     				</div>
 					<label class="control-label col-md-1">Viaticos</label>
-					<div class="form-group col-md-4">
+					<div class="form-group col-md-3">
     					<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
     				</div>
     			</div><br>
@@ -329,10 +329,10 @@
 	                            </tr>
 	                        </thead>
 							<tbody>
-								{{--*/ $trow = $total = 0; /*--}}
+								{{--*/ $trow = $totalArea = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
 									{{--*/ $trow = $areap->cotizacion6_horas * $areap->cotizacion6_valor /*--}}
-									{{--*/ $total += $trow /*--}}
+									{{--*/ $totalArea += $trow /*--}}
 
 									<tr>
 										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
@@ -347,7 +347,7 @@
 	                            <tr>
 	                                <td colspan="3"></td>
 	                                <th class="text-right">Total</th>
-	                                <th class="text-right">{{ number_format($total, 2, ',', '.') }}</th>
+	                                <th class="text-right">{{ number_format($totalArea, 2, ',', '.') }}</th>
 	                            </tr>
 	                        </tfoot>
 	                    </table>
@@ -355,17 +355,58 @@
 				</div>
 			</div>
 
-			<div class="box box-primary">
-				<div class="box-header with-border">
-					<h3 class="box-title">Info Cotizacion</h3>
-				</div>
-				<div class="box-body">
-					<div class="row">
-						{{--*/ $totalCotizacion = 0; /*--}}
-						<label class="label label-success col-md-1">Total cotizacion</label>
-						<div class="form-group col-md-10">
-							{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $cotizacion2->cotizacion2_viaticos + $cotizacion2->cotizacion2_transporte /*--}}
-							<div>$ {{ number_format($totalCotizacion, 2, ',', '.') }}</div>
+			<div class="row">
+				{{-- Content informacion --}}
+				{{--*/ $totalCotizacion = 0; /*--}}
+				{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $cotizacion2->cotizacion2_viaticos + $cotizacion2->cotizacion2_transporte + $totalArea /*--}}
+
+				<div class="col-sm-6 col-md-offset-3">
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Informacion Adicional</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+	                            <div class="col-md-12">
+	                                <label class="col-sm-6">Precio</label>
+	                                <div class="col-md-6 text-right">
+	                                    <label>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</label>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="row">
+	                            <div class="col-md-12">
+	                                <label class="col-sm-6">Transporte</label>
+	                                <div class="col-md-6 text-right">
+										<label>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.')}}</label>
+	                                </div>
+	                            </div>
+	                        </div>
+	                        <div class="row">
+	                            <div class="col-md-12">
+	                                <label class="col-sm-6">Viaticos</label>
+	                                <div class="col-md-6 text-right">
+										<label>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.')}}</label>
+	                                </div>
+	                            </div>
+	                        </div>
+							<div class="row">
+	                            <div class="col-md-12">
+	                                <label class="col-sm-6">Áreas</label>
+	                                <div class="col-md-6 text-right">
+										<label>{{ number_format($totalArea, 2, ',', '.') }}</label>
+	                                </div>
+	                            </div>
+	                        </div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-md-6">Total cotizacion</label>
+									<div class="col-md-6 text-right">
+										<label class="label bg-green">{{ number_format($totalCotizacion, 2, ',', '.') }}</label>
+									</div>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>

@@ -33,6 +33,8 @@ app || (app = {});
 
             // References
             this.$unidades = this.$('#subtotal-cantidad');
+            this.$viaticos = this.$('#subtotal-viaticos');
+            this.$transporte = this.$('#subtotal-transporte');
             this.$facturado = this.$('#subtotal-facturado');
             this.$subtotal = this.$('#subtotal-total');
             this.$iva = this.$('#iva-total');
@@ -108,7 +110,6 @@ app || (app = {});
                         }
                     }
                 });
-
             }
         },
 
@@ -182,7 +183,15 @@ app || (app = {});
                 this.$subtotal.html( window.Misc.currency(data.subtotal) );
             }
 
-            var iva = data.subtotal * (this.parameters.iva / 100);
+            if(this.$viaticos.length) {
+                this.$viaticos.html( window.Misc.currency(data.viaticos) );
+            }
+
+            if(this.$transporte.length) {
+                this.$transporte.html( window.Misc.currency(data.transporte) );
+            }
+
+            var iva = data.subtotal * ( this.parameters.iva / 100);
             if(this.$iva.length) {
                 this.$iva.html( window.Misc.currency(iva) );
             }

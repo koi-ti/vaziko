@@ -22,6 +22,9 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
+            // Recuperar iva
+            this.$iva = this.$('#cotizacion1_iva');
+
             // Attributes
             this.productopCotizacionList = new app.ProductopCotizacionList();
 
@@ -38,6 +41,7 @@ app || (app = {});
                 collection: this.productopCotizacionList,
                 parameters: {
                     wrapper: this.$('#wrapper-productop-cotizacion'),
+                    iva: this.$iva.val(),
                     dataFilter: {
                         'cotizacion2_cotizacion': this.model.get('id')
                     }
@@ -91,7 +95,6 @@ app || (app = {});
                     }
                 }
             });
-
             cancelConfirm.render();
         },
 

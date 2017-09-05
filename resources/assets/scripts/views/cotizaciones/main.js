@@ -56,8 +56,6 @@ app || (app = {});
                     { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
                     { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
                     { data: 'cotizacion1_fecha_inicio', name: 'cotizacion1_fecha_inicio' },
-                    { data: 'cotizacion1_fecha_entrega', name: 'cotizacion1_fecha_entrega' },
-                    { data: 'cotizacion1_hora_entrega', name: 'cotizacion1_hora_entrega' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' }
                 ],
                 order: [

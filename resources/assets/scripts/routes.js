@@ -113,6 +113,10 @@ app || (app = {});
             'tipoproductosp/create(/)': 'getTipoProductopCreate',
             'tipoproductosp/:tipoproductosp/edit(/)': 'getTipoProductopEdit',
 
+            'subtipoproductosp(/)': 'getSubtipoProductopMain',
+            'subtipoproductosp/create(/)': 'getSubtipoProductopCreate',
+            'subtipoproductosp/:subtipoproductosp/edit(/)': 'getSubtipoProductopEdit',
+
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
             'ordenes/:orden(/)': 'getOrdenesShow',
@@ -1238,6 +1242,50 @@ app || (app = {});
 
             this.createTipoProductopView = new app.CreateTipoProductopView({ model: this.tipoproductopModel });
             this.tipoproductopModel.fetch();
+        },
+
+        /**
+        * show view main subtipos de producto produccion
+        */
+        getSubtipoProductopMain: function () {
+
+            if ( this.mainSubtipoProductospView instanceof Backbone.View ){
+                this.mainSubtipoProductospView.stopListening();
+                this.mainSubtipoProductospView.undelegateEvents();
+            }
+
+            this.mainSubtipoProductospView = new app.MainSubtipoProductospView( );
+        },
+
+        /**
+        * show view create subtipos de producto de produccion
+        */
+        getSubtipoProductopCreate: function () {
+            this.subtipoproductopModel = new app.SubtipoProductopModel();
+
+            if ( this.createSubtipoProductopView instanceof Backbone.View ){
+                this.createSubtipoProductopView.stopListening();
+                this.createSubtipoProductopView.undelegateEvents();
+            }
+
+            this.createSubtipoProductopView = new app.CreateSubtipoProductopView({ model: this.subtipoproductopModel });
+            this.createSubtipoProductopView.render();
+        },
+
+        /**
+        * show view edit subtipos de producto de produccion
+        */
+        getSubtipoProductopEdit: function ( subtipoproductosp ) {
+            this.subtipoproductopModel = new app.SubtipoProductopModel();
+            this.subtipoproductopModel.set({'id': subtipoproductosp }, {'silent':true});
+
+            if ( this.createSubtipoProductopView instanceof Backbone.View ){
+                this.createSubtipoProductopView.stopListening();
+                this.createSubtipoProductopView.undelegateEvents();
+            }
+
+            this.createSubtipoProductopView = new app.CreateSubtipoProductopView({ model: this.subtipoproductopModel });
+            this.subtipoproductopModel.fetch();
         },
 
         /**

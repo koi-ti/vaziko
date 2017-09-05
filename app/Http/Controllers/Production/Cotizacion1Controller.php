@@ -21,7 +21,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $query = Cotizacion1::query();
-            $query->select('koi_cotizacion1.id', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_fecha_entrega', 'cotizacion1_hora_entrega', 'cotizacion1_anulada', 'cotizacion1_abierta',
+            $query->select('koi_cotizacion1.id', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -171,7 +171,6 @@ class Cotizacion1Controller extends Controller
 
                     // Commit Transaction
                     DB::commit();
-
                     return response()->json(['success' => true, 'id' => $cotizacion->id]);
                 }catch(\Exception $e){
                     DB::rollback();

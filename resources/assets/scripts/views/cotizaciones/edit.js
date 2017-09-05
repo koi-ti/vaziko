@@ -19,6 +19,7 @@ app || (app = {});
             'click .clone-cotizacion': 'cloneCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
+            'change #subtypeproductop': 'changeSubtypeProduct',
             'submit #form-cotizaciones': 'onStore',
         },
         parameters: {
@@ -50,6 +51,7 @@ app || (app = {});
             this.$el.html( this.template(attributes) );
 
             this.$product = this.$('#productop');
+            this.$subtypeproduct = this.$('#subtypeproductop');
             this.$form = this.$('#form-cotizaciones');
             this.spinner = this.$('#spinner-main');
 
@@ -96,12 +98,46 @@ app || (app = {});
         },
 
         changeTypeProduct: function(e) {
-            var _this = this,
+            var _this = this;
                 typeproduct = this.$(e.currentTarget).val();
 
             if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('productosp.index', {typeproduct: typeproduct}) ),
+                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$subtypeproduct.empty().val(0);
+                    _this.$product.empty().val(0);
+
+                    _this.$subtypeproduct.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    });
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$subtypeproduct.empty().val(0);
+                this.$product.empty().val(0);
+            }
+        },
+
+        changeSubtypeProduct: function(e) {
+            var _this = this;
+                subtypeproduct = this.$(e.currentTarget).val();
+
+            if( typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productosp.index', {subtypeproduct: subtypeproduct}) ),
                     type: 'GET',
                     beforeSend: function() {
                         window.Misc.setSpinner( _this.spinner );
@@ -122,6 +158,8 @@ app || (app = {});
                     window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
+            }else{
+                this.$product.empty().val(0);
             }
         },
 

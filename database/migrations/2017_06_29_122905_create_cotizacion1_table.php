@@ -21,11 +21,8 @@ class CreateCotizacion1Table extends Migration
             $table->integer('cotizacion1_numero');
             $table->integer('cotizacion1_ano');
             $table->date('cotizacion1_fecha_inicio');
-            $table->date('cotizacion1_fecha_entrega');
-            $table->time('cotizacion1_hora_entrega');
             $table->integer('cotizacion1_contacto')->unsigned();
             $table->integer('cotizacion1_iva')->unsigned();
-            $table->string('cotizacion1_formapago', 2)->comment = 'CT: Credito, Contado: CO';
             $table->string('cotizacion1_suministran', 200)->nullable();
             $table->boolean('cotizacion1_anulada')->default(false);
             $table->boolean('cotizacion1_abierta')->default(true);

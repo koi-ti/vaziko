@@ -88,12 +88,13 @@ app || (app = {});
             this.$viaticos = this.$('#cotizacion2_viaticos');
             this.$transporte = this.$('#cotizacion2_transporte');
             this.totalAreap = 0;
-            this.$totalCot = 0;
+            this.totalCot = 0;
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
+            this.$infoareas = this.$('#info-areas');
 
             // Reference views
             this.calculateCotizacion2();
@@ -234,16 +235,13 @@ app || (app = {});
         },
 
         calculateCotizacion2: function() {
-            this.totalAreap = this.areasProductopCotizacionList.trigger('reset').totalize();
-            this.$totalCot = parseFloat( this.$precio.inputmask('unmaskedvalue') ) + parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) + parseFloat( this.$transporte.inputmask('unmaskedvalue') + parseFloat(this.totalAreap.total) );
-
-            console.log(this.areasProductopCotizacionList.trigger('reset'));
+            this.totalCot = parseFloat( this.$precio.inputmask('unmaskedvalue') ) + parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) + parseFloat( this.$transporte.inputmask('unmaskedvalue'));
 
             this.$infoprecio.empty().html( window.Misc.currency( this.$precio.inputmask('unmaskedvalue')) );
             this.$infoviaticos.empty().html( window.Misc.currency( this.$viaticos.inputmask('unmaskedvalue')) );
             this.$infotransporte.empty().html( window.Misc.currency( this.$transporte.inputmask('unmaskedvalue')) );
 
-            this.$precioCot2.val( this.$totalCot );
+            this.$precioCot2.val( this.totalCot );
         },
 
         /**

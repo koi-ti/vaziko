@@ -60,7 +60,7 @@ class Cotizacion2 extends BaseModel
     public static function getCotizaciones2( $cotizacion )
     {
         $query = Cotizacion2::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion2_viaticos', 'cotizacion2_transporte', 'cotizacion1_iva',
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? 'cotizacion2_precio_venta' : DB::raw('0 as cotizacion2_precio_venta') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? DB::raw('(cotizacion2_cantidad * cotizacion2_precio_venta) as cotizacion2_precio_total') : DB::raw('0 as cotizacion2_precio_total') ),
 
@@ -96,6 +96,7 @@ class Cotizacion2 extends BaseModel
             ")
         );
         $query->join('koi_productop', 'cotizacion2_productop', '=', 'koi_productop.id');
+        $query->join('koi_cotizacion1', 'cotizacion2_cotizacion', '=', 'koi_cotizacion1.id');
         $query->leftJoin('koi_unidadmedida as me1', 'productop_ancho_med', '=', 'me1.id');
         $query->leftJoin('koi_unidadmedida as me2', 'productop_alto_med', '=', 'me2.id');
         $query->leftJoin('koi_unidadmedida as me3', 'productop_c_med_ancho', '=', 'me3.id');

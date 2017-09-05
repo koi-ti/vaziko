@@ -36,19 +36,26 @@
                         <div class="row">
                             <label for="productop_tipoproductop" class="col-sm-1 control-label">Tipo de producto</label>
                             <div class="form-group col-sm-4 ">
-                                <select name="productop_tipoproductop" id="productop_tipoproductop" class="form-control select2-default-clear">
+                                <select name="productop_tipoproductop" id="productop_tipoproductop" class="form-control select2-default-clear" required>
                                     @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_tipoproductop == '{{ $key }}' ? 'selected': '' %>>{{ $value }}</option>
                                     @endforeach
                                 </select>
                             </div>
-                            <label for="productop_observaciones" class="col-sm-1 control-label">Detalle</label>
-                            <div class="form-group col-sm-6">
-                                <textarea id="productop_observaciones" name="productop_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- productop_observaciones %></textarea>
+
+                            <label for="productop_subtipoproductop" class="col-sm-1 control-label">Subtipo de producto</label>
+                            <div class="form-group col-sm-4 ">
+                                <select name="productop_subtipoproductop" id="productop_subtipoproductop" class="form-control select2-default" required>
+                                    <option value="<%- productop_subtipoproductop %>"><%- subtipoproductop_nombre %></option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="row">
+                            <label for="productop_observaciones" class="col-sm-1 control-label">Detalle</label>
+                            <div class="form-group col-sm-6">
+                                <textarea id="productop_observaciones" name="productop_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- productop_observaciones %></textarea>
+                            </div>
                         </div>
 
                         <div class="row">

@@ -29,6 +29,7 @@ class CreateProductopTable extends Migration
             $table->integer('productop_c_med_ancho')->unsigned()->nullable();
             $table->integer('productop_c_med_alto')->unsigned()->nullable();
             $table->integer('productop_tipoproductop')->unsigned();
+            $table->integer('productop_subtipoproductop')->unsigned();
 
             $table->boolean('productop_abierto')->default(false);
             $table->boolean('productop_cerrado')->default(false);
@@ -47,6 +48,7 @@ class CreateProductopTable extends Migration
             $table->foreign('productop_3d_alto_med')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
             $table->foreign('productop_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('productop_tipoproductop')->references('id')->on('koi_tipoproductop')->onDelete('restrict');
+            $table->foreign('productop_subtipoproductop')->references('id')->on('koi_subtipoproductop')->onDelete('restrict');
         });
     }
 

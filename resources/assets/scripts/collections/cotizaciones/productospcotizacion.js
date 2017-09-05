@@ -35,17 +35,31 @@ app || (app = {});
             }, 0);
         },
 
+        transporte: function() {
+            return this.reduce(function(sum, model) {
+                return sum + parseInt(model.get('cotizacion2_transporte'))
+            }, 0);
+        },
+
+        viaticos: function() {
+            return this.reduce(function(sum, model) {
+                return sum + parseInt(model.get('cotizacion2_viaticos'))
+            }, 0);
+        },
+
         subtotal: function() {
             return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('cotizacion2_precio_total'))
+                return sum + parseFloat(model.get('cotizacion2_precio_total')) + parseFloat(model.get('cotizacion2_viaticos')) + parseFloat(model.get('cotizacion2_transporte'))
             }, 0);
         },
 
         totalize: function() {
             var unidades = this.unidades();
             var facturado = this.facturado();
+            var transporte = this.transporte();
+            var viaticos = this.viaticos();
             var subtotal = this.subtotal();
-            return { 'unidades': unidades, 'facturado': facturado, 'subtotal': subtotal}
+            return { 'unidades': unidades, 'facturado': facturado, 'subtotal': subtotal, 'transporte': transporte, 'viaticos': viaticos}
         },
    });
 

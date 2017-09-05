@@ -137,7 +137,6 @@ class Cotizacion6Controller extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Cotizacion6Controller', 'destroy', $e->getMessage()));

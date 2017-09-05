@@ -17,6 +17,7 @@ app || (app = {});
             'ifChanged .change-productop-abierto-koi-component': 'changedAbierto',
             'ifChanged .change-productop-cerrado-koi-component': 'changedCerrado',
             'ifChanged .change-productop-3d-koi-component': 'changed3d',
+            'change #productop_tipoproductop': 'changeTypeProduct',
             'click .submit-productosp': 'submitProductop',
             'submit #form-productosp': 'onStore',
         },
@@ -57,6 +58,7 @@ app || (app = {});
             this.$input3dProfundidad = $('#productop_3d_profundidad_med');
 
             this.$form = this.$('#form-productosp');
+            this.$subtypeproduct = this.$('#productop_subtipoproductop');
             this.spinner = this.$('#spinner-main');
 
             this.ready();
@@ -140,6 +142,38 @@ app || (app = {});
                 this.$inputCerrado.iCheck('enable');
                 this.$inputCerradoAncho.prop('disabled', false);
                 this.$inputCerradoAlto.prop('disabled', false);
+            }
+        },
+
+        changeTypeProduct: function(e) {
+            var _this = this;
+                typeproduct = this.$(e.currentTarget).val();
+
+            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$subtypeproduct.empty().val(0);
+
+                    _this.$subtypeproduct.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    });
+
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$subtypeproduct.empty().val(0);
             }
         },
 

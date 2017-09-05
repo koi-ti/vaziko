@@ -169,6 +169,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
 	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
+	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'cotizaciones'], function(){
 		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);

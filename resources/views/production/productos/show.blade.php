@@ -27,7 +27,14 @@
                         <label class="control-label">Tipo de producto</label>
                         <div>{{ $producto->tipoproductop_nombre }}</div>
                     </div>
-                    <div class="form-group col-md-7">
+                    <div class="form-group col-md-5">
+                        <label class="control-label">Subipo de producto</label>
+                        <div>{{ $producto->subtipoproductop_nombre }}</div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
                         <label class="control-label">Detalle</label>
                         <div>{{ $producto->productop_observaciones }}</div>
                     </div>
