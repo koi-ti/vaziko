@@ -22,15 +22,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
+            this.$iva = this.$('#orden_iva');
 
-                this.productopOrdenList = new app.ProductopOrdenList();
-                this.despachopOrdenList = new app.DespachopOrdenList();
+            this.productopOrdenList = new app.ProductopOrdenList();
+            this.despachopOrdenList = new app.DespachopOrdenList();
 
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**
@@ -42,6 +40,7 @@ app || (app = {});
                 collection: this.productopOrdenList,
                 parameters: {
                     wrapper: this.$('#wrapper-productop-orden'),
+                    iva: this.$iva.val(),
                     dataFilter: {
                         'orden2_orden': this.model.get('id')
                     }

@@ -187,7 +187,7 @@
 
                                                         <label for="subtypeproductop" class="control-label col-sm-1">Subtipo </label>
                                                         <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" required>
+                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" required disabled>
                                                                 <option value=""></option>
                                                             </select>
                                                         </div>
@@ -197,7 +197,7 @@
                                                         <label for="productop" class="control-label col-sm-1 col-md-offset-2">Producto</label>
                                                         <div class="form-group col-sm-6 col-xs-11">
                                                             <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
-                                                            <select name="productop" id="productop" class="form-control select2-default" required>
+                                                            <select name="productop" id="productop" class="form-control select2-default" required disabled>
                                                             </select>
                                                         </div>
 

@@ -19,6 +19,7 @@ app || (app = {});
             'click .clone-ordenp': 'cloneOrdenp',
             'click .export-ordenp': 'exportOrdenp',
             'change #typeproductop': 'changeTypeProduct',
+            'change #subtypeproductop': 'changeSubtypeProduct',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho'
         },
@@ -52,8 +53,9 @@ app || (app = {});
                 attributes.edit = true;
             this.$el.html( this.template(attributes) );
 
-            this.$product = this.$('#productop');
             this.$form = this.$('#form-ordenes');
+            this.$product = this.$('#productop');
+            this.$subtypeproduct = this.$('#subtypeproductop');
             this.spinner = this.$('#spinner-main');
 
             // Reference views and ready
@@ -134,13 +136,16 @@ app || (app = {});
             }
         },
 
+        /**
+        *   Event change select2 type orden
+        **/
         changeTypeProduct: function(e) {
             var _this = this,
                 typeproduct = this.$(e.currentTarget).val();
 
             if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('productosp.index', {typeproduct: typeproduct}) ),
+                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
                     type: 'GET',
                     beforeSend: function() {
                         window.Misc.setSpinner( _this.spinner );
@@ -149,10 +154,50 @@ app || (app = {});
                 .done(function(resp) {
                     window.Misc.removeSpinner( _this.spinner );
 
-                    _this.$product.empty().val(0);
+                    _this.$product.empty().val(0).attr('disabled', 'disabled');
+                    _this.$subtypeproduct.empty().val(0).removeAttr('disabled');
+                    _this.$subtypeproduct.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    });
 
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$subtypeproduct.empty().val(0).attr('disabled', 'disabled');
+                this.$product.empty().val(0).attr('disabled', 'disabled');
+            }
+        },
+
+        /**
+        *   Event change select2 subtype orden
+        **/
+        changeSubtypeProduct: function(e) {
+            var _this = this,
+                subtypeproduct = this.$(e.currentTarget).val(),
+                typeproduct = this.$('#typeproductop').val();
+
+            if( typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productosp.index') ),
+                    data: {
+                        subtypeproduct: subtypeproduct,
+                        typeproduct: typeproduct
+                    },
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$product.empty().val(0).removeAttr('disabled');
                     _this.$product.append("<option value=></option>");
-                    _.each(resp.data, function(item){
+                    _.each(resp, function(item){
                         _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
                     });
 

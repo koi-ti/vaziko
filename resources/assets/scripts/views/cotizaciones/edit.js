@@ -112,9 +112,8 @@ app || (app = {});
                 .done(function(resp) {
                     window.Misc.removeSpinner( _this.spinner );
 
-                    _this.$subtypeproduct.empty().val(0);
-                    _this.$product.empty().val(0);
-
+                    _this.$product.empty().val(0).attr('disabled', 'disabled');
+                    _this.$subtypeproduct.empty().val(0).removeAttr('disabled');
                     _this.$subtypeproduct.append("<option value=></option>");
                     _.each(resp, function(item){
                         _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
@@ -126,18 +125,23 @@ app || (app = {});
                     alertify.error(thrownError);
                 });
             }else{
-                this.$subtypeproduct.empty().val(0);
-                this.$product.empty().val(0);
+                this.$subtypeproduct.empty().val(0).attr('disabled', 'disabled');
+                this.$product.empty().val(0).attr('disabled', 'disabled');
             }
         },
 
         changeSubtypeProduct: function(e) {
             var _this = this;
                 subtypeproduct = this.$(e.currentTarget).val();
+                typeproduct = this.$('#typeproductop').val();
 
             if( typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '' ){
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('productosp.index', {subtypeproduct: subtypeproduct}) ),
+                    url: window.Misc.urlFull( Route.route('productosp.index') ),
+                    data: {
+                        subtypeproduct: subtypeproduct,
+                        typeproduct: typeproduct
+                    },
                     type: 'GET',
                     beforeSend: function() {
                         window.Misc.setSpinner( _this.spinner );
@@ -146,10 +150,9 @@ app || (app = {});
                 .done(function(resp) {
                     window.Misc.removeSpinner( _this.spinner );
 
-                    _this.$product.empty().val(0);
-
+                    _this.$product.empty().val(0).removeAttr('disabled');
                     _this.$product.append("<option value=></option>");
-                    _.each(resp.data, function(item){
+                    _.each(resp, function(item){
                         _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
                     });
 
@@ -158,8 +161,6 @@ app || (app = {});
                     window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
-            }else{
-                this.$product.empty().val(0);
             }
         },
 

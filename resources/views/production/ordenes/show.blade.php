@@ -135,6 +135,8 @@
 										<label class="control-label">Terminado</label>
 										<div>{{ $orden->orden_terminado }}</div>
 									</div>
+
+                                    <input type="hidden" id="orden_iva" value="{{ $orden->orden_iva }}">
 								</div>
 
 								<div class="row">
@@ -192,7 +194,7 @@
                                                     @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                                         <tr>
                                                             <td></td>
-                                                            <th class="text-right">Iva</th>
+                                                            <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
                                                             <td colspan="4" class="text-right" id="iva-total">0</td>
                                                         </tr>
                                                         <tr>

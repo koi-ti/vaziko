@@ -207,19 +207,28 @@
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
-                                                        <label for="typeproductop" class="control-label col-sm-1">Tipo </label>
+                                                        <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2">Tipo de producto</label>
                                                         <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default" required>
+                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear" required>
                                                                 @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                     <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
 
-                                                        <label for="productop" class="control-label col-sm-1">Producto</label>
+                                                        <label for="subtypeproductop" class="control-label col-sm-1">Subtipo </label>
+                                                        <div class="form-group col-sm-3 col-xs-11">
+                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" required disabled>
+                                                                <option value=""></option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <label for="productop" class="control-label col-sm-1 col-md-offset-2">Producto</label>
                                                         <div class="form-group col-sm-6 col-xs-11">
                                                             <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
-                                                            <select name="productop" id="productop" class="form-control select2-default-clear" required>
+                                                            <select name="productop" id="productop" class="form-control select2-default" required disabled>
                                                             </select>
                                                         </div>
 

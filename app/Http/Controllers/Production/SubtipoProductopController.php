@@ -154,7 +154,7 @@ class SubtipoProductopController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
                     Cache::forget( SubtipoProductop::$key_cache );
                     return response()->json(['success' => true, 'id' => $subtipoproductop->id]);
