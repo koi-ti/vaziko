@@ -16,7 +16,7 @@ class CreateTipoproductoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('tipoproductop_nombre', 25);
+            $table->string('tipoproductop_nombre', 35);
             $table->boolean('tipoproductop_activo')->default(false);
         });
     }

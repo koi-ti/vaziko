@@ -17,7 +17,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            
+
             this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
 
             this.$centroscostoSearchTable.DataTable({
@@ -36,7 +36,7 @@ app || (app = {});
                     { data: 'centrocosto_activo', name: 'centrocosto_activo' }
                 ],
 				buttons: [
-					{ 
+					{
 						text: '<i class="fa fa-user-plus"></i> Nuevo centro de costo',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
@@ -63,7 +63,7 @@ app || (app = {});
                         targets: [4],
                         width: '10%',
                         render: function ( data, type, full, row ) {
-                            return data ? 'Si' : 'No';
+                            return parseInt(data) ? 'Si' : 'No';
                         }
                     },
                 ]

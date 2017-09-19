@@ -42,7 +42,7 @@ class TipoProductop extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'tipoproductop_nombre' => 'required|max:25',
+            'tipoproductop_nombre' => 'required|max:35',
         ];
 
         $validator = Validator::make($data, $rules);

@@ -1033,9 +1033,9 @@
 {{-- Template TipoProductop --}}
 <script type="text/template" id="add-tipoproductop-tpl">
 	<div class="row">
-		<div class="form-group col-md-4">
+		<div class="form-group col-md-6">
 			<label for="tipoproductop_nombre" class="control-label">Nombre</label>
-			<input type="text" id="tipoproductop_nombre" name="tipoproductop_nombre" value="<%- tipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+			<input type="text" id="tipoproductop_nombre" name="tipoproductop_nombre" value="<%- tipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="35" required>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
