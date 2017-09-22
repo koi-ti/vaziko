@@ -23,7 +23,8 @@ app || (app = {});
         	'plancuentas_centro': '',	
         	'plancuentas_tercero': false,	
         	'plancuentas_tipo': 'N',	
-        	'plancuentas_tasa': 0
+        	'plancuentas_tasa': 0,
+            'plancuentas_equivalente':''
         }
     });
 

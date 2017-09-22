@@ -83,7 +83,7 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -117,7 +117,7 @@
             </li>
 
             {{-- Referencias contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -133,6 +133,9 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
                         <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'plancuentasnif' ? 'active' : '' }}">
+                        <a href="{{ route('plancuentasnif.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas NIF</a>
                     </li>
                 </ul>
             </li>

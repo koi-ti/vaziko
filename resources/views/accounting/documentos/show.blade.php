@@ -34,9 +34,20 @@
         </div>
 
         <div class="row">
-            <div class="form-group col-md-4">
+            <div class="form-group col-md-3">
                 <label class="control-label">Consecutivo</label>
                 <div>{{ $documento->documento_consecutivo }}</div>
+            </div>
+            <div class="form-group col-md-4 col-xs-8 col-sm-3">
+                <label class="control-label">Tipo contabilidad</label>
+                <div class="row">
+                    <label class="checkbox-inline" for="documento_actual">
+                        <input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" disabled {{ $documento->documento_actual ? 'checked': '' }}> Acutal
+                    </label>
+                    <label class="checkbox-inline" for="documento_nif">
+                        <input type="checkbox" id="documeto_nif" name="documeto_nif" value="documeto_nif" disabled {{ $documento->documento_nif ? 'checked': '' }}> Nif
+                    </label>                
+                </div>
             </div>
         </div>
     </div>

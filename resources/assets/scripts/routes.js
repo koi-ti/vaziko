@@ -50,6 +50,10 @@ app || (app = {});
             'plancuentas/create(/)': 'getPlanCuentasCreate',
             'plancuentas/:plancuenta/edit(/)': 'getPlanCuentasEdit',
 
+            'plancuentasnif(/)': 'getPlanCuentasNifMain',
+            'plancuentasnif/create(/)': 'getPlanCuentasNifCreate',
+            'plancuentasnif/:plancuentanif/edit(/)': 'getPlanCuentasNifEdit',
+
             'centroscosto(/)': 'getCentrosCostoMain',
             'centroscosto/create(/)': 'getCentrosCostoCreate',
             'centroscosto/:centrocosto/edit(/)': 'getCentrosCostoEdit',
@@ -565,6 +569,47 @@ app || (app = {});
             this.planCuentaModel.fetch();
         },
 
+        /**
+        * show view main cuenta NIF contable
+        */
+        getPlanCuentasNifMain: function () {
+
+            if ( this.mainPlanCuentasNifView instanceof Backbone.View ){
+                this.mainPlanCuentasNifView.stopListening();
+                this.mainPlanCuentasNifView.undelegateEvents();
+            }
+
+            this.mainPlanCuentasNifView = new app.MainPlanCuentasNifView( );
+        },
+        /**
+        * show view create cuenta NIF contable
+        */
+        getPlanCuentasNifCreate: function () {
+            this.planCuentaNifModel = new app.PlanCuentaNifModel();
+
+            if ( this.createPlanCuentaNifView instanceof Backbone.View ){
+                this.createPlanCuentaNifView.stopListening();
+                this.createPlanCuentaNifView.undelegateEvents();
+            }
+
+            this.createPlanCuentaNifView = new app.CreatePlanCuentaNifView({ model: this.planCuentaNifModel });
+            this.createPlanCuentaNifView.render();
+        },
+        /**
+        * show view edit cuenta NIF contable
+        */
+        getPlanCuentasNifEdit: function (plancuentanif) {
+            this.planCuentaNifModel = new app.PlanCuentaNifModel();
+            this.planCuentaNifModel.set({'id': plancuentanif}, {silent: true});
+
+            if ( this.createPlanCuentaNifView instanceof Backbone.View ){
+                this.createPlanCuentaNifView.stopListening();
+                this.createPlanCuentaNifView.undelegateEvents();
+            }
+
+            this.createPlanCuentaNifView = new app.CreatePlanCuentaNifView({ model: this.planCuentaNifModel });
+            this.planCuentaNifModel.fetch();
+        },
         /**
         * show view main centros de costo
         */

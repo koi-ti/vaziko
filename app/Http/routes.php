@@ -77,6 +77,13 @@ Route::group(['middleware' => 'auth'], function()
 	});
     Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
+	Route::group(['prefix' => 'plancuentasnif'], function()
+	{
+		Route::get('nivel', ['as' => 'plancuentasnif.nivel', 'uses' => 'Accounting\PlanCuentasNifController@nivel']);
+		Route::get('search', ['as' => 'plancuentasnif.search', 'uses' => 'Accounting\PlanCuentasNifController@search']);
+	});
+    Route::resource('plancuentasnif', 'Accounting\PlanCuentasNifController', ['except' => ['destroy']]);
+
 	Route::group(['prefix' => 'documentos'], function()
 	{
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
@@ -97,6 +104,20 @@ Route::group(['middleware' => 'auth'], function()
 
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+
+	Route::group(['prefix' => 'asientosnif'], function()
+	{
+		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
+		Route::get('exportar/{asientosnif}', ['as' => 'asientosnif.exportar', 'uses' => 'Accounting\AsientoNifController@exportar']);
+
+		Route::group(['prefix' => 'detalle'], function()
+		{
+			Route::post('evaluate', ['as' => 'asientosnif.detalle.evaluate', 'uses' => 'Accounting\AsientoNifDetalleController@evaluate']);
+			Route::post('validate', ['as' => 'asientosnif.detalle.validate', 'uses' => 'Accounting\AsientoNifDetalleController@validation']);
+			Route::get('movimientos', ['as' => 'asientosnif.detalle.movimientos', 'uses' => 'Accounting\AsientoNifDetalleController@movimientos']);
+		});
+	});
+	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
 
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);

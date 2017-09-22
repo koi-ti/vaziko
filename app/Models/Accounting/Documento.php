@@ -3,10 +3,11 @@
 namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
 use Validator;
 
-class Documento extends Model
+class Documento extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -23,6 +24,13 @@ class Documento extends Model
      * @var array
      */
     protected $fillable = ['documento_codigo', 'documento_nombre', 'documento_folder', 'documento_tipo_consecutivo'];
+
+    /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['documento_nif', 'documento_actual'];
 
     public function isValid($data)
     {

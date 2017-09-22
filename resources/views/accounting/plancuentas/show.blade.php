@@ -57,9 +57,13 @@
 			</div>
 
 			<div class="row">
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-3">
 					<label class="control-label">Tasa</label>
 					<div>{{ $plancuenta->plancuentas_tasa }}</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label class="control-label">Equivalencia en NIF</label>
+					<div>{{ $plancuenta->plancuentasn_cuenta }} - {{ $plancuenta->plancuentasn_nombre }}</div>
 				</div>
 			</div>
 		</div>
