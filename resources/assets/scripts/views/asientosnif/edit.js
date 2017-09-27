@@ -1,5 +1,5 @@
 /**
-* Class CreateAsientoView  of Backbone Router
+* Class EditAsientoNifView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,17 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateAsientoView = Backbone.View.extend({
+    app.EditAsientoNifView = Backbone.View.extend({
 
-        el: '#asientos-create',
-        template: _.template( ($('#add-asiento-tpl').html() || '') ),
+        el: '#asientosnif-create',
+        template: _.template( ($('#add-asienton-tpl').html() || '') ),
         templateFp: _.template( ($('#add-rfacturap-tpl').html() || '') ),
         events: {
-            'change select#asiento1_documento': 'documentoChanged',
-            'change input#asiento2_base': 'baseChanged',
-            'submit #form-asientos': 'onStore',
+            'change select#asienton1_documento': 'documentoChanged',
+            'submit #form-item-asienton': 'onStoreItem',
+            'change input#asienton2_base': 'baseChanged',
+            'click .submit-asienton': 'submitAsiento',
+            'submit #form-asientosn': 'onStore',
         },
 
         /**
@@ -25,8 +27,7 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$modalFactura = $('#modal-facturap-component');
-            this.asientoCuentasList = new app.AsientoCuentasList();
+            this.asientoNifCuentasList = new app.AsientoNifCuentasList();
 
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -39,15 +40,16 @@ app || (app = {});
         render: function() {
 
             var attributes = this.model.toJSON();
-            attributes.edit = false;
+            attributes.edit = true;
             this.$el.html( this.template(attributes) );
 
-            this.$numero = this.$('#asiento1_numero');
-            this.$form = this.$('#form-asientos');
-            this.$formItem = this.$('#form-item-asiento');
-            this.$inputTasa = this.$("#asiento2_tasa");
-            this.$inputValor = this.$("#asiento2_valor");
-            this.$inputBase = this.$("#asiento2_base");
+            this.$numero = this.$('#asienton1_numero');
+            this.$form = this.$('#form-asientosn');
+            this.$formItem = this.$('#form-item-asienton');
+            this.$inputTasa = this.$("#asienton2_tasa");
+            this.$inputValor = this.$("#asienton2_valor");
+            this.$inputBase = this.$("#asienton2_base");
+            this.$inputDocumento = this.$("#asienton1_documento");
             this.spinner = this.$('#spinner-main');
 
             // Reference views
@@ -56,6 +58,10 @@ app || (app = {});
             // to fire plugins
             this.ready();
 
+            // to change document
+            if(this.model.get('documento_tipo_consecutivo') == 'A'){
+                this.$inputDocumento.change();
+            }
 		},
 
         /**
@@ -77,6 +83,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
         },
 
         /**
@@ -84,10 +93,10 @@ app || (app = {});
         */
         referenceViews: function () {
             // Detalle asiento list
-            this.cuentasListView = new app.AsientoCuentasListView({
-                collection: this.asientoCuentasList,
+            this.cuentasListView = new app.AsientoNifCuentasListView({
+                collection: this.asientoNifCuentasList,
                 parameters: {
-                    wrapper: this.el,
+                    wrapper: this.spinner,
                     edit: true,
                     dataFilter: {
                         'asiento': this.model.get('id')
@@ -132,20 +141,45 @@ app || (app = {});
         },
 
         /**
+        * Event submit Asiento
+        */
+        submitAsiento: function (e) {
+            this.$form.submit();
+        },
+
+        /**
         * Event Create Cuenta
         */
         onStore: function (e) {
+
+            if (!e.isDefaultPrevented()) {
+
+                e.preventDefault();
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Event add item Asiento Cuentas
+        */
+        onStoreItem: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                
-                // Definir tercero
-                data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
-                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
+                data.asienton1_id = this.model.get('id');
 
-                window.Misc.evaluateActionsAccount({
+                // Definir tercero
+                data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
+                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
+
+                // Default insert
+                    // this.asientoNifCuentasList.trigger( 'store', data );
+                    // window.Misc.clearForm( this.$formItem );  
+                // Evaluate account
+                window.Misc.evaluateActionsAccountNif({
                     'data': data,
                     'wrap': this.spinner,
                     'callback': (function (_this) {
@@ -160,7 +194,7 @@ app || (app = {});
 
                                 _this.asientoActionView = new app.AsientoActionView({
                                     model: _this.model,
-                                    collection: _this.asientoCuentasList,
+                                    collection: _this.asientoNifCuentasList,
                                     parameters: {
                                         data: data,
                                         actions: actions
@@ -169,7 +203,8 @@ app || (app = {});
                                 _this.asientoActionView.render();
                             }else{
                                 // Default insert
-                                _this.model.save( data, {patch: true, silent: true} );
+                                _this.asientoNifCuentasList.trigger( 'store', data );
+                                window.Misc.clearForm( _this.$formItem );   
                             }
                         }
                     })(this)
@@ -220,26 +255,8 @@ app || (app = {});
                     return;
                 }
 
-                // FacturapView undelegateEvents
-                if ( this.createFacturapView instanceof Backbone.View ){
-                    this.createFacturapView.stopListening();
-                    this.createFacturapView.undelegateEvents();
-                }
-
-                // AsientoActionView undelegateEvents
-                if ( this.asientoActionView instanceof Backbone.View ){
-                    this.asientoActionView.stopListening();
-                    this.asientoActionView.undelegateEvents();
-                }
-
-                if ( resp.id == '' && resp.nif != '' ) {
-                    // Redirect to Content Course
-                    window.Misc.redirect( window.Misc.urlFull( Route.route('asientosnif.edit', { asientosnif: resp.nif}), { trigger:true }));
-
-                }else{
-                    // Redirect to Content Course
-                    Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
-                }
+                // Redirect to show view
+                window.Misc.redirect( window.Misc.urlFull( Route.route('asientosnif.edit', { asientosnif: resp.id}) ) );
             }
         }
     });

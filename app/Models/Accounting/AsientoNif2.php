@@ -35,9 +35,9 @@ class AsientoNif2 extends Model
         return false;
     }
 
-    public static function getAsiento2($asiento)
+    public static function getAsientoNif2($asiento)
     {
-        $query = Asiento2::query();
+        $query = AsientoNif2::query();
         $query->select('koi_asienton2.*', 'plancuentasn_cuenta', 'plancuentasn_naturaleza', 'plancuentasn_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
             DB::raw("(CASE WHEN t.tercero_persona = 'N'
                 THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
@@ -57,7 +57,7 @@ class AsientoNif2 extends Model
            ) AS ordenp_beneficiario")
         );
         $query->join('koi_tercero as t', 'asienton2_beneficiario', '=', 't.id');
-        $query->join('koi_plancuentas', 'asienton2_cuenta', '=', 'koi_plancuentas.id');
+        $query->join('koi_plancuentasn', 'asienton2_cuenta', '=', 'koi_plancuentasn.id');
         $query->leftJoin('koi_centrocosto', 'asienton2_centro', '=', 'koi_centrocosto.id');
         // Temporal join
         $query->leftJoin('koi_ordenproduccion', 'asienton2_ordenp', '=', 'koi_ordenproduccion.id');
@@ -120,6 +120,9 @@ class AsientoNif2 extends Model
         // Insert si no existe asiento2
         if(!isset($data['Id']) || empty($data['Id']))
         {
+            // Consecutivo item
+            $item = DB::table('koi_asienton2')->where('asienton2_asiento', $asiento->id)->max('asienton2_item');
+            $this->asiento2_item = ++$item;
             $this->asienton2_asiento = $asientoNif->id;
             $this->asienton2_cuenta = $objCuenta->id;
             $this->asienton2_beneficiario = $objTercero->id;
@@ -156,7 +159,7 @@ class AsientoNif2 extends Model
         return $response;
     }
 
-    public static function validarAsiento2(Request $request, PlanCuenta $cuenta)
+    public static function validarAsientoNif2(Request $request, PlanCuentaNif $cuenta)
     {
         // Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
         $result = $cuenta->validarSubnivelesCuenta();
@@ -165,7 +168,7 @@ class AsientoNif2 extends Model
         }
 
         // Recuperar niveles cuenta
-        $niveles = PlanCuenta::getNivelesCuenta($cuenta->plancuentasn_cuenta);
+        $niveles = PlanCuentaNif::getNivelesCuenta($cuenta->plancuentasn_cuenta);
         if(!is_array($niveles)) {
             return "Error al recuperar niveles para la cuenta {$cuenta->plancuentasn_cuenta}.";
         }
@@ -459,12 +462,11 @@ class AsientoNif2 extends Model
         return $response;
     }
 
-    public function movimiento(Request $request)
+    public function movimiento(Request $request, $plancuentasn_cuenta = null)
     {
         $response = new \stdClass();
         $response->success = false;
-        $cuenta = $request->has('plancuentasn_cuenta') ? $request->plancuentasn_cuenta : $request->plancuentasn_cuenta_cuenta ; 
- 
+        $cuenta = $request->has('plancuentasn_cuenta') ? $request->plancuentasn_cuenta : $plancuentasn_cuenta; 
         // Recuperar cuenta
         $objCuenta = PlanCuentaNif::where('plancuentasn_cuenta', $cuenta)->first();
         if(!$objCuenta instanceof PlanCuentaNif) {

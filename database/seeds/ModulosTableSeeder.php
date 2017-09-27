@@ -183,12 +183,20 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	//Modulos
+        Modulo::create([
+            'name' => 'asientos',
+            'display_name' => 'Asientos',
+            'nivel1' => 3,
+            'nivel2' => 1,
+            'nivel3' => 1
+        ]);
+
     	Modulo::create([
-        	'name' => 'asientos',
-        	'display_name' => 'Asientos',
+        	'name' => 'asientosnif',
+        	'display_name' => 'Asientos NIF',
         	'nivel1' => 3,
         	'nivel2' => 1,
-        	'nivel3' => 1
+        	'nivel3' => 2
     	]);
 
     	//Reportes
@@ -233,12 +241,20 @@ class ModulosTableSeeder extends Seeder
         	'nivel3' => 3
     	]);
 
+        Modulo::create([
+            'name' => 'plancuentas',
+            'display_name' => 'Plan de cuentas',
+            'nivel1' => 3,
+            'nivel2' => 3,
+            'nivel3' => 4
+        ]);
+        
     	Modulo::create([
-        	'name' => 'plancuentas',
-        	'display_name' => 'Plan de cuentas',
+        	'name' => 'plancuentasnif',
+        	'display_name' => 'Plan de cuentas NIF',
         	'nivel1' => 3,
         	'nivel2' => 3,
-        	'nivel3' => 4
+        	'nivel3' => 5
     	]);
 
     	//Inventario

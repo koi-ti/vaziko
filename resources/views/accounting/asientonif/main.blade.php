@@ -1,21 +1,21 @@
 @extends('layout.layout')
 
-@section('title') Asientos contables @stop
+@section('title') Asientos contables NIF @stop
 
 @section('content')
 	@yield('module')
 
     {{-- Templates --}}
-    <script type="text/template" id="add-asiento-tpl">
+    <script type="text/template" id="add-asienton-tpl">
 	    <section class="content-header">
 			<h1>
-				Asientos contables <small>Administración asientos contables</small>
+				Asientos contables NIF<small>Administración asientos contables NIF</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
-					<li><a href="{{ route('asientos.index') }}">Asientos contables</a></li>
+					<li><a href="{{ route('asientosnif.index') }}">Asientos contables NIF</a></li>
 		    	<% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-					<li><a href="<%- window.Misc.urlFull( Route.route('asientos.show', { asientos: id}) ) %>"><%- id %></a></li>
+					<li><a href="<%- window.Misc.urlFull( Route.route('asientosnif.show', { asientosnif: id}) ) %>"><%- id %></a></li>
 					<li class="active">Editar</li>
 				<% }else{ %>
 					<li class="active">Nuevo</li>
@@ -25,33 +25,33 @@
 
 	    <section class="content">
 		    <div class="box box-success" id="spinner-main">
-		    	<div class="box-body" id="render-form-asientos">
-					<form method="POST" accept-charset="UTF-8" id="form-asientos" data-toggle="validator">
+		    	<div class="box-body" id="render-form-asientosn">
+					<form method="POST" accept-charset="UTF-8" id="form-asientosn" data-toggle="validator">
 						<div class="row">
-							<label for="asiento1_ano" class="col-sm-1 control-label">Fecha</label>
+							<label for="asienton1_ano" class="col-sm-1 control-label">Fecha</label>
 							<div class="form-group col-sm-2">
-								<input id="asiento1_ano" value="<%- asiento1_ano %>" placeholder="Año" class="form-control input-sm input-toupper" name="asiento1_ano" type="number" maxlength="4" data-minlength="4" required>
+								<input id="asienton1_ano" value="<%- asienton1_ano %>" placeholder="Año" class="form-control input-sm input-toupper" name="asienton1_ano" type="number" maxlength="4" data-minlength="4" required>
 							</div>
 
 							<div class="form-group col-sm-2">
-								<select name="asiento1_mes" id="asiento1_mes" class="form-control" required>
+								<select name="asienton1_mes" id="asienton1_mes" class="form-control" required>
 									@foreach( config('koi.meses') as $key => $value)
-										<option value="{{ $key }}" <%- asiento1_mes == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
+										<option value="{{ $key }}" <%- asienton1_mes == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
 
 							<div class="form-group col-sm-1">
-								<select name="asiento1_dia" id="asiento1_dia" class="form-control" required>
+								<select name="asienton1_dia" id="asienton1_dia" class="form-control" required>
 									@for($i = 1; $i <= 31; $i++)
-										<option value="{{ $i }}" <%- asiento1_dia == '{{ $i }}' ? 'selected': ''%>>{{ $i }}</option>
+										<option value="{{ $i }}" <%- asienton1_dia == '{{ $i }}' ? 'selected': ''%>>{{ $i }}</option>
 									@endfor
 								</select>
 							</div>
 
 							<% if(edit) { %>
 								<div class="col-md-1 col-sm-2 col-xs-2 text-right pull-right">
-									<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" class="btn btn-danger btn-sm btn-block">
+									<a href="<%- window.Misc.urlFull( Route.route('asientosnif.exportar', { asientosnif: id}) ) %>" class="btn btn-danger btn-sm btn-block">
 										<i class="fa fa-file-pdf-o"></i>
 									</a>
 								</div>
@@ -59,32 +59,32 @@
 						</div>
 
 						<div class="row">
-							<label for="asiento1_folder" class="col-sm-1 control-label">Folder</label>
+							<label for="asienton1_folder" class="col-sm-1 control-label">Folder</label>
 							<div class="form-group col-sm-3">
-								<select name="asiento1_folder" id="asiento1_folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper="spinner-main" data-documents="asiento1_documento" required>
+								<select name="asienton1_folder" id="asienton1_folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper="spinner-main" data-documents="asienton1_documento" required>
 									<option value="" selected>Seleccione</option>
 									@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
-										<option value="{{ $key }}" <%- asiento1_folder == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
+										<option value="{{ $key }}" <%- asienton1_folder == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
 
-							<label for="asiento1_documento" class="col-sm-1 control-label">Documento</label>
+							<label for="asienton1_documento" class="col-sm-1 control-label">Documento</label>
 							<div class="form-group col-sm-3">
-								<select name="asiento1_documento" id="asiento1_documento" class="form-control select2-default" required>
+								<select name="asienton1_documento" id="asienton1_documento" class="form-control select2-default" required>
 									<option value="" selected>Seleccione</option>
 									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
-										<option value="{{ $key }}" <%- asiento1_documento == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
+										<option value="{{ $key }}" <%- asienton1_documento == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
 
-							<label for="asiento1_numero" class="col-sm-1 control-label">Número</label>
+							<label for="asienton1_numero" class="col-sm-1 control-label">Número</label>
 							<div class="form-group col-sm-2">
-								<input id="asiento1_numero" name="asiento1_numero" value="<%- asiento1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
+								<input id="asienton1_numero" name="asienton1_numero" value="<%- asienton1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
 							</div>
 
-							<% if(asiento1_preguardado) { %>
+							<% if(asienton1_preguardado) { %>
 								<div class="col-md-1 text-right pull-right">
 									<span class="label label-warning">PRE-GUARDADO</span>
 								</div>
@@ -92,43 +92,43 @@
 			            </div>
 
 						<div class="row">
-							<label for="asiento1_beneficiario" class="col-sm-1 control-label">Beneficiario</label>
+							<label for="asienton1_beneficiario" class="col-sm-1 control-label">Beneficiario</label>
 							<div class="form-group col-sm-3">
 					      		<div class="input-group input-group-sm">
 									<span class="input-group-btn">
-										<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="asiento1_beneficiario">
+										<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="asienton1_beneficiario">
 											<i class="fa fa-user"></i>
 										</button>
 									</span>
-									<input id="asiento1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asiento1_beneficiario" type="text" maxlength="15" data-wrapper="spinner-main" data-name="asiento1_beneficiario_nombre" value="<%- tercero_nit %>" required>
+									<input id="asienton1_beneficiario" placeholder="Beneficiario" class="form-control tercero-koi-component" name="asienton1_beneficiario" type="text" maxlength="15" data-wrapper="spinner-main" data-name="asienton1_beneficiario_nombre" value="<%- tercero_nit %>" required>
 								</div>
 							</div>
 							<div class="col-sm-5">
-								<input id="asiento1_beneficiario_nombre" name="asiento1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" readonly required>
+								<input id="asienton1_beneficiario_nombre" name="asienton1_beneficiario_nombre" placeholder="Nombre beneficiario" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" readonly required>
 							</div>
 							<div class="col-sm-1">
-								<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="asiento1_beneficiario">
+								<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="tercero" data-field="asienton1_beneficiario">
 									<i class="fa fa-plus"></i>
 								</button>
 							</div>
 						</div>
 
 						<div class="row">
-							<label for="asiento1_detalle" class="col-sm-1 control-label">Detalle</label>
+							<label for="asienton1_detalle" class="col-sm-1 control-label">Detalle</label>
 							<div class="form-group col-sm-10">
-								<textarea id="asiento1_detalle" name="asiento1_detalle" class="form-control" rows="2" placeholder="Detalle"><%- asiento1_detalle %></textarea>
+								<textarea id="asienton1_detalle" name="asienton1_detalle" class="form-control" rows="2" placeholder="Detalle"><%- asienton1_detalle %></textarea>
 							</div>
 			            </div>
 
     					<div class="box-footer with-border">
 				        	<div class="row">
 								<div class="col-md-2 <%- (edit) ? 'col-md-offset-4' : 'col-md-offset-5' %> col-sm-6 col-xs-6 text-left">
-									<a href="<%- window.Misc.urlFull( edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+									<a href="<%- window.Misc.urlFull( edit ? Route.route('asientosnif.show', { asientos: id}) : Route.route('asientosnif.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
 								</div>
 
 								<% if(edit) { %>
 									<div class="col-md-2 col-sm-6 col-xs-6 text-right">
-										<button type="button" class="btn btn-primary btn-sm btn-block submit-asiento">{{ trans('app.save') }}</button>
+										<button type="button" class="btn btn-primary btn-sm btn-block submit-asienton">{{ trans('app.save') }}</button>
 									</div>
 								<% } %>
 							</div>
@@ -137,25 +137,25 @@
 
 					<!-- Detalle -->
 					<div class="box box-success">
-						<% if(edit) { %> <form method="POST" accept-charset="UTF-8" id="form-item-asiento" data-toggle="validator"> <% } %>
+						<% if(edit) { %> <form method="POST" accept-charset="UTF-8" id="form-item-asienton" data-toggle="validator"> <% } %>
 							<div class="box-body">
 								<div class="row">
 									<div class="form-group col-sm-2">
 							      		<div class="input-group input-group-sm">
 											<span class="input-group-btn">
-												<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="plancuentas_cuenta">
+												<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="plancuentasn_cuenta">
 													<i class="fa fa-tasks"></i>
 												</button>
 											</span>
-											<input id="plancuentas_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentas_cuenta" type="text" maxlength="15" data-wrapper="spinner-main" data-name="plancuentas_nombre" data-base="asiento2_base" data-valor="asiento2_valor" data-centro="asiento2_centro" data-tasa="asiento2_tasa" required>
+											<input id="plancuentasn_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="plancuentasn_cuenta" type="text" maxlength="15" data-wrapper="spinner-main" data-name="plancuentasn_nombre" data-base="asienton2_base" data-valor="asienton2_valor" data-centro="asienton2_centro" data-tasa="asienton2_tasa" required>
 										</div>
 									</div>
 									<div class="col-sm-3">
-										<input id="plancuentas_nombre" name="plancuentas_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled required>
+										<input id="plancuentasn_nombre" name="plancuentasn_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled required>
 									</div>
 
 									<div class="form-group col-sm-6">
-										<select name="asiento2_centro" id="asiento2_centro" class="form-control select2-default-clear"  data-placeholder="Seleccione centro de costo">
+										<select name="asienton2_centro" id="asienton2_centro" class="form-control select2-default-clear"  data-placeholder="Seleccione centro de costo">
 											@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto() as $key => $value)
 												<option value="{{ $key }}">{{ $value }}</option>
 											@endforeach
@@ -184,34 +184,34 @@
 									</div>
 
 									<div class="form-group col-sm-2">
-										<label class="radio-inline without-padding" for="asiento2_naturaleza_debito">
-											<input type="radio" id="asiento2_naturaleza_debito" name="asiento2_naturaleza" value="D" checked> Débito
+										<label class="radio-inline without-padding" for="asienton2_naturaleza_debito">
+											<input type="radio" id="asienton2_naturaleza_debito" name="asienton2_naturaleza" value="D" checked> Débito
 										</label>
 
-										<label class="radio-inline without-padding" for="asiento2_naturaleza_credito">
-											<input type="radio" id="asiento2_naturaleza_credito" name="asiento2_naturaleza" value="C"> Crédito
+										<label class="radio-inline without-padding" for="asienton2_naturaleza_credito">
+											<input type="radio" id="asienton2_naturaleza_credito" name="asienton2_naturaleza" value="C"> Crédito
 										</label>
 									</div>
 
 									<div class="form-group col-sm-1 text-right">
-										<label for="asiento2_base" class="control-label">Base</label>
+										<label for="asienton2_base" class="control-label">Base</label>
 									</div>
 
 									<div class="form-group col-sm-2">
-										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
-										<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
+										<input id="asienton2_base" name="asienton2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
+										<input id="asienton2_tasa" name="asienton2_tasa" type="hidden">
 									</div>
 								</div>
 
 								<div class="row">
 									<div class="form-group col-sm-8">
-										<input id="asiento2_detalle" name="asiento2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
+										<input id="asienton2_detalle" name="asienton2_detalle" class="form-control input-sm" placeholder="Detalle" type="text">
 									</div>
 									<div class="form-group col-sm-1 text-right">
-										<label for="asiento2_valor" class="control-label">Valor</label>
+										<label for="asienton2_valor" class="control-label">Valor</label>
 									</div>
 									<div class="form-group col-sm-2">
-										<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" data-currency type="text" required>
+										<input id="asienton2_valor" name="asienton2_valor" placeholder="Valor" class="form-control input-sm" data-currency type="text" required>
 									</div>
 									<div class="form-group col-sm-1">
 										<button type="submit" class="btn btn-success btn-sm btn-block">
@@ -224,7 +224,7 @@
 
 						<!-- table table-bordered table-striped -->
 						<div class="box-body table-responsive no-padding">
-							<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+							<table id="browse-detalle-asienton-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 					            <tr>
 					                <th></th>
 					                <th>Cuenta</th>
@@ -261,31 +261,31 @@
 		</section>
 	</script>
 
-	<script type="text/template" id="add-asiento2-item-tpl">
+	<script type="text/template" id="add-asienton2-item-tpl">
 		<% if(edit) { %>
 		<td class="text-center">
-			<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>" data-resource-nif = "<%- asientoNif2_id %>">
+			<a class="btn btn-default btn-xs item-asienton2-remove" data-resource="<%- id %>">
 				<span><i class="fa fa-times"></i></span>
 			</a>
 		</td>
 		<% } %>
-		<td><%- plancuentas_cuenta %></td>
-	    <td><%- plancuentas_nombre %></td>
+		<td><%- plancuentasn_cuenta %></td>
+	    <td><%- plancuentasn_nombre %></td>
 	    <td>
-	    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
+	    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asienton2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
 	    		<%- tercero_nit %>
 	    	</a>
 	    </td>
 	    <td>
-	    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
-		    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
+	    	<% if( !_.isUndefined(asienton2_centro) && !_.isNull(asienton2_centro) && asienton2_centro != '') { %>
+		    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asienton2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
 		    		<%- centrocosto_codigo %>
 		    	</a>
 	    	<% } %>
 	    </td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
+	    <td class="text-right"><%- window.Misc.currency(asienton2_base ? asienton2_base : 0) %></td>
+	    <td class="text-right"><%- window.Misc.currency(asienton2_debito ? asienton2_debito : 0) %></td>
+	    <td class="text-right"><%- window.Misc.currency(asienton2_credito ? asienton2_credito: 0) %></td>
 	    <td class="text-center">
 			<a class="btn btn-default btn-xs item-asiento2-show-info" data-resource="<%- id %>">
 				<span><i class="fa fa-info-circle"></i></span>
@@ -297,25 +297,25 @@
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<label class="control-label">
-					Seleccione orden de producción para asociar al <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+					Seleccione orden de producción para asociar al <%- asienton2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
 				</label>
 			</div>
 		</div>
 
 		<div class="row">
-			<label for="asiento1_beneficiario" class="col-sm-offset-1 col-sm-1 control-label">Orden</label>
+			<label for="asienton1_beneficiario" class="col-sm-offset-1 col-sm-1 control-label">Orden</label>
 			<div class="form-group col-sm-3">
 	      		<div class="input-group input-group-sm">
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="asiento2_orden">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="asienton2_orden">
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-factura="false" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
+					<input id="asienton2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asienton2_orden" type="text" maxlength="15" data-factura="false" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asienton2_orden_beneficiario" required>
 				</div>
 			</div>
 			<div class="col-sm-6">
-				<input id="asiento2_orden_beneficiario" name="asiento2_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+				<input id="asienton2_orden_beneficiario" name="asienton2_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
 			</div>
 		</div>
 	</script>
@@ -330,13 +330,13 @@
 	    <div class="row">
 			<div class="form-group col-md-9">
 				<label for="facturap1_factura" class="control-label">
-					Ingrese el numero de factura para realizar el <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+					Ingrese el numero de factura para realizar el <%- asienton2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
 				</label>
 				<input type="text" id="facturap1_factura" name="facturap1_factura" placeholder="Factura" class="form-control input-sm" maxlength="200" required>
 			</div>
 			<div class="form-group col-md-3">
 				<label class="control-label">Valor</label>
-				<div><%- window.Misc.currency( asiento2_valor ) %></div>
+				<div><%- window.Misc.currency( asienton2_valor ) %></div>
 			</div>
 		</div>
 		<div id="content-invoice"></div>
@@ -352,7 +352,7 @@
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<label class="control-label">
-					Seleccione factura del cliente <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
+					Seleccione factura del cliente <%- asienton2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>.
 				</label>
 			</div>
 		</div>
@@ -452,9 +452,9 @@
 		<div class="row">
 			<div class="col-md-12 text-center">
 				<label class="control-label">
-					Seleccione producto de inventario para asociar al <%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>. Valor (<%- window.Misc.currency( asiento2_valor ) %>)
+					Seleccione producto de inventario para asociar al <%- asienton2_naturaleza == 'D' ? 'Débito' : 'Crédito' %>. Valor (<%- window.Misc.currency( asienton2_valor ) %>)
 				</label>
-				<% if(asiento2_naturaleza == 'C') { %>
+				<% if(asienton2_naturaleza == 'C') { %>
 					<br/>
 					<label class="control-label text-red">
 						El valor del Crédito puede ser modificado si es diferente al costo de movimiento.
@@ -478,7 +478,7 @@
                 <input id="producto_nombre" name="producto_nombre" placeholder="Nombre producto" class="form-control input-sm" type="text" maxlength="15" readonly required>
             </div>
 
-            <% if(asiento2_naturaleza == 'D') { %>
+            <% if(asienton2_naturaleza == 'D') { %>
 	            <div class="col-sm-1 col-xs-1">
 	                <button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="producto" data-field="producto_codigo">
 	                    <i class="fa fa-plus"></i>
@@ -490,7 +490,7 @@
                 <input id="movimiento_cantidad" name="movimiento_cantidad" class="form-control input-sm evaluate-producto-movimiento-asiento" type="number" placeholder="Unidades" min="1" required>
 			</div>
 
-            <div class="form-group <%- asiento2_naturaleza == 'D' ? 'col-sm-3' : 'col-sm-4' %>">
+            <div class="form-group <%- asienton2_naturaleza == 'D' ? 'col-sm-3' : 'col-sm-4' %>">
                 <select name="movimiento_sucursal" id="movimiento_sucursal" class="form-control evaluate-producto-movimiento-asiento" required>
                     <option value="" selected>Sucursal</option>
                     @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
@@ -558,12 +558,12 @@
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label class="control-label">Naturaleza</label>
-				<div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
+				<div><%- asienton2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
 			</div>
 		</div>
 
 		<!-- Orden -->
-		<% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
+		<% if( !_.isUndefined(asienton2_ordenp) && !_.isNull(asienton2_ordenp) && asienton2_ordenp != ''){ %>
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="control-label">Orden de producción</label>
@@ -581,7 +581,7 @@
 		</div>
 
 		<!-- Centro costo -->
-    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
+    	<% if( !_.isUndefined(asienton2_centro) && !_.isNull(asienton2_centro) && asienton2_centro != '') { %>
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="control-label">Centro Costo</label>
@@ -591,11 +591,11 @@
 		<% } %>
 
 		<!-- Detalle -->
-    	<% if( !_.isUndefined(asiento2_detalle) && !_.isNull(asiento2_detalle) && asiento2_detalle != '') { %>
+    	<% if( !_.isUndefined(asienton2_detalle) && !_.isNull(asienton2_detalle) && asienton2_detalle != '') { %>
 			<div class="row">
 				<div class="form-group col-md-12">
 					<label class="control-label">Detalle</label>
-					<div><%- asiento2_detalle %></div>
+					<div><%- asienton2_detalle %></div>
 				</div>
 			</div>
 		<% } %>

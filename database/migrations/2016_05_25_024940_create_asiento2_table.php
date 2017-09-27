@@ -25,6 +25,7 @@ class CreateAsiento2Table extends Migration
             $table->double('asiento2_credito')->default(0);
             $table->double('asiento2_base')->default(0);
             $table->text('asiento2_detalle')->nullable();
+            $table->integer('asiento2_item')->unsigned();
 
             $table->integer('asiento2_nivel1')->default(0);
             $table->integer('asiento2_nivel2')->default(0);

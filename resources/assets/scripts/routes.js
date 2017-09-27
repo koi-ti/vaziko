@@ -63,6 +63,10 @@ app || (app = {});
             'asientos/:asientos(/)': 'getAsientosShow',
             'asientos/:asiento/edit(/)': 'getAsientosEdit',
 
+            'asientosnif(/)': 'getAsientosNifMain',
+            'asientosnif/:asientonif(/)': 'getAsientosNifShow',
+            'asientosnif/:asientonif/edit(/)': 'getAsientosNifEdit',
+
             'documentos(/)': 'getDocumentosMain',
             'documentos/create(/)': 'getDocumentosCreate',
             'documentos/:documento/edit(/)':'getDocumentosEdit',
@@ -717,7 +721,52 @@ app || (app = {});
             this.editAsientoView = new app.EditAsientoView({ model: this.asientoModel });
             this.asientoModel.fetch();
         },
+        /**
+        * show view main asiento NIF contable
+        */
+        getAsientosNifMain: function () {
 
+            if ( this.mainAsientosNifView instanceof Backbone.View ){
+                this.mainAsientosNifView.stopListening();
+                this.mainAsientosNifView.undelegateEvents();
+            }
+
+            this.mainAsientosNifView = new app.MainAsientosNifView( );
+        },
+        /**
+        * show view show asiento NIF contable
+        */
+        getAsientosNifShow: function (asientoNif) {
+            this.asientoNifModel = new app.AsientoNifModel();
+            this.asientoNifModel.set({'id': asientoNif}, {'silent':true});
+
+            if ( this.showAsientoNifView instanceof Backbone.View ){
+                this.showAsientoNifView.stopListening();
+                this.showAsientoNifView.undelegateEvents();
+            }
+
+            this.showAsientoNifView = new app.ShowAsientoNifView({ model: this.asientoNifModel });
+        },
+        /**
+        * show view edit asiento NIF contable
+        */
+        getAsientosNifEdit: function (asientoNif) {
+            this.asientoNifModel = new app.AsientoNifModel();
+            this.asientoNifModel.set({'id': asientoNif}, {'silent':true});
+
+            if ( this.editAsientoNifView instanceof Backbone.View ){
+                this.editAsientoNifView.stopListening();
+                this.editAsientoNifView.undelegateEvents();
+            }
+
+            if ( this.createAsientoView instanceof Backbone.View ){
+                this.createAsientoView.stopListening();
+                this.createAsientoView.undelegateEvents();
+            }
+
+            this.editAsientoNifView = new app.EditAsientoNifView({ model: this.asientoNifModel });
+            this.asientoNifModel.fetch();
+        },
         /**
         * show view show folders
         */

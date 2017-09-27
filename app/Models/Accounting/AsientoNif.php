@@ -44,15 +44,16 @@ class AsientoNif extends Model
         return false;
     }
 
-    public static function getAsiento($id)
+    public static function getAsientoNif($id)
     {
-        $query = Asiento::query();
+        $query = AsientoNif::query();
         $query->select('koi_asienton1.*', 'folder_nombre', 'documento_nombre', 't.tercero_nit', 'documento_tipo_consecutivo', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 'u.username as username_elaboro');
         $query->join('koi_tercero as t', 'asienton1_beneficiario', '=', 't.id');
         $query->join('koi_tercero as u', 'asienton1_usuario_elaboro', '=', 'u.id');
         $query->join('koi_documento', 'asienton1_documento', '=', 'koi_documento.id');
         $query->join('koi_folder', 'asienton1_folder', '=', 'koi_folder.id');
         $query->where('koi_asienton1.id', $id);
+        // dd($query->first());
         return $query->first();
     }
 

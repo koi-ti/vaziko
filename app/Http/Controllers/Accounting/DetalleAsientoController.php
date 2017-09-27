@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Log, DB;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2,App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 
 class DetalleAsientoController extends Controller
 {
@@ -127,6 +127,34 @@ class DetalleAsientoController extends Controller
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result->error]);
                     }
+                    // Asiento Nif
+                    $asientoNif = AsientoNif::where('asienton1_asiento', $asiento->id)->first();
+                    $asientoNif2 = null; 
+                    if ($asientoNif instanceof AsientoNif) {
+
+                        $cuentaNif = PlanCuentaNif::find($objCuenta->plancuentas_equivalente);
+                        if ( !$cuentaNif instanceof PlanCuentaNif ) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta NIF, por favor verifique la información del asiento o consulte al administrador.']);
+                        }
+                        $cuenta = [];
+                        $cuenta['Cuenta'] = $cuentaNif->plancuentasn_cuenta;
+                        $cuenta['Tercero'] = $request->tercero_nit;
+                        $cuenta['Detalle'] = $request->asiento2_detalle;
+                        $cuenta['Naturaleza'] = $request->asiento2_naturaleza;
+                        $cuenta['CentroCosto'] = $request->asiento2_centro;
+                        $cuenta['Base'] = $request->asiento2_base;
+                        $cuenta['Credito'] = $request->asiento2_naturaleza == 'C' ? $request->asiento2_valor: 0;
+                        $cuenta['Debito'] = $request->asiento2_naturaleza == 'D' ? $request->asiento2_valor: 0;
+                        $cuenta['Orden'] = ($ordenp instanceof Ordenp ? $ordenp->id : '');
+
+                        $asientoNif2 = new AsientoNif2;
+                        $result = $asientoNif2->store($asientoNif, $cuenta);
+                        if(!$result->success) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result->error]);
+                        }
+                    }
 
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento2->id,
@@ -142,7 +170,8 @@ class DetalleAsientoController extends Controller
                         'asiento2_debito' => $asiento2->asiento2_debito,
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
                         'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : ''),
-                        'ordenp_beneficiario' => $request->asiento2_orden_beneficiario
+                        'ordenp_beneficiario' => $request->asiento2_orden_beneficiario,
+                        'asientoNif2_id' => ($asientoNif2 instanceof AsientoNif2 ? $asientoNif2->id : '')
                     ]);
                 }catch(\Exception $e){
                     DB::rollback();

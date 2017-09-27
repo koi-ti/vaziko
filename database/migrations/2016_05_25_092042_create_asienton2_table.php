@@ -19,11 +19,13 @@ class CreateAsienton2Table extends Migration
             $table->integer('asienton2_asiento')->unsigned();
             $table->integer('asienton2_cuenta')->unsigned();
             $table->integer('asienton2_beneficiario')->unsigned()->nullable();
+            $table->integer('asienton2_ordenp')->unsigned()->nullable();
             $table->double('asienton2_debito')->default(0);
             $table->double('asienton2_credito')->default(0);
             $table->integer('asienton2_centro')->unsigned()->nullable();
             $table->double('asienton2_base')->default(0);
             $table->text('asienton2_detalle')->nullable();
+            $table->integer('asienton2_item')->unsigned();
 
             $table->integer('asienton2_nivel1')->default(0);
             $table->integer('asienton2_nivel2')->default(0);
@@ -38,6 +40,7 @@ class CreateAsienton2Table extends Migration
             $table->foreign('asienton2_cuenta')->references('id')->on('koi_plancuentasn')->onDelete('restrict');
             $table->foreign('asienton2_beneficiario')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('asienton2_centro')->references('id')->on('koi_centrocosto')->onDelete('restrict');
+            $table->foreign('asienton2_ordenp')->references('id')->on('koi_ordenproduccion')->onDelete('restrict');
         });
     }
 
