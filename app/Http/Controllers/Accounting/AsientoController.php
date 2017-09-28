@@ -208,12 +208,13 @@ class AsientoController extends Controller
                                 DB::rollback();
                                 return response()->json(['success' => false, 'errors' => $result->error]);
                             }
+                            
                         }
                         // Commit Transaction
                         // DB::rollback();
+                        // return response()->json(['success' => false, 'errors' => 'Todo ok']);
                         DB::commit();
                         return response()->json(['success' => true, 'id' => ( isset($asiento->id) ) ? $asiento->id : '', 'nif' => ( isset($asientoNif->id) ) ? $asientoNif->id : '' ]);
-                        // return response()->json(['success' => false, 'errors' => 'Todo ok']);
                     }catch(\Exception $e){
                         DB::rollback();
                         Log::error($e->getMessage());
@@ -415,10 +416,10 @@ class AsientoController extends Controller
                         }
                     }
                     // Commit Transaction
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => "TODO OK"]);
-                    // DB::commit();
-                    // return response()->json(['success' => true, 'id' => $asiento->id]);
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => "TODO OK"]);
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $asiento->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());

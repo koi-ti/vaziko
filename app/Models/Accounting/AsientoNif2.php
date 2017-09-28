@@ -121,8 +121,8 @@ class AsientoNif2 extends Model
         if(!isset($data['Id']) || empty($data['Id']))
         {
             // Consecutivo item
-            $item = DB::table('koi_asienton2')->where('asienton2_asiento', $asiento->id)->max('asienton2_item');
-            $this->asiento2_item = ++$item;
+            $item = DB::table('koi_asienton2')->where('asienton2_asiento', $asientoNif->id)->max('asienton2_item');
+            $this->asienton2_item = ++$item;
             $this->asienton2_asiento = $asientoNif->id;
             $this->asienton2_cuenta = $objCuenta->id;
             $this->asienton2_beneficiario = $objTercero->id;

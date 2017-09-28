@@ -234,6 +234,13 @@ class DetalleAsientoController extends Controller
                 if(!$asiento2 instanceof Asiento2){
                     return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                 }
+                // Si existe asiento NIF
+                $asientoNif = AsientoNif::query()->where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
+                if ($asientoNif instanceof AsientoNif) {
+                    $asientoNif2 = AsientoNif2::query()->where('asienton2_asiento',$asientoNif->id)->where('asienton2_item', $asiento2->asiento2_item)->first();
+                    $asientoNif2->delete();
+                }
+
                 // Eliminar movimiento
                 AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->delete();
 
