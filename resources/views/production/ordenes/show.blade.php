@@ -242,4 +242,8 @@
     <script type="text/template" id="ordenp-open-confirm-tpl">
         <p>¿Está seguro que desea reabrir la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
     </script>
+
+    <script type="text/template" id="ordenp-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
+    </script>
 @stop

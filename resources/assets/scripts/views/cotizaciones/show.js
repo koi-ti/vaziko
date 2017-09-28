@@ -105,17 +105,16 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                data = { cotizacion_codigo: this.model.get('id') };
+                route = window.Misc.urlFull( Route.route('cotizaciones.clonar', { cotizaciones: this.model.get('id') }) );
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: data,
                     template: _.template( ($('#cotizacion-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar cotización',
                     onConfirm: function () {
                         // Clone cotizacion
-                        window.Misc.cloneCotizacion({
-                            'data': data,
+                        window.Misc.cloneModule({
+                            'url': route,
                             'wrap': _this.$el,
                             'callback': (function (_this) {
                                 return function ( resp )

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Productop, App\Models\Production\TipoProductop, App\Models\Production\SubtipoProductop;
+use App\Models\Production\Productop, App\Models\Production\Productop2, App\Models\Production\Productop3, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\TipoProductop, App\Models\Production\SubtipoProductop;
 use Auth, DB, Log, Datatables, Cache;
 
 class ProductopController extends Controller
@@ -33,8 +33,8 @@ class ProductopController extends Controller
                 return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Codigo
-                    if($request->has('productop_codigo')) {
-                        $query->where('koi_productop.id', $request->productop_codigo);
+                    if($request->has('id')) {
+                        $query->where('koi_productop.id', $request->id);
                     }
 
                     // Nombre
@@ -225,5 +225,94 @@ class ProductopController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    /**
+     * Search orden2.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        dd($request->all());
+        // if($request->has('orden2_id')) {
+        //     $ordenp2 = Productop::getDetail($request->orden2_id);
+        //     if($ordenp2 instanceof Ordenp2) {
+        //         return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
+        //     }
+        // }
+        // return response()->json(['success' => false]);
+    }
+
+    /**
+     * Clonar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clonar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+
+            $productop = Productop::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Cotizacion
+                $newproductop = $productop->replicate();
+                $newproductop->productop_nombre = sprintf('%s - %s', $newproductop->productop_nombre, 'COPIA');
+                $newproductop->productop_usuario_elaboro = Auth::user()->id;
+                $newproductop->productop_fecha_elaboro = date('Y-m-d H:m:s');
+                $newproductop->save();
+
+                // Productop2
+                $productosp2 = Productop2::where('productop2_productop', $productop->id)->orderBy('id', 'asc')->get();
+                foreach ($productosp2 as $productop2) {
+                    $newproductop2 = $productop2->replicate();
+                    $newproductop2->productop2_productop = $newproductop->id;
+                    $newproductop2->save();
+                }
+
+                // Productop3
+                $productosp3 = Productop3::where('productop3_productop', $productop->id)->orderBy('id', 'asc')->get();
+                foreach ($productosp3 as $productop3) {
+                    $newproductop3 = $productop3->replicate();
+                    $newproductop3->productop3_productop = $newproductop->id;
+                    $newproductop3->save();
+                }
+
+                // Productop4
+                $productosp4 = Productop4::where('productop4_productop', $productop->id)->orderBy('id', 'asc')->get();
+                foreach ($productosp4 as $productop4) {
+                    $newproductop4 = $productop4->replicate();
+                    $newproductop4->productop4_productop = $newproductop->id;
+                    $newproductop4->save();
+                }
+
+                // Productop5
+                $productosp5 = Productop5::where('productop5_productop', $productop->id)->orderBy('id', 'asc')->get();
+                foreach ($productosp5 as $productop5) {
+                    $newproductop5 = $productop5->replicate();
+                    $newproductop5->productop5_productop = $newproductop->id;
+                    $newproductop5->save();
+                }
+
+                // Productop6
+                $productosp6 = Productop6::where('productop6_productop', $productop->id)->orderBy('id', 'asc')->get();
+                foreach ($productosp6 as $productop6) {
+                    $newproductop6 = $productop6->replicate();
+                    $newproductop6->productop6_productop = $newproductop->id;
+                    $newproductop6->save();
+                }
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'id' => $newproductop->id, 'msg' => 'Producto clonado con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }

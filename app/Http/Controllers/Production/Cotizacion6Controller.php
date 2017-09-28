@@ -132,6 +132,20 @@ class Cotizacion6Controller extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
+                // Recuperar cotizacion2
+                $cotizacion2 = Cotizacion2::find($cotizacion6->cotizacion6_cotizacion2);
+                if(!$cotizacion2 instanceof Cotizacion2){
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+
+                $totalarea = $cotizacion6->cotizacion6_valor * $cotizacion6->cotizacion6_horas;
+                $unitario = $totalarea / $cotizacion2->cotizacion2_cantidad;
+                $totalunitario = $cotizacion2->cotizacion2_total_valor_unitario - $unitario;
+
+                // Quitar cotizacion2
+                $cotizacion2->cotizacion2_total_valor_unitario = $totalunitario;
+                $cotizacion2->save();
+
                 // Eliminar item productop4
                 $cotizacion6->delete();
 

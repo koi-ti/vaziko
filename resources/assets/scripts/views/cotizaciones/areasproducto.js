@@ -190,12 +190,24 @@ app || (app = {});
         *Render totales the collection
         */
         totalize: function(){
-            var precioCot2 = parseFloat( $('#cotizacion2_precio_venta').inputmask('unmaskedvalue') ) + parseFloat( $('#cotizacion2_viaticos').inputmask('unmaskedvalue') ) + parseFloat( $('#cotizacion2_transporte').inputmask('unmaskedvalue'));
-            var data = this.collection.totalize();
-            var cotizacion2 = this.collection.totalcotizacion( precioCot2 , data.total );
+            // inputs precios viaricos transporte
+            var precio = $('#cotizacion2_precio_venta').inputmask('unmaskedvalue'),
+                viaticos = $('#cotizacion2_viaticos').inputmask('unmaskedvalue'),
+                transporte = $('#cotizacion2_transporte').inputmask('unmaskedvalue'),
+                cantidad = $('#cotizacion2_cantidad').val(),
+                data = this.collection.totalize();
+
+            // Calculate
+            var calviaticos = parseFloat( viaticos ) / parseInt( cantidad ),
+                caltransporte = parseFloat( transporte ) / parseInt( cantidad ),
+                calarea = parseFloat( data.total ) / parseInt( cantidad );
+
+            // Totalize
+            var totalProductop = parseFloat( precio ) + parseFloat( calviaticos ) + parseFloat( caltransporte ),
+                cotizacion2 = this.collection.totalcotizacion( totalProductop , calarea );
 
             this.$total.empty().html( window.Misc.currency( data.total ) );
-            this.$infoareas.empty().html( window.Misc.currency( data.total ) );
+            this.$infoareas.empty().html( window.Misc.currency( calarea ) );
             this.$renderCot2.val( cotizacion2 );
         },
 

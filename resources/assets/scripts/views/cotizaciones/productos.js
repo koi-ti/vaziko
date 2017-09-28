@@ -33,8 +33,6 @@ app || (app = {});
 
             // References
             this.$unidades = this.$('#subtotal-cantidad');
-            this.$viaticos = this.$('#subtotal-viaticos');
-            this.$transporte = this.$('#subtotal-transporte');
             this.$facturado = this.$('#subtotal-facturado');
             this.$subtotal = this.$('#subtotal-total');
             this.$iva = this.$('#iva-total');
@@ -122,6 +120,7 @@ app || (app = {});
             var _this = this,
                 resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
+                route = window.Misc.urlFull( Route.route('cotizaciones.productos.clonar', { productos: model.get('id') }) ),
                 data = { cotizacion2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
@@ -130,33 +129,15 @@ app || (app = {});
                     template: _.template( ($('#cotizacion-productop-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar producto cotización',
                     onConfirm: function () {
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.productos.clonar', { productos: data.cotizacion2_codigo }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.parameters.wrapper );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.parameters.wrapper,
+                            'callback': (function ( _this ) {
+                                return function ( resp )
+                                {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.productos.show', { productos: resp.id })) );
                                 }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.productos.show', { productos: resp.id })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            alertify.error(thrownError);
+                            })(_this)
                         });
                     }
                 }
@@ -181,14 +162,6 @@ app || (app = {});
 
             if(this.$subtotal.length) {
                 this.$subtotal.html( window.Misc.currency(data.subtotal) );
-            }
-
-            if(this.$viaticos.length) {
-                this.$viaticos.html( window.Misc.currency(data.viaticos) );
-            }
-
-            if(this.$transporte.length) {
-                this.$transporte.html( window.Misc.currency(data.transporte) );
             }
 
             var iva = data.subtotal * ( this.parameters.iva / 100);

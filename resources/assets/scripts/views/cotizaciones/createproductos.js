@@ -14,8 +14,7 @@ app || (app = {});
         el: '#cotizaciones-productos-create',
         template: _.template( ($('#add-cotizacion-producto-tpl').html() || '') ),
         events: {
-            'change #cotizacion2_precio_formula': 'changeFormula',
-            'change #cotizacion2_round_formula': 'changeFormula',
+            'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
             'click .submit-cotizacion2': 'submitCotizacion2',
@@ -60,9 +59,25 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
 
             this.$form = this.$('#form-cotizacion-producto');
-            this.$inputFormula = this.$('#cotizacion2_precio_formula');
-            this.$inputRound = this.$('#cotizacion2_round_formula');
+
+            this.$inputFormula = null;
+            this.$inputRenderFormula = null;
+            this.$inputRound = null;
+
+            // Inputs render round
+            this.$inputFormulaPrecio = this.$('#cotizacion2_precio_formula');
+            this.$inputFormulaTransporte = this.$('#cotizacion2_transporte_formula');
+            this.$inputFormulaViaticos = this.$('#cotizacion2_viaticos_formula');
+
+            // Inputs render round
+            this.$inputRoundPrecio = this.$('#cotizacion2_precio_round');
+            this.$inputRoundTranporte = this.$('#cotizacion2_transporte_round');
+            this.$inputRoundViaticos = this.$('#cotizacion2_viaticos_round');
+
+            // Inputs render formulas
             this.$inputPrecio = this.$('#cotizacion2_precio_venta');
+            this.$inputTranporte = this.$('#cotizacion2_transporte');
+            this.$inputViaticos = this.$('#cotizacion2_viaticos');
 
             // Tiro
             this.$inputYellow = this.$('#cotizacion2_yellow');
@@ -83,12 +98,13 @@ app || (app = {});
             this.$valorC6 = this.$('#cotizacion6_valor');
 
             // Total
+            this.totalCotizacion = 0;
+            this.tranporteUnitario = 0;
+            this.cantidad = this.$('#cotizacion2_cantidad');
             this.$precioCot2 = this.$('#total-price');
             this.$precio = this.$('#cotizacion2_precio_venta');
             this.$viaticos = this.$('#cotizacion2_viaticos');
             this.$transporte = this.$('#cotizacion2_transporte');
-            this.totalAreap = 0;
-            this.totalCot = 0;
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
@@ -151,8 +167,29 @@ app || (app = {});
         /**
         * Event calcule formula
         */
-        changeFormula: function () {
-        	var _this = this;
+        changeFormula: function (e) {
+        	var _this = this,
+                inputformula = this.$(e.currentTarget).data('input');
+
+            if( inputformula == 'P' || inputformula == 'RP'){
+                this.$inputFormula = this.$inputFormulaPrecio;
+                this.$inputRound = this.$inputRoundPrecio;
+                this.$inputRenderFormula = this.$inputPrecio;
+
+            }else if( inputformula == 'T' || inputformula == 'RT'){
+                this.$inputFormula = this.$inputFormulaTransporte;
+                this.$inputRound = this.$inputRoundTranporte;
+                this.$inputRenderFormula = this.$inputTranporte;
+
+            }else if( inputformula == 'V' || inputformula == 'RV'){
+                this.$inputFormula = this.$inputFormulaViaticos;
+                this.$inputRound = this.$inputRoundViaticos;
+                this.$inputRenderFormula = this.$inputViaticos;
+
+            }else{
+                return;
+            }
+
         	var formula = this.$inputFormula.val();
         	var round = this.$inputRound.val();
 
@@ -172,11 +209,11 @@ app || (app = {});
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
-                _this.$inputPrecio.val(resp.precio_venta);
+                _this.$inputRenderFormula.val(resp.precio_venta);
                 _this.calculateCotizacion2();
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-            	_this.$inputPrecio.val(0);
+            	_this.$inputRenderFormula.val(0);
                 window.Misc.removeSpinner( _this.el );
                 alertify.error(thrownError);
             });
@@ -235,13 +272,16 @@ app || (app = {});
         },
 
         calculateCotizacion2: function() {
-            this.totalCot = parseFloat( this.$precio.inputmask('unmaskedvalue') ) + parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) + parseFloat( this.$transporte.inputmask('unmaskedvalue'));
+            this.tranporteUnitario = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad.val() );
+            this.viaticosUnitario = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad.val() );
+
+            this.totalCotizacion = parseFloat( this.$precio.inputmask('unmaskedvalue') ) + parseFloat( this.tranporteUnitario ) + parseFloat( this.viaticosUnitario );
 
             this.$infoprecio.empty().html( window.Misc.currency( this.$precio.inputmask('unmaskedvalue')) );
-            this.$infoviaticos.empty().html( window.Misc.currency( this.$viaticos.inputmask('unmaskedvalue')) );
-            this.$infotransporte.empty().html( window.Misc.currency( this.$transporte.inputmask('unmaskedvalue')) );
+            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticosUnitario ) );
+            this.$infotransporte.empty().html( window.Misc.currency( this.tranporteUnitario ));
 
-            this.$precioCot2.val( this.totalCot );
+            this.$precioCot2.val( this.totalCotizacion );
         },
 
         /**

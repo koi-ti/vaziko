@@ -64,7 +64,6 @@ class Cotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $cotizacion2 = new Cotizacion2;
             if ($cotizacion2->isValid($data)) {
                 DB::beginTransaction();
@@ -132,14 +131,26 @@ class Cotizacion2Controller extends Controller
 
                     // Areap
                     $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
+                    $sumaareasp = 0;
                     foreach ($areasp as $areap)
                     {
                         $cotizacion6 = new Cotizacion6;
                         $cotizacion6->fill($areap);
                         (!empty($areap['cotizacion6_areap'])) ? $cotizacion6->cotizacion6_areap = $areap['cotizacion6_areap'] : $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                        $sumaareasp += $areap['total'];
                         $cotizacion6->save();
                     }
+
+                    // Calcular valor unitario
+                    $totalareasp = $sumaareasp / $request->cotizacion2_cantidad;
+                    $transporte = $request->cotizacion2_transporte / $request->cotizacion2_cantidad;
+                    $viaticos = $request->cotizacion2_viaticos / $request->cotizacion2_cantidad;
+                    $valorunitario = $cotizacion2->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
+
+                    // Actualizar cotizacion2
+                    $cotizacion2->cotizacion2_total_valor_unitario = round($valorunitario);
+                    $cotizacion2->save();
 
                     // Commit Transaction
                     DB::commit();
@@ -310,7 +321,7 @@ class Cotizacion2Controller extends Controller
 
                         // Areas
                         $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
-                        foreach ($areasp as $areap) {
+                        foreach($areasp as $areap) {
                             if(!empty($areap['cotizacion6_areap'])){
                                 $area = Areap::find($areap['cotizacion6_areap']);
                                 if(!$area instanceof Areap){
@@ -337,6 +348,19 @@ class Cotizacion2Controller extends Controller
                                 }
                             }
                         }
+
+                        // Recuperar sumatoria areas guardadas
+                        $recuperarAreas = Cotizacion6::select(DB::raw("SUM(cotizacion6_valor*cotizacion6_horas) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
+
+                        // Calcular valor unitario
+                        $totalareasp = round($recuperarAreas->valor_total) / $request->cotizacion2_cantidad;
+                        $transporte = $request->cotizacion2_transporte / $request->cotizacion2_cantidad;
+                        $viaticos = $request->cotizacion2_viaticos / $request->cotizacion2_cantidad;
+                        $valorunitario = $request->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
+
+                        // Actualizar cotizacion2
+                        $cotizacion2->cotizacion2_total_valor_unitario = round($valorunitario);
+                        $cotizacion2->save();
 
                         // Commit Transaction
                         DB::commit();

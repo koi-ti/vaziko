@@ -43,35 +43,61 @@
 				<div class="form-group col-md-1">
 					<div>{{ $cotizacion2->cotizacion2_cantidad }}</div>
 				</div>
-			</div>
+			</div><br>
 
             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-    			<div class="row">
-					<label class="control-label col-md-1">Fórmula</label>
-    				<div class="form-group col-md-8">
-    					<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
-    				</div>
+				<div class="box box-primary">
+	                <div class="box-header with-border">
+	                    <h3 class="box-title">Fórmulas</h3>
+	                </div>
+	                <div class="box-body">
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
+		    				</div>
 
-					<label class="control-label col-md-1">Redondear</label>
-    				<div class="form-group col-md-2">
-    					<div>{{ $cotizacion2->cotizacion2_round_formula }}</div>
-    				</div>
-    			</div>
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $cotizacion2->cotizacion2_precio_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Precio</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
+		    				</div>
 
-    			<div class="row">
-					<label class="control-label col-md-1">Precio</label>
-					<div class="form-group col-md-3">
-    					<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
-    				</div>
-					<label class="control-label col-md-1">Transporte</label>
-					<div class="form-group col-md-3">
-    					<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
-    				</div>
-					<label class="control-label col-md-1">Viaticos</label>
-					<div class="form-group col-md-3">
-    					<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
-    				</div>
-    			</div><br>
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $cotizacion2->cotizacion2_transporte_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Transporte</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
+		    				</div>
+
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $cotizacion2->cotizacion2_viaticos_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Viaticos</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+	    			</div>
+				</div>
             @endif
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)

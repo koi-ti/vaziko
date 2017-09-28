@@ -69,21 +69,11 @@
 								</div>
 
 								<div class="row">
-									<div class="form-group col-md-3">
+									<div class="form-group col-md-2">
 										<label class="control-label">F. Inicio</label>
 										<div>{{ $cotizacion->cotizacion1_fecha_inicio }}</div>
 									</div>
-                                    <div class="form-group col-md-3">
-                                        <label class="control-label">Transporte</label>
-                                        <div>{{ number_format($cotizacion->cotizacion1_transporte, 2, ',', '.') }}</div>
-                                    </div>
-                                    <div class="form-group col-md-3">
-                                        <label class="control-label">Viaticos</label>
-                                        <div>{{ number_format($cotizacion->cotizacion1_viaticos, 2, ',', '.') }}</div>
-                                    </div>
-								</div>
 
-								<div class="row">
 									<div class="form-group col-md-9">
 										<label class="control-label">Cliente</label>
 										<div>
@@ -157,11 +147,9 @@
                                                 <thead>
                                                     <tr>
                                                         <th width="5%">Código</th>
-                                                        <th width="40%">Nombre</th>
+                                                        <th width="60%">Nombre</th>
                                                         <th width="10%">Cantidad</th>
                                                         <th width="10%">Facturado</th>
-                                                        <th width="10%">Transporte</th>
-                                                        <th width="10%">Viaticos</th>
                                                         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                                             <th width="10%">Precio</th>
                                                             <th width="10%">Total</th>
@@ -178,8 +166,6 @@
                                                         <th class="text-center" id="subtotal-cantidad">0</th>
                                                         <th class="text-center" id="subtotal-facturado">0</th>
                                                         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                                                            <th class="text-right" id="subtotal-transporte">0</th>
-                                                            <th class="text-right" id="subtotal-viaticos">0</th>
                                                             <td></td>
                                                             <th class="text-right" id="subtotal-total">0</th>
                                                         @endif
@@ -188,12 +174,12 @@
                                                         <tr>
                                                             <td></td>
                                                             <th class="text-right">Iva ({{ $cotizacion->cotizacion1_iva }}%)</th>
-                                                            <th colspan="6" class="text-right" id="iva-total"></th>
+                                                            <th colspan="5" class="text-right" id="iva-total"></th>
                                                         </tr>
                                                         <tr>
                                                             <td></td>
                                                             <th class="text-right">Total</th>
-                                                            <th colspan="6" class="text-right" id="total-total">0</th>
+                                                            <th colspan="5" class="text-right" id="total-total">0</th>
                                                         </tr>
                                                     @endif
                                                 </tfoot>
@@ -211,5 +197,9 @@
 
     <script type="text/template" id="cotizacion-open-confirm-tpl">
         <p>¿Está seguro que desea reabrir la cotizacion de producción <b>{{ $cotizacion->cotizacion_codigo }}</b>?</p>
+    </script>
+
+    <script type="text/template" id="cotizacion-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar la cotización <b>{{ $cotizacion->cotizacion_codigo }}</b>?</p>
     </script>
 @stop

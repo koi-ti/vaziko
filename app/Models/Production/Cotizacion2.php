@@ -29,14 +29,16 @@ class Cotizacion2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_precio_formula', 'cotizacion2_round_formula', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos'];
+    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_round', 'cotizacion2_transporte_round', 'cotizacion2_viaticos_round', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos'];
 
     public function isValid($data)
     {
         $rules = [
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
-            'cotizacion2_round_formula' => 'integer',
+            'cotizacion2_precio_round' => 'integer',
+            'cotizacion2_transporte_round' => 'integer',
+            'cotizacion2_viaticos_round' => 'integer',
             'cotizacion2_precio_venta' => 'required',
             'cotizacion2_viaticos' => 'required',
             'cotizacion2_transporte' => 'required',
@@ -60,7 +62,7 @@ class Cotizacion2 extends BaseModel
     public static function getCotizaciones2( $cotizacion )
     {
         $query = Cotizacion2::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion2_viaticos', 'cotizacion2_transporte', 'cotizacion1_iva',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva',
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? 'cotizacion2_precio_venta' : DB::raw('0 as cotizacion2_precio_venta') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? DB::raw('(cotizacion2_cantidad * cotizacion2_precio_venta) as cotizacion2_precio_total') : DB::raw('0 as cotizacion2_precio_total') ),
 

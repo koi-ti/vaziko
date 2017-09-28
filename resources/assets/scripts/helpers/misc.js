@@ -325,70 +325,23 @@
         },
 
         /**
-        * Evaluate actions accounts
+        * Clone module
         */
-        cloneOrden: function ( options ) {
+        cloneModule: function ( options ) {
 
             options || (options = {});
 
             var defaults = {
                 'callback': null,
                 'wrap': 'body',
-                'data': null
+                'url': null
             }, settings = {};
 
             settings = $.extend({}, defaults, options);
 
-            // Clone orden
+            // Clone module
             $.ajax({
-                url: window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: settings.data.orden_codigo }) ),
-                type: 'GET',
-                beforeSend: function() {
-                    window.Misc.setSpinner( settings.wrap );
-                }
-            })
-            .done(function(resp) {
-                window.Misc.removeSpinner( settings.wrap );
-
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // return callback
-                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
-                    settings.callback( resp );
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( settings.wrap );
-                alertify.error(thrownError);
-            });
-        },
-
-        /**
-        * Clone cotizacion
-        */
-        cloneCotizacion: function ( options ) {
-
-            options || (options = {});
-
-            var defaults = {
-                'callback': null,
-                'wrap': 'body',
-                'data': null
-            }, settings = {};
-
-            settings = $.extend({}, defaults, options);
-
-            // Clone orden
-            $.ajax({
-                url: window.Misc.urlFull( Route.route('cotizaciones.clonar', { cotizaciones: settings.data.cotizacion_codigo }) ),
+                url: settings.url,
                 type: 'GET',
                 beforeSend: function() {
                     window.Misc.setSpinner( settings.wrap );

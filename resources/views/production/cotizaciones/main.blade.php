@@ -64,27 +64,17 @@
                                                 </div>
                                             <% } %>
 
-                                            <label for="cotizacion1_referencia" class="col-sm-1 control-label">Referencia</label>
-                                            <div class="form-group col-md-8">
-                                                <input id="cotizacion1_referencia" value="<%- cotizacion1_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="cotizacion1_referencia" type="text" maxlength="200" required>
-                                            </div>
-                                        </div>
-
-                                        <div class="row">
                                             <label for="cotizacion1_fecha_inicio" class="col-sm-1 control-label">F. Inicio</label>
                                             <div class="form-group col-md-2">
                                                 <input type="text" id="cotizacion1_fecha_inicio" name="cotizacion1_fecha_inicio" placeholder="Fecha inicio" class="form-control input-sm datepicker" value="<%- cotizacion1_fecha_inicio %>" required>
                                             </div>
+                                        </div>
 
-                                            <label for="cotizacion1_transporte" class="col-sm-1 control-label">Transporte</label>
-                                            <div class="form-group col-md-3">
-                                            	<input id="cotizacion1_transporte" value="<%- cotizacion1_transporte %>" class="form-control input-sm" name="cotizacion1_transporte" type="text" maxlength="30" data-currency>
-                                       		</div>
-
-                                            <label for="cotizacion1_viaticos" class="col-sm-1 control-label">Viaticos</label>
-                                            <div class="form-group col-md-3">
-                                            	<input id="cotizacion1_viaticos" value="<%- cotizacion1_viaticos %>" class="form-control input-sm" name="cotizacion1_viaticos" type="text" maxlength="30" data-currency>
-                                       		</div>
+                                        <div class="row">
+                                            <label for="cotizacion1_referencia" class="col-sm-1 control-label">Referencia</label>
+                                            <div class="form-group col-md-10">
+                                                <input id="cotizacion1_referencia" value="<%- cotizacion1_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="cotizacion1_referencia" type="text" maxlength="200" required>
+                                            </div>
                                         </div>
 
                                         <div class="row">
@@ -178,7 +168,7 @@
                                                     <div class="row">
                                                         <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2">Tipo de producto</label>
                                                         <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear" required>
+                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
                                                                 @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                     <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
@@ -187,7 +177,7 @@
 
                                                         <label for="subtypeproductop" class="control-label col-sm-1">Subtipo </label>
                                                         <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" required disabled>
+                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" disabled>
                                                                 <option value=""></option>
                                                             </select>
                                                         </div>
@@ -196,9 +186,15 @@
                                                     <div class="row">
                                                         <label for="productop" class="control-label col-sm-1 col-md-offset-2">Producto</label>
                                                         <div class="form-group col-sm-6 col-xs-11">
-                                                            <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
-                                                            <select name="productop" id="productop" class="form-control select2-default" required disabled>
-                                                            </select>
+                                                            <div class="input-group input-group-sm">
+                                                                <span class="input-group-btn">
+                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
+                                                                        <i class="fa fa-search"></i>
+                                                                    </button>
+                                                                </span>
+                                                                <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
+                                                                <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required></select>
+                                                            </div>
                                                         </div>
 
                                                         <div class="form-group col-sm-1">
@@ -216,11 +212,9 @@
                                                                 <th width="2%"></th>
                                                                 <th width="2%"></th>
                                                                 <th width="5%">Código</th>
-                                                                <th width="40%">Nombre</th>
+                                                                <th width="60%">Nombre</th>
                                                                 <th width="5%">Cantidad</th>
                                                                 <th width="6%">Facturado</th>
-                                                                <th width="10%" class="text-right">Transporte</th>
-                                                                <th width="10%" class="text-right">Viaticos</th>
                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                                                 <th width="10%" class="text-right">Precio</th>
                                                                 <th width="10%" class="text-right">Total</th>
@@ -237,8 +231,6 @@
                                                                 <th class="text-center" id="subtotal-cantidad">0</th>
                                                                 <th class="text-center" id="subtotal-facturado">0</th>
                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                                                                    <th class="text-right" id="subtotal-transporte">0</th>
-                                                                    <th class="text-right" id="subtotal-viaticos">0</th>
                                                                     <th></th>
                                                                     <th class="text-right" id="subtotal-total">0</th>
                                                                 @endif
@@ -247,12 +239,12 @@
                                                             <tr>
                                                                 <th colspan="3"></th>
                                                                 <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
-                                                                <th colspan="6" class="text-right" id="iva-total">0</th>
+                                                                <th colspan="5" class="text-right" id="iva-total">0</th>
                                                             </tr>
                                                             <tr>
                                                                 <th colspan="3"></th>
                                                                 <th class="text-right">Total</th>
-                                                                <th colspan="6" class="text-right" id="total-total">0</th>
+                                                                <th colspan="5" class="text-right" id="total-total">0</th>
                                                             </tr>
                                                             @endif
                                                         </tfoot>
@@ -294,8 +286,6 @@
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- cotizacion2_cantidad %></td>
         <td class="text-center"><%- cotizacion2_facturado %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion2_transporte ) %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion2_viaticos ) %></td>
         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_venta ) %></td>
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_total ) %></td>

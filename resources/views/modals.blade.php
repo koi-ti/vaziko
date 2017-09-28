@@ -98,6 +98,15 @@
 	</div>
 </div>
 
+<!-- Modal search productop -->
+<div class="modal fade" id="modal-search-productop-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal search contacto -->
 <div class="modal fade" id="modal-search-contacto-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -458,6 +467,53 @@
 		                <thead>
 				            <tr>
 				                <th>Código</th>
+			                	<th>Nombre</th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<!-- Script productop -->
+<script type="text/template" id="koi-search-productop-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador de productos</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-productop-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="koi_search_productop_codigo" class="col-md-1 control-label">Código</label>
+				<div class="col-md-2">
+					{!! Form::text('koi_search_productop_codigo', null, ['id' => 'koi_search_productop_codigo', 'class' => 'form-control input-sm']) !!}
+				</div>
+
+				<label for="koi_search_productop_nombre" class="col-md-1 control-label">Nombre</label>
+				<div class="col-md-8">
+					{!! Form::text('koi_search_productop_nombre', null, ['id' => 'koi_search_productop_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-productop-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-productop-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-productop-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="5%">Código</th>
 			                	<th>Nombre</th>
 				            </tr>
 				        </thead>

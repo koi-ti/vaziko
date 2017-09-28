@@ -230,8 +230,9 @@ app || (app = {});
         cloneCotizacion: function (e) {
             e.preventDefault();
 
-            var _this = this
-                data = { cotizacion_codigo: _this.model.get('id') };
+            var _this = this,
+                route =  window.Misc.urlFull( Route.route('cotizaciones.clonar', { cotizaciones: this.model.get('id') }) ),
+                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -240,8 +241,8 @@ app || (app = {});
                     titleConfirm: 'Clonar cotización',
                     onConfirm: function () {
                         // Clone cotizacion
-                        window.Misc.cloneCotizacion({
-                            'data': data,
+                        window.Misc.cloneModule({
+                            'url': route,
                             'wrap': _this.spinner,
                             'callback': (function (_this) {
                                 return function ( resp )

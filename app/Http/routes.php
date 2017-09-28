@@ -192,6 +192,8 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'productosp'], function(){
+		Route::get('search', ['as' => 'productosp.search', 'uses' => 'Production\ProductopController@search']);
+		Route::get('clonar/{productosp}', ['as' => 'productosp.clonar', 'uses' => 'Production\ProductopController@clonar']);
 		Route::resource('tips', 'Production\Productop2Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('areas', 'Production\Productop3Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);

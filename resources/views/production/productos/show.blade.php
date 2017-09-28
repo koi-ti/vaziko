@@ -13,13 +13,20 @@
     </section>
 
     <section class="content">
-        <div class="box box-success">
+        <div class="box box-success" id="productop-show">
             <div class="box-body">
                 <div class="row">
-                    <div class="form-group col-md-12">
+                    <div class="form-group col-md-8">
                         <label class="control-label">Nombre</label>
                         <div>{{ $producto->productop_nombre }}</div>
                     </div>
+                    @if( Auth::user()->ability('admin', ['module' => 'productosp']) )
+                        <div class="col-sm-1 col-xs-2 col-md-offset-3">
+                            <button type="button" class="btn btn-block btn-primary btn-sm clone-productop" title="Clonar producto">
+                                <i class="fa fa-clone"></i>
+                            </button>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="row">
@@ -248,4 +255,8 @@
             </div>
         </div>
     </section>
+
+    <script type="text/template" id="productop-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar el producto <b>{{ $producto->productop_nombre }}</b>?</p>
+    </script>
 @stop

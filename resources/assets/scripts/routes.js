@@ -183,6 +183,7 @@ app || (app = {});
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
             this.componentSearchOrdenP2View = new app.ComponentSearchOrdenP2View();
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
+            this.componentSearchProductopView = new app.ComponentSearchProductopView();
             this.componentSearchContactoView = new app.ComponentSearchContactoView();
             this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},

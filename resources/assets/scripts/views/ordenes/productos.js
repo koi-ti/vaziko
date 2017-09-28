@@ -122,6 +122,7 @@ app || (app = {});
             var _this = this,
                 resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
+                route = window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: model.get('id') }) ),
                 data = { orden2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
@@ -130,33 +131,15 @@ app || (app = {});
                     template: _.template( ($('#ordenp-productop-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar producto orden de producción',
                     onConfirm: function () {
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: data.orden2_codigo }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.parameters.wrapper );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
+                        // Clonar producto
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.parameters.wrapper,
+                            'callback': (function(_this){
+                                return function(resp){
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
                                 }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            alertify.error(thrownError);
+                            })(_this)
                         });
                     }
                 }

@@ -275,8 +275,9 @@ app || (app = {});
         cloneOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this
-                data = { orden_codigo: _this.model.get('id') };
+            var _this = this,
+                route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: this.model.get('id') }) ),
+                data = { orden_codigo: this.model.get('orden_codigo') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -285,8 +286,8 @@ app || (app = {});
                     titleConfirm: 'Clonar orden de producción',
                     onConfirm: function () {
                         // Clone orden
-                        window.Misc.cloneOrden({
-                            'data': data,
+                        window.Misc.cloneModule({
+                            'url': route,
                             'wrap': _this.spinner,
                             'callback': (function (_this) {
                                 return function ( resp )

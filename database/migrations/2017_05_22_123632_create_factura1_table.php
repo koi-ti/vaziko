@@ -23,7 +23,7 @@ class CreateFactura1Table extends Migration
             $table->string('factura1_prefijo', 4);
             $table->integer('factura1_puntoventa')->unsigned();
             $table->integer('factura1_tercero')->unsigned();
-            $table->integer('factura1_asiento')->unsigned();
+            $table->integer('factura1_asiento')->unsigned()->nullable();
 
             $table->double('factura1_subtotal')->default(0);
             $table->double('factura1_iva')->default(0);

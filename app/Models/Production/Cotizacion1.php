@@ -22,7 +22,7 @@ class Cotizacion1 extends Model
      *
      * @var array
      */
-    protected $fillable = ['cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_transporte', 'cotizacion1_viaticos'];
+    protected $fillable = ['cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado'];
 
     public function isValid($data)
     {
