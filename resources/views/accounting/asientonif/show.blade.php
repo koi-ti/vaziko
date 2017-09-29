@@ -92,7 +92,7 @@
 
         		<div class="row">
 					<div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
-						<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+						<a href="{{ route('asientosnif.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 					</div>
 				</div><br>
 

@@ -214,10 +214,16 @@ app || (app = {});
             // Prepare global data
             data.action = settings.action;
             data = $.extend({}, this.parameters.data, data);
+            
+            // Prepare global route
+            _this.url = window.Misc.urlFull(Route.route('asientos.detalle.validate'));
+            
+            if (_.has(data, "plancuentasn_cuenta")) 
+                _this.url = window.Misc.urlFull(Route.route('asientosnif.detalle.validate'));
 
             // Validate action
             $.ajax({
-                url: window.Misc.urlFull(Route.route('asientos.detalle.validate')),
+                url: _this.url,
                 type: 'POST',
                 data: data,
                 beforeSend: function() {

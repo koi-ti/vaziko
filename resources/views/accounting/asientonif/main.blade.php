@@ -554,7 +554,7 @@
 		</div>
 	</script>
 
-	<script type="text/template" id="show-info-asiento2-tpl">
+	<script type="text/template" id="show-info-asienton2-tpl">
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label class="control-label">Naturaleza</label>

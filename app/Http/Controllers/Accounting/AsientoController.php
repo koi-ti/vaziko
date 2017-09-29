@@ -150,7 +150,7 @@ class AsientoController extends Controller
                         if ($documento->documento_nif) {
                             $asientoNif = new AsientoNif;
                             $asientoNif2 = new AsientoNif2;
-
+                            
                             // AsientoNif1
                             $asientoNif->asienton1_mes = $data['asiento1_mes'];
                             $asientoNif->asienton1_ano = $data['asiento1_ano'];
