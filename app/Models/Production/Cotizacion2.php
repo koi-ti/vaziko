@@ -62,7 +62,7 @@ class Cotizacion2 extends BaseModel
     public static function getCotizaciones2( $cotizacion )
     {
         $query = Cotizacion2::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_transporte', 'cotizacion2_viaticos'
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? 'cotizacion2_precio_venta' : DB::raw('0 as cotizacion2_precio_venta') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? DB::raw('(cotizacion2_cantidad * cotizacion2_precio_venta) as cotizacion2_precio_total') : DB::raw('0 as cotizacion2_precio_total') ),
 

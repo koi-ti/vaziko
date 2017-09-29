@@ -56,6 +56,7 @@ class DocumentoController extends Controller
                 try {
                     // Documento
                     $documento->fill($data);
+                    $documento->fillBoolean($data);
                     $documento->save();
 
                     // Commit Transaction
@@ -120,6 +121,7 @@ class DocumentoController extends Controller
                 try {
                     // Documento
                     $documento->fill($data);
+                    $documento->fillBoolean($data);
                     $documento->save();
 
                     // Commit Transaction

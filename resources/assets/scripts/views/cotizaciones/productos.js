@@ -51,7 +51,6 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
         },
 
         /**

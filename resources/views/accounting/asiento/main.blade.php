@@ -264,7 +264,7 @@
 	<script type="text/template" id="add-asiento2-item-tpl">
 		<% if(edit) { %>
 		<td class="text-center">
-			<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>">
+			<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>" data-resource-nif = "<%- asientoNif2_id %>">
 				<span><i class="fa fa-times"></i></span>
 			</a>
 		</td>

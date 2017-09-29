@@ -119,7 +119,10 @@ class Asiento2 extends Model
 
         // Insert si no existe asiento2
         if(!isset($data['Id']) || empty($data['Id']))
-        {
+        {   
+            // Consecutivo item
+            $item = DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->max('asiento2_item');
+            $this->asiento2_item = ++$item;
             $this->asiento2_asiento = $asiento->id;
             $this->asiento2_cuenta = $objCuenta->id;
             $this->asiento2_beneficiario = $objTercero->id;

@@ -709,9 +709,104 @@
 			<label for="plancuentas_tasa" class="control-label">Tasa</label>
 			<input type="text" id="plancuentas_tasa" name="plancuentas_tasa" value="<%- plancuentas_tasa ? plancuentas_tasa : '0' %>" placeholder="Tasa" class="form-control input-sm" required>
 		</div>
+
+		<div class="form-group col-md-4">
+			<label for="plancuentas_equivalente" class="control-label">Equivalencia en NIF</label>
+			<select name="plancuentas_equivalente" id="plancuentas_equivalente" class="form-control select2-default-clear">
+				@foreach( App\Models\Accounting\PlanCuentaNif::getPlanCuentas() as $key => $value)
+					<option value="{{ $key }}" <%- plancuentas_equivalente == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
     </div>
 </script>
 
+<script type="text/template" id="add-plancuentasnif-tpl">
+    <div class="row">
+		<div class="form-group col-md-3">
+			<label for="plancuentasn_cuenta" class="control-label">Cuenta</label>
+			<div class="row">
+				<div class="col-md-9">
+					<input type="text" id="plancuentasn_cuenta" name="plancuentasn_cuenta" value="<%- plancuentasn_cuenta %>" placeholder="Cuenta" class="form-control input-sm" maxlength="15" required>
+				</div>
+				<div class="col-md-3">
+					<input type="text" id="plancuentasn_nivel" name="plancuentasn_nivel" value="<%- plancuentasn_nivel %>" class="form-control input-sm" maxlength="1" required readonly>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-7">
+			<label for="plancuentasn_nombre" class="control-label">Nombre</label>
+			<input type="text" id="plancuentasn_nombre" name="plancuentasn_nombre" value="<%- plancuentasn_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-6 col-xs-10">
+			<label for="plancuentasn_centro" class="control-label">Centro de costo</label>
+			<select name="plancuentasn_centro" id="plancuentasn_centro" class="form-control select2-default-clear">
+				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
+					<option value="{{ $key }}" <%- plancuentasn_centro == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="centrocosto" data-field="plancuentasn_centro">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-6 col-sm-12 col-xs-12">
+			<label class="control-label">Naturaleza</label>
+			<div class="row">
+				<label class="radio-inline" for="plancuentasn_naturaleza_debito">
+					<input type="radio" id="plancuentasn_naturaleza_debito" name="plancuentasn_naturaleza" value="D" <%- plancuentasn_naturaleza == 'D' ? 'checked': ''%>> Débito
+				</label>
+
+				<label class="radio-inline" for="plancuentasn_naturaleza_credito">
+					<input type="radio" id="plancuentasn_naturaleza_credito" name="plancuentasn_naturaleza" value="C" <%- plancuentasn_naturaleza == 'C' ? 'checked': ''%>> Crédito
+				</label>
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+		<div class="form-group col-md-3 col-sm-12 col-xs-12">
+			<label for="plancuentasn_tercero">¿Requiere tercero?</label>
+			<div class="row">
+				<label class="radio-inline" for="plancuentasn_tercero_no">
+					<input type="radio" id="plancuentasn_tercero_no" name="plancuentasn_tercero" value="plancuentasn_tercero_no" <%- !plancuentasn_tercero ? 'checked': ''%>> No
+				</label>
+				<label class="radio-inline" for="plancuentasn_tercero_si">
+					<input type="radio" id="plancuentasn_tercero_si" name="plancuentasn_tercero" value="plancuentasn_tercero" <%- plancuentasn_tercero ? 'checked': ''%>> Si
+				</label>
+			</div>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-12 col-sm-12 col-xs-12">
+			<label class="control-label">Tipo</label>
+			<div class="row">
+				@foreach(config('koi.contabilidad.plancuentas.tipo') as $key => $value)
+					<label class="radio-inline" for="plancuentasn_naturaleza_{{ $key }}">
+						<input type="radio" id="plancuentasn_naturaleza_{{ $key }}" name="plancuentasn_tipo" value="{{ $key }}" <%- plancuentasn_tipo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
+					</label>
+				@endforeach
+			</div>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="plancuentasn_tasa" class="control-label">Tasa</label>
+			<input type="text" id="plancuentasn_tasa" name="plancuentasn_tasa" value="<%- plancuentasn_tasa ? plancuentasn_tasa : '0' %>" placeholder="Tasa" class="form-control input-sm" required>
+		</div>
+    </div>
+</script>
 <script type="text/template" id="add-folder-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
@@ -763,6 +858,17 @@
 						<input type="radio" id="documento_tipo_consecutivo_{{ $key }}" name="documento_tipo_consecutivo" value="{{ $key }}" <%- documento_tipo_consecutivo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
 					</label>
 				@endforeach
+			</div>
+		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label">Tipo contabilidad </label>
+			<div class="row">
+				<label class="checkbox-inline" for="documento_actual">
+					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal ?	
+				</label>
+				<label class="checkbox-inline" for="documento_nif">
+					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif ?	
+				</label>
 			</div>
 		</div>
     </div>

@@ -355,10 +355,11 @@
 	                            </tr>
 	                        </thead>
 							<tbody>
-								{{--*/ $trow = $totalArea = 0; /*--}}
+								{{--*/ $trow = $area = $totalArea = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
 									{{--*/ $trow = $areap->cotizacion6_horas * $areap->cotizacion6_valor /*--}}
-									{{--*/ $totalArea += $trow /*--}}
+									{{--*/ $area += $trow /*--}}
+									{{--*/ $totalArea = $area / $cotizacion2->cotizacion2_cantidad; /*--}}
 
 									<tr>
 										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
@@ -373,7 +374,7 @@
 	                            <tr>
 	                                <td colspan="3"></td>
 	                                <th class="text-right">Total</th>
-	                                <th class="text-right">{{ number_format($totalArea, 2, ',', '.') }}</th>
+	                                <th class="text-right">{{ number_format($area, 2, ',', '.') }}</th>
 	                            </tr>
 	                        </tfoot>
 	                    </table>
@@ -383,8 +384,10 @@
 
 			<div class="row">
 				{{-- Content informacion --}}
-				{{--*/ $totalCotizacion = 0; /*--}}
-				{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $cotizacion2->cotizacion2_viaticos + $cotizacion2->cotizacion2_transporte + $totalArea /*--}}
+				{{--*/ $totalCotizacion = $ttransporte = $tviaticos = 0; /*--}}
+				{{--*/ $ttransporte = $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad; /*--}}
+				{{--*/ $tviaticos = $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad; /*--}}
+				{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $ttransporte + $tviaticos + $totalArea; /*--}}
 
 				<div class="col-sm-6 col-md-offset-3">
 					<div class="box box-primary">
@@ -404,7 +407,7 @@
 	                            <div class="col-md-12">
 	                                <label class="col-sm-6">Transporte</label>
 	                                <div class="col-md-6 text-right">
-										<label>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.')}}</label>
+										<label>{{ number_format($ttransporte, 2, ',', '.')}}</label>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -412,7 +415,7 @@
 	                            <div class="col-md-12">
 	                                <label class="col-sm-6">Viaticos</label>
 	                                <div class="col-md-6 text-right">
-										<label>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.')}}</label>
+										<label>{{ number_format($tviaticos, 2, ',', '.')}}</label>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -434,6 +437,11 @@
 								</div>
 							</div>
 						</div>
+						<div class="box-footer">
+	                        <div class="col-sm-12">
+	                            <b><small>Los campos de transporte, viaticos y areas se dividiran por la cantidad ingresada.</small></b>
+	                        </div>
+	                    </div>
 					</div>
 				</div>
 			</div>

@@ -336,8 +336,9 @@ class PlanCuenta extends BaseModel
     public static function getCuenta($id)
     {
         $query = PlanCuenta::query();
-        $query->select('koi_plancuentas.*', 'centrocosto_nombre');
+        $query->select('koi_plancuentas.*', 'centrocosto_nombre', 'plancuentasn_cuenta', 'plancuentasn_nombre');
         $query->leftJoin('koi_centrocosto', 'koi_plancuentas.plancuentas_centro', '=', 'koi_centrocosto.id');
+        $query->leftJoin('koi_plancuentasn', 'koi_plancuentas.plancuentas_equivalente', '=', 'koi_plancuentasn.id');
         $query->where('koi_plancuentas.id', $id);
         return $query->first();
     }

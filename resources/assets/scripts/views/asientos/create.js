@@ -232,8 +232,14 @@ app || (app = {});
                     this.asientoActionView.undelegateEvents();
                 }
 
-                // Redirect to Content Course
-                Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
+                if ( resp.id == '' && resp.nif != '' ) {
+                    // Redirect to Content Course
+                    window.Misc.redirect( window.Misc.urlFull( Route.route('asientosnif.edit', { asientosnif: resp.nif}), { trigger:true }));
+
+                }else{
+                    // Redirect to Content Course
+                    Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
+                }
             }
         }
     });
