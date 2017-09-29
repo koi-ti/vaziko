@@ -521,7 +521,7 @@ class AsientoNif2 extends Model
                         $datamov['Valor'] = $request->get("movimiento_valor_{$cuota->id}");
                         $datamov['Nuevo'] = false;
 
-                        $movimiento = new AsientoMovimiento;
+                        $movimiento = new AsientoNifMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
                             $response->error = $result->error;
@@ -540,7 +540,7 @@ class AsientoNif2 extends Model
                 $datamov['Periodicidad'] = $request->facturap1_periodicidad;
                 $datamov['Detalle'] = $request->facturap1_observaciones;
 
-                $movimiento = new AsientoMovimiento;
+                $movimiento = new AsientoNifMovimiento;
                 $result = $movimiento->store($this, $datamov);
                 if(!$result->success) {
                     $response->error = $result->error;
@@ -568,7 +568,7 @@ class AsientoNif2 extends Model
             $datamov['Producto'] = $producto->id;
             $datamov['Valor'] = $request->movimiento_cantidad;
 
-            $movimiento = new AsientoMovimiento;
+            $movimiento = new AsientoNifMovimiento;
             $result = $movimiento->store($this, $datamov);
             if(!$result->success) {
                 $response->error = $result->error;
@@ -590,7 +590,7 @@ class AsientoNif2 extends Model
                         $datamov['Item'] = $item;
                         $datamov['Valor'] = $request->get("itemrollo_metros_$item");
 
-                        $movimiento = new AsientoMovimiento;
+                        $movimiento = new AsientoNifMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
                             $response->error = $result->error;
@@ -608,7 +608,7 @@ class AsientoNif2 extends Model
                             $datamov['Item'] = $item->prodboderollo_item;
                             $datamov['Valor'] = $request->get("itemrollo_metros_{$item->id}");
 
-                            $movimiento = new AsientoMovimiento;
+                            $movimiento = new AsientoNifMovimiento;
                             $result = $movimiento->store($this, $datamov);
                             if(!$result->success) {
                                 $response->error = $result->error;
@@ -631,7 +631,7 @@ class AsientoNif2 extends Model
                         $datamov['Item'] = $item;
                         $datamov['Serie'] = $request->get("producto_serie_$item");
 
-                        $movimiento = new AsientoMovimiento;
+                        $movimiento = new AsientoNifMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
                             $response->error = $result->error;
@@ -649,7 +649,7 @@ class AsientoNif2 extends Model
             $datamov['Factura'] = $request->factura1_orden;
             $datamov['Valor'] = $request->factura1_pagar;
             
-            $movimiento = new AsientoMovimiento;
+            $movimiento = new AsientoNifMovimiento;
             $result = $movimiento->store($this, $datamov);
             if(!$result->success) {
                 $response->error = $result->error;
@@ -676,7 +676,7 @@ class AsientoNif2 extends Model
                         $datamov['FacturaChild'] = $item->id;
                         $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
                      
-                        $movimiento = new AsientoMovimiento;
+                        $movimiento = new AsientoNifMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
                             $response->error = $result->error;
@@ -719,7 +719,7 @@ class AsientoNif2 extends Model
     public function storeFacturap()
     {
         // Recuperar movimientos
-        $movementsfp = AsientoMovimiento::where('movimiento_asiento2', $this->id)->where('movimiento_tipo', 'FP')->get();
+        $movementsfp = AsientoNifMovimiento::where('movimiento_asiento2', $this->id)->where('movimiento_tipo', 'FP')->get();
         if ($movementsfp->count() <= 0) {
             return "No es posible recuperar movimientos de inventario para la cuenta {$this->plancuentasn_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
@@ -785,13 +785,13 @@ class AsientoNif2 extends Model
     public function storeInventario()
     {
         // Recuperar movimientos
-        $movements = AsientoMovimiento::where('movimiento_asiento2', $this->id)->whereIn('movimiento_tipo', ['IP', 'IH'])->get();
+        $movements = AsientoNifMovimiento::where('movimiento_asiento2', $this->id)->whereIn('movimiento_tipo', ['IP', 'IH'])->get();
         if ($movements->count() <= 0) {
             return "No es posible recuperar movimientos de inventario para la cuenta {$this->plancuentasn_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
         $movfather = $movements->where('movimiento_tipo', 'IP')->first();
-        if(!$movfather instanceof AsientoMovimiento) {
+        if(!$movfather instanceof AsientoNifMovimiento) {
             return "No es posible recuperar movimiento padre de inventario para la cuenta {$this->plancuentasn_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
@@ -974,13 +974,13 @@ class AsientoNif2 extends Model
 
     public function storeFactura(){
         // Recuperar movimientos
-        $movements = AsientoMovimiento::where('movimiento_asiento2', $this->id)->whereIn('movimiento_tipo', ['F', 'FH'])->get();
+        $movements = AsientoNifMovimiento::where('movimiento_asiento2', $this->id)->whereIn('movimiento_tipo', ['F', 'FH'])->get();
         if ($movements->count() <= 0) {
             return "No es posible recuperar movimientos de factura para la cuenta {$this->plancuentasn_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
         $movfather = $movements->where('movimiento_tipo', 'F')->first();
-        if(!$movfather instanceof AsientoMovimiento) {
+        if(!$movfather instanceof AsientoNifMovimiento) {
             return "No es posible recuperar movimiento padre de factura para la cuenta {$this->plancuentasn_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 

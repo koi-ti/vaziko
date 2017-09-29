@@ -299,15 +299,15 @@ class AsientoNifDetalleController extends Controller
         // Prepare response
         $response = new \stdClass();
         $response->success = false;
-        $response->asiento2_valor = $request->asiento2_valor;
+        $response->asiento2_valor = $request->asienton2_valor;
 
         // Recuperar cuenta
         $cuenta = null;
-        if($request->has('plancuentas_cuenta')) {
-            $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
+        if($request->has('plancuentasn_cuenta')) {
+            $cuenta = PlanCuentaNif::where('plancuentasn_cuenta', $request->plancuentasn_cuenta)->first();
         }
 
-        if(!$cuenta instanceof PlanCuenta) {
+        if(!$cuenta instanceof PlanCuentaNif) {
             $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
             return response()->json($response);
         }
@@ -317,7 +317,7 @@ class AsientoNifDetalleController extends Controller
             switch ($request->action) {
                 case 'ordenp':
                     // Valido movimiento ordenp
-                    $result = Asiento2::validarOrdenp($request);
+                    $result = AsientoNif2::validarOrdenp($request);
                     if($result != 'OK') {
                         $response->errors = $result;
                         return response()->json($response);
@@ -328,7 +328,7 @@ class AsientoNifDetalleController extends Controller
 
                 case 'facturap':
                     // Valido movimiento facturap
-                    $result = Asiento2::validarFacturap($request);
+                    $result = AsientoNif2::validarFacturap($request);
                     if($result != 'OK') {
                         $response->errors = $result;
                         return response()->json($response);
@@ -339,7 +339,7 @@ class AsientoNifDetalleController extends Controller
 
                 case 'cartera':
                     // Valido movimiento cartera
-                    $result = Asiento2::validarFactura($request);
+                    $result = AsientoNif2::validarFactura($request);
                     if($result != 'OK') {
                         $response->errors = $result;
                         return response()->json($response);
@@ -351,14 +351,14 @@ class AsientoNifDetalleController extends Controller
 
                 case 'inventario':
                     // Valido movimiento inventario
-                    $result = Asiento2::validarInventario($request);
+                    $result = AsientoNif2::validarInventario($request);
                     if($result->success != true) {
                         $response->errors = $result->errors;
                         return response()->json($response);
                     }
 
                     // Inventario modifica valor item asiento por el valor del costo del movimiento
-                    if(isset($result->asiento2_valor) && $result->asiento2_valor != $request->asiento2_valor){
+                    if(isset($result->asiento2_valor) && $result->asiento2_valor != $request->asienton2_valor){
                         $response->asiento2_valor = $result->asiento2_valor;
                     }
 

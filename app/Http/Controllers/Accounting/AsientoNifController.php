@@ -80,7 +80,9 @@ class AsientoNifController extends Controller
     public function edit($id)
     {
         $asientoNif = AsientoNif::findOrFail($id);
-        if($asientoNif->asienton1_preguardado == false) {
+        // Get document and valid show or edit 
+        $documento = Documento::find($asientoNif->asienton1_documento);
+        if($asientoNif->asienton1_preguardado == false || $documento->documento_actual == true ) {
             return redirect()->route('asientosnif.show', ['asientoNif' => $asientoNif]);
         }
 
