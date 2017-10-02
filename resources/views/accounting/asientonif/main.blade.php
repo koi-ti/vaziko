@@ -123,7 +123,7 @@
     					<div class="box-footer with-border">
 				        	<div class="row">
 								<div class="col-md-2 <%- (edit) ? 'col-md-offset-4' : 'col-md-offset-5' %> col-sm-6 col-xs-6 text-left">
-									<a href="<%- window.Misc.urlFull( edit ? Route.route('asientosnif.show', { asientos: id}) : Route.route('asientosnif.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+									<a href="<%- window.Misc.urlFull( edit ? Route.route('asientosnif.show', { asientosnif: id}) : Route.route('asientosnif.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
 								</div>
 
 								<% if(edit) { %>
@@ -688,7 +688,7 @@
 						<b>Factura </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
 					</h3>
 					<div class="pull-right">
-						<% if ( !_.isNull(movimiento_factura) ) { %> 
+						<% if ( !_.isNull(movimiento_factura) ) { %>
 							<b>Numero </b><small># <%- factura1_id %></small>
 						<% } %>
 						<b>Prefijo </b><small><%- puntoventa_prefijo %></small>
@@ -810,7 +810,7 @@
 	<!-- Detalles de las Facturas, Facturap, Inventario -> Hijos -->
 	<script type="text/template" id="show-info-detalle-factura">
 		<td class="text-center"><%- factura4_cuota %></td>
-		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>				
+		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>
 	</script>
 
 	<script type="text/template" id="show-info-detalle-facturap">

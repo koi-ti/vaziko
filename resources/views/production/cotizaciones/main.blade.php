@@ -287,7 +287,7 @@
         <td class="text-center"><%- cotizacion2_cantidad %></td>
         <td class="text-center"><%- cotizacion2_facturado %></td>
         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-            <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_venta ) %></td>
+            <td class="text-right"><%- window.Misc.currency( cotizacion2_total_valor_unitario ) %></td>
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_total ) %></td>
         @endif
     </script>

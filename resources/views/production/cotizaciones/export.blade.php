@@ -76,7 +76,7 @@
 						<td class="left">{{ $cotizacion2->productop_nombre }}</td>
 						<td class="center">{{ $cotizacion2->cotizacion2_cantidad }}</td>
 						<td class="center">{{ $cotizacion2->cotizacion2_facturado }}</td>
-						<td class="right">{{ number_format($cotizacion2->cotizacion2_precio_venta,2,',','.') }}</td>
+						<td class="right">{{ number_format($cotizacion2->cotizacion2_total_valor_unitario,2,',','.') }}</td>
 						<td class="right">{{ number_format($cotizacion2->cotizacion2_precio_total,2,',','.') }}</td>
 					</tr>
 
@@ -89,6 +89,7 @@
 					/*--}}
 				@endforeach
 				{{--*/ $tiva = $tsubtotal * ($cotizacion->cotizacion1_iva / 100); /*--}}
+				{{--*/ $total = $tsubtotal + $tiva; /*--}}
 				<tr>
 					<td colspan="2" class="right bold">Subtotal</td>
 					<td class="center bold">{{ $tunidades }}</td>
@@ -101,7 +102,7 @@
 				</tr>
 				<tr>
 					<td colspan="2" class="right bold">Total</td>
-					<td colspan="4" class="right bold">{{ number_format(($tsubtotal + $tiva),2,',','.') }}</td>
+					<td colspan="4" class="right bold">{{ number_format($total,2,',','.') }}</td>
 				</tr>
 			@endif
 		</tbody>
