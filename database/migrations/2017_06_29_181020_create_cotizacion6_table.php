@@ -19,7 +19,7 @@ class CreateCotizacion6Table extends Migration
             $table->integer('cotizacion6_cotizacion2')->unsigned();
             $table->integer('cotizacion6_areap')->unsigned()->nullable();
             $table->string('cotizacion6_nombre', 20)->nullable();
-            $table->integer('cotizacion6_horas')->default(0);
+            $table->time('cotizacion6_horas');
             $table->double('cotizacion6_valor')->default(0);
 
             $table->foreign('cotizacion6_cotizacion2')->references('id')->on('koi_cotizacion2')->onDelete('restrict');

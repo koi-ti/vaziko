@@ -138,7 +138,14 @@ class Cotizacion6Controller extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $totalarea = $cotizacion6->cotizacion6_valor * $cotizacion6->cotizacion6_horas;
+                $hora = substr($cotizacion6->cotizacion6_horas, 1, 2);
+                $min = substr($cotizacion6->cotizacion6_horas, -5, 2);
+
+                // Regla de tres para pasa min a horas
+                $r3 = intval($min) / 60;
+                $total = intval($hora) + $r3;
+
+                $totalarea = $cotizacion6->cotizacion6_valor * $total;
                 $unitario = $totalarea / $cotizacion2->cotizacion2_cantidad;
                 $totalunitario = $cotizacion2->cotizacion2_total_valor_unitario - $unitario;
 

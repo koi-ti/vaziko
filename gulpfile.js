@@ -18,6 +18,9 @@ var paths = {
 
 elixir(function(mix) {
     mix.styles([
+        paths.libs + 'jquery-ui/themes/base/core.css',
+        paths.libs + 'jquery-ui/themes/base/spinner.css',
+        paths.libs + 'jquery-ui/themes/base/theme.css',
         paths.adminlte + 'bootstrap/css/bootstrap.min.css',
         paths.adminlte + 'dist/css/skins/skin-green.min.css',
         paths.adminlte + 'plugins/iCheck/minimal/green.css',

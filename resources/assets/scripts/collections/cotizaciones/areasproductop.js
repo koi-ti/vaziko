@@ -47,13 +47,26 @@ app || (app = {});
 
         total: function() {
             return this.reduce(function(sum, model) {
-                return sum + parseInt(model.get('cotizacion6_horas')) * parseFloat(model.get('cotizacion6_valor'));
+                var min = parseInt(model.get('cotizacion6_horas').substr(3,2));
+                var hora = parseInt(model.get('cotizacion6_horas').substr(0,2));
+
+                // Regla de 3 para convertir min a horas
+                var r3 = min / 60;
+                var sumR3 = hora + r3;
+
+                return sum + parseFloat(sumR3) * parseFloat(model.get('cotizacion6_valor'));
             }, 0);
         },
 
         totalRow: function( ){
             _.each(this.models, function(item){
-                var total = parseInt(item.get('cotizacion6_horas')) * parseFloat(item.get('cotizacion6_valor'));
+                var min = parseInt(item.get('cotizacion6_horas').substr(3,2));
+                var hora = parseInt(item.get('cotizacion6_horas').substr(0,2));
+
+                var r3 = min / 60;
+                var sumR3 = hora + r3;
+
+                var total = parseFloat(sumR3) * parseFloat(item.get('cotizacion6_valor'));
                 item.set('total', total);
             });
         },

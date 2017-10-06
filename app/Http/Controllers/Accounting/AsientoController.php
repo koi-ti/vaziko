@@ -107,7 +107,7 @@ class AsientoController extends Controller
                             }
                         }
                         if ($documento->documento_actual) {
-                            
+
                             // Asiento1
                             $asiento->fill($data);
 
@@ -150,7 +150,7 @@ class AsientoController extends Controller
                         if ($documento->documento_nif) {
                             $asientoNif = new AsientoNif;
                             $asientoNif2 = new AsientoNif2;
-                            
+
                             // AsientoNif1
                             $asientoNif->asienton1_mes = $data['asiento1_mes'];
                             $asientoNif->asienton1_ano = $data['asiento1_ano'];
@@ -208,7 +208,7 @@ class AsientoController extends Controller
                                 DB::rollback();
                                 return response()->json(['success' => false, 'errors' => $result->error]);
                             }
-                            
+
                         }
                         // Commit Transaction
                         // DB::rollback();
@@ -344,10 +344,10 @@ class AsientoController extends Controller
                     }
                     if ($asientoNif instanceof AsientoNif) {
 
-                        // Validar no cambio de documento 
+                        // Validar no cambio de documento
                         if ($asiento->asiento1_documento != $request->asiento1_documento ) {
                             DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'Documento no puede ser modificado']); 
+                            return response()->json(['success' => false, 'errors' => 'Documento no puede ser modificado']);
                         }
 
                         $query = AsientoNif2::query();
@@ -373,11 +373,11 @@ class AsientoController extends Controller
                             $cuentas[] = $arCuenta;
                         }
 
-                        // Preparo data 
+                        // Preparo data
                         $dataNif = [];
-                        $dataNif['asienton1_ano'] = $data['asiento1_ano']; 
-                        $dataNif['asienton1_mes'] = $data['asiento1_mes']; 
-                        $dataNif['asienton1_dia'] = $data['asiento1_dia']; 
+                        $dataNif['asienton1_ano'] = $data['asiento1_ano'];
+                        $dataNif['asienton1_mes'] = $data['asiento1_mes'];
+                        $dataNif['asienton1_dia'] = $data['asiento1_dia'];
                         $dataNif['asienton1_folder'] = $data['asiento1_folder'];
                         $dataNif['asienton1_documento'] = $data['asiento1_documento'];
                         $dataNif['asienton1_numero'] = $data['asiento1_numero'];
