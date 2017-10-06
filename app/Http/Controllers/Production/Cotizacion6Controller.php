@@ -138,8 +138,8 @@ class Cotizacion6Controller extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $hora = substr($cotizacion6->cotizacion6_horas, 1, 2);
-                $min = substr($cotizacion6->cotizacion6_horas, -5, 2);
+                $hora = substr($cotizacion6->cotizacion6_horas, 0, 2);
+                $min = substr($cotizacion6->cotizacion6_horas, 3, 2);
 
                 // Regla de tres para pasa min a horas
                 $r3 = intval($min) / 60;

@@ -357,14 +357,14 @@
 							<tbody>
 								{{--*/ $trow = $area = $totalArea = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
-									{{--*/ $trow = $areap->cotizacion6_horas * $areap->cotizacion6_valor /*--}}
+									{{--*/ $trow = (substr($areap->cotizacion6_horas, 0, 2) + (substr($areap->cotizacion6_horas, 3, 2) / 60)) * $areap->cotizacion6_valor /*--}}
 									{{--*/ $area += $trow /*--}}
 									{{--*/ $totalArea = $area / $cotizacion2->cotizacion2_cantidad; /*--}}
 
 									<tr>
 										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 		                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
-		                                <td class="text-center">{{ $areap->cotizacion6_horas }}</td>
+		                                <td class="text-center">{{  date('H:i', strtotime($areap->cotizacion6_horas)) }}</td>
 										<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
 		                                <td class="text-right">{{ number_format($trow, 2, ',', '.') }}</td>
 									</tr>

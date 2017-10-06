@@ -146,7 +146,7 @@ class Cotizacion2Controller extends Controller
                     $totalareasp = $sumaareasp / $request->cotizacion2_cantidad;
                     $transporte = $request->cotizacion2_transporte / $request->cotizacion2_cantidad;
                     $viaticos = $request->cotizacion2_viaticos / $request->cotizacion2_cantidad;
-                    $valorunitario = $cotizacion2->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
+                    $valorunitario = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareasp;
 
                     // Actualizar cotizacion2
                     $cotizacion2->cotizacion2_total_valor_unitario = $valorunitario;
@@ -350,13 +350,13 @@ class Cotizacion2Controller extends Controller
                         }
 
                         // Recuperar sumatoria areas guardadas
-                        $recuperarAreas = Cotizacion6::select(DB::raw("SUM( ((SUBSTR(cotizacion6_horas, -5, 2) / 60 ) + SUBSTR(cotizacion6_horas, 1, 2)) * cotizacion6_valor ) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
+                        $recuperarAreas = Cotizacion6::select(DB::raw("SUM( ((SUBSTR(cotizacion6_horas, 4, 2) / 60 ) + SUBSTR(cotizacion6_horas, 1, 2)) * cotizacion6_valor ) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
 
                         // Calcular valor unitario
-                        $totalareasp = round($recuperarAreas->valor_total) / $request->cotizacion2_cantidad;
+                        $totalareasp = $recuperarAreas->valor_total / $request->cotizacion2_cantidad;
                         $transporte = $request->cotizacion2_transporte / $request->cotizacion2_cantidad;
                         $viaticos = $request->cotizacion2_viaticos / $request->cotizacion2_cantidad;
-                        $valorunitario = $request->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
+                        $valorunitario = $request->cotizacion2_precio_venta + $transporte + $viaticos + $totalareasp;
 
                         // Actualizar cotizacion2
                         $cotizacion2->cotizacion2_total_valor_unitario = $valorunitario;
