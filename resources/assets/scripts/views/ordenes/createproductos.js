@@ -14,8 +14,7 @@ app || (app = {});
         el: '#ordenes-productos-create',
         template: _.template( ($('#add-orden-producto-tpl').html() || '') ),
         events: {
-            'change #orden2_precio_formula': 'changeFormula',
-            'change #orden2_round_formula': 'changeFormula',
+            'change .calculate_formula': 'changeFormula',
             'ifChanged #orden2_tiro': 'changedTiro',
             'ifChanged #orden2_retiro': 'changedRetiro',
             'click .submit-ordenp2': 'submitOrdenp2',
@@ -54,8 +53,27 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-
             this.$form = this.$('#form-orden-producto');
+
+            this.$inputFormula = null;
+            this.$inputRenderFormula = null;
+            this.$inputRound = null;
+
+            // Inputs render round
+            this.$inputFormulaPrecio = this.$('#orden2_precio_formula');
+            this.$inputFormulaTransporte = this.$('#orden2_transporte_formula');
+            this.$inputFormulaViaticos = this.$('#orden2_viaticos_formula');
+
+            // Inputs render round
+            this.$inputRoundPrecio = this.$('#orden2_precio_round');
+            this.$inputRoundTranporte = this.$('#orden2_transporte_round');
+            this.$inputRoundViaticos = this.$('#orden2_viaticos_round');
+
+            // Inputs render formulas
+            this.$inputPrecio = this.$('#orden2_precio_venta');
+            this.$inputTranporte = this.$('#orden2_transporte');
+            this.$inputViaticos = this.$('#orden2_viaticos');
+
             this.$inputFormula = this.$('#orden2_precio_formula');
             this.$inputRound = this.$('#orden2_round_formula');
             this.$inputPrecio = this.$('#orden2_precio_venta');
@@ -118,8 +136,29 @@ app || (app = {});
         /**
         * Event calcule formula
         */
-        changeFormula: function () {
-        	var _this = this;
+        changeFormula: function (e) {
+            var _this = this,
+                inputformula = this.$(e.currentTarget).data('input');
+
+            if( inputformula == 'P' || inputformula == 'RP'){
+                this.$inputFormula = this.$inputFormulaPrecio;
+                this.$inputRound = this.$inputRoundPrecio;
+                this.$inputRenderFormula = this.$inputPrecio;
+
+            }else if( inputformula == 'T' || inputformula == 'RT'){
+                this.$inputFormula = this.$inputFormulaTransporte;
+                this.$inputRound = this.$inputRoundTranporte;
+                this.$inputRenderFormula = this.$inputTranporte;
+
+            }else if( inputformula == 'V' || inputformula == 'RV'){
+                this.$inputFormula = this.$inputFormulaViaticos;
+                this.$inputRound = this.$inputRoundViaticos;
+                this.$inputRenderFormula = this.$inputViaticos;
+
+            }else{
+                return;
+            }
+
         	var formula = this.$inputFormula.val();
         	var round = this.$inputRound.val();
 
@@ -139,10 +178,10 @@ app || (app = {});
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
-                _this.$inputPrecio.val(resp.precio_venta);
+                _this.$inputRenderFormula.val(resp.precio_venta);
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-            	_this.$inputPrecio.val(0);
+                _this.$inputRenderFormula.val(0);
                 window.Misc.removeSpinner( _this.el );
                 alertify.error(thrownError);
             });

@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, DB;
 
 class Ordenp extends Model
@@ -99,7 +98,7 @@ class Ordenp extends Model
     public function paraFacturar()
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta', 
+        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN

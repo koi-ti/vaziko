@@ -17,6 +17,7 @@ app || (app = {});
             'click .submit-cotizacion': 'submitCotizacion',
             'click .close-cotizacion': 'closeCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
+            'click .generate-cotizacion': 'generateCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
             'change #subtypeproductop': 'changeSubtypeProduct',
@@ -250,6 +251,59 @@ app || (app = {});
                                     window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id })) );
                                 }
                             })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
+        },
+
+        /**
+        * Generate cotizacion
+        */
+        generateCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                route =  window.Misc.urlFull( Route.route('cotizaciones.generar', { cotizaciones: this.model.get('id') }) ),
+                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo'), cotizacion_referencia: _this.model.get('cotizacion1_referencia') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#cotizacion-generate-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Generar orden de producción',
+                    onConfirm: function () {
+                        // Generate orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('cotizaciones.generar', { cotizaciones: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.spinner );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.spinner );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.orden_id })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.spinner );
+                            alertify.error(thrownError);
                         });
                     }
                 }

@@ -41,6 +41,9 @@
                                         <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
                                             <i class="fa fa-clone"></i>Clonar cotización
                                         </a>
+                                        <a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
+                                            <i class="fa fa-sticky-note"></i>Generar orden
+                                        </a>
                                         @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-cotizacion">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
@@ -300,7 +303,12 @@
         <p>¿Está seguro que desea clonar la cotización <b><%- cotizacion_codigo %></b>?</p>
     </script>
 
+    <script type="text/template" id="cotizacion-generate-confirm-tpl">
+        <p>¿Está seguro que desea generar una orden de producción del producto <b><%- cotizacion_codigo %> - <%- cotizacion_referencia %></b>?</p>
+    </script>
+
     <script type="text/template" id="cotizacion-productop-clone-confirm-tpl">
         <p>¿Está seguro que desea clonar el producto <b><%- cotizacion2_codigo %> - <%- productop_nombre %></b>?</p>
     </script>
+
 @stop

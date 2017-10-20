@@ -198,6 +198,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{cotizaciones}', ['as' => 'cotizaciones.cerrar', 'uses' => 'Production\Cotizacion1Controller@cerrar']);
 		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
 		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
+		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
 
 		Route::get('productos/formula', ['as' => 'cotizaciones.productos.formula', 'uses' => 'Production\Cotizacion2Controller@formula']);
 

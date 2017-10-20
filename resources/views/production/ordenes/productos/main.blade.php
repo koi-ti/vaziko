@@ -50,26 +50,6 @@
                 </div>
             </div>
 
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                <div class="row">
-                    <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                    <div class="form-group col-md-8">
-                    	<input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm" name="orden2_precio_formula" type="text" maxlength="200">
-               		</div>
-               		<label for="orden2_round_formula" class="col-sm-1 control-label">Redondear</label>
-                    <div class="form-group col-md-1">
-                        <input id="orden2_round_formula" value="<%- orden2_round_formula %>" class="form-control input-sm" name="orden2_round_formula" type="text" maxlength="5">
-                    </div>
-               </div>
-
-               <div class="row">
-                    <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                    <div class="form-group col-md-3">
-                    	<input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
-               		</div>
-               	</div>
-            @endif
-
             @if($producto->productop_abierto || $producto->productop_cerrado)
                 <div class="box box-primary">
                     <div class="box-body">
@@ -282,7 +262,116 @@
                     </div>
                 </div>
             </div>
+
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Fórmulas</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_precio_formula" type="text" maxlength="200" data-input="P">
+                            </div>
+                            <label for="orden2_precio_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_precio_round" value="<%- orden2_precio_round %>" class="form-control input-sm calculate_formula" name="orden2_precio_round" type="text" maxlength="5" data-input="RP">
+                            </div>
+                            <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm event-price" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="orden2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_transporte_formula" value="<%- orden2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_transporte_formula" type="text" maxlength="200" data-input="T">
+                            </div>
+                            <label for="orden2_transporte_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_transporte_round" value="<%- orden2_transporte_round %>" class="form-control input-sm  calculate_formula" name="orden2_transporte_round" type="text" maxlength="5" data-input="RT">
+                            </div>
+                            <label for="orden2_transporte" class="col-sm-1 control-label">Transporte</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm event-price" name="orden2_transporte" type="text" maxlength="30" data-currency required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-input="V">
+                            </div>
+                            <label for="orden2_viaticos_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_viaticos_round" value="<%- orden2_viaticos_round %>" class="form-control input-sm  calculate_formula" name="orden2_viaticos_round" type="text" maxlength="5" data-input="RV">
+                            </div>
+                            <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm event-price" name="orden2_viaticos" type="text" maxlength="30" data-currency required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </form>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Informacion Adicional</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Precio</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-precio">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Transporte</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-transporte">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Viaticos</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-viaticos">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Áreas</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-areas">0,00</label>
+                                </div>
+                            </div>
+                        </div> -->
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6 control-label">Total</label>
+                                <div class="form-group col-md-6">
+                                    <input id="total-price" class="form-control input-sm" data-currency disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="col-sm-12">
+                            <b><small>Los campos de transporte, viaticos y areas se dividiran por la cantidad ingresada.</small></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <script type="text/template" id="orden-producto-maquina-item-tpl">
