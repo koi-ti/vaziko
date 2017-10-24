@@ -1,5 +1,5 @@
 /**
-* Class AreasProductopCotizacionList of Backbone Collection
+* Class AreasProductopList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,12 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AreasProductopCotizacionList = Backbone.Collection.extend({
+    app.AreasProductopList = Backbone.Collection.extend({
 
         url: function() {
-            return window.Misc.urlFull( Route.route('cotizaciones.productos.areas.index') );
+            return window.Misc.urlFull( Route.route('ordenes.productos.areas.index') );
         },
-        model: app.Cotizacion6Model,
+        model: app.Ordenp6Model,
 
         /**
         * Constructor Method
@@ -26,13 +26,13 @@ app || (app = {});
             var error = { success: false, message: '' };
 
             // Validate exist
-            if( !_.isNull(data.cotizacion6_areap) && !_.isUndefined(data.cotizacion6_areap) && data.cotizacion6_areap != ''){
+            if( !_.isNull(data.orden6_areap) && !_.isUndefined(data.orden6_areap) && data.orden6_areap != ''){
                 var modelExits = _.find(this.models, function(item) {
-                    return item.get('cotizacion6_areap') == data.cotizacion6_areap;
+                    return item.get('orden6_areap') == data.orden6_areap;
                 });
             }else{
                 var modelExits = _.find(this.models, function(item) {
-                    return item.get('cotizacion6_nombre') == data.cotizacion6_nombre;
+                    return item.get('orden6_nombre') == data.orden6_nombre;
                 });
             }
 
@@ -48,10 +48,10 @@ app || (app = {});
         total: function() {
             var _this = this;
 
-            return this.reduce(function(sum, model) {
+            return this.reduce(function(sum, model){
 
-                var func = _this.convertirMinutos( model );
-                return sum + func * parseFloat(model.get('cotizacion6_valor'));
+                var func =  _this.convertirMinutos( model );
+                return sum + func * parseFloat(model.get('orden6_valor'));
 
             }, 0);
         },
@@ -59,10 +59,10 @@ app || (app = {});
         totalRow: function( ){
             var _this = this;
 
-            _.each(this.models, function(item){
+            _.each( this.models, function(item) {
 
                 var func = _this.convertirMinutos( item );
-                var total = func * parseFloat(item.get('cotizacion6_valor'));
+                var total = func * parseFloat(item.get('orden6_valor'));
                 item.set('total', total);
 
             });
@@ -70,8 +70,8 @@ app || (app = {});
 
         convertirMinutos: function ( model ){
 
-            var minutos = parseInt( model.get('cotizacion6_horas').substr(3,2) );
-            var horas = parseInt( model.get('cotizacion6_horas').substr(0,2) );
+            var minutos = parseInt(model.get('orden6_horas').substr(3,2));
+            var horas = parseInt(model.get('orden6_horas').substr(0,2));
 
             // Regla de 3 para convertir min a horas
             var regla3 = minutos / 60;
@@ -79,6 +79,7 @@ app || (app = {});
 
             return parseFloat( total );
         },
+
 
         totalize: function(  ) {
             var total = this.total();

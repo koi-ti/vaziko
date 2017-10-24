@@ -18,7 +18,7 @@ class Factura2 extends Model
 
     public static function getFactura2($factura){
        	$query = Factura2::query();
-        $query->select('koi_factura2.*', 'koi_ordenproduccion2.id as orden2_id', 'orden2_precio_venta', DB::raw("
+        $query->select('koi_factura2.*', 'koi_ordenproduccion2.id as orden2_id', 'orden2_precio_venta', 'orden2_total_valor_unitario', DB::raw("
             CASE
                 WHEN productop_3d != 0 THEN
                         CONCAT(

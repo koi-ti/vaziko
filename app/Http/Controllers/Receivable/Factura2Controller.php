@@ -20,11 +20,11 @@ class Factura2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            
+
             $detalle = [];
             if($request->has('factura2')) {
                 $query = Factura2::query();
-                $query->select('koi_factura2.*', 'koi_ordenproduccion2.id as orden2_id', 'orden2_precio_venta', DB::raw("
+                $query->select('koi_factura2.*', 'koi_ordenproduccion2.id as orden2_id', 'orden2_total_valor_unitario', DB::raw("
                     CASE
                         WHEN productop_3d != 0 THEN
                                 CONCAT(
@@ -107,12 +107,12 @@ class Factura2Controller extends Controller
                 // Commit Transaction
                 DB::commit();
 
-                return response()->json(['success' => true, 
+                return response()->json(['success' => true,
                     'id' => $ordenp2->id,
                     'productop_nombre' => $ordenp2->productop_nombre,
                     'orden2_cantidad' => $ordenp2->orden2_cantidad,
                     'orden2_facturado' => $ordenp2->orden2_facturado,
-                    'orden2_precio_venta' => $ordenp2->orden2_precio_venta,
+                    'orden2_total_valor_unitario' => $ordenp2->orden2_total_valor_unitario,
                     'orden_codigo' => $ordenp2->orden_codigo]);
             }catch(\Exception $e){
                 DB::rollback();

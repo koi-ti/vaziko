@@ -1,5 +1,5 @@
 /**
-* Class AreasProductopCotizacionListView  of Backbone Router
+* Class AreasProductopListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,9 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AreasProductopCotizacionListView = Backbone.View.extend({
+    app.AreasProductopListView = Backbone.View.extend({
 
-        el: '#browse-cotizacion-producto-areas-list',
+        el: '#browse-orden-producto-areas-list',
         events: {
             'click .item-producto-areas-remove': 'removeOne',
         },
@@ -50,16 +50,16 @@ app || (app = {});
 
         /**
         * Render view contact by model
-        * @param Object cotizacion6Model Model instance
+        * @param Object ordenp6Model Model instance
         */
-        addOne: function (cotizacion6Model) {
-            var view = new app.AreasProductopCotizacionItemView({
-                model: cotizacion6Model,
+        addOne: function (ordenp6Model) {
+            var view = new app.AreasProductopItemView({
+                model: ordenp6Model,
                 parameters: {
                     edit: this.parameters.edit
                 }
             });
-            cotizacion6Model.view = view;
+            ordenp6Model.view = view;
             this.$el.append( view.render().el );
 
             // Totaliza
@@ -92,8 +92,8 @@ app || (app = {});
             window.Misc.setSpinner( this.parameters.wrapper );
 
             // Add model in collection
-            var cotizacion6Model = new app.Cotizacion6Model();
-            cotizacion6Model.save(data, {
+            var ordenp6Model = new app.Ordenp6Model();
+            ordenp6Model.save(data, {
                 success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
@@ -128,7 +128,7 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if( _.isUndefined(this.parameters.dataFilter.cotizacion2) ){
+            if( _.isUndefined(this.parameters.dataFilter.orden2) ){
                 if ( model instanceof Backbone.Model ) {
                     model.view.remove();
                     this.collection.remove(model);
@@ -151,13 +151,13 @@ app || (app = {});
         /**
         * modal confirm delete area
         */
-        areaDelete: function(model, cotizacion2) {
+        areaDelete: function( model ) {
             var _this = this;
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { cotizacion6_nombre: model.get('cotizacion6_nombre'), cotizacion6_areap: model.get('areap_nombre')},
-                    template: _.template( ($('#cotizacion-delete-confirm-tpl').html() || '') ),
+                    dataFilter: { orden6_nombre: model.get('orden6_nombre'), orden6_areap: model.get('areap_nombre')},
+                    template: _.template( ($('#orden-delete-confirm-tpl').html() || '') ),
                     titleConfirm: 'Eliminar área',
                     onConfirm: function () {
                         if ( model instanceof Backbone.Model ) {
@@ -189,11 +189,10 @@ app || (app = {});
         */
         totalize: function(){
             // Llamar funcion de calculateOrdenp2 del modelo Ordnep2
-            this.parameters.model.trigger('calculateCotizacion2')
+            this.parameters.model.trigger('calculateOrdenp2');
 
-            // Render table total areas
             var data = this.collection.totalize();
-            if(this.$total.length){
+            if(this.$total.length) {
                 this.$total.empty().html( window.Misc.currency( data.total ) );
             }
         },
@@ -223,7 +222,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.clearForm( $('#form-cotizacion6-producto') );
+                window.Misc.clearForm( $('#form-ordenp6-producto') );
             }
         },
    });

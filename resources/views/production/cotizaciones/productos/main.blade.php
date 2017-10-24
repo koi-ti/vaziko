@@ -353,7 +353,7 @@
                             <input id="cotizacion6_valor" name="cotizacion6_valor" class="form-control input-sm" type="text" required data-currency>
                         </div>
                         <div class="form-group col-sm-1">
-                            <button type="submit" class="btn btn-success btn-sm btn-block disabled">
+                            <button type="button" class="btn btn-success btn-sm btn-block submit-cotizacion6">
                                 <i class="fa fa-plus"></i>
                             </button>
                         </div>

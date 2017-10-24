@@ -121,27 +121,49 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
-                model.destroy({
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
+            // Function confirm delete item
+            this.confirmDelete( model );
 
-                            if( !resp.success ) {
-                                alertify.error(resp.errors);
-                                return;
-                            }
 
-                            model.view.remove();
-                            _this.collection.remove(model);
+        },
 
-                            // Refresh other collection
-                            _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
+        /**
+        * modal confirm delete area
+        */
+        confirmDelete: function( model ) {
+            var _this = this;
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { tcontacto_nombre: model.get('tcontacto_nombre'), despachop1_fecha: model.get('despachop1_fecha') },
+                    template: _.template( ($('#ordenp-despacho-delete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Eliminar despacho',
+                    onConfirm: function () {
+                        if ( model instanceof Backbone.Model ) {
+                            model.destroy({
+                                success : function(model, resp) {
+                                    if(!_.isUndefined(resp.success)) {
+                                        window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                                        if( !resp.success ) {
+                                            alertify.error(resp.errors);
+                                            return;
+                                        }
+
+                                        model.view.remove();
+                                        _this.collection.remove(model);
+
+                                        // Refresh other collection
+                                        _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
+                                    }
+                                }
+                            });
                         }
                     }
-                });
+                }
+            });
 
-            }
+            cancelConfirm.render();
         },
 
         /**

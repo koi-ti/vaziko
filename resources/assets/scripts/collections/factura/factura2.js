@@ -47,7 +47,7 @@ app || (app = {});
 
         renderSubtotal: function(){
             _.each(this.models, function(item){
-                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('orden2_precio_venta'));
+                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('orden2_total_valor_unitario'));
                 $('#subtotal_'+item.get('id') ).html( window.Misc.currency(total) );
             });
         },

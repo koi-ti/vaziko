@@ -311,4 +311,7 @@
         <p>¿Está seguro que desea clonar el producto <b><%- cotizacion2_codigo %> - <%- productop_nombre %></b>?</p>
     </script>
 
+    <script type="text/template" id="cotizacion-productop-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el producto <b><%- producto_id %> - <%- producto_nombre %></b>?</p>
+    </script>
 @stop

@@ -464,7 +464,7 @@
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-            <td class="text-right"><%- window.Misc.currency( orden2_precio_venta ) %></td>
+            <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
             <td class="text-right"><%- window.Misc.currency( orden2_precio_total ) %></td>
         @endif
     </script>
@@ -509,5 +509,13 @@
 
     <script type="text/template" id="ordenp-productop-clone-confirm-tpl">
         <p>¿Está seguro que desea clonar el producto <b><%- orden2_codigo %> - <%- productop_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-productop-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el producto <b><%- producto_id %> - <%- producto_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-despacho-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el despacho para <b><%- tcontacto_nombre %></b> con fecha <b><%- despachop1_fecha %></b>?</p>
     </script>
 @stop

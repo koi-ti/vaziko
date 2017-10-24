@@ -49,6 +49,7 @@ app || (app = {});
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
+            this.listenTo( this.model, 'calculateCotizacion2', this.calculateCotizacion2 );
         },
 
         /*
@@ -91,17 +92,23 @@ app || (app = {});
             this.$inputCyan2 = this.$('#cotizacion2_cyan2');
             this.$inputKey2 = this.$('#cotizacion2_key2');
 
-            // Cotizacion6
+            // Ordenp6
             this.$formCotizacion6 = this.$('#form-cotizacion6-producto');
-            this.$nombreC6 = this.$('#cotizacion6_nombre');
-            this.$horasC6 = this.$('#cotizacion6_horas');
-            this.$valorC6 = this.$('#cotizacion6_valor');
+            this.$inputArea = this.$('#cotizacion6_nombre');
+            this.$inputHoras = this.$('#cotizacion6_horas');
+            this.$inputValor = this.$('#cotizacion6_valor');
 
-            // Total
-            this.totalCotizacion = 0;
-            this.tranporteUnitario = 0;
-            this.cantidad = this.$('#cotizacion2_cantidad');
-            this.$precioCot2 = this.$('#total-price');
+            // Inputs cuadro de informacion
+            this.totalCotizacion2 = 0;
+            this.tranporte = 0;
+            this.viaticos = 0;
+            this.precio = 0;
+            this.areas = 0;
+            this.cantidad = 1;
+
+            // Inputs from form
+            this.$precioCotizacion2 = this.$('#total-price');
+            this.$cantidad = this.$('#cotizacion2_cantidad');
             this.$precio = this.$('#cotizacion2_precio_venta');
             this.$viaticos = this.$('#cotizacion2_viaticos');
             this.$transporte = this.$('#cotizacion2_transporte');
@@ -159,6 +166,7 @@ app || (app = {});
                 collection: this.areasProductopCotizacionList,
                 parameters: {
                     dataFilter: dataFilter,
+                    model: this.model,
                     edit: true,
                }
             });
@@ -209,8 +217,7 @@ app || (app = {});
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
-                _this.$inputRenderFormula.val(resp.precio_venta);
-                _this.calculateCotizacion2();
+                _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
             	_this.$inputRenderFormula.val(0);
@@ -271,17 +278,42 @@ app || (app = {});
             }
         },
 
+        /**
+        * Event submit productop
+        */
+        submitCotizacion6: function (e) {
+            this.$formCotizacion6.submit();
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStoreCotizacion6: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopCotizacionList.trigger( 'store' , data );
+            }
+        },
+
         calculateCotizacion2: function() {
-            this.tranporteUnitario = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad.val() );
-            this.viaticosUnitario = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad.val() );
+            // Igualar variables y quitar el inputmask
+            this.cantidad = parseInt( this.$cantidad.val() );
+            this.tranporte = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
+            this.viaticos = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
+            this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+            this.areas = parseFloat( this.areasProductopCotizacionList.totalize()['total'] ) / parseFloat( this.cantidad );
 
-            this.totalCotizacion = parseFloat( this.$precio.inputmask('unmaskedvalue') ) + parseFloat( this.tranporteUnitario ) + parseFloat( this.viaticosUnitario );
+            // Cuadros de informacion
+            this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
+            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
+            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
+            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
 
-            this.$infoprecio.empty().html( window.Misc.currency( this.$precio.inputmask('unmaskedvalue')) );
-            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticosUnitario ) );
-            this.$infotransporte.empty().html( window.Misc.currency( this.tranporteUnitario ));
-
-            this.$precioCot2.val( this.totalCotizacion );
+            // Calcular total de la orden (transporte+viaticos+precio+areas)
+            this.totalCotizacion2 = parseFloat( this.precio ) + parseFloat( this.tranporte ) + parseFloat( this.viaticos ) + parseFloat( this.areas );
+            this.$precioCotizacion2.val( this.totalCotizacion2 );
         },
 
         /**
@@ -302,38 +334,19 @@ app || (app = {});
                .done(function(resp) {
                    window.Misc.removeSpinner( _this.spinner );
 
-                   _this.$nombreC6.val('').attr('readonly', true);
-                   _this.$horasC6.val('');
-                   _this.$valorC6.val( resp.areap_valor );
+                   _this.$inputArea.val('').attr('readonly', true);
+                   _this.$inputHoras.val('');
+                   _this.$inputValor.val( resp.areap_valor );
                })
                .fail(function(jqXHR, ajaxOptions, thrownError) {
                    window.Misc.removeSpinner( _this.spinner );
                    alertify.error(thrownError);
                });
            }else{
-              this.$nombreC6.val('').attr('readonly', false);
-              this.$valorC6.val('');
-              this.$horasC6.val('');
+               this.$inputArea.val('').attr('readonly', false);
+               this.$inputHoras.val('');
+               this.$inputValor.val('');
            }
-        },
-
-        /**
-        * Event submit productop
-        */
-        submitCotizacion6: function (e) {
-            this.$formCotizacion6.submit();
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStoreCotizacion6: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.areasProductopCotizacionList.trigger( 'store' , data );
-            }
         },
 
         /**

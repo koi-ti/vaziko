@@ -342,6 +342,13 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
+
+            // Comprobar que no exita orden de produccion
+            $orden = Ordenp::where('orden_cotizacion', $cotizacion->id)->first();
+            if($orden instanceof Ordenp){
+                return response()->json(['success' => false, 'errors' => 'No se puede reabrir la cotización, porque tiene una orden de produccion en proceso.']);
+            }
+
             DB::beginTransaction();
             try {
                 // Cotizacion
@@ -390,8 +397,14 @@ class Cotizacion1Controller extends Controller
     public function clonar(Request $request, $id)
     {
         if ($request->ajax()) {
-
             $cotizacion = Cotizacion1::findOrFail($id);
+
+            // Comprobar que no exita orden de produccion
+            $orden = Ordenp::where('orden_cotizacion', $cotizacion->id)->first();
+            if($orden instanceof Ordenp){
+                return response()->json(['success' => false, 'errors' => 'No se puede clonar la cotización, porque tiene una orden de producción en proceso.']);
+            }
+
             DB::beginTransaction();
             try {
                 // Recuperar numero cotizacion
@@ -488,6 +501,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_ano = $cotizacion->cotizacion1_ano;
                 $orden->orden_fecha_inicio = $cotizacion->cotizacion1_fecha_inicio;
                 $orden->orden_contacto = $cotizacion->cotizacion1_contacto;
+                $orden->orden_cotizacion = $cotizacion->id;
                 $orden->orden_iva = $cotizacion->cotizacion1_iva;
                 $orden->orden_suministran = $cotizacion->cotizacion1_suministran;
                 $orden->orden_abierta = true;
@@ -585,6 +599,10 @@ class Cotizacion1Controller extends Controller
                          $orden6->save();
                     }
                 }
+
+                $cotizacion->cotizacion1_abierta = false;
+                $cotizacion->cotizacion1_anulada = false;
+                $cotizacion->save();
 
                 // Commit Transaction
                 DB::commit();

@@ -82,7 +82,7 @@
 						<td class="left">{{ $ordenp2->productop_nombre }}</td>
 						<td class="center">{{ $ordenp2->orden2_cantidad }}</td>
 						<td class="center">{{ $ordenp2->orden2_facturado }}</td>
-						<td class="right">{{ number_format($ordenp2->orden2_precio_venta,2,',','.') }}</td>
+						<td class="right">{{ number_format($ordenp2->orden2_total_valor_unitario,2,',','.') }}</td>
 						<td class="right">{{ number_format($ordenp2->orden2_precio_total,2,',','.') }}</td>
 					</tr>
 

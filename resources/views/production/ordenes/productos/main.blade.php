@@ -42,11 +42,13 @@
                 <label for="orden2_referencia" class="col-sm-1 control-label">Referencia</label>
                 <div class="form-group col-md-8">
                     <input id="orden2_referencia" value="<%- orden2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden2_referencia" type="text" maxlength="200" required>
+                    <div class="help-block with-errors"></div>
                 </div>
 
                 <label for="orden2_cantidad" class="col-sm-1 control-label">Cantidad</label>
                 <div class="form-group col-md-2">
-                    <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm" name="orden2_cantidad" type="number" min="1" required>
+                    <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm event-price" name="orden2_cantidad" type="number" min="1" required>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
 
@@ -81,6 +83,7 @@
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
                                         <input id="orden2_c_ancho" value="<%- orden2_c_ancho %>" class="form-control input-sm" name="orden2_c_ancho" type="number" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
                                 </div>
@@ -89,6 +92,7 @@
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
                                         <input id="orden2_c_alto" value="<%- orden2_c_alto %>" class="form-control input-sm" name="orden2_c_alto" type="number" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
                                 </div>
@@ -107,6 +111,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_ancho" value="<%- orden2_3d_ancho %>" class="form-control input-sm" name="orden2_3d_ancho" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
                             </div>
@@ -115,6 +120,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_alto" value="<%- orden2_3d_alto %>" class="form-control input-sm" name="orden2_3d_alto" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
                             </div>
@@ -123,6 +129,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_profundidad" value="<%- orden2_3d_profundidad %>" class="form-control input-sm" name="orden2_3d_profundidad" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
                             </div>
@@ -316,6 +323,75 @@
             @endif
         </form>
 
+        {{-- Content areasp --}}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Áreas</h3>
+            </div>
+            <div class="box-body">
+                <form method="POST" accept-charset="UTF-8" id="form-ordenp6-producto" data-toggle="validator">
+                    <div class="row">
+                        <label for="orden6_areap" class="control-label col-sm-1">Área</label>
+                        <div class="form-group col-sm-3">
+                            <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear">
+                                <option value="" selected>Seleccione</option>
+                                @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                            <input id="orden6_nombre" name="orden6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <div class="bootstrap-timepicker">
+                                <div class="input-group">
+                                    <input type="text" id="orden6_horas" name="orden6_horas" placeholder="Horas" class="form-control input-sm timepicker" required>
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <input id="orden6_valor" name="orden6_valor" class="form-control input-sm" type="text" required data-currency>
+                        </div>
+                        <div class="form-group col-sm-1">
+                            <button type="button" class="btn btn-success btn-sm btn-block submit-ordenp6">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- table table-bordered table-striped -->
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-orden-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Área</th>
+                                <th>Nombre</th>
+                                <th>Horas</th>
+                                <th>Valor</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4"></td>
+                                <th class="text-right">Total</th>
+                                <th class="text-right" id="total">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="box box-primary">
@@ -347,14 +423,14 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- <div class="row">
+                        <div class="row">
                             <div class="col-md-12">
                                 <label class="col-sm-6">Áreas</label>
                                 <div class="col-md-6 text-right">
-                                    <label id="info-areas">0,00</label>
+                                    <label id="info-areas">0</label>
                                 </div>
                             </div>
-                        </div> -->
+                        </div>
                         <div class="row">
                             <div class="col-md-12">
                                 <label class="col-sm-6 control-label">Total</label>
@@ -396,5 +472,24 @@
                 <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
         </div>
+    </script>
+
+    <script type="text/template" id="orden-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el area <b><%- orden6_areap %> <%- orden6_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="orden-producto-areas-item-tpl">
+        <% if(edit) { %>
+           <td class="text-center">
+               <a class="btn btn-default btn-xs item-producto-areas-remove" data-resource="<%- id %>">
+                   <span><i class="fa fa-times"></i></span>
+               </a>
+           </td>
+       <% } %>
+       <td><%- areap_nombre %></td>
+       <td><%- orden6_nombre %></td>
+       <td><%- moment(orden6_horas, 'HH:mm').format('HH:mm') %></td>
+       <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
+       <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
 @stop
