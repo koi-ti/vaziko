@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\MigrateOrdenes::class,
         \App\Console\Commands\MigrateDetalleOrdenes::class,
         \App\Console\Commands\MigrateProductos::class,
+        \App\Console\Commands\actualizarordenes::class,
         \App\Console\Commands\MigrateTerceros::class
     ];
 
