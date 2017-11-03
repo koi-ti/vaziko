@@ -40,8 +40,6 @@ class Cotizacion2 extends BaseModel
             'cotizacion2_transporte_round' => 'integer',
             'cotizacion2_viaticos_round' => 'integer',
             'cotizacion2_precio_venta' => 'required',
-            'cotizacion2_viaticos' => 'required',
-            'cotizacion2_transporte' => 'required',
             'cotizacion2_ancho' => 'numeric|min:0',
         ];
 

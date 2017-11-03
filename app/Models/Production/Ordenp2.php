@@ -39,8 +39,6 @@ class Ordenp2 extends BaseModel
             'orden2_precio_round' => 'integer',
             'orden2_transporte_round' => 'integer',
             'orden2_viaticos_round' => 'integer',
-            'orden2_viaticos' => 'required',
-            'orden2_transporte' => 'required',
             'orden2_precio_venta' => 'required',
             'orden2_ancho' => 'numeric|min:0',
 

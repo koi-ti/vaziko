@@ -501,6 +501,8 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_ano = $cotizacion->cotizacion1_ano;
                 $orden->orden_fecha_inicio = $cotizacion->cotizacion1_fecha_inicio;
                 $orden->orden_contacto = $cotizacion->cotizacion1_contacto;
+                $orden->orden_fecha_entrega = date('Y-m-d');
+                $orden->orden_hora_entrega = date('H:m:s');
                 $orden->orden_cotizacion = $cotizacion->id;
                 $orden->orden_iva = $cotizacion->cotizacion1_iva;
                 $orden->orden_suministran = $cotizacion->cotizacion1_suministran;

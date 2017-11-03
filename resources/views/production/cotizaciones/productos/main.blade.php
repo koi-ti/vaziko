@@ -226,6 +226,18 @@
 
             <br/>
             <div class="row">
+                {{-- Content maquinas --}}
+                <div class="col-sm-4">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Máquinas</h3>
+                        </div>
+                        <div class="box-body" id="browse-cotizacion-producto-maquinas-list">
+                            {{-- render maquinas list --}}
+                        </div>
+                    </div>
+                </div>
+
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
                     <div class="box box-primary">
@@ -246,18 +258,6 @@
                         </div>
                         <div class="box-body" id="browse-cotizacion-producto-acabados-list">
                             {{-- render acabados list --}}
-                        </div>
-                    </div>
-                </div>
-
-                {{-- Content maquinas --}}
-                <div class="col-sm-4">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
-                        </div>
-                        <div class="box-body" id="browse-cotizacion-producto-maquinas-list">
-                            {{-- render maquinas list --}}
                         </div>
                     </div>
                 </div>
@@ -294,7 +294,7 @@
                             </div>
                             <label for="cotizacion2_transporte" class="col-sm-1 control-label">Transporte</label>
                             <div class="form-group col-md-3">
-                                <input id="cotizacion2_transporte" value="<%- cotizacion2_transporte %>" class="form-control input-sm event-price" name="cotizacion2_transporte" type="text" maxlength="30" data-currency required>
+                                <input id="cotizacion2_transporte" value="<%- cotizacion2_transporte %>" class="form-control input-sm event-price" name="cotizacion2_transporte" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                         <div class="row">
@@ -308,7 +308,7 @@
                             </div>
                             <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viaticos</label>
                             <div class="form-group col-md-3">
-                                <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm event-price" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency required>
+                                <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm event-price" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                     </div>

@@ -222,6 +222,26 @@
             <br/>
 
             <div class="row">
+				{{-- Content maquinas --}}
+				<div class="col-sm-4">
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Máquinas</h3>
+						</div>
+						<div class="box-body">
+							@foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
+								<div class="row">
+									<div class="form-group col-md-12">
+										<label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_{{ $maquina->id }}">
+											<input type="checkbox" id="cotizacion3_maquinap_{{ $maquina->id }}" name="cotizacion3_maquinap_{{ $maquina->id }}" value="cotizacion3_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
+										</label>
+									</div>
+								</div>
+							@endforeach
+						</div>
+					</div>
+				</div>
+
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
                     <div class="box box-primary">
@@ -254,26 +274,6 @@
                                     <div class="form-group col-md-12">
                                         <label class="checkbox-inline without-padding white-space-normal" for="cotizacion5_acabadop_{{ $acabado->id }}">
                                             <input type="checkbox" id="cotizacion5_acabadop_{{ $acabado->id }}" name="cotizacion5_acabadop_{{ $acabado->id }}" value="cotizacion5_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
-                                        </label>
-                                    </div>
-                                </div>
-                            @endforeach
-                        </div>
-                    </div>
-                </div>
-
-				{{-- Content maquinas --}}
-                <div class="col-sm-4">
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
-                        </div>
-                        <div class="box-body">
-                            @foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
-                                <div class="row">
-                                    <div class="form-group col-md-12">
-                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_{{ $maquina->id }}">
-                                            <input type="checkbox" id="cotizacion3_maquinap_{{ $maquina->id }}" name="cotizacion3_maquinap_{{ $maquina->id }}" value="cotizacion3_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
                                         </label>
                                     </div>
                                 </div>

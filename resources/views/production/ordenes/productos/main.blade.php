@@ -301,7 +301,7 @@
                             </div>
                             <label for="orden2_transporte" class="col-sm-1 control-label">Transporte</label>
                             <div class="form-group col-md-3">
-                                <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm event-price" name="orden2_transporte" type="text" maxlength="30" data-currency required>
+                                <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm event-price" name="orden2_transporte" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                         <div class="row">
@@ -315,7 +315,7 @@
                             </div>
                             <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
                             <div class="form-group col-md-3">
-                                <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm event-price" name="orden2_viaticos" type="text" maxlength="30" data-currency required>
+                                <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm event-price" name="orden2_viaticos" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                     </div>
