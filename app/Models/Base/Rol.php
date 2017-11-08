@@ -4,7 +4,6 @@ namespace App\Models\Base;
 
 use Zizaco\Entrust\EntrustRole;
 
-
 use Validator, Cache;
 
 class Rol extends EntrustRole
