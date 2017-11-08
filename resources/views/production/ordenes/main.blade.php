@@ -207,7 +207,7 @@
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
-                                                        <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2">Tipo de producto</label>
+                                                        <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2">Tipo </label>
                                                         <div class="form-group col-sm-3 col-xs-11">
                                                             <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
                                                                 @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
