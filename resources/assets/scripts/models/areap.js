@@ -16,7 +16,8 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'areap_nombre': ''
+            'areap_nombre': '',
+            'areap_valor': 0
         }
     });
 

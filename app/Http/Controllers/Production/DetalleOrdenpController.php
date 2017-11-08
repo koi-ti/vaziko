@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Auth, DB, Log;
+use Auth, DB, Log, Datatables;
 
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap;
 
 class DetalleOrdenpController extends Controller
 {
@@ -22,6 +22,20 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
+
+            if( $request->has('datatables') ) {
+                $query = Ordenp2::getDetails();
+
+                return Datatables::of($query)
+                ->filter(function($query) use($request) {
+                    // Orden
+                    if($request->has('search_ordenp')) {
+                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
+                    }
+                })
+                ->make(true);
+            }
+
             if($request->has('orden2_orden')) {
                 $detalle = Ordenp2::getOrdenesp2($request->orden2_orden);
             }
@@ -132,6 +146,29 @@ class DetalleOrdenpController extends Controller
                         }
                     }
 
+                    // Areap
+                    $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
+                    $sumaareasp = 0;
+                    foreach ($areasp as $areap)
+                    {
+                        $orden6 = new Ordenp6;
+                        $orden6->fill($areap);
+                        (!empty($areap['orden6_areap'])) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
+                        $orden6->orden6_orden2 = $orden2->id;
+                        $sumaareasp += $areap['total'];
+                        $orden6->save();
+                    }
+
+                    // Calcular valor unitario
+                    $totalareasp = $sumaareasp / $request->orden2_cantidad;
+                    $transporte = $request->orden2_transporte / $request->orden2_cantidad;
+                    $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
+                    $valorunitario = $orden2->orden2_precio_venta + $transporte + $viaticos + $totalareasp;
+
+                    // Actualizar orden2
+                    $orden2->orden2_total_valor_unitario = $valorunitario;
+                    $orden2->save();
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true]);
@@ -211,7 +248,7 @@ class DetalleOrdenpController extends Controller
         if($orden->orden_abierta == false) {
             return redirect()->route('ordenes.productos.show', ['productos' => $ordenp2->id]);
         }
-        return view('production.ordenes.productos.edit', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
+        return view('production.ordenes.productos.create', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
     }
 
     /**
@@ -313,6 +350,49 @@ class DetalleOrdenpController extends Controller
                             }
                         }
 
+                        // Areas
+                        $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
+                        foreach($areasp as $areap) {
+                            if(!empty($areap['orden6_areap'])){
+                                $area = Areap::find($areap['orden6_areap']);
+                                if(!$area instanceof Areap){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
+                                }
+
+                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_areap', $area->id)->first();
+                                if(!$orden6 instanceof Ordenp6) {
+                                    $orden6 = new Ordenp6;
+                                    $orden6->fill($areap);
+                                    $orden6->orden6_orden2 = $orden2->id;
+                                    $orden6->orden6_areap = $area->id;
+                                    $orden6->save();
+                                }
+                            }else{
+                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_nombre', $areap['orden6_nombre'])->first();
+                                if(!$orden6 instanceof Ordenp6) {
+                                    $orden6 = new Ordenp6;
+                                    $orden6->fill($areap);
+                                    $orden6->orden6_nombre = $areap['orden6_nombre'];
+                                    $orden6->orden6_orden2 = $orden2->id;
+                                    $orden6->save();
+                                }
+                            }
+                        }
+
+                        // Recuperar sumatoria areas guardadas
+                        $recuperarAreas = Ordenp6::select(DB::raw("SUM( ((SUBSTR(orden6_horas, 4, 2) / 60 ) + SUBSTR(orden6_horas, 1, 2)) * orden6_valor ) as valor_total"))->where('orden6_orden2', $orden2->id)->first();
+
+                        // Calcular valor unitario
+                        $totalareasp = $recuperarAreas->valor_total / $request->orden2_cantidad;
+                        $transporte = $request->orden2_transporte / $request->orden2_cantidad;
+                        $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
+                        $valorunitario = $request->orden2_precio_venta + $transporte + $viaticos + $totalareasp;
+
+                        // Actualizar orden2
+                        $orden2->orden2_total_valor_unitario = $valorunitario;
+                        $orden2->save();
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $orden2->id]);
@@ -361,6 +441,9 @@ class DetalleOrdenpController extends Controller
 
                 // Acabados
                 DB::table('koi_ordenproduccion5')->where('orden5_orden2', $orden2->id)->delete();
+
+                // Areasp
+                DB::table('koi_ordenproduccion6')->where('orden6_orden2', $orden2->id)->delete();
 
                 // Eliminar item orden2
                 $orden2->delete();
@@ -445,6 +528,14 @@ class DetalleOrdenpController extends Controller
                      $neworden5->save();
                 }
 
+                // Areasp
+                $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
+                foreach ($areasp as $orden6) {
+                     $neworden6 = $orden6->replicate();
+                     $neworden6->orden6_orden2 = $neworden2->id;
+                     $neworden6->save();
+                }
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden2->id, 'msg' => 'Producto orden clonado con exito.']);
@@ -455,5 +546,21 @@ class DetalleOrdenpController extends Controller
             }
         }
         abort(403);
+    }
+
+    /**
+     * Search orden2.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function search(Request $request)
+    {
+        if($request->has('orden2_id')) {
+            $ordenp2 = Ordenp2::getDetail($request->orden2_id);
+            if($ordenp2 instanceof Ordenp2) {
+                return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
+            }
+        }
+        return response()->json(['success' => false]);
     }
 }

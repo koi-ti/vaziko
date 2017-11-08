@@ -22,7 +22,7 @@ class Asiento extends Model
      *
      * @var array
      */
-    protected $fillable = ['asiento1_mes', 'asiento1_ano', 'asiento1_dia', 'asiento1_folder', 'asiento1_documento', 'asiento1_numero', 'asiento1_detalle'];
+    protected $fillable = ['asiento1_mes', 'asiento1_ano', 'asiento1_dia', 'asiento1_folder', 'asiento1_documento', 'asiento1_numero', 'asiento1_detalle', 'asiento1_documentos', 'asiento1_id_documentos'];
 
     public function isValid($data)
     {

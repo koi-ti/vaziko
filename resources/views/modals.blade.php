@@ -62,6 +62,24 @@
 	</div>
 </div>
 
+<!-- Modal search factura -->
+<div class="modal fade" id="modal-search-factura-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-xlg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal search ordenp2 -->
+<div class="modal fade" id="modal-search-ordenp2-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-xlg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
 <!-- Modal search ordenp -->
 <div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -73,6 +91,15 @@
 
 <!-- Modal search producto -->
 <div class="modal fade" id="modal-search-producto-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal search productop -->
+<div class="modal fade" id="modal-search-productop-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -102,8 +129,10 @@
 <div class="modal fade" id="modal-confirm-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
-			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
 				<h4 class="inner-title-modal modal-title"></h4>
 			</div>
 			<div class="modal-body">
@@ -329,7 +358,7 @@
 
 			<div class="form-group">
 				<div class="col-md-12 table-responsive">
-					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0">
+					<table id="koi-search-ordenp-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
 		                <thead>
 				            <tr>
 				                <th width="10%">Código</th>
@@ -337,6 +366,62 @@
 				                <th>Numero</th>
 			                	<th width="70%">Tercero</th>
 			                	<th width="20%">Fecha</th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<script type="text/template" id="koi-search-ordenp2-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador de ordenes</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-ordenp2-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="row">
+                <label for="search_ordenp" class="col-md-1 control-label">Orden</label>
+                <div class="form-group col-md-3 col-sm-8 col-xs-8">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="search_ordenp">
+                                <i class="fa fa-building-o"></i>
+                            </button>
+                        </span>
+                        <input id="search_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="search_ordenp" type="text" maxlength="15" data-factura="true" data-name="search_ordenpnombre">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-8 col-xs-10">
+                    <input id="search_ordenpnombre" name="search_ordenpnombre" placeholder="Tercero" class="form-control input-sm" type="text" readonly>
+                </div>
+            </div>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-ordenp2-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-ordenp2-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-ordenp2-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="10%">Código</th>
+			                	<th width="10%">Orden</th>
+				                <th>Año</th>
+				                <th>Numero</th>
+			                	<th width="60%">Producto</th>
+			                	<th width="10%">Saldo</th>
+			                	<th width="10%">Facturadas</th>
 				            </tr>
 				        </thead>
 		            </table>
@@ -382,6 +467,53 @@
 		                <thead>
 				            <tr>
 				                <th>Código</th>
+			                	<th>Nombre</th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<!-- Script productop -->
+<script type="text/template" id="koi-search-productop-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador de productos</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-productop-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="form-group">
+				<label for="koi_search_productop_codigo" class="col-md-1 control-label">Código</label>
+				<div class="col-md-2">
+					{!! Form::text('koi_search_productop_codigo', null, ['id' => 'koi_search_productop_codigo', 'class' => 'form-control input-sm']) !!}
+				</div>
+
+				<label for="koi_search_productop_nombre" class="col-md-1 control-label">Nombre</label>
+				<div class="col-md-8">
+					{!! Form::text('koi_search_productop_nombre', null, ['id' => 'koi_search_productop_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-productop-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-productop-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-productop-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="5%">Código</th>
 			                	<th>Nombre</th>
 				            </tr>
 				        </thead>
@@ -463,4 +595,64 @@
 			</div>
 		</div>
 	</div>
+</script>
+
+<script type="text/template" id="koi-search-factura-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador de facturas</h4>
+	</div>
+
+	{!! Form::open(['id' => 'form-koi-search-factura-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="row">
+				<label for="searchfactura_tercero" class="col-sm-1 control-label">Tercero</label>
+				<div class="col-md-3">
+		      		<div class="input-group input-group-sm">
+						<span class="input-group-btn">
+							<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="searchfactura_tercero">
+								<i class="fa fa-user"></i>
+							</button>
+						</span>
+						<input id="searchfactura_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="searchfactura_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-ordenp" data-name="searchfactura_tercero_nombre">
+					</div>
+				</div>
+				<div class="col-sm-5">
+					<input id="searchfactura_tercero_nombre" name="searchfactura_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+				</div>
+
+				<label for="searchfactura_numero" class="col-sm-1 control-label">Numero</label>
+				<div class="col-md-2">
+					<input id="searchfactura_numero" placeholder="Numero" class="form-control input-sm" name="searchfactura_numero" type="text" maxlength="15">
+				</div>
+			</div>
+
+			<div class="row"><br>
+				<div class="form-group">
+					<div class="col-md-offset-4 col-md-2 col-xs-6">
+						<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-factura-component">Buscar</button>
+					</div>
+					<div class="col-md-2 col-xs-6">
+						<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-factura-component">Limpiar</button>
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-factura-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="10%">Numero</th>
+			                	<th width="80%">Tercero</th>
+			                	<th width="10%">Prefijo</th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
 </script>

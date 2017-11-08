@@ -38,6 +38,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('productosp.index') ),
                     data: function( data ) {
                         data.persistent = true;
+                        data.datatables = true;
                         data.productop_codigo = _this.$searchCod.val();
                         data.productop_nombre = _this.$searchName.val();
                     }

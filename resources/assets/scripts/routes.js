@@ -40,10 +40,19 @@ app || (app = {});
             'puntosventa/create(/)': 'getPuntosVentaCreate',
             'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
 
+            // Cartera
+            'facturas(/)': 'getFacturasMain',
+            'facturas/create(/)': 'getFacturaCreate',
+            'facturas/:facturas(/)': 'getFacturaShow',
+
             // Contabilidad
             'plancuentas(/)': 'getPlanCuentasMain',
             'plancuentas/create(/)': 'getPlanCuentasCreate',
             'plancuentas/:plancuenta/edit(/)': 'getPlanCuentasEdit',
+
+            'plancuentasnif(/)': 'getPlanCuentasNifMain',
+            'plancuentasnif/create(/)': 'getPlanCuentasNifCreate',
+            'plancuentasnif/:plancuentanif/edit(/)': 'getPlanCuentasNifEdit',
 
             'centroscosto(/)': 'getCentrosCostoMain',
             'centroscosto/create(/)': 'getCentrosCostoCreate',
@@ -53,6 +62,10 @@ app || (app = {});
             'asientos/create(/)': 'getAsientosCreate',
             'asientos/:asientos(/)': 'getAsientosShow',
             'asientos/:asiento/edit(/)': 'getAsientosEdit',
+
+            'asientosnif(/)': 'getAsientosNifMain',
+            'asientosnif/:asientonif(/)': 'getAsientosNifShow',
+            'asientosnif/:asientonif/edit(/)': 'getAsientosNifEdit',
 
             'documentos(/)': 'getDocumentosMain',
             'documentos/create(/)': 'getDocumentosCreate',
@@ -100,6 +113,18 @@ app || (app = {});
             'materialesp/create(/)': 'getMaterialespCreate',
             'materialesp/:materialp/edit(/)': 'getMaterialespEdit',
 
+            'tiposmaterialp(/)': 'getTiposMaterialpMain',
+            'tiposmaterialp/create(/)': 'getTiposMaterialpCreate',
+            'tiposmaterialp/:tiposmaterialp/edit(/)': 'getTiposMaterialpEdit',
+
+            'tipoproductosp(/)': 'getTipoProductopMain',
+            'tipoproductosp/create(/)': 'getTipoProductopCreate',
+            'tipoproductosp/:tipoproductosp/edit(/)': 'getTipoProductopEdit',
+
+            'subtipoproductosp(/)': 'getSubtipoProductopMain',
+            'subtipoproductosp/create(/)': 'getSubtipoProductopCreate',
+            'subtipoproductosp/:subtipoproductosp/edit(/)': 'getSubtipoProductopEdit',
+
             'ordenes(/)': 'getOrdenesMain',
             'ordenes/create(/)': 'getOrdenesCreate',
             'ordenes/:orden(/)': 'getOrdenesShow',
@@ -111,6 +136,17 @@ app || (app = {});
             'productosp/create(/)': 'getProductospCreate',
             'productosp/:producto(/)': 'getProductospShow',
             'productosp/:producto/edit(/)': 'getProductospEdit',
+
+            'cotizaciones(/)': 'getCotizacionesMain',
+            'cotizaciones/create(/)': 'getCotizacionesCreate',
+            'cotizaciones/:cotizaciones(/)': 'getCotizacionesShow',
+            'cotizaciones/:cotizaciones/edit(/)': 'getCotizacionesEdit',
+            'cotizaciones/productos/create(/)(?*queryString)': 'getCotizacionesProductoCreate',
+            'cotizaciones/productos/:producto/edit(/)': 'getCotizacionesProductoEdit',
+
+            // Treasury
+            'facturap(/)': 'getFacturaspMain',
+            'facturap(/):facturap(/)': 'getFacturaspShow',
         },
 
         /**
@@ -151,8 +187,11 @@ app || (app = {});
             this.componentDocumentView = new app.ComponentDocumentView();
             this.componentReportView = new app.ComponentReportView();
             this.componentTerceroView = new app.ComponentTerceroView();
+            this.componentSearchFacturaView = new app.ComponentSearchFacturaView();
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
+            this.componentSearchOrdenP2View = new app.ComponentSearchOrdenP2View();
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
+            this.componentSearchProductopView = new app.ComponentSearchProductopView();
             this.componentSearchContactoView = new app.ComponentSearchContactoView();
             this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},
@@ -407,12 +446,17 @@ app || (app = {});
             this.rolModel = new app.RolModel();
             this.rolModel.set({'id': rol}, {silent: true});
 
+            if ( this.editRolView instanceof Backbone.View ){
+                this.editRolView.stopListening();
+                this.editRolView.undelegateEvents();
+            }
+
             if ( this.createRolView instanceof Backbone.View ){
                 this.createRolView.stopListening();
                 this.createRolView.undelegateEvents();
             }
 
-            this.createRolView = new app.CreateRolView({ model: this.rolModel });
+            this.editRolView = new app.EditRolView({ model: this.rolModel });
             this.rolModel.fetch();
         },
 
@@ -531,6 +575,47 @@ app || (app = {});
         },
 
         /**
+        * show view main cuenta NIF contable
+        */
+        getPlanCuentasNifMain: function () {
+
+            if ( this.mainPlanCuentasNifView instanceof Backbone.View ){
+                this.mainPlanCuentasNifView.stopListening();
+                this.mainPlanCuentasNifView.undelegateEvents();
+            }
+
+            this.mainPlanCuentasNifView = new app.MainPlanCuentasNifView( );
+        },
+        /**
+        * show view create cuenta NIF contable
+        */
+        getPlanCuentasNifCreate: function () {
+            this.planCuentaNifModel = new app.PlanCuentaNifModel();
+
+            if ( this.createPlanCuentaNifView instanceof Backbone.View ){
+                this.createPlanCuentaNifView.stopListening();
+                this.createPlanCuentaNifView.undelegateEvents();
+            }
+
+            this.createPlanCuentaNifView = new app.CreatePlanCuentaNifView({ model: this.planCuentaNifModel });
+            this.createPlanCuentaNifView.render();
+        },
+        /**
+        * show view edit cuenta NIF contable
+        */
+        getPlanCuentasNifEdit: function (plancuentanif) {
+            this.planCuentaNifModel = new app.PlanCuentaNifModel();
+            this.planCuentaNifModel.set({'id': plancuentanif}, {silent: true});
+
+            if ( this.createPlanCuentaNifView instanceof Backbone.View ){
+                this.createPlanCuentaNifView.stopListening();
+                this.createPlanCuentaNifView.undelegateEvents();
+            }
+
+            this.createPlanCuentaNifView = new app.CreatePlanCuentaNifView({ model: this.planCuentaNifModel });
+            this.planCuentaNifModel.fetch();
+        },
+        /**
         * show view main centros de costo
         */
         getCentrosCostoMain: function () {
@@ -637,7 +722,52 @@ app || (app = {});
             this.editAsientoView = new app.EditAsientoView({ model: this.asientoModel });
             this.asientoModel.fetch();
         },
+        /**
+        * show view main asiento NIF contable
+        */
+        getAsientosNifMain: function () {
 
+            if ( this.mainAsientosNifView instanceof Backbone.View ){
+                this.mainAsientosNifView.stopListening();
+                this.mainAsientosNifView.undelegateEvents();
+            }
+
+            this.mainAsientosNifView = new app.MainAsientosNifView( );
+        },
+        /**
+        * show view show asiento NIF contable
+        */
+        getAsientosNifShow: function (asientoNif) {
+            this.asientoNifModel = new app.AsientoNifModel();
+            this.asientoNifModel.set({'id': asientoNif}, {'silent':true});
+
+            if ( this.showAsientoNifView instanceof Backbone.View ){
+                this.showAsientoNifView.stopListening();
+                this.showAsientoNifView.undelegateEvents();
+            }
+
+            this.showAsientoNifView = new app.ShowAsientoNifView({ model: this.asientoNifModel });
+        },
+        /**
+        * show view edit asiento NIF contable
+        */
+        getAsientosNifEdit: function (asientoNif) {
+            this.asientoNifModel = new app.AsientoNifModel();
+            this.asientoNifModel.set({'id': asientoNif}, {'silent':true});
+
+            if ( this.editAsientoNifView instanceof Backbone.View ){
+                this.editAsientoNifView.stopListening();
+                this.editAsientoNifView.undelegateEvents();
+            }
+
+            if ( this.createAsientoView instanceof Backbone.View ){
+                this.createAsientoView.stopListening();
+                this.createAsientoView.undelegateEvents();
+            }
+
+            this.editAsientoNifView = new app.EditAsientoNifView({ model: this.asientoNifModel });
+            this.asientoNifModel.fetch();
+        },
         /**
         * show view show folders
         */
@@ -1122,6 +1252,138 @@ app || (app = {});
         },
 
         /**
+        * show view main tipos de material produccion
+        */
+        getTiposMaterialpMain: function () {
+
+            if ( this.mainTiposMaterialpView instanceof Backbone.View ){
+                this.mainTiposMaterialpView.stopListening();
+                this.mainTiposMaterialpView.undelegateEvents();
+            }
+
+            this.mainTiposMaterialpView = new app.MainTiposMaterialpView( );
+        },
+
+        /**
+        * show view create tipos de material de produccion
+        */
+        getTiposMaterialpCreate: function () {
+            this.tipomaterialpModel = new app.TipoMaterialpModel();
+
+            if ( this.createTipoMaterialpView instanceof Backbone.View ){
+                this.createTipoMaterialpView.stopListening();
+                this.createTipoMaterialpView.undelegateEvents();
+            }
+
+            this.createTipoMaterialpView = new app.CreateTipoMaterialpView({ model: this.tipomaterialpModel });
+            this.createTipoMaterialpView.render();
+        },
+
+        /**
+        * show view edit tipos de material de produccion
+        */
+        getTiposMaterialpEdit: function (tipomaterialp) {
+            this.tipomaterialpModel = new app.TipoMaterialpModel();
+            this.tipomaterialpModel.set({'id': tipomaterialp}, {'silent':true});
+
+            if ( this.createTipoMaterialpView instanceof Backbone.View ){
+                this.createTipoMaterialpView.stopListening();
+                this.createTipoMaterialpView.undelegateEvents();
+            }
+
+            this.createTipoMaterialpView = new app.CreateTipoMaterialpView({ model: this.tipomaterialpModel });
+            this.tipomaterialpModel.fetch();
+        },
+
+        /**
+        * show view main tipos de producto produccion
+        */
+        getTipoProductopMain: function () {
+
+            if ( this.mainTipoProductospView instanceof Backbone.View ){
+                this.mainTipoProductospView.stopListening();
+                this.mainTipoProductospView.undelegateEvents();
+            }
+
+            this.mainTipoProductospView = new app.MainTipoProductospView( );
+        },
+
+        /**
+        * show view create tipos de producto de produccion
+        */
+        getTipoProductopCreate: function () {
+            this.tipoproductopModel = new app.TipoProductopModel();
+
+            if ( this.createTipoProductopView instanceof Backbone.View ){
+                this.createTipoProductopView.stopListening();
+                this.createTipoProductopView.undelegateEvents();
+            }
+
+            this.createTipoProductopView = new app.CreateTipoProductopView({ model: this.tipoproductopModel });
+            this.createTipoProductopView.render();
+        },
+
+        /**
+        * show view edit tipos de producto de produccion
+        */
+        getTipoProductopEdit: function ( tipoproductosp ) {
+            this.tipoproductopModel = new app.TipoProductopModel();
+            this.tipoproductopModel.set({'id': tipoproductosp }, {'silent':true});
+
+            if ( this.createTipoProductopView instanceof Backbone.View ){
+                this.createTipoProductopView.stopListening();
+                this.createTipoProductopView.undelegateEvents();
+            }
+
+            this.createTipoProductopView = new app.CreateTipoProductopView({ model: this.tipoproductopModel });
+            this.tipoproductopModel.fetch();
+        },
+
+        /**
+        * show view main subtipos de producto produccion
+        */
+        getSubtipoProductopMain: function () {
+
+            if ( this.mainSubtipoProductospView instanceof Backbone.View ){
+                this.mainSubtipoProductospView.stopListening();
+                this.mainSubtipoProductospView.undelegateEvents();
+            }
+
+            this.mainSubtipoProductospView = new app.MainSubtipoProductospView( );
+        },
+
+        /**
+        * show view create subtipos de producto de produccion
+        */
+        getSubtipoProductopCreate: function () {
+            this.subtipoproductopModel = new app.SubtipoProductopModel();
+
+            if ( this.createSubtipoProductopView instanceof Backbone.View ){
+                this.createSubtipoProductopView.stopListening();
+                this.createSubtipoProductopView.undelegateEvents();
+            }
+
+            this.createSubtipoProductopView = new app.CreateSubtipoProductopView({ model: this.subtipoproductopModel });
+            this.createSubtipoProductopView.render();
+        },
+
+        /**
+        * show view edit subtipos de producto de produccion
+        */
+        getSubtipoProductopEdit: function ( subtipoproductosp ) {
+            this.subtipoproductopModel = new app.SubtipoProductopModel();
+            this.subtipoproductopModel.set({'id': subtipoproductosp }, {'silent':true});
+
+            if ( this.createSubtipoProductopView instanceof Backbone.View ){
+                this.createSubtipoProductopView.stopListening();
+                this.createSubtipoProductopView.undelegateEvents();
+            }
+
+            this.createSubtipoProductopView = new app.CreateSubtipoProductopView({ model: this.subtipoproductopModel });
+            this.subtipoproductopModel.fetch();
+        },
+
+        /**
         * show view main ordenes de produccion
         */
         getOrdenesMain: function () {
@@ -1175,7 +1437,12 @@ app || (app = {});
                 this.createOrdenpView.undelegateEvents();
             }
 
-            this.createOrdenpView = new app.CreateOrdenpView({ model: this.ordenpModel });
+            if ( this.editOrdenpView instanceof Backbone.View ){
+                this.editOrdenpView.stopListening();
+                this.editOrdenpView.undelegateEvents();
+            }
+
+            this.editOrdenpView = new app.EditOrdenpView({ model: this.ordenpModel });
             this.ordenpModel.fetch();
         },
 
@@ -1274,8 +1541,178 @@ app || (app = {});
                 this.createProductopView.undelegateEvents();
             }
 
-            this.createProductopView = new app.CreateProductopView({ model: this.productopModel });
+            if ( this.editProductopView instanceof Backbone.View ){
+                this.editProductopView.stopListening();
+                this.editProductopView.undelegateEvents();
+            }
+
+            this.editProductopView = new app.EditProductopView({ model: this.productopModel });
             this.productopModel.fetch();
+        },
+
+        /**
+        * show view main cotizacion produccion
+        */
+        getCotizacionesMain: function () {
+
+            if ( this.mainCotizacionesView instanceof Backbone.View ){
+                this.mainCotizacionesView.stopListening();
+                this.mainCotizacionesView.undelegateEvents();
+            }
+
+            this.mainCotizacionesView = new app.MainCotizacionesView( );
+        },
+
+        /**
+        * show view create cotizacion produccion
+        */
+        getCotizacionesCreate: function () {
+            this.cotizacionModel = new app.CotizacionModel();
+
+            if ( this.createCotizacionView instanceof Backbone.View ){
+                this.createCotizacionView.stopListening();
+                this.createCotizacionView.undelegateEvents();
+            }
+
+            this.createCotizacionView = new app.CreateCotizacionView({ model: this.cotizacionModel });
+            this.createCotizacionView.render();
+        },
+
+        /**
+        * show view show tercero
+        */
+        getCotizacionesShow: function (cotizacion) {
+            this.cotizacionModel = new app.CotizacionModel();
+            this.cotizacionModel.set({'id': cotizacion}, {silent: true});
+
+            if ( this.showCotizacionView instanceof Backbone.View ){
+                this.showCotizacionView.stopListening();
+                this.showCotizacionView.undelegateEvents();
+            }
+
+            this.showCotizacionView = new app.ShowCotizacionView({ model: this.cotizacionModel });
+        },
+
+        /**
+        * show view edit cotizacion produccion
+        */
+        getCotizacionesEdit: function (cotizacion) {
+            this.cotizacionModel = new app.CotizacionModel();
+            this.cotizacionModel.set({'id': cotizacion}, {'silent':true});
+
+            if ( this.editCotizacionView instanceof Backbone.View ){
+                this.editCotizacionView.stopListening();
+                this.editCotizacionView.undelegateEvents();
+            }
+
+            if ( this.createCotizacionView instanceof Backbone.View ){
+                this.createCotizacionView.stopListening();
+                this.createCotizacionView.undelegateEvents();
+            }
+
+            this.editCotizacionView = new app.EditCotizacionView({ model: this.cotizacionModel });
+            this.cotizacionModel.fetch();
+        },
+
+        /**
+        * show view create productos en cotizaciones
+        */
+        getCotizacionesProductoCreate: function (queryString) {
+            var queries = this.parseQueryString(queryString);
+            this.cotizacion2Model = new app.Cotizacion2Model();
+
+            if ( this.createCotizacion2View instanceof Backbone.View ){
+                this.createCotizacion2View.stopListening();
+                this.createCotizacion2View.undelegateEvents();
+            }
+
+            this.createCotizacion2View = new app.CreateCotizacion2View({
+                model: this.cotizacion2Model,
+                parameters: {
+                    data : {
+                        cotizacion2_cotizacion: queries.cotizacion,
+                        cotizacion2_productop: queries.productop
+                    }
+                }
+            });
+            this.createCotizacion2View.render();
+        },
+
+        /**
+        * show view edit cotizaciones
+        */
+        getCotizacionesProductoEdit: function (producto) {
+            this.cotizacion2Model = new app.Cotizacion2Model();
+            this.cotizacion2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.createCotizacion2View instanceof Backbone.View ){
+                this.createCotizacion2View.stopListening();
+                this.createCotizacion2View.undelegateEvents();
+            }
+
+            this.createCotizacion2View = new app.CreateCotizacion2View({ model: this.cotizacion2Model });
+            this.cotizacion2Model.fetch();
+        },
+
+        /**
+        * Cartera
+        */
+
+        // Facturas
+        getFacturasMain: function () {
+
+            if ( this.mainFacturaView instanceof Backbone.View ){
+                this.mainFacturaView.stopListening();
+                this.mainFacturaView.undelegateEvents();
+            }
+
+            this.mainFacturaView = new app.MainFacturasView( );
+        },
+
+        getFacturaCreate: function () {
+            this.facturaModel = new app.FacturaModel();
+            if ( this.createFacturaView instanceof Backbone.View ){
+                this.createFacturaView.stopListening();
+                this.createFacturaView.undelegateEvents();
+            }
+
+            this.createFacturaView = new app.CreateFacturaView({ model: this.facturaModel });
+            this.createFacturaView.render();
+        },
+
+        getFacturaShow: function(facturas){
+            this.facturaModel = new app.FacturaModel();
+            this.facturaModel.set({'id': facturas}, {'silent':true});
+            if ( this.showFacturasView instanceof Backbone.View ){
+                this.showFacturasView.stopListening();
+                this.showFacturasView.undelegateEvents();
+            }
+
+            this.showFacturasView = new app.ShowFacturaView({ model: this.facturaModel });
+        },
+
+        /**
+        * Treasury
+        */
+        getFacturaspMain: function() {
+            if ( this.mainFacturaspView instanceof Backbone.View ){
+                this.mainFacturaspView.stopListening();
+                this.mainFacturaspView.undelegateEvents();
+            }
+
+            this.mainFacturaspView = new app.MainFacturaspView();
+        },
+
+        getFacturaspShow: function(facturap){
+            this.facturapModel = new app.FacturapModel();
+            this.facturapModel.set({'id': facturap}, {'silent':true});
+
+            if( this.showFacturapView instanceof Backbone.View ){
+                this.showFacturapView.stopListening();
+                this.showFacturapView.undelegateEvents();
+            }
+
+            this.showFacturapView = new app.ShowFacturapView({ model: this.facturapModel });
         },
     }) );
 

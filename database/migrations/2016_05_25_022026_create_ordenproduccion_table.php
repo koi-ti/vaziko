@@ -24,6 +24,8 @@ class CreateOrdenproduccionTable extends Migration
             $table->date('orden_fecha_entrega');
             $table->time('orden_hora_entrega');
             $table->integer('orden_contacto')->unsigned();
+            $table->integer('orden_cotizacion')->unsigned()->nullable();
+            $table->integer('orden_iva')->unsigned();
             $table->string('orden_formapago', 2)->comment = 'CT: Credito, Contado: CO';
             $table->string('orden_suministran', 200)->nullable();
             $table->boolean('orden_anulada')->default(false);
@@ -37,6 +39,7 @@ class CreateOrdenproduccionTable extends Migration
 
             $table->foreign('orden_cliente')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('orden_contacto')->references('id')->on('koi_tcontacto')->onDelete('restrict');
+            $table->foreign('orden_cotizacion')->references('id')->on('koi_cotizacion1')->onDelete('restrict');
             $table->foreign('orden_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('orden_usuario_anulo')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->unique(['orden_numero', 'orden_ano']);

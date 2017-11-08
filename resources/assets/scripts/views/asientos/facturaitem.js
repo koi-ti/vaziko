@@ -12,9 +12,9 @@ app || (app = {});
     app.FacturaPendienteOrdenItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#ordenp-factura-pendiente-item-list-tpl').html() || '') ),
+        template: _.template( ($('#factura-item-list-tpl').html() || '') ),
         parameters: {
-            edit: false
+            edit: false,
         },
 
         /**
@@ -36,9 +36,7 @@ app || (app = {});
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
-
             return this;
-        }
+        },
     });
-
 })(jQuery, this, this.document);

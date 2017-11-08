@@ -27,7 +27,6 @@
          *  @return { object } form into json
          *
          */
-
         formToJson: function( selector ){
             var o = {}, a = [];
             if( $.prototype.isPrototypeOf(selector) ){
@@ -98,15 +97,6 @@
             return text;
         },
 
-         /*
-        * Open multimodal
-        */
-        multiModal: function( modal ){
-            if( $(modal).length > 0 ){
-                setTimeout( function () { $('body').addClass('modal-open') }, 500);
-            }
-        },
-
         /**
         *  Sets a loading spinner in a box
         * @param { selector } String|Object Selector jQuery
@@ -128,6 +118,43 @@
 
             if($selector.length)
                 $selector.remove();
+        },
+
+        /**
+        *   ClearFields the forms
+        */
+        clearForm: function( form ){
+
+            form.find(':input').each(function(){
+                field_type = $(this);
+
+                // Inputmask data-currency
+                if ( field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == ''){
+                    field_type.val('');
+                }
+
+                // Checkbox && radiobutton
+                if( field_type.attr('checked') ){
+                    field_type.iCheck('check');
+                }else{
+                    field_type.iCheck('uncheck');
+                }
+
+                // Select2
+                if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
+                    var name = field_type.attr('id');
+                    field_type.val('').trigger('change');
+                    $('#select2-'+name+'-container').removeAttr('title');
+
+                    // Select2 with ajax
+                }else if( field_type.hasClass('choice-select-autocomplete') ){
+                    field_type.empty();
+                    id = field_type.attr('id');
+                    $('#select2-'+id+'-container').removeAttr('title');
+                }
+
+            });
+            form.trigger('reset');
         },
 
         /**
@@ -241,6 +268,53 @@
                 alertify.error(thrownError);
             });
         },
+        /**
+        * Evaluate actions accounts
+        */
+        evaluateActionsAccountNif: function ( options ) {
+
+            options || (options = {});
+
+            var defaults = {
+                'callback': null,
+                'wrap': 'body',
+                'data': null
+            }, settings = {};
+
+            settings = $.extend({}, defaults, options);
+
+            // Search plancuenta
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('asientosnif.detalle.evaluate')),
+                type: 'POST',
+                data: settings.data,
+                beforeSend: function() {
+                    window.Misc.setSpinner( settings.wrap );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( settings.wrap );
+
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // return callback
+                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                    settings.callback( resp.actions );
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( settings.wrap );
+                alertify.error(thrownError);
+            });
+        },
 
         /**
         * Evaluate facturap
@@ -298,23 +372,23 @@
         },
 
         /**
-        * Evaluate actions accounts
+        * Clone module
         */
-        cloneOrden: function ( options ) {
+        cloneModule: function ( options ) {
 
             options || (options = {});
 
             var defaults = {
                 'callback': null,
                 'wrap': 'body',
-                'data': null
+                'url': null
             }, settings = {};
 
             settings = $.extend({}, defaults, options);
 
-            // Clone orden
+            // Clone module
             $.ajax({
-                url: window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: settings.data.orden_codigo }) ),
+                url: settings.url,
                 type: 'GET',
                 beforeSend: function() {
                     window.Misc.setSpinner( settings.wrap );

@@ -70,6 +70,11 @@ class OrdenpController extends Controller
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
 
+                    // Ordenes a facturar
+                    if($request->has('factura') && $request->factura == 'true') {
+                        $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('(orden2_cantidad - orden2_facturado) > 0'));
+                    }
+
                     // Tercero nit
                     if($request->has('orden_tercero_nit')) {
                         $query->where('tercero_nit', $request->orden_tercero_nit);
@@ -168,7 +173,7 @@ class OrdenpController extends Controller
 
                     // Recuperar numero orden
                     $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                    $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // Orden de produccion
                     $orden->fill($data);
@@ -241,7 +246,7 @@ class OrdenpController extends Controller
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
 
-        return view('production.ordenes.edit', ['orden' => $orden]);
+        return view('production.ordenes.create', ['orden' => $orden]);
     }
 
     /**
@@ -433,7 +438,7 @@ class OrdenpController extends Controller
             try {
                 // Recuperar numero orden
                 $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                 // Orden
                 $neworden = $orden->replicate();

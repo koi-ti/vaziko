@@ -17,7 +17,8 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'materialp_nombre': '',
-            'materialp_descripcion': ''
+            'materialp_descripcion': '',
+            'materialp_tipomaterial': '',
         }
     });
 

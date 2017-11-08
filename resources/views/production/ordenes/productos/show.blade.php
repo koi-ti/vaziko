@@ -23,47 +23,26 @@
 
         <div class="box-body">
 			<div class="row">
+				<label class="control-label col-md-1">Código</label>
 				<div class="form-group col-md-1">
-					<label class="control-label">Código</label>
 					<div>{{ $orden->orden_codigo }}</div>
 				</div>
-				<div class="form-group col-md-9">
-					<label class="control-label">Producto</label>
+				<label class="control-label col-md-1">Producto</label>
+				<div class="form-group col-md-7">
 					<div>{{ $ordenp2->productop_nombre }}</div>
-				</div>
-				<div class="form-group col-md-2">
-					<label class="control-label">Cantidad</label>
-					<div>{{ $ordenp2->orden2_cantidad }}</div>
 				</div>
 			</div>
 
 			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Referencia</label>
+				<label class="control-label col-md-1">Referencia</label>
+				<div class="form-group col-md-8">
 					<div>{{ $ordenp2->orden2_referencia }}</div>
 				</div>
-			</div>
-
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-    			<div class="row">
-    				<div class="form-group col-md-10">
-    					<label class="control-label">Fórmula</label>
-    					<div>{{ $ordenp2->orden2_precio_formula }}</div>
-    				</div>
-
-    				<div class="form-group col-md-2">
-    					<label class="control-label">Redondear</label>
-    					<div>{{ $ordenp2->orden2_round_formula }}</div>
-    				</div>
-    			</div>
-
-    			<div class="row">
-    				<div class="form-group col-md-12">
-    					<label class="control-label">Referencia</label>
-    					<div>{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</div>
-    				</div>
-    			</div>
-            @endif
+				<label class="control-label col-md-1">Cantidad</label>
+				<div class="form-group col-md-1">
+					<div>{{ $ordenp2->orden2_cantidad }}</div>
+				</div>
+			</div><br>
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
 				<div class="box box-primary">
@@ -301,6 +280,168 @@
                     </div>
                 </div>
             </div>
+
+			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+				<div class="box box-primary">
+	                <div class="box-header with-border">
+	                    <h3 class="box-title">Fórmulas</h3>
+	                </div>
+	                <div class="box-body">
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $ordenp2->orden2_precio_formula }}</div>
+		    				</div>
+
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $ordenp2->orden2_precio_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Precio</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $ordenp2->orden2_transporte_formula }}</div>
+		    				</div>
+
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $ordenp2->orden2_transporte_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Transporte</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($ordenp2->orden2_transporte, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+		    			<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+		    				<div class="form-group col-md-5">
+		    					<div>{{ $ordenp2->orden2_viaticos_formula }}</div>
+		    				</div>
+
+							<label class="control-label col-md-1">Redondear</label>
+		    				<div class="form-group col-md-1">
+		    					<div>{{ $ordenp2->orden2_viaticos_round }}</div>
+		    				</div>
+							<label class="control-label col-md-1">Viaticos</label>
+							<div class="form-group col-md-3">
+								<div>{{ number_format($ordenp2->orden2_viaticos, 2, ',', '.') }}</div>
+							</div>
+		    			</div>
+	    			</div>
+				</div>
+            @endif
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">Áreas</h3>
+				</div>
+				<div class="box-body">
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-orden-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>Área</th>
+									<th>Nombre</th>
+									<th>Horas</th>
+									<th>Valor</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $trow = $area = $totalArea = 0; /*--}}
+								@foreach( App\Models\Production\Ordenp6::getOrdenesp6($ordenp2->id) as $areap)
+									{{--*/ $trow = (substr($areap->orden6_horas, 0, 2) + (substr($areap->orden6_horas, 3, 2) / 60)) * $areap->orden6_valor /*--}}
+									{{--*/ $area += $trow /*--}}
+									{{--*/ $totalArea = $area / $ordenp2->orden2_cantidad; /*--}}
+
+									<tr>
+										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
+										<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
+										<td class="text-center">{{  date('H:i', strtotime($areap->orden6_horas)) }}</td>
+										<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
+										<td class="text-right">{{ number_format($trow, 2, ',', '.') }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right">{{ number_format($area, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+			</div>
+
+			<div class="row">
+				{{-- Content informacion --}}
+				{{--*/ $totalCotizacion = $ttransporte = $tviaticos = 0; /*--}}
+				{{--*/ $ttransporte = $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad; /*--}}
+				{{--*/ $tviaticos = $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad; /*--}}
+				{{--*/ $totalCotizacion = $ordenp2->orden2_precio_venta + $ttransporte + $tviaticos + $totalArea; /*--}}
+
+				<div class="col-sm-6 col-md-offset-3">
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Informacion Adicional</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-sm-6">Precio</label>
+									<div class="col-md-6 text-right">
+										<label>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-sm-6">Transporte</label>
+									<div class="col-md-6 text-right">
+										<label>{{ number_format($ttransporte, 2, ',', '.')}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-sm-6">Viaticos</label>
+									<div class="col-md-6 text-right">
+										<label>{{ number_format($tviaticos, 2, ',', '.')}}</label>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-sm-6">Áreas</label>
+									<div class="col-md-6 text-right">
+										<label>{{ number_format($totalArea, 2, ',', '.') }}</label>
+									</div>
+								</div>
+							</div>
+
+							<div class="row">
+								<div class="col-md-12">
+									<label class="col-md-6">Total orden</label>
+									<div class="col-md-6 text-right">
+										<label class="label bg-green">{{ number_format($totalCotizacion, 2, ',', '.') }}</label>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="box-footer">
+							<div class="col-sm-12">
+								<b><small>Los campos de transporte, viaticos y areas se dividiran por la cantidad ingresada.</small></b>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</div>
 @stop

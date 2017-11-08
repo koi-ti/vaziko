@@ -22,15 +22,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
+            this.$iva = this.$('#orden_iva');
 
-                this.productopOrdenList = new app.ProductopOrdenList();
-                this.despachopOrdenList = new app.DespachopOrdenList();
+            this.productopOrdenList = new app.ProductopOrdenList();
+            this.despachopOrdenList = new app.DespachopOrdenList();
 
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**
@@ -42,6 +40,7 @@ app || (app = {});
                 collection: this.productopOrdenList,
                 parameters: {
                     wrapper: this.$('#wrapper-productop-orden'),
+                    iva: this.$iva.val(),
                     dataFilter: {
                         'orden2_orden': this.model.get('id')
                     }
@@ -117,17 +116,16 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                data = { orden_codigo: this.model.get('id') };
+                route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: this.model.get('id') }) );
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: data,
                     template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar orden de producción',
                     onConfirm: function () {
                         // Clone orden
-                        window.Misc.cloneOrden({
-                            'data': data,
+                        window.Misc.cloneModule({
+                            'url': route,
                             'wrap': _this.$el,
                             'callback': (function (_this) {
                                 return function ( resp )

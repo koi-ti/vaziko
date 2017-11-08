@@ -15,5 +15,15 @@
 
 	<section class="content">
     	@yield('module')
-    </section>    
+    </section>
+
+    <script type="text/template" id="add-tercero-cartera-tpl">
+		<td><%- factura1_numero %></td>
+	    <td><%- puntoventa_prefijo %></td>
+	    <td><%- factura4_cuota %></td>
+	    <td><%- factura1_fecha %></td>
+		<td><%- factura4_vencimiento %></td>
+		<td><%- days %></td>
+	    <td class="text-right"><%- window.Misc.currency(factura4_saldo) %></td>
+	</script>
 @stop

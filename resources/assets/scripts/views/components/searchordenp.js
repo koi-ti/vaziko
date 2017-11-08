@@ -56,6 +56,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
+                        data.factura = _this.$factura;
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }
@@ -106,7 +107,7 @@ app || (app = {});
             this.$inputName.val( data.tercero_nombre );
 
             if(this.$factura == 'true'){
-                this.$inputContent.val( data.orden_codigo ).trigger('change'); 
+                this.$inputContent.trigger('change');
             }
 
 			this.$modalComponent.modal('hide');

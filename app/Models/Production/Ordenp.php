@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, DB;
 
 class Ordenp extends Model
@@ -24,6 +23,13 @@ class Ordenp extends Model
      */
     protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado'];
 
+    /**
+     * The attributes that are mass nullable fields to null.
+     *
+     * @var array
+     */
+    protected $nullable = ['orden_cotizacion', 'orden_formapago'];
+
     public function isValid($data)
     {
         $rules = [
@@ -35,7 +41,7 @@ class Ordenp extends Model
             'orden_iva' => 'integer|min:0|max:19',
 	        'orden_fecha_inicio' => 'required|date_format:Y-m-d',
 	        'orden_suministran' => 'max:200',
-            'orden_fecha_entrega' => 'required|date_format:Y-m-d',
+            'orden_fecha_entrega' => 'required',
             'orden_hora_entrega' => 'required|date_format:H:m'
         ];
 
@@ -99,7 +105,7 @@ class Ordenp extends Model
     public function paraFacturar()
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado',
+        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -141,7 +147,7 @@ class Ordenp extends Model
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->where('orden2_orden', $this->id);
         $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
-        $query->orderBy('koi_ordenproduccion2.id', 'desc');
+        $query->orderBy('koi_ordenproduccion2.id', 'asc');
         return $query->get();
     }
 

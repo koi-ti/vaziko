@@ -17,13 +17,9 @@ app || (app = {});
             'ifChanged .change-productop-abierto-koi-component': 'changedAbierto',
             'ifChanged .change-productop-cerrado-koi-component': 'changedCerrado',
             'ifChanged .change-productop-3d-koi-component': 'changed3d',
+            'change #productop_tipoproductop': 'changeTypeProduct',
             'click .submit-productosp': 'submitProductop',
             'submit #form-productosp': 'onStore',
-            'submit #form-productosp2': 'onStoreTip',
-            'submit #form-productosp3': 'onStoreArea',
-            'submit #form-productosp4': 'onStoreMaquina',
-            'submit #form-productosp5': 'onStoreMaterial',
-            'submit #form-productosp6': 'onStoreAcabado'
         },
         parameters: {
         },
@@ -31,24 +27,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-            // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-productop');
-
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                this.tipsList = new app.TipsList();
-                this.areasList = new app.AreasList();
-                this.maquinasList = new app.MaquinasList();
-                this.materialesList = new app.MaterialesList();
-                this.acabadosList = new app.AcabadosList();
-           }
-
+        initialize : function() {
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -61,8 +40,9 @@ app || (app = {});
         render: function() {
 
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
-            this.$form = this.$('#form-productosp');
+                attributes.edit = false;
+
+            this.$el.html( this.template(attributes) );
 
             this.$inputAbierto = $('#productop_abierto');
             this.$inputAbiertoAncho = $('#productop_ancho_med');
@@ -77,79 +57,11 @@ app || (app = {});
             this.$input3dAlto = $('#productop_3d_alto_med');
             this.$input3dProfundidad = $('#productop_3d_profundidad_med');
 
-            // Model exist
-            if( this.model.id != undefined ) {
-
-                // Reference views
-                this.referenceViews();
-            }
+            this.$form = this.$('#form-productosp');
+            this.$subtypeproduct = this.$('#productop_subtipoproductop');
+            this.spinner = this.$('#spinner-main');
 
             this.ready();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Tips list
-            this.tipsListView = new app.TipsListView( {
-                collection: this.tipsList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-productop-tips'),
-                    dataFilter: {
-                        'productop_id': this.model.get('id')
-                    }
-               }
-            });
-
-            // Areas list
-            this.areasListView = new app.AreasListView( {
-                collection: this.areasList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-productop-areas'),
-                    dataFilter: {
-                        'productop_id': this.model.get('id')
-                    }
-               }
-            });
-
-            // Areas list
-            this.maquinasListView = new app.MaquinasListView( {
-                collection: this.maquinasList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-productop-maquinas'),
-                    dataFilter: {
-                        'productop_id': this.model.get('id')
-                    }
-               }
-            });
-
-            // Materiales list
-            this.materialesListView = new app.MaterialesListView( {
-                collection: this.materialesList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-productop-materiales'),
-                    dataFilter: {
-                        'productop_id': this.model.get('id')
-                    }
-               }
-            });
-
-            // Acabados list
-            this.acabadosListView = new app.AcabadosListView( {
-                collection: this.acabadosList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-productop-acabados'),
-                    dataFilter: {
-                        'productop_id': this.model.get('id')
-                    }
-               }
-            });
         },
 
         /**
@@ -163,10 +75,9 @@ app || (app = {});
         * Event Create Folder
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }
@@ -234,78 +145,35 @@ app || (app = {});
             }
         },
 
-        /**
-        * Event Create Tip
-        */
-        onStoreTip: function (e) {
+        changeTypeProduct: function(e) {
+            var _this = this;
+                typeproduct = this.$(e.currentTarget).val();
 
-            if (!e.isDefaultPrevented()) {
+            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
 
-                e.preventDefault();
+                    _this.$subtypeproduct.empty().val(0);
 
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.tipsList.trigger( 'store', data );
-            }
-        },
+                    _this.$subtypeproduct.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    });
 
-        /**
-        * Event Create area
-        */
-        onStoreArea: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.areasList.trigger( 'store', data );
-            }
-        },
-
-        /**
-        * Event Create maquina
-        */
-        onStoreMaquina: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.maquinasList.trigger( 'store', data );
-            }
-        },
-
-        /**
-        * Event Create material
-        */
-        onStoreMaterial: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.materialesList.trigger( 'store', data );
-            }
-        },
-
-        /**
-        * Event Create acabado
-        */
-        onStoreAcabado: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.acabadosList.trigger( 'store', data );
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$subtypeproduct.empty().val(0);
             }
         },
 
@@ -331,14 +199,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -359,7 +227,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit orden
-                Backbone.history.navigate(Route.route('productosp.edit', { productosp: resp.id}), { trigger:true });
+                Backbone.history.navigate( Route.route('productosp.edit', { productosp: resp.id}), { trigger:true } );
             }
         }
     });

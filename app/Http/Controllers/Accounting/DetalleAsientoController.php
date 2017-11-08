@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use Log, DB;
 
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\Facturap, App\Models\Accounting\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2,App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 
 class DetalleAsientoController extends Controller
 {
@@ -127,6 +127,34 @@ class DetalleAsientoController extends Controller
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result->error]);
                     }
+                    // Asiento Nif
+                    $asientoNif = AsientoNif::where('asienton1_asiento', $asiento->id)->first();
+                    $asientoNif2 = null; 
+                    if ($asientoNif instanceof AsientoNif) {
+
+                        $cuentaNif = PlanCuentaNif::find($objCuenta->plancuentas_equivalente);
+                        if ( !$cuentaNif instanceof PlanCuentaNif ) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta NIF, por favor verifique la información del asiento o consulte al administrador.']);
+                        }
+                        $cuenta = [];
+                        $cuenta['Cuenta'] = $cuentaNif->plancuentasn_cuenta;
+                        $cuenta['Tercero'] = $request->tercero_nit;
+                        $cuenta['Detalle'] = $request->asiento2_detalle;
+                        $cuenta['Naturaleza'] = $request->asiento2_naturaleza;
+                        $cuenta['CentroCosto'] = $request->asiento2_centro;
+                        $cuenta['Base'] = $request->asiento2_base;
+                        $cuenta['Credito'] = $request->asiento2_naturaleza == 'C' ? $request->asiento2_valor: 0;
+                        $cuenta['Debito'] = $request->asiento2_naturaleza == 'D' ? $request->asiento2_valor: 0;
+                        $cuenta['Orden'] = ($ordenp instanceof Ordenp ? $ordenp->id : '');
+
+                        $asientoNif2 = new AsientoNif2;
+                        $result = $asientoNif2->store($asientoNif, $cuenta);
+                        if(!$result->success) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result->error]);
+                        }
+                    }
 
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento2->id,
@@ -141,9 +169,10 @@ class DetalleAsientoController extends Controller
                         'asiento2_credito' => $asiento2->asiento2_credito,
                         'asiento2_debito' => $asiento2->asiento2_debito,
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
-                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : '')
+                        'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : ''),
+                        'ordenp_beneficiario' => $request->asiento2_orden_beneficiario,
+                        'asientoNif2_id' => ($asientoNif2 instanceof AsientoNif2 ? $asientoNif2->id : '')
                     ]);
-
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'store', $e->getMessage()));
@@ -205,6 +234,13 @@ class DetalleAsientoController extends Controller
                 if(!$asiento2 instanceof Asiento2){
                     return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                 }
+                // Si existe asiento NIF
+                $asientoNif = AsientoNif::query()->where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
+                if ($asientoNif instanceof AsientoNif) {
+                    $asientoNif2 = AsientoNif2::query()->where('asienton2_asiento',$asientoNif->id)->where('asienton2_item', $asiento2->asiento2_item)->first();
+                    $asientoNif2->delete();
+                }
+
                 // Eliminar movimiento
                 AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->delete();
 
@@ -313,6 +349,7 @@ class DetalleAsientoController extends Controller
             $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
             return response()->json($response);
         }
+
         if($request->has('action'))
         {
             switch ($request->action) {
@@ -345,6 +382,7 @@ class DetalleAsientoController extends Controller
                         $response->errors = $result;
                         return response()->json($response);
                     }
+
                     $response->success = true;
                     return response()->json($response);
                 break;
@@ -382,15 +420,68 @@ class DetalleAsientoController extends Controller
         if ($request->ajax()) {
             $movimientos = [];
             if($request->has('asiento2')) {
-
                 $query = AsientoMovimiento::query();
-                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'sucursal_nombre');
+                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'koi_factura1.id as factura1_id', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
+                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                                (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                            )
+                        ELSE tercero_razonsocial END)
+                    AS tercero_nombre"), DB::raw("
+                        CASE
+                            WHEN productop_3d != 0 THEN
+                                    CONCAT(
+                                    COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') 3D(',
+                                    COALESCE(orden2_3d_ancho,0), COALESCE(me6.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_3d_alto,0), COALESCE(me7.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_3d_profundidad,0), COALESCE(me5.unidadmedida_sigla,''),')' )
+                            WHEN productop_abierto != 0 AND productop_cerrado != 0 THEN
+                                    CONCAT(
+                                    COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') A(',
+                                    COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ') C(',
+                                    COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
+                            WHEN productop_abierto != 0 AND productop_cerrado = 0 THEN
+                                    CONCAT(
+                                    COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') A(',
+                                    COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ')')
+                            WHEN productop_abierto = 0 AND productop_cerrado != 0 THEN
+                                    CONCAT(
+                                    COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') C(',
+                                    COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
+                                    COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
+                            ELSE
+                                    CONCAT(
+                                        COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,')' )
+                            END AS productop_nombre
+                        ")
+                    );
                 $query->where('movimiento_asiento2', $request->asiento2);
                 $query->leftJoin('koi_producto', 'movimiento_producto', '=', 'koi_producto.id');
                 $query->leftJoin('koi_sucursal', 'movimiento_sucursal', '=', 'koi_sucursal.id');
 
-                $movimientos = $query->get();
+                // Factura
+                $query->leftJoin('koi_factura1', 'movimiento_factura', '=', 'koi_factura1.id');
+                $query->leftJoin('koi_factura4', 'movimiento_factura4', '=', 'koi_factura4.id');
+                $query->leftJoin('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
+                $query->leftJoin('koi_ordenproduccion2', 'movimiento_ordenp2', '=', 'koi_ordenproduccion2.id');
+                $query->leftJoin('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
 
+                // Facturap
+                $query->leftJoin('koi_facturap2', 'movimiento_item', '=', 'koi_facturap2.id');
+
+                // Joins producto
+                $query->leftJoin('koi_productop', 'orden2_productop', '=', 'koi_productop.id');
+                $query->leftJoin('koi_unidadmedida as me1', 'productop_ancho_med', '=', 'me1.id');
+                $query->leftJoin('koi_unidadmedida as me2', 'productop_alto_med', '=', 'me2.id');
+                $query->leftJoin('koi_unidadmedida as me3', 'productop_c_med_ancho', '=', 'me3.id');
+                $query->leftJoin('koi_unidadmedida as me4', 'productop_c_med_alto', '=', 'me4.id');
+                $query->leftJoin('koi_unidadmedida as me5', 'productop_3d_profundidad_med', '=', 'me5.id');
+                $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
+                $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
+
+                $movimientos = $query->get();
             }
             return response()->json($movimientos);
         }

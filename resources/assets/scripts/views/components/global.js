@@ -14,7 +14,8 @@ app || (app = {});
       	el: 'body',
 		events: {
             'click .sidebar-toggle': 'clickSidebar',
-            'click .history-back': 'clickHistoryBack'
+            'click .history-back': 'clickHistoryBack',
+            'hidden.bs.modal': 'multiModal'
 		},
 
         /**
@@ -39,7 +40,11 @@ app || (app = {});
 
 			window.history.back();
 		},
+
+		multiModal: function(){
+			if( $('.modal.in').length > 0){
+                $('body').addClass('modal-open');
+            }
+		},
     });
-
-
 })(jQuery, this, this.document);

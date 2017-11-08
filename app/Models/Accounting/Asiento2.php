@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Validator, Auth, DB;
 
-use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Accounting\Factura1, App\Models\Accounting\Factura2;
+use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
 
 class Asiento2 extends Model
 {
@@ -38,21 +38,30 @@ class Asiento2 extends Model
     public static function getAsiento2($asiento)
     {
         $query = Asiento2::query();
-        $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 'tercero_nit',
-            DB::raw("(CASE WHEN tercero_persona = 'N'
-                THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+        $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+            DB::raw("(CASE WHEN t.tercero_persona = 'N'
+                THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
+                        (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
                     )
-                ELSE tercero_razonsocial END)
+                ELSE t.tercero_razonsocial END)
                 AS tercero_nombre"),
             DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
-            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as orden_codigo")
+            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as ordenp_codigo"),
+            DB::raw("CONCAT( (CASE WHEN to.tercero_persona = 'N'
+                        THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
+                            (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
+                        )
+                        ELSE to.tercero_razonsocial
+                    END),
+                ' (', orden_referencia ,')'
+           ) AS ordenp_beneficiario")
         );
-        $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
+        $query->join('koi_tercero as t', 'asiento2_beneficiario', '=', 't.id');
         $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
         $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
         // Temporal join
         $query->leftJoin('koi_ordenproduccion', 'asiento2_ordenp', '=', 'koi_ordenproduccion.id');
+        $query->leftJoin('koi_tercero as to', 'orden_cliente', '=', 'to.id');
         $query->where('asiento2_asiento', $asiento);
         return $query->get();
     }
@@ -110,7 +119,10 @@ class Asiento2 extends Model
 
         // Insert si no existe asiento2
         if(!isset($data['Id']) || empty($data['Id']))
-        {
+        {   
+            // Consecutivo item
+            $item = DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->max('asiento2_item');
+            $this->asiento2_item = ++$item;
             $this->asiento2_asiento = $asiento->id;
             $this->asiento2_cuenta = $objCuenta->id;
             $this->asiento2_beneficiario = $objTercero->id;
@@ -129,7 +141,7 @@ class Asiento2 extends Model
 
                     $objOrdenp = Ordenp::find($data['Orden']);
                     if(!$objOrdenp instanceof Ordenp) {
-                        $response->error = "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador..";
+                        $response->error = "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador.";
                         return $response;
                     }
 
@@ -278,63 +290,29 @@ class Asiento2 extends Model
     
     public static function validarFactura(Request $request)
     {
-        if ($request->factura_nueva == 'N'){
-            // Recuperar tercero
-            $tercero = null;
-            if($request->has('tercero_nit')) {
-                // Recuperar tercero
-                $tercero = Tercero::where('tercero_nit', $request->tercero_nit)->first();
-                if(!$tercero instanceof Tercero) {
-                    return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
-                }
-            }
+        // Validate factura
+        $factura = null;
 
-            if(!$tercero instanceof Tercero) {
-                return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
-            }
-            
-            // Recuperar puntoventa
-            $puntoventa = PuntoVenta::findOrFail($request->factura1_puntoventa);
-            if(!$puntoventa instanceof PuntoVenta) {
-                return "No es posible recuperar punto de venta, por favor verifique la información del asiento o consulte al administrador.";
-            }
-
-            // Validar fecha
-            if(!isset($request->factura1_fecha) || trim($request->factura1_fecha) == '') {
-                return "Fecha es obligatoria.";
-            }
-
-            // Validar fecha_vencimiento
-            if(!isset($request->factura1_fecha_vencimiento) || trim($request->factura1_fecha_vencimiento) == '') {
-                return "Fecha vencimiento es obligatoria.";
-            }
-
-            // Recuperar Ordenp
-            $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-            if(!$orden instanceof Ordenp){
-                return "No es posible recuperar numero de orden, por favor verifique la información del asiento o consulte al administrador.";
-            }
-
-            // Recuperar ordenp2
-            $orden2 = Ordenp2::getOrdenesf2($orden->id);
-            foreach ($orden2 as $item) {
-                if($item->orden2_orden != $orden->id){
-                    return "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
-                }
-
-                if( $request->has("despachop2_cantidad_{$item->id}") ){
-                    if($request->get("despachop2_cantidad_{$item->id}") < 0){
-                        return "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
-                    }
-
-                    if($request->get("despachop2_cantidad_{$item->id}") > $item->orden2_cantidad){
-                        return "La cantidad no puede superar al saldo que esta registrado en esta orden {$item->id}, por favor verifique la información del asiento o consulte al administrador.";
-                    }
-                }
-            }
-        }else{
-            
+        // Recuperar factura1 -> Padre
+        $factura = Factura1::find($request->factura1_orden);
+        if(!$factura instanceof Factura1){
+            return "No es posible recuperar la factura, por favor verifique la información o consulte al administrador.";
         }
+
+        // Variable sumatoria
+        $costo = 0;
+
+        // Recuperar Factura4 -> Hijo
+        $factura4 = Factura4::where('factura4_factura1', $factura->id)->get();
+        foreach ($factura4 as $item) {
+            $costo += $request->get("factura4_pagar_{$item->id}");
+        }
+
+        // Validar Cantidad
+        if ($costo == 0 ) {
+            return "El valor a pagar debe ser diferente a 0.";
+        }
+
         return 'OK';
     }
 
@@ -663,70 +641,48 @@ class Asiento2 extends Model
                 }
             }
         }elseif ($objCuenta->plancuentas_tipo == 'C') {
-            if($request->has('factura_nueva')){
+            // Preparar movimiento Factura
+            $datamov = [];
+            $datamov['Tipo'] = 'F';
+            $datamov['Naturaleza'] = $request->asiento2_naturaleza;
+            $datamov['Nuevo'] = false;
+            $datamov['Factura'] = $request->factura1_orden;
+            $datamov['Valor'] = $request->factura1_pagar;
+            
+            $movimiento = new AsientoMovimiento;
+            $result = $movimiento->store($this, $datamov);
+            if(!$result->success) {
+                $response->error = $result->error;
+                return $response;
+            }
 
-                $orden = null;
-                if($request->factura_nueva == 'N'){
-                    $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-                    if(!$orden instanceof Ordenp){
-                        $response->error = "No es posible recuperar numero de orden, por favor verifique la información del asiento o consulte al administrador.";
-                        return $response;
-                    }
+            // Preparar movimientos hijos
+            $datamov = [];
+            $datamov['Tipo'] = 'FH';
+            $datamov['Nuevo'] = false;
 
-                    // Preparar movimiento Factura
-                    $datamov = [];
-                    $datamov['Tipo'] = 'F';
-                    $datamov['Naturaleza'] = $request->asiento2_naturaleza;
-                    $datamov['Nuevo'] = true;
-                    $datamov['Fecha'] = $request->factura1_fecha;
-                    $datamov['Vencimiento'] = $request->factura1_fecha_vencimiento;
-                    $datamov['Valor'] = $request->asiento2_valor;
-                    $datamov['PuntoVenta'] = $request->factura1_puntoventa;
-                    $datamov['Orden'] = $orden->id;
+            // Recuperar Factura1 ->Padre
+            $factura = Factura1::find($request->factura1_orden);
+            if(!$factura instanceof Factura1){
+                $response->error = "No es posible recuperar la factura, por favor verifique la información o consulte al administrador";
+                return $response;
+            }
 
-                    $movimiento = new AsientoMovimiento;
-                    $result = $movimiento->store($this, $datamov);
-                    if(!$result->success) {
-                        $response->error = $result->error;
-                        return $response;
-                    }
-
-                    // Preparar movimientos hijos
-                    $datamov = [];
-                    $datamov['Tipo'] = 'FH';
-                    $datamov['Nuevo'] = true;
-
-                    // Traer ordenp2
-                    $orden2 = Ordenp2::getOrdenesp2($orden->id);
-                    foreach ($orden2 as $item) {
-                        if( $request->has("despachop2_cantidad_{$item->id}") ){
-                            
-                            if($item->orden2_orden != $orden->id){
-                                $response->error = "El item {$item->id} no corresponde a la orden, por favor verifique la información del asiento o consulte al administrador.";
-                                return $response;
-                            }
-
-                            if($request->get("despachop2_cantidad_{$item->id}") < 0){
-                                $response->error = "El numero de unidades debe ser mayor a cero, por favor verifique la información del asiento o consulte al administrador.";
-                                return $response;
-                            }
-
-                            if($request->get("despachop2_cantidad_{$item->id}") > 0){
-                                $datamov['Orden'] = $item->id;
-                                $datamov['Cantidad'] = $request->get("despachop2_cantidad_{$item->id}");
-                             
-                                $movimiento = new AsientoMovimiento;
-                                $result = $movimiento->store($this, $datamov);
-                                if(!$result->success) {
-                                    $response->error = $result->error;
-                                    return $response;
-                                }
-                            }
-
+            // Recuperar Factura4 -> Hijo
+            $factura4 = Factura4::where('factura4_factura1', $factura->id)->get();
+            foreach ($factura4 as $item) {
+                if($request->has("factura4_pagar_{$item->id}")){
+                    if($request->get("factura4_pagar_{$item->id}") != 0){
+                        $datamov['FacturaChild'] = $item->id;
+                        $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
+                     
+                        $movimiento = new AsientoMovimiento;
+                        $result = $movimiento->store($this, $datamov);
+                        if(!$result->success) {
+                            $response->error = $result->error;
+                            return $response;
                         }
                     }
-                }else{
-
                 }
             }
         }  
@@ -781,6 +737,7 @@ class Asiento2 extends Model
                 $facturap = new Facturap;
                 $facturap->facturap1_tercero = $this->asiento2_beneficiario;
                 $facturap->facturap1_factura = $movefp->movimiento_facturap;
+                $facturap->facturap1_asiento = $this->asiento2_asiento;
                 $facturap->facturap1_sucursal = $movefp->movimiento_sucursal;
                 $facturap->facturap1_fecha = $movefp->movimiento_fecha;
                 $facturap->facturap1_cuotas = $movefp->movimiento_item;
@@ -1027,27 +984,27 @@ class Asiento2 extends Model
             return "No es posible recuperar movimiento padre de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
+        // Recuperar hijos de factura FH
         $movchildren = $movements->where('movimiento_tipo', 'FH');
         if($movchildren->count() <= 0) {
             return "No es posible recuperar movimientos detalle de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
         // Nuevo registro en factura
-        if($movfather->movimiento_nuevo == true) {
-            // Factura
-            $factura = new Factura1;
-            $factura->factura1_fecha = $movfather->movimiento_fecha;
-            $factura->factura1_fecha_vencimiento = $movfather->movimiento_vencimiento;
-            $factura->factura1_puntoventa = $movfather->movimiento_puntoventa;
-            $factura->factura1_orden = $movfather->movimiento_ordenp;
-            $factura->factura1_valor = $movfather->movimiento_valor;
-            $factura->save();
+        if(!$movfather->movimiento_nuevo) {
 
-            // Factura2 (items)
-            $result = $factura->storeFactura2($movchildren);
-            if(!$result->success) {
+            // Recuperar factura1 -> Padre
+            $factura = Factura1::find($movfather->movimiento_factura);
+            if(!$factura instanceof Factura1){
+                return "No es posible recuperar la factura, por favor verifique la informacion o consulte con el administrador.";
+            }
+
+            // Actualizar factura4 
+            $result = $factura->actualizarFactura4($movchildren, $this->asiento2_naturaleza);
+            if(!$result->success){
                 return $result->error;
             }
+
         }
         return 'OK';
     }

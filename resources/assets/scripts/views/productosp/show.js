@@ -11,7 +11,10 @@ app || (app = {});
 
     app.ShowProductopView = Backbone.View.extend({
 
-        el: '#terceros-main',
+        el: '#productop-show',
+        events: {
+            'click .clone-productop': 'cloneProductop',
+        },
 
         /**
         * Constructor Method
@@ -94,6 +97,35 @@ app || (app = {});
                     }
                }
             });
+        },
+
+        cloneProductop: function(e){
+            e.preventDefault();
+
+            var _this = this,
+                route = window.Misc.urlFull( Route.route('productosp.clonar', { productosp: this.model.get('id')}) );
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template( ($('#productop-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar producto',
+                    onConfirm: function () {
+                        // Clone producto
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.el,
+                            'callback': (function (_this) {
+                                return function ( resp )
+                                {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('productosp.show', { productosp: resp.id })) );
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         }
     });
 
