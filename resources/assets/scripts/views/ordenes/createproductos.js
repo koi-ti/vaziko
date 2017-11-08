@@ -14,12 +14,15 @@ app || (app = {});
         el: '#ordenes-productos-create',
         template: _.template( ($('#add-orden-producto-tpl').html() || '') ),
         events: {
-            'change #orden2_precio_formula': 'changeFormula',
-            'change #orden2_round_formula': 'changeFormula',
+            'change .calculate_formula': 'changeFormula',
             'ifChanged #orden2_tiro': 'changedTiro',
             'ifChanged #orden2_retiro': 'changedRetiro',
             'click .submit-ordenp2': 'submitOrdenp2',
-            'submit #form-orden-producto': 'onStore'
+            'submit #form-orden-producto': 'onStore',
+            'click .submit-ordenp6': 'submitOrdenp6',
+            'submit #form-ordenp6-producto': 'onStoreOrdenp6',
+            'change #orden6_areap': 'changeAreap',
+            'change .event-price': 'calculateOrdenp2',
         },
         parameters: {
             data: {
@@ -40,11 +43,13 @@ app || (app = {});
             this.maquinasProductopList = new app.MaquinasProductopList();
             this.materialesProductopList = new app.MaterialesProductopList();
             this.acabadosProductopList = new app.AcabadosProductopList();
+            this.areasProductopList = new app.AreasProductopList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
+            this.listenTo( this.model, 'calculateOrdenp2', this.calculateOrdenp2 );
         },
 
         /*
@@ -54,8 +59,27 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
-
             this.$form = this.$('#form-orden-producto');
+
+            this.$inputFormula = null;
+            this.$inputRenderFormula = null;
+            this.$inputRound = null;
+
+            // Inputs render round
+            this.$inputFormulaPrecio = this.$('#orden2_precio_formula');
+            this.$inputFormulaTransporte = this.$('#orden2_transporte_formula');
+            this.$inputFormulaViaticos = this.$('#orden2_viaticos_formula');
+
+            // Inputs render round
+            this.$inputRoundPrecio = this.$('#orden2_precio_round');
+            this.$inputRoundTranporte = this.$('#orden2_transporte_round');
+            this.$inputRoundViaticos = this.$('#orden2_viaticos_round');
+
+            // Inputs render formulas
+            this.$inputPrecio = this.$('#orden2_precio_venta');
+            this.$inputTranporte = this.$('#orden2_transporte');
+            this.$inputViaticos = this.$('#orden2_viaticos');
+
             this.$inputFormula = this.$('#orden2_precio_formula');
             this.$inputRound = this.$('#orden2_round_formula');
             this.$inputPrecio = this.$('#orden2_precio_venta');
@@ -72,9 +96,35 @@ app || (app = {});
             this.$inputCyan2 = this.$('#orden2_cyan2');
             this.$inputKey2 = this.$('#orden2_key2');
 
-            // Reference views
-            this.referenceViews();
+            // Ordenp6
+            this.$formOrdenp6 = this.$('#form-ordenp6-producto');
+            this.$inputArea = this.$('#orden6_nombre');
+            this.$inputHoras = this.$('#orden6_horas');
+            this.$inputValor = this.$('#orden6_valor');
 
+            // Inputs cuadro de informacion
+            this.totalOrdenp2 = 0;
+            this.tranporte = 0;
+            this.viaticos = 0;
+            this.precio = 0;
+            this.areas = 0;
+            this.cantidad = 1;
+
+            this.$precioOrdenp2 = this.$('#total-price');
+            this.$cantidad = this.$('#orden2_cantidad');
+            this.$precio = this.$('#orden2_precio_venta');
+            this.$viaticos = this.$('#orden2_viaticos');
+            this.$transporte = this.$('#orden2_transporte');
+
+            // Informacion Cotizacion
+            this.$infoprecio = this.$('#info-precio');
+            this.$infoviaticos = this.$('#info-viaticos');
+            this.$infotransporte = this.$('#info-transporte');
+            this.$infoareas = this.$('#info-areas');
+
+            // Reference views
+            this.calculateOrdenp2();
+            this.referenceViews();
             this.ready();
         },
 
@@ -113,13 +163,44 @@ app || (app = {});
                     dataFilter: dataFilter
                }
             });
+
+            // Areas list
+            this.areasProductopListView = new app.AreasProductopListView( {
+                collection: this.areasProductopList,
+                parameters: {
+                    dataFilter: dataFilter,
+                    model: this.model,
+                    edit: true
+               }
+            });
         },
 
         /**
         * Event calcule formula
         */
-        changeFormula: function () {
-        	var _this = this;
+        changeFormula: function (e) {
+            var _this = this,
+                inputformula = this.$(e.currentTarget).data('input');
+
+            if( inputformula == 'P' || inputformula == 'RP'){
+                this.$inputFormula = this.$inputFormulaPrecio;
+                this.$inputRound = this.$inputRoundPrecio;
+                this.$inputRenderFormula = this.$inputPrecio;
+
+            }else if( inputformula == 'T' || inputformula == 'RT'){
+                this.$inputFormula = this.$inputFormulaTransporte;
+                this.$inputRound = this.$inputRoundTranporte;
+                this.$inputRenderFormula = this.$inputTranporte;
+
+            }else if( inputformula == 'V' || inputformula == 'RV'){
+                this.$inputFormula = this.$inputFormulaViaticos;
+                this.$inputRound = this.$inputRoundViaticos;
+                this.$inputRenderFormula = this.$inputViaticos;
+
+            }else{
+                return;
+            }
+
         	var formula = this.$inputFormula.val();
         	var round = this.$inputRound.val();
 
@@ -139,10 +220,10 @@ app || (app = {});
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( _this.el );
-                _this.$inputPrecio.val(resp.precio_venta);
+                _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-            	_this.$inputPrecio.val(0);
+                _this.$inputRenderFormula.val(0);
                 window.Misc.removeSpinner( _this.el );
                 alertify.error(thrownError);
             });
@@ -195,8 +276,81 @@ app || (app = {});
 
                 e.preventDefault();
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.ordenp6 = this.areasProductopList.toJSON();
                 this.model.save( data, {silent: true} );
             }
+        },
+
+        /**
+        * Event submit productop
+        */
+        submitOrdenp6: function (e) {
+            this.$formOrdenp6.submit();
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStoreOrdenp6: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopList.trigger( 'store' , data );
+            }
+        },
+
+
+        calculateOrdenp2: function () {
+            // Igualar variables y quitar el inputmask
+            this.cantidad = parseInt( this.$cantidad.val() );
+            this.tranporte = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
+            this.viaticos = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
+            this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+            this.areas = parseFloat( this.areasProductopList.totalize()['total'] ) / parseFloat( this.cantidad );
+
+            // Cuadros de informacion
+            this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
+            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
+            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
+            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
+
+            // Calcular total de la orden (transporte+viaticos+precio+areas)
+            this.totalOrdenp2 = parseFloat( this.precio ) + parseFloat( this.tranporte ) + parseFloat( this.viaticos ) + parseFloat( this.areas );
+            this.$precioOrdenp2.val( this.totalOrdenp2 );
+        },
+
+        /**
+        *   Event render input value
+        **/
+        changeAreap: function(e){
+           var _this = this;
+               id = this.$(e.currentTarget).val();
+
+           if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
+               $.ajax({
+                   url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
+                   type: 'GET',
+                   beforeSend: function() {
+                       window.Misc.setSpinner( _this.spinner );
+                   }
+               })
+               .done(function(resp) {
+                   window.Misc.removeSpinner( _this.spinner );
+
+                   _this.$inputArea.val('').attr('readonly', true);
+                   _this.$inputHoras.val('');
+                   _this.$inputValor.val( resp.areap_valor );
+               })
+               .fail(function(jqXHR, ajaxOptions, thrownError) {
+                   window.Misc.removeSpinner( _this.spinner );
+                   alertify.error(thrownError);
+               });
+           }else{
+              this.$inputArea.val('').attr('readonly', false);
+              this.$inputHoras.val('');
+              this.$inputValor.val('');
+           }
         },
 
         /**

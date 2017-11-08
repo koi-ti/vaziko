@@ -61,21 +61,45 @@
         </ul>
     </li>
 
+    {{-- Cartera --}}
+    <li class="treeview {{ in_array(Request::segment(1), ['facturas']) ? 'active' : '' }}">
+        <a href="#">
+            <i class="fa fa-suitcase"></i> <span>Cartera</span><i class="fa fa-angle-left pull-right"></i>
+        </a>
+
+        <ul class="treeview-menu">
+            {{-- Modulos cartera --}}
+            <li class="{{ in_array(Request::segment(1), ['facturas']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'facturas' ? 'active' : '' }}">
+                        <a href="{{ route('facturas.index') }}"><i class="fa fa-pencil-square-o"></i> Facturas</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'plancuentas', 'centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['asientos']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'asientos' ? 'active' : '' }}">
                         <a href="{{ route('asientos.index') }}"><i class="fa fa-file-text-o"></i> Asientos</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'asientosnif' ? 'active' : '' }}">
+                        <a href="{{ route('asientosnif.index') }}"><i class="fa fa-file-text"></i> Asientos NIF</a>
                     </li>
                 </ul>
             </li>
@@ -96,7 +120,7 @@
             </li>
 
             {{-- Referencias contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['plancuentas', 'centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -112,6 +136,9 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'plancuentas' ? 'active' : '' }}">
                         <a href="{{ route('plancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'plancuentasnif' ? 'active' : '' }}">
+                        <a href="{{ route('plancuentasnif.index') }}"><i class="fa fa-circle-o"></i> Plan de cuentas NIF</a>
                     </li>
                 </ul>
             </li>
@@ -161,18 +188,21 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'cotizaciones' ? 'active' : '' }}">
+                        <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-puzzle-piece"></i> Cotizaciones</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
                         <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>
                     </li>
@@ -182,7 +212,7 @@
                 </ul>
             </li>
             {{-- Referencias produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['areasp', 'acabadosp', 'maquinasp', 'materialesp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -198,6 +228,36 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'materialesp' ? 'active' : '' }}">
                         <a href="{{ route('materialesp.index') }}"><i class="fa fa-circle-o"></i> Materiales</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'tiposmaterialp' ? 'active' : '' }}">
+                        <a href="{{ route('tiposmaterialp.index') }}"><i class="fa fa-circle-o"></i> Tipo de material</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'tipoproductosp' ? 'active' : '' }}">
+                        <a href="{{ route('tipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Tipo de producto</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'subtipoproductosp' ? 'active' : '' }}">
+                        <a href="{{ route('subtipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Subtipo de producto</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </li>
+
+    {{-- Tesoreria --}}
+    <li class="treeview {{ in_array(Request::segment(1), ['facturap']) ? 'active' : '' }}">
+        <a href="#">
+            <i class="fa fa-balance-scale"></i> <span>Tesorería</span><i class="fa fa-angle-left pull-right"></i>
+        </a>
+
+        <ul class="treeview-menu">
+            {{-- Modulos tesoreria --}}
+            <li class="{{ in_array(Request::segment(1), ['facturap']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'facturap' ? 'active' : '' }}">
+                        <a href="{{ route('facturap.index') }}"><i class="fa fa-pencil-square-o"></i> Factura proveedor</a>
                     </li>
                 </ul>
             </li>

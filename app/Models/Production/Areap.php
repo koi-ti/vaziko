@@ -29,12 +29,13 @@ class Areap extends Model
      *
      * @var array
      */
-    protected $fillable = ['areap_nombre'];
+    protected $fillable = ['areap_nombre', 'areap_valor'];
 
     public function isValid($data)
     {
         $rules = [
-            'areap_nombre' => 'required|max:200'
+            'areap_nombre' => 'required|max:200',
+            'areap_valor' => 'required'
         ];
 
         $validator = Validator::make($data, $rules);

@@ -26,8 +26,6 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.$modalFactura = $('#modal-facturap-component');
-            this.$wraperForm = this.$('#render-form-asientos');
-
             this.asientoCuentasList = new app.AsientoCuentasList();
 
             this.listenTo( this.model, 'change', this.render );
@@ -42,7 +40,7 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             attributes.edit = false;
-            this.$wraperForm.html( this.template(attributes) );
+            this.$el.html( this.template(attributes) );
 
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
@@ -50,12 +48,14 @@ app || (app = {});
             this.$inputTasa = this.$("#asiento2_tasa");
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
+            this.spinner = this.$('#spinner-main');
 
             // Reference views
             this.referenceViews();
 
             // to fire plugins
             this.ready();
+
 		},
 
         /**
@@ -108,11 +108,11 @@ app || (app = {});
                     url: window.Misc.urlFull(Route.route('documentos.show', { documentos: documento })),
                     type: 'GET',
                     beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
+                        window.Misc.setSpinner( _this.spinner );
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
                     if( _.isObject( resp ) ) {
                         if(!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
                             _this.$numero.val(resp.documento_consecutivo + 1);
@@ -125,7 +125,7 @@ app || (app = {});
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
             }
@@ -140,15 +140,14 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                data.asiento1_id = this.model.get('id');
-
+                
                 // Definir tercero
                 data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
                 data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
 
                 window.Misc.evaluateActionsAccount({
                     'data': data,
-                    'wrap': this.$el,
+                    'wrap': this.spinner,
                     'callback': (function (_this) {
                         return function ( actions )
                         {
@@ -200,14 +199,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
@@ -227,8 +226,20 @@ app || (app = {});
                     this.createFacturapView.undelegateEvents();
                 }
 
-                // Redirect to Content Course
-                Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
+                // AsientoActionView undelegateEvents
+                if ( this.asientoActionView instanceof Backbone.View ){
+                    this.asientoActionView.stopListening();
+                    this.asientoActionView.undelegateEvents();
+                }
+
+                if ( resp.id == '' && resp.nif != '' ) {
+                    // Redirect to Content Course
+                    window.Misc.redirect( window.Misc.urlFull( Route.route('asientosnif.edit', { asientosnif: resp.nif}), { trigger:true }));
+
+                }else{
+                    // Redirect to Content Course
+                    Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
+                }
             }
         }
     });

@@ -17,18 +17,17 @@
 	    <div class="box box-success" id="empresa-create">
 		 	{!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}
 
-			<div class="box-header with-border">
-	        	<div class="row">
-					<div class="col-md-2 col-md-offset-10 col-sm-12 col-xs-6 text-right">
-						<button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
-					</div>
-				</div>
-			</div>
-
 			<div class="box-body" id="render-form-empresa">
 				{{-- Render form empresa --}}
 			</div>
 
+			<div class="box-header with-border">
+	        	<div class="row">
+					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
+						<button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
+					</div>
+				</div>
+			</div>
 			{!! Form::close() !!}
 		</div>
 	</section>
@@ -101,10 +100,7 @@
 
 			<div class="form-group col-md-3">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
-				<select name="tercero_municipio" id="tercero_municipio" class="form-control select2-default" required>
-					@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-						<option value="{{ $key }}" <%- tercero_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-					@endforeach
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
 				</select>
 			</div>
 
@@ -190,10 +186,7 @@
 						    	</div>
 						    	<div class="form-group col-md-8">
 						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-						    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default" required>
-										@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
-											<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-										@endforeach
+									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('actividades.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
 									</select>
 						    	</div>
 						    	<div class="form-group col-md-2">
@@ -215,23 +208,23 @@
 									<label class="control-label"></label>
 									<div class="row">
 										<label class="checkbox-inline" for="tercero_responsable_iva">
-											<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- tercero_responsable_iva ? 'checked': ''%>> Responsable de IVA
+											<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- parseInt(tercero_responsable_iva) ? 'checked': ''%>> Responsable de IVA
 										</label>
 
 										<label class="checkbox-inline" for="tercero_autoretenedor_cree">
-											<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- tercero_autoretenedor_cree ? 'checked': ''%>> Autorretenedor CREE
+											<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- parseInt(tercero_autoretenedor_cree) ? 'checked': ''%>> Autorretenedor CREE
 										</label>
 
 										<label class="checkbox-inline" for="tercero_gran_contribuyente">
-											<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- tercero_gran_contribuyente ? 'checked': ''%>> Gran contribuyente
+											<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- parseInt(tercero_gran_contribuyente) ? 'checked': ''%>> Gran contribuyente
 										</label>
 
 										<label class="checkbox-inline" for="tercero_autoretenedor_renta">
-											<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- tercero_autoretenedor_renta ? 'checked': ''%>> Autorretenedor renta
+											<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- parseInt(tercero_autoretenedor_renta) ? 'checked': ''%>> Autorretenedor renta
 										</label>
 
 										<label class="checkbox-inline" for="tercero_autoretenedor_ica">
-											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- tercero_autoretenedor_ica ? 'checked': ''%>> Autorretenedor ICA
+											<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- parseInt(tercero_autoretenedor_ica) ? 'checked': ''%>> Autorretenedor ICA
 										</label>
 									</div>
 								</div>

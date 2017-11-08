@@ -70,6 +70,11 @@ class OrdenpController extends Controller
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
 
+                    // Ordenes a facturar
+                    if($request->has('factura') && $request->factura == 'true') {
+                        $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('(orden2_cantidad - orden2_facturado) > 0'));
+                    }
+
                     // Tercero nit
                     if($request->has('orden_tercero_nit')) {
                         $query->where('tercero_nit', $request->orden_tercero_nit);
@@ -168,7 +173,7 @@ class OrdenpController extends Controller
 
                     // Recuperar numero orden
                     $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                    $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // Orden de produccion
                     $orden->fill($data);
@@ -241,7 +246,7 @@ class OrdenpController extends Controller
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
 
-        return view('production.ordenes.edit', ['orden' => $orden]);
+        return view('production.ordenes.create', ['orden' => $orden]);
     }
 
     /**
@@ -324,7 +329,7 @@ class OrdenpController extends Controller
     public function search(Request $request)
     {
         if($request->has('orden_codigo')) {
-            $ordenp = Ordenp::select(
+            $ordenp = Ordenp::select('koi_ordenproduccion.id',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -335,7 +340,7 @@ class OrdenpController extends Controller
             ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id')
             ->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'")->first();
             if($ordenp instanceof Ordenp) {
-                return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre]);
+                return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre, 'id' => $ordenp->id]);
             }
         }
         return response()->json(['success' => false]);
@@ -433,7 +438,7 @@ class OrdenpController extends Controller
             try {
                 // Recuperar numero orden
                 $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
-                $numero = !is_integer($numero) ? 1 : ($numero + 1);
+                $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                 // Orden
                 $neworden = $orden->replicate();

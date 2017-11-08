@@ -19,7 +19,7 @@ class CreateProductoTable extends Migration
             $table->string('producto_nombre', 200);
             $table->string('producto_codigo', 15);
             $table->string('producto_codigoori', 15)->comment = 'Codigo que la da el proveedor a ese producto';
-            $table->integer('producto_referencia')->unsigned()->comment = 'Codigo producto padre';
+            $table->integer('producto_referencia')->unsigned()->nullable()->comment = 'Codigo producto padre';
             $table->integer('producto_grupo')->unsigned();
             $table->integer('producto_subgrupo')->unsigned();
             $table->integer('producto_unidadmedida')->unsigned()->nullable();

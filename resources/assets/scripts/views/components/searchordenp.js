@@ -43,8 +43,9 @@ app || (app = {});
             this.$searchordenpTerceroNombre = this.$('#searchordenp_tercero_nombre');
 
             this.$ordersSearchTable = this.$modalComponent.find('#koi-search-ordenp-component-table');
-			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
-			this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+            this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
+            this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+            this.$factura = this.$inputContent.attr("data-factura");
 
 			this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -55,6 +56,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
+                        data.factura = _this.$factura;
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }
@@ -99,11 +101,14 @@ app || (app = {});
 
 		setOrden: function(e) {
 			e.preventDefault();
-
 	        var data = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
 
-			this.$inputContent.val( data.orden_codigo );
-			this.$inputName.val( data.tercero_nombre );
+            this.$inputContent.val( data.orden_codigo );
+            this.$inputName.val( data.tercero_nombre );
+
+            if(this.$factura == 'true'){
+                this.$inputContent.trigger('change');
+            }
 
 			this.$modalComponent.modal('hide');
 		},

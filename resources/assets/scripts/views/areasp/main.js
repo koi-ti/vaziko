@@ -30,7 +30,8 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('areasp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'areap_nombre', name: 'areap_nombre' }
+                    { data: 'areap_nombre', name: 'areap_nombre' },
+                    { data: 'areap_valor', name: 'areap_valor'}
                 ],
 				buttons: [
 					{
@@ -48,7 +49,13 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('areasp.show', {areasp: full.id }) )  +'">' + data + '</a>';
                         }
-                    }
+                    },
+                    {
+                        targets: 2,
+                        render: function ( data ) {
+                            return window.Misc.currency( data );
+                        }
+                    },
                 ]
 			});
         }

@@ -34,6 +34,7 @@ app || (app = {});
 
             // References
             this.$unidades = this.$('#subtotal-cantidad');
+            this.$facturado = this.$('#subtotal-facturado');
             this.$subtotal = this.$('#subtotal-total');
             this.$iva = this.$('#iva-total');
             this.$total = this.$('#total-total');
@@ -89,27 +90,47 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
-                model.destroy({
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
+            // function confirm delete item
+            this.confirmDelete(model);
+        },
 
-                            if( !resp.success ) {
-                                alertify.error(resp.errors);
-                                return;
-                            }
+        /**
+        * modal confirm delete area
+        */
+        confirmDelete: function( model ) {
+            var _this = this;
 
-                            model.view.remove();
-                            _this.collection.remove(model);
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { producto_nombre: model.get('productop_nombre'), producto_id: model.get('id')},
+                    template: _.template( ($('#ordenp-productop-delete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Eliminar producto',
+                    onConfirm: function () {
+                        if ( model instanceof Backbone.Model ) {
+                            model.destroy({
+                                success : function(model, resp) {
+                                    if(!_.isUndefined(resp.success)) {
+                                        window.Misc.removeSpinner( _this.parameters.wrapper );
 
-                            // Update total
-                            _this.totalize();
+                                        if( !resp.success ) {
+                                            alertify.error(resp.errors);
+                                            return;
+                                        }
+
+                                        model.view.remove();
+                                        _this.collection.remove(model);
+
+                                        // Update total
+                                        _this.totalize();
+                                    }
+                                }
+                            });
                         }
                     }
-                });
+                }
+            });
 
-            }
+            cancelConfirm.render();
         },
 
         /**
@@ -121,6 +142,7 @@ app || (app = {});
             var _this = this,
                 resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
+                route = window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: model.get('id') }) ),
                 data = { orden2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
 
             var cloneConfirm = new window.app.ConfirmWindow({
@@ -129,33 +151,15 @@ app || (app = {});
                     template: _.template( ($('#ordenp-productop-clone-confirm-tpl').html() || '') ),
                     titleConfirm: 'Clonar producto orden de producción',
                     onConfirm: function () {
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: data.orden2_codigo }) ),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.parameters.wrapper );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
+                        // Clonar producto
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.parameters.wrapper,
+                            'callback': (function(_this){
+                                return function(resp){
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
                                 }
-
-                                if( !resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            alertify.error(thrownError);
+                            })(_this)
                         });
                     }
                 }
@@ -172,6 +176,10 @@ app || (app = {});
 
             if(this.$unidades.length) {
                 this.$unidades.html( data.unidades );
+            }
+
+            if(this.$facturado.length) {
+                this.$facturado.html( data.facturado );
             }
 
             if(this.$subtotal.length) {

@@ -14,7 +14,13 @@ app || (app = {});
         tagName: 'tr',
         template: _.template( ($('#add-asiento2-item-tpl').html() || '') ),
         templateInfo: _.template( ($('#show-info-asiento2-tpl').html() || '') ),
-        templateInfoInsumo: _.template( ($('#show-info-asiento2-movimientos-insumo-tpl').html() || '') ),
+
+        // Factura
+        templateInfoFacturaItem: _.template( ($('#add-info-factura-item').html() || '') ),
+        // Facturap
+        templateInfoFacturapItem: _.template( ($('#add-info-facturap-item').html() || '') ),
+        // Inventario
+        templateInfoInventarioItem: _.template( ($('#add-info-inventario-item').html() || '') ),
 
         events: {
             'click .item-asiento2-show-info': 'showInfo'
@@ -50,8 +56,10 @@ app || (app = {});
             var attributes = this.model.toJSON();
             attributes.edit = this.parameters.edit;
 
-            this.$el.html( this.template(attributes) );
+            this.$tercero = {tercero_nit: attributes.tercero_nit, tercero_nombre: attributes.tercero_nombre};
+            this.$naturaleza = attributes.asiento2_naturaleza;
 
+            this.$el.html( this.template(attributes) );
             return this;
         },
 
@@ -64,8 +72,11 @@ app || (app = {});
             // Render info
             this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( attributes ) );
 
-            this.$wrapperList = this.$modalInfo.find('#browse-showinfo-asiento-list');
-            this.$wrapperInsumo = this.$modalInfo.find('#browse-showinfo-asiento-insumo');
+            // Wrapper Info
+            this.$wrapGeneral = this.$modalInfo.find('#render-info-modal');
+
+            // Count
+            this.count = 0;
 
             // Get movimientos list
             this.asientoMovimientosList.fetch({ reset: true, data: { asiento2: this.model.get('id') } });
@@ -79,18 +90,41 @@ app || (app = {});
         * @param Object mentoringTaskModel Model instance
         */
         addOne: function (AsientoMovModel) {
-            // var attributes = AsientoMovModel.toJSON();
+            var attributes = AsientoMovModel.toJSON();
+                attributes.tercero = this.$tercero;
+                attributes.naturaleza = this.$naturaleza;
 
-            // if( $.inArray( AsientoMovModel.get('movimiento_tipo'), ['IP'] ) != -1 ) {
-            //     this.$wrapperInsumo.empty().html(  this.templateInfoInsumo( attributes ) );
 
-            // }else if( $.inArray( AsientoMovModel.get('movimiento_tipo'), ['IH', 'FP'] ) != -1 ) {
-                var view = new app.AsientoMovimientosItemView({
-                    model: AsientoMovModel,
-                });
+            if( attributes.movimiento_tipo == 'F'){
 
-                this.$wrapperList.append( view.render().el );
-            // }
+                this.$wrapGeneral.empty().html(  this.templateInfoFacturaItem( attributes ) );
+                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-factura-list');
+
+            }else if ( attributes.movimiento_tipo == 'FP' ){
+
+                if (attributes.movimiento_nuevo){
+                    this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                    return;
+                }else{
+                    if ( this.count == 0){
+                        this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
+                        this.$wrapperList = this.$modalInfo.find('#browse-showinfo-facturap-list');
+                        this.count = this.count + 1;
+                    }
+                }
+
+            }else if ( attributes.movimiento_tipo == 'IP') {
+
+                this.$wrapGeneral.empty().html(  this.templateInfoInventarioItem( attributes ) );
+                this.$wrapperList = this.$modalInfo.find('#browse-showinfo-asiento-list');
+                
+            }
+            
+            var view = new app.AsientoMovimientosItemView({
+                model: AsientoMovModel,
+            });
+
+            this.$wrapperList.append( view.render().el );
         },
 
         /**

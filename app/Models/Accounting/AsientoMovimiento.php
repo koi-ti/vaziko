@@ -4,7 +4,7 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
-use App\Models\Inventory\Producto;
+use App\Models\Inventory\Producto, App\Models\Treasury\Facturap;
 
 class AsientoMovimiento extends Model
 {
@@ -41,6 +41,14 @@ class AsientoMovimiento extends Model
         }else if( in_array($data['Tipo'], ['IP', 'IH']) ) {
 
             $result = $this->storeInventario($asiento2, $data);
+            if($result != 'OK') {
+                $response->error = $result;
+                return $response;
+            }
+
+        // Movimientos factura padre F, factura hijos FH
+        }else if( in_array($data['Tipo'], ['F', 'FH'])){
+            $result = $this->storeFactura($asiento2, $data);
             if($result != 'OK') {
                 $response->error = $result;
                 return $response;
@@ -164,6 +172,35 @@ class AsientoMovimiento extends Model
                 $this->movimiento_item = $data['Item'];
             break;
         }
+        return 'OK';
+    }
+
+    public function storeFactura(Asiento2 $asiento2, Array $data)
+    {
+        switch ($data['Tipo']) {
+            // Factura padre
+            case 'F':
+                // Validar factura
+                if(!isset($data['Factura']) || trim($data['Factura']) == '') {
+                    return "Factura es obligatoria.";
+                }
+
+                $this->movimiento_factura = $data['Factura'];
+            break;
+
+             // Factura hijo
+            case 'FH':
+                // Validar factura -> child
+                if(isset($data['FacturaChild']) && trim($data['FacturaChild']) != '') {
+                    $this->movimiento_factura4 = $data['FacturaChild'];
+                }
+
+                if(isset($data['Valor']) && trim($data['Valor']) != '') {
+                    $this->movimiento_valor = $data['Valor'];
+                }
+            break;
+        }
+        $this->movimiento_nuevo = $data['Nuevo'];
         return 'OK';
     }
 }

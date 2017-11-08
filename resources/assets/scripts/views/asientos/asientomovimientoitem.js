@@ -12,7 +12,9 @@ app || (app = {});
     app.AsientoMovimientosItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#show-info-asiento2-movimientos-tpl').html() || '') ),
+        templateDetalleInventario: _.template( ($('#show-info-detalle-inventario').html() || '') ),
+        templateDetalleFactura: _.template( ($('#show-info-detalle-factura').html() || '') ),
+        templateDetalleFacturap: _.template( ($('#show-info-detalle-facturap').html() || '') ),
 
         /**
         * Constructor Method
@@ -27,8 +29,22 @@ app || (app = {});
         */
         render: function(){
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
+            
+            if(attributes.movimiento_tipo == 'FH'){
+                this.$el.html( this.templateDetalleFactura(attributes) );
+            }else if( attributes.movimiento_tipo == 'IH') {
+                if ( attributes.movimiento_tipo == 'IH' && !_.isNull( attributes.movimiento_serie ) ){
+                    $('.first-row').text( 'Item' );
+                    $('.second-row').text( 'Series' );
+                }else{
+                    $('.first-row').text( 'Item' );
+                    $('.second-row').text( 'Metros (m)' );
+                }
 
+                this.$el.html( this.templateDetalleInventario(attributes) );
+            }else if( attributes.movimiento_tipo == 'FP' ){
+                this.$el.html( this.templateDetalleFacturap(attributes) );
+            }
             return this;
         }
     });

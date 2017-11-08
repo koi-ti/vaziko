@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables;
 
-use App\Models\Accounting\PlanCuenta, App\Models\Accounting\CentroCosto;
+use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
 
 class PlanCuentasController extends Controller
 {
@@ -75,6 +75,22 @@ class PlanCuentasController extends Controller
                     $plancuenta->fill($data);
                     $plancuenta->fillBoolean($data);
                     $plancuenta->setNivelesCuenta();
+
+                    if ($request->has('plancuentas_equivalente')) {
+                        // Nif 
+                        $nif = PlanCuentaNif::find($request->plancuentas_equivalente);
+                        if (!$nif instanceof PlanCuentaNif) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => "No es posible recuperar plan de cuenta NIF, por favor verifique la información o consulte a su administrador"]);
+                        }
+
+                        // Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
+                        $result = $nif->validarSubnivelesCuenta();
+                        if($result != 'OK') {
+                            return $result;
+                        }
+                        $plancuenta->plancuentas_equivalente = $nif->id;
+                    }
                     $plancuenta->save();
 
 
@@ -142,6 +158,22 @@ class PlanCuentasController extends Controller
                     $plancuenta->fill($data);
                     $plancuenta->fillBoolean($data);
                     $plancuenta->setNivelesCuenta();
+
+                    if ($request->has('plancuentas_equivalente')) {
+                        // Nif 
+                        $nif = PlanCuentaNif::find($request->plancuentas_equivalente);
+                        if (!$nif instanceof PlanCuentaNif) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => "No es posible recuperar plan de cuenta NIF, por favor verifique la información o consulte a su administrador"]);
+                        }
+
+                        // Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
+                        $result = $nif->validarSubnivelesCuenta();
+                        if($result != 'OK') {
+                            return response()->json(['success' => false, 'errors' => "No es posible que el plan de cuenta nif $nif->plancuentasn_nombre sea un equivalente, por favor verifique la información o consulte a su administrador" ]);
+                        }
+                        $plancuenta->plancuentas_equivalente = $nif->id;
+                    }
                     $plancuenta->save();
 
                     // Commit Transaction

@@ -20,7 +20,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-
         },
 
         debitos: function() {

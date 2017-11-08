@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use DB, Log, Datatables, Cache;
 
-use App\Models\Production\Materialp;
+use App\Models\Production\Materialp, App\Models\Production\TipoMaterial;
 
 class MaterialespController extends Controller
 {
@@ -22,8 +22,17 @@ class MaterialespController extends Controller
     {
         if ($request->ajax()) {
             $query = Materialp::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of($query)
+            ->filter(function($query) use ($request){
+
+                // Tipo Material
+                if($request->has('tipo')){
+                    $query->where('materialp_tipomaterial', $request->tipo );
+                }
+                
+            })->make(true);
         }
+
         return view('production.materiales.index');
     }
 
@@ -52,8 +61,16 @@ class MaterialespController extends Controller
             if ($material->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Recuperar TipoMaterial
+                    $tipomaterial = TipoMaterial::find($request->materialp_tipomaterial);
+                    if(!$tipomaterial instanceof TipoMaterial){
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
+                    }
+
                     // Material
                     $material->fill($data);
+                    $material->materialp_tipomaterial = $tipomaterial->id;
                     $material->save();
 
                     // Commit Transaction
@@ -81,7 +98,10 @@ class MaterialespController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $material = Materialp::findOrFail($id);
+        $material = Materialp::where('koi_materialp.id', $id)
+                ->select('koi_materialp.*', 'tipomaterial_nombre')
+                ->leftJoin('koi_tipomaterial','materialp_tipomaterial','=','koi_tipomaterial.id')
+                ->first();
         if ($request->ajax()) {
             return response()->json($material);
         }
@@ -116,8 +136,16 @@ class MaterialespController extends Controller
             if ($material->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Recuperar TipoMaterial
+                    $tipomaterial = TipoMaterial::find($request->materialp_tipomaterial);
+                    if(!$tipomaterial instanceof TipoMaterial){
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
+                    }
+
                     // Material
                     $material->fill($data);
+                    $material->materialp_tipomaterial = $tipomaterial->id;
                     $material->save();
 
                     // Commit Transaction

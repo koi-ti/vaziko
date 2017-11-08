@@ -27,6 +27,9 @@ app || (app = {});
             'productop_alto_med': '',
             'productop_c_med_ancho': '',
             'productop_c_med_alto': '',
+            'productop_tipoproductop': '',
+            'productop_subtipoproductop': '',
+            'subtipoproductop_nombre': '',
             'productop_3d_profundidad_med': '',
             'productop_3d_ancho_med': '',
             'productop_3d_alto_med': ''

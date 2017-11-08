@@ -20,6 +20,8 @@ class CreateAsiento1Table extends Migration
             $table->integer('asiento1_mes');
             $table->integer('asiento1_folder')->unsigned();
             $table->integer('asiento1_documento')->unsigned();
+            $table->string('asiento1_documentos', 4);
+            $table->integer('asiento1_id_documentos')->unsigned();
             $table->integer('asiento1_numero');
             $table->integer('asiento1_dia');
             $table->integer('asiento1_beneficiario')->unsigned();  

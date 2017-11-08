@@ -38,10 +38,7 @@
 
     	<div class="form-group col-md-4">
 			<label for="tcontacto_municipio" class="control-label">Municipio</label>
-			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control select2-default" required>
-				@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-					<option value="{{ $key }}" <%- tcontacto_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
+			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tcontacto_municipio %>">
 			</select>
 		</div>
 
@@ -171,10 +168,7 @@
 
 			<div class="form-group col-md-3">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
-				<select name="tercero_municipio" id="tercero_municipio" class="form-control select2-default" required>
-					@foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
-						<option value="{{ $key }}" <%- tercero_municipio == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-					@endforeach
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
 				</select>
 			</div>
 
@@ -267,10 +261,7 @@
 				    	    <div class="row">
 						    	<div class="form-group col-md-10">
 						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-						    		<select name="tercero_actividad" id="tercero_actividad" class="form-control select2-default change-actividad-koi-component" required data-field="tercero_retecree">
-										@foreach( App\Models\Base\Actividad::getActividades() as $key => $value)
-											<option value="{{ $key }}" <%- tercero_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-										@endforeach
+									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('actividades.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
 									</select>
 						    	</div>
 						    	<div class="form-group col-md-2">
@@ -376,19 +367,19 @@
 								<div class="row">
 							    	<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_activo">
-											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- tercero_activo ? 'checked': ''%>> Activo
+											<input type="checkbox" id="tercero_activo" name="tercero_activo" value="tercero_activo" <%- parseInt(tercero_activo) ? 'checked': ''%>> Activo
 										</label>
 									</div>
 							    	<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_tecnico">
-											<input type="checkbox" id="tercero_tecnico" name="tercero_tecnico" value="tercero_tecnico" <%- tercero_tecnico ? 'checked': ''%>> Técnico
+											<input type="checkbox" id="tercero_tecnico" name="tercero_tecnico" value="tercero_tecnico" <%- parseInt(tercero_tecnico) ? 'checked': ''%>> Técnico
 										</label>
 									</div>
 								</div>
 								<div class="row">
 									<div class="form-group col-md-2">
 								    	<label class="checkbox-inline" for="tercero_coordinador">
-											<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" <%- tercero_coordinador ? 'checked': ''%>> Coordinador
+											<input type="checkbox" id="tercero_coordinador" name="tercero_coordinador" value="tercero_coordinador" <%- parseInt(tercero_coordinador) ? 'checked': ''%>> Coordinador
 										</label>
 									</div>
 
@@ -628,7 +619,7 @@
 		</div>
 		<div class="form-group col-md-2 col-xs-8 col-sm-3">
 			<br><label class="checkbox-inline" for="centrocosto_activo">
-				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- centrocosto_activo ? 'checked': ''%>> Activo
+				<input type="checkbox" id="centrocosto_activo" name="centrocosto_activo" value="centrocosto_activo" <%- parseInt(centrocosto_activo) ? 'checked': ''%>> Activo
 			</label>
 		</div>
     </div>
@@ -718,9 +709,104 @@
 			<label for="plancuentas_tasa" class="control-label">Tasa</label>
 			<input type="text" id="plancuentas_tasa" name="plancuentas_tasa" value="<%- plancuentas_tasa ? plancuentas_tasa : '0' %>" placeholder="Tasa" class="form-control input-sm" required>
 		</div>
+
+		<div class="form-group col-md-4">
+			<label for="plancuentas_equivalente" class="control-label">Equivalencia en NIF</label>
+			<select name="plancuentas_equivalente" id="plancuentas_equivalente" class="form-control select2-default-clear">
+				@foreach( App\Models\Accounting\PlanCuentaNif::getPlanCuentas() as $key => $value)
+					<option value="{{ $key }}" <%- plancuentas_equivalente == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
     </div>
 </script>
 
+<script type="text/template" id="add-plancuentasnif-tpl">
+    <div class="row">
+		<div class="form-group col-md-3">
+			<label for="plancuentasn_cuenta" class="control-label">Cuenta</label>
+			<div class="row">
+				<div class="col-md-9">
+					<input type="text" id="plancuentasn_cuenta" name="plancuentasn_cuenta" value="<%- plancuentasn_cuenta %>" placeholder="Cuenta" class="form-control input-sm" maxlength="15" required>
+				</div>
+				<div class="col-md-3">
+					<input type="text" id="plancuentasn_nivel" name="plancuentasn_nivel" value="<%- plancuentasn_nivel %>" class="form-control input-sm" maxlength="1" required readonly>
+				</div>
+			</div>
+		</div>
+
+		<div class="form-group col-md-7">
+			<label for="plancuentasn_nombre" class="control-label">Nombre</label>
+			<input type="text" id="plancuentasn_nombre" name="plancuentasn_nombre" value="<%- plancuentasn_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-6 col-xs-10">
+			<label for="plancuentasn_centro" class="control-label">Centro de costo</label>
+			<select name="plancuentasn_centro" id="plancuentasn_centro" class="form-control select2-default-clear">
+				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
+					<option value="{{ $key }}" <%- plancuentasn_centro == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+		<div class="form-group col-md-1 col-xs-2 text-right">
+			<div>&nbsp;</div>
+			<button type="button" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="centrocosto" data-field="plancuentasn_centro">
+				<i class="fa fa-plus"></i>
+			</button>
+		</div>
+	</div>
+
+	<div class="row">
+		<div class="form-group col-md-6 col-sm-12 col-xs-12">
+			<label class="control-label">Naturaleza</label>
+			<div class="row">
+				<label class="radio-inline" for="plancuentasn_naturaleza_debito">
+					<input type="radio" id="plancuentasn_naturaleza_debito" name="plancuentasn_naturaleza" value="D" <%- plancuentasn_naturaleza == 'D' ? 'checked': ''%>> Débito
+				</label>
+
+				<label class="radio-inline" for="plancuentasn_naturaleza_credito">
+					<input type="radio" id="plancuentasn_naturaleza_credito" name="plancuentasn_naturaleza" value="C" <%- plancuentasn_naturaleza == 'C' ? 'checked': ''%>> Crédito
+				</label>
+			</div>
+		</div>
+	</div>
+
+    <div class="row">
+		<div class="form-group col-md-3 col-sm-12 col-xs-12">
+			<label for="plancuentasn_tercero">¿Requiere tercero?</label>
+			<div class="row">
+				<label class="radio-inline" for="plancuentasn_tercero_no">
+					<input type="radio" id="plancuentasn_tercero_no" name="plancuentasn_tercero" value="plancuentasn_tercero_no" <%- !plancuentasn_tercero ? 'checked': ''%>> No
+				</label>
+				<label class="radio-inline" for="plancuentasn_tercero_si">
+					<input type="radio" id="plancuentasn_tercero_si" name="plancuentasn_tercero" value="plancuentasn_tercero" <%- plancuentasn_tercero ? 'checked': ''%>> Si
+				</label>
+			</div>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-12 col-sm-12 col-xs-12">
+			<label class="control-label">Tipo</label>
+			<div class="row">
+				@foreach(config('koi.contabilidad.plancuentas.tipo') as $key => $value)
+					<label class="radio-inline" for="plancuentasn_naturaleza_{{ $key }}">
+						<input type="radio" id="plancuentasn_naturaleza_{{ $key }}" name="plancuentasn_tipo" value="{{ $key }}" <%- plancuentasn_tipo == '{{ $key }}' ? 'checked': ''%>> {{ $value }}
+					</label>
+				@endforeach
+			</div>
+		</div>
+    </div>
+
+    <div class="row">
+		<div class="form-group col-md-2">
+			<label for="plancuentasn_tasa" class="control-label">Tasa</label>
+			<input type="text" id="plancuentasn_tasa" name="plancuentasn_tasa" value="<%- plancuentasn_tasa ? plancuentasn_tasa : '0' %>" placeholder="Tasa" class="form-control input-sm" required>
+		</div>
+    </div>
+</script>
 <script type="text/template" id="add-folder-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
@@ -774,6 +860,17 @@
 				@endforeach
 			</div>
 		</div>
+		<div class="form-group col-md-4">
+			<label class="control-label">Tipo contabilidad </label>
+			<div class="row">
+				<label class="checkbox-inline" for="documento_actual">
+					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal ?	
+				</label>
+				<label class="checkbox-inline" for="documento_nif">
+					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif ?	
+				</label>
+			</div>
+		</div>
     </div>
 </script>
 
@@ -790,7 +887,7 @@
     </div>
     <div class="row">
 		<div class="form-group col-md-2">
-			<label for="actividad_tarifa" class="control-label">% Cree</label>
+			<label for="actividad_tarifa" class="control-label">% Cree</label><br>
 			<input type="text" id="actividad_tarifa" name="actividad_tarifa" value="<%- actividad_tarifa %>" placeholder="% Cree" class="form-control input-sm spinner-percentage" maxlength="4" required>
 		</div>
     	<div class="form-group col-md-2">
@@ -944,17 +1041,17 @@
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-12">
 			<label for="producto_unidades" class="control-label">¿Maneja unidades?</label>
-			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- producto_unidades ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- parseInt(producto_unidades) ? 'checked': ''%>></div>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="producto_serie" class="control-label">¿Meneja serie?</label>
-			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- producto_serie ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- parseInt(producto_serie) ? 'checked': ''%>></div>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="producto_metrado" class="control-label">¿Producto metrado?</label>
-			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- producto_metrado ? 'checked': ''%>></div>
+			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- parseInt(producto_metrado) ? 'checked': ''%>></div>
 		</div>
 	</div>
 </script>
@@ -965,6 +1062,11 @@
 		<div class="form-group col-md-8">
 			<label for="areap_nombre" class="control-label">Nombre</label>
 			<input type="text" id="areap_nombre" name="areap_nombre" value="<%- areap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+		</div>
+
+		<div class="form-group col-md-3">
+			<label for="areap_nombre" class="control-label">Valor</label>
+			<input type="text" id="areap_valor" name="areap_valor" value="<%- areap_valor %>" placeholder="Nombre" class="form-control input-sm input-toupper" data-currency required>
 		</div>
     </div>
 </script>
@@ -1000,12 +1102,76 @@
 			<label for="materialp_nombre" class="control-label">Nombre</label>
 			<input type="text" id="materialp_nombre" name="materialp_nombre" value="<%- materialp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
+
+		<div class="form-group col-md-4">
+			<label for="materialp_tipomaterial" class="control-label">Tipo de material</label>
+			<select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\TipoMaterial::getTiposMaterial() as $key => $value)
+					<option value="{{ $key }}" <%- materialp_tipomaterial == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
     </div>
 
     <div class="row">
 		<div class="form-group col-md-8">
 			<label for="materialp_descripcion" class="control-label">Descripción</label>
             <textarea id="materialp_descripcion" name="materialp_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- materialp_descripcion %></textarea>
+		</div>
+    </div>
+</script>
+
+<script type="text/template" id="add-tipomaterialp-tpl">
+	<div class="row">
+		<div class="form-group col-md-4">
+			<label for="tipomaterial_nombre" class="control-label">Nombre</label>
+			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="tipomaterial_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="tipomaterial_activo" name="tipomaterial_activo" value="tipomaterial_activo" <%- parseInt(tipomaterial_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+{{-- Template TipoProductop --}}
+<script type="text/template" id="add-tipoproductop-tpl">
+	<div class="row">
+		<div class="form-group col-md-6">
+			<label for="tipoproductop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="tipoproductop_nombre" name="tipoproductop_nombre" value="<%- tipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="35" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="tipoproductop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="tipoproductop_activo" name="tipoproductop_activo" value="tipoproductop_activo" <%- parseInt(tipoproductop_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+{{-- Template SubtipoProductop --}}
+<script type="text/template" id="add-subtipoproductop-tpl">
+	<div class="row">
+        <div class="form-group col-md-4">
+			<label for="subtipoproductop_tipoproductop" class="control-label">Tipo de producto</label>
+			<select name="subtipoproductop_tipoproductop" id="subtipoproductop_tipoproductop" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+					<option value="{{ $key }}" <%- subtipoproductop_tipoproductop == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<div class="form-group col-md-5">
+			<label for="subtipoproductop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subtipoproductop_nombre" name="subtipoproductop_nombre" value="<%- subtipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="subtipoproductop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" <%- parseInt(subtipoproductop_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>

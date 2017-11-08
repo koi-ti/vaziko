@@ -42,33 +42,15 @@
                 <label for="orden2_referencia" class="col-sm-1 control-label">Referencia</label>
                 <div class="form-group col-md-8">
                     <input id="orden2_referencia" value="<%- orden2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden2_referencia" type="text" maxlength="200" required>
+                    <div class="help-block with-errors"></div>
                 </div>
 
                 <label for="orden2_cantidad" class="col-sm-1 control-label">Cantidad</label>
                 <div class="form-group col-md-2">
-                    <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm" name="orden2_cantidad" type="number" min="1" required>
+                    <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm event-price" name="orden2_cantidad" type="number" min="1" required>
+                    <div class="help-block with-errors"></div>
                 </div>
             </div>
-
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                <div class="row">
-                    <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                    <div class="form-group col-md-8">
-                    	<input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm" name="orden2_precio_formula" type="text" maxlength="200">
-               		</div>
-               		<label for="orden2_round_formula" class="col-sm-1 control-label">Redondear</label>
-                    <div class="form-group col-md-1">
-                        <input id="orden2_round_formula" value="<%- orden2_round_formula %>" class="form-control input-sm" name="orden2_round_formula" type="text" maxlength="5">
-                    </div>
-               </div>
-
-               <div class="row">
-                    <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                    <div class="form-group col-md-3">
-                    	<input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
-               		</div>
-               	</div>
-            @endif
 
             @if($producto->productop_abierto || $producto->productop_cerrado)
                 <div class="box box-primary">
@@ -101,6 +83,7 @@
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
                                         <input id="orden2_c_ancho" value="<%- orden2_c_ancho %>" class="form-control input-sm" name="orden2_c_ancho" type="number" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
                                 </div>
@@ -109,6 +92,7 @@
                                 <div class="form-group col-md-3">
                                     <div class="col-md-9">
                                         <input id="orden2_c_alto" value="<%- orden2_c_alto %>" class="form-control input-sm" name="orden2_c_alto" type="number" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
                                 </div>
@@ -127,6 +111,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_ancho" value="<%- orden2_3d_ancho %>" class="form-control input-sm" name="orden2_3d_ancho" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
                             </div>
@@ -135,6 +120,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_alto" value="<%- orden2_3d_alto %>" class="form-control input-sm" name="orden2_3d_alto" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
                             </div>
@@ -143,6 +129,7 @@
                             <div class="form-group col-md-2">
                                 <div class="col-md-9">
                                     <input id="orden2_3d_profundidad" value="<%- orden2_3d_profundidad %>" class="form-control input-sm" name="orden2_3d_profundidad" type="number" min="0" step="0.01" required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
                             </div>
@@ -168,25 +155,25 @@
                             <div class="row">
                                 <div class="col-sm-offset-2 col-md-1">
                                     <label for="orden2_tiro" class="control-label">T</label>
-                                    <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- orden2_tiro ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- parseInt(orden2_tiro) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- orden2_yellow ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- orden2_magenta ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- parseInt(orden2_magenta) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- orden2_cyan ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- parseInt(orden2_cyan) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- orden2_key ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- parseInt(orden2_key) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- orden2_color1 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- parseInt(orden2_color1) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- orden2_color2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- parseInt(orden2_color2) ? 'checked': ''%>>
                                 </div>
                             </div>
                         @endif
@@ -195,25 +182,25 @@
                             <div class="row">
                                 <div class="col-sm-offset-2 col-md-1">
                                     <label for="orden2_retiro" class="control-label">R</label>
-                                    <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- orden2_retiro ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- parseInt(orden2_retiro) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- orden2_yellow2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- orden2_magenta2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- parseInt(orden2_magenta2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- orden2_cyan2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- parseInt(orden2_cyan2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- orden2_key2 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- parseInt(orden2_key2) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- orden2_color12 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- parseInt(orden2_color12) ? 'checked': ''%>>
                                 </div>
                                 <div class="col-md-1">
-                                    <input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- orden2_color22 ? 'checked': ''%>>
+                                    <input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- parseInt(orden2_color22) ? 'checked': ''%>>
                                 </div>
                             </div>
                         @endif
@@ -282,13 +269,191 @@
                     </div>
                 </div>
             </div>
+
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Fórmulas</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_precio_formula" type="text" maxlength="200" data-input="P">
+                            </div>
+                            <label for="orden2_precio_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_precio_round" value="<%- orden2_precio_round %>" class="form-control input-sm calculate_formula" name="orden2_precio_round" type="text" maxlength="5" data-input="RP">
+                            </div>
+                            <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm event-price" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="orden2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_transporte_formula" value="<%- orden2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_transporte_formula" type="text" maxlength="200" data-input="T">
+                            </div>
+                            <label for="orden2_transporte_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_transporte_round" value="<%- orden2_transporte_round %>" class="form-control input-sm  calculate_formula" name="orden2_transporte_round" type="text" maxlength="5" data-input="RT">
+                            </div>
+                            <label for="orden2_transporte" class="col-sm-1 control-label">Transporte</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm event-price" name="orden2_transporte" type="text" maxlength="30" data-currency>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
+                            <div class="form-group col-md-5">
+                                <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-input="V">
+                            </div>
+                            <label for="orden2_viaticos_round" class="col-sm-1 control-label">Redondear</label>
+                            <div class="form-group col-md-1">
+                                <input id="orden2_viaticos_round" value="<%- orden2_viaticos_round %>" class="form-control input-sm  calculate_formula" name="orden2_viaticos_round" type="text" maxlength="5" data-input="RV">
+                            </div>
+                            <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                            <div class="form-group col-md-3">
+                                <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm event-price" name="orden2_viaticos" type="text" maxlength="30" data-currency>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endif
         </form>
+
+        {{-- Content areasp --}}
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Áreas</h3>
+            </div>
+            <div class="box-body">
+                <form method="POST" accept-charset="UTF-8" id="form-ordenp6-producto" data-toggle="validator">
+                    <div class="row">
+                        <label for="orden6_areap" class="control-label col-sm-1">Área</label>
+                        <div class="form-group col-sm-3">
+                            <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear">
+                                <option value="" selected>Seleccione</option>
+                                @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                    <option value="{{ $key }}">{{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="form-group col-sm-3">
+                            <input id="orden6_nombre" name="orden6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <div class="bootstrap-timepicker">
+                                <div class="input-group">
+                                    <input type="text" id="orden6_horas" name="orden6_horas" placeholder="Horas" class="form-control input-sm timepicker" required>
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group col-sm-2">
+                            <input id="orden6_valor" name="orden6_valor" class="form-control input-sm" type="text" required data-currency>
+                        </div>
+                        <div class="form-group col-sm-1">
+                            <button type="button" class="btn btn-success btn-sm btn-block submit-ordenp6">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- table table-bordered table-striped -->
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-orden-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Área</th>
+                                <th>Nombre</th>
+                                <th>Horas</th>
+                                <th>Valor</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <td colspan="4"></td>
+                                <th class="text-right">Total</th>
+                                <th class="text-right" id="total">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Informacion Adicional</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Precio</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-precio">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Transporte</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-transporte">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Viaticos</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-viaticos">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6">Áreas</label>
+                                <div class="col-md-6 text-right">
+                                    <label id="info-areas">0</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label class="col-sm-6 control-label">Total</label>
+                                <div class="form-group col-md-6">
+                                    <input id="total-price" class="form-control input-sm" data-currency disabled>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box-footer">
+                        <div class="col-sm-12">
+                            <b><small>Los campos de transporte, viaticos y areas se dividiran por la cantidad ingresada.</small></b>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </script>
 
     <script type="text/template" id="orden-producto-maquina-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_<%- id %>">
-                <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- activo ? 'checked': ''%>> <%- maquinap_nombre %>
+                <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
     </script>
@@ -296,7 +461,7 @@
     <script type="text/template" id="orden-producto-material-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- id %>">
-                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- activo ? 'checked': ''%>> <%- materialp_nombre %>
+                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
     </script>
@@ -304,8 +469,27 @@
     <script type="text/template" id="orden-producto-acabado-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_<%- id %>">
-                <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- activo ? 'checked': ''%>> <%- acabadop_nombre %>
+                <input type="checkbox" id="orden5_acabadop_<%- id %>" name="orden5_acabadop_<%- id %>" value="orden5_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
         </div>
+    </script>
+
+    <script type="text/template" id="orden-delete-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el area <b><%- orden6_areap %> <%- orden6_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="orden-producto-areas-item-tpl">
+        <% if(edit) { %>
+           <td class="text-center">
+               <a class="btn btn-default btn-xs item-producto-areas-remove" data-resource="<%- id %>">
+                   <span><i class="fa fa-times"></i></span>
+               </a>
+           </td>
+       <% } %>
+       <td><%- areap_nombre %></td>
+       <td><%- orden6_nombre %></td>
+       <td><%- moment(orden6_horas, 'HH:mm').format('HH:mm') %></td>
+       <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
+       <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
 @stop

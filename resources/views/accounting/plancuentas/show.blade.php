@@ -8,17 +8,6 @@
 
 @section('module')
 	<div class="box box-success">
-		<div class="box-header with-border">
-        	<div class="row">
-				<div class="col-md-2 col-sm-6 col-xs-6 text-left">
-					<a href="{{ route('plancuentas.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-				</div>
-				<div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-					<a href="{{ route('plancuentas.edit', ['plancuentas' => $plancuenta->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-				</div>
-			</div>
-		</div>
-
 		<div class="box-body">
 			<div class="row">
 				<div class="form-group col-md-3">
@@ -68,9 +57,23 @@
 			</div>
 
 			<div class="row">
-				<div class="form-group col-md-6">
+				<div class="form-group col-md-3">
 					<label class="control-label">Tasa</label>
 					<div>{{ $plancuenta->plancuentas_tasa }}</div>
+				</div>
+				<div class="form-group col-md-4">
+					<label class="control-label">Equivalencia en NIF</label>
+					<div>{{ $plancuenta->plancuentasn_cuenta }} - {{ $plancuenta->plancuentasn_nombre }}</div>
+				</div>
+			</div>
+		</div>
+		<div class="box-footer with-border">
+        	<div class="row">
+				<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+					<a href="{{ route('plancuentas.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+				</div>
+				<div class="col-md-2 col-sm-6 col-xs-6 text-right">
+					<a href="{{ route('plancuentas.edit', ['plancuentas' => $plancuenta->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
 				</div>
 			</div>
 		</div>

@@ -82,9 +82,9 @@ app || (app = {});
                     }
                 ],
                 fnRowCallback: function( row, data ) {
-                    if ( data.orden_abierta ) {
+                    if ( parseInt(data.orden_abierta) ) {
                         $(row).css( {"color":"#00a65a"} );
-                    }else if ( data.orden_anulada ) {
+                    }else if ( parseInt(data.orden_anulada) ) {
                         $(row).css( {"color":"red"} );
                     }
                 }

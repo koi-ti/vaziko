@@ -27,7 +27,6 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$wraperForm = this.$('#render-form-asientos');
             this.asientoCuentasList = new app.AsientoCuentasList();
 
             this.listenTo( this.model, 'change', this.render );
@@ -42,7 +41,7 @@ app || (app = {});
 
             var attributes = this.model.toJSON();
             attributes.edit = true;
-            this.$wraperForm.html( this.template(attributes) );
+            this.$el.html( this.template(attributes) );
 
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
@@ -51,6 +50,7 @@ app || (app = {});
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
             this.$inputDocumento = this.$("#asiento1_documento");
+            this.spinner = this.$('#spinner-main');
 
             // Reference views
             this.referenceViews();
@@ -96,7 +96,7 @@ app || (app = {});
             this.cuentasListView = new app.AsientoCuentasListView({
                 collection: this.asientoCuentasList,
                 parameters: {
-                    wrapper: this.el,
+                    wrapper: this.spinner,
                     edit: true,
                     dataFilter: {
                         'asiento': this.model.get('id')
@@ -117,11 +117,11 @@ app || (app = {});
                     url: window.Misc.urlFull(Route.route('documentos.show', { documentos: documento })),
                     type: 'GET',
                     beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
+                        window.Misc.setSpinner( _this.spinner );
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
                     if( _.isObject( resp ) ) {
                         if(!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
                             _this.$numero.val(resp.documento_consecutivo + 1);
@@ -134,7 +134,7 @@ app || (app = {});
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
             }
@@ -178,7 +178,7 @@ app || (app = {});
                 // Evaluate account
                 window.Misc.evaluateActionsAccount({
                     'data': data,
-                    'wrap': this.$el,
+                    'wrap': this.spinner,
                     'callback': (function (_this) {
                         return function ( actions )
                         {
@@ -201,6 +201,7 @@ app || (app = {});
                             }else{
                                 // Default insert
                                 _this.asientoCuentasList.trigger( 'store', data );
+                                window.Misc.clearForm( _this.$formItem );   
                             }
                         }
                     })(this)
@@ -230,14 +231,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
