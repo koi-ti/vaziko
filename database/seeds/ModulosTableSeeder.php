@@ -26,7 +26,6 @@ class ModulosTableSeeder extends Seeder
             'nivel1' => 2
         ]);
 
-
     	Modulo::create([
         	'name' => 'contabilidad',
         	'display_name' => 'Contabilidad',
@@ -160,7 +159,7 @@ class ModulosTableSeeder extends Seeder
             'nivel1' => 2,
             'nivel2' => 1,
             'nivel3' => 1
-        ]);   
+        ]);
 
     	// Contabilidad
     	Modulo::create([
@@ -248,7 +247,7 @@ class ModulosTableSeeder extends Seeder
             'nivel2' => 3,
             'nivel3' => 4
         ]);
-        
+
     	Modulo::create([
         	'name' => 'plancuentasnif',
         	'display_name' => 'Plan de cuentas NIF',
@@ -381,6 +380,30 @@ class ModulosTableSeeder extends Seeder
         	'nivel1' => 5,
         	'nivel2' => 2,
         	'nivel3' => 4
+    	]);
+
+    	Modulo::create([
+        	'name' => 'tiposmaterialp',
+        	'display_name' => 'Tipo de material',
+        	'nivel1' => 5,
+        	'nivel2' => 2,
+        	'nivel3' => 5
+    	]);
+
+    	Modulo::create([
+        	'name' => 'tipoproductosp',
+        	'display_name' => 'Tipo de producto',
+        	'nivel1' => 5,
+        	'nivel2' => 2,
+        	'nivel3' => 6
+    	]);
+
+    	Modulo::create([
+        	'name' => 'subtipoproductosp',
+        	'display_name' => 'Subtipo de producto',
+        	'nivel1' => 5,
+        	'nivel2' => 2,
+        	'nivel3' => 7
     	]);
 
         //Tesoreria

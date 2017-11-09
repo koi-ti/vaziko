@@ -23,6 +23,7 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.$wraperForm = this.$('#render-form-tiempoordenp');
+            console.log(this.$('#render-form-tiempoordenp'));
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -35,8 +36,9 @@ app || (app = {});
         */
         render: function(){
             var attributes = this.model.toJSON();
-            console.log(attributes);
             this.$wraperForm.html( this.template(attributes) );
+
+            console.log(attributes);
 
             this.ready();
         },

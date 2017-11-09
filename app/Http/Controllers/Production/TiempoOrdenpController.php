@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\TiempoOrdenp;
-use Auth;
 
 class TiempoOrdenpController extends Controller
 {
@@ -19,10 +18,8 @@ class TiempoOrdenpController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = TiempoOrdenp::query();
-            $query->where('tiempoordenp_tercero', Auth::user()->id);
-            
-            return response()->json($query);
+            $tiempos = TiempoOrdenp::getTiempos();
+            return response()->json(['tiempos' => $tiempos]);
         }
         return view('production.tiempoordenesp.main');
     }
@@ -45,7 +42,7 @@ class TiempoOrdenpController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd('store');
     }
 
     /**

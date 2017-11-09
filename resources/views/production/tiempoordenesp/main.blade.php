@@ -37,7 +37,12 @@
                     <div class="row">
                         <label for="tiempoordenp_fecha" class="col-md-1 col-md-offset-1 control-label">Fecha</label>
                         <div class="form-group col-md-2">
-                            <input type="text" id="tiempoordenp_fecha" name="tiempoordenp_fecha" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
+                            <div class="input-group">
+                             <div class="input-group-addon">
+                                 <i class="fa fa-calendar"></i>
+                             </div>
+                             <input type="text" id="tiempoordenp_fecha" name="tiempoordenp_fecha" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
+                         </div>
                         </div>
                         <label for="tiempoordenp_hora_inicio" class="col-md-1 control-label">H. inicio</label>
                         <div class="form-group col-md-2">
@@ -84,12 +89,61 @@
     				</div>
     			</div>
 
-                <div class="">
-                    <div class="row">
-                        <h4 class="col-md-2"><b>Bienvenido Sr(a) {{ Auth::user()->getName() }}</b></h4>
-                    </div>
-                </div>
+                <div id="render-form-tiempoordenp"></div>
 			{!! Form::close() !!}
 		</div>
 	</section>
+
+    <script type="text/template" id="add-tiempoordenp-tpl">
+        <div class="box-body">
+            <div class="box box-info">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Informacion adicional del sr(a) <b>{{ Auth::user()->getName() }}</b></h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="box-body">
+                    <div class="table-responsive">
+                        <table class="table no-margin">
+                            <thead>
+                                <tr>
+                                    <th width="50%">Orden</th>
+                                    <th>Área</th>
+                                    <th>Fecha</th>
+                                    <th>Hora inicio</th>
+                                    <th>Hora fin</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(tiempos.length) { %>
+                                    <% _.each(tiempos, function(item) { %>
+                                        <tr>
+                                            <td><b><%- item.orden_codigo %></b> <%- item.tercero_nombre %></td>
+                                            <td><%- item.areap_nombre %></td>
+                                            <td><%- item.tiempoordenp_fecha %></td>
+                                            <td><%- moment(item.tiempoordenp_hora_inicio, 'HH:mm').format('HH:mm') %></td>
+                                            <td><%- moment(item.tiempoordenp_hora_fin, 'HH:mm').format('HH:mm') %></td>
+                                            <td class="text-center">
+                                                <a class="btn btn-default btn-xs">
+                                                    <span><i class="fa fa-pencil-square-o"></i></span>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                <% }else{ %>
+                                    <tr>
+                                        <th colspan="6" class="text-center">No existen items para el cliente.</th>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
 @stop
