@@ -195,7 +195,7 @@
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiempoordenesp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -209,6 +209,9 @@
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
                         <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
+                    {{-- <li class="{{ Request::segment(1) == 'tiempoordenesp' ? 'active' : '' }}">
+                        <a href="{{ route('tiempoordenesp.index') }}"><i class="fa fa-clock-o"></i> Tiempo orden</a>
+                    </li> --}}
                 </ul>
             </li>
             {{-- Referencias produccion --}}

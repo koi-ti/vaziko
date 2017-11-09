@@ -143,7 +143,7 @@ class Tercero extends BaseModel implements AuthenticatableContract,
 
     public function getName()
     {
-        return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_apellido1'], $this->attributes['tercero_apellido2']);
+        return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s %s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_nombre2'], $this->attributes['tercero_apellido1'], $this->attributes['tercero_apellido2']);
     }
 
     public static function getTechnicalAdministrators()

@@ -97,6 +97,8 @@ app || (app = {});
             'traslados/:traslado(/)': 'getTrasladosShow',
 
             // Produccion
+            // 'tiempoordenesp(/)': 'getTiempoOrdenespEdit',
+
             'areasp(/)': 'getAreaspMain',
             'areasp/create(/)': 'getAreaspCreate',
             'areasp/:areap/edit(/)': 'getAreaspEdit',
@@ -1078,6 +1080,21 @@ app || (app = {});
         /**
         * show view main areas produccion
         */
+        /**
+        * show view edit tiempoordenp
+        */
+        getTiempoOrdenespEdit: function () {
+            this.tiempoordenpModel = new app.TiempoOrdenpModel();
+
+            if ( this.createTiempoOrdenpView instanceof Backbone.View ){
+                this.createTiempoOrdenpView.stopListening();
+                this.createTiempoOrdenpView.undelegateEvents();
+            }
+
+            this.createTiempoOrdenpView = new app.CreateTiempoOrdenpView({ model: this.tiempoordenpModel });
+            this.tiempoordenpModel.fetch();
+        },
+
         getAreaspMain: function () {
 
             if ( this.mainAreaspView instanceof Backbone.View ){

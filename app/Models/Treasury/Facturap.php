@@ -73,7 +73,7 @@ class Facturap extends Model
             AS tercero_nombre")
         );
         $query->join('koi_sucursal', 'facturap1_sucursal', '=', 'koi_sucursal.id');
-        $query->join('koi_asiento1', 'facturap1_asiento', '=', 'koi_asiento1.id');
+        $query->leftjoin('koi_asiento1', 'facturap1_asiento', '=', 'koi_asiento1.id');
         $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
         $query->join('koi_tercero', 'facturap1_tercero', '=', 'koi_tercero.id');
         $query->where('koi_facturap1.id', $id);

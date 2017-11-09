@@ -185,6 +185,8 @@ Route::group(['middleware' => 'auth'], function()
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 
+	// Route::resource('tiempoordenesp', 'Production\TiempoOrdenpController', ['except' => ['destroy']]);
+
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
