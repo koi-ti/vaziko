@@ -4,6 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
+use Auth, DB;
 
 class TiempoOrdenp extends BaseModel
 {
@@ -37,5 +38,26 @@ class TiempoOrdenp extends BaseModel
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public static function getTiempos(){
+        $query = TiempoOrdenp::query();
+        $query->select('koi_tiempoordenp.*' ,'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
+            CONCAT(
+                (CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                    )
+                    ELSE tercero_razonsocial
+                END),
+            ' (', orden_referencia ,')'
+            ) AS tercero_nombre"
+        ));
+        $query->join('koi_ordenproduccion', 'tiempoordenp_ordenp', '=', 'koi_ordenproduccion.id');
+        $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+        $query->join('koi_areap', 'tiempoordenp_areap', '=', 'koi_areap.id');
+        $query->where('tiempoordenp_tercero', Auth::user()->id);
+
+        return $query->get();
     }
 }

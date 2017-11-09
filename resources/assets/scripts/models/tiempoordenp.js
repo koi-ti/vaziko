@@ -16,9 +16,6 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'tiempoordenp_fecha': moment().format('Y-m-d'),
-            'tiempoordenp_hora_inicio': moment().format('H:m'),
-            'tiempoordenp_hora_fin': moment().format('H:m'),
         }
     });
 
