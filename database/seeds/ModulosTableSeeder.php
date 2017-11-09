@@ -26,7 +26,6 @@ class ModulosTableSeeder extends Seeder
             'nivel1' => 2
         ]);
 
-
     	Modulo::create([
         	'name' => 'contabilidad',
         	'display_name' => 'Contabilidad',
