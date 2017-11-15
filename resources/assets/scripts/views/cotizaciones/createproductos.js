@@ -307,12 +307,12 @@ app || (app = {});
 
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
-            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
-            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
-            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
+            this.$infoviaticos.empty().html( window.Misc.currency( Math.round(this.viaticos) ) );
+            this.$infotransporte.empty().html( window.Misc.currency( Math.round(this.tranporte) ) );
+            this.$infoareas.empty().html( window.Misc.currency( Math.round(this.areas) ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalCotizacion2 = parseFloat( this.precio ) + parseFloat( this.tranporte ) + parseFloat( this.viaticos ) + parseFloat( this.areas );
+            this.totalCotizacion2 = parseFloat( this.precio ) + Math.round(parseFloat( this.tranporte )) + Math.round(parseFloat( this.viaticos )) + Math.round(parseFloat( this.areas ));
             this.$precioCotizacion2.val( this.totalCotizacion2 );
         },
 

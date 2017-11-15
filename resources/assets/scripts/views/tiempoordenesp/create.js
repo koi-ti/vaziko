@@ -14,7 +14,10 @@ app || (app = {});
         el: '#tiempoordenp-create',
         template: _.template( ($('#add-tiempoordenp-tpl').html() || '') ),
         events: {
-            // 'submit #form-create-empresa': 'onStore'
+            'click .submit-tiempoordenp': 'submitTiempoOrdenp',
+            'click .btn-edit-tiempoordenp': 'editTiempoOrdenp',
+            'submit #form-tiempoordenp': 'onStoreTiempoOrdenp',
+            'change #tiempoordenp_actividadop': 'changeActividadOp'
         },
 
         /**
@@ -23,7 +26,7 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.$wraperForm = this.$('#render-form-tiempoordenp');
-            console.log(this.$('#render-form-tiempoordenp'));
+            this.$modalGeneric = $('#modal-producto-generic');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -38,9 +41,88 @@ app || (app = {});
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
 
-            console.log(attributes);
+            // Attributes
+            this.$form = this.$('#form-tiempoordenp');
+            this.$subactividadesop = this.$('#tiempoordenp_subactividadop');
 
             this.ready();
+        },
+
+        /**
+        * Event change select actividadop
+        */
+        changeActividadOp: function(e) {
+            var _this = this,
+                actividadesop = this.$(e.currentTarget).val();
+
+            if( typeof(actividadesop) !== 'undefined' && !_.isUndefined(actividadesop) && !_.isNull(actividadesop) && actividadesop != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('subactividadesop.index', {actividadesop: actividadesop}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.el );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.el );
+
+                    _this.$subactividadesop.empty().val(0);
+                    _this.$subactividadesop.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$subactividadesop.append("<option value="+item.id+">"+item.subactividadop_nombre+"</option>");
+                    });
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.el );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$subactividadesop.empty().val(0);
+            }
+        },
+
+        /**
+        * Event submit productop
+        */
+        submitTiempoOrdenp: function (e) {
+            this.$form.submit();
+        },
+
+        /**
+        * Event Create Forum Post
+        */
+        onStoreTiempoOrdenp: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true} );
+            }
+        },
+
+        editTiempoOrdenp: function(e){
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                // tercero, tcontacto, vencimiento and servicio
+            //     this.$modalGeneric.modal('show');
+            //
+            //     // Open TecnicoActionView
+            //     if ( this.productoActionView instanceof Backbone.View ){
+            //         this.productoActionView.stopListening();
+            //         this.productoActionView.undelegateEvents();
+            //     }
+            //
+            //     this.productoActionView = new app.ProductoActionView({
+            //         model: this.model,
+            //         parameters: {
+            //             call: 'M'
+            //         }
+            //     });
+            //
+            //     this.productoActionView.render();
+            // }
+            }
         },
 
         /**
@@ -51,27 +133,14 @@ app || (app = {});
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
-           	if( typeof window.initComponent.initInputMask == 'function' )
+            if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();
 
-       		if( typeof window.initComponent.initICheck == 'function' )
+            if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
-        },
-
-        /**
-        * Event Create Forum Post
-        */
-        onStore: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true} );
-            }
         },
 
         /**
@@ -99,7 +168,9 @@ app || (app = {});
 	                return;
 	            }
 
-                alertify.success('Empresa fue actualizada con éxito.');
+                alertify.success(resp.msg);
+                window.Misc.clearForm( this.$form );
+                this.model.fetch();
 	     	}
         }
     });

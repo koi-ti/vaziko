@@ -61,21 +61,21 @@ app || (app = {});
 
             _.each(this.models, function(item){
 
-                var func = _this.convertirMinutos( item );
-                var total = func * parseFloat(item.get('cotizacion6_valor'));
-                item.set('total', total);
+                var func = _this.convertirMinutos( item ),
+                    total = func * parseFloat(item.get('cotizacion6_valor'));
+                item.set('total', Math.round( total ) );
 
             });
         },
 
         convertirMinutos: function ( model ){
-
-            var minutos = parseInt( model.get('cotizacion6_horas').substr(3,2) );
-            var horas = parseInt( model.get('cotizacion6_horas').substr(0,2) );
+            var tiempo = model.get('cotizacion6_horas').split(':'),
+                horas = parseInt( tiempo[0] ),
+                minutos = parseInt( tiempo[1] );
 
             // Regla de 3 para convertir min a horas
-            var regla3 = minutos / 60;
-            var total = horas + regla3;
+            var regla3 = minutos / 60,
+                total = horas + regla3;
 
             return parseFloat( total );
         },

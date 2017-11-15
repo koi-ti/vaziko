@@ -33,7 +33,8 @@ class Cotizacion6 extends Model
     public function isValid($data)
     {
         $rules = [
-            'cotizacion6_horas' => 'required',
+            'cotizacion6_horas' => 'required|min:0',
+            'cotizacion6_minutos' => 'required|min:0|max:59',
             'cotizacion6_valor' => 'required',
         ];
         $validator = Validator::make($data, $rules);

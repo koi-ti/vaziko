@@ -864,10 +864,10 @@
 			<label class="control-label">Tipo contabilidad </label>
 			<div class="row">
 				<label class="checkbox-inline" for="documento_actual">
-					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal ?	
+					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal ?
 				</label>
 				<label class="checkbox-inline" for="documento_nif">
-					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif ?	
+					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif ?
 				</label>
 			</div>
 		</div>
@@ -1172,6 +1172,46 @@
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="subtipoproductop_activo" class="control-label">Activo</label>
 			<div><input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" <%- parseInt(subtipoproductop_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+{{-- Template Actividadop --}}
+<script type="text/template" id="add-actividadop-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="actividadop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="actividadop_nombre" name="actividadop_nombre" value="<%- actividadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="actividadop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="actividadop_activo" name="actividadop_activo" value="actividadop_activo" <%- parseInt(actividadop_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+{{-- Template SubActividadop --}}
+<script type="text/template" id="add-subactividadop-tpl">
+	<div class="row">
+        <div class="form-group col-md-4">
+			<label for="subactividadop_actividad" class="control-label">Actividad</label>
+			<select name="subactividadop_actividad" id="subactividadop_actividad" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\ActividadOp::getActividadesOp() as $key => $value)
+					<option value="{{ $key }}" <%- subactividadop_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<div class="form-group col-md-5">
+			<label for="subactividadop_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subactividadop_nombre" name="subactividadop_nombre" value="<%- subactividadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="subactividadop_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="subactividadop_activo" name="subactividadop_activo" value="subactividadop_activo" <%- parseInt(subactividadop_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>

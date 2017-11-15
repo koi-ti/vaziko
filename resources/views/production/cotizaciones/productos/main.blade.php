@@ -324,7 +324,6 @@
             <div class="box-body">
                 <form method="POST" accept-charset="UTF-8" id="form-cotizacion6-producto" data-toggle="validator">
                     <div class="row">
-                        <label for="cotizacion6_areap" class="control-label col-sm-1">Área</label>
                         <div class="form-group col-sm-3">
                             <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear">
                                 <option value="" selected>Seleccione</option>
@@ -338,18 +337,15 @@
                             <input id="cotizacion6_nombre" name="cotizacion6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
                         </div>
 
-                        <div class="form-group col-sm-2">
-                            <div class="bootstrap-timepicker">
-                                <div class="input-group">
-                                    <input type="text" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Horas" class="form-control input-sm timepicker" required>
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="form-group col-sm-1">
+                            <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" required>
+                            <div class="help-block with-errors"></div>
                         </div>
-
-                        <div class="form-group col-sm-2">
+                        <div class="form-group col-sm-1">
+                            <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" class="form-control input-xs" min="00" step="01" max="59" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-sm-3">
                             <input id="cotizacion6_valor" name="cotizacion6_valor" class="form-control input-sm" type="text" required data-currency>
                         </div>
                         <div class="form-group col-sm-1">
@@ -481,7 +477,7 @@
        <% } %>
        <td><%- areap_nombre %></td>
        <td><%- cotizacion6_nombre %></td>
-       <td><%- moment(cotizacion6_horas, 'HH:mm').format('HH:mm') %></td>
+       <td><%- cotizacion6_horas %></td>
        <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>

@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
-use Auth, DB;
+use Auth, DB, Validator;
 
 class TiempoOrdenp extends BaseModel
 {
@@ -27,6 +27,9 @@ class TiempoOrdenp extends BaseModel
     public function isValid($data)
     {
         $rules = [
+            'tiempoordenp_areap' => 'required|integer',
+            'tiempoordenp_actividadop' => 'required|integer',
+            'tiempoordenp_subactividadop' => 'required|integer',
             'tiempoordenp_fecha' => 'required|date_format:Y-m-d',
             'tiempoordenp_hora_inicio' => 'required|date_format:H:m',
             'tiempoordenp_hora_fin' => 'required|date_format:H:m',
@@ -42,7 +45,7 @@ class TiempoOrdenp extends BaseModel
 
     public static function getTiempos(){
         $query = TiempoOrdenp::query();
-        $query->select('koi_tiempoordenp.*' ,'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
+        $query->select('koi_tiempoordenp.*', 'actividadop_nombre', 'subactividadop_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
             CONCAT(
                 (CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
@@ -55,6 +58,8 @@ class TiempoOrdenp extends BaseModel
         ));
         $query->join('koi_ordenproduccion', 'tiempoordenp_ordenp', '=', 'koi_ordenproduccion.id');
         $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+        $query->join('koi_actividadop', 'tiempoordenp_actividadop', '=', 'koi_actividadop.id');
+        $query->join('koi_subactividadop', 'tiempoordenp_subactividadop', '=', 'koi_subactividadop.id');
         $query->join('koi_areap', 'tiempoordenp_areap', '=', 'koi_areap.id');
         $query->where('tiempoordenp_tercero', Auth::user()->id);
 
