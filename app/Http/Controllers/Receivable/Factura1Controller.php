@@ -150,7 +150,7 @@ class Factura1Controller extends Controller
                                 $factura2->factura2_cantidad = $detail;
                                 $factura2->save();
 
-                                $subtotal += $detail * $child->orden2_precio_venta;
+                                $subtotal += $detail * $child->orden2_total_valor_unitario;
                                 $cantidad += $detail;
 
                                 // Actualizar orden2_facturado de Orden2

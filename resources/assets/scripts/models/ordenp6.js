@@ -17,7 +17,7 @@ app || (app = {});
         defaults: {
             'orden6_areap': '',
         	'orden6_nombre': '',
-            'orden6_horas': moment().format('HH:mm'),
+            'orden6_tiempo': '',
             'orden6_valor': 0,
         	'areap_nombre': '',
         	'total': 0,

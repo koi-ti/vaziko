@@ -1,7 +1,7 @@
 @extends('production.subactividadesop.main')
 
 @section('breadcrumb')
-    <li class="active">SubActividades de producción</li>
+    <li class="active">Subactividades de producción</li>
 @stop
 
 @section('module')

@@ -188,14 +188,14 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiempoordenesp', 'actividadesop', 'subactividadesop', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'actividadesop', 'subactividadesop', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiempoordenesp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -209,8 +209,8 @@
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
                         <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'tiempoordenesp' ? 'active' : '' }}">
-                        <a href="{{ route('tiempoordenesp.index') }}"><i class="fa fa-clock-o"></i> Tiempo orden</a>
+                    <li class="{{ Request::segment(1) == 'tiemposp' ? 'active' : '' }}">
+                        <a href="{{ route('tiemposp.index') }}"><i class="fa fa-clock-o"></i> Tiempos</a>
                     </li>
                 </ul>
             </li>

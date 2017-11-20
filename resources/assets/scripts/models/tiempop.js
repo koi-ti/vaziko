@@ -1,5 +1,5 @@
 /**
-* Class TiempoOrdenpModel extend of Backbone Model
+* Class TiempopModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.TiempoOrdenpModel = Backbone.Model.extend({
+    app.TiempopModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('tiempoordenesp.index') );
+            return window.Misc.urlFull( Route.route('tiemposp.index') );
         },
         idAttribute: 'id',
         defaults: {

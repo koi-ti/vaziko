@@ -34,4 +34,12 @@ class Cotizacion4 extends Model
         $query->orderBy('materialp_nombre', 'asc');
         return $query->get();
     }
+
+    /**
+     * Get the attributes for the materialp.
+     */
+    public function getName()
+    {
+        return $this->hasOne('App\Models\Production\Materialp', 'id' , 'cotizacion4_materialp');
+    }
 }

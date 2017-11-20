@@ -1,7 +1,7 @@
 @extends('production.subactividadesop.main')
 
 @section('breadcrumb')
-	<li><a href="{{ route('subactividadesop.index') }}">SubActividades de produccióm</a></li>
+	<li><a href="{{ route('subactividadesop.index') }}">Subactividades de produccióm</a></li>
 	<li><a href="{{ route('subactividadesop.show', ['subactividadop' => $subactividadop->id]) }}">{{ $subactividadop->id }}</a></li>
 	<li class="active">Editar</li>
 @stop

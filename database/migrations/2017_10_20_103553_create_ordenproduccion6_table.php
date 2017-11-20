@@ -19,7 +19,7 @@ class CreateOrdenproduccion6Table extends Migration
             $table->integer('orden6_orden2')->unsigned();
             $table->integer('orden6_areap')->unsigned()->nullable();
             $table->string('orden6_nombre', 20)->nullable();
-            $table->time('orden6_horas');
+            $table->string('orden6_tiempo', 7);
             $table->double('orden6_valor')->default(0);
 
             $table->foreign('orden6_orden2')->references('id')->on('koi_ordenproduccion2')->onDelete('restrict');

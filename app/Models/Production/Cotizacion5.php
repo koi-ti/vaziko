@@ -34,4 +34,12 @@ class Cotizacion5 extends Model
         $query->orderBy('acabadop_nombre', 'asc');
         return $query->get();
     }
+
+    /**
+     * Get the attributes for the acabadospName.
+     */
+    public function getName()
+    {
+        return $this->hasOne('App\Models\Production\Acabadop', 'id' , 'cotizacion5_acabadop');
+    }
 }

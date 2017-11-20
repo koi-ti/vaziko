@@ -324,7 +324,7 @@
             <div class="box-body">
                 <form method="POST" accept-charset="UTF-8" id="form-cotizacion6-producto" data-toggle="validator">
                     <div class="row">
-                        <div class="form-group col-sm-3">
+                        <div class="form-group col-sm-5 col-md-offset-1">
                             <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear">
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
@@ -333,15 +333,17 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-sm-3">
+                        <div class="form-group col-sm-5">
                             <input id="cotizacion6_nombre" name="cotizacion6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
                         </div>
+                    </div>
 
-                        <div class="form-group col-sm-1">
-                            <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" required>
+                    <div class="row">
+                        <div class="form-group col-sm-2 col-md-offset-2">
+                            <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" max="9999" required>
                             <div class="help-block with-errors"></div>
                         </div>
-                        <div class="form-group col-sm-1">
+                        <div class="form-group col-sm-2">
                             <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" class="form-control input-xs" min="00" step="01" max="59" required>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -477,7 +479,7 @@
        <% } %>
        <td><%- areap_nombre %></td>
        <td><%- cotizacion6_nombre %></td>
-       <td><%- cotizacion6_horas %></td>
+       <td><%- cotizacion6_tiempo %></td>
        <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>

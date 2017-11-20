@@ -99,7 +99,7 @@ app || (app = {});
             // Ordenp6
             this.$formOrdenp6 = this.$('#form-ordenp6-producto');
             this.$inputArea = this.$('#orden6_nombre');
-            this.$inputHoras = this.$('#orden6_horas');
+            this.$inputTiempo = this.$('#orden6_tiempo');
             this.$inputValor = this.$('#orden6_valor');
 
             // Inputs cuadro de informacion
@@ -300,26 +300,6 @@ app || (app = {});
             }
         },
 
-
-        calculateOrdenp2: function () {
-            // Igualar variables y quitar el inputmask
-            this.cantidad = parseInt( this.$cantidad.val() );
-            this.tranporte = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
-            this.viaticos = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
-            this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
-            this.areas = parseFloat( this.areasProductopList.totalize()['total'] ) / parseFloat( this.cantidad );
-
-            // Cuadros de informacion
-            this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
-            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
-            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
-            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
-
-            // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalOrdenp2 = parseFloat( this.precio ) + parseFloat( this.tranporte ) + parseFloat( this.viaticos ) + parseFloat( this.areas );
-            this.$precioOrdenp2.val( this.totalOrdenp2 );
-        },
-
         /**
         *   Event render input value
         **/
@@ -339,7 +319,7 @@ app || (app = {});
                    window.Misc.removeSpinner( _this.spinner );
 
                    _this.$inputArea.val('').attr('readonly', true);
-                   _this.$inputHoras.val('');
+                   _this.$inputTiempo.val('');
                    _this.$inputValor.val( resp.areap_valor );
                })
                .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -348,9 +328,31 @@ app || (app = {});
                });
            }else{
               this.$inputArea.val('').attr('readonly', false);
-              this.$inputHoras.val('');
+              this.$inputTiempo.val('');
               this.$inputValor.val('');
            }
+        },
+
+        /**
+        *   Event calculate orden2
+        **/
+        calculateOrdenp2: function () {
+            // Igualar variables y quitar el inputmask
+            this.cantidad = parseInt( this.$cantidad.val() );
+            this.tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ) );
+            this.viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ) );
+            this.areas = Math.round( parseFloat( this.areasProductopList.totalize()['total'] ) / parseFloat( this.cantidad ) );
+            this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+
+            // Cuadros de informacion
+            this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
+            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
+            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
+            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
+
+            // Calcular total de la orden (transporte+viaticos+precio+areas)
+            this.totalOrdenp2 = this.precio + this.tranporte + this.viaticos + this.areas;
+            this.$precioOrdenp2.val( this.totalOrdenp2 );
         },
 
         /**

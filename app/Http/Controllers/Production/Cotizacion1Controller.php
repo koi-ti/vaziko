@@ -379,12 +379,44 @@ class Cotizacion1Controller extends Controller
         if(!$cotizacion instanceof Cotizacion1){
             abort(404);
         }
-        $detalle = Cotizacion2::getCotizaciones2($cotizacion->id);
+
+        $cotizacion2 = Cotizacion2::getCotizaciones2($cotizacion->id);
         $title = sprintf('Cotización %s', $cotizacion->cotizacion_codigo);
+
+        $object = new \stdClass();
+        $object->cotizacion2 = [];
+        foreach ( $cotizacion2 as $detalle ) {
+            $items = new \stdClass();
+            $items->cotizacion2 = $detalle;
+
+            // Maquinasp
+            $maquinasp = Cotizacion3::where('cotizacion3_cotizacion2', $detalle->id)->get();
+            foreach ($maquinasp as $maquinap) {
+                $items->maquinasp[] = $maquinap->getName->maquinap_nombre;
+            }
+
+            $materialesp = Cotizacion4::where('cotizacion4_cotizacion2', $detalle->id)->get();
+            foreach ($materialesp as $materialp) {
+                $items->materialesp[] = $materialp->getName->materialp_nombre;
+
+            }
+
+            $acabadosp = Cotizacion5::where('cotizacion5_cotizacion2', $detalle->id)->get();
+            foreach ($acabadosp as $acabadop) {
+                $items->acabadosp[] = $acabadop->getName->acabadop_nombre;
+            }
+
+            isset($items->maquinasp) ? $items->maquinasp = implode(', ', $items->maquinasp) : null;
+            isset($items->materialesp) ? $items->materialesp = implode(', ', $items->materialesp) : null;
+            isset($items->acabadosp) ? $items->acabadosp = implode(', ', $items->acabadosp) : null;
+
+            $object->cotizacion2[] = $items;
+        }
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('production.cotizaciones.export',  compact('cotizacion', 'detalle' ,'title'))->render());
+        $pdf->getDomPDF()->set_option("enable_php", true);
+        $pdf->loadHTML(View::make('production.cotizaciones.export.export',  compact('cotizacion', 'object' ,'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'cotización', $cotizacion->id, date('Y_m_d'), date('H_m_s')));
     }
 
@@ -596,7 +628,7 @@ class Cotizacion1Controller extends Controller
                          $orden6->orden6_orden2 = $orden2->id;
                          $orden6->orden6_areap = $cotizacion6->cotizacion6_areap;
                          $orden6->orden6_nombre = $cotizacion6->cotizacion6_nombre;
-                         $orden6->orden6_horas = $cotizacion6->cotizacion6_horas;
+                         $orden6->orden6_tiempo = $cotizacion6->cotizacion6_tiempo;
                          $orden6->orden6_valor = $cotizacion6->cotizacion6_valor;
                          $orden6->save();
                     }

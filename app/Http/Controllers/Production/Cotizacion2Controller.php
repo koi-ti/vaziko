@@ -260,7 +260,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion2->fillBoolean($data);
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                         $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
-                        // $cotizacion2->save();
+                        $cotizacion2->save();
 
                         // Maquinas
                         $maquinas = Cotizacion3::getCotizaciones3($cotizacion2->cotizacion2_productop, $cotizacion2->id);
@@ -272,11 +272,11 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion3 = new Cotizacion3;
                                     $cotizacion3->cotizacion3_cotizacion2 = $cotizacion2->id;
                                     $cotizacion3->cotizacion3_maquinap = $maquina->id;
-                                    // $cotizacion3->save();
+                                    $cotizacion3->save();
                                 }
                             }else{
                                 if($cotizacion3 instanceof Cotizacion3) {
-                                    // $cotizacion3->delete();
+                                    $cotizacion3->delete();
                                 }
                             }
                         }
@@ -291,11 +291,11 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion4 = new Cotizacion4;
                                     $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                                     $cotizacion4->cotizacion4_materialp = $material->id;
-                                    // $cotizacion4->save();
+                                    $cotizacion4->save();
                                 }
                             }else{
                                 if($cotizacion4 instanceof Cotizacion4) {
-                                    // $cotizacion4->delete();
+                                    $cotizacion4->delete();
                                 }
                             }
                         }
@@ -310,11 +310,11 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion5 = new Cotizacion5;
                                     $cotizacion5->cotizacion5_cotizacion2 = $cotizacion2->id;
                                     $cotizacion5->cotizacion5_acabadop = $acabado->id;
-                                    // $cotizacion5->save();
+                                    $cotizacion5->save();
                                 }
                             }else{
                                 if($cotizacion5 instanceof Cotizacion5) {
-                                    // $cotizacion5->delete();
+                                    $cotizacion5->delete();
                                 }
                             }
                         }
@@ -335,7 +335,7 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion6->fill($areap);
                                     $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                                     $cotizacion6->cotizacion6_areap = $area->id;
-                                    // $cotizacion6->save();
+                                    $cotizacion6->save();
                                 }
                             }else{
                                 $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_nombre', $areap['cotizacion6_nombre'])->first();
@@ -344,16 +344,16 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion6->fill($areap);
                                     $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
                                     $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                                    // $cotizacion6->save();
+                                    $cotizacion6->save();
                                 }
                             }
                         }
 
                         // Recuperar sumatoria areas guardadas
-                        $recuperarAreas = Cotizacion6::select(DB::raw("SUM( ((SUBSTRING_INDEX(cotizacion6_horas, ':', -1) / 60 ) + SUBSTRING_INDEX(cotizacion6_horas, ':', 1)) * cotizacion6_valor ) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
+                        $valorareasp = Cotizacion6::select( DB::raw("SUM( ((SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1) / 60 ) + SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1)) * cotizacion6_valor ) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
 
                         // Calcular valor unitario
-                        $totalareasp = $recuperarAreas->valor_total / $request->cotizacion2_cantidad;
+                        $totalareasp = $valorareasp->valor_total / $request->cotizacion2_cantidad;
                         $transporte = $request->cotizacion2_transporte / $request->cotizacion2_cantidad;
                         $viaticos = $request->cotizacion2_viaticos / $request->cotizacion2_cantidad;
                         $valorunitario = $request->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);

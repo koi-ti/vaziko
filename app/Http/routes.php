@@ -187,7 +187,7 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::resource('actividadesop', 'Production\ActividadOpController', ['except' => ['destroy']]);
 	Route::resource('subactividadesop', 'Production\SubActividadOpController', ['except' => ['destroy']]);
-	Route::resource('tiempoordenesp', 'Production\TiempoOrdenpController', ['except' => ['destroy']]);
+	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);

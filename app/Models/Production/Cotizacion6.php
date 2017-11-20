@@ -21,7 +21,7 @@ class Cotizacion6 extends Model
     *
     * @var array
     */
-    protected $fillable = ['cotizacion6_horas', 'cotizacion6_valor'];
+    protected $fillable = ['cotizacion6_tiempo', 'cotizacion6_valor'];
 
     /**
      * The attributes that are mass nullable fields to null.
@@ -33,8 +33,8 @@ class Cotizacion6 extends Model
     public function isValid($data)
     {
         $rules = [
-            'cotizacion6_horas' => 'required|min:0',
-            'cotizacion6_minutos' => 'required|min:0|max:59',
+            'cotizacion6_horas' => 'required|min:0|max:9999|numeric',
+            'cotizacion6_minutos' => 'required|min:0|max:59|numeric',
             'cotizacion6_valor' => 'required',
         ];
         $validator = Validator::make($data, $rules);

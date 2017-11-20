@@ -50,7 +50,7 @@ class Factura1 extends Model
 
         if ($factura->factura1_cuotas > 0) {
             $valor = $factura->factura1_total / $factura->factura1_cuotas;
-            $fecha = $factura->factura1_fecha_vencimiento; 
+            $fecha = $factura->factura1_fecha_vencimiento;
 
             for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
                 $factura4 = new Factura4;
@@ -64,7 +64,7 @@ class Factura1 extends Model
                 $factura4->save();
             }
         }
-        
+
         $response->success = true;
         return $response;
     }
@@ -118,7 +118,7 @@ class Factura1 extends Model
         if(!$documento instanceof Documento){
             throw new \Exception('No es posible recuperar el documento.');
         }
-        
+
         // Recuperar tercero
         $tercero = Tercero::find($this->factura1_tercero);
         if(!$tercero instanceof Tercero){
@@ -146,7 +146,7 @@ class Factura1 extends Model
                 throw new \Exception('No es posible recuperar la ordenp.');
             }
 
-            $totalF2 = $ordenp2->orden2_precio_venta * $item->factura2_cantidad;
+            $totalF2 = $ordenp2->orden2_total_valor_unitario * $item->factura2_cantidad;
 
             // Subtotal
             $subtotalobase = [];

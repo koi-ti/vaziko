@@ -62,8 +62,8 @@ class Ordenp2 extends BaseModel
     {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_precio_venta' : DB::raw('0 as orden2_precio_venta') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_cantidad * orden2_total_valor_unitario) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
 
             DB::raw("
                 CASE
@@ -160,8 +160,8 @@ class Ordenp2 extends BaseModel
     {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden_cliente', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_precio_venta' : DB::raw('0 as orden2_precio_venta') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_cantidad * orden2_total_valor_unitario) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -203,7 +203,7 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
-        $query->whereRaw('orden2_precio_venta <> 0');
+        $query->whereRaw('orden2_total_valor_unitario <> 0');
         $query->where('orden_abierta', true);
         return $query;
     }
@@ -213,8 +213,8 @@ class Ordenp2 extends BaseModel
     {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_precio_venta' : DB::raw('0 as orden2_precio_venta') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_cantidad * orden2_total_valor_unitario) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -256,7 +256,7 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
-        $query->whereRaw('orden2_precio_venta <> 0');
+        $query->whereRaw('orden2_total_valor_unitario <> 0');
         $query->where('orden_abierta', true);
         $query->where('koi_ordenproduccion2.id', $id);
         return $query->first();

@@ -194,7 +194,7 @@ app || (app = {});
             // Render table total areas
             var data = this.collection.totalize();
             if(this.$total.length){
-                this.$total.empty().html( window.Misc.currency( Math.round( data.total ) ) );
+                this.$total.empty().html( window.Misc.currency( data.total ) );
             }
         },
 

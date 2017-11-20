@@ -1,5 +1,5 @@
 /**
-* Class CreateTiempoOrdenpView  of Backbone Router
+* Class CreateTiempopView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,15 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateTiempoOrdenpView = Backbone.View.extend({
+    app.CreateTiempopView = Backbone.View.extend({
 
-        el: '#tiempoordenp-create',
-        template: _.template( ($('#add-tiempoordenp-tpl').html() || '') ),
+        el: '#tiempop-create',
+        template: _.template( ($('#add-tiempop-tpl').html() || '') ),
         events: {
-            'click .submit-tiempoordenp': 'submitTiempoOrdenp',
-            'click .btn-edit-tiempoordenp': 'editTiempoOrdenp',
-            'submit #form-tiempoordenp': 'onStoreTiempoOrdenp',
-            'change #tiempoordenp_actividadop': 'changeActividadOp'
+            'click .submit-tiempop': 'submitTiempop',
+            'click .btn-edit-tiempop': 'editTiempop',
+            'submit #form-tiempop': 'onStoreTiempop',
+            'change #tiempop_actividadop': 'changeActividadOp'
         },
 
         /**
@@ -25,8 +25,8 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$wraperForm = this.$('#render-form-tiempoordenp');
-            this.$modalGeneric = $('#modal-producto-generic');
+            this.$wraperForm = this.$('#render-form-tiempop');
+            this.$modal = $('#modal-edit-tiempop');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -42,8 +42,8 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
 
             // Attributes
-            this.$form = this.$('#form-tiempoordenp');
-            this.$subactividadesop = this.$('#tiempoordenp_subactividadop');
+            this.$form = this.$('#form-tiempop');
+            this.$subactividadesop = this.$('#tiempop_subactividadop');
 
             this.ready();
         },
@@ -66,11 +66,15 @@ app || (app = {});
                 .done(function(resp) {
                     window.Misc.removeSpinner( _this.el );
 
-                    _this.$subactividadesop.empty().val(0);
-                    _this.$subactividadesop.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$subactividadesop.append("<option value="+item.id+">"+item.subactividadop_nombre+"</option>");
-                    });
+                    if(resp.length > 0){
+                        _this.$subactividadesop.empty().val(0).attr('required', 'required');
+                        _this.$subactividadesop.append("<option value=></option>");
+                        _.each(resp, function(item){
+                            _this.$subactividadesop.append("<option value="+item.id+">"+item.subactividadop_nombre+"</option>");
+                        });
+                    }else{
+                        _this.$subactividadesop.empty().val(0).removeAttr('required');
+                    }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
                     window.Misc.removeSpinner( _this.el );
@@ -84,14 +88,14 @@ app || (app = {});
         /**
         * Event submit productop
         */
-        submitTiempoOrdenp: function (e) {
+        submitTiempop: function (e) {
             this.$form.submit();
         },
 
         /**
         * Event Create Forum Post
         */
-        onStoreTiempoOrdenp: function (e) {
+        onStoreTiempop: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
@@ -100,28 +104,32 @@ app || (app = {});
             }
         },
 
-        editTiempoOrdenp: function(e){
+        editTiempop: function(e){
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
+                var tiempo = {
+                    id: this.$(e.currentTarget).data('tiempo-id'),
+                    fecha: this.$(e.currentTarget).data('tiempo-fecha'),
+                    horai: this.$(e.currentTarget).data('tiempo-hi'),
+                    horaf: this.$(e.currentTarget).data('tiempo-hf')
+                };
 
-                // tercero, tcontacto, vencimiento and servicio
-            //     this.$modalGeneric.modal('show');
-            //
-            //     // Open TecnicoActionView
-            //     if ( this.productoActionView instanceof Backbone.View ){
-            //         this.productoActionView.stopListening();
-            //         this.productoActionView.undelegateEvents();
-            //     }
-            //
-            //     this.productoActionView = new app.ProductoActionView({
-            //         model: this.model,
-            //         parameters: {
-            //             call: 'M'
-            //         }
-            //     });
-            //
-            //     this.productoActionView.render();
-            // }
+                this.$modal.modal('show');
+
+                // Open tiempopActionView
+                if ( this.tiempopActionView instanceof Backbone.View ){
+                    this.tiempopActionView.stopListening();
+                    this.tiempopActionView.undelegateEvents();
+                }
+
+                this.tiempopActionView = new app.TiempopActionView({
+                    model: this.model,
+                    parameters: {
+                        model: tiempo
+                    }
+                });
+
+                this.tiempopActionView.render();
             }
         },
 
@@ -130,17 +138,20 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
+
+            if( typeof window.initComponent.initDatePicker == 'function' )
+                window.initComponent.initDatePicker();
+
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
-
-            if( typeof window.initComponent.initInputMask == 'function' )
-                window.initComponent.initInputMask();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
+            if( typeof window.initComponent.initTimePicker == 'function' )
+                window.initComponent.initTimePicker();
         },
 
         /**
@@ -168,9 +179,7 @@ app || (app = {});
 	                return;
 	            }
 
-                alertify.success(resp.msg);
-                window.Misc.clearForm( this.$form );
-                this.model.fetch();
+                window.Misc.successRedirect( resp.msg, window.Misc.urlFull( Route.route('tiemposp.index')) );
 	     	}
         }
     });

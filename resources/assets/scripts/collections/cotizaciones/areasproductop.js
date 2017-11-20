@@ -69,13 +69,12 @@ app || (app = {});
         },
 
         convertirMinutos: function ( model ){
-            var tiempo = model.get('cotizacion6_horas').split(':'),
+            var tiempo = model.get('cotizacion6_tiempo').split(':'),
                 horas = parseInt( tiempo[0] ),
                 minutos = parseInt( tiempo[1] );
 
             // Regla de 3 para convertir min a horas
-            var regla3 = minutos / 60,
-                total = horas + regla3;
+            var total = horas + (minutos / 60);
 
             return parseFloat( total );
         },
@@ -83,7 +82,7 @@ app || (app = {});
         totalize: function(  ) {
             var total = this.total();
             this.totalRow();
-            return { 'total': total }
+            return { 'total': Math.round(total) }
         },
    });
 
