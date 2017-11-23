@@ -1,5 +1,5 @@
 /**
-* Class ActividadOpModel extend of Backbone Model
+* Class ActividadpModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,15 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.ActividadOpModel = Backbone.Model.extend({
+    app.ActividadpModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('actividadesop.index') );
+            return window.Misc.urlFull( Route.route('actividadesp.index') );
         },
         idAttribute: 'id',
         defaults: {
-            'actividadop_nombre': '',
-            'actividadop_activo': 1
+            'actividadp_nombre': '',
+            'actividadp_activo': 1
         }
     });
 

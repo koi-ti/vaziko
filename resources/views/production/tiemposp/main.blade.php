@@ -46,19 +46,19 @@
                     </div>
 
                     <div class="row">
-                        <label for="tiempop_actividadop" class="control-label col-md-1">Actividad</label>
+                        <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
                         <div class="form-group col-md-5">
-                            <select name="tiempop_actividadop" id="tiempop_actividadop" class="form-control select2-default-clear" required>
-                                @foreach( App\Models\Production\ActividadOp::getActividadesOp() as $key => $value)
+                            <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
+                                @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
                             <div class="help-block with-errors"></div>
                         </div>
 
-                        <label for="tiempop_subactividadop" class="control-label col-md-1">SubActividad</label>
+                        <label for="tiempop_subactividadp" class="control-label col-md-1">Subactividad</label>
                         <div class="form-group col-md-4">
-                            <select name="tiempop_subactividadop" id="tiempop_subactividadop" class="form-control select2-default-clear" required>
+                            <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required>
                             </select>
                         </div>
                     </div>
@@ -107,26 +107,20 @@
     					</div>
     				</div>
     			</div>
+            {!! Form::close() !!}
 
-                <div id="render-form-tiempop"></div>
-			{!! Form::close() !!}
-		</div>
-	</section>
-
-    <script type="text/template" id="add-tiempop-tpl">
-        <div class="box-body">
-            <div class="box box-info">
-                <div class="box-header with-border">
-                    <h3 class="box-title">Informacion adicional del sr(a) <b>{{ Auth::user()->getName() }}</b></h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                        </button>
+            <div class="box-body">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Informacion adicional del sr(a) <b>{{ Auth::user()->getName() }}</b></h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
-                </div>
 
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table class="table no-margin">
+                    <div class="box-body table-responsive no-padding">
+                        <table id="browse-tiemposp-list" class="table table-bordered" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th width="2%">#</th>
@@ -135,41 +129,35 @@
                                     <th width="20%">Subactividad</th>
                                     <th width="20%">Área</th>
                                     <th width="8%">Fecha</th>
-                                    <th width="5%">Hora inicio</th>
-                                    <th width="5%">Hora fin</th>
+                                    <th width="5%">H. inicio</th>
+                                    <th width="5%">H. fin</th>
                                     <th width="1%"></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if(tiempos.length) { %>
-                                    <% _.each(tiempos, function(item) { %>
-                                        <tr>
-                                            <th><%- item.id %></th>
-                                            <td><%- ( !_.isNull(item.orden_codigo) && !_.isNull(item.tercero_nombre)) ? item.orden_codigo+" - "+item.tercero_nombre : '-' %></td>
-                                            <td><%- item.actividadop_nombre %></td>
-                                            <td><%- ( !_.isNull(item.subactividadop_nombre) ) ? item.subactividadop_nombre : '-' %></td>
-                                            <td><%- item.areap_nombre %></td>
-                                            <td><%- item.tiempop_fecha %></td>
-                                            <td><%- moment(item.tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
-                                            <td><%- moment(item.tiempop_hora_fin, 'HH:mm').format('HH:mm') %></td>
-                                            <td class="text-center">
-                                                <a class="btn btn-default btn-xs btn-edit-tiempop" data-tiempo-id="<%- item.id %>" data-tiempo-fecha="<%- item.tiempop_fecha %>" data-tiempo-hi="<%- item.tiempop_hora_inicio %>" data-tiempo-hf="<%- item.tiempop_hora_fin %>">
-                                                    <span><i class="fa fa-pencil-square-o"></i></span>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    <% }); %>
-                                <% }else{ %>
-                                    <tr>
-                                        <th colspan="6" class="text-center">No existen items para el cliente.</th>
-                                    </tr>
-                                <% } %>
+                                {{-- Render content --}}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </div>
+		</div>
+	</section>
+
+    <script type="text/template" id="tiempop-item-list-tpl">
+        <td><%- id %></td>
+        <td><%- ( !_.isNull(orden_codigo) && !_.isNull(tercero_nombre)) ? orden_codigo+' - '+tercero_nombre : '-' %></td>
+        <td><%- actividadp_nombre %></td>
+        <td><%- !_.isNull(subactividadp_nombre) ? subactividadp_nombre : ' - ' %></td>
+        <td><%- areap_nombre %></td>
+        <td><%- tiempop_fecha %></td>
+        <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
+        <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
+        <td class="text-center">
+            <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>" data-tiempo-fecha="<%- tiempop_fecha %>" data-tiempo-hi="<%- tiempop_hora_inicio %>" data-tiempo-hf="<%- tiempop_hora_fin %>">
+                <span><i class="fa fa-pencil-square-o"></i></span>
+            </a>
+        </td>
     </script>
 
     <section id="tiempop-content-section">

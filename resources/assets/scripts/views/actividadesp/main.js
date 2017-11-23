@@ -1,5 +1,5 @@
 /**
-* Class MainActividadesOpView
+* Class MainActividadespView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,18 +9,18 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainActividadesOpView = Backbone.View.extend({
+    app.MainActividadespView = Backbone.View.extend({
 
-        el: '#actividadesop-main',
+        el: '#actividadesp-main',
 
         /**
         * Constructor Method
         */
         initialize : function() {
 
-            this.$actividadesopSearchTable = this.$('#actividadesop-search-table');
+            this.$actividadespSearchTable = this.$('#actividadesp-search-table');
 
-            this.$actividadesopSearchTable.DataTable({
+            this.$actividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -28,22 +28,22 @@ app || (app = {});
                 serverSide: true,
                 language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('actividadesop.index') ),
+                    url: window.Misc.urlFull( Route.route('actividadesp.index') ),
                     data: function( data ) {
                         data.datatables = true;
                     }
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'actividadop_nombre', name: 'actividadop_nombre'},
-                    { data: 'actividadop_activo', name: 'actividadop_activo' }
+                    { data: 'actividadp_nombre', name: 'actividadp_nombre'},
+                    { data: 'actividadp_activo', name: 'actividadp_activo' }
                 ],
                 buttons: [
                     {
                         text: '<i class="fa fa-user-plus"></i> Nueva actividad',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
-                                window.Misc.redirect( window.Misc.urlFull( Route.route('actividadesop.create') ) )
+                                window.Misc.redirect( window.Misc.urlFull( Route.route('actividadesp.create') ) )
                         }
                     }
                 ],
@@ -52,7 +52,7 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('actividadesop.show', {actividadesop: full.id }) )  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull( Route.route('actividadesp.show', {actividadesp: full.id }) )  +'">' + data + '</a>';
                         }
                     },
                     {

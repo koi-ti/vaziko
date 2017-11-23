@@ -188,7 +188,7 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'actividadesop', 'subactividadesop', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -214,8 +214,21 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- Reportes contabilidad --}}
+            <li class="{{ in_array(Request::segment(1), ['rtiemposp']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
+                        <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Reporte de tiempos</a>
+                    </li>
+                </ul>
+            </li>
+
             {{-- Referencias produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesop', 'subactividadesop', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesp', 'subactividadesp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -223,8 +236,8 @@
                     <li class="{{ Request::segment(1) == 'acabadosp' ? 'active' : '' }}">
                         <a href="{{ route('acabadosp.index') }}"><i class="fa fa-circle-o"></i> Acabados</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'actividadesop' ? 'active' : '' }}">
-                        <a href="{{ route('actividadesop.index') }}"><i class="fa fa-circle-o"></i> Actividades</a>
+                    <li class="{{ Request::segment(1) == 'actividadesp' ? 'active' : '' }}">
+                        <a href="{{ route('actividadesp.index') }}"><i class="fa fa-circle-o"></i> Actividades</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'areasp' ? 'active' : '' }}">
                         <a href="{{ route('areasp.index') }}"><i class="fa fa-circle-o"></i> Áreas</a>
@@ -241,8 +254,8 @@
                     <li class="{{ Request::segment(1) == 'tipoproductosp' ? 'active' : '' }}">
                         <a href="{{ route('tipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Tipo de producto</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'subactividadesop' ? 'active' : '' }}">
-                        <a href="{{ route('subactividadesop.index') }}"><i class="fa fa-circle-o"></i> SubActividades</a>
+                    <li class="{{ Request::segment(1) == 'subactividadesp' ? 'active' : '' }}">
+                        <a href="{{ route('subactividadesp.index') }}"><i class="fa fa-circle-o"></i> Subactividades</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'subtipoproductosp' ? 'active' : '' }}">
                         <a href="{{ route('subtipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Subtipo de producto</a>

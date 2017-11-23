@@ -162,4 +162,24 @@ class Ordenp extends Model
         $query->where('koi_ordenproduccion.id', $id);
         return $query->first();
     }
+
+    // Traer item con codigo (tiempop)
+    public static function getOrdenp( $codigo )
+    {
+        $query = Ordenp::query();
+        $query->select('koi_ordenproduccion.id as id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
+            CONCAT(
+                (CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                    )
+                    ELSE tercero_razonsocial
+                END),
+            ' (', orden_referencia ,')'
+            ) AS tercero_nombre"
+        ));
+        $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$codigo'");
+        return $query->first();
+    }
 }

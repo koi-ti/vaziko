@@ -19,8 +19,8 @@ class CreateTiempopTable extends Migration
              $table->integer('tiempop_ordenp')->unsigned()->nullable();
              $table->integer('tiempop_tercero')->unsigned();
              $table->integer('tiempop_areap')->unsigned();
-             $table->integer('tiempop_actividadop')->unsigned()->nullable();
-             $table->integer('tiempop_subactividadop')->unsigned()->nullable();
+             $table->integer('tiempop_actividadp')->unsigned()->nullable();
+             $table->integer('tiempop_subactividadp')->unsigned()->nullable();
              $table->date('tiempop_fecha');
              $table->time('tiempop_hora_inicio');
              $table->time('tiempop_hora_fin');
@@ -29,8 +29,8 @@ class CreateTiempopTable extends Migration
              $table->foreign('tiempop_ordenp')->references('id')->on('koi_ordenproduccion')->onDelete('restrict');
              $table->foreign('tiempop_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
              $table->foreign('tiempop_areap')->references('id')->on('koi_areap')->onDelete('restrict');
-             $table->foreign('tiempop_actividadop')->references('id')->on('koi_actividadop')->onDelete('restrict');
-             $table->foreign('tiempop_subactividadop')->references('id')->on('koi_subactividadop')->onDelete('restrict');
+             $table->foreign('tiempop_actividadp')->references('id')->on('koi_actividadp')->onDelete('restrict');
+             $table->foreign('tiempop_subactividadp')->references('id')->on('koi_subactividadp')->onDelete('restrict');
          });
      }
 

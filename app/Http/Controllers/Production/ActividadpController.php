@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\ActividadOp;
+use App\Models\Production\Actividadp;
 use Datatables, Cache, DB;
 
-class ActividadOpController extends Controller
+class ActividadpController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,10 +19,10 @@ class ActividadOpController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = ActividadOp::query();
+            $query = Actividadp::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.actividadesop.index');
+        return view('production.actividadesp.index');
     }
 
     /**
@@ -32,7 +32,7 @@ class ActividadOpController extends Controller
      */
     public function create()
     {
-        return view('production.actividadesop.create');
+        return view('production.actividadesp.create');
     }
 
     /**
@@ -45,30 +45,30 @@ class ActividadOpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $actividadop = new ActividadOp;
+            $actividadp = new Actividadp;
 
-            if( $actividadop->isValid($data) ) {
+            if( $actividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
-                    // ActividadOp
-                    $actividadop->fill($data);
-                    $actividadop->fillBoolean($data);
-                    $actividadop->save();
+                    // Actividadp
+                    $actividadp->fill($data);
+                    $actividadp->fillBoolean($data);
+                    $actividadp->save();
 
                     // Commit Transaction
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( ActividadOp::$key_cache );
+                    Cache::forget( Actividadp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $actividadop->id]);
+                    return response()->json(['success' => true, 'id' => $actividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $actividadop->errors]);
+            return response()->json(['success' => false, 'errors' => $actividadp->errors]);
         }
         abort(403);
     }
@@ -81,11 +81,11 @@ class ActividadOpController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $actividadop = ActividadOp::findOrFail($id);
+        $actividadp = Actividadp::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($actividadop);
+            return response()->json($actividadp);
         }
-        return view('production.actividadesop.show', ['actividadop' => $actividadop]);
+        return view('production.actividadesp.show', ['actividadp' => $actividadp]);
     }
 
     /**
@@ -96,8 +96,8 @@ class ActividadOpController extends Controller
      */
     public function edit($id)
     {
-        $actividadop = ActividadOp::findOrFail($id);
-        return view('production.actividadesop.edit', ['actividadop' => $actividadop]);
+        $actividadp = Actividadp::findOrFail($id);
+        return view('production.actividadesp.edit', ['actividadp' => $actividadp]);
     }
 
     /**
@@ -111,30 +111,30 @@ class ActividadOpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $actividadop = ActividadOp::findOrFail($id);
+            $actividadp = Actividadp::findOrFail($id);
 
-            if( $actividadop->isValid($data) ) {
+            if( $actividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
-                    // ActividadOp
-                    $actividadop->fill($data);
-                    $actividadop->fillBoolean($data);
-                    $actividadop->save();
+                    // Actividadp
+                    $actividadp->fill($data);
+                    $actividadp->fillBoolean($data);
+                    $actividadp->save();
 
                     // Commit Transaction
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( ActividadOp::$key_cache );
+                    Cache::forget( Actividadp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $actividadop->id]);
+                    return response()->json(['success' => true, 'id' => $actividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $actividadop->errors]);
+            return response()->json(['success' => false, 'errors' => $actividadp->errors]);
         }
         abort(403);
     }

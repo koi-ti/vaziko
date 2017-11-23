@@ -1,14 +1,14 @@
-@extends('production.subactividadesop.main')
+@extends('production.subactividadesp.main')
 
 @section('breadcrumb')
     <li class="active">Subactividades de producción</li>
 @stop
 
 @section('module')
-    <div id="subactividadesop-main">
+    <div id="subactividadesp-main">
         <div class="box box-success">
             <div class="box-body table-responsive">
-                <table id="subactividadesop-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <table id="subactividadesp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Código</th>

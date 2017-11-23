@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Tiempop, App\Models\Production\ActividadOp, App\Models\Production\SubActividadOp, App\Models\Production\Ordenp, App\Models\Production\Areap;
+use App\Models\Production\Tiempop, App\Models\Production\Actividadp, App\Models\Production\SubActividadp, App\Models\Production\Ordenp, App\Models\Production\Areap;
 use DB, Log, Auth;
 
 class TiempopController extends Controller
@@ -19,8 +19,13 @@ class TiempopController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $tiempos = Tiempop::getTiemposp();
-            return response()->json(['tiempos' => $tiempos]);
+            $tiemposp = Tiempop::getTiemposp();
+
+            if($request->has('orden2_orden')){
+                $tiemposp = Tiempop::getTiempospOrdenp( $request->orden2_orden );
+            }
+
+            return response()->json( $tiemposp );
         }
         return view('production.tiemposp.main');
     }
@@ -50,10 +55,26 @@ class TiempopController extends Controller
             if ( $tiempop->isValid($data) ) {
                 DB::beginTransaction();
                 try {
+                    $itemcodigo = $itemtercero = $itemsubactividadp = null;
+
+                    // Validar rango hora inicio
+                    $query = Tiempop::query();
+                    $query->where('tiempop_tercero', Auth::user()->id);
+                    $query->where('tiempop_fecha', $request->tiempop_fecha);
+                    $query->where(function ($query) use ($request){
+                        $query->where('tiempop_hora_inicio', '<=', $request->tiempop_hora_inicio);
+                        $query->where('tiempop_hora_fin', '>', $request->tiempop_hora_inicio);
+                    });
+                    $rango = $query->get();
+
+                    if(count($rango) > 0){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede interferir con otras ya registradas, por favor verifique la información o consulte al administrador.']);
+                    }
 
                     // Recuperar Actividadop
-                    $actividadop = ActividadOp::find( $request->tiempop_actividadop );
-                    if( !$actividadop instanceof ActividadOp ) {
+                    $actividadp = Actividadp::find( $request->tiempop_actividadp );
+                    if( !$actividadp instanceof Actividadp ) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
@@ -67,35 +88,38 @@ class TiempopController extends Controller
 
                     if($request->has('tiempop_ordenp')){
                         // Recuperar Ordenp
-                        $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$request->tiempop_ordenp'")->first();
+                        $ordenp = Ordenp::getOrdenp($request->tiempop_ordenp);
                         if( !$ordenp instanceof Ordenp ){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
                         $tiempop->tiempop_ordenp = $ordenp->id;
+                        $itemcodigo = $ordenp->orden_codigo;
+                        $itemtercero = $ordenp->tercero_nombre;
                     }
 
-                    // Recuperar Subactividadop
-                    if($request->has('tiempop_subactividadop')){
-                        $subactividadop = SubActividadOp::find( $request->tiempop_subactividadop );
-                        if( !$subactividadop instanceof SubActividadOp ) {
+                    // Recuperar Subactividadp
+                    if($request->has('tiempop_subactividadp')){
+                        $subactividadp = SubActividadp::find( $request->tiempop_subactividadp );
+                        if( !$subactividadp instanceof SubActividadp ) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar subactividad de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        // Validar que sean validas actividadop y subactividadop
-                        if( $actividadop->id != $subactividadop->subactividadop_actividad) {
+                        // Validar que sean validas actividadp y subactividadp
+                        if( $actividadp->id != $subactividadp->subactividadp_actividadp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'La actividad no esta relacionada con la subactividad, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        $tiempop->tiempop_subactividadop = $subactividadop->id;
+                        $tiempop->tiempop_subactividadp = $subactividadp->id;
+                        $itemsubactividadp = $subactividadp->subactividadp_nombre;
                     }
 
                     // Tiempop
                     $tiempop->fill($data);
-                    $tiempop->tiempop_actividadop = $actividadop->id;
+                    $tiempop->tiempop_actividadp = $actividadp->id;
                     $tiempop->tiempop_areap = $areap->id;
                     $tiempop->tiempop_tercero = Auth::user()->id;
                     $tiempop->tiempop_fh_elaboro = date('Y-m-d H:m:s');
@@ -103,7 +127,7 @@ class TiempopController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'msg' => 'El tiempo fue registrado con exito.']);
+                    return response()->json(['success' => true, 'id' => $tiempop->id, 'actividadp_nombre' => $actividadp->actividadp_nombre, 'areap_nombre' => $areap->areap_nombre, 'tiempop_hora_inicio' => $tiempop->tiempop_hora_inicio, 'tiempop_hora_fin' => $tiempop->tiempop_hora_fin, 'tiempop_fecha' => $tiempop->tiempop_fecha, 'subactividadp_nombre' => $itemsubactividadp, 'orden_codigo' => $itemcodigo, 'tercero_nombre' => $itemtercero]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -149,7 +173,7 @@ class TiempopController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $tiempop = Tiempop::findOrFail($request->tiempo_id);
+            $tiempop = Tiempop::findOrFail( $id );
             if( !$tiempop instanceof Tiempop ){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tiempo de la orden, por favor verifique la información o consulte al administrador.']);
             }
@@ -158,20 +182,38 @@ class TiempopController extends Controller
                 return response()->json(['success' => false, 'errors' => 'El tercero que intenta editar no corresponde a este tiempo, por favor verifique la información o consulte al administrador.']);
             }
 
-            DB::beginTransaction();
-            try{
-                // Tiempop
-                $tiempop->fill($data);
-                $tiempop->save();
+            // Validar rango hora inicio
+            $query = Tiempop::query();
+            $query->where('tiempop_tercero', Auth::user()->id);
+            $query->where('tiempop_fecha', $request->tiempop_fecha);
+            $query->where(function ($query) use ($request, $tiempop){
+                $query->where('tiempop_hora_inicio', '<=', $request->tiempop_hora_inicio);
+                $query->where('tiempop_hora_fin', '>', $request->tiempop_hora_inicio);
+                $query->where('koi_tiempop.id', '!=', $tiempop->id);
+            });
+            $rango = $query->get();
 
-                // Commit Transaction
-                DB::commit();
-                return response()->json(['success' => true, 'msg' => 'El tiempo se edito con exito.']);
-            }catch(\Exception $e){
-                DB::rollback();
-                Log::error($e->getMessage());
-                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            if(count($rango) > 0){
+                return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede interferir con otras ya registradas, por favor verifique la información o consulte al administrador.']);
             }
+
+            if ( $tiempop->isValid($data) ) {
+                DB::beginTransaction();
+                try{
+                    // Tiempop
+                    $tiempop->fill($data);
+                    $tiempop->save();
+
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'msg' => 'El tiempo se edito con exito.']);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => $tiempop->errors]);
         }
         abort(404);
     }

@@ -1,5 +1,5 @@
 /**
-* Class MainSubActividadesOpView
+* Class MainSubActividadespView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,18 +9,18 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainSubActividadesOpView = Backbone.View.extend({
+    app.MainSubActividadespView = Backbone.View.extend({
 
-        el: '#subactividadesop-main',
+        el: '#subactividadesp-main',
 
         /**
         * Constructor Method
         */
         initialize : function() {
 
-            this.$subactividadesopSearchTable = this.$('#subactividadesop-search-table');
+            this.$subactividadespSearchTable = this.$('#subactividadesp-search-table');
 
-            this.$subactividadesopSearchTable.DataTable({
+            this.$subactividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -28,23 +28,23 @@ app || (app = {});
                 serverSide: true,
                 language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('subactividadesop.index') ),
+                    url: window.Misc.urlFull( Route.route('subactividadesp.index') ),
                     data: function( data ) {
                         data.datatables = true;
                     }
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'actividadop_nombre', name: 'actividadop_nombre'},
-                    { data: 'subactividadop_nombre', name: 'subactividadop_nombre'},
-                    { data: 'subactividadop_activo', name: 'subactividadop_activo' }
+                    { data: 'actividadp_nombre', name: 'actividadp_nombre'},
+                    { data: 'subactividadp_nombre', name: 'subactividadp_nombre'},
+                    { data: 'subactividadp_activo', name: 'subactividadp_activo' }
                 ],
                 buttons: [
                     {
                         text: '<i class="fa fa-user-plus"></i> Nueva Subactividad',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
-                                window.Misc.redirect( window.Misc.urlFull( Route.route('subactividadesop.create') ) )
+                                window.Misc.redirect( window.Misc.urlFull( Route.route('subactividadesp.create') ) )
                         }
                     }
                 ],
@@ -53,7 +53,7 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('subactividadesop.show', {subactividadesop: full.id }) )  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull( Route.route('subactividadesp.show', {subactividadesp: full.id }) )  +'">' + data + '</a>';
                         }
                     },
                     {

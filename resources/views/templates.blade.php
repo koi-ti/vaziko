@@ -1176,42 +1176,42 @@
     </div>
 </script>
 
-{{-- Template Actividadop --}}
-<script type="text/template" id="add-actividadop-tpl">
+{{-- Template Actividadp --}}
+<script type="text/template" id="add-actividadp-tpl">
 	<div class="row">
 		<div class="form-group col-md-8">
-			<label for="actividadop_nombre" class="control-label">Nombre</label>
-			<input type="text" id="actividadop_nombre" name="actividadop_nombre" value="<%- actividadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+			<label for="actividadp_nombre" class="control-label">Nombre</label>
+			<input type="text" id="actividadp_nombre" name="actividadp_nombre" value="<%- actividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
-			<label for="actividadop_activo" class="control-label">Activo</label>
-			<div><input type="checkbox" id="actividadop_activo" name="actividadop_activo" value="actividadop_activo" <%- parseInt(actividadop_activo) ? 'checked': ''%>></div>
+			<label for="actividadp_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="actividadp_activo" name="actividadp_activo" value="actividadp_activo" <%- parseInt(actividadp_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>
 
-{{-- Template SubActividadop --}}
-<script type="text/template" id="add-subactividadop-tpl">
+{{-- Template SubActividadp --}}
+<script type="text/template" id="add-subactividadp-tpl">
 	<div class="row">
         <div class="form-group col-md-4">
-			<label for="subactividadop_actividad" class="control-label">Actividad</label>
-			<select name="subactividadop_actividad" id="subactividadop_actividad" class="form-control select2-default-clear" required>
+			<label for="subactividadp_actividadp" class="control-label">Actividad</label>
+			<select name="subactividadp_actividadp" id="subactividadp_actividadp" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
-				@foreach( App\Models\Production\ActividadOp::getActividadesOp() as $key => $value)
-					<option value="{{ $key }}" <%- subactividadop_actividad == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+					<option value="{{ $key }}" <%- subactividadp_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
 		</div>
 
 		<div class="form-group col-md-5">
-			<label for="subactividadop_nombre" class="control-label">Nombre</label>
-			<input type="text" id="subactividadop_nombre" name="subactividadop_nombre" value="<%- subactividadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+			<label for="subactividadp_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subactividadp_nombre" name="subactividadp_nombre" value="<%- subactividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
-			<label for="subactividadop_activo" class="control-label">Activo</label>
-			<div><input type="checkbox" id="subactividadop_activo" name="subactividadop_activo" value="subactividadop_activo" <%- parseInt(subactividadop_activo) ? 'checked': ''%>></div>
+			<label for="subactividadp_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="subactividadp_activo" name="subactividadp_activo" value="subactividadp_activo" <%- parseInt(subactividadp_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>

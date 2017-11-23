@@ -4,65 +4,64 @@
 
 	<table class="brtable" border="1" cellspacing="0" cellpadding="0">
 		<tr>
-			<td width="30%" class="left bold">Fecha</td>
-			<td width="70%" class="left bold">Tomado por</td>
-		</tr>
+			<td width="10%" class="left">Referencia:</td>
+			<td width="40%" class="left">{{ $cotizacion->cotizacion1_referencia }}</td>
 
-		<tr>
-			<td width="30%" class="left">{{ $cotizacion->cotizacion1_fecha_inicio }}</td>
-			<td width="70%" class="left">{{ Auth::user()->getName() }}</td>
+			<td width="10%" class="left">Terminos:</td>
+			<td width="40%" colspan="3" class="left">{{ $cotizacion->cotizacion1_terminado }}</td>
 		</tr>
 		<tr>
-			<td colspan="2" class="bold">Cliente</td>
-		</tr>
-	</table>
-
-	<table class="brtable" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<th width="10%" class="left border-left">Compañia:</th>
-			<th width="40%" class="left">{{ $cotizacion->tercero_nombre }}</th>
-
-			<th width="10%" class="left">Nit:</th>
-			<th width="40%" class="left border-right">{{ $cotizacion->tercero_nit }}</th>
+			<td colspan="4" class="bold">Cliente</td>
+			<td class="bold">Asegurado por</td>
+			<td class="bold">Transporte</td>
 		</tr>
 		<tr>
-			<th width="10%" class="left border-left">Contacto</th>
-			<th width="40%" class="left">{{ $cotizacion->tcontacto_nombre }}</th>
+			<td colspan="4" rowspan="4">
+				<table class="intertable">
+					<tr>
+						<th width="10%" class="left">Compañia</th>
+						<th width="50%" class="left">{{ $cotizacion->tercero_nombre }}</th>
 
-			<th width="10%" class="left">Email:</th>
-			<th width="40%" class="left border-right">{{ $cotizacion->tcontacto_email }}</th>
+						<th width="10%" class="left">Nit</th>
+						<th width="30%" class="left">{{ $cotizacion->tercero_nit }}</th>
+					</tr>
+					<tr>
+						<th width="10%" class="left">Contacto</th>
+						<th width="50%" class="left">{{ $cotizacion->tcontacto_nombre }}</th>
+
+						<th width="10%" class="left">Email</th>
+						<td width="30%" class="left">{{ $cotizacion->tcontacto_email }}</td>
+					</tr>
+					<tr>
+						<th width="10%" class="left">Teléfono</th>
+						@if( !empty( $cotizacion->tercero_telefono1 ) )
+							<th width="50%" class="left">{{ $cotizacion->tercero_telefono1 }}</th>
+						@else
+							<th width="50%" class="left">{{ $cotizacion->tercero_telefono2 }}</th>
+						@endif
+
+						<th width="10%" class="left">Celular</th>
+						<th width="30%" class="left">{{ $cotizacion->tercero_celular }}</th>
+					</tr>
+					<tr>
+						<th width="10%" class="left">Direccion</th>
+						<th width="50%" class="left">{{ $cotizacion->tercero_direccion }}</th>
+
+						<th width="10%" class="left">Ciudad</th>
+						<th width="30%" class="left">{{ $cotizacion->municipio_nombre }}</th>
+					</tr>
+				</table>
+			</td>
+			<td rowspan="2">No aplica</td>
+			<td rowspan="2">No aplica</td>
 		</tr>
 		<tr>
-			<th width="10%" class="left border-left">Teléfono</th>
-			@if( !empty( $cotizacion->tercero_telefono1 ) )
-				<th width="40%" class="left">{{ $cotizacion->tercero_telefono1 }}</th>
-			@else
-				<th width="40%" class="left">{{ $cotizacion->tercero_telefono2 }}</th>
-			@endif
-
-			<th width="10%" class="left">Celular</th>
-			<th width="40%" class="left border-right">{{ $cotizacion->tercero_celular }}</th>
-		</tr>
-	</table>
-
-	<table class="brtable" border="0" cellspacing="0" cellpadding="0">
-		<tr>
-			<th width="10%" class="left border-left">Direccion</th>
-			<th width="60%" class="left">{{ $cotizacion->tercero_direccion }}</th>
-
-			<th width="10%" class="left">Ciudad</th>
-			<th width="20%" class="left border-right">{{ $cotizacion->municipio_nombre }}</th>
-		</tr>
-	</table>
-
-	<table class="brtable" border="1" cellspacing="0" cellpadding="0">
-		<tr>
-			<td width="50%" class="center">Referencia</td>
-			<td width="50%" class="left">Terminos</td>
 		</tr>
 		<tr>
-			<th class="left">{{ $cotizacion->cotizacion1_referencia }}</th>
-			<th class="left">{{ $cotizacion->cotizacion1_terminado }}</th>
+			<td colspan="2">Tomado por</td>
+		</tr>
+		<tr>
+			<td colspan="2">{{ Auth::user()->getName() }}</td>
 		</tr>
 	</table>
 
@@ -120,8 +119,12 @@
 				<td class="noborder"></td>
 			</tr>
 			<tr>
-				<td class="noborder"></td>
-				<td class="noborder"></td>
+				<td class="center noborder" colspan="2">
+					<p>
+						_________________________<br>	
+						Aprobacion Cliente
+					</p>
+				</td>
 			</tr>
 			<tr>
 				<td class="noborder"></td>

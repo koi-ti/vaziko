@@ -1,6 +1,6 @@
 @extends('layout.layout')
 
-@section('title') SubActividades de producción @stop
+@section('title') Subactividades de producción @stop
 
 @section('content')
     <section class="content-header">

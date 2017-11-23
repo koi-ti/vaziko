@@ -25,6 +25,15 @@
 					border-collapse: collapse;
 				}
 
+				.intertable {
+					width: 100%;
+					border-collapse: collapse;
+				}
+
+				.intertable td {
+					padding-left: 2px;
+				}
+
 				.titleespecial{
 					font-size: 10;
 					background-color: #000000;
@@ -32,6 +41,7 @@
 				}
 
 				.brtable {
+					page-break-before:auto;
 					width: 100%;
 				    border-collapse: collapse;
 				}
@@ -62,6 +72,14 @@
 
 				.size-7 {
 					font-size: 7;
+				}
+
+				.size-8 {
+					font-size: 8;
+				}
+
+				.border {
+					border: 1px solid black;
 				}
 
 				.noborder {

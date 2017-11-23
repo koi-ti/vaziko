@@ -4,17 +4,16 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
-
 use Validator, Cache;
 
-class ActividadOp extends BaseModel
+class Actividadp extends BaseModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'koi_actividadop';
+    protected $table = 'koi_actividadp';
 
     public $timestamps = false;
 
@@ -23,26 +22,26 @@ class ActividadOp extends BaseModel
      *
      * @var static string
      */
-    public static $key_cache = '_actividadop_cache';
+    public static $key_cache = '_actividadp_cache';
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['actividadop_nombre'];
+    protected $fillable = ['actividadp_nombre'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['actividadop_activo'];
+    protected $boolean = ['actividadp_activo'];
 
     public function isValid($data)
     {
         $rules = [
-            'actividadop_nombre' => 'required|max:50'
+            'actividadp_nombre' => 'required|max:50'
         ];
 
         $validator = Validator::make($data, $rules);
@@ -53,17 +52,17 @@ class ActividadOp extends BaseModel
         return false;
     }
 
-    public static function getActividadesOp()
+    public static function getActividadesp()
     {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }
 
         return Cache::rememberForever( self::$key_cache , function() {
-            $query = ActividadOp::query();
-            $query->where('actividadop_activo', true);
-            $query->orderBy('actividadop_nombre', 'asc');
-            $collection = $query->lists('actividadop_nombre', 'id');
+            $query = Actividadp::query();
+            $query->where('actividadp_activo', true);
+            $query->orderBy('actividadp_nombre', 'asc');
+            $collection = $query->lists('actividadp_nombre', 'id');
 
             $collection->prepend('', '');
             return $collection;

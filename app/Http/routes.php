@@ -161,6 +161,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
+		Route::resource('tiemposp', 'Production\TiempopController', ['only' => ['index']]);
 
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 
@@ -185,8 +186,8 @@ Route::group(['middleware' => 'auth'], function()
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 
-	Route::resource('actividadesop', 'Production\ActividadOpController', ['except' => ['destroy']]);
-	Route::resource('subactividadesop', 'Production\SubActividadOpController', ['except' => ['destroy']]);
+	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
+	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
 	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
@@ -258,4 +259,5 @@ Route::group(['middleware' => 'auth'], function()
 	*/
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
+   	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 });

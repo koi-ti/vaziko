@@ -1,5 +1,5 @@
 /**
-* Class CreateActividadOpView  of Backbone Router
+* Class CreateActividadpView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,12 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateActividadOpView = Backbone.View.extend({
+    app.CreateActividadpView = Backbone.View.extend({
 
-        el: '#actividadop-create',
-        template: _.template( ($('#add-actividadop-tpl').html() || '') ),
+        el: '#actividadp-create',
+        template: _.template( ($('#add-actividadp-tpl').html() || '') ),
         events: {
-            'submit #form-actividadop': 'onStore'
+            'submit #form-actividadp': 'onStore'
         },
         parameters: {
         },
@@ -28,7 +28,7 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-actividadop');
+            this.$wraperForm = this.$('#render-form-actividadp');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -98,7 +98,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('actividadesop.index')) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('actividadesp.index')) );
             }
         }
     });

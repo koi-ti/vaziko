@@ -1,5 +1,5 @@
 /**
-* Class CreateSubActividadOpView  of Backbone Router
+* Class CreateSubActividadpView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,12 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateSubActividadOpView = Backbone.View.extend({
+    app.CreateSubActividadpView = Backbone.View.extend({
 
-        el: '#subactividadop-create',
-        template: _.template( ($('#add-subactividadop-tpl').html() || '') ),
+        el: '#subactividadp-create',
+        template: _.template( ($('#add-subactividadp-tpl').html() || '') ),
         events: {
-            'submit #form-subactividadop': 'onStore'
+            'submit #form-subactividadp': 'onStore'
         },
         parameters: {
         },
@@ -28,7 +28,7 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-subactividadop');
+            this.$wraperForm = this.$('#render-form-subactividadp');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -101,7 +101,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('subactividadesop.index')) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('subactividadesp.index')) );
             }
         }
     });

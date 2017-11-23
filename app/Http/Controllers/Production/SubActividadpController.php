@@ -6,10 +6,10 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\ActividadOp, App\Models\Production\SubActividadOp;
+use App\Models\Production\Actividadp, App\Models\Production\SubActividadp;
 use Cache, Datatables, DB, Log;
 
-class SubActividadOpController extends Controller
+class SubActividadpController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,22 +19,22 @@ class SubActividadOpController extends Controller
      public function index(Request $request)
      {
          if($request->ajax()){
-             $query = SubActividadOp::query();
-             $query->select('koi_subactividadop.*', 'actividadop_nombre');
-             $query->join('koi_actividadop', 'subactividadop_actividad', '=', 'koi_actividadop.id');
+             $query = SubActividadp::query();
+             $query->select('koi_subactividadp.*', 'actividadp_nombre');
+             $query->join('koi_actividadp', 'subactividadp_actividadp', '=', 'koi_actividadp.id');
 
              if( $request->has('datatables') ) {
                  return Datatables::of($query->get())->make(true);
              }
 
-             if( $request->has('actividadesop') ){
-                 $query->where('subactividadop_actividad', $request->actividadesop);
-                 $query->where('subactividadop_activo', true);
+             if( $request->has('actividadesp') ){
+                 $query->where('subactividadp_actividadp', $request->actividadesp);
+                 $query->where('subactividadp_activo', true);
              }
 
              return response()->json($query->get());
          }
-         return view('production.subactividadesop.index');
+         return view('production.subactividadesp.index');
      }
 
     /**
@@ -44,7 +44,7 @@ class SubActividadOpController extends Controller
      */
     public function create()
     {
-        return view('production.subactividadesop.create');
+        return view('production.subactividadesp.create');
     }
 
     /**
@@ -57,38 +57,38 @@ class SubActividadOpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $subactividadop = new SubActividadOp;
+            $subactividadp = new SubActividadp;
 
-            if( $subactividadop->isValid($data) ) {
+            if( $subactividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
                     // Recuperar actividad
-                    $actividadop = ActividadOp::find( $request->subactividadop_actividad );
-                    if(!$actividadop instanceof ActividadOp) {
+                    $actividadp = Actividadp::find( $request->subactividadp_actividadp );
+                    if(!$actividadp instanceof Actividadp) {
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad, por favor verifique la información o consulte al administrador.']);
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    // SubActividadOp
-                    $subactividadop->fill($data);
-                    $subactividadop->fillBoolean($data);
-                    $subactividadop->subactividadop_actividad = $actividadop->id;
-                    $subactividadop->save();
+                    // SubActividadp
+                    $subactividadp->fill($data);
+                    $subactividadp->fillBoolean($data);
+                    $subactividadp->subactividadp_actividadp = $actividadp->id;
+                    $subactividadp->save();
 
                     // Commit Transaction
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubActividadOp::$key_cache );
+                    Cache::forget( SubActividadp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $subactividadop->id]);
+                    return response()->json(['success' => true, 'id' => $subactividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $subactividadop->errors]);
+            return response()->json(['success' => false, 'errors' => $subactividadp->errors]);
         }
         abort(403);
     }
@@ -102,11 +102,11 @@ class SubActividadOpController extends Controller
     public function show(Request $request, $id)
     {
 
-        $subactividadop = SubActividadOp::findOrFail($id);
+        $subactividadp = SubActividadp::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($subactividadop);
+            return response()->json($subactividadp);
         }
-        return view('production.subactividadesop.show', ['subactividadop' => $subactividadop]);
+        return view('production.subactividadesp.show', ['subactividadp' => $subactividadp]);
     }
 
     /**
@@ -117,8 +117,8 @@ class SubActividadOpController extends Controller
      */
     public function edit($id)
     {
-        $subactividadop = SubActividadOp::findOrFail($id);
-        return view('production.subactividadesop.edit', ['subactividadop' => $subactividadop]);
+        $subactividadp = SubActividadp::findOrFail($id);
+        return view('production.subactividadesp.edit', ['subactividadp' => $subactividadp]);
     }
 
     /**
@@ -132,38 +132,38 @@ class SubActividadOpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            $subactividadop = SubActividadOp::findOrFail($id);
+            $subactividadp = SubActividadp::findOrFail($id);
 
-            if( $subactividadop->isValid($data) ) {
+            if( $subactividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
                     // Recuperar actividad
-                    $actividadop = ActividadOp::find( $request->subactividadop_actividad );
-                    if(!$actividadop instanceof ActividadOp){
+                    $actividadp = Actividadp::find( $request->subactividadp_actividadp );
+                    if(!$actividadp instanceof Actividadp){
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad, por favor verifique la información o consulte al administrador.']);
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    // SubActividadOp
-                    $subactividadop->fill($data);
-                    $subactividadop->fillBoolean($data);
-                    $subactividadop->subactividadop_actividad = $actividadop->id;
-                    $subactividadop->save();
+                    // SubActividadp
+                    $subactividadp->fill($data);
+                    $subactividadp->fillBoolean($data);
+                    $subactividadp->subactividadp_actividadp = $actividadp->id;
+                    $subactividadp->save();
 
                     // Commit Transaction
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubActividadOp::$key_cache );
+                    Cache::forget( SubActividadp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $subactividadop->id]);
+                    return response()->json(['success' => true, 'id' => $subactividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $subactividadop->errors]);
+            return response()->json(['success' => false, 'errors' => $subactividadp->errors]);
         }
         abort(403);
     }

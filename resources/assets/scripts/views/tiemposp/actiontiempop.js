@@ -57,42 +57,40 @@ app || (app = {});
         onStore: function(e){
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                var _this = this;
-                var data = window.Misc.formToJson( e.target );
-                    data.tiempo_id = this.parameters.model.id;
+                var _this = this,
+                    data = window.Misc.formToJson( e.target );
 
-                // Update tiempop
-                $.ajax({
-                    url: window.Misc.urlFull( Route.route( 'tiemposp.update') ),
-                    data: data,
-                    type: 'PUT',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
-                    }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
-                    if(!_.isUndefined(resp.success)) {
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
-                        }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        alertify.success( resp.msg );
-                        _this.$modal.modal('hide');
-                        _this.model.fetch();
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
-                    alertify.error(thrownError);
+                var model = _.find( this.parameters.collection.models, function(item) {
+                    return item.get('id') == _this.parameters.model.id;
                 });
+
+                if(model instanceof Backbone.Model ) {
+                    model.save( data ,{
+                        success : function(model, resp) {
+                            if(!_.isUndefined(resp.success)) {
+                                window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                alertify.success( resp.msg );
+                                _this.parameters.collection.fetch();
+                                _this.$modal.modal('hide');
+                            }
+                        },
+                        error : function(model, error) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            alertify.error(error.statusText)
+                        }
+                    });
+                }
             }
         },
 

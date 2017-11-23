@@ -389,11 +389,6 @@ class Cotizacion1Controller extends Controller
             $items = new \stdClass();
             $items->cotizacion2 = $detalle;
 
-            // Maquinasp
-            $maquinasp = Cotizacion3::where('cotizacion3_cotizacion2', $detalle->id)->get();
-            foreach ($maquinasp as $maquinap) {
-                $items->maquinasp[] = $maquinap->getName->maquinap_nombre;
-            }
 
             $materialesp = Cotizacion4::where('cotizacion4_cotizacion2', $detalle->id)->get();
             foreach ($materialesp as $materialp) {
@@ -406,7 +401,6 @@ class Cotizacion1Controller extends Controller
                 $items->acabadosp[] = $acabadop->getName->acabadop_nombre;
             }
 
-            isset($items->maquinasp) ? $items->maquinasp = implode(', ', $items->maquinasp) : null;
             isset($items->materialesp) ? $items->materialesp = implode(', ', $items->materialesp) : null;
             isset($items->acabadosp) ? $items->acabadosp = implode(', ', $items->acabadosp) : null;
 

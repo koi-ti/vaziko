@@ -37,6 +37,7 @@ app || (app = {});
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
+            this.tiempopordenList = new app.TiempopOrdenList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -83,6 +84,16 @@ app || (app = {});
             // Despachos pendientes list
             this.despachospPendientesOrdenListView = new app.DespachospPendientesOrdenListView( {
                 collection: this.despachospPendientesOrdenList,
+                parameters: {
+                    dataFilter: {
+                        'orden2_orden': this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos pendientes list
+            this.tiempopordenListView = new app.TiempopOrdenListView( {
+                collection: this.tiempopordenList,
                 parameters: {
                     dataFilter: {
                         'orden2_orden': this.model.get('id')

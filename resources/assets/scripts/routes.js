@@ -97,19 +97,19 @@ app || (app = {});
             'traslados/:traslado(/)': 'getTrasladosShow',
 
             // Produccion
-            'tiemposp(/)': 'getTiempopEdit',
+            'tiemposp(/)': 'getTiempopMain',
 
             'areasp(/)': 'getAreaspMain',
             'areasp/create(/)': 'getAreaspCreate',
             'areasp/:areap/edit(/)': 'getAreaspEdit',
 
-            'actividadesop(/)': 'getActividadesOpMain',
-            'actividadesop/create(/)': 'getActividadesOpCreate',
-            'actividadesop/:actividadop/edit(/)': 'getActividadesOpEdit',
+            'actividadesp(/)': 'getActividadespMain',
+            'actividadesp/create(/)': 'getActividadespCreate',
+            'actividadesp/:actividadp/edit(/)': 'getActividadespEdit',
 
-            'subactividadesop(/)': 'getSubActividadesOpMain',
-            'subactividadesop/create(/)': 'getSubActividadesOpCreate',
-            'subactividadesop/:subactividadop/edit(/)': 'getSubActividadesOpEdit',
+            'subactividadesp(/)': 'getSubActividadespMain',
+            'subactividadesp/create(/)': 'getSubActividadespCreate',
+            'subactividadesp/:subactividadp/edit(/)': 'getSubActividadespEdit',
 
             'acabadosp(/)': 'getAcabadospMain',
             'acabadosp/create(/)': 'getAcabadospCreate',
@@ -1091,16 +1091,13 @@ app || (app = {});
         /**
         * show view edit tiempop
         */
-        getTiempopEdit: function () {
-            this.tiempopModel = new app.TiempopModel();
-
-            if ( this.createTiempopView instanceof Backbone.View ){
-                this.createTiempopView.stopListening();
-                this.createTiempopView.undelegateEvents();
+        getTiempopMain: function () {
+            if ( this.mainTiempopView instanceof Backbone.View ){
+                this.mainTiempopView.stopListening();
+                this.mainTiempopView.undelegateEvents();
             }
 
-            this.createTiempopView = new app.CreateTiempopView({ model: this.tiempopModel });
-            this.tiempopModel.fetch();
+            this.mainTiempopView = new app.MainTiempopView( );
         },
 
         getAreaspMain: function () {
@@ -1147,89 +1144,89 @@ app || (app = {});
         /**
         * show view create actividades de produccion de produccion
         */
-        getActividadesOpMain: function () {
+        getActividadespMain: function () {
 
-            if ( this.mainActividadesOpView instanceof Backbone.View ){
-                this.mainActividadesOpView.stopListening();
-                this.mainActividadesOpView.undelegateEvents();
+            if ( this.mainActividadespView instanceof Backbone.View ){
+                this.mainActividadespView.stopListening();
+                this.mainActividadespView.undelegateEvents();
             }
 
-            this.mainActividadesOpView = new app.MainActividadesOpView( );
+            this.mainActividadespView = new app.MainActividadespView( );
         },
 
         /**
         * show view create actividades de produccion de produccion
         */
-        getActividadesOpCreate: function () {
-            this.actividadOpModel = new app.ActividadOpModel();
+        getActividadespCreate: function () {
+            this.actividadpModel = new app.ActividadpModel();
 
-            if ( this.createActividadOpView instanceof Backbone.View ){
-                this.createActividadOpView.stopListening();
-                this.createActividadOpView.undelegateEvents();
+            if ( this.createActividadpView instanceof Backbone.View ){
+                this.createActividadpView.stopListening();
+                this.createActividadpView.undelegateEvents();
             }
 
-            this.createActividadOpView = new app.CreateActividadOpView({ model: this.actividadOpModel });
-            this.createActividadOpView.render();
+            this.createActividadpView = new app.CreateActividadpView({ model: this.actividadpModel });
+            this.createActividadpView.render();
         },
 
         /**
         * show view edit actividades de produccion de produccion
         */
-        getActividadesOpEdit: function ( actividadOp ) {
-            this.actividadOpModel = new app.ActividadOpModel();
-            this.actividadOpModel.set({'id': actividadOp}, {'silent':true});
+        getActividadespEdit: function ( actividadp ) {
+            this.actividadpModel = new app.ActividadpModel();
+            this.actividadpModel.set({'id': actividadp}, {'silent':true});
 
-            if ( this.createActividadOpView instanceof Backbone.View ){
-                this.createActividadOpView.stopListening();
-                this.createActividadOpView.undelegateEvents();
+            if ( this.createActividadpView instanceof Backbone.View ){
+                this.createActividadpView.stopListening();
+                this.createActividadpView.undelegateEvents();
             }
 
-            this.createActividadOpView = new app.CreateActividadOpView({ model: this.actividadOpModel });
-            this.actividadOpModel.fetch();
+            this.createActividadpView = new app.CreateActividadpView({ model: this.actividadpModel });
+            this.actividadpModel.fetch();
         },
 
         /**
         * show view create subactividades de produccion de produccion
         */
-        getSubActividadesOpMain: function () {
+        getSubActividadespMain: function () {
 
-            if ( this.mainSubActividadesOpView instanceof Backbone.View ){
-                this.mainSubActividadesOpView.stopListening();
-                this.mainSubActividadesOpView.undelegateEvents();
+            if ( this.mainSubActividadespView instanceof Backbone.View ){
+                this.mainSubActividadespView.stopListening();
+                this.mainSubActividadespView.undelegateEvents();
             }
 
-            this.mainSubActividadesOpView = new app.MainSubActividadesOpView( );
+            this.mainSubActividadespView = new app.MainSubActividadespView( );
         },
 
         /**
         * show view create subactividades de produccion de produccion
         */
-        getSubActividadesOpCreate: function () {
-            this.subactividadOpModel = new app.SubActividadOpModel();
+        getSubActividadespCreate: function () {
+            this.subactividadpModel = new app.SubActividadpModel();
 
-            if ( this.createSubActividadOpView instanceof Backbone.View ){
-                this.createSubActividadOpView.stopListening();
-                this.createSubActividadOpView.undelegateEvents();
+            if ( this.createSubActividadpView instanceof Backbone.View ){
+                this.createSubActividadpView.stopListening();
+                this.createSubActividadpView.undelegateEvents();
             }
 
-            this.createSubActividadOpView = new app.CreateSubActividadOpView({ model: this.subactividadOpModel });
-            this.createSubActividadOpView.render();
+            this.createSubActividadpView = new app.CreateSubActividadpView({ model: this.subactividadpModel });
+            this.createSubActividadpView.render();
         },
 
         /**
         * show view edit actividades de produccion de produccion
         */
-        getSubActividadesOpEdit: function ( subactividadOp ) {
-            this.subactividadOpModel = new app.SubActividadOpModel();
-            this.subactividadOpModel.set({'id': subactividadOp}, {'silent':true});
+        getSubActividadespEdit: function ( subactividadp ) {
+            this.subactividadpModel = new app.SubActividadpModel();
+            this.subactividadpModel.set({'id': subactividadp}, {'silent':true});
 
-            if ( this.createSubActividadOpView instanceof Backbone.View ){
-                this.createSubActividadOpView.stopListening();
-                this.createSubActividadOpView.undelegateEvents();
+            if ( this.createSubActividadpView instanceof Backbone.View ){
+                this.createSubActividadpView.stopListening();
+                this.createSubActividadpView.undelegateEvents();
             }
 
-            this.createSubActividadOpView = new app.CreateSubActividadOpView({ model: this.subactividadOpModel });
-            this.subactividadOpModel.fetch();
+            this.createSubActividadpView = new app.CreateSubActividadpView({ model: this.subactividadpModel });
+            this.subactividadpModel.fetch();
         },
 
         /**
