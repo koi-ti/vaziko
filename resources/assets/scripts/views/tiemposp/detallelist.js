@@ -129,6 +129,8 @@ app || (app = {});
                         // Add model in collection
                         _this.collection.add(model);
                         window.Misc.clearForm( $('#form-tiempop') );
+                        $('#tiempop_hora_inicio').val( moment().format('H:mm') );
+                        $('#tiempop_hora_fin').val( moment().format('H:mm') );
                     }
                 },
                 error : function(model, error) {

@@ -46,6 +46,7 @@ app || (app = {});
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
+            this.$inputTiempop = this.$inputContent.attr("data-tiempop");
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -58,6 +59,7 @@ app || (app = {});
                     data: function( data ) {
                         data.tercero_nit = _this.$searchNit.val();
                         data.tercero_nombre = _this.$searchName.val();
+                        data.tercero_tiempop = _this.$inputTiempop;
                     }
                 },
                 columns: [
@@ -141,6 +143,7 @@ app || (app = {});
             this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
+            this.$inputTiempop = this.$inputContent.attr("data-tiempop");
 
             if(this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
@@ -153,7 +156,9 @@ app || (app = {});
                 this.$inputOrden.attr('data-tercero', '');
             }
 
-            var tercero = this.$inputContent.val();
+            var tercero = this.$inputContent.val(),
+                tiempop = this.$inputTiempop;
+
 
             // Before eval clear data
             this.$inputName.val('');
@@ -163,7 +168,7 @@ app || (app = {});
                 $.ajax({
                     url: window.Misc.urlFull(Route.route('terceros.search')),
                     type: 'GET',
-                    data: { tercero_nit: tercero },
+                    data: { tercero_nit: tercero, tiempop_tercero: tiempop },
                     beforeSend: function() {
                         _this.$inputName.val('');
                         window.Misc.setSpinner( _this.$wraperConten );

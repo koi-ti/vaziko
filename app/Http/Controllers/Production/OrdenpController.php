@@ -108,6 +108,11 @@ class OrdenpController extends Controller
                         $query->whereRaw("$request->orden_productop IN ( SELECT orden2_productop
                             FROM koi_ordenproduccion2 WHERE orden2_orden = koi_ordenproduccion.id) ");
                     }
+
+                    // Tiemposp
+                    if($request->has('orden_tiempop')) {
+                        $query->where('orden_abierta', true);
+                    }
                 })
                 ->make(true);
         }
@@ -329,16 +334,23 @@ class OrdenpController extends Controller
     public function search(Request $request)
     {
         if($request->has('orden_codigo')) {
-            $ordenp = Ordenp::select('koi_ordenproduccion.id',
+            $query = Ordenp::query();
+            $query->select('koi_ordenproduccion.id',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                         )
                     ELSE tercero_razonsocial END)
                 AS tercero_nombre")
-            )
-            ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id')
-            ->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'")->first();
+            );
+            $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+            $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
+
+            if($request->has('orden_tiempop')){
+                $query->where('orden_abierta', true);
+            }
+
+            $ordenp = $query->first();
             if($ordenp instanceof Ordenp) {
                 return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre, 'id' => $ordenp->id]);
             }

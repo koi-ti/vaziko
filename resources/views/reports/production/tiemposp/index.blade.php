@@ -19,7 +19,7 @@
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
                     <div class="row">
-                        <label for="tiempop_tercero" class="col-sm-1 col-md-offset-1 control-label">Cliente</label>
+                        <label for="tiempop_tercero" class="col-sm-1 col-md-offset-1 control-label">Funcionario</label>
                         <div class="form-group col-sm-3">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-btn">
@@ -27,7 +27,7 @@
                                         <i class="fa fa-user"></i>
                                     </button>
                                 </span>
-                                <input id="tiempop_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="tiempop_tercero" type="text" maxlength="15" data-wrapper="spinner-main" data-name="tiempop_tercero_nombre" value="{{ old('tiempop_tercero') }}" required>
+                                <input id="tiempop_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="tiempop_tercero" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre" value="{{ old('tiempop_tercero') }}" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -43,7 +43,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" id="fecha_inicial" name="fecha_inicial" placeholder="Fecha inicio" value="{{ old('fecha_inicial') }}" class="form-control input-sm datepicker" required>
+                                <input type="text" id="fecha_inicial" name="fecha_inicial" placeholder="Fecha inicio" value="{{ date('Y-m-d') }}" class="form-control input-sm datepicker" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -53,7 +53,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" id="fecha_final" name="fecha_final" placeholder="Fecha inicio" value="{{ old('fecha_final') }}" class="form-control input-sm datepicker" required>
+                                <input type="text" id="fecha_final" name="fecha_final" placeholder="Fecha inicio" value="{{ date('Y-m-d') }}" class="form-control input-sm datepicker" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>

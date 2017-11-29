@@ -215,17 +215,19 @@
                 </ul>
             </li>
 
-            {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rtiemposp']) ? 'active' : '' }}">
-                <a href="#">
-                    <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
-                        <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Reporte de tiempos</a>
-                    </li>
-                </ul>
-            </li>
+            @if( Auth::user()->ability('admin', ['module' => 'rtiemposp']) )
+                {{-- Reportes contabilidad --}}
+                <li class="{{ in_array(Request::segment(1), ['rtiemposp']) ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
+                            <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Reporte de tiempos</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
 
             {{-- Referencias produccion --}}
             <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesp', 'subactividadesp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
