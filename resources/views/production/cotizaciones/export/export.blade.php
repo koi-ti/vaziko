@@ -61,7 +61,7 @@
 				<div class="cell center noborder" colspan="2">
 					<p>
 						_________________________<br>
-						Aprobacion Cliente
+						Aprobación Cliente
 					</p>
 				</div>
 			</div>
