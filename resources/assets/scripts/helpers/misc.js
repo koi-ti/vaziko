@@ -125,12 +125,18 @@
         */
         clearForm: function( form ){
 
+            form.trigger('reset');
+
             form.find(':input').each(function(){
                 field_type = $(this);
 
                 // Inputmask data-currency
                 if ( field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == ''){
                     field_type.val('');
+                }
+
+                if( field_type.hasClass('timepicker') ){
+                    field_type.val( moment().format('H:mm') );
                 }
 
                 // Checkbox && radiobutton
@@ -152,9 +158,7 @@
                     id = field_type.attr('id');
                     $('#select2-'+id+'-container').removeAttr('title');
                 }
-
             });
-            form.trigger('reset');
         },
 
         /**

@@ -22,6 +22,7 @@
 
 				.table  {
 					display: table;
+					border-collapse: collapse;
 					width: 100%;
 				}
 
@@ -35,10 +36,9 @@
 
 				.cell {
 					display: table-cell;
-					border: solid;
-					border-width: thin;
-					padding-left: 2px;
-					padding-right: 2px;
+					border: 1px solid black;
+					padding-left: 1px;
+					padding-right: 1px;
 				}
 
 				.titleespecial{
@@ -71,8 +71,12 @@
 					font-size: 8;
 				}
 
+				.size-10 {
+					font-size: 10;
+				}
+
 				.noborder {
-					border: 1px solid white;
+					border: none;
 				}
 
 				.border {
@@ -82,22 +86,50 @@
 				.border-cell {
 					border-left: 1px solid black;
 					border-right: 1px solid black;
-					border-top: 0px solid black;
-					border-bottom: 0px solid black;
+					border-top: none;
+					border-bottom: none;
 				}
 
 				.border-left {
 					border-left: 1px solid black;
-					border-right: 0px solid black;
-					border-top: 0px solid black;
-					border-bottom: 0px solid black;
+					border-right: none;
+					border-top: none;
+					border-bottom: none;
+				}
+
+				.border-right {
+					border-left: none;
+					border-right: 1px solid black;
+					border-top: none;
+					border-bottom: none;
 				}
 
 				.border-top {
-					border-left: 0px solid black;
-					border-right: 0px solid black;
+					border-left: none;
+					border-right: none;
 					border-top: 1px solid black;
-					border-bottom: 0px solid black;
+					border-bottom: none;
+				}
+
+				.border-bottom {
+					border-left: none;
+					border-right: none;
+					border-top: none;
+					border-bottom: 1px solid black;
+				}
+
+				.border-tbr {
+					border-top: 1px solid black;
+					border-bottom: 1px solid black;
+					border-left: none;
+					border-right: 1px solid black;
+				}
+
+				.border-tbl {
+					border-top: 1px solid black;
+					border-bottom: 1px solid black;
+					border-left: 1px solid black;
+					border-right: none;
 				}
 
 				.bold{

@@ -4,11 +4,11 @@
 	<div class="body">
 		<div class="table">
 			<div class="rows">
-				<div style="width:49%;" class="cell center">Descripción</div>
-				<div style="width:10%;" class="cell center">Cantidad</div>
-				<div style="width:13%;" class="cell right">Precio Unitario</div>
-				<div style="width:13%;" class="cell right">IVA</div>
-				<div style="width:13%;" class="cell right">Total</div>
+				<div style="width:53%;" class="cell center">Descripción</div>
+				<div style="width:7%;" class="cell center">Cantidad</div>
+				<div style="width:13%;" class="cell center">Precio Unitario</div>
+				<div style="width:13%;" class="cell center">I.V.A</div>
+				<div style="width:13%;" class="cell center">Total</div>
 			</div>
 			{{--*/ $iva = $fiva = $total = 0 /*--}}
 			@foreach( $object->cotizacion2 as $cotizacion2 )
@@ -24,9 +24,9 @@
 						{{ isset($cotizacion2->materialesp) ? 'Material: '. $cotizacion2->materialesp : null }}<br>
 						{{ isset($cotizacion2->acabadosp) ? 'Acabado: '. $cotizacion2->acabadosp : null }}
 					</div>
-					<div class="cell border-left center">{{ $cotizacion2->cotizacion2->cotizacion2_cantidad }}</div>
-					<div class="cell border-left right">{{ number_format($cotizacion2->cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</div>
-					<div class="cell border-left right">{{ number_format($fiva, 2, ',', '.') }}</div>
+					<div class="cell border-cell center">{{ $cotizacion2->cotizacion2->cotizacion2_cantidad }}</div>
+					<div class="cell border-cell right">{{ number_format($cotizacion2->cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</div>
+					<div class="cell border-cell right">{{ number_format($fiva, 2, ',', '.') }}</div>
 					<div class="cell border-cell right">{{ number_format($cotizacion2->cotizacion2->cotizacion2_precio_total, 2, ',', '.') }}</div>
 				</div>
 			@endforeach
