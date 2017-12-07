@@ -94,7 +94,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('unidades.show', { unidades: resp.id})) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('unidades.index') ) );
             }
         }
     });

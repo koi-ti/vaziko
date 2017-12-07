@@ -25,9 +25,30 @@ class AsientoController extends Controller
     {
         if ($request->ajax()) {
             $query = Asiento::query();
-            $query->select('koi_asiento1.id as id', 'asiento1_numero', 'asiento1_mes', 'asiento1_ano', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"), 'asiento1_preguardado');
-            $query->join('koi_tercero', 'koi_asiento1.asiento1_beneficiario', '=', 'koi_tercero.id');
-            return Datatables::of($query->get())->make(true);
+            $query->select('koi_asiento1.id as id', 'asiento1_numero', 'documento_nombre', 'asiento1_mes', 'asiento1_ano', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"), 'asiento1_preguardado');
+            $query->join('koi_tercero', 'asiento1_beneficiario', '=', 'koi_tercero.id');
+            $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
+
+            // Persistent data filter
+            if($request->has('persistent') && $request->persistent) {
+                session(['search_tercero' => $request->has('asiento_tercero_nit') ? $request->asiento_tercero_nit : '']);
+                session(['search_tercero_nombre' => $request->has('asiento_tercero_nombre') ? $request->asiento_tercero_nombre : '']);
+                session(['search_documento' => $request->has('asiento_documento') ? $request->asiento_documento : '']);
+            }
+
+            return Datatables::of($query)
+                ->filter(function($query) use ($request){
+                    // Tercero nit
+                    if($request->has('asiento_tercero_nit')) {
+                        $query->where('tercero_nit', $request->asiento_tercero_nit);
+                    }
+
+                    // Documento
+                    if($request->has('asiento_documento')) {
+                        $query->where('asiento1_documento', $request->asiento_documento);
+                    }
+                })
+                ->make(true);
         }
         return view('accounting.asiento.index');
     }

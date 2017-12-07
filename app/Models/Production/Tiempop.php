@@ -55,6 +55,7 @@ class Tiempop extends BaseModel
         return false;
     }
 
+    // Consulta modulo tiemposp
     public static function getTiemposp(){
         $query = Tiempop::query();
         $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
@@ -79,6 +80,7 @@ class Tiempop extends BaseModel
         return $query->get();
     }
 
+    // Consulta de detalle ordenp
     public static function getTiempospOrdenp( $ordenp2 ){
         $query = Tiempop::query();
         $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre',  DB::raw("(CASE WHEN tercero_persona = 'N'

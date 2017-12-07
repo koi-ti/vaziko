@@ -13,7 +13,6 @@ app || (app = {});
 
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
-        templateFp: _.template( ($('#add-rfacturap-tpl').html() || '') ),
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'submit #form-item-asiento': 'onStoreItem',
@@ -38,9 +37,9 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
+            // Attributes
             var attributes = this.model.toJSON();
-            attributes.edit = true;
+                attributes.edit = true;
             this.$el.html( this.template(attributes) );
 
             this.$numero = this.$('#asiento1_numero');
@@ -99,7 +98,7 @@ app || (app = {});
                     wrapper: this.spinner,
                     edit: true,
                     dataFilter: {
-                        'asiento': this.model.get('id')
+                        asiento: this.model.get('id')
                     }
                 }
             });
@@ -151,10 +150,9 @@ app || (app = {});
         * Event Create Cuenta
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }
@@ -201,7 +199,7 @@ app || (app = {});
                             }else{
                                 // Default insert
                                 _this.asientoCuentasList.trigger( 'store', data );
-                                window.Misc.clearForm( _this.$formItem );   
+                                window.Misc.clearForm( _this.$formItem );
                             }
                         }
                     })(this)

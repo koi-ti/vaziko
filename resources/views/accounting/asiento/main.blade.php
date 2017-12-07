@@ -261,37 +261,6 @@
 		</section>
 	</script>
 
-	<script type="text/template" id="add-asiento2-item-tpl">
-		<% if(edit) { %>
-		<td class="text-center">
-			<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>" data-resource-nif = "<%- asientoNif2_id %>">
-				<span><i class="fa fa-times"></i></span>
-			</a>
-		</td>
-		<% } %>
-		<td><%- plancuentas_cuenta %></td>
-	    <td><%- plancuentas_nombre %></td>
-	    <td>
-	    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
-	    		<%- tercero_nit %>
-	    	</a>
-	    </td>
-	    <td>
-	    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
-		    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
-		    		<%- centrocosto_codigo %>
-		    	</a>
-	    	<% } %>
-	    </td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
-	    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
-	    <td class="text-center">
-			<a class="btn btn-default btn-xs item-asiento2-show-info" data-resource="<%- id %>">
-				<span><i class="fa fa-info-circle"></i></span>
-			</a>
-		</td>
-	</script>
 
 	<script type="text/template" id="searchordenp-asiento-tpl">
 		<div class="row">
@@ -311,7 +280,7 @@
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-factura="false" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
+					<input id="asiento2_orden" placeholder="Orden" class="form-control ordenp-koi-component" name="asiento2_orden" type="text" maxlength="15" data-estado="A" data-wrapper="modal-asiento-wrapper-ordenp" data-name="asiento2_orden_beneficiario" required>
 				</div>
 			</div>
 			<div class="col-sm-6">
@@ -358,25 +327,29 @@
 		</div>
 
 		<div class="row"><br>
-			<label for="factura_koi" class="col-sm-offset-2 col-sm-1 control-label">Factura</label>
+			<label for="factura_koi" class="col-sm-offset-1 col-sm-1 control-label">Factura</label>
 			<div class="form-group col-sm-2">
 	      		<div class="input-group input-group-sm">
 					<span class="input-group-btn">
-						<button type="button" class="btn btn-default btn-flat btn-koi-search-factura-component-table" data-field="factura1_orden">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-factura-component-table" data-field="factura1_asiento">
 							<i class="fa fa-building-o"></i>
 						</button>
 					</span>
-					<input id="factura1_orden" placeholder="Factura" class="form-control factura-koi-component" name="factura1_orden" type="text" maxlength="15" data-factura="true" data-name="factura1_orden_beneficiario" required>
+					<input id="factura1_asiento" name="factura1_asiento" placeholder="Factura" class="form-control factura-koi-component" type="text" maxlength="15" data-factura="true" data-nit="factura1_tercero_nit" data-name="factura1_asiento_beneficiario" data-referencia="factura1_referencia" readonly required>
+					<input id="factura1_referencia" name="factura1_referencia" type="hidden" required>
 				</div>
 			</div>
+			<div class="col-sm-3">
+				<input id="factura1_tercero_nit" name="factura1_tercero_nit" placeholder="Nit" class="form-control input-sm" type="text" readonly required>
+			</div>
 			<div class="col-sm-4">
-				<input id="factura1_orden_beneficiario" name="factura1_orden_beneficiario" placeholder="Tercero" class="form-control input-sm" type="text" readonly required>
+				<input id="factura1_asiento_beneficiario" name="factura1_asiento_beneficiario" placeholder="Nombre" class="form-control input-sm" type="text" readonly required>
 			</div>
 		</div>
 
 		<!-- table table-bordered table-striped -->
         <div id="wrapper-table-factura" class="box-body table-responsive no-padding" hidden>
-            <table id="browse-factura-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+            <table id="browse-factura4-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
                 <thead>
                     <tr>
                         <th width="10%">Fecha</th>
@@ -403,12 +376,12 @@
 
 			<div class="form-group col-md-4">
 				<label for="facturap1_cuotas" class="control-label">Cuotas</label>
-				<input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" class="form-control input-sm" value="2" min="1" max="100" required>
+				<input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" class="form-control input-sm" value="1" min="1" max="100" required>
 			</div>
 
 			<div class="form-group col-md-4">
 				<label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
-				<input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" class="form-control input-sm" min="1" value="15" required>
+				<input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" class="form-control input-sm" min="1" value="30" required>
 			</div>
 		</div>
 
@@ -554,315 +527,12 @@
 		</div>
 	</script>
 
-	<script type="text/template" id="show-info-asiento2-tpl">
-		<div class="row">
-			<div class="form-group col-md-6">
-				<label class="control-label">Naturaleza</label>
-				<div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
-			</div>
-		</div>
-
-		<!-- Orden -->
-		<% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Orden de producción</label>
-					<div><%- ordenp_codigo %> - <%- ordenp_beneficiario %></div>
-				</div>
-			</div>
-		<% } %>
-
-		<!-- Beneficiario -->
-		<div class="row">
-			<div class="form-group col-md-12">
-				<label class="control-label">Beneficiario</label>
-				<div><%- tercero_nit %> - <%- tercero_nombre %></div>
-			</div>
-		</div>
-
-		<!-- Centro costo -->
-    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Centro Costo</label>
-					<div><%- centrocosto_codigo %> - <%- centrocosto_nombre %></div>
-				</div>
-			</div>
-		<% } %>
-
-		<!-- Detalle -->
-    	<% if( !_.isUndefined(asiento2_detalle) && !_.isNull(asiento2_detalle) && asiento2_detalle != '') { %>
-			<div class="row">
-				<div class="form-group col-md-12">
-					<label class="control-label">Detalle</label>
-					<div><%- asiento2_detalle %></div>
-				</div>
-			</div>
-		<% } %>
-
-		<div class="row" id="render-info-modal"></div>
-	</script>
-
-	<!-- Facturas, Facturap, Inventario -> Padres -->
-	<script type="text/template" id="add-info-facturap-item">
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="box-header with-border">
-		            <h3 class="box-title">
-		            	<b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
-		            </h3>
-		        </div>
-				<div class="box-body">
-					<div class="row">
-						<div class="form-group col-md-6">
-							<label class="control-label">Factura proveedor</label>
-							<div><%- movimiento_facturap %></div>
-						</div>
-						<% if( movimiento_nuevo ) { %>
-							<div class="form-group col-md-6">
-								<label class="control-label">Valor</label>
-								<div><%- window.Misc.currency( movimiento_valor ) %></div>
-							</div>
-						<% } %>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="control-label">Tercero</label>
-							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
-						</div>
-					</div>
-					<% if( movimiento_nuevo ) { %>
-						<div class="row">
-							<div class="form-group col-md-4">
-								<label class="control-label">Vencimiento</label>
-								<div><%- movimiento_fecha %></div>
-							</div>
-							<div class="form-group col-md-4">
-								<label class="control-label">Cuotas</label>
-								<div><%- movimiento_item %></div>
-							</div>
-							<div class="form-group col-md-4">
-								<label class="control-label">Periodicidad</label>
-								<div><%- movimiento_periodicidad %></div>
-							</div>
-						</div>
-						<div class="row">
-							<div class="form-group col-md-12">
-								<label class="control-label">Observaciones</label>
-								<div><%- movimiento_observaciones %></div>
-							</div>
-						</div>
-					<% } %>
-				</div>
-		    </div>
-		</div>
-		<% if ( !movimiento_nuevo ) { %>
-			<div class="box box-success">
-				<div class="box-body">
-					<div class="box-header with-border">
-			            <h3 class="box-title"><b>Informacion adicional</b></h3>
-			        </div>
-
-			        <div class="box-body table-responsive no-padding">
-			            <table id="browse-showinfo-facturap-list" class="table table-hover table-bordered" cellspacing="0">
-		                	<thead>
-					        	<tr>
-									<th class="text-center">Cuota</th>
-					                <th class="text-center">Pago</th>
-					            </tr>
-					       	</thead>
-					       	<tbody>
-					       	</tbody>
-					    </table>
-			        </div>
-				</div>
-			</div>
-		 <% } %>
-	</script>
-
-	<script type="text/template" id="add-info-factura-item">
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="box-header with-border">
-					<h3 class="box-title">
-						<b>Factura </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
-					</h3>
-					<div class="pull-right">
-						<% if ( !_.isNull(movimiento_factura) ) { %> 
-							<b>Numero </b><small># <%- factura1_id %></small>
-						<% } %>
-						<b>Prefijo </b><small><%- puntoventa_prefijo %></small>
-					</div>
-		        </div>
-				<div class="box-body">
-					<div class="row">
-						<div class="form-group col-md-6">
-							<label class="control-label">Fecha</label>
-							<div><%- factura1_fecha %></div>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Vencimiento</label>
-							<div><%- factura1_fecha_vencimiento %></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-4">
-							<label class="control-label">Punto de venta</label>
-							<div><%- puntoventa_nombre %></div>
-						</div>
-						<div class="form-group col-md-4">
-							<label class="control-label">Valor</label>
-							<div><%- window.Misc.currency( factura1_total ) %></div>
-						</div>
-						<div class="form-group col-md-4">
-							<label class="control-label">Cuotas</label>
-							<div><%- factura1_cuotas %></div>
-						</div>
-					</div>
-
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="control-label">Tercero</label>
-							<div><%- tercero_nit %> - <%- tercero_nombre %></div>
-						</div>
-					</div>
-				</div>
-		    </div>
-		</div>
-
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="box-header with-border">
-		            <h3 class="box-title"><b>Informacion adicional</b></h3>
-		        </div>
-
-		        <div class="box-body table-responsive no-padding">
-		            <table id="browse-showinfo-factura-list" class="table table-hover table-bordered" cellspacing="0">
-	                	<thead>
-				        	<tr>
-								<th class="text-center">Cuota No.</th>
-				                <th class="text-center">Pago</th>
-				            </tr>
-				       	</thead>
-				       	<tbody></tbody>
-				    </table>
-		        </div>
-			</div>
-		</div>
-	</script>
-
-	<script type="text/template" id="add-info-inventario-item">
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="box-header with-border">
-		            <h3 class="box-title">
-		              	<b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
-		            </h3>
-		        </div>
-				<div class="box-body">
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="control-label">Tercero</label>
-							<div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-12">
-							<label class="control-label">Producto</label>
-							<div><%- producto_codigo %> - <%- producto_nombre %></div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="form-group col-md-6">
-							<label class="control-label">Sucursal</label>
-							<div><%- sucursal_nombre %></div>
-						</div>
-						<div class="form-group col-md-6">
-							<label class="control-label">Cantidad</label>
-							<div><%- movimiento_valor %></div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="box-header with-border">
-		              <h3 class="box-title"><b>Informacion adicional</b></h3>
-		        </div>
-
-		        <div class="box-body table-responsive no-padding">
-					<table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
-	                	<thead>
-                			<tr>
-				                <th class="text-center first-row"></th>
-				                <th class="text-center second-row"></th>
-				            </tr>
-				       	</thead>
-				       	<tbody></tbody>
-				    </table>
-		        </div>
-			</div>
-		</div>
-	</script>
-
-	<!-- Detalles de las Facturas, Facturap, Inventario -> Hijos -->
-	<script type="text/template" id="show-info-detalle-factura">
-		<td class="text-center"><%- factura4_cuota %></td>
-		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>				
-	</script>
-
-	<script type="text/template" id="show-info-detalle-facturap">
-		<td class="text-center"><%- facturap2_cuota %></td>
-		<td class="text-center"><%- window.Misc.currency( movimiento_valor ) %></td>
-	</script>
-
-	<script type="text/template" id="show-info-detalle-inventario">
-		<% if ( !_.isNull( movimiento_serie ) ) { %>
-			<td class="text-center"><%- movimiento_item %></td>
-			<td class="text-center"><%- movimiento_serie %></td>
-		<% }else{ %>
-			<td class="text-center"><%- movimiento_item %></td>
-			<td class="text-center"><%- movimiento_valor %></td>
-		<% } %>
-	</script>
-
     <script type="text/template" id="factura-item-list-tpl">
         <td><%- factura1_fecha %></td>
 	    <td><%- factura4_vencimiento %></td>
-	    <td><%- factura4_factura1 %></td>
+	    <td><%- factura1_numero %></td>
 	    <td><%- factura4_cuota %></td>
 	    <td><%- window.Misc.currency(factura4_saldo) %></td>
 	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
     </script>
-
-    <script type="text/template" id="add-comments-item-tpl">
-    	<td class="text-center">
-			<a class="btn btn-default btn-xs item-factura-remove" data-resource="<%- id %>">
-				<span><i class="fa fa-times"></i></span>
-			</a>
-		</td>
-    	<td><%- factura3_observaciones %></td>
-    </script>
-
-	<!-- Modal info -->
-	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-		<div class="modal-dialog modal-md" role="document">
-			<div class="modal-content">
-				<div class="modal-header small-box {{ config('koi.template.bg') }}">
-					<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
-				</div>
-				<div class="modal-body" id="modal-asiento-wrapper-show-info">
-					<div class="content-modal"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 @stop

@@ -15,7 +15,7 @@
 		</div>
 		<div class="cell noborder" style="width: 40%;">
 			<div class="center">
-				<img src="{{ asset(config('koi.app.image.logo')) }}" alt="" style="width: 70px; height: 70px; padding-top:15;">
+				<img src="{{ asset(config('koi.app.image.image-vaziko')) }}" alt="" style="width: 250px; height: 130px;">
 			</div>
 		</div>
 		<div class="cell noborder" style="width: 30%;">
@@ -43,10 +43,10 @@
 <!-- Encabezado Cliente -->
 <div class="table">
 	<div class="rows">
-		<div class="cell border-tbl" style="width:10%;">Referencia</div>
-		<div class="cell border-tbr" colspan="2" style="width:40%;">{{ $cotizacion->cotizacion1_referencia }}</div>
-		<div class="cell border-tbl" style="width:10%;">Terminos</div>
-		<div class="cell border-tbr" colspan="3" style="width:40%;">{{ $cotizacion->cotizacion1_terminado }}</div>
+		<div class="cell border-tbl bold" style="width: 2%;">Referencia:</div>
+		<div class="cell border-tbr" colspan="2">{{ $cotizacion->cotizacion1_referencia }}</div>
+		<div class="cell border-tbl bold" style="width: 2%;">Terminos:</div>
+		<div class="cell border-tbr" colspan="3">{{ $cotizacion->cotizacion1_terminado }}</div>
 	</div>
 	<div class="rows">
 		<div colspan="5" class="cell bold">Cliente</div>
@@ -67,16 +67,16 @@
 					<div class="cell left size-7 noborder bold">Contacto:</div>
 					<div class="cell left size-7 noborder bold">{{ $cotizacion->tcontacto_nombre }}</div>
 
-					<div class="cell left size-7 noborder bold">Email:</div>
-					<div class="cell left size-7 noborder">{{ $cotizacion->tcontacto_email }}</div>
-				</div>
-				<div class="rows">
 					<div class="cell left size-7 noborder bold">Teléfono:</div>
 					@if( !empty( $cotizacion->tercero_telefono1 ) )
 						<div class="cell left size-7 noborder bold">{{ $cotizacion->tercero_telefono1 }}</div>
 					@else
 						<div class="cell left size-7 noborder bold">{{ $cotizacion->tercero_telefono2 }}</div>
 					@endif
+				</div>
+				<div class="rows">
+					<div class="cell left size-7 noborder bold">Email:</div>
+					<div class="cell left size-7 noborder">{{ $cotizacion->tcontacto_email }}</div>
 
 					<div class="cell left size-7 noborder bold">Celular:</div>
 					<div class="cell left size-7 noborder bold">{{ $cotizacion->tercero_celular }}</div>
@@ -96,7 +96,7 @@
 	<div class="rows">
 	</div>
 	<div class="rows">
-		<div class="cell" colspan="2">Tomado por:</div>
+		<div class="cell bold" colspan="2">Tomado por:</div>
 	</div>
 	<div class="rows">
 		<div class="cell" colspan="2">{{ Auth::user()->getName() }}</div>

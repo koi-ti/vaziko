@@ -45,6 +45,7 @@
 				                <th>Nombre</th>
 				                <th>Naturaleza</th>
 				                <th>Tercero</th>
+				                <th>Tipo</th>
 				            </tr>
 				        </thead>
 				    </table>

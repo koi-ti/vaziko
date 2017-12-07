@@ -1,4 +1,4 @@
-@extends('production.cotizaciones.export.layout', ['type' => 'pdf', 'title' => $title])
+@extends('production.cotizaciones.report.layout', ['type' => 'pdf', 'title' => $title])
 
 @section('content')
 	<div class="body">

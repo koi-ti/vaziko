@@ -38,7 +38,7 @@ class Asiento2 extends Model
     public static function getAsiento2($asiento)
     {
         $query = Asiento2::query();
-        $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
             DB::raw("(CASE WHEN t.tercero_persona = 'N'
                 THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
                         (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
@@ -57,12 +57,49 @@ class Asiento2 extends Model
            ) AS ordenp_beneficiario")
         );
         $query->join('koi_tercero as t', 'asiento2_beneficiario', '=', 't.id');
+        $query->leftJoin('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id');
         $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
+        $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
         $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
         // Temporal join
         $query->leftJoin('koi_ordenproduccion', 'asiento2_ordenp', '=', 'koi_ordenproduccion.id');
         $query->leftJoin('koi_tercero as to', 'orden_cliente', '=', 'to.id');
         $query->where('asiento2_asiento', $asiento);
+
+        return $query->get();
+    }
+
+    public static function getAsiento2Ordenp( $ordenp )
+    {
+        $query = Asiento2::query();
+        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+            DB::raw("(CASE WHEN t.tercero_persona = 'N'
+                THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
+                        (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
+                    )
+                ELSE t.tercero_razonsocial END)
+                AS tercero_nombre"),
+            DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"),
+            DB::raw("CONCAT(COALESCE(orden_numero, ''),'-',SUBSTRING(COALESCE(orden_ano,''), -2)) as ordenp_codigo"),
+            DB::raw("CONCAT( (CASE WHEN to.tercero_persona = 'N'
+                        THEN CONCAT(to.tercero_nombre1,' ',to.tercero_nombre2,' ',to.tercero_apellido1,' ',to.tercero_apellido2,
+                            (CASE WHEN (to.tercero_razonsocial IS NOT NULL AND to.tercero_razonsocial != '') THEN CONCAT(' - ', to.tercero_razonsocial) ELSE '' END)
+                        )
+                        ELSE to.tercero_razonsocial
+                    END),
+                ' (', orden_referencia ,')'
+           ) AS ordenp_beneficiario")
+        );
+        $query->join('koi_tercero as t', 'asiento2_beneficiario', '=', 't.id');
+        $query->leftJoin('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id');
+        $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
+        $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
+        $query->leftJoin('koi_centrocosto', 'asiento2_centro', '=', 'koi_centrocosto.id');
+        // Temporal join
+        $query->leftJoin('koi_ordenproduccion', 'asiento2_ordenp', '=', 'koi_ordenproduccion.id');
+        $query->leftJoin('koi_tercero as to', 'orden_cliente', '=', 'to.id');
+        $query->where('asiento2_ordenp', $ordenp);
+
         return $query->get();
     }
 
@@ -119,7 +156,7 @@ class Asiento2 extends Model
 
         // Insert si no existe asiento2
         if(!isset($data['Id']) || empty($data['Id']))
-        {   
+        {
             // Consecutivo item
             $item = DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->max('asiento2_item');
             $this->asiento2_item = ++$item;
@@ -287,14 +324,14 @@ class Asiento2 extends Model
         }
         return 'OK';
     }
-    
+
     public static function validarFactura(Request $request)
     {
         // Validate factura
         $factura = null;
 
         // Recuperar factura1 -> Padre
-        $factura = Factura1::find($request->factura1_orden);
+        $factura = Factura1::find($request->factura1_referencia);
         if(!$factura instanceof Factura1){
             return "No es posible recuperar la factura, por favor verifique la información o consulte al administrador.";
         }
@@ -646,9 +683,9 @@ class Asiento2 extends Model
             $datamov['Tipo'] = 'F';
             $datamov['Naturaleza'] = $request->asiento2_naturaleza;
             $datamov['Nuevo'] = false;
-            $datamov['Factura'] = $request->factura1_orden;
+            $datamov['Factura'] = $request->factura1_referencia;
             $datamov['Valor'] = $request->factura1_pagar;
-            
+
             $movimiento = new AsientoMovimiento;
             $result = $movimiento->store($this, $datamov);
             if(!$result->success) {
@@ -662,7 +699,7 @@ class Asiento2 extends Model
             $datamov['Nuevo'] = false;
 
             // Recuperar Factura1 ->Padre
-            $factura = Factura1::find($request->factura1_orden);
+            $factura = Factura1::find($request->factura1_referencia);
             if(!$factura instanceof Factura1){
                 $response->error = "No es posible recuperar la factura, por favor verifique la información o consulte al administrador";
                 return $response;
@@ -675,7 +712,7 @@ class Asiento2 extends Model
                     if($request->get("factura4_pagar_{$item->id}") != 0){
                         $datamov['FacturaChild'] = $item->id;
                         $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
-                     
+
                         $movimiento = new AsientoMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
@@ -685,7 +722,7 @@ class Asiento2 extends Model
                     }
                 }
             }
-        }  
+        }
 
         $response->success = true;
         return $response;
@@ -999,7 +1036,7 @@ class Asiento2 extends Model
                 return "No es posible recuperar la factura, por favor verifique la informacion o consulte con el administrador.";
             }
 
-            // Actualizar factura4 
+            // Actualizar factura4
             $result = $factura->actualizarFactura4($movchildren, $this->asiento2_naturaleza);
             if(!$result->success){
                 return $result->error;

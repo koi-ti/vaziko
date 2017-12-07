@@ -26,6 +26,7 @@ app || (app = {});
 
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
+            this.tiempopordenList = new app.TiempopOrdenList();
 
             // Reference views
             this.referenceViews();
@@ -42,7 +43,7 @@ app || (app = {});
                     wrapper: this.$('#wrapper-productop-orden'),
                     iva: this.$iva.val(),
                     dataFilter: {
-                        'orden2_orden': this.model.get('id')
+                        orden2_orden: this.model.get('id')
                     }
                }
             });
@@ -53,7 +54,17 @@ app || (app = {});
                 parameters: {
                     wrapper: this.$el,
                     dataFilter: {
-                        'despachop1_orden': this.model.get('id')
+                        despachop1_orden: this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos pendientes list
+            this.tiempopordenListView = new app.TiempopOrdenListView( {
+                collection: this.tiempopordenList,
+                parameters: {
+                    dataFilter: {
+                        orden2_orden: this.model.get('id')
                     }
                }
             });

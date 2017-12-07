@@ -20,14 +20,11 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
+            this.detalleFactura2List = new app.DetalleFactura2List();
+            this.detalleFactura4List = new app.DetalleFactura4List();
 
-            // Model exist
-            if( this.model.id != undefined ) {
-                this.detalleFactura2List = new app.DetalleFactura2List();
-
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**
@@ -35,13 +32,26 @@ app || (app = {});
         */
         referenceViews: function () {
             // Detalle factura list
-            this.detalleFacturaView = new app.DetalleFacturaView({
+            this.factura2ListView = new app.DetalleFacturaView({
                 collection: this.detalleFactura2List,
                 parameters: {
                     edit: false,
                     call: 'show',
                     dataFilter: {
                         factura2: this.model.get('id')
+                    }
+                }
+            });
+
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFactura4List,
+                parameters: {
+                    edit: false,
+                    template: _.template( ($('#add-detalle-factura-tpl').html() || '') ),
+                    call: 'factura',
+                    dataFilter: {
+                        factura1_id: this.model.get('id')
                     }
                 }
             });

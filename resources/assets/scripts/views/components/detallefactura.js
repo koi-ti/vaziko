@@ -25,14 +25,16 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            // References
+            // Init Attributes
+            this.confCollection = { reset: true, data: {} };
+
+            // Info adicional
             this.$valor = this.$('.total');
             this.$totalCount = this.$('#total_count');
 
-            // Info adicional
             this.$porvencer = this.$('#porvencer');
-            this.$porvencer_saldo = this.$('#porvencer_saldo');
             this.$menor30 = this.$('#menor30');
+            this.$porvencer_saldo = this.$('#porvencer_saldo');
             this.$menor30_saldo = this.$('#menor30_saldo');
             this.$menor60 = this.$('#menor60');
             this.$menor60_saldo = this.$('#menor60_saldo');
@@ -48,10 +50,14 @@ app || (app = {});
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {tercero: this.parameters.dataFilter.tercero , factura1: this.parameters.dataFilter.factura1}, reset: true });
+            if( !_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter) ){
+                this.confCollection.data = this.parameters.dataFilter;
+                this.collection.fetch( this.confCollection );
+            }
         },
 
         /*
@@ -65,7 +71,7 @@ app || (app = {});
         * Render view rol by model
         * @param Object contactModel Model instance
         */
-        addOne: function (factura4Model) {
+        addOne: function ( factura4Model ) {
             var view = new app.Factura4ItemView({
                 model: factura4Model,
                 parameters: {
@@ -77,14 +83,20 @@ app || (app = {});
             factura4Model.view = view;
             this.$el.prepend( view.render().el );
 
-            // Update total
-            this.totalize();
+            // Calculate total if call tercero || factura
+            if( this.parameters.call == 'tercero' )
+                this.totalize();
+
+            // Ready asiento
+            if( this.parameters.call == 'asiento' )
+                this.ready();
         },
 
         /**
         * Render all view Marketplace of the collection
         */
         addAll: function () {
+            this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
         },
 
@@ -133,7 +145,21 @@ app || (app = {});
                 this.$mayor360.html( data.mayor360.count );
                 this.$mayor360_saldo.html( window.Misc.currency( data.mayor360.saldo ) );
             }
+        },
 
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if( typeof window.initComponent.initToUpper == 'function' )
+                window.initComponent.initToUpper();
+
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
+
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
         },
 
         /**

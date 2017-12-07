@@ -22,7 +22,7 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $query = Documento::query();
-            $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre', 'folder_codigo', 'koi_folder.id as folder_id');
+            $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre', 'folder_codigo', 'documento_actual', 'documento_nif');
             $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
             return Datatables::of($query->get())->make(true);
         }

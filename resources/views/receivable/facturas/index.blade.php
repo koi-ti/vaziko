@@ -52,9 +52,9 @@
                     <thead>
                         <tr>
                             <th >Numero</th>
+                            <th >Prefijo</th>
                             <th >Nit</th>
                             <th >Cliente</th>
-                            <th >Prefijo</th>
                         </tr>
                     </thead>
                 </table>

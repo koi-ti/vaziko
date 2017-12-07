@@ -94,7 +94,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('subgrupos.show', { subgrupos: resp.id})) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('subgrupos.index') ) );
             }
         }
     });

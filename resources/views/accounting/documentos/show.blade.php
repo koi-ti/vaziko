@@ -18,14 +18,14 @@
                 <div>{{ $documento->documento_nombre }}</div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="form-group col-md-6">
                 <label class="control-label">Folder</label>
                 <div>{{ $documento->folder_nombre }}</div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="form-group col-md-4">
                 <label class="control-label">Tipo consecutivo</label>
@@ -42,11 +42,11 @@
                 <label class="control-label">Tipo contabilidad</label>
                 <div class="row">
                     <label class="checkbox-inline" for="documento_actual">
-                        <input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" disabled {{ $documento->documento_actual ? 'checked': '' }}> Acutal
+                        <input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" disabled {{ $documento->documento_actual ? 'checked': '' }}> Normal
                     </label>
                     <label class="checkbox-inline" for="documento_nif">
                         <input type="checkbox" id="documeto_nif" name="documeto_nif" value="documeto_nif" disabled {{ $documento->documento_nif ? 'checked': '' }}> Nif
-                    </label>                
+                    </label>
                 </div>
             </div>
         </div>

@@ -17,7 +17,7 @@ app || (app = {});
         initialize: function () {
 
             this.$documentosSearchTable = this.$('#documentos-search-table');
-            
+
             this.$documentosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
@@ -30,11 +30,12 @@ app || (app = {});
                     { data: 'documento_codigo', name: 'documento_codigo' },
                     { data: 'documento_nombre', name: 'documento_nombre' },
                     { data: 'folder_codigo', name: 'folder_codigo' },
-                    { data: 'folder_id', name: 'folder_id' }
+                    { data: 'documento_actual', name: 'documento_actual' },
+                    { data: 'documento_nif', name: 'documento_nif' }
                 ],
                 buttons: [
-                    { 
-                        text: '<i class="fa fa-user-plus"></i> Nuevo documento', 
+                    {
+                        text: '<i class="fa fa-user-plus"></i> Nuevo documento',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
                                 window.Misc.redirect( window.Misc.urlFull( Route.route('documentos.create') ) )
@@ -44,18 +45,18 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '15%',
+                        width: '7%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('documentos.show', {documentos: full.id }) )  +'">' + data + '</a>';
                         }
                     },
                     {
                         targets: 1,
-                        width: '70%'
+                        width: '63%'
                     },
                     {
                         targets: 2,
-                        width: '15%',
+                        width: '10%',
                         render: function ( data, type, full, row ) {
                             if(!_.isNull(full.folder_codigo) && !_.isUndefined(full.folder_codigo)) {
                                 return '<a href="'+ window.Misc.urlFull( Route.route('folders.show', {folders: full.folder_id }) )  +'">' + data + '</a>';
@@ -65,9 +66,18 @@ app || (app = {});
                     },
                     {
                         targets: 3,
-                        visible: false,
-                        searchable: false
-                    }
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
                 ]
             });
         }

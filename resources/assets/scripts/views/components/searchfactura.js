@@ -15,7 +15,7 @@ app || (app = {});
         template: _.template( ($('#koi-search-factura-component-tpl').html() || '') ),
 
 		events: {
-			'change input.factura-koi-component': 'facturaChanged',
+			// 'change input.factura-koi-component': 'facturaChanged',
             'click .btn-koi-search-factura-component-table': 'searchFactura',
             'click .btn-search-koi-search-factura-component': 'search',
             'click .btn-clear-koi-search-factura-component': 'clear',
@@ -44,6 +44,8 @@ app || (app = {});
 
             this.$facturaSearchTable = this.$modalComponent.find('#koi-search-factura-component-table');
             this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
+            this.$inputId = this.$("#"+this.$inputContent.attr("data-referencia"));
+            this.$inputNit = this.$("#"+this.$inputContent.attr("data-nit"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$factura = this.$inputContent.attr("data-factura");
 
@@ -56,14 +58,15 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('facturas.index') ),
                     data: function( data ) {
-                        data.id = _this.$searchfacturaNumero.val();
+                        data.factura1_numero = _this.$searchfacturaNumero.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
                     }
                 },
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'factura1_numero', name: 'factura1_numero' },
                     { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
+                    { data: 'tercero_nit', name: 'tercero_nit' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
                 ],
                 columnDefs: [
                     {
@@ -87,11 +90,13 @@ app || (app = {});
 			e.preventDefault();
 	        var data = this.facturaSearchTable.row( $(e.currentTarget).parents('tr') ).data();
 
-            this.$inputContent.val( data.id );
+            this.$inputContent.val( data.factura1_numero );
+            this.$inputId.val( data.id );
+            this.$inputNit.val( data.tercero_nit );
             this.$inputName.val( data.tercero_nombre );
 
 			if(this.$factura == 'true'){
-                this.$inputContent.trigger('change'); 
+                this.$inputContent.trigger('change');
             }
 
 			this.$modalComponent.modal('hide');
@@ -113,43 +118,43 @@ app || (app = {});
             this.facturaSearchTable.ajax.reload();
 		},
 
-		facturaChanged: function(e) {
-			var _this = this;
-
-			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
-
-			var factura = this.$inputContent.val();
-
-            // Before eval clear data
-            this.$inputName.val('');
-
-			if(!_.isUndefined(factura) && !_.isNull(factura) && factura != '') {
-				// Get Factura
-	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('facturas.search')),
-	                type: 'GET',
-	                data: { factura_numero: factura },
-	                beforeSend: function() {
-						_this.$inputName.val('');
-	                    window.Misc.setSpinner( _this.$wraperConten );
-	                }
-	            })
-	            .done(function(resp) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                if(resp.success) {
-	                    if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
-							_this.$inputName.val(resp.tercero_nombre);
-	                    }
-	                }
-	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                alertify.error(thrownError);
-	            });
-	     	}
-		},
+		// facturaChanged: function(e) {
+		// 	var _this = this;
+        //
+		// 	this.$inputContent = $(e.currentTarget);
+		// 	this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
+		// 	this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+        //
+		// 	var factura = this.$inputContent.val();
+        //
+        //     // Before eval clear data
+        //     this.$inputName.val('');
+        //
+		// 	if(!_.isUndefined(factura) && !_.isNull(factura) && factura != '') {
+		// 		// Get Factura
+	    //         $.ajax({
+	    //             url: window.Misc.urlFull(Route.route('facturas.search')),
+	    //             type: 'GET',
+	    //             data: { factura_numero: factura },
+	    //             beforeSend: function() {
+		// 				_this.$inputName.val('');
+	    //                 window.Misc.setSpinner( _this.$wraperConten );
+	    //             }
+	    //         })
+	    //         .done(function(resp) {
+	    //             window.Misc.removeSpinner( _this.$wraperConten );
+	    //             if(resp.success) {
+	    //                 if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
+		// 					_this.$inputName.val(resp.tercero_nombre);
+	    //                 }
+	    //             }
+	    //         })
+	    //         .fail(function(jqXHR, ajaxOptions, thrownError) {
+	    //             window.Misc.removeSpinner( _this.$wraperConten );
+	    //             alertify.error(thrownError);
+	    //         });
+	    //  	}
+		// },
 
         /**
         * fires libraries js

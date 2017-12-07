@@ -45,8 +45,8 @@ class Factura1Controller extends Controller
                 ->filter(function($query) use($request) {
 
                     // Numero
-                    if($request->has('id')){
-                        $query->whereRaw("koi_factura1.id LIKE '%{$request->id}%'");
+                    if($request->has('factura1_numero')){
+                        $query->whereRaw("factura1_numero LIKE '%{$request->factura1_numero}%'");
                     }
 
                     // Documento
@@ -308,26 +308,26 @@ class Factura1Controller extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function search(Request $request)
-    {
-        if($request->has('factura_numero')) {
-            $factura = Factura1::select('koi_factura1.id',
-                DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
-            )
-            ->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id')
-            ->where('koi_factura1.id', $request->factura_numero)->first();
-
-            if($factura instanceof Factura1) {
-                return response()->json(['success' => true, 'tercero_nombre' => $factura->tercero_nombre, 'id' => $factura->id]);
-            }
-        }
-        return response()->json(['success' => false]);
-    }
+    // public function search(Request $request)
+    // {
+    //     if($request->has('factura_numero')) {
+    //         $factura = Factura1::select('koi_factura1.id',
+    //             DB::raw("(CASE WHEN tercero_persona = 'N'
+    //                 THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+    //                         (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+    //                     )
+    //                 ELSE tercero_razonsocial END)
+    //             AS tercero_nombre")
+    //         )
+    //         ->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id')
+    //         ->where('koi_factura1.id', $request->factura_numero)->first();
+    //
+    //         if($factura instanceof Factura1) {
+    //             return response()->json(['success' => true, 'tercero_nombre' => $factura->tercero_nombre, 'id' => $factura->id]);
+    //         }
+    //     }
+    //     return response()->json(['success' => false]);
+    // }
 
     /**
      * Export pdf the specified resource.

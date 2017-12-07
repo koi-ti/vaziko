@@ -410,7 +410,7 @@ class Cotizacion1Controller extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadHTML(View::make('production.cotizaciones.export.export',  compact('cotizacion', 'object' ,'title'))->render());
+        $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'object' ,'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'cotización', $cotizacion->id, date('Y_m_d'), date('H_m_s')));
     }
 

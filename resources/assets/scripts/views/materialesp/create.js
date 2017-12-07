@@ -97,7 +97,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('materialesp.show', { materialesp: resp.id})) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('materialesp.index') ) );
             }
         }
     });

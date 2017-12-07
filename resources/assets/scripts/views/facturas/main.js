@@ -31,7 +31,7 @@ app || (app = {});
             this.$searchfacturaNumero = this.$('#searchfactura_numero');
             this.$searchfacturaTercero = this.$('#searchfactura_tercero');
             this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
-            
+
             this.facturasSearchTable = this.$facturasSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -42,16 +42,16 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('facturas.index') ),
                     data: function( data ) {
                         data.persistent = true;
-                        data.id = _this.$searchfacturaNumero.val();
+                        data.factura1_numero = _this.$searchfacturaNumero.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
                         data.tercero_nombre = _this.$searchfacturaTerceroNombre.val();
                     }
                 },
-                columns: [ 
-                    { data: 'id', name: 'id' },
+                columns: [
+                    { data: 'factura1_numero', name: 'factura1_numero' },
+                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
                     { data: 'tercero_nit', name: 'tercero_nit' },
                     { data: 'tercero_nombre', name: 'factura1_tercero' },
-                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
                 ],
                 columnDefs: [
                     {
@@ -60,6 +60,14 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                            return '<a href="'+ window.Misc.urlFull( Route.route('facturas.show', {facturas: full.id }) )  +'">' + data + '</a>';
                         },
+                    },
+                    {
+                        targets: 1,
+                        width: '5%'
+                    },
+                    {
+                        targets: 2,
+                        width: '15%'
                     },
                 ]
             });
