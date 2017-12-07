@@ -61,7 +61,7 @@
 				<div class="input-group-addon">
 					<i class="fa fa-phone"></i>
 				</div>
-				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask required>
+				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask required>
 			</div>
 		</div>
 
@@ -186,7 +186,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
 				</div>
 			</div>
 
@@ -196,7 +196,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
 				</div>
 			</div>
 
@@ -206,7 +206,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-fax"></i>
 					</div>
-					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
 				</div>
 			</div>
 
@@ -906,10 +906,12 @@
 
 <script type="text/template" id="choose-itemrollo-tpl">
     <td class="text-center"><%- prodboderollo_item %></td>
-    <td class="text-right"><%- prodboderollo_centimetro %></td>
+    <td class="text-right"><%- prodboderollo_metros %></td>
     <td class="text-right"><%- prodboderollo_saldo %></td>
     <td>
-		<input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0" max="<%- prodboderollo_saldo %>" step="0.1">
+        <div class="form-group">
+            <input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0" max="<%- prodboderollo_saldo %>" step="0.1">
+        </div>
     </td>
 </script>
 

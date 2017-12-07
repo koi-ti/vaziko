@@ -48,6 +48,9 @@ app || (app = {});
             this.$factura = this.$inputContent.attr("data-factura");
             this.$estado = this.$inputContent.attr("data-estado");
 
+            /* Render in <a> dashboard */
+            this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
+
 			this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -79,6 +82,12 @@ app || (app = {});
                         width: '10%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
+                            // Render show tercero in dashboard
+                            if (_this.$fieldRender == "show")
+                            {
+                                return '<a href='+ window.Misc.urlFull( Route.route('ordenes.show', { ordenes: full.id}))+'>' + data + '</a>';
+                            }
+
                         	return '<a href="#" class="a-koi-search-ordenp-component-table">' + data + '</a>';
                         }
                     },

@@ -145,7 +145,27 @@
 		</div>
 	</div>
 </div>
+<!-- Modal inventario -->
+<div class="modal fade" id="modal-inventario-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="inner-title-modal modal-title"></h4>
+			</div>
 
+			<form id="form-create-inventario-component-source" data-toggle="validator">
+				<div class="modal-body" id="modal-wrapper-inventario">
+					<div class="content-modal"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 {{-- templates --}}
 <script type="text/template" id="koi-address-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">

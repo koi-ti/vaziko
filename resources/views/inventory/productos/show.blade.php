@@ -75,18 +75,63 @@
             <div class="row">
                 <div class="form-group col-md-2">
                     <label class="control-label">Precio</label>
-                    <div class="text-right">{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
+                    <div>{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
                 </div>
-            </div>
-
-            <div class="row">
                 <div class="form-group col-md-2">
                     <label class="control-label">Costo promedio</label>
-                    <div class="text-right">{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
+                    <div>{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
+                </div>
+            </div>
+            <div class="box box-success">
+                <div class="box-body table-responsive">
+                    <table id="prodbode-search-table" class="table table-striped table-condensed table-bordered" cellspacing="0">
+                        <tbody>
+                            <!-- Producto serie -->
+                            @if( $producto->producto_metrado)
+                                <tr>
+                                    <th>Sucursal</th>
+                                    <th>Disponible (Mts)</th>
+                                </tr>
+
+                                @if( $available->isEmpty() )
+                                    <tr>
+                                        <th colspan="2" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
+                                    </tr>
+                                @endif
+
+                                @foreach( $available as $item)
+                                    <tr>
+                                        <td>{{ $item->sucursal_nombre }}</td>
+                                        <td>{{ $item->disponible }}</td>
+                                    </tr>
+                                @endforeach
+                            @else
+                                <tr>
+                                    <th width="60%">Sucursal</th>
+                                    <th width="20%">Disponible</th>
+                                    <th width="20%">Reservadas</th>
+                                </tr>
+
+                                @if( $available->isEmpty() )
+                                    <tr>
+                                        <th colspan="3" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
+                                    </tr>
+                                @endif
+
+                                @foreach( $available as $item)
+                                    <tr>
+                                        <td>{{ $item->sucursal_nombre }}</td>
+                                        <td>{{ $item->disponible }}</td>
+                                        <td>{{ $item->prodbode_reservada }}</td>
+                                    </tr>
+                                @endforeach
+                            @endif
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-        <div class="box-footer with-border">
+        <div class="box-footer">
             <div class="row">
                 <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
                     <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
@@ -98,5 +143,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 @stop

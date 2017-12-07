@@ -174,6 +174,7 @@ class DetalleAsientoController extends Controller
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
                         'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : ''),
                         'ordenp_beneficiario' => $request->asiento2_orden_beneficiario,
+                        'asiento1_documentos' => $request->asiento1_documentos,
                         'asientoNif2_id' => ($asientoNif2 instanceof AsientoNif2 ? $asientoNif2->id : '')
                     ]);
                 }catch(\Exception $e){
