@@ -53,7 +53,7 @@ app || (app = {});
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-            
+
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -104,7 +104,7 @@ app || (app = {});
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
         },
-        
+
 		/**
         * Run actions
         */
@@ -214,11 +214,11 @@ app || (app = {});
             // Prepare global data
             data.action = settings.action;
             data = $.extend({}, this.parameters.data, data);
-            
+
             // Prepare global route
             _this.url = window.Misc.urlFull(Route.route('asientos.detalle.validate'));
-            
-            if (_.has(data, "plancuentasn_cuenta")) 
+
+            if (_.has(data, "plancuentasn_cuenta"))
                 _this.url = window.Misc.urlFull(Route.route('asientosnif.detalle.validate'));
 
             // Validate action
@@ -634,13 +634,13 @@ app || (app = {});
         /**
         * Event add item cartera
         */
-        onStoreItemFactura: function (e) {    
+        onStoreItemFactura: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 // Extend attributes
                 this.parameters.data = $.extend({}, this.parameters.data, window.Misc.formToJson( e.target ));
-                
+
                 // Evaluate account
                 this.validateAction({
                     'action': 'cartera',

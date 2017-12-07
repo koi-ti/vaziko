@@ -59,6 +59,7 @@ class AsientoController extends Controller
             $asientoNif2 = null;
             if ($asiento->isValid($data)) {
                 if ($asiento2->isValid($data)) {
+
                     DB::beginTransaction();
                     try {
                         // Recuperar tercero
@@ -202,13 +203,14 @@ class AsientoController extends Controller
                                 return response()->json(['success' => false, 'errors' => $result->error]);
                             }
 
-                            // Insertar movimiento asiento
-                            $result = $asientoNif2->movimiento($request, $plancuentaNif->plancuentasn_cuenta);
-                            if(!$result->success) {
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => $result->error]);
+                            if ($asientoNif->asienton1_asiento == null) {
+                                // Insertar movimiento asiento
+                                $result = $asientoNif2->movimiento($request, $plancuentaNif->plancuentasn_cuenta);
+                                if(!$result->success) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => $result->error]);
+                                }
                             }
-
                         }
                         // Commit Transaction
                         // DB::rollback();
@@ -407,13 +409,13 @@ class AsientoController extends Controller
                         }
 
                         // Insertar movimientos asiento
-                        foreach ($asiento2 as $item) {
-                            $result = $item->movimientos();
-                            if($result != 'OK') {
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => $result]);
-                            }
-                        }
+                        // foreach ($asiento2 as $item) {
+                        //     $result = $item->movimientos();
+                        //     if($result != 'OK') {
+                        //         DB::rollback();
+                        //         return response()->json(['success' => false, 'errors' => $result]);
+                        //     }
+                        // }
                     }
                     // Commit Transaction
                     // DB::rollback();

@@ -48,6 +48,9 @@ app || (app = {});
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
             this.$inputTiempop = this.$inputContent.attr("data-tiempop");
 
+            /* Render in <a> dashboard */
+            this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
+
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -77,6 +80,11 @@ app || (app = {});
                         width: '15%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
+                            // Render show tercero in dashboard
+                            if (_this.$fieldRender == "show")
+                            {
+                                return '<a href='+ window.Misc.urlFull( Route.route('terceros.show', { terceros: full.id}))+'>' + data + '</a>';
+                            }
                             return '<a href="#" class="a-koi-search-tercero-component-table">' + data + '</a>';
                         }
                     },

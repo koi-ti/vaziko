@@ -248,6 +248,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'productos'], function()
 	{
 		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
+		Route::post('evaluate',['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate'] );
 		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
 	});
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
@@ -260,4 +261,5 @@ Route::group(['middleware' => 'auth'], function()
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
    	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
+	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
 });

@@ -111,6 +111,7 @@ class Factura1 extends Model
     public function prepararAsiento(){
         $object = new \stdClass();
         $object->data = [];
+        $object->dataNif = [];
         $object->cuentas = [];
 
         // Recuperar documento
@@ -173,7 +174,20 @@ class Factura1 extends Model
             'asiento1_id_documentos' => $this->id,
             'asiento1_beneficiario' => $tercero->tercero_nit,
         ];
-
+        // Prepare Data nif 
+        if ($documento->documento_nif) {
+            $object->dataNif = [
+                'asienton1_mes' => (Int) date('m'),
+                'asienton1_ano' => (Int) date('Y'),
+                'asienton1_dia' => (Int) date('d'),
+                'asienton1_numero' => $documento->documento_consecutivo + 1,
+                'asienton1_folder' => $documento->documento_folder,
+                'asienton1_documento' => $documento->id,
+                'asienton1_documentos' => 'FACT',
+                'asienton1_id_documentos' => $this->id,
+                'asienton1_beneficiario' => $tercero->tercero_nit,
+            ];
+        }
         // Iva
         $iva = [];
         $iva['Cuenta'] = '24081010';

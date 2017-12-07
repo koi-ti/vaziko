@@ -4,6 +4,7 @@ namespace App\Models\Treasury;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Base\Tercero;
 use DB;
 
 class Facturap extends Model
@@ -79,5 +80,40 @@ class Facturap extends Model
         $query->where('koi_facturap1.id', $id);
 
         return $query->first();
+    }
+
+    /**
+    * Function for report history provider
+    */
+    public static function historyProviderReport(Tercero $tercero, Array $historyClient, $i )
+    {
+        $response = new \stdClass();
+        $response->success = false;
+        $response->facturaProveedor = [];
+        $response->position = 0;
+
+        $query = Facturap::query();
+        $query->select('koi_facturap1.*', 'sucursal_nombre', DB::raw('SUM(facturap2_valor) AS valor'));
+        $query->join('koi_sucursal', 'facturap1_sucursal', '=', 'koi_sucursal.id');
+        $query->join('koi_facturap2', 'koi_facturap1.id', '=', 'koi_facturap2.facturap2_factura');
+        $query->where('facturap1_tercero', $tercero->id);
+        $facturaProveedor = $query->get();
+
+        foreach ($facturaProveedor as $value) {
+            $historyClient[$i]['documento'] = 'FACTURA PROVEEDOR';
+            $historyClient[$i]['numero'] = $value->facturap1_factura;
+            $historyClient[$i]['sucursal'] = $value->sucursal_nombre;
+            $historyClient[$i]['docafecta'] = '-';
+            $historyClient[$i]['id_docafecta'] = $value->facturap1_factura;
+            $historyClient[$i]['cuota'] = $value->facturap1_cuotas;
+            $historyClient[$i]['naturaleza'] = $value->facturap1_cuotas > 1 ? 'C' : 'D';
+            $historyClient[$i]['valor'] = $value->valor;
+            $historyClient[$i]['elaboro_fh'] = $value->facturap1_fecha;
+            $i++;
+        }
+
+        $response->facturaProveedor = $historyClient;
+        $response->position = $i;
+        return $response;
     }
 }

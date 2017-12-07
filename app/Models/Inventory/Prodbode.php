@@ -27,7 +27,7 @@ class Prodbode extends Model
         return $query->first();
     }
 
-    public  static function actualizar(Producto $producto, $sucursal, $tipo, $unidades)
+    public static function actualizar(Producto $producto, $sucursal, $tipo, $unidades)
     {
         // Validar producto
         $sucursal = Sucursal::find($sucursal);

@@ -119,7 +119,7 @@ class Asiento2 extends Model
 
         // Insert si no existe asiento2
         if(!isset($data['Id']) || empty($data['Id']))
-        {   
+        {
             // Consecutivo item
             $item = DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->max('asiento2_item');
             $this->asiento2_item = ++$item;
@@ -287,7 +287,7 @@ class Asiento2 extends Model
         }
         return 'OK';
     }
-    
+
     public static function validarFactura(Request $request)
     {
         // Validate factura
@@ -648,7 +648,7 @@ class Asiento2 extends Model
             $datamov['Nuevo'] = false;
             $datamov['Factura'] = $request->factura1_orden;
             $datamov['Valor'] = $request->factura1_pagar;
-            
+
             $movimiento = new AsientoMovimiento;
             $result = $movimiento->store($this, $datamov);
             if(!$result->success) {
@@ -675,7 +675,7 @@ class Asiento2 extends Model
                     if($request->get("factura4_pagar_{$item->id}") != 0){
                         $datamov['FacturaChild'] = $item->id;
                         $datamov['Valor'] = $request->get("factura4_pagar_{$item->id}");
-                     
+
                         $movimiento = new AsientoMovimiento;
                         $result = $movimiento->store($this, $datamov);
                         if(!$result->success) {
@@ -685,7 +685,7 @@ class Asiento2 extends Model
                     }
                 }
             }
-        }  
+        }
 
         $response->success = true;
         return $response;
@@ -999,7 +999,7 @@ class Asiento2 extends Model
                 return "No es posible recuperar la factura, por favor verifique la informacion o consulte con el administrador.";
             }
 
-            // Actualizar factura4 
+            // Actualizar factura4
             $result = $factura->actualizarFactura4($movchildren, $this->asiento2_naturaleza);
             if(!$result->success){
                 return $result->error;

@@ -87,7 +87,7 @@ app || (app = {});
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
                 data.detalle = this.trasladoProductosList.toJSON()
-
+                console.log(data);
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -97,9 +97,40 @@ app || (app = {});
         */
         onStoreItem: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
-                this.trasladoProductosList.trigger( 'store', this.$(e.target) );
+
+                var data = data = window.Misc.formToJson( e.target );
+                    data.tipo = 'S';
+                    data.sucursal = this.$('#traslado1_sucursal').val();
+                    data.destino = this.$('#traslado1_destino').val();
+
+                    window.Misc.evaluateActionsInventory({
+                        'data': data,
+                        'wrap': this.$el,
+                        'callback': (function (_this) {
+                            return function ( action, tipo, producto )
+                            {
+                                // Open InventarioActionView
+                                if ( _this.inventarioActionView instanceof Backbone.View ){
+                                    _this.inventarioActionView.stopListening();
+                                    _this.inventarioActionView.undelegateEvents();
+                                }
+                                _this.inventarioActionView = new app.InventarioActionView({
+                                    model: _this.model,
+                                    collection: _this.trasladoProductosList,
+                                    parameters: {
+                                        data: data,
+                                        action: action,
+                                        tipo: tipo,
+                                        producto: producto,
+                                        form:_this.$formItem
+                                    }
+                                });
+                                _this.inventarioActionView.render();
+                            }
+                        })(this)
+                    });
+                // this.trasladoProductosList.trigger( 'store', data );
             }
         },
 
