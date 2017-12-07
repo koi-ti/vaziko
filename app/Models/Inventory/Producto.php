@@ -122,12 +122,14 @@ class Producto extends BaseModel
                 ->select('koi_prodboderollo.*','sucursal_nombre', DB::raw('SUM(prodboderollo_saldo) AS disponible'))
                 ->join('koi_sucursal','prodboderollo_sucursal','=','koi_sucursal.id')
                 ->havingRaw('SUM(prodboderollo_saldo) >= 0')
+                ->groupBy('prodboderollo_sucursal')
                 ->where('prodboderollo_saldo', '>', 0);
         }else{
             return $this->hasMany('App\Models\Inventory\Prodbode', 'prodbode_producto', 'id')
                 ->select('koi_prodbode.*','sucursal_nombre', DB::raw('SUM(prodbode_cantidad) AS disponible'),'prodbode_reservada')
                 ->join('koi_sucursal','prodbode_sucursal','=','koi_sucursal.id')
                 ->havingRaw('SUM(prodbode_cantidad) >= 0')
+                ->groupBy('prodbode_sucursal')
                 ->where('prodbode_cantidad', '>', 0);
         }
     }

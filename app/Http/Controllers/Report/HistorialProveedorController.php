@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Models\Treasury\Facturap;
 use App\Models\Base\Tercero;
-use View, App, Validator, DB;
+use View, App, Excel, Validator, DB;
 
 class HistorialProveedorController extends Controller
 {
@@ -46,7 +46,7 @@ class HistorialProveedorController extends Controller
                 case 'xls':
                     Excel::create(sprintf('%s_%s_%s', 'historyProveider', date('Y_m_d'), date('H_m_s')), function($excel) use($historyProveider, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($historyProveider, $title, $type) {
-                            $sheet->loadView('reportes.treasury.historialproveedores.report', compact('historyProveider', 'title', 'type'));
+                            $sheet->loadView('reports.treasury.historialproveedores.report', compact('historyProveider', 'title', 'type'));
                         });
                     })->download('xls');
                 break;
