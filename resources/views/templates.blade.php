@@ -914,6 +914,11 @@
         </div>
     </td>
 </script>
+<script type="text/template" id="itemrollo-tpl">
+    <td class="text-center"><%- prodboderollo_item %></td>
+    <td class="text-right"><%- prodboderollo_metros %></td>
+    <td class="text-right"><%- prodboderollo_saldo %></td>
+</script>
 
 <script type="text/template" id="add-serie-tpl">
     <td class="text-center"><%- id %></td>
@@ -1234,4 +1239,9 @@
             </div>
         </div>
     </div>
+</script>
+<script type="text/template" id="add-seriesprodbode-tpl">
+    <td><%- sucursal_nombre %></td>
+    <td><%- producto_codigo %></td>
+    <td><%- producto_nombre %></td>
 </script>

@@ -90,6 +90,7 @@ app || (app = {});
 
             'productos(/)': 'getProductosMain',
             'productos/create(/)': 'getProductosCreate',
+            'productos/:producto(/)': 'getProductoShow',
             'productos/:producto/edit(/)': 'getProductosEdit',
 
             'traslados(/)': 'getTrasladosMain',
@@ -1025,6 +1026,20 @@ app || (app = {});
             this.createProductoView.render();
         },
 
+        /**
+        * show view show producto
+        */
+        getProductoShow: function (producto) {
+            this.productoModel = new app.ProductoModel();
+            this.productoModel.set({'id': producto}, {'silent':true});
+
+            if ( this.showProductoView instanceof Backbone.View ){
+                this.showProductoView.stopListening();
+                this.showProductoView.undelegateEvents();
+            }
+
+            this.showProductoView = new app.ShowProductoView({ model: this.productoModel });
+        },
         /**
         * show view edit producto
         */
