@@ -1,5 +1,5 @@
 /**
-* Class AsientoFacturaCommentsList of Backbone Collection
+* Class ContabilidadOrdenpList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,17 +9,19 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AsientoFacturaCommentsList = Backbone.Collection.extend({
+    app.ContabilidadOrdenpList = Backbone.Collection.extend({
 
         url: function() {
-            return window.Misc.urlFull( Route.route('asientos.facturas.detalle.index') );
+            return window.Misc.urlFull( Route.route('ordenes.contabilidad.index') );
         },
-        model: app.Factura3Model,
+        model: app.TiempopModel,
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize : function(){
+
         }
    });
+
 })(this, this.document);

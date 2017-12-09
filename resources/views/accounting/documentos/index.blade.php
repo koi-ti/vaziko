@@ -1,6 +1,6 @@
 @extends('accounting.documentos.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
     <li class="active">Documentos</li>
 @stop
 
@@ -14,6 +14,8 @@
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Folder</th>
+                            <th>Normal</th>
+                            <th>Nif</th>
                         </tr>
                     </thead>
                 </table>

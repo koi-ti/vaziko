@@ -100,7 +100,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('areasp.show', { areasp: resp.id})) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('areasp.index') ) );
             }
         }
     });

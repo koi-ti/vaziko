@@ -20,11 +20,6 @@ class TiempopController extends Controller
     {
         if($request->ajax()){
             $tiemposp = Tiempop::getTiemposp();
-
-            if($request->has('orden2_orden')){
-                $tiemposp = Tiempop::getTiempospOrdenp( $request->orden2_orden );
-            }
-
             return response()->json( $tiemposp );
         }
         return view('production.tiemposp.main');

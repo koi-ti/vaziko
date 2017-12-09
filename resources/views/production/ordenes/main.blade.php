@@ -29,6 +29,7 @@
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
+                            <li><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
                             @endif
@@ -47,9 +48,9 @@
                                             <i class="fa fa-lock"></i>Cerrar orden
                                         </a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
-                                        <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                            <i class="fa fa-clone"></i>Clonar orden
-                                        </a>
+                                            <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
+                                                <i class="fa fa-clone"></i>Clonar orden
+                                            </a>
                                         @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
@@ -432,6 +433,30 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="tab_contabilidad">
+                                <div class="box box-whithout-border">
+                                    <div class="box-body table-responsive no-padding">
+                                        <table id="browse-detalle-asiento-list" class="table table-bordered" cellspacing="0" width="100%">
+                                            <thead>
+                					            <tr>
+                					                <th>Cuenta</th>
+                					                <th>Nombre</th>
+                					                <th>Beneficiario</th>
+                					                <th>Centro Costo</th>
+                					                <th>Base</th>
+                					                <th>Debito</th>
+                					                <th>Credito</th>
+                					                <th></th>
+                					            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- render content --}}
+                                            </tbody>
+            						    </table>
                                     </div>
                                 </div>
                             </div>

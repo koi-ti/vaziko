@@ -7,10 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
 use DB, Log, Cache, Datatables;
-
-use App\Models\Accounting\PlanCuentaNif;
-use App\Models\Accounting\CentroCosto;
 
 class PlanCuentasNifController extends Controller
 {
@@ -23,7 +21,7 @@ class PlanCuentasNifController extends Controller
     {
         if ($request->ajax()) {
             $query = PlanCuentaNif::query();
-            $query->select('id', 'plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_naturaleza', 'plancuentasn_tercero', 'plancuentasn_tasa', 'plancuentasn_centro');
+            $query->select('id', 'plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_naturaleza', 'plancuentasn_tercero', 'plancuentasn_tasa', 'plancuentasn_centro', 'plancuentasn_tipo');
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['search_plancuentasn_cuenta' => $request->has('plancuentasn_cuenta') ? $request->plancuentasn_cuenta : '']);
@@ -77,10 +75,12 @@ class PlanCuentasNifController extends Controller
                     $plancuentanif->setNivelesCuenta();
                     $plancuentanif->save();
 
-                    //Forget cache
-                    Cache::forget( PlanCuentaNif::$key_cache );
                     // Commit Transaction
                     DB::commit();
+
+                    //Forget cache
+                    Cache::forget( PlanCuentaNif::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -145,10 +145,12 @@ class PlanCuentasNifController extends Controller
                     $plancuentanif->setNivelesCuenta();
                     $plancuentanif->save();
 
-                    //Forget cache
-                    Cache::forget( PlanCuentaNif::$key_cache );
                     // Commit Transaction
                     DB::commit();
+
+                    //Forget cache
+                    Cache::forget( PlanCuentaNif::$key_cache );
+
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
                 }catch(\Exception $e){
                     DB::rollback();

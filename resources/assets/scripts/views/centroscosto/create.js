@@ -23,13 +23,13 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {      
+        initialize : function(opts) {
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-            
-            // Attributes 
-            this.msgSuccess = 'Centro de costo guardado con exito!'; 
+
+            // Attributes
+            this.msgSuccess = 'Centro de costo guardado con exito!';
             this.$wraperForm = this.$('#render-form-centrocosto');
 
             // Events
@@ -44,10 +44,10 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );                
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -59,16 +59,16 @@ app || (app = {});
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
 
-            this.ready();  
+            this.ready();
         },
-        
+
         /**
         * fires libraries js
         */
         ready: function () {
             // to fire plugins
             if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck(); 
+                window.initComponent.initICheck();
 
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
@@ -103,7 +103,7 @@ app || (app = {});
                 var _this = this,
                     stuffToDo = {
                         'toShow' : function() {
-                            window.Misc.redirect( window.Misc.urlFull( Route.route('centroscosto.show', { centroscosto: resp.id})) );            
+                            window.Misc.redirect( window.Misc.urlFull( Route.route('centroscosto.index') ) );            
                         },
 
                         'default' : function() {

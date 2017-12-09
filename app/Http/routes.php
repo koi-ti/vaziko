@@ -161,7 +161,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
-		Route::resource('tiemposp', 'Production\TiempopController', ['only' => ['index']]);
+		Route::resource('tiemposp', 'Production\DetalleTiempospController', ['only' => ['index']]);
 
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 

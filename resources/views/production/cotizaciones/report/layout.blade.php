@@ -169,7 +169,7 @@
 			{{-- Title --}}
 			{{--*/ $empresa = App\Models\Base\Empresa::getEmpresa(); /*--}}
 			<div class="header">
-				@include('production.cotizaciones.export.title')
+				@include('production.cotizaciones.report.title')
 			</div>
 
 			@yield('content')

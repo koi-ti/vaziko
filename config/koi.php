@@ -11,7 +11,8 @@ return [
         'site' => 'http://www.vaziko.com',
         'image' => [
             'logo' => '/images/logo.png',
-            'avatar' => '/images/avatar.svg'
+            'avatar' => '/images/avatar.svg',
+            'image-vaziko' => '/images/image-vaziko.gif'
         ],
     	'ano' => 2015
     ],
@@ -79,7 +80,7 @@ return [
             'AUT' => 'Autopista',
             'AV' => 'Avenida',
             'AK' => 'Avenida Carrera',
-            
+
             'BRR' => 'Barrio',
             'BL' => 'Bloque',
             'BG' => 'Bodega',
@@ -123,7 +124,7 @@ return [
             'MZ' => 'Manzana',
             'MN' => 'Mezzanine',
             'MD' => 'Modulo',
-            
+
             'MCP' => 'Municipio',
             'NORTE' => 'Norte',
             'OCC' => 'Occidente',

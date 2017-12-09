@@ -22,12 +22,12 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {      
+        initialize : function(opts) {
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-            
-            // Attributes 
+
+            // Attributes
             this.$wraperForm = this.$('#render-form-actividad');
 
             // Events
@@ -42,10 +42,10 @@ app || (app = {});
         onStore: function (e) {
 
             if (!e.isDefaultPrevented()) {
-            
+
                 e.preventDefault();
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );                
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -57,9 +57,9 @@ app || (app = {});
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
 
-            this.ready();  
+            this.ready();
         },
-        
+
         /**
         * fires libraries js
         */
@@ -69,7 +69,7 @@ app || (app = {});
                 window.initComponent.initToUpper();
 
             if( typeof window.initComponent.initSpinner == 'function' )
-                window.initComponent.initSpinner();         
+                window.initComponent.initSpinner();
         },
 
         /**
@@ -97,7 +97,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('actividades.show', { actividades: resp.id})) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('actividades.index') ) );
             }
         }
     });

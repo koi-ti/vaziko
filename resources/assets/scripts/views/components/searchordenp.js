@@ -46,7 +46,7 @@ app || (app = {});
             this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$factura = this.$inputContent.attr("data-factura");
-            this.$tiempop = this.$inputContent.attr("data-tiempop");
+            this.$estado = this.$inputContent.attr("data-estado");
 
             /* Render in <a> dashboard */
             this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
@@ -61,7 +61,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
                         data.factura = _this.$factura;
-                        data.orden_tiempop = _this.$tiempop;
+                        data.orden_estado = _this.$estado;
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }
@@ -146,10 +146,10 @@ app || (app = {});
 			this.$inputContent = $(e.currentTarget);
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
-            this.$tiempop = this.$inputContent.attr("data-tiempop");
+            this.$estado = this.$inputContent.attr("data-estado");
 
 			var orden = this.$inputContent.val(),
-                tiempop = this.$tiempop;
+                estado = this.$estado;
 
             // Before eval clear data
             this.$inputName.val('');
@@ -159,7 +159,7 @@ app || (app = {});
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.search')),
 	                type: 'GET',
-	                data: { orden_codigo: orden, orden_tiempop: tiempop },
+	                data: { orden_codigo: orden, orden_estado: estado },
 	                beforeSend: function() {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner( _this.$wraperConten );

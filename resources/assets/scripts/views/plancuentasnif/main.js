@@ -46,7 +46,8 @@ app || (app = {});
                     { data: 'plancuentasn_nivel', name: 'plancuentasn_nivel' },
                     { data: 'plancuentasn_nombre', name: 'plancuentasn_nombre' },
                     { data: 'plancuentasn_naturaleza', name: 'plancuentasn_naturaleza' },
-                    { data: 'plancuentasn_tercero', name: 'plancuentasn_tercero' }
+                    { data: 'plancuentasn_tercero', name: 'plancuentasn_tercero' },
+                    { data: 'plancuentasn_tipo', name: 'plancuentasn_tipo' },
                 ],
                 columnDefs: [
                     {
@@ -73,7 +74,24 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
-                    }
+                    },
+                    {
+                        targets: 5,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            if( data == 'N' ){
+                                return 'Ninguno';
+                            }else if( data == 'I' ){
+                                return 'Inventario';
+                            }else if( data == 'C' ){
+                                return 'Cartera';
+                            }else if( data == 'P' ){
+                                return 'Cuentas por pagar';
+                            }else{
+                                return '';
+                            }
+                        }
+                    },
                 ]
 			});
         },

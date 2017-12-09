@@ -108,11 +108,6 @@ class OrdenpController extends Controller
                         $query->whereRaw("$request->orden_productop IN ( SELECT orden2_productop
                             FROM koi_ordenproduccion2 WHERE orden2_orden = koi_ordenproduccion.id) ");
                     }
-
-                    // Tiemposp
-                    if($request->has('orden_tiempop')) {
-                        $query->where('orden_abierta', true);
-                    }
                 })
                 ->make(true);
         }
@@ -346,8 +341,10 @@ class OrdenpController extends Controller
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
 
-            if($request->has('orden_tiempop')){
-                $query->where('orden_abierta', true);
+            if($request->has('orden_estado')){
+                if($request->orden_estado == 'A'){
+                    $query->where('orden_abierta', true);
+                }
             }
 
             $ordenp = $query->first();

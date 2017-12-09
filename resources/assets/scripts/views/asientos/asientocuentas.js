@@ -45,8 +45,8 @@ app || (app = {});
             this.listenTo( this.collection, 'sync', this.responseServer );
 
             /* if was passed asiento code */
-            if( !_.isUndefined(this.parameters.dataFilter.asiento) && !_.isNull(this.parameters.dataFilter.asiento) ){
-                 this.confCollection.data.asiento = this.parameters.dataFilter.asiento;
+            if( !_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter) ){
+                 this.confCollection.data = this.parameters.dataFilter;
 
                 this.collection.fetch( this.confCollection );
             }

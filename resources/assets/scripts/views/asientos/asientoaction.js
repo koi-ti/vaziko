@@ -70,7 +70,6 @@ app || (app = {});
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
-            this.listenTo( this.detalleFactura4List, 'reset', this.addAllFactura );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
 
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -669,33 +668,21 @@ app || (app = {});
         *   Change Factura Exists Cartera
         */
         facturaChange: function(e) {
-            var factura1_id = this.$(e.currentTarget).val();
+            var factura1_id = this.$('#factura1_referencia').val();
             this.$('#wrapper-table-factura').removeAttr('hidden');
-            this.detalleFactura4List.reset();
 
-            this.detalleFactura4List.fetch({ reset: true, data: { factura1_id: factura1_id } });
-            this.$wraper = this.$('#browse-factura-list');
-        },
-
-        /**
-        * Render view task by model
-        * @param Object Facturap2Model Model instance
-        */
-        addOneFactura: function (Factura4Model) {
-            var view = new app.FacturaPendienteOrdenItemView({
-                model: Factura4Model
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFactura4List,
+                parameters: {
+                    edit: false,
+                    template: _.template( ($('#factura-item-list-tpl').html() || '') ),
+                    call: 'asiento',
+                    dataFilter: {
+                        factura1_id: factura1_id
+                    }
+                }
             });
-
-            this.$wraper.append( view.render().el );
-            this.ready();
-        },
-
-        /**
-        * Render all view tast of the collection
-        */
-        addAllFactura: function () {
-            this.$wraper.find('tbody').html('');
-            this.detalleFactura4List.forEach( this.addOneFactura, this );
         },
 
         /**
