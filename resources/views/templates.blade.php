@@ -1529,12 +1529,10 @@
         </div>
     </div>
 </script>
-<<<<<<< HEAD
+{{-- fin template general asiento detalle --}}
+
 <script type="text/template" id="add-seriesprodbode-tpl">
     <td><%- sucursal_nombre %></td>
     <td><%- producto_codigo %></td>
     <td><%- producto_nombre %></td>
 </script>
-=======
-{{-- fin template general asiento detalle --}}
->>>>>>> 3b3a2f1334be76c12fc9c4386cdaa53b10c40b61
