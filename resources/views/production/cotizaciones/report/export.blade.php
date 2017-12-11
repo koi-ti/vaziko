@@ -24,7 +24,7 @@
 						<br>
 						{{ $cotizacion2->detalle->productop_nombre }}<br>
 						{{ isset($cotizacion2->materialesp) ? 'Material: '. $cotizacion2->materialesp : null }}<br>
-						{{ isset($cotizacion2->acabadosp) ? 'Acabado: '. $cotizacion2->acabadosp : null }}
+						{{ isset($cotizacion2->acabadosp) ? 'Acabado: '. $cotizacion2->acabadosp : null }}<br>
 						{{ ($cotizacion2->detalle->cotizacion2_tiro || $cotizacion2->detalle->cotizacion2_retiro) ? 'Tintas: '. $tiro . '/' . $retiro : null }}
 					</div>
 					<div class="cell border-cell center"><br>{{ $cotizacion2->detalle->cotizacion2_cantidad }}</div>
