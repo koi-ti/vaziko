@@ -23,9 +23,15 @@
 					<div class="cell border-cell">
 						<br>
 						{{ $cotizacion2->detalle->productop_nombre }}<br>
-						{{ isset($cotizacion2->materialesp) ? 'Material: '. $cotizacion2->materialesp : null }}<br>
-						{{ isset($cotizacion2->acabadosp) ? 'Acabado: '. $cotizacion2->acabadosp : null }}<br>
-						{{ ($cotizacion2->detalle->cotizacion2_tiro || $cotizacion2->detalle->cotizacion2_retiro) ? 'Tintas: '. $tiro . '/' . $retiro : null }}
+						@if( isset($cotizacion2->materialesp) )
+							{{ "Material: $cotizacion2->materialesp" }} <br>
+						@endif
+						@if( isset($cotizacion2->acabadosp) )
+							{{ "Acabado: $cotizacion2->acabadosp" }} <br>
+						@endif
+						@if( $cotizacion2->detalle->cotizacion2_tiro || $cotizacion2->detalle->cotizacion2_retiro )
+							{{ "Tintas: $tiro / $retiro" }}
+						@endif
 					</div>
 					<div class="cell border-cell center"><br>{{ $cotizacion2->detalle->cotizacion2_cantidad }}</div>
 					<div class="cell border-cell right"><br>{{ number_format($cotizacion2->detalle->cotizacion2_total_valor_unitario, 2, ',', '.') }}</div>

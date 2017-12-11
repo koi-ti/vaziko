@@ -402,7 +402,7 @@ class Cotizacion1Controller extends Controller
 
             isset($items->materialesp) ? $items->materialesp = implode(', ', $items->materialesp) : null;
             isset($items->acabadosp) ? $items->acabadosp = implode(', ', $items->acabadosp) : null;
-            
+
             $data[] = $items;
         }
 
