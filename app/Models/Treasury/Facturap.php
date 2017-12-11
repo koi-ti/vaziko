@@ -93,18 +93,19 @@ class Facturap extends Model
         $response->position = 0;
 
         $query = Facturap::query();
-        $query->select('koi_facturap1.*', 'sucursal_nombre', DB::raw('SUM(facturap2_valor) AS valor'));
+        $query->select('koi_facturap1.*', 'sucursal_nombre', DB::raw('SUM(facturap2_valor) AS valor'), 'asiento1_numero', 'asienton1_numero');
+        $query->leftJoin('koi_asiento1', 'facturap1_asiento', '=', 'koi_asiento1.id');
+        $query->leftJoin('koi_asienton1', 'koi_asiento1.id', '=', 'koi_asienton1.asienton1_asiento');
         $query->join('koi_sucursal', 'facturap1_sucursal', '=', 'koi_sucursal.id');
         $query->join('koi_facturap2', 'koi_facturap1.id', '=', 'koi_facturap2.facturap2_factura');
         $query->where('facturap1_tercero', $tercero->id);
         $facturaProveedor = $query->get();
 
         foreach ($facturaProveedor as $value) {
-            $historyClient[$i]['documento'] = 'FACTURA PROVEEDOR';
             $historyClient[$i]['numero'] = $value->facturap1_factura;
             $historyClient[$i]['sucursal'] = $value->sucursal_nombre;
-            $historyClient[$i]['docafecta'] = '-';
-            $historyClient[$i]['id_docafecta'] = $value->facturap1_factura;
+            $historyClient[$i]['asiento'] = $value->asiento1_numero;
+            $historyClient[$i]['asientonif'] = $value->asienton1_numero;
             $historyClient[$i]['cuota'] = $value->facturap1_cuotas;
             $historyClient[$i]['naturaleza'] = $value->facturap1_cuotas > 1 ? 'C' : 'D';
             $historyClient[$i]['valor'] = $value->valor;
