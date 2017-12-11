@@ -4,15 +4,14 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-				<th width="15%">DOCUMENTO</th>
-				<th width="15%">NÚMERO</th>
-				<th width="50%">REGIONAL</th>
-				<th width="10%">AFEC DOCUMENTO</th>
-				<th width="15%">AFEC NÚMERO</th>
-				<th width="15%">AFEC CTA</th>
-				<th width="15%">FECHA E</th>
-				<th width="15%">FECHA DOC</th>
-				<th width="15%">FECHA PAGO</th>
+				<th width="6%">NÚMERO</th>
+				<th width="15%">SUCURSAL</th>
+				<th width="7%">ASIENTO</th>
+				<th width="7%">NIF</th>
+				<th width="5%">CUOTAS</th>
+				<th width="10%">FECHA E</th>
+				<th width="10%">F DOC</th>
+				<th width="10%">F PAGO</th>
 				<th width="15%">DEBITO</th>
 				<th width="15%">CREDITO</th>
 			</tr>
@@ -25,11 +24,10 @@
 			@else
 				@for($i = 0; $i < count($historyProveider); $i++)
 					<tr>
-						<td>{{ $historyProveider[$i]['documento'] }}</td>
 						<td>{{ $historyProveider[$i]['numero'] }}</td>
 						<td>{{ $historyProveider[$i]['sucursal'] }}</td>
-						<td>{{ $historyProveider[$i]['docafecta'] }}</td>
-						<td>{{ $historyProveider[$i]['id_docafecta'] }}</td>
+						<td>{{ $historyProveider[$i]['asiento'] }}</td>
+						<td>{{ $historyProveider[$i]['asientonif'] }}</td>
 						<td class="center">{{ $historyProveider[$i]['cuota'] }}</td>
 						<td>{{ $historyProveider[$i]['elaboro_fh'] }}</td>
 						<td>{{ $historyProveider[$i]['elaboro_fh'] }}</td>
