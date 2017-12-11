@@ -4,30 +4,33 @@
 	<div class="body">
 		<div class="table">
 			<div class="rows">
-				<div style="width:53%;" class="cell center">Descripción</div>
+				<div style="width:60%;" class="cell center">Descripción</div>
 				<div style="width:7%;" class="cell center">Cantidad</div>
-				<div style="width:13%;" class="cell center">Precio Unitario</div>
-				<div style="width:13%;" class="cell center">I.V.A</div>
-				<div style="width:13%;" class="cell center">Total</div>
+				<div class="cell center">Precio Unitario</div>
+				<div class="cell center">I.V.A</div>
+				<div class="cell center">Total</div>
 			</div>
-			{{--*/ $iva = $fiva = $total = 0 /*--}}
-			@foreach( $object->cotizacion2 as $cotizacion2 )
+			{{--*/ $iva = $fiva = $total = $tiro = $retiro = 0 /*--}}
+			@foreach( $data as $cotizacion2 )
 				{{--*/
-					$iva = $cotizacion2->cotizacion2->cotizacion1_iva / 100;
-					$fiva = $cotizacion2->cotizacion2->cotizacion2_total_valor_unitario * $iva;
-					$total += $cotizacion2->cotizacion2->cotizacion2_precio_total;
+					$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
+					$fiva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
+					$total += $cotizacion2->detalle->cotizacion2_precio_total;
+					$tiro = $cotizacion2->detalle->cotizacion2_yellow + $cotizacion2->detalle->cotizacion2_magenta + $cotizacion2->detalle->cotizacion2_cyan + $cotizacion2->detalle->cotizacion2_key;
+					$retiro = $cotizacion2->detalle->cotizacion2_yellow2 + $cotizacion2->detalle->cotizacion2_magenta2 + $cotizacion2->detalle->cotizacion2_cyan2 + $cotizacion2->detalle->cotizacion2_key2;
 				/*--}}
 				<div class="rows">
 					<div class="cell border-cell">
 						<br>
-						{{ $cotizacion2->cotizacion2->productop_nombre }}<br>
+						{{ $cotizacion2->detalle->productop_nombre }}<br>
 						{{ isset($cotizacion2->materialesp) ? 'Material: '. $cotizacion2->materialesp : null }}<br>
 						{{ isset($cotizacion2->acabadosp) ? 'Acabado: '. $cotizacion2->acabadosp : null }}
+						{{ ($cotizacion2->detalle->cotizacion2_tiro || $cotizacion2->detalle->cotizacion2_retiro) ? 'Tintas: '. $tiro . '/' . $retiro : null }}
 					</div>
-					<div class="cell border-cell center">{{ $cotizacion2->cotizacion2->cotizacion2_cantidad }}</div>
-					<div class="cell border-cell right">{{ number_format($cotizacion2->cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</div>
-					<div class="cell border-cell right">{{ number_format($fiva, 2, ',', '.') }}</div>
-					<div class="cell border-cell right">{{ number_format($cotizacion2->cotizacion2->cotizacion2_precio_total, 2, ',', '.') }}</div>
+					<div class="cell border-cell center"><br>{{ $cotizacion2->detalle->cotizacion2_cantidad }}</div>
+					<div class="cell border-cell right"><br>{{ number_format($cotizacion2->detalle->cotizacion2_total_valor_unitario, 2, ',', '.') }}</div>
+					<div class="cell border-cell right"><br>{{ number_format($fiva, 2, ',', '.') }}</div>
+					<div class="cell border-cell right"><br>{{ number_format($cotizacion2->detalle->cotizacion2_precio_total, 2, ',', '.') }}</div>
 				</div>
 			@endforeach
 			<div class="rows">

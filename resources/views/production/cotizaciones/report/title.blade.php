@@ -15,7 +15,7 @@
 		</div>
 		<div class="cell noborder" style="width: 40%;">
 			<div class="center">
-				<img src="{{ asset(config('koi.app.image.image-vaziko')) }}" alt="" style="width: 250px; height: 130px;">
+				<img src="{{ asset(config('koi.app.image.image-vaziko')) }}" alt="" style="width: 235px; height: 115px; padding-top: 13px;">
 			</div>
 		</div>
 		<div class="cell noborder" style="width: 30%;">

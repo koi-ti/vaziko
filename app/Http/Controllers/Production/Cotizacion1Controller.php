@@ -383,11 +383,10 @@ class Cotizacion1Controller extends Controller
         $cotizacion2 = Cotizacion2::getCotizaciones2($cotizacion->id);
         $title = sprintf('Cotización %s', $cotizacion->cotizacion_codigo);
 
-        $object = new \stdClass();
-        $object->cotizacion2 = [];
+        $data = [];
         foreach ( $cotizacion2 as $detalle ) {
             $items = new \stdClass();
-            $items->cotizacion2 = $detalle;
+            $items->detalle = $detalle;
 
 
             $materialesp = Cotizacion4::where('cotizacion4_cotizacion2', $detalle->id)->get();
@@ -403,14 +402,14 @@ class Cotizacion1Controller extends Controller
 
             isset($items->materialesp) ? $items->materialesp = implode(', ', $items->materialesp) : null;
             isset($items->acabadosp) ? $items->acabadosp = implode(', ', $items->acabadosp) : null;
-
-            $object->cotizacion2[] = $items;
+            
+            $data[] = $items;
         }
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->getDomPDF()->set_option("enable_php", true);
-        $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'object' ,'title'))->render());
+        $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'data' ,'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'cotización', $cotizacion->id, date('Y_m_d'), date('H_m_s')));
     }
 
