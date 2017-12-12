@@ -61,7 +61,7 @@
 				<div class="input-group-addon">
 					<i class="fa fa-phone"></i>
 				</div>
-				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask required>
+				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask required>
 			</div>
 		</div>
 
@@ -186,7 +186,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
+					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
@@ -196,7 +196,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
+					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
@@ -206,7 +206,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-fax"></i>
 					</div>
-					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 999'" data-mask>
+					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
