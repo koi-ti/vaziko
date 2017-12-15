@@ -13,9 +13,9 @@
 				</tr>
 				<tr>
 					<th align="left" valign="top" class="border-tbl">Referencia:</th>
-					<td colspan="2" class="border-tbr">{{ $cotizacion->cotizacion1_referencia }}</td>
+					<td colspan="2" valign="top" class="border-tbr">{{ $cotizacion->cotizacion1_referencia }}</td>
 					<th align="left" valign="top" class="border-tbl">Suministran:</th>
-					<td colspan="6" class="border-tbr">{{ $cotizacion->cotizacion1_suministran }}</td>
+					<td colspan="6" valign="top" class="border-tbr">{{ $cotizacion->cotizacion1_suministran }}</td>
 				</tr>
 				<tr>
 					<th colspan="6" align="left" class="border">Cliente</th>
