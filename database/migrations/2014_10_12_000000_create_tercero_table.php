@@ -33,9 +33,9 @@ class CreateTerceroTable extends Migration
             $table->integer('tercero_municipio')->unsigned()->nullable();
             $table->string('tercero_email', 200)->nullable();
 
-            $table->string('tercero_telefono1', 15)->nullable();
-            $table->string('tercero_telefono2', 15)->nullable();
-            $table->string('tercero_fax', 15)->nullable();
+            $table->string('tercero_telefono1', 25)->nullable();
+            $table->string('tercero_telefono2', 25)->nullable();
+            $table->string('tercero_fax', 25)->nullable();
             $table->string('tercero_celular', 15)->nullable();
 
             $table->integer('tercero_actividad')->unsigned()->nullable();

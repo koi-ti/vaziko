@@ -74,13 +74,18 @@
 										<div>{{ $cotizacion->cotizacion1_fecha_inicio }}</div>
 									</div>
 
-									<div class="form-group col-md-9">
+									<div class="form-group col-md-7">
 										<label class="control-label">Cliente</label>
 										<div>
 											<a href="{{ route('terceros.show', ['terceros' =>  $cotizacion->cotizacion1_cliente ]) }}">
 												{{ $cotizacion->tercero_nit }}
 											</a>- {{ $cotizacion->tercero_nombre }}
 										</div>
+									</div>
+
+									<div class="form-group col-md-3">
+										<label class="control-label">Forma de pago</label>
+										<div>{{ $cotizacion->cotizacion1_formapago }}</div>
 									</div>
 								</div>
 

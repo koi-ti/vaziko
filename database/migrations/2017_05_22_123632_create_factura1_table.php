@@ -24,6 +24,7 @@ class CreateFactura1Table extends Migration
             $table->integer('factura1_puntoventa')->unsigned();
             $table->integer('factura1_tercero')->unsigned();
             $table->integer('factura1_asiento')->unsigned()->nullable();
+            $table->integer('factura1_asienton1')->unsigned()->nullable();
 
             $table->double('factura1_subtotal')->default(0);
             $table->double('factura1_iva')->default(0);
@@ -41,6 +42,7 @@ class CreateFactura1Table extends Migration
             $table->foreign('factura1_puntoventa')->references('id')->on('koi_puntoventa')->onDelete('restrict');
             $table->foreign('factura1_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('factura1_asiento')->references('id')->on('koi_asiento1')->onDelete('restrict');
+            $table->foreign('factura1_asienton1')->references('id')->on('koi_asienton1')->onDelete('restrict');
             $table->foreign('factura1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
 
             $table->unique(['factura1_numero', 'factura1_prefijo']);

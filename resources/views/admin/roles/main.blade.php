@@ -118,7 +118,7 @@
     </script>
 
     <!-- Modal add permisorol -->
-    <div class="modal fade" id="modal-permisorol-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+    <div class="modal fade" id="modal-permisorol-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
         <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content" id="content-permisorol-component">
                 <div class="modal-header small-box {{ config('koi.template.bg') }}">

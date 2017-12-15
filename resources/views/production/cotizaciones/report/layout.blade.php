@@ -20,67 +20,36 @@
 					margin-bottom: 35px;
 				}
 
-				.table  {
-					display: table;
-					border-collapse: collapse;
+				.rtable {
 					width: 100%;
+					font-size: 6;
+				    border-collapse: collapse;
 				}
 
-				.heading {
-					display: table-row;
+				.rtable th {
+					padding-left: 2px;
 				}
 
-				.rows {
-					display: table-row;
+				.rtable td {
+					padding-left: 4px;
 				}
 
-				.cell {
-					display: table-cell;
-					border: 1px solid black;
-					padding-left: 1px;
-					padding-right: 1px;
+				.rtable td, th {
+					height: 14px;
 				}
 
 				.titleespecial{
-					font-size: 10;
 					background-color: #000000;
+					border: 1px solid black;
 					color: #FFFFFF;
-				}
-
-				.left {
-					text-align: left;
-				}
-
-				.right {
-					text-align: right;
-				}
-
-				.center{
-					text-align: center;
-				}
-
-				.size-6 {
-					font-size: 6;
-				}
-
-				.size-7 {
-					font-size: 7;
 				}
 
 				.size-8 {
 					font-size: 8;
 				}
 
-				.size-10 {
-					font-size: 10;
-				}
-
 				.noborder {
 					border: none;
-				}
-
-				.border {
-					border: 1px solid black;
 				}
 
 				.border-cell {
@@ -97,25 +66,11 @@
 					border-bottom: none;
 				}
 
-				.border-right {
-					border-left: none;
-					border-right: 1px solid black;
-					border-top: none;
-					border-bottom: none;
-				}
-
 				.border-top {
 					border-left: none;
 					border-right: none;
 					border-top: 1px solid black;
 					border-bottom: none;
-				}
-
-				.border-bottom {
-					border-left: none;
-					border-right: none;
-					border-top: none;
-					border-bottom: 1px solid black;
 				}
 
 				.border-tbr {
@@ -132,47 +87,33 @@
 					border-right: none;
 				}
 
-				.bold{
-					font-weight: bold;
+				.border {
+					border: 1px solid black;
 				}
 
-				.container {
-					min-height:100%;
-  					position:relative;
+				.body {
+					padding-bottom: 100px;   /* Height of the footer */
+				}
 
-					.header {
-						background:#ff0;
-					}
-
-					.body {
-  						padding-bottom:100px;   /* Height of the footer */
-					}
-
-					.footer {
-						position:absolute;
-						bottom:0;
-						width:100%;
-						height:100px;   /* Height of the footer */
-					}
+				.footer {
+					position: absolute;
+					bottom: 0;
+					width: 100%;
+					height: 100px;   /* Height of the footer */
 				}
 			</style>
 		@endif
 	</head>
 	<body>
 		<script type="text/php">
-		    if (isset($pdf)) {
+			if (isset($pdf)) {
+				$font = Font_Metrics::get_font("DejaVu Sans", "normal");
+				$text = html_entity_decode("P&aacute;gina {PAGE_NUM} de {PAGE_COUNT}", ENT_QUOTES, "UTF-8");
+				
 				// Configurar (positionX, positionY, textp, font-family, font-size, font-color, word_space, char_space, angle)
-				$pdf->page_text(279, $pdf->get_height() - 15, utf8_decode("Pagina {PAGE_NUM} de {PAGE_COUNT}"), 'DejaVu Sans', 7, array(0,0,0), 0.0, 0.0, 0.0);
-		    }
+				$pdf->page_text(279, $pdf->get_height() - 15, $text, $font, 7, array(0,0,0), 0.0, 0.0, 0.0);
+			}
 		</script>
-		<div class="container">
-			{{-- Title --}}
-			{{--*/ $empresa = App\Models\Base\Empresa::getEmpresa(); /*--}}
-			<div class="header">
-				@include('production.cotizaciones.report.title')
-			</div>
-
-			@yield('content')
-		</div>
+		@yield('content')
 	</body>
 </html>

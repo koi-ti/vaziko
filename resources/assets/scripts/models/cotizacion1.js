@@ -30,6 +30,7 @@ app || (app = {});
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',
             'cotizacion1_suministran': '',
+            'cotizacion1_formapago': '',
             'cotizacion1_observaciones': '',
             'cotizacion1_terminado': ''
         }

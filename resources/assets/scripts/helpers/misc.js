@@ -140,10 +140,8 @@
                 }
 
                 // Checkbox && radiobutton
-                if( field_type.attr('checked') ){
-                    field_type.iCheck('check');
-                }else{
-                    field_type.iCheck('uncheck');
+                if( field_type.attr('type') == 'radio' || field_type.attr('type') == 'checkbox'){
+                    field_type.iCheck('update');
                 }
 
                 // Select2

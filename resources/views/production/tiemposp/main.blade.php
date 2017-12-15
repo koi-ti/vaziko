@@ -162,7 +162,7 @@
 
     <section id="tiempop-content-section">
         <!-- Modal generic producto -->
-        <div class="modal fade" id="modal-edit-tiempop" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+        <div class="modal fade" id="modal-edit-tiempop" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
             <div class="modal-dialog modal-md" role="document">
                 <div class="modal-content">
                     <div class="modal-header small-box {{ config('koi.template.bg') }}">

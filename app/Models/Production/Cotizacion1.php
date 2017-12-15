@@ -3,10 +3,10 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
+use App\Models\BaseModel;
 use Validator, DB;
 
-class Cotizacion1 extends Model
+class Cotizacion1 extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -22,7 +22,7 @@ class Cotizacion1 extends Model
      *
      * @var array
      */
-    protected $fillable = ['cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado'];
+    protected $fillable = ['cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago'];
 
     public function isValid($data)
     {
@@ -32,6 +32,7 @@ class Cotizacion1 extends Model
             'cotizacion1_contacto' => 'required',
             'tcontacto_telefono' => 'required',
             'cotizacion1_iva' => 'integer|min:0|max:19',
+            'cotizacion1_formapago' => 'required|max:30',
 	        'cotizacion1_fecha_inicio' => 'required|date_format:Y-m-d',
 	        'cotizacion1_suministran' => 'max:200',
         ];

@@ -23,6 +23,7 @@ class CreateCotizacion1Table extends Migration
             $table->date('cotizacion1_fecha_inicio');
             $table->integer('cotizacion1_contacto')->unsigned();
             $table->integer('cotizacion1_iva')->unsigned();
+            $table->string('cotizacion1_formapago', 30)->nullable();
             $table->string('cotizacion1_suministran', 200)->nullable();
             $table->boolean('cotizacion1_anulada')->default(false);
             $table->boolean('cotizacion1_abierta')->default(true);

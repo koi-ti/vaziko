@@ -535,4 +535,8 @@
 	    <td><%- window.Misc.currency(factura4_saldo) %></td>
 	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
     </script>
+
+	<script type="text/template" id="asiento-item-delete-confirm-tpl">
+		<p>¿Está seguro que desea eliminar la cuenta <b><%- plancuentas_cuenta %> - <%- plancuentas_nombre %></b>?</p>
+	</script>
 @stop

@@ -1324,7 +1324,7 @@
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+                    <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
                 </h3>
             </div>
             <div class="box-body">
@@ -1375,7 +1375,7 @@
         <div class="box box-success">
             <div class="box-body">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><b>Informacion adicional</b></h3>
+                    <h3 class="box-title"><b>Información adicional</b></h3>
                 </div>
 
                 <div class="box-body table-responsive no-padding">
@@ -1402,11 +1402,11 @@
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <b>Factura </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+                    <b>Factura </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
                 </h3>
                 <div class="pull-right">
                     <% if ( !_.isNull(father.movimiento_factura) ) { %>
-                        <b>Numero </b><small># <%- father.factura1_numero %></small>
+                        <b>Número </b><small># <%- father.factura1_numero %></small>
                     <% } %>
                     <b>Prefijo </b><small><%- father.puntoventa_prefijo %></small>
                 </div>
@@ -1450,7 +1450,7 @@
     <div class="box box-success">
         <div class="box-body">
             <div class="box-header with-border">
-                <h3 class="box-title"><b>Informacion adicional</b></h3>
+                <h3 class="box-title"><b>Información adicional</b></h3>
             </div>
 
             <div class="box-body table-responsive no-padding">
@@ -1476,7 +1476,7 @@
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Debito' : 'Credito' %>)</small>
+                    <b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
                 </h3>
             </div>
             <div class="box-body">
@@ -1509,7 +1509,7 @@
     <div class="box box-success">
         <div class="box-body">
             <div class="box-header with-border">
-                  <h3 class="box-title"><b>Informacion adicional</b></h3>
+                  <h3 class="box-title"><b>Información adicional</b></h3>
             </div>
 
             <div class="box-body table-responsive no-padding">
