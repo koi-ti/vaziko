@@ -12,7 +12,7 @@ return [
         'image' => [
             'logo' => '/images/logo.png',
             'avatar' => '/images/avatar.svg',
-            'image-vaziko' => '/images/image-vaziko.gif'
+            'header-pdf' => '/images/logo-header-pdf.png'
         ],
     	'ano' => 2015
     ],
