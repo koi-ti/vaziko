@@ -125,7 +125,7 @@
 				<td colspan="2" align="center">_____________________________</td>
 			</tr>
 			<tr>
-				<th colspan="2" align="center">Aprobación Cliente</th>
+				<th colspan="2" align="center">Aprobación Clientesss</th>
 			</tr>
 			<tr>
 				<td></td>
