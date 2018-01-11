@@ -26,7 +26,7 @@
 	<tr>
 		<td rowspan="6" colspan="2">
 			<div align="right">
-				<small>NO Gran Contribuyente - {{ url(config('koi.app.image.header-pdf')) }}</small><br>
+				<small>NO Gran Contribuyente - - {{ url(config('koi.app.image.header-pdf')) }}</small><br>
 				<small>Actividad económica 1811</small><br>
 				<small>Régimen común</small><br>
 				<small>Nit: 900.474.161‐6</small><br>
