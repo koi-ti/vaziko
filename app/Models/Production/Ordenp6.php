@@ -21,7 +21,7 @@ class Ordenp6 extends Model
     *
     * @var array
     */
-    protected $fillable = ['orden6_horas', 'orden6_valor'];
+    protected $fillable = ['orden6_tiempo', 'orden6_valor'];
 
     /**
      * The attributes that are mass nullable fields to null.
@@ -33,7 +33,8 @@ class Ordenp6 extends Model
     public function isValid($data)
     {
         $rules = [
-            'orden6_horas' => 'required',
+            'orden6_horas' => 'required|min:0|max:9999|numeric',
+            'orden6_minutos' => 'required|min:0|max:59|numeric',
             'orden6_valor' => 'required',
         ];
 

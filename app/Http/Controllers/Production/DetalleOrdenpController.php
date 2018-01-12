@@ -163,7 +163,7 @@ class DetalleOrdenpController extends Controller
                     $totalareasp = $sumaareasp / $request->orden2_cantidad;
                     $transporte = $request->orden2_transporte / $request->orden2_cantidad;
                     $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
-                    $valorunitario = $orden2->orden2_precio_venta + $transporte + $viaticos + $totalareasp;
+                    $valorunitario = $orden2->orden2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
 
                     // Actualizar orden2
                     $orden2->orden2_total_valor_unitario = $valorunitario;
@@ -381,13 +381,13 @@ class DetalleOrdenpController extends Controller
                         }
 
                         // Recuperar sumatoria areas guardadas
-                        $recuperarAreas = Ordenp6::select(DB::raw("SUM( ((SUBSTR(orden6_horas, 4, 2) / 60 ) + SUBSTR(orden6_horas, 1, 2)) * orden6_valor ) as valor_total"))->where('orden6_orden2', $orden2->id)->first();
+                        $valorareasp = Ordenp6::select( DB::raw("SUM( ((SUBSTRING_INDEX(orden6_tiempo, ':', -1) / 60 ) + SUBSTRING_INDEX(orden6_tiempo, ':', 1)) * orden6_valor ) as valor_total"))->where('orden6_orden2', $orden2->id)->first();
 
                         // Calcular valor unitario
-                        $totalareasp = $recuperarAreas->valor_total / $request->orden2_cantidad;
+                        $totalareasp = $valorareasp->valor_total / $request->orden2_cantidad;
                         $transporte = $request->orden2_transporte / $request->orden2_cantidad;
                         $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
-                        $valorunitario = $request->orden2_precio_venta + $transporte + $viaticos + $totalareasp;
+                        $valorunitario = $request->orden2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
 
                         // Actualizar orden2
                         $orden2->orden2_total_valor_unitario = $valorunitario;

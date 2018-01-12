@@ -50,7 +50,7 @@ class Factura1 extends Model
 
         if ($factura->factura1_cuotas > 0) {
             $valor = $factura->factura1_total / $factura->factura1_cuotas;
-            $fecha = $factura->factura1_fecha_vencimiento; 
+            $fecha = $factura->factura1_fecha_vencimiento;
 
             for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
                 $factura4 = new Factura4;
@@ -64,7 +64,7 @@ class Factura1 extends Model
                 $factura4->save();
             }
         }
-        
+
         $response->success = true;
         return $response;
     }
@@ -111,6 +111,7 @@ class Factura1 extends Model
     public function prepararAsiento(){
         $object = new \stdClass();
         $object->data = [];
+        $object->dataNif = [];
         $object->cuentas = [];
 
         // Recuperar documento
@@ -118,7 +119,7 @@ class Factura1 extends Model
         if(!$documento instanceof Documento){
             throw new \Exception('No es posible recuperar el documento.');
         }
-        
+
         // Recuperar tercero
         $tercero = Tercero::find($this->factura1_tercero);
         if(!$tercero instanceof Tercero){
@@ -146,7 +147,7 @@ class Factura1 extends Model
                 throw new \Exception('No es posible recuperar la ordenp.');
             }
 
-            $totalF2 = $ordenp2->orden2_precio_venta * $item->factura2_cantidad;
+            $totalF2 = $ordenp2->orden2_total_valor_unitario * $item->factura2_cantidad;
 
             // Subtotal
             $subtotalobase = [];
@@ -173,7 +174,20 @@ class Factura1 extends Model
             'asiento1_id_documentos' => $this->id,
             'asiento1_beneficiario' => $tercero->tercero_nit,
         ];
-
+        // Prepare Data nif 
+        if ($documento->documento_nif) {
+            $object->dataNif = [
+                'asienton1_mes' => (Int) date('m'),
+                'asienton1_ano' => (Int) date('Y'),
+                'asienton1_dia' => (Int) date('d'),
+                'asienton1_numero' => $documento->documento_consecutivo + 1,
+                'asienton1_folder' => $documento->documento_folder,
+                'asienton1_documento' => $documento->id,
+                'asienton1_documentos' => 'FACT',
+                'asienton1_id_documentos' => $this->id,
+                'asienton1_beneficiario' => $tercero->tercero_nit,
+            ];
+        }
         // Iva
         $iva = [];
         $iva['Cuenta'] = '24081010';

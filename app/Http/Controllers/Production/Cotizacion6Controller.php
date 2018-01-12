@@ -53,6 +53,10 @@ class Cotizacion6Controller extends Controller
                 try {
                     $areap_nombre = null;
 
+                    if($request->cotizacion6_horas == 0 && $request->cotizacion6_minutos == 0){
+                        return response()->json(['success' => false, 'errors' => 'No puede ingresar horas y minutos en 0.']);
+                    }
+
                     if(empty(trim($request->cotizacion6_valor)) || is_null(trim($request->cotizacion6_valor))){
                         return response()->json(['success' => false, 'errors' => 'El campo valor es obligatorio.']);
                     }
@@ -70,8 +74,10 @@ class Cotizacion6Controller extends Controller
                         }
                     }
 
+                    $tiempo = sprintf('%s:%s', $request->cotizacion6_horas, $request->cotizacion6_minutos);
+
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre'=>$areap_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'cotizacion6_tiempo' => $tiempo]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -133,24 +139,24 @@ class Cotizacion6Controller extends Controller
                 }
 
                 // Recuperar cotizacion2
-                $cotizacion2 = Cotizacion2::find($cotizacion6->cotizacion6_cotizacion2);
+                $cotizacion2 = Cotizacion2::find( $cotizacion6->cotizacion6_cotizacion2 );
                 if(!$cotizacion2 instanceof Cotizacion2){
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $hora = substr($cotizacion6->cotizacion6_horas, 0, 2);
-                $min = substr($cotizacion6->cotizacion6_horas, 3, 2);
+                $tiempo = explode(':', $cotizacion6->cotizacion6_tiempo); // explode input tiempo 00:00
+                $horas = $tiempo[0]; // value for hour
+                $minutos = $tiempo[1]; // value for minutes
 
-                // Regla de tres para pasa min a horas
-                $r3 = intval($min) / 60;
-                $total = intval($hora) + $r3;
+                // Convertir minutos a horas y sumar horas enteras
+                $newhour = intval($horas) + (intval($minutos) / 60);
 
-                $totalarea = $cotizacion6->cotizacion6_valor * $total;
-                $unitario = $totalarea / $cotizacion2->cotizacion2_cantidad;
-                $totalunitario = $cotizacion2->cotizacion2_total_valor_unitario - $unitario;
+                $areap = $cotizacion6->cotizacion6_valor * $newhour;
+                $unitario = $areap / $cotizacion2->cotizacion2_cantidad;
+                $valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario - round($unitario);
 
                 // Quitar cotizacion2
-                $cotizacion2->cotizacion2_total_valor_unitario = $totalunitario;
+                $cotizacion2->cotizacion2_total_valor_unitario = $valor_unitario;
                 $cotizacion2->save();
 
                 // Eliminar item productop4

@@ -12,23 +12,42 @@ app || (app = {});
     app.MainAsientosView = Backbone.View.extend({
 
         el: '#asientos-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
 
         /**
         * Constructor Method
         */
         initialize : function() {
+            var _this = this;
             this.$asientosSearchTable = this.$('#asientos-search-table');
 
-            this.$asientosSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
+            // References
+            this.$searchTercero = this.$('#search_tercero');
+            this.$searchTerceroName = this.$('#search_tercero_nombre');
+            this.$searchReferencia = this.$('#search_referencia');
+            this.$searchDocumento = this.$('#search_documento');
+
+            this.asientosSearchTable = this.$asientosSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('asientos.index') ),
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('asientos.index') ),
+                    data: function( data ) {
+                        data.persistent = true;
+                        data.asiento_tercero_nit = _this.$searchTercero.val();
+                        data.asiento_tercero_nombre = _this.$searchTerceroName.val();
+                        data.asiento_documento = _this.$searchDocumento.val();
+                    }
+                },
                 columns: [
                     { data: 'asiento1_numero', name: 'asiento1_numero' },
+                    { data: 'documento_nombre', name: 'documento_nombre' },
                     { data: 'asiento1_ano', name: 'asiento1_ano' },
                     { data: 'asiento1_mes', name: 'asiento1_mes' },
                     { data: 'tercero_nit', name: 'tercero_nit' },
@@ -52,7 +71,7 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
+                        width: '7%',
                         render: function ( data, type, full, row ) {
                             if( parseInt(full.asiento1_preguardado) ) {
                                 return '<a href="'+ window.Misc.urlFull( Route.route('asientos.edit', {asientos: full.id }) )  +'">' + data + ' <span class="label label-warning">PRE</span></a>';
@@ -62,29 +81,50 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: [1, 2],
-                        width: '10%'
-                    },
-                    {
-                        targets: 3,
-                        width: '15%'
+                        targets: [2, 3],
+                        width: '7%'
                     },
                     {
                         targets: 4,
+                        width: '15%'
+                    },
+                    {
+                        targets: 5,
                         searchable: false
                     },
                     {
-                        targets: [5, 6, 7, 8, 9],
+                        targets: [6, 7, 8, 9, 10],
                         visible: false
                     },
                     {
-                        targets: 10,
+                        targets: 11,
                         visible: false,
                         searchable: false
                     }
-                ]
+                ],
+                order: [
+                	[ 2, 'desc' ], [ 3, 'desc' ]
+                ],
 			});
-        }
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.asientosSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            // References
+            this.$searchTercero.val('');
+            this.$searchTerceroName.val('');
+            this.$searchReferencia.val('');
+            this.$searchDocumento.val('').trigger('change');
+
+            this.asientosSearchTable.ajax.reload();
+        },
     });
 
 })(jQuery, this, this.document);

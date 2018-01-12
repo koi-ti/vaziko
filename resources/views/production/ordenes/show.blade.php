@@ -19,6 +19,9 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                     <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
+                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                        <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
+                    @endif
                     <li class="pull-right">
                         <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
                             <i class="fa fa-file-pdf-o"></i>
@@ -234,6 +237,32 @@
                             </div>
                         </div>
                     </div>
+
+                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                        <div class="tab-pane" id="tab_tiemposp">
+                            <div class="box box-whithout-border">
+                                <div class="box-body table-responsive no-padding">
+                                    <table id="browse-orden-tiemposp-list" class="table table-bordered" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th width="2%">#</th>
+                                                <th width="20%">Tercero</th>
+                                                <th width="20%">Actividad</th>
+                                                <th width="20%">Subactividad</th>
+                                                <th width="20%">Área</th>
+                                                <th width="8%">Fecha</th>
+                                                <th width="5%">H. inicio</th>
+                                                <th width="5%">H. fin</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {{-- Render content productos --}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                	</div>
         	</div>
         </div>

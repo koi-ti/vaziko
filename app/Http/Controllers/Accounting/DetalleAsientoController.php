@@ -25,6 +25,9 @@ class DetalleAsientoController extends Controller
             if($request->has('asiento')) {
                 $detalle = Asiento2::getAsiento2($request->asiento);
             }
+            if($request->has('orden2_orden')){
+                $detalle = Asiento2::getAsiento2Ordenp($request->orden2_orden);
+            }
             return response()->json($detalle);
         }
         return view('admin.actividades.index');
@@ -129,7 +132,7 @@ class DetalleAsientoController extends Controller
                     }
                     // Asiento Nif
                     $asientoNif = AsientoNif::where('asienton1_asiento', $asiento->id)->first();
-                    $asientoNif2 = null; 
+                    $asientoNif2 = null;
                     if ($asientoNif instanceof AsientoNif) {
 
                         $cuentaNif = PlanCuentaNif::find($objCuenta->plancuentas_equivalente);
@@ -171,6 +174,7 @@ class DetalleAsientoController extends Controller
                         'asiento2_ordenp' => ($ordenp instanceof Ordenp ? $ordenp->id : ''),
                         'ordenp_codigo' => ($ordenp instanceof Ordenp ? "{$ordenp->orden_numero}-".substr($ordenp->orden_ano,-2) : ''),
                         'ordenp_beneficiario' => $request->asiento2_orden_beneficiario,
+                        'asiento1_documentos' => $request->asiento1_documentos,
                         'asientoNif2_id' => ($asientoNif2 instanceof AsientoNif2 ? $asientoNif2->id : '')
                     ]);
                 }catch(\Exception $e){
@@ -420,8 +424,12 @@ class DetalleAsientoController extends Controller
         if ($request->ajax()) {
             $movimientos = [];
             if($request->has('asiento2')) {
+
+                // Recuperar padre
+                $asiento2 = Asiento2::find( $request->asiento2 );
+
                 $query = AsientoMovimiento::query();
-                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'koi_factura1.id as factura1_id', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
+                $query->select('koi_asientomovimiento.*', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
                         THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                                 (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                             )
@@ -457,7 +465,7 @@ class DetalleAsientoController extends Controller
                             END AS productop_nombre
                         ")
                     );
-                $query->where('movimiento_asiento2', $request->asiento2);
+                $query->where('movimiento_asiento2', $asiento2->id);
                 $query->leftJoin('koi_producto', 'movimiento_producto', '=', 'koi_producto.id');
                 $query->leftJoin('koi_sucursal', 'movimiento_sucursal', '=', 'koi_sucursal.id');
 
@@ -480,10 +488,67 @@ class DetalleAsientoController extends Controller
                 $query->leftJoin('koi_unidadmedida as me5', 'productop_3d_profundidad_med', '=', 'me5.id');
                 $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
                 $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
-
                 $movimientos = $query->get();
+
+                // Object detalle
+                $data = [];
+                foreach ($movimientos as $item) {
+                    if( $item->movimiento_tipo == 'F'){
+                        $data['type'] = $item->movimiento_tipo;
+                        $data['father'] = [
+                            'factura1_puntoventa' => $item->factura1_puntoventa,
+                            'factura1_numero' => $item->factura1_numero,
+                            'factura1_fecha' => $item->factura1_fecha,
+                            'factura1_fecha_vencimiento' => $item->factura1_fecha_vencimiento,
+                            'factura1_total' => $item->factura1_total,
+                            'factura1_cuotas' => $item->factura1_cuotas,
+                            'puntoventa_prefijo' => $item->puntoventa_prefijo,
+                            'puntoventa_nombre' => $item->puntoventa_nombre,
+                            'movimiento_factura' => $item->movimiento_factura,
+                            'tercero_nit' => $item->tercero_nit,
+                            'tercero_nombre' => $item->tercero_nombre,
+                        ];
+                    }
+                    if( $item->movimiento_tipo == 'FH'){
+                        $data['childrens'][] = [
+                            'factura4_cuota' => $item->factura4_cuota,
+                            'movimiento_valor' => $item->movimiento_valor
+                        ];
+                    }
+
+                    if( $item->movimiento_tipo == 'FP'){
+                        $data['type'] = $item->movimiento_tipo;
+                        $data['father'][] = [
+                            'facturap2_cuota' => $item->facturap2_cuota,
+                            'movimiento_facturap' => $item->movimiento_facturap,
+                            'movimiento_nuevo' => $item->movimiento_nuevo,
+                            'movimiento_valor' => $item->movimiento_valor,
+                            'movimiento_fecha' => $item->movimiento_fecha,
+                            'movimiento_item' => $item->movimiento_item,
+                            'movimiento_periodicidad' => $item->movimiento_periodicidad,
+                            'movimiento_observaciones' => $item->movimiento_observaciones,
+                        ];
+                    }
+
+                    if( $item->movimiento_tipo == 'IP'){
+                        $data['type'] = $item->movimiento_tipo;
+                        $data['father'] = [
+                            'producto_codigo' => $item->producto_codigo,
+                            'producto_nombre' => $item->producto_nombre,
+                            'sucursal_nombre' => $item->sucursal_nombre,
+                            'movimiento_valor' => $item->movimiento_valor
+                        ];
+                    }
+                    if( $item->movimiento_tipo == 'IH'){
+                        $data['childrens'][] = [
+                            'movimiento_serie' => $item->movimiento_serie,
+                            'movimiento_item' => $item->movimiento_item,
+                            'movimiento_valor' => $item->movimiento_valor,
+                        ];
+                    }
+                }
             }
-            return response()->json($movimientos);
+            return response()->json($data);
         }
     }
 }

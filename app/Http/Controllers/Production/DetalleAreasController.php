@@ -70,8 +70,10 @@ class DetalleAreasController extends Controller
                         }
                     }
 
+                    $tiempo = sprintf('%s:%s', $request->orden6_horas, $request->orden6_minutos);
+
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'orden6_tiempo' => $tiempo]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -138,16 +140,16 @@ class DetalleAreasController extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $hora = substr($orden6->orden6_horas, 0, 2);
-                $min = substr($orden6->orden6_horas, 3, 2);
+                $tiempo = explode(':', $orden6->orden6_tiempo); // explode input tiempo 00:00
+                $horas = $tiempo[0];  // value for hour
+                $minutos = $tiempo[1]; // value for minutes
 
                 // Regla de tres para pasa min a horas
-                $r3 = intval($min) / 60;
-                $total = intval($hora) + $r3;
+                $newhour = intval($horas) + (intval($minutos) / 60);
 
-                $totalarea = $orden6->orden6_valor * $total;
-                $unitario = $totalarea / $orden2->orden2_cantidad;
-                $totalunitario = $orden2->orden2_total_valor_unitario - $unitario;
+                $areap = $orden6->orden6_valor * $newhour;
+                $unitario = $areap / $orden2->orden2_cantidad;
+                $totalunitario = $orden2->orden2_total_valor_unitario - round($unitario);
 
                 // Quitar orden2
                 $orden2->orden2_total_valor_unitario = $totalunitario;

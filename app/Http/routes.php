@@ -161,6 +161,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
+		Route::resource('tiemposp', 'Production\DetalleTiempospController', ['only' => ['index']]);
 
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 
@@ -185,7 +186,9 @@ Route::group(['middleware' => 'auth'], function()
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 
-	// Route::resource('tiempoordenesp', 'Production\TiempoOrdenpController', ['except' => ['destroy']]);
+	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
+	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
+	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
@@ -245,7 +248,9 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'productos'], function()
 	{
 		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
+		Route::post('evaluate',['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate'] );
 		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
+		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
 	});
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 
@@ -256,4 +261,6 @@ Route::group(['middleware' => 'auth'], function()
 	*/
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
+   	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
+	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
 });

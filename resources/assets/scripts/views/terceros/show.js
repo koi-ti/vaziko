@@ -39,7 +39,7 @@ app || (app = {});
                 collection: this.contactsList,
                 parameters: {
                     dataFilter: {
-                        'tercero_id': this.model.get('id')
+                        tercero_id: this.model.get('id')
                     }
                }
             });
@@ -51,7 +51,7 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-roles'),
                     dataFilter: {
-                        'tercero_id': this.model.get('id')
+                        tercero_id: this.model.get('id')
                     }
                }
             });
@@ -61,7 +61,7 @@ app || (app = {});
                 collection: this.facturaptList,
                 parameters: {
                     dataFilter: {
-                        'tercero_id': this.model.get('id')
+                        tercero_id: this.model.get('id')
                     }
                }
             });
@@ -71,8 +71,10 @@ app || (app = {});
                 collection: this.detalleFacturaList,
                 parameters: {
                     edit: false,
+                    template: _.template( ($('#add-detalle-factura-cartera-tpl').html() || '') ),
+                    call: 'tercero',
                     dataFilter: {
-                        'tercero': this.model.get('id'),
+                        tercero_id: this.model.get('id'),
                     }
                 }
             });

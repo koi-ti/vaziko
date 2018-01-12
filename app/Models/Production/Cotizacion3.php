@@ -34,4 +34,12 @@ class Cotizacion3 extends Model
         $query->orderBy('maquinap_nombre', 'asc');
         return $query->get();
     }
+
+    /**
+     * Get the attributes for the maquinaName.
+     */
+    public function getName()
+    {
+        return $this->hasOne('App\Models\Production\Maquinap', 'id' , 'cotizacion3_maquinap');
+    }
 }

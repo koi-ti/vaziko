@@ -355,18 +355,21 @@
 	                            </tr>
 	                        </thead>
 							<tbody>
-								{{--*/ $trow = $area = $totalArea = 0; /*--}}
+								{{--*/ $fila = $sumareap = $totalareap = $totalcotizacion = $ttransporte = $tviaticos = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
-									{{--*/ $trow = (substr($areap->cotizacion6_horas, 0, 2) + (substr($areap->cotizacion6_horas, 3, 2) / 60)) * $areap->cotizacion6_valor /*--}}
-									{{--*/ $area += $trow /*--}}
-									{{--*/ $totalArea = $area / $cotizacion2->cotizacion2_cantidad; /*--}}
+									{{--*/
+										$tiempo = explode(':', $areap->cotizacion6_tiempo);
+										$fila = round( ($tiempo[0] + ($tiempo[1] / 60)) * $areap->cotizacion6_valor );
+										$sumareap += $fila;
+										$totalareap = round( $sumareap / $cotizacion2->cotizacion2_cantidad );
+									/*--}}
 
 									<tr>
 										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 		                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
-		                                <td class="text-center">{{  date('H:i', strtotime($areap->cotizacion6_horas)) }}</td>
+		                                <td class="text-left">{{  $areap->cotizacion6_tiempo }}</td>
 										<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
-		                                <td class="text-right">{{ number_format($trow, 2, ',', '.') }}</td>
+		                                <td class="text-right">{{ number_format($fila, 2, ',', '.') }}</td>
 									</tr>
 								@endforeach
 							</tbody>
@@ -374,7 +377,7 @@
 	                            <tr>
 	                                <td colspan="3"></td>
 	                                <th class="text-right">Total</th>
-	                                <th class="text-right">{{ number_format($area, 2, ',', '.') }}</th>
+	                                <th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
 	                            </tr>
 	                        </tfoot>
 	                    </table>
@@ -384,15 +387,16 @@
 
 			<div class="row">
 				{{-- Content informacion --}}
-				{{--*/ $totalCotizacion = $ttransporte = $tviaticos = 0; /*--}}
-				{{--*/ $ttransporte = $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad; /*--}}
-				{{--*/ $tviaticos = $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad; /*--}}
-				{{--*/ $totalCotizacion = $cotizacion2->cotizacion2_precio_venta + $ttransporte + $tviaticos + $totalArea; /*--}}
+				{{--*/
+					$ttransporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
+					$tviaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
+					$totalcotizacion = $cotizacion2->cotizacion2_precio_venta + $ttransporte + $tviaticos + $totalareap;
+				/*--}}
 
 				<div class="col-sm-6 col-md-offset-3">
 					<div class="box box-primary">
 						<div class="box-header with-border">
-							<h3 class="box-title">Informacion Adicional</h3>
+							<h3 class="box-title">Información adicional</h3>
 						</div>
 						<div class="box-body">
 							<div class="row">
@@ -423,7 +427,7 @@
 	                            <div class="col-md-12">
 	                                <label class="col-sm-6">Áreas</label>
 	                                <div class="col-md-6 text-right">
-										<label>{{ number_format($totalArea, 2, ',', '.') }}</label>
+										<label>{{ number_format($totalareap, 2, ',', '.') }}</label>
 	                                </div>
 	                            </div>
 	                        </div>
@@ -432,7 +436,7 @@
 								<div class="col-md-12">
 									<label class="col-md-6">Total cotizacion</label>
 									<div class="col-md-6 text-right">
-										<label class="label bg-green">{{ number_format($totalCotizacion, 2, ',', '.') }}</label>
+										<label class="label bg-green">{{ number_format($totalcotizacion, 2, ',', '.') }}</label>
 									</div>
 								</div>
 							</div>

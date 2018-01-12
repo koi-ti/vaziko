@@ -109,7 +109,7 @@ class ProductoController extends Controller
             if ($request->ajax()) {
                 return response()->json($producto);
             }
-            return view('inventory.productos.show', ['producto' => $producto]);
+            return view('inventory.productos.show', ['producto' => $producto, 'available' => $producto->available]);
         }
         abort(404);
     }
@@ -190,5 +190,48 @@ class ProductoController extends Controller
             }
         }
         return response()->json(['success' => false]);
+    }
+    /**
+     * Evaluate actions inventory.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function evaluate(Request $request)
+    {
+        // Prepare response
+        $response = new \stdClass();
+        $response->action = "";
+        $response->tipo = "";
+        $response->producto = "";
+
+        // Recuperar producto
+        $producto = Producto::where('producto_codigo', $request->producto_codigo)->first();
+        if(!$producto instanceof Producto){
+            return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
+        }
+
+        //Maneja unidaes en inventario
+        if ($producto->producto_unidades == true)
+        {
+            if ($request->tipo === 'S') {
+                if ($producto->producto_metrado) {
+                    $action = 'metrado';
+                }else if ($producto->producto_serie){
+                    $action = 'series';
+                }else{
+                    $action = 'unidades';
+                }
+                $response->producto = $producto->id;
+                $response->tipo = $request->tipo;
+                $response->action = $action;
+                $response->success = true;
+            }
+        }else{
+            $response->errors = "No es posible realizar movimientos para productos que no manejan unidades";
+            $response->success = false;
+        }
+        // dd($request->all());
+
+        return response()->json($response);
     }
 }

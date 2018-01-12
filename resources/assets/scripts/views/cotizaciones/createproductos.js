@@ -95,7 +95,7 @@ app || (app = {});
             // Ordenp6
             this.$formCotizacion6 = this.$('#form-cotizacion6-producto');
             this.$inputArea = this.$('#cotizacion6_nombre');
-            this.$inputHoras = this.$('#cotizacion6_horas');
+            this.$inputTiempo = this.$('#cotizacion6_tiempo');
             this.$inputValor = this.$('#cotizacion6_valor');
 
             // Inputs cuadro de informacion
@@ -297,13 +297,49 @@ app || (app = {});
             }
         },
 
+        /**
+        *   Event render input value
+        **/
+        changeAreap: function(e){
+            var _this = this;
+            id = this.$(e.currentTarget).val();
+
+            if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$inputArea.val('').attr('readonly', true);
+                    _this.$inputTiempo.val('');
+                    _this.$inputValor.val( resp.areap_valor );
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$inputArea.val('').attr('readonly', false);
+                this.$inputTiempo.val('');
+                this.$inputValor.val('');
+            }
+        },
+
+        /**
+        * Event calculate cotizacion
+        **/
         calculateCotizacion2: function() {
             // Igualar variables y quitar el inputmask
             this.cantidad = parseInt( this.$cantidad.val() );
-            this.tranporte = parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
-            this.viaticos = parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad );
+            this.tranporte = Math.round(parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ));
+            this.viaticos = Math.round(parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ));
+            this.areas = Math.round(parseFloat( this.areasProductopCotizacionList.totalize()['total'] ) / parseFloat( this.cantidad ));
             this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
-            this.areas = parseFloat( this.areasProductopCotizacionList.totalize()['total'] ) / parseFloat( this.cantidad );
 
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
@@ -312,41 +348,8 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalCotizacion2 = parseFloat( this.precio ) + parseFloat( this.tranporte ) + parseFloat( this.viaticos ) + parseFloat( this.areas );
+            this.totalCotizacion2 = this.precio + this.tranporte + this.viaticos + this.areas;
             this.$precioCotizacion2.val( this.totalCotizacion2 );
-        },
-
-        /**
-        *   Event render input value
-        **/
-        changeAreap: function(e){
-           var _this = this;
-               id = this.$(e.currentTarget).val();
-
-           if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
-               $.ajax({
-                   url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
-                   type: 'GET',
-                   beforeSend: function() {
-                       window.Misc.setSpinner( _this.spinner );
-                   }
-               })
-               .done(function(resp) {
-                   window.Misc.removeSpinner( _this.spinner );
-
-                   _this.$inputArea.val('').attr('readonly', true);
-                   _this.$inputHoras.val('');
-                   _this.$inputValor.val( resp.areap_valor );
-               })
-               .fail(function(jqXHR, ajaxOptions, thrownError) {
-                   window.Misc.removeSpinner( _this.spinner );
-                   alertify.error(thrownError);
-               });
-           }else{
-               this.$inputArea.val('').attr('readonly', false);
-               this.$inputHoras.val('');
-               this.$inputValor.val('');
-           }
         },
 
         /**

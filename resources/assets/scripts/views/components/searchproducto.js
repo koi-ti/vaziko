@@ -45,6 +45,9 @@ app || (app = {});
 			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
 			this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
 
+            /* Render in <a> dashboard */
+            this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
+
 			this.productosSearchTable = this.$productosSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -68,6 +71,11 @@ app || (app = {});
 						width: '10%',
 						searchable: false,
 						render: function ( data, type, full, row ) {
+                            // Render show tercero in dashboard
+                            if (_this.$fieldRender == "show")
+                            {
+                                return '<a href='+ window.Misc.urlFull( Route.route('productos.show', { productos: full.id}))+'>' + data + '</a>';
+                            }
 							return '<a href="#" class="a-koi-search-producto-component-table">' + data + '</a>';
 						}
 					}

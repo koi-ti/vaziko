@@ -67,9 +67,14 @@
                                                 </div>
                                             <% } %>
 
-                                            <label for="cotizacion1_fecha_inicio" class="col-sm-1 control-label">F. Inicio</label>
+                                            <label for="cotizacion1_fecha_inicio" class="col-md-1 control-label">F. Inicio</label>
                                             <div class="form-group col-md-2">
                                                 <input type="text" id="cotizacion1_fecha_inicio" name="cotizacion1_fecha_inicio" placeholder="Fecha inicio" class="form-control input-sm datepicker" value="<%- cotizacion1_fecha_inicio %>" required>
+                                            </div>
+
+                                            <label for="cotizacion1_formapago" class="col-md-1 control-label">Forma de pago</label>
+                                            <div class="form-group col-md-4">
+                                                <input type="text" id="cotizacion1_formapago" name="cotizacion1_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- cotizacion1_formapago %>" maxlength="30" required>
                                             </div>
                                         </div>
 

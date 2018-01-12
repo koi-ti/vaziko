@@ -58,7 +58,7 @@
 
                     <div class="row">
                         <label for="traslado1_observaciones" class="col-sm-1 control-label">Detalle</label>
-                        <div class="form-group col-sm-8">
+                        <div class="form-group col-sm-10">
                             <textarea id="traslado1_observaciones" name="traslado1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- traslado1_observaciones %></textarea>
                         </div>
                     </div>
@@ -113,7 +113,6 @@
                         </div>
                     </div>
                 </form>
-
                 <!-- table table-bordered table-striped -->
                 <div class="box-body table-responsive no-padding">
                     <table id="browse-detalle-traslado-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
@@ -123,13 +122,6 @@
                             <th>Producto</th>
                             <th>Unidades</th>
                         </tr>
-                        <tfoot>
-                            <tr>
-                                <td colspan="2"></td>
-                                <th class="text-left">Total</th>
-                                <td class="text-right" id="total-costo">0</td>
-                            </tr>
-                        </tfoot>
                     </table>
                 </div>
             </div>

@@ -132,7 +132,7 @@
         <td><%- orden2_id %></td>
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- factura2_cantidad %></td>
-        <td class="text-center"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
         <td class="text-right" id="subtotal_<%- id %>">0</td>
     </script>
 
@@ -142,7 +142,6 @@
                 <span><i class="fa fa-times"></i></span>
             </a>
         </td>
-
         <td><%- id %></td>
         <td><%- productop_nombre %></td>
         <td><%- orden_codigo %></td>
@@ -152,5 +151,12 @@
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
         <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
+    </script>
+
+    <script type="text/template" id="add-detalle-factura-tpl">
+        <td><%- factura4_cuota %></td>
+    	<td><%- factura4_vencimiento %></td>
+        <td><%- window.Misc.currency(factura4_valor) %></td>
+        <td><%- window.Misc.currency(factura4_saldo) %></td>
     </script>
 @stop

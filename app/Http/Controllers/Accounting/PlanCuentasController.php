@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use DB, Log, Datatables;
-
 use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
+use DB, Log, Datatables;
 
 class PlanCuentasController extends Controller
 {
@@ -22,7 +21,8 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $query = PlanCuenta::query();
-            $query->select('id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tercero', 'plancuentas_tasa', 'plancuentas_centro');
+            $query->select('koi_plancuentas.id as id', 'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tercero', 'plancuentas_tasa', 'plancuentas_centro', 'plancuentas_tipo', 'plancuentas_equivalente', 'plancuentasn_cuenta');
+            $query->leftJoin('koi_plancuentasn', 'plancuentas_equivalente', '=', 'koi_plancuentasn.id');
 
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
@@ -77,7 +77,7 @@ class PlanCuentasController extends Controller
                     $plancuenta->setNivelesCuenta();
 
                     if ($request->has('plancuentas_equivalente')) {
-                        // Nif 
+                        // Nif
                         $nif = PlanCuentaNif::find($request->plancuentas_equivalente);
                         if (!$nif instanceof PlanCuentaNif) {
                             DB::rollback();
@@ -160,7 +160,7 @@ class PlanCuentasController extends Controller
                     $plancuenta->setNivelesCuenta();
 
                     if ($request->has('plancuentas_equivalente')) {
-                        // Nif 
+                        // Nif
                         $nif = PlanCuentaNif::find($request->plancuentas_equivalente);
                         if (!$nif instanceof PlanCuentaNif) {
                             DB::rollback();

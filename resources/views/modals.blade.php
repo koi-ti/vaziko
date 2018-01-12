@@ -1,5 +1,5 @@
 <!-- Modal add resource -->
-<div class="modal fade" id="modal-add-resource-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-add-resource-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content" id="content-create-resource-component">
 			<div class="modal-header small-box {{ config('koi.template.bg') }}">
@@ -23,7 +23,7 @@
 </div>
 
 <!-- Modal add tcontacto -->
-<div class="modal fade" id="modal-tcontacto-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-tcontacto-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content" id="content-tcontacto-component">
 			<div class="modal-header small-box {{ config('koi.template.bg') }}">
@@ -46,7 +46,7 @@
 </div>
 
 <!-- Modal address -->
-<div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -54,7 +54,7 @@
 	</div>
 </div>
 
-<div class="modal fade" id="modal-address-component-validacion" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-address-component-validacion" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -63,7 +63,7 @@
 </div>
 
 <!-- Modal search factura -->
-<div class="modal fade" id="modal-search-factura-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-factura-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -72,7 +72,7 @@
 </div>
 
 <!-- Modal search ordenp2 -->
-<div class="modal fade" id="modal-search-ordenp2-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-ordenp2-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -81,7 +81,7 @@
 </div>
 
 <!-- Modal search ordenp -->
-<div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -90,7 +90,7 @@
 </div>
 
 <!-- Modal search producto -->
-<div class="modal fade" id="modal-search-producto-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-producto-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -99,7 +99,7 @@
 </div>
 
 <!-- Modal search productop -->
-<div class="modal fade" id="modal-search-productop-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-productop-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -108,7 +108,7 @@
 </div>
 
 <!-- Modal search contacto -->
-<div class="modal fade" id="modal-search-contacto-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-contacto-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -117,7 +117,7 @@
 </div>
 
 <!-- Modal search -->
-<div class="modal fade" id="modal-search-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-search-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -126,7 +126,7 @@
 </div>
 
 <!-- Modal confirm -->
-<div class="modal fade" id="modal-confirm-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<div class="modal fade" id="modal-confirm-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
 	<div class="modal-dialog modal-md" role="document">
 		<div class="modal-content">
 			<div class="modal-header small-box {{ config('koi.template.bg') }}">
@@ -145,7 +145,27 @@
 		</div>
 	</div>
 </div>
+<!-- Modal inventario -->
+<div class="modal fade" id="modal-inventario-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="inner-title-modal modal-title"></h4>
+			</div>
 
+			<form id="form-create-inventario-component-source" data-toggle="validator">
+				<div class="modal-body" id="modal-wrapper-inventario">
+					<div class="content-modal"></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="submit" class="btn btn-primary btn-sm">Continuar</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
 {{-- templates --}}
 <script type="text/template" id="koi-address-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
@@ -646,8 +666,9 @@
 		                <thead>
 				            <tr>
 				                <th width="10%">Numero</th>
-			                	<th width="80%">Tercero</th>
-			                	<th width="10%">Prefijo</th>
+								<th width="10%">Prefijo</th>
+			                	<th width="15%">Tercero</th>
+			                	<th width="65%">Nombre</th>
 				            </tr>
 				        </thead>
 		            </table>
@@ -656,3 +677,23 @@
 		</div>
 	{!! Form::close() !!}
 </script>
+
+<!-- Modal show info detalle asiento -->
+<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="inner-title-modal modal-title">Información del asiento</h4>
+			</div>
+			<div class="modal-body" id="modal-asiento-wrapper-show-info">
+				<div class="content-modal"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
+			</div>
+		</div>
+	</div>
+</div>

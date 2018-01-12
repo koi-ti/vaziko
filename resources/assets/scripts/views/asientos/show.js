@@ -19,7 +19,7 @@ app || (app = {});
         initialize : function() {
             // Model exist
             if( this.model.id != undefined ) {
-             
+
                 this.asientoCuentasList = new app.AsientoCuentasList();
 
                 // Reference views
@@ -37,7 +37,7 @@ app || (app = {});
                 parameters: {
                     wrapper: this.el,
                     dataFilter: {
-                        'asiento': this.model.get('id')
+                        asiento: this.model.get('id')
                     }
                 }
             });

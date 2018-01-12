@@ -46,6 +46,10 @@ app || (app = {});
             this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$factura = this.$inputContent.attr("data-factura");
+            this.$estado = this.$inputContent.attr("data-estado");
+
+            /* Render in <a> dashboard */
+            this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
 
 			this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -57,6 +61,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
                         data.factura = _this.$factura;
+                        data.orden_estado = _this.$estado;
                         data.orden_numero = _this.$searchordenpOrden.val();
                         data.orden_tercero_nit = _this.$searchordenpTercero.val();
                     }
@@ -77,6 +82,12 @@ app || (app = {});
                         width: '10%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
+                            // Render show tercero in dashboard
+                            if (_this.$fieldRender == "show")
+                            {
+                                return '<a href='+ window.Misc.urlFull( Route.route('ordenes.show', { ordenes: full.id}))+'>' + data + '</a>';
+                            }
+
                         	return '<a href="#" class="a-koi-search-ordenp-component-table">' + data + '</a>';
                         }
                     },
@@ -88,7 +99,7 @@ app || (app = {});
                         targets: 4 ,
                         render: function ( data, type, full, row ) {
                             return window.moment(data).format('YYYY-MM-DD');
-                        } 
+                        }
                     }
                 ]
 
@@ -135,8 +146,10 @@ app || (app = {});
 			this.$inputContent = $(e.currentTarget);
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+            this.$estado = this.$inputContent.attr("data-estado");
 
-			var orden = this.$inputContent.val();
+			var orden = this.$inputContent.val(),
+                estado = this.$estado;
 
             // Before eval clear data
             this.$inputName.val('');
@@ -146,7 +159,7 @@ app || (app = {});
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.search')),
 	                type: 'GET',
-	                data: { orden_codigo: orden },
+	                data: { orden_codigo: orden, orden_estado: estado },
 	                beforeSend: function() {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner( _this.$wraperConten );

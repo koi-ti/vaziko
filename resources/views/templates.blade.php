@@ -61,7 +61,7 @@
 				<div class="input-group-addon">
 					<i class="fa fa-phone"></i>
 				</div>
-				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask required>
+				<input id="tcontacto_telefono" value="<%- tcontacto_telefono %>" class="form-control input-sm" name="tcontacto_telefono" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask required>
 			</div>
 		</div>
 
@@ -186,7 +186,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
@@ -196,7 +196,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
@@ -206,7 +206,7 @@
 					<div class="input-group-addon">
 						<i class="fa fa-fax"></i>
 					</div>
-					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
 
@@ -864,10 +864,10 @@
 			<label class="control-label">Tipo contabilidad </label>
 			<div class="row">
 				<label class="checkbox-inline" for="documento_actual">
-					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal ?	
+					<input type="checkbox" id="documento_actual" name="documento_actual" value="documento_actual" <%- parseInt(documento_actual) ? 'checked': ''%>> Normal
 				</label>
 				<label class="checkbox-inline" for="documento_nif">
-					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif ?	
+					<input type="checkbox" id="documento_nif" name="documento_nif" value="documento_nif" <%- parseInt(documento_nif) ? 'checked': ''%>> Nif
 				</label>
 			</div>
 		</div>
@@ -906,11 +906,18 @@
 
 <script type="text/template" id="choose-itemrollo-tpl">
     <td class="text-center"><%- prodboderollo_item %></td>
-    <td class="text-right"><%- prodboderollo_centimetro %></td>
+    <td class="text-right"><%- prodboderollo_metros %></td>
     <td class="text-right"><%- prodboderollo_saldo %></td>
     <td>
-		<input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0" max="<%- prodboderollo_saldo %>" step="0.1">
+        <div class="form-group">
+            <input id="itemrollo_metros_<%- id %>" name="itemrollo_metros_<%- id %>" class="form-control input-sm text-right" type="number" value="0" min="0" max="<%- prodboderollo_saldo %>" step="0.1">
+        </div>
     </td>
+</script>
+<script type="text/template" id="itemrollo-tpl">
+    <td class="text-center"><%- prodboderollo_item %></td>
+    <td class="text-right"><%- prodboderollo_metros %></td>
+    <td class="text-right"><%- prodboderollo_saldo %></td>
 </script>
 
 <script type="text/template" id="add-serie-tpl">
@@ -1174,4 +1181,358 @@
 			<div><input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" <%- parseInt(subtipoproductop_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
+</script>
+
+{{-- Template Actividadp --}}
+<script type="text/template" id="add-actividadp-tpl">
+	<div class="row">
+		<div class="form-group col-md-8">
+			<label for="actividadp_nombre" class="control-label">Nombre</label>
+			<input type="text" id="actividadp_nombre" name="actividadp_nombre" value="<%- actividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="actividadp_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="actividadp_activo" name="actividadp_activo" value="actividadp_activo" <%- parseInt(actividadp_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+{{-- Template SubActividadp --}}
+<script type="text/template" id="add-subactividadp-tpl">
+	<div class="row">
+        <div class="form-group col-md-4">
+			<label for="subactividadp_actividadp" class="control-label">Actividad</label>
+			<select name="subactividadp_actividadp" id="subactividadp_actividadp" class="form-control select2-default-clear" required>
+				<option value="" selected>Seleccione</option>
+				@foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+					<option value="{{ $key }}" <%- subactividadp_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+				@endforeach
+			</select>
+		</div>
+
+		<div class="form-group col-md-5">
+			<label for="subactividadp_nombre" class="control-label">Nombre</label>
+			<input type="text" id="subactividadp_nombre" name="subactividadp_nombre" value="<%- subactividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-6">
+			<label for="subactividadp_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="subactividadp_activo" name="subactividadp_activo" value="subactividadp_activo" <%- parseInt(subactividadp_activo) ? 'checked': ''%>></div>
+		</div>
+    </div>
+</script>
+
+
+{{-- Inicio template general asiento detalle --}}
+<script type="text/template" id="add-asiento2-item-tpl">
+	<% if(edit) { %>
+	<td class="text-center">
+		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>" data-resource-nif = "<%- asientoNif2_id %>">
+			<span><i class="fa fa-times"></i></span>
+		</a>
+	</td>
+	<% } %>
+	<td><%- plancuentas_cuenta %></td>
+    <td><%- plancuentas_nombre %></td>
+    <td>
+    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
+    		<%- tercero_nit %>
+    	</a>
+    </td>
+    <td>
+    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
+	    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
+	    		<%- centrocosto_codigo %>
+	    	</a>
+    	<% } %>
+    </td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
+    <td class="text-center">
+		<a class="btn btn-default btn-xs item-asiento2-show-info" data-resource="<%- id %>">
+			<span><i class="fa fa-info-circle"></i></span>
+		</a>
+	</td>
+</script>
+
+<script type="text/template" id="show-info-asiento2-tpl">
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label class="control-label">Naturaleza</label>
+            <div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
+        </div>
+    </div>
+
+    <!-- Orden -->
+    <% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="control-label">Orden de producción</label>
+                <div><%- ordenp_codigo %> - <%- ordenp_beneficiario %></div>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Beneficiario -->
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="control-label">Beneficiario</label>
+            <div><%- tercero_nit %> - <%- tercero_nombre %></div>
+        </div>
+    </div>
+
+    <!-- Centro costo -->
+    <% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="control-label">Centro Costo</label>
+                <div><%- centrocosto_codigo %> - <%- centrocosto_nombre %></div>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Detalle -->
+    <% if( !_.isUndefined(asiento2_detalle) && !_.isNull(asiento2_detalle) && asiento2_detalle != '') { %>
+        <div class="row">
+            <div class="form-group col-md-12">
+                <label class="control-label">Detalle</label>
+                <div><%- asiento2_detalle %></div>
+            </div>
+        </div>
+    <% } %>
+
+    <!-- Detalle -->
+    <% if( !_.isUndefined(asiento1_documentos) && !_.isNull(asiento1_documentos) && asiento1_documentos != '') { %>
+        <% if( asiento1_documentos == 'FACT' && plancuentas_cuenta == '130505') { %>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label">Documento</label>
+                    <div><b><%- documento_nombre %></b> <a href="<%- window.Misc.urlFull( Route.route('facturas.show', { facturas: asiento1_id_documentos}) ) %>">Ver factura</a> </div>
+                </div>
+            </div>
+        <% } %>
+    <% } %>
+
+    <div class="row" id="render-info-modal"></div>
+</script>
+
+<!-- Facturas, Facturap, Inventario -> Padres -->
+<script type="text/template" id="add-info-facturap-item">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Factura proveedor</label>
+                        <div><%- father[0].movimiento_facturap %></div>
+                    </div>
+                    <% if( father[0].movimiento_nuevo ) { %>
+                        <div class="form-group col-md-6">
+                            <label class="control-label">Valor</label>
+                            <div><%- window.Misc.currency( father[0].movimiento_valor ) %></div>
+                        </div>
+                    <% } %>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Tercero</label>
+                        <div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+                    </div>
+                </div>
+                <% if( father[0].movimiento_nuevo ) { %>
+                    <div class="row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Vencimiento</label>
+                            <div><%- father[0].movimiento_fecha %></div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Cuotas</label>
+                            <div><%- father[0].movimiento_item %></div>
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label class="control-label">Periodicidad</label>
+                            <div><%- father[0].movimiento_periodicidad %></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-md-12">
+                            <label class="control-label">Observaciones</label>
+                            <div><%- father[0].movimiento_observaciones %></div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <% if ( !father[0].movimiento_nuevo ) { %>
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><b>Información adicional</b></h3>
+                </div>
+
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-showinfo-facturap-list" class="table no-margin" cellspacing="0">
+                        <tr>
+                            <th class="text-center">Cuota</th>
+                            <th class="text-center">Pago</th>
+                        </tr>
+                        <% _.each( father, function(children){ %>
+                            <tr>
+                                <td class="text-center"><%- children.facturap2_cuota %></td>
+                                <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
+                            </tr>
+                        <% }); %>
+                    </table>
+                </div>
+            </div>
+        </div>
+     <% } %>
+</script>
+
+<script type="text/template" id="add-info-factura-item">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <b>Factura </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                </h3>
+                <div class="pull-right">
+                    <% if ( !_.isNull(father.movimiento_factura) ) { %>
+                        <b>Número </b><small># <%- father.factura1_numero %></small>
+                    <% } %>
+                    <b>Prefijo </b><small><%- father.puntoventa_prefijo %></small>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Fecha</label>
+                        <div><%- father.factura1_fecha %></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Vencimiento</label>
+                        <div><%- father.factura1_fecha_vencimiento %></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Punto de venta</label>
+                        <div><%- father.puntoventa_nombre %></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Valor</label>
+                        <div><%- window.Misc.currency( father.factura1_total ) %></div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label class="control-label">Cuotas</label>
+                        <div><%- father.factura1_cuotas %></div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Tercero</label>
+                        <div><%- father.tercero_nit %> - <%- father.tercero_nombre %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="box-header with-border">
+                <h3 class="box-title"><b>Información adicional</b></h3>
+            </div>
+
+            <div class="box-body table-responsive no-padding">
+                <table id="browse-showinfo-factura-list" class="table no-margin" cellspacing="0">
+                    <tr>
+                        <th class="text-center">Cuota No.</th>
+                        <th class="text-center">Pago</th>
+                    </tr>
+                    <% _.each( childrens, function( children ){ %>
+                        <tr>
+                            <td class="text-center"><%- children.factura4_cuota %></td>
+                            <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
+                        </tr>
+                    <% }); %>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="add-info-inventario-item">
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="box-header with-border">
+                <h3 class="box-title">
+                    <b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                </h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Tercero</label>
+                        <div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label class="control-label">Producto</label>
+                        <div><%- father.producto_codigo %> - <%- father.producto_nombre %></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Sucursal</label>
+                        <div><%- father.sucursal_nombre %></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label class="control-label">Cantidad</label>
+                        <div><%- father.movimiento_valor %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="box box-success">
+        <div class="box-body">
+            <div class="box-header with-border">
+                  <h3 class="box-title"><b>Información adicional</b></h3>
+            </div>
+
+            <div class="box-body table-responsive no-padding">
+                <table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
+                    <tr>
+                        <th class="text-center">Item</th>
+                        <th class="text-center"><%- !_.isNull( childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
+                    </tr>
+                    <% _.each(childrens, function( children ){ %>
+                        <tr>
+                            <td class="text-center"><%- children.movimiento_item %></td>
+                            <td class="text-center"><%- !_.isNull(children.movimiento_serie) ? children.movimiento_serie : children.movimiento_valor %></td>
+                        </tr>
+                    <% }); %>
+                </table>
+            </div>
+        </div>
+    </div>
+</script>
+{{-- fin template general asiento detalle --}}
+
+<script type="text/template" id="add-seriesprodbode-tpl">
+    <td><%- sucursal_nombre %></td>
+    <td><%- producto_codigo %></td>
+    <td><%- producto_nombre %></td>
 </script>

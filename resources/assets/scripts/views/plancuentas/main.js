@@ -46,19 +46,21 @@ app || (app = {});
                     { data: 'plancuentas_nivel', name: 'plancuentas_nivel' },
                     { data: 'plancuentas_nombre', name: 'plancuentas_nombre' },
                     { data: 'plancuentas_naturaleza', name: 'plancuentas_naturaleza' },
-                    { data: 'plancuentas_tercero', name: 'plancuentas_tercero' }
+                    { data: 'plancuentas_tercero', name: 'plancuentas_tercero' },
+                    { data: 'plancuentas_equivalente', name: 'plancuentas_equivalente' },
+                    { data: 'plancuentas_tipo', name: 'plancuentas_tipo' },
                 ],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '15%',
+                        width: '13%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('plancuentas.show', {plancuentas: full.id }) )  +'">' + data + '</a>';
                         }
                     },
                     {
                         targets: 1,
-                        width: '10%'
+                        width: '5%'
                     },
                     {
                         targets: 3,
@@ -72,6 +74,33 @@ app || (app = {});
                         width: '10%',
                         render: function ( data, type, full, row ) {
                             return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
+                    {
+                        targets: 5,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            if( !_.isNull( full.plancuentas_equivalente ) && !_.isUndefined( full.plancuentas_equivalente ) ){
+                                return '<a href="'+ window.Misc.urlFull( Route.route('plancuentasnif.show', {plancuentasnif: full.plancuentas_equivalente }) )  +'">' + full.plancuentasn_cuenta + '</a>';
+                            }
+                            return '';
+                        }
+                    },
+                    {
+                        targets: 6,
+                        width: '15%',
+                        render: function ( data, type, full, row ) {
+                            if( data == 'N' ){
+                                return 'Ninguno';
+                            }else if( data == 'I' ){
+                                return 'Inventario';
+                            }else if( data == 'C' ){
+                                return 'Cartera';
+                            }else if( data == 'P' ){
+                                return 'Cuentas por pagar';
+                            }else{
+                                return '';
+                            }
                         }
                     }
                 ]

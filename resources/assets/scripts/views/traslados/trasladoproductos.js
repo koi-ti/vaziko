@@ -76,9 +76,8 @@ app || (app = {});
         * storescuenta
         * @param form element
         */
-        storeOne: function (form) {
-            var _this = this,
-                data = window.Misc.formToJson( form );
+        storeOne: function (data) {
+            var _this = this
 
             // Set Spinner
             window.Misc.setSpinner( this.parameters.wrapper );

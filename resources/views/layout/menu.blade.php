@@ -188,14 +188,14 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiempoordenesp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -209,19 +209,37 @@
                     <li class="{{ Request::segment(1) == 'ordenes' ? 'active' : '' }}">
                         <a href="{{ route('ordenes.index') }}"><i class="fa fa-building-o"></i> Ordenes</a>
                     </li>
-                    {{-- <li class="{{ Request::segment(1) == 'tiempoordenesp' ? 'active' : '' }}">
-                        <a href="{{ route('tiempoordenesp.index') }}"><i class="fa fa-clock-o"></i> Tiempo orden</a>
-                    </li> --}}
+                    <li class="{{ Request::segment(1) == 'tiemposp' ? 'active' : '' }}">
+                        <a href="{{ route('tiemposp.index') }}"><i class="fa fa-clock-o"></i> Tiempos</a>
+                    </li>
                 </ul>
             </li>
+
+            @if( Auth::user()->ability('admin', ['module' => 'rtiemposp']) )
+                {{-- Reportes produccion --}}
+                <li class="{{ in_array(Request::segment(1), ['rtiemposp']) ? 'active' : '' }}">
+                    <a href="#">
+                        <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
+                            <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Reporte de tiempos</a>
+                        </li>
+                    </ul>
+                </li>
+            @endif
+
             {{-- Referencias produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesp', 'subactividadesp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'acabadosp' ? 'active' : '' }}">
                         <a href="{{ route('acabadosp.index') }}"><i class="fa fa-circle-o"></i> Acabados</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'actividadesp' ? 'active' : '' }}">
+                        <a href="{{ route('actividadesp.index') }}"><i class="fa fa-circle-o"></i> Actividades</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'areasp' ? 'active' : '' }}">
                         <a href="{{ route('areasp.index') }}"><i class="fa fa-circle-o"></i> Áreas</a>
@@ -238,6 +256,9 @@
                     <li class="{{ Request::segment(1) == 'tipoproductosp' ? 'active' : '' }}">
                         <a href="{{ route('tipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Tipo de producto</a>
                     </li>
+                    <li class="{{ Request::segment(1) == 'subactividadesp' ? 'active' : '' }}">
+                        <a href="{{ route('subactividadesp.index') }}"><i class="fa fa-circle-o"></i> Subactividades</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'subtipoproductosp' ? 'active' : '' }}">
                         <a href="{{ route('subtipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Subtipo de producto</a>
                     </li>
@@ -247,7 +268,7 @@
     </li>
 
     {{-- Tesoreria --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['facturap']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['facturap', 'rhistorialproveedores']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-balance-scale"></i> <span>Tesorería</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -261,6 +282,17 @@
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'facturap' ? 'active' : '' }}">
                         <a href="{{ route('facturap.index') }}"><i class="fa fa-pencil-square-o"></i> Factura proveedor</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="{{ in_array(Request::segment(1), ['rhistorialproveedores']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'rhistorialproveedores' ? 'active' : '' }}">
+                        <a href="{{ route('rhistorialproveedores.index') }}"><i class="fa fa-circle-o"></i> Historial proveedores</a>
                     </li>
                 </ul>
             </li>

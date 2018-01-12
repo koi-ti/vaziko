@@ -17,7 +17,7 @@ app || (app = {});
         defaults: {
             'cotizacion6_areap': '',
         	'cotizacion6_nombre': '',
-            'cotizacion6_horas': moment().format('HH:mm'),
+            'cotizacion6_tiempo': '',
             'cotizacion6_valor': 0,
         	'areap_nombre': '',
         	'total': 0,

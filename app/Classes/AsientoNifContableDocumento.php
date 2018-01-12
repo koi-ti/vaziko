@@ -23,11 +23,11 @@ class AsientoNifContableDocumento {
 		}
 		$this->asientoNif = $asientoNif;
 
-        // if (!$this->asientoNif->isValid($data)) {
-        // 	$this->asientoNif_error = $this->asientoNif->errors;
-        // 	return;
-        // }
-        // $this->asientoNif->fill($data);
+        if (!$this->asientoNif->isValid($data)) {
+        	$this->asientoNif_error = $this->asientoNif->errors;
+        	return;
+        }
+        $this->asientoNif->fill($data);
 
         // Recuperar tercero
         $this->beneficiario = Tercero::where('tercero_nit', $data['asienton1_beneficiario'])->first();
@@ -87,13 +87,12 @@ class AsientoNifContableDocumento {
 		if ($result != 'OK'){
 			return $result;
 		}
-
 		foreach ($this->asientoNif_cuentas as $cuenta)
 		{
 			// Recuperar cuenta
             $objCuenta = PlanCuentaNif::where('plancuentasn_cuenta', $cuenta['Cuenta'])->first();
             if(!$objCuenta instanceof PlanCuentaNif) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (asientoCuentas). ";
+                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (asientoCuentas)";
             }
 
 			// Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
@@ -213,7 +212,7 @@ class AsientoNifContableDocumento {
 			}
 		}
 		return 'OK';
-	}	
+	}
 
 	public function saldosTerceros(PlanCuentaNif $cuenta, Tercero $tercero, $naturaleza, $debito = 0, $credito = 0, $xmes, $xano)
 	{
@@ -559,4 +558,3 @@ class AsientoNifContableDocumento {
         return 'OK';
 	}
 }
-

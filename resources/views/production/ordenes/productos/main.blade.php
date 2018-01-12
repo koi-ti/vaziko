@@ -330,9 +330,9 @@
             </div>
             <div class="box-body">
                 <form method="POST" accept-charset="UTF-8" id="form-ordenp6-producto" data-toggle="validator">
+
                     <div class="row">
-                        <label for="orden6_areap" class="control-label col-sm-1">Área</label>
-                        <div class="form-group col-sm-3">
+                        <div class="form-group col-sm-5 col-md-offset-1">
                             <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear">
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
@@ -341,22 +341,21 @@
                             </select>
                         </div>
 
-                        <div class="form-group col-sm-3">
+                        <div class="form-group col-sm-5">
                             <input id="orden6_nombre" name="orden6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
                         </div>
+                    </div>
 
-                        <div class="form-group col-sm-2">
-                            <div class="bootstrap-timepicker">
-                                <div class="input-group">
-                                    <input type="text" id="orden6_horas" name="orden6_horas" placeholder="Horas" class="form-control input-sm timepicker" required>
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="row">
+                        <div class="form-group col-sm-2 col-md-offset-2">
+                            <input type="number" id="orden6_horas" name="orden6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" max="9999" required>
+                            <div class="help-block with-errors"></div>
                         </div>
-
                         <div class="form-group col-sm-2">
+                            <input type="number" id="orden6_minutos" name="orden6_minutos" placeholder="Minutos" class="form-control input-xs" min="00" step="01" max="59" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="form-group col-sm-3">
                             <input id="orden6_valor" name="orden6_valor" class="form-control input-sm" type="text" required data-currency>
                         </div>
                         <div class="form-group col-sm-1">
@@ -396,7 +395,7 @@
             <div class="col-md-6 col-md-offset-3">
                 <div class="box box-primary">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Informacion Adicional</h3>
+                        <h3 class="box-title">Información adicional</h3>
                     </div>
                     <div class="box-body">
                         <div class="row">
@@ -488,7 +487,7 @@
        <% } %>
        <td><%- areap_nombre %></td>
        <td><%- orden6_nombre %></td>
-       <td><%- moment(orden6_horas, 'HH:mm').format('HH:mm') %></td>
+       <td><%- orden6_tiempo %></td>
        <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>

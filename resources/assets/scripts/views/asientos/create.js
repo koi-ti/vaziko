@@ -13,7 +13,6 @@ app || (app = {});
 
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
-        templateFp: _.template( ($('#add-rfacturap-tpl').html() || '') ),
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'change input#asiento2_base': 'baseChanged',
@@ -25,21 +24,8 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$modalFactura = $('#modal-facturap-component');
-            this.asientoCuentasList = new app.AsientoCuentasList();
-
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
             var attributes = this.model.toJSON();
-            attributes.edit = false;
+                attributes.edit = false;
             this.$el.html( this.template(attributes) );
 
             this.$numero = this.$('#asiento1_numero');
@@ -50,13 +36,13 @@ app || (app = {});
             this.$inputBase = this.$("#asiento2_base");
             this.spinner = this.$('#spinner-main');
 
-            // Reference views
-            this.referenceViews();
+            // Events listener
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
 
             // to fire plugins
             this.ready();
-
-		},
+        },
 
         /**
         * fires libraries js
@@ -77,23 +63,6 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Detalle asiento list
-            this.cuentasListView = new app.AsientoCuentasListView({
-                collection: this.asientoCuentasList,
-                parameters: {
-                    wrapper: this.el,
-                    edit: true,
-                    dataFilter: {
-                        'asiento': this.model.get('id')
-                    }
-                }
-            });
         },
 
         documentoChanged: function(e) {
@@ -140,7 +109,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                
+
                 // Definir tercero
                 data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
                 data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
@@ -218,12 +187,6 @@ app || (app = {});
                 if( !resp.success ) {
                     alertify.error(text);
                     return;
-                }
-
-                // FacturapView undelegateEvents
-                if ( this.createFacturapView instanceof Backbone.View ){
-                    this.createFacturapView.stopListening();
-                    this.createFacturapView.undelegateEvents();
                 }
 
                 // AsientoActionView undelegateEvents

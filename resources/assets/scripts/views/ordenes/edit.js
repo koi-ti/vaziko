@@ -37,6 +37,8 @@ app || (app = {});
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
+            this.tiempopordenList = new app.TiempopOrdenList();
+            this.asientoCuentasList = new app.AsientoCuentasList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -75,7 +77,7 @@ app || (app = {});
                     iva: this.model.get('orden_iva'),
                     wrapper: this.spinner,
                     dataFilter: {
-                        'orden2_orden': this.model.get('id')
+                        orden2_orden: this.model.get('id')
                     }
                }
             });
@@ -85,7 +87,17 @@ app || (app = {});
                 collection: this.despachospPendientesOrdenList,
                 parameters: {
                     dataFilter: {
-                        'orden2_orden': this.model.get('id')
+                        orden2_orden: this.model.get('id')
+                    }
+               }
+            });
+
+            // Despachos pendientes list
+            this.tiempopordenListView = new app.TiempopOrdenListView( {
+                collection: this.tiempopordenList,
+                parameters: {
+                    dataFilter: {
+                        orden2_orden: this.model.get('id')
                     }
                }
             });
@@ -98,9 +110,21 @@ app || (app = {});
                     wrapper: this.spinner,
                     collectionPendientes: this.despachospPendientesOrdenList,
                     dataFilter: {
-                        'despachop1_orden': this.model.get('id')
+                        despachop1_orden: this.model.get('id')
                     }
                }
+            });
+
+            // Detalle asiento list
+            this.cuentasListView = new app.AsientoCuentasListView({
+                collection: this.asientoCuentasList,
+                parameters: {
+                    wrapper: this.spinner,
+                    edit: false,
+                    dataFilter: {
+                        orden2_orden: this.model.get('id')
+                    }
+                }
             });
         },
 

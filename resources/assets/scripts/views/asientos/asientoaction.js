@@ -53,7 +53,7 @@ app || (app = {});
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-            
+
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -70,7 +70,6 @@ app || (app = {});
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
-            this.listenTo( this.detalleFactura4List, 'reset', this.addAllFactura );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
 
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -104,7 +103,7 @@ app || (app = {});
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
         },
-        
+
 		/**
         * Run actions
         */
@@ -214,11 +213,11 @@ app || (app = {});
             // Prepare global data
             data.action = settings.action;
             data = $.extend({}, this.parameters.data, data);
-            
+
             // Prepare global route
             _this.url = window.Misc.urlFull(Route.route('asientos.detalle.validate'));
-            
-            if (_.has(data, "plancuentasn_cuenta")) 
+
+            if (_.has(data, "plancuentasn_cuenta"))
                 _this.url = window.Misc.urlFull(Route.route('asientosnif.detalle.validate'));
 
             // Validate action
@@ -634,13 +633,13 @@ app || (app = {});
         /**
         * Event add item cartera
         */
-        onStoreItemFactura: function (e) {    
+        onStoreItemFactura: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 // Extend attributes
                 this.parameters.data = $.extend({}, this.parameters.data, window.Misc.formToJson( e.target ));
-                
+
                 // Evaluate account
                 this.validateAction({
                     'action': 'cartera',
@@ -669,33 +668,21 @@ app || (app = {});
         *   Change Factura Exists Cartera
         */
         facturaChange: function(e) {
-            var factura1_id = this.$(e.currentTarget).val();
+            var factura1_id = this.$('#factura1_referencia').val();
             this.$('#wrapper-table-factura').removeAttr('hidden');
-            this.detalleFactura4List.reset();
 
-            this.detalleFactura4List.fetch({ reset: true, data: { factura1_id: factura1_id } });
-            this.$wraper = this.$('#browse-factura-list');
-        },
-
-        /**
-        * Render view task by model
-        * @param Object Facturap2Model Model instance
-        */
-        addOneFactura: function (Factura4Model) {
-            var view = new app.FacturaPendienteOrdenItemView({
-                model: Factura4Model
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFactura4List,
+                parameters: {
+                    edit: false,
+                    template: _.template( ($('#factura-item-list-tpl').html() || '') ),
+                    call: 'asiento',
+                    dataFilter: {
+                        factura1_id: factura1_id
+                    }
+                }
             });
-
-            this.$wraper.append( view.render().el );
-            this.ready();
-        },
-
-        /**
-        * Render all view tast of the collection
-        */
-        addAllFactura: function () {
-            this.$wraper.find('tbody').html('');
-            this.detalleFactura4List.forEach( this.addOneFactura, this );
         },
 
         /**
