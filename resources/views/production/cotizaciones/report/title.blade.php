@@ -13,7 +13,7 @@
 			</div>
 		</td>
 		<td rowspan="8" align="center" valign="middle">
-			<img src="{{ asset(config('koi.app.image.image-vaziko')) }}" alt="" style="width: 235px; height: 115px;">
+			<img src="{{ url(config('koi.app.image.header-pdf')) }}" alt="" style="width: 235px; height: 115px;">
 		</td>
 
 		<th class="border-tbl size-8" align="left">Fecha</th>
