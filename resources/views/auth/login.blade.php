@@ -14,8 +14,6 @@
         {{-- Secure tags TuProyecto --}}
         <meta name="csrf-token" content="{{ csrf_token() }}" />
 
-        {{-- Icons css --}}
-        <link href="{{ elixir("css/icons.min.css") }}" rel="stylesheet" type="text/css" />
         {{-- Vendor css --}}
         <link href="{{ elixir("css/vendor.min.css") }}" rel="stylesheet" type="text/css" />
 
