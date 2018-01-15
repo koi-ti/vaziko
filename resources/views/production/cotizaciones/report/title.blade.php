@@ -13,9 +13,7 @@
 			</div>
 		</td>
 		<td rowspan="8" align="center" valign="middle">
-			<img src="{{ asset(config('koi.app.image.header-pdf')) }}" alt="" style="width: 235px; height: 115px;">
-		</td>
-		<td rowspan="8" align="center" valign="middle">
+			{{-- <img src="{{ asset(config('koi.app.image.header-pdf')) }}" alt="" style="width: 235px; height: 115px;"> --}}
 			<img src="http://104.236.57.82/vaziko/public/images/logo-header-pdf.png" alt="" style="width: 235px; height: 115px;">
 		</td>
 
@@ -29,8 +27,8 @@
 	<tr>
 		<td rowspan="6" colspan="2">
 			<div align="right">
-				<small>{{ asset(config('koi.app.image.header-pdf')) }} NO Gran Contribuyente</small><br>
-				<small>{{ url( config('koi.app.image.header-pdf') ) }} Actividad económica 1811</small><br>
+				<small>NO Gran Contribuyente</small><br>
+				<small>Actividad económica 1811</small><br>
 				<small>Régimen común</small><br>
 				<small>Nit: 900.474.161‐6</small><br>
 				<small>Actividad ICA 102‐116</small><br>
