@@ -83,7 +83,7 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance', 'rlibromayor', 'rlibrodiario', 'rauxcontable']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -105,11 +105,20 @@
             </li>
 
             {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rplancuentas', 'rmayorbalance']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rplancuentas', 'rmayorbalance', 'rauxcontable', 'rlibrodiario', 'rlibromayor']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'rauxcontable' ? 'active' : '' }}">
+                        <a href="{{ route('rauxcontable.index') }}"><i class="fa fa-circle-o"></i> Auxiliar contable</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rlibrodiario' ? 'active' : '' }}">
+                        <a href="{{ route('rlibrodiario.index') }}"><i class="fa fa-circle-o"></i> Libro diario</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rlibromayor' ? 'active' : '' }}">
+                        <a href="{{ route('rlibromayor.index') }}"><i class="fa fa-circle-o"></i> Libro mayor</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
                         <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
                     </li>

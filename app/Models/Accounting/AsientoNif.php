@@ -4,6 +4,7 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Base\Empresa;
 use Validator, DB;
 
 class AsientoNif extends Model
@@ -38,6 +39,25 @@ class AsientoNif extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
+            // Validar mes || año en curso
+            if ( $data['asienton1_ano'] == date('Y') && (date('n') < $data['asienton1_mes'])) {
+                $this->errors = "La fecha no puede ser mayor al mes en curso";
+                return false;
+            }
+            // Armo fecha del asiento
+            $fecha_asienton = "{$data['asienton1_ano']}-{$data['asienton1_mes']}-{$data['asienton1_dia']}";
+
+            // Recuperar empresa
+            $empresa = Empresa::select('empresa_fecha_cierre_contabilidad as fecha_cierre')->first();
+            if (!$empresa instanceof Empresa) {
+                $this->errors = 'No es posible definir fecha para el asiento contable';
+                return false;
+            }
+            // Validar contra fecha de cierre
+            if (strtotime($fecha_asiento) <= strtotime($empresa->fecha_cierre) ) {
+                $this->errors = "La fecha que intenta realizar el asiento: $fecha_asienton no esta PERMITIDA. Es menor a la del cierre contable : $empresa->fecha_cierre";
+                return false;
+            }
             return true;
         }
         $this->errors = $validator->errors();
