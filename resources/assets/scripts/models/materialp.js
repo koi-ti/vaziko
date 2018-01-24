@@ -18,7 +18,7 @@ app || (app = {});
         defaults: {
             'materialp_nombre': '',
             'materialp_descripcion': '',
-            'materialp_tipomaterial': '',
+            'materialp_tipomaterialp': '',
         }
     });
 

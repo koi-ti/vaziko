@@ -30,7 +30,8 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('materialesp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'materialp_nombre', name: 'materialp_nombre' }
+                    { data: 'materialp_nombre', name: 'materialp_nombre' },
+                    { data: 'tipomaterialp_nombre', name: 'tipomaterialp_nombre' }
                 ],
 				buttons: [
 					{

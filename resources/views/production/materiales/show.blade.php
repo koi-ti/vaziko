@@ -23,7 +23,7 @@
 
                 <div class="form-group col-md-4">
                     <label class="control-label">Tipo de material</label>
-                    <div>{{ $material->tipomaterial_nombre }}</div>
+                    <div>{{ $material->tipomaterialp_nombre }}</div>
                 </div>
             </div>
 

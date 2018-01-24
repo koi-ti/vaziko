@@ -188,7 +188,7 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -230,7 +230,7 @@
             @endif
 
             {{-- Referencias produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesp', 'subactividadesp', 'acabadosp', 'maquinasp', 'materialesp', 'tiposmaterialp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['areasp', 'actividadesp', 'subactividadesp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -250,8 +250,8 @@
                     <li class="{{ Request::segment(1) == 'materialesp' ? 'active' : '' }}">
                         <a href="{{ route('materialesp.index') }}"><i class="fa fa-circle-o"></i> Materiales</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'tiposmaterialp' ? 'active' : '' }}">
-                        <a href="{{ route('tiposmaterialp.index') }}"><i class="fa fa-circle-o"></i> Tipo de material</a>
+                    <li class="{{ Request::segment(1) == 'tipomaterialesp' ? 'active' : '' }}">
+                        <a href="{{ route('tipomaterialesp.index') }}"><i class="fa fa-circle-o"></i> Tipo de material</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'tipoproductosp' ? 'active' : '' }}">
                         <a href="{{ route('tipoproductosp.index') }}"><i class="fa fa-circle-o"></i> Tipo de producto</a>

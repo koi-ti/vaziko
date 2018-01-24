@@ -5,17 +5,16 @@ namespace App\Models\Production;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\BaseModel;
-
 use Validator, Cache;
 
-class TipoMaterial extends BaseModel
+class TipoMaterialp extends BaseModel
 {
     /**
      * The database table used by the model.
      *
      * @var string
      */
-    protected $table = 'koi_tipomaterial';
+    protected $table = 'koi_tipomaterialp';
 
     public $timestamps = false;
 
@@ -31,19 +30,19 @@ class TipoMaterial extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['tipomaterial_nombre'];
+    protected $fillable = ['tipomaterialp_nombre'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['tipomaterial_activo'];
+    protected $boolean = ['tipomaterialp_activo'];
 
     public function isValid($data)
     {
         $rules = [
-            'tipomaterial_nombre' => 'required|max:25',
+            'tipomaterialp_nombre' => 'required|max:50',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -54,17 +53,17 @@ class TipoMaterial extends BaseModel
         return false;
     }
 
-    public static function getTiposMaterial()
+    public static function getTiposMaterialp()
     {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }
 
         return Cache::rememberForever( self::$key_cache , function() {
-            $query = TipoMaterial::query();
-            $query->orderBy('tipomaterial_nombre', 'asc');
-            $query->where('tipomaterial_activo', true);
-            $collection = $query->lists('tipomaterial_nombre', 'id');
+            $query = TipoMaterialp::query();
+            $query->orderBy('tipomaterialp_nombre', 'asc');
+            $query->where('tipomaterialp_activo', true);
+            $collection = $query->lists('tipomaterialp_nombre', 'id');
 
             $collection->prepend('', '');
             return $collection;

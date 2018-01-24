@@ -13,6 +13,7 @@
                         <tr>
                             <th>Código</th>
                             <th>Nombre</th>
+                            <th>Tipo de material</th>
                         </tr>
                     </thead>
                 </table>

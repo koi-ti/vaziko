@@ -42,9 +42,9 @@
 					<td colspan="2" class="noborder">{{ $cotizacion->tcontacto_nombre }}</td>
 					<th align="left" class="noborder">Teléfono:</th>
 					@if( !empty( $cotizacion->tercero_telefono1 ) )
-					<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono1 }}</td>
+						<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono1 }}</td>
 					@else
-					<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono2 }}</td>
+						<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono2 }}</td>
 					@endif
 					<th colspan="2" align="left" class="border">Tomado por:</th>
 					<td colspan="2" class="border">{{ Auth::user()->getName() }}</td>
@@ -68,25 +68,23 @@
 			<tbody>
 				{{--*/ $iva = $fiva = $total = $tiro = $retiro = 0 /*--}}
 				@foreach( $data as $cotizacion2 )
-				{{--*/
-					$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
-					$fiva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
-					$total += $cotizacion2->detalle->cotizacion2_precio_total;
-					$tiro = $cotizacion2->detalle->cotizacion2_yellow + $cotizacion2->detalle->cotizacion2_magenta + $cotizacion2->detalle->cotizacion2_cyan + $cotizacion2->detalle->cotizacion2_key;
-					$retiro = $cotizacion2->detalle->cotizacion2_yellow2 + $cotizacion2->detalle->cotizacion2_magenta2 + $cotizacion2->detalle->cotizacion2_cyan2 + $cotizacion2->detalle->cotizacion2_key2;
+					{{--*/
+						$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
+						$fiva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
+						$total += $cotizacion2->detalle->cotizacion2_precio_total;
 					/*--}}
 					<tr>
 						<td colspan="3" class="border-cell">
 							<br>
 							{{ $cotizacion2->detalle->productop_nombre }}<br>
 							@if( isset($cotizacion2->materialesp) )
-							{{ "Material: $cotizacion2->materialesp" }} <br>
+								{{ "Material: $cotizacion2->materialesp" }} <br>
 							@endif
 							@if( isset($cotizacion2->acabadosp) )
-							{{ "Acabado: $cotizacion2->acabadosp" }} <br>
+								{{ "Acabado: $cotizacion2->acabadosp" }} <br>
 							@endif
-							@if( $cotizacion2->detalle->cotizacion2_tiro || $cotizacion2->detalle->cotizacion2_retiro )
-							{{ "Tintas: $tiro / $retiro" }}
+							@if( $cotizacion2->detalle->tiro || $cotizacion2->detalle->retiro )
+								{{ "Tintas: {$cotizacion2->detalle->tiro} / {$cotizacion2->detalle->retiro}" }}
 							@endif
 						</td>
 						<td class="border-cell" align="center">{{ $cotizacion2->detalle->cotizacion2_cantidad }}</td>

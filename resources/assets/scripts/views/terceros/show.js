@@ -11,7 +11,7 @@ app || (app = {});
 
     app.ShowTerceroView = Backbone.View.extend({
 
-        el: '#terceros-main',
+        el: '#terceros-show',
 
         /**
         * Constructor Method

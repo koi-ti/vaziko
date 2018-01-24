@@ -12,12 +12,12 @@ app || (app = {});
     app.TipoMaterialpModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('tiposmaterialp.index') );
+            return window.Misc.urlFull( Route.route('tipomaterialesp.index') );
         },
         idAttribute: 'id',
         defaults: {
-            'tipomaterial_nombre': '',
-            'tipomaterial_activo': 1
+            'tipomaterialp_nombre': '',
+            'tipomaterialp_activo': 1
         }
     });
 

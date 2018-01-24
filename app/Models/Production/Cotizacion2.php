@@ -61,7 +61,8 @@ class Cotizacion2 extends BaseModel
     {
         $query = Cotizacion2::query();
         $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario',
-        'cotizacion2_tiro', 'cotizacion2_yellow', 'cotizacion2_magenta', 'cotizacion2_cyan', 'cotizacion2_key', 'cotizacion2_retiro', 'cotizacion2_yellow2', 'cotizacion2_magenta2', 'cotizacion2_cyan2', 'cotizacion2_key2',
+            DB::raw("CASE WHEN cotizacion2_tiro != 0 THEN ( cotizacion2_yellow + cotizacion2_magenta + cotizacion2_cyan + cotizacion2_key + cotizacion2_color1 + cotizacion2_color2) ELSE '0' END AS tiro"),
+            DB::raw("CASE WHEN cotizacion2_retiro != 0 THEN ( cotizacion2_yellow2 + cotizacion2_magenta2 + cotizacion2_cyan2 + cotizacion2_key2 + cotizacion2_color12 + cotizacion2_color22) ELSE '0' END AS retiro"),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? 'cotizacion2_total_valor_unitario' : DB::raw('0 as cotizacion2_total_valor_unitario') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? DB::raw('(cotizacion2_total_valor_unitario * cotizacion2_cantidad) as cotizacion2_precio_total') : DB::raw('0 as cotizacion2_precio_total') ),
             DB::raw("

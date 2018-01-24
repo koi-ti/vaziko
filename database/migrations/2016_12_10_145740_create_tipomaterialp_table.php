@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTipomaterialCreate extends Migration
+class CreateTipomaterialpTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,12 @@ class CreateTipomaterialCreate extends Migration
      */
     public function up()
     {
-        Schema::create('koi_tipomaterial', function (Blueprint $table) {
+        Schema::create('koi_tipomaterialp', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('tipomaterial_nombre', 25);
-            $table->boolean('tipomaterial_activo')->default(false);
+            $table->string('tipomaterialp_nombre', 50);
+            $table->boolean('tipomaterialp_activo')->default(false);
         });
     }
 
@@ -28,6 +28,6 @@ class CreateTipomaterialCreate extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('koi_tipomaterial');
+        Schema::dropIfExists('koi_tipomaterialp');
     }
 }
