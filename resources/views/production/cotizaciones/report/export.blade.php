@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{--*/ $iva = $fiva = $total = $tiro = $retiro = 0 /*--}}
+				{{--*/ $iva = $fiva = $total = 0 /*--}}
 				@foreach( $data as $cotizacion2 )
 					{{--*/
 						$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
@@ -93,15 +93,20 @@
 						<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->detalle->cotizacion2_precio_total, 2, ',', '.') }}</td>
 					</tr>
 					@endforeach
+
 			</tbody>
 			<tfoot>
 				<tr>
-					<td colspan="6" class="border-top"></td>
-					<th colspan="2" align="left" class="border">Valor Total</th>
-					<th colspan="2" align="right" class="border">{{ number_format($total, 2, ',', '.') }}</th>
+					<td colspan="6" class="border-top" align="left" valign="top"></td>
+					<th colspan="2" align="left" class="border" valign="top">Valor Total</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($total, 2, ',', '.') }}</th>
 				</tr>
 			</tfoot>
 		</table>
+
+		<div class="">
+			<p><b>Notas:</b> {{ $cotizacion->cotizacion1_terminado }}</p>
+		</div>
 	</div>
 
 	<div class="footer">

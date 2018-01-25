@@ -11,12 +11,12 @@
             <div class="row">
                 <div class="form-group col-md-4">
                     <label class="control-label">Nombre</label>
-                    <div>{{ $tipomaterialp->tipomaterialp_nombre }}</div>
+                    <div>{{ $tipomaterialp->tipomaterial_nombre }}</div>
                 </div>
 
                 <div class="form-group col-md-2"><br>
-                    <label class="checkbox-inline" for="tipomaterialp_activo">
-                        <input type="checkbox" id="tipomaterialp_activo" name="tipomaterialp_activo" value="tipomaterialp_activo" disabled {{ $tipomaterialp->tipomaterialp_activo ? 'checked': '' }}> Activo
+                    <label class="checkbox-inline" for="tipomaterial_activo">
+                        <input type="checkbox" id="tipomaterial_activo" name="tipomaterial_activo" value="tipomaterial_activo" disabled {{ $tipomaterialp->tipomaterial_activo ? 'checked': '' }}> Activo
                     </label>
                 </div>
             </div>

@@ -37,7 +37,7 @@ class Ordenp extends Model
             'orden_cliente' => 'required',
             'orden_contacto' => 'required',
             'tcontacto_telefono' => 'required',
-            'orden_formapago' => "required|exists:koi_tercero,tercero_formapago,tercero_nit,{$data['orden_cliente']}",
+            'orden_formapago' => 'required|max:30',
             'orden_iva' => 'integer|min:0|max:19',
 	        'orden_fecha_inicio' => 'required|date_format:Y-m-d',
 	        'orden_suministran' => 'max:200',

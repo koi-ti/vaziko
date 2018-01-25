@@ -74,7 +74,7 @@ class Cotizacion6Controller extends Controller
                         }
                     }
 
-                    $tiempo = sprintf('%s:%s', $request->cotizacion6_horas, $request->cotizacion6_minutos);
+                    $tiempo = "{$request->cotizacion6_horas}:{$request->cotizacion6_minutos}";
 
                     // Commit Transaction
                     return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'cotizacion6_tiempo' => $tiempo]);
@@ -155,8 +155,12 @@ class Cotizacion6Controller extends Controller
                 $unitario = $areap / $cotizacion2->cotizacion2_cantidad;
                 $valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario - round($unitario);
 
+                // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
+                $comision = ($valor_unitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+
                 // Quitar cotizacion2
                 $cotizacion2->cotizacion2_total_valor_unitario = $valor_unitario;
+                $cotizacion2->cotizacion2_vtotal = round($comision);
                 $cotizacion2->save();
 
                 // Eliminar item productop4

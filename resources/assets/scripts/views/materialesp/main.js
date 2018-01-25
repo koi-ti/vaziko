@@ -31,7 +31,7 @@ app || (app = {});
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'materialp_nombre', name: 'materialp_nombre' },
-                    { data: 'tipomaterialp_nombre', name: 'tipomaterialp_nombre' }
+                    { data: 'tipomaterial_nombre', name: 'tipomaterial_nombre' }
                 ],
 				buttons: [
 					{

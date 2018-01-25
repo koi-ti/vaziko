@@ -12,12 +12,12 @@ class CreateTipomaterialpTable extends Migration
      */
     public function up()
     {
-        Schema::create('koi_tipomaterialp', function (Blueprint $table) {
+        Schema::create('koi_tipomaterial', function (Blueprint $table) {
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('tipomaterialp_nombre', 50);
-            $table->boolean('tipomaterialp_activo')->default(false);
+            $table->string('tipomaterial_nombre', 50);
+            $table->boolean('tipomaterial_activo')->default(false);
         });
     }
 
@@ -28,6 +28,6 @@ class CreateTipomaterialpTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('koi_tipomaterialp');
+        Schema::dropIfExists('koi_tipomaterial');
     }
 }

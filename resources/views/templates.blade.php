@@ -232,7 +232,7 @@
 	    	</div>
 			<div class="form-group col-md-3">
 	    		<label for="tercero_formapago" class="control-label">Forma de pago</label>
-	    		<input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30">
+	    		<input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
 	    	</div>
 		</div>
 
@@ -588,15 +588,15 @@
 
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label for="centrocosto_descripcion1" class="control-label">Descripcion 1</label>
-			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripcion 1" class="form-control input-sm input-toupper" maxlength="200">
+			<label for="centrocosto_descripcion1" class="control-label">Descripción 1</label>
+			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripción 1" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label for="centrocosto_descripcion2" class="control-label">Descripcion 2</label>
-			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripcion 2" class="form-control input-sm input-toupper" maxlength="200">
+			<label for="centrocosto_descripcion2" class="control-label">Descripción 2</label>
+			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripción 2" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
@@ -615,7 +615,7 @@
 
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-4 col-sm-4">
-			<label for="centrocosto_estructura" class="control-label">Titulo</label>
+			<label for="centrocosto_estructura" class="control-label">Título</label>
 			<select name="centrocosto_estructura" id="centrocosto_estructura" class="form-control" required>
 				<option value="N" <%- centrocosto_estructura == 'N' ? 'selected': ''%>>No</option>
 				<option value="S" <%- centrocosto_estructura == 'S' ? 'selected': ''%>>Si</option>
@@ -1115,11 +1115,11 @@
 		</div>
 
 		<div class="form-group col-md-4">
-			<label for="materialp_tipomaterialp" class="control-label">Tipo de material</label>
-			<select name="materialp_tipomaterialp" id="materialp_tipomaterialp" class="form-control select2-default-clear" required>
+			<label for="materialp_tipomaterial" class="control-label">Tipo de material</label>
+			<select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
 				@foreach( App\Models\Production\TipoMaterialp::getTiposMaterialp() as $key => $value)
-					<option value="{{ $key }}" <%- materialp_tipomaterialp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+					<option value="{{ $key }}" <%- materialp_tipomaterial == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
 		</div>
@@ -1136,13 +1136,13 @@
 <script type="text/template" id="add-tipomaterialp-tpl">
 	<div class="row">
 		<div class="form-group col-md-6">
-			<label for="tipomaterialp_nombre" class="control-label">Nombre</label>
-			<input type="text" id="tipomaterialp_nombre" name="tipomaterialp_nombre" value="<%- tipomaterialp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+			<label for="tipomaterial_nombre" class="control-label">Nombre</label>
+			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">
-			<label for="tipomaterialp_activo" class="control-label">Activo</label>
-			<div><input type="checkbox" id="tipomaterialp_activo" name="tipomaterialp_activo" value="tipomaterialp_activo" <%- parseInt(tipomaterialp_activo) ? 'checked': ''%>></div>
+			<label for="tipomaterial_activo" class="control-label">Activo</label>
+			<div><input type="checkbox" id="tipomaterial_activo" name="tipomaterial_activo" value="tipomaterial_activo" <%- parseInt(tipomaterial_activo) ? 'checked': ''%>></div>
 		</div>
     </div>
 </script>

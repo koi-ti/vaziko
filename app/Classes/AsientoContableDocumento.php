@@ -371,10 +371,8 @@ class AsientoContableDocumento {
 			}
 
 			if($xmes == date('m') && $xano == date('Y')) {
-				dd($xmes, $xano);
 				break;
 			}
-			dd('bitch');
 
 			if($xmes == 13) {
 				$xmes = 1;

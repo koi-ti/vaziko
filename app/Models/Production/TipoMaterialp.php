@@ -14,7 +14,7 @@ class TipoMaterialp extends BaseModel
      *
      * @var string
      */
-    protected $table = 'koi_tipomaterialp';
+    protected $table = 'koi_tipomaterial';
 
     public $timestamps = false;
 
@@ -30,19 +30,19 @@ class TipoMaterialp extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['tipomaterialp_nombre'];
+    protected $fillable = ['tipomaterial_nombre'];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['tipomaterialp_activo'];
+    protected $boolean = ['tipomaterial_activo'];
 
     public function isValid($data)
     {
         $rules = [
-            'tipomaterialp_nombre' => 'required|max:50',
+            'tipomaterial_nombre' => 'required|max:50',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -61,9 +61,9 @@ class TipoMaterialp extends BaseModel
 
         return Cache::rememberForever( self::$key_cache , function() {
             $query = TipoMaterialp::query();
-            $query->orderBy('tipomaterialp_nombre', 'asc');
-            $query->where('tipomaterialp_activo', true);
-            $collection = $query->lists('tipomaterialp_nombre', 'id');
+            $query->orderBy('tipomaterial_nombre', 'asc');
+            $query->where('tipomaterial_activo', true);
+            $collection = $query->lists('tipomaterial_nombre', 'id');
 
             $collection->prepend('', '');
             return $collection;

@@ -12,7 +12,7 @@ app || (app = {});
     app.MainTipoMaterialespView = Backbone.View.extend({
 
         el: '#tipomaterialesp-main',
-        
+
         /**
         * Constructor Method
         */
@@ -30,8 +30,8 @@ app || (app = {});
                 ajax: window.Misc.urlFull( Route.route('tipomaterialesp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'tipomaterialp_nombre', name: 'tipomaterialp_nombre' },
-                    { data: 'tipomaterialp_activo', name: 'tipomaterialp_activo' },
+                    { data: 'tipomaterial_nombre', name: 'tipomaterial_nombre' },
+                    { data: 'tipomaterial_activo', name: 'tipomaterial_activo' },
                 ],
 				buttons: [
 					{

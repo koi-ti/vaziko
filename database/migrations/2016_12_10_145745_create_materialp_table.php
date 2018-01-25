@@ -18,9 +18,9 @@ class CreateMaterialpTable extends Migration
             $table->increments('id');
             $table->string('materialp_nombre', 250);
             $table->text('materialp_descripcion')->nullable();
-            $table->integer('materialp_tipomaterialp')->unsigned();
-
-            $table->foreign('materialp_tipomaterialp')->references('id')->on('koi_tipomaterialp')->onDelete('restrict');
+            $table->integer('materialp_tipomaterial')->unsigned();
+            
+            $table->foreign('materialp_tipomaterial')->references('id')->on('koi_tipomaterial')->onDelete('restrict');
         });
     }
 

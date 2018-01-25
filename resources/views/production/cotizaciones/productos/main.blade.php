@@ -391,43 +391,43 @@
                     </div>
                     <div class="box-body">
                         <div class="row">
-                            <div class="col-md-12">
-                                <label class="col-sm-6">Precio</label>
-                                <div class="col-md-6 text-right">
-                                    <label id="info-precio">0</label>
-                                </div>
+                            <label class="col-sm-6">Precio</label>
+                            <div class="col-md-6 text-right">
+                                <label id="info-precio">0</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <label class="col-sm-6">Transporte</label>
-                                <div class="col-md-6 text-right">
-                                    <label id="info-transporte">0</label>
-                                </div>
+                            <label class="col-sm-6">Transporte</label>
+                            <div class="col-md-6 text-right">
+                                <label id="info-transporte">0</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <label class="col-sm-6">Viaticos</label>
-                                <div class="col-md-6 text-right">
-                                    <label id="info-viaticos">0</label>
-                                </div>
+                            <label class="col-sm-6">Viaticos</label>
+                            <div class="col-md-6 text-right">
+                                <label id="info-viaticos">0</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <label class="col-sm-6">Áreas</label>
-                                <div class="col-md-6 text-right">
-                                    <label id="info-areas">0,00</label>
-                                </div>
+                            <label class="col-sm-6">Áreas</label>
+                            <div class="col-md-6 text-right">
+                                <label id="info-areas">0,00</label>
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-md-12">
-                                <label class="col-sm-6 control-label">Total</label>
-                                <div class="form-group col-md-6">
-                                    <input id="total-price" class="form-control input-sm" data-currency disabled>
-                                </div>
+                            <label class="col-sm-6 control-label">Total</label>
+                            <div class="form-group col-md-6">
+                                <input id="total-price" class="form-control input-sm" data-currency disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="cotizacion2_volumen" class="col-md-2 control-label">Volumen</label>
+                            <div class="form-group col-md-3">
+                                <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
+                            </div>
+
+                            <div class="col-md-offset-1 col-md-6">
+                                <input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled>
                             </div>
                         </div>
                     </div>
