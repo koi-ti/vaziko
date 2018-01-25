@@ -69,10 +69,12 @@ class AsientoContableDocumento {
 			return;
 		}
 
+
         // Validar cierre contable
-		// if( $this->asiento1_fecha <= $empresa->empresa_fecha_contabilidad){
-		// 	$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
-		// }
+		$date_asiento = "{$this->asiento->asiento1_ano}-{$this->asiento->asiento1_mes}-{$this->asiento->asiento1_dia}";
+		if( $date_asiento <= $this->empresa->empresa_fecha_cierre_contabilidad){
+			$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$date_asiento.' no esta PERMITIDA. Es menor a la del cierre contable :'.$this->empresa->empresa_fecha_cierre_contabilidad;
+		}
 	}
 
 	function asientoCuentas($cuentas = null)

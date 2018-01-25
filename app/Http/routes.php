@@ -263,4 +263,7 @@ Route::group(['middleware' => 'auth'], function()
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
    	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
+	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
+	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
+	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
 });
