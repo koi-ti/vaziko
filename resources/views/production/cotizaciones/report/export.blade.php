@@ -66,7 +66,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{--*/ $iva = $productoIva = $total = $preciototal = 0 /*--}}
+				{{--*/ $iva = $productoIva = $preciototal = 0 /*--}}
 				@foreach( $data as $cotizacion2 )
 					{{--*/
 						$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
@@ -96,13 +96,18 @@
 			</tbody>
 			<tfoot>
 				{{-- Calcular iva total cotizacion --}}
-				{{--*/ $calculoiva = $totaliva = $totalcotizacion = 0; /*--}}
+				{{--*/ $calculoiva = $totalcotizacion = 0; /*--}}
 				{{--*/
 					$calculoiva = $preciototal * $iva;
 					$totalcotizacion = $calculoiva + $preciototal;
 				/*--}}
 				<tr>
 					<td colspan="6" class="border-top" align="left" valign="top"></td>
+					<th colspan="2" align="left" class="border" valign="top">Subtotal</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($preciototal, 2, ',', '.') }}</th>
+				</tr>
+				<tr>
+					<td colspan="6" class="noborder" align="left" valign="top"></td>
 					<th colspan="2" align="left" class="border" valign="top">I.V.A({{ $cotizacion2->detalle->cotizacion1_iva }}%)</th>
 					<th colspan="2" align="right" class="border" valign="top">{{ number_format($calculoiva, 2, ',', '.') }}</th>
 				</tr>
