@@ -100,5 +100,4 @@ app || (app = {});
             }
         }
     });
-
 })(jQuery, this, this.document);

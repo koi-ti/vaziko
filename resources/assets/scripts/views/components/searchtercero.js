@@ -220,6 +220,4 @@ app || (app = {});
                 window.initComponent.initToUpper();
         }
     });
-
-
 })(jQuery, this, this.document);

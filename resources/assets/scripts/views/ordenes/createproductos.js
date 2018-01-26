@@ -22,7 +22,7 @@ app || (app = {});
             'click .submit-ordenp6': 'submitOrdenp6',
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
-            'change .event-price': 'calculateOrdenp2',
+            'change .event-price': 'calculateOrdenp2'
         },
         parameters: {
             data: {
