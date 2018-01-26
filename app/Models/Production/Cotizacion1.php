@@ -32,7 +32,7 @@ class Cotizacion1 extends BaseModel
             'cotizacion1_contacto' => 'required',
             'tcontacto_telefono' => 'required',
             'cotizacion1_iva' => 'integer|min:0|max:19',
-            'cotizacion1_formapago' => 'required|max:30',
+            'cotizacion1_formapago' => "required|exists:koi_tercero,tercero_formapago,tercero_nit,{$data['cotizacion1_cliente']}",
 	        'cotizacion1_fecha_inicio' => 'required|date_format:Y-m-d',
 	        'cotizacion1_suministran' => 'max:200',
         ];

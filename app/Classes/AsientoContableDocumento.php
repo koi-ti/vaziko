@@ -69,10 +69,12 @@ class AsientoContableDocumento {
 			return;
 		}
 
+
         // Validar cierre contable
-		// if( $this->asiento1_fecha <= $empresa->empresa_fecha_contabilidad){
-		// 	$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$this->asiento1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
-		// }
+		$date_asiento = "{$this->asiento->asiento1_ano}-{$this->asiento->asiento1_mes}-{$this->asiento->asiento1_dia}";
+		if( $date_asiento <= $this->empresa->empresa_fecha_cierre_contabilidad){
+			$this->asiento_error = 'La fecha que intenta realizar el asiento: '.$date_asiento.' no esta PERMITIDA. Es menor a la del cierre contable :'.$this->empresa->empresa_fecha_cierre_contabilidad;
+		}
 	}
 
 	function asientoCuentas($cuentas = null)
@@ -180,6 +182,7 @@ class AsientoContableDocumento {
 				$asiento2 = Asiento2::find($cuenta['Id']);
 			}
 
+
 			if(!$asiento2 instanceof Asiento2) {
 				$asiento2 = new Asiento2;
 				$result = $asiento2->store($this->asiento, $cuenta);
@@ -200,17 +203,17 @@ class AsientoContableDocumento {
 		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
 		    }
 
-		    // Mayorizacion de saldos Contables
-            $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			if($result != 'OK') {
-				return $result;
-			}
-
 			// Mayorizacion de saldos x tercero
 			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
 			if($result != 'OK') {
 				return $result;
 			}
+
+			// // Mayorizacion de saldos Contables
+			// $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			// if($result != 'OK') {
+			// 	return $result;
+			// }
 		}
 		return 'OK';
 	}
@@ -272,6 +275,7 @@ class AsientoContableDocumento {
 				$xmes2 = $xmes - 1;
 				$xano2 = $xano;
 			}
+
 
 			$sql = "
 				SELECT DISTINCT s1.saldosterceros_cuenta, s1.saldosterceros_tercero,
@@ -368,7 +372,7 @@ class AsientoContableDocumento {
 				$objSaldoTercero->save();
 			}
 
-			if($xmes == date('n') && $xano == date('Y')) {
+			if($xmes == date('m') && $xano == date('Y')) {
 				break;
 			}
 
@@ -425,23 +429,24 @@ class AsientoContableDocumento {
         		$objSaldoContable->saldoscontables_nivel8 = $niveles['nivel8'] ?: 0;
         		$objSaldoContable->saldoscontables_debito_mes = $debito ?: 0;
         		$objSaldoContable->saldoscontables_credito_mes = $credito ?: 0;
-        		$objSaldoContable->save();
+        		// $objSaldoContable->save();
 
         	}else{
         		// Debito
         		if ($debito){
 					$saldo = ($objSaldoContable->saldoscontables_debito_mes ? $objSaldoContable->saldoscontables_debito_mes : 0) + $debito;
 					$objSaldoContable->saldoscontables_debito_mes = $saldo;
-					$objSaldoContable->save();
+					// $objSaldoContable->save();
         		}
 
         		// Credito
         		if($credito){
 					$saldo = ($objSaldoContable->saldoscontables_credito_mes ? $objSaldoContable->saldoscontables_credito_mes : 0) + $credito;
 					$objSaldoContable->saldoscontables_credito_mes = $saldo;
-					$objSaldoContable->save();
+					// $objSaldoContable->save();
         		}
         	}
+
 
         	// Saldos iniciales
         	while (true)
@@ -541,10 +546,10 @@ class AsientoContableDocumento {
 					}else{
 						return "No se puede definir la naturaleza {$saldo->plancuentas_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 					}
-					$objSaldoContable->save();
+					// $objSaldoContable->save();
 		        }
 
-				if($xmes == date('n') && $xano == date('Y')) {
+				if($xmes == date('m') && $xano == date('Y')) {
 					break;
 				}
 
@@ -559,4 +564,3 @@ class AsientoContableDocumento {
         return 'OK';
 	}
 }
-

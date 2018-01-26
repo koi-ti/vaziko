@@ -1,14 +1,14 @@
-@extends('production.tiposmaterial.main')
+@extends('production.tipomaterialesp.main')
 
 @section('breadcrumb')
     <li class="active">Tipos de material</li>
 @stop
 
 @section('module')
-    <div id="tiposmaterialp-main">
+    <div id="tipomaterialesp-main">
         <div class="box box-success">
             <div class="box-body table-responsive">
-                <table id="tiposmaterialp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <table id="tipomaterialesp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
                             <th>Código</th>

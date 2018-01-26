@@ -11,12 +11,10 @@ app || (app = {});
 
     app.CreateTipoMaterialpView = Backbone.View.extend({
 
-        el: '#tiposmaterialp-create',
+        el: '#tipomaterialesp-create',
         template: _.template( ($('#add-tipomaterialp-tpl').html() || '') ),
         events: {
             'submit #form-tipomaterialp': 'onStore'
-        },
-        parameters: {
         },
 
         /**
@@ -36,28 +34,26 @@ app || (app = {});
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
 
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
         /*
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
 
             this.ready();
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true, silent: true} );
+            }
         },
 
         /**
@@ -100,10 +96,8 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.clearForm( this.$('#form-tipomaterialp'));
-                window.Misc.redirect( window.Misc.urlFull( Route.route('tiposmaterialp.index' )) );
+                window.Misc.redirect( window.Misc.urlFull( Route.route('tipomaterialesp.index' )) );
             }
         }
     });
-
 })(jQuery, this, this.document);

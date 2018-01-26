@@ -7,11 +7,10 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\TipoMaterial;
-
+use App\Models\Production\TipoMaterialp;
 use DB, Log, Datatables, Cache;
 
-class TiposMaterialController extends Controller
+class TipoMaterialespController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -21,10 +20,10 @@ class TiposMaterialController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = TipoMaterial::query();
+            $query = TipoMaterialp::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.tiposmaterial.index');
+        return view('production.tipomaterialesp.index');
     }
 
     /**
@@ -34,7 +33,7 @@ class TiposMaterialController extends Controller
      */
     public function create()
     {
-        return view('production.tiposmaterial.create');
+        return view('production.tipomaterialesp.create');
     }
 
     /**
@@ -48,29 +47,29 @@ class TiposMaterialController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $tipomaterial = new TipoMaterial;
-            if ($tipomaterial->isValid($data)) {
+            $tipomaterialp = new TipoMaterialp;
+            if ($tipomaterialp->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Tipo de material
-                    $tipomaterial->fill($data);
-                    $tipomaterial->fillBoolean($data);
-                    $tipomaterial->save();
+                    $tipomaterialp->fill($data);
+                    $tipomaterialp->fillBoolean($data);
+                    $tipomaterialp->save();
 
                     // Commit Transaction
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( TipoMaterial::$key_cache );
+                    Cache::forget( TipoMaterialp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $tipomaterial->id]);
+                    return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $tipomaterial->errors]);
+            return response()->json(['success' => false, 'errors' => $tipomaterialp->errors]);
         }
         abort(403);
     }
@@ -83,11 +82,11 @@ class TiposMaterialController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $tipomaterial = TipoMaterial::findOrFail($id);
+        $tipomaterialp = TipoMaterialp::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($tipomaterial);
+            return response()->json($tipomaterialp);
         }
-        return view('production.tiposmaterial.show', ['tipomaterial' => $tipomaterial]);
+        return view('production.tipomaterialesp.show', ['tipomaterialp' => $tipomaterialp]);
     }
 
     /**
@@ -98,8 +97,8 @@ class TiposMaterialController extends Controller
      */
     public function edit($id)
     {
-        $tipomaterial = TipoMaterial::findOrFail($id);
-        return view('production.tiposmaterial.edit', ['tipomaterial' => $tipomaterial]);
+        $tipomaterialp = TipoMaterialp::findOrFail($id);
+        return view('production.tipomaterialesp.edit', ['tipomaterialp' => $tipomaterialp]);
     }
 
     /**
@@ -114,28 +113,28 @@ class TiposMaterialController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
 
-            $tipomaterial = TipoMaterial::findOrFail($id);
-            if ($tipomaterial->isValid($data)) {
+            $tipomaterialp = TipoMaterialp::findOrFail($id);
+            if ($tipomaterialp->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Material
-                    $tipomaterial->fill($data);
-                    $tipomaterial->fillBoolean($data);
-                    $tipomaterial->save();
+                    $tipomaterialp->fill($data);
+                    $tipomaterialp->fillBoolean($data);
+                    $tipomaterialp->save();
 
                     // Commit Transaction
                     DB::commit();
                     // Forget cache
-                    Cache::forget( TipoMaterial::$key_cache );
+                    Cache::forget( TipoMaterialp::$key_cache );
 
-                    return response()->json(['success' => true, 'id' => $tipomaterial->id]);
+                    return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
-            return response()->json(['success' => false, 'errors' => $tipomaterial->errors]);
+            return response()->json(['success' => false, 'errors' => $tipomaterialp->errors]);
         }
         abort(403);
     }

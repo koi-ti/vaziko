@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTipomaterialCreate extends Migration
+class CreateTipomaterialpTable extends Migration
 {
     /**
      * Run the migrations.
@@ -16,7 +16,7 @@ class CreateTipomaterialCreate extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('tipomaterial_nombre', 25);
+            $table->string('tipomaterial_nombre', 50);
             $table->boolean('tipomaterial_activo')->default(false);
         });
     }

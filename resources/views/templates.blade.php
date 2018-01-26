@@ -230,6 +230,10 @@
 	    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
 	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
 	    	</div>
+			<div class="form-group col-md-3">
+	    		<label for="tercero_formapago" class="control-label">Forma de pago</label>
+	    		<input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
+	    	</div>
 		</div>
 
 	    <div class="row">
@@ -584,15 +588,15 @@
 
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label for="centrocosto_descripcion1" class="control-label">Descripcion 1</label>
-			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripcion 1" class="form-control input-sm input-toupper" maxlength="200">
+			<label for="centrocosto_descripcion1" class="control-label">Descripción 1</label>
+			<input type="text" id="centrocosto_descripcion1" name="centrocosto_descripcion1" value="<%- centrocosto_descripcion1 %>" placeholder="Descripción 1" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
 	<div class="row">
 		<div class="form-group col-md-12">
-			<label for="centrocosto_descripcion2" class="control-label">Descripcion 2</label>
-			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripcion 2" class="form-control input-sm input-toupper" maxlength="200">
+			<label for="centrocosto_descripcion2" class="control-label">Descripción 2</label>
+			<input type="text" id="centrocosto_descripcion2" name="centrocosto_descripcion2" value="<%- centrocosto_descripcion2 %>" placeholder="Descripción 2" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
     </div>
 
@@ -611,7 +615,7 @@
 
 	<div class="row">
 		<div class="form-group col-md-2 col-xs-4 col-sm-4">
-			<label for="centrocosto_estructura" class="control-label">Titulo</label>
+			<label for="centrocosto_estructura" class="control-label">Título</label>
 			<select name="centrocosto_estructura" id="centrocosto_estructura" class="form-control" required>
 				<option value="N" <%- centrocosto_estructura == 'N' ? 'selected': ''%>>No</option>
 				<option value="S" <%- centrocosto_estructura == 'S' ? 'selected': ''%>>Si</option>
@@ -1114,7 +1118,7 @@
 			<label for="materialp_tipomaterial" class="control-label">Tipo de material</label>
 			<select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
-				@foreach( App\Models\Production\TipoMaterial::getTiposMaterial() as $key => $value)
+				@foreach( App\Models\Production\TipoMaterialp::getTiposMaterialp() as $key => $value)
 					<option value="{{ $key }}" <%- materialp_tipomaterial == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -1131,9 +1135,9 @@
 
 <script type="text/template" id="add-tipomaterialp-tpl">
 	<div class="row">
-		<div class="form-group col-md-4">
+		<div class="form-group col-md-6">
 			<label for="tipomaterial_nombre" class="control-label">Nombre</label>
-			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
+			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
 
 		<div class="form-group col-md-2 col-xs-6">

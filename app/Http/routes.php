@@ -118,6 +118,7 @@ Route::group(['middleware' => 'auth'], function()
 		});
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
+	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);
@@ -194,7 +195,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
-	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
+	Route::resource('tipomaterialesp', 'Production\TipoMaterialespController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
 
@@ -263,4 +264,7 @@ Route::group(['middleware' => 'auth'], function()
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
    	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
+	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
+	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
+	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
 });
