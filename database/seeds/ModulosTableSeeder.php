@@ -200,11 +200,35 @@ class ModulosTableSeeder extends Seeder
 
     	//Reportes
     	Modulo::create([
+        	'name' => 'rauxcontable',
+        	'display_name' => 'Auxiliar contable',
+        	'nivel1' => 3,
+        	'nivel2' => 2,
+        	'nivel3' => 1
+    	]);
+
+    	Modulo::create([
+        	'name' => 'rlibrodiario',
+        	'display_name' => 'Libro diario',
+        	'nivel1' => 3,
+        	'nivel2' => 2,
+        	'nivel3' => 2
+    	]);
+
+    	Modulo::create([
+        	'name' => 'rlibromayor',
+        	'display_name' => 'Libro mayor',
+        	'nivel1' => 3,
+        	'nivel2' => 2,
+        	'nivel3' => 3
+    	]);
+
+    	Modulo::create([
         	'name' => 'rplancuentas',
         	'display_name' => 'Plan cuentas',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 1
+        	'nivel3' => 4
     	]);
 
     	Modulo::create([
@@ -212,7 +236,7 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Mayor y Balance',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 2
+        	'nivel3' => 5
     	]);
 
     	//referencias
@@ -319,9 +343,15 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'display_name' => 'Referencias',
+        	'display_name' => 'Reportes',
         	'nivel1' => 5,
         	'nivel2' => 2
+    	]);
+
+    	Modulo::create([
+        	'display_name' => 'Referencias',
+        	'nivel1' => 5,
+        	'nivel2' => 3
     	]);
 
     	//Modulos
@@ -349,61 +379,93 @@ class ModulosTableSeeder extends Seeder
         	'nivel3' => 3
     	]);
 
+    	Modulo::create([
+        	'name' => 'tiemposp',
+        	'display_name' => 'Tiempos',
+        	'nivel1' => 5,
+        	'nivel2' => 1,
+        	'nivel3' => 4
+    	]);
+
+    	// Reportes
+    	Modulo::create([
+        	'name' => 'rtiemposp',
+        	'display_name' => 'Reporte de tiempos',
+        	'nivel1' => 5,
+        	'nivel2' => 2,
+        	'nivel3' => 1
+    	]);
+
     	//Referencias
     	Modulo::create([
         	'name' => 'acabadosp',
         	'display_name' => 'Acabados',
         	'nivel1' => 5,
-        	'nivel2' => 2,
+        	'nivel2' => 3,
         	'nivel3' => 1
+    	]);
+
+    	Modulo::create([
+        	'name' => 'actividadesp',
+        	'display_name' => 'Actividades',
+        	'nivel1' => 5,
+        	'nivel2' => 3,
+        	'nivel3' => 2
     	]);
 
     	Modulo::create([
         	'name' => 'areasp',
         	'display_name' => 'Areas',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 2
+        	'nivel2' => 3,
+        	'nivel3' => 3
     	]);
 
     	Modulo::create([
         	'name' => 'maquinasp',
         	'display_name' => 'Maquinas',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 3
+        	'nivel2' => 3,
+        	'nivel3' => 4
     	]);
 
     	Modulo::create([
         	'name' => 'materialesp',
         	'display_name' => 'Materiales',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 4
+        	'nivel2' => 3,
+        	'nivel3' => 5
     	]);
 
     	Modulo::create([
         	'name' => 'tiposmaterialp',
         	'display_name' => 'Tipo de material',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 5
+        	'nivel2' => 3,
+        	'nivel3' => 6
     	]);
 
     	Modulo::create([
         	'name' => 'tipoproductosp',
         	'display_name' => 'Tipo de producto',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 6
+        	'nivel2' => 3,
+        	'nivel3' => 7
     	]);
 
     	Modulo::create([
+        	'name' => 'subactividadesp',
+        	'display_name' => 'Subactividades',
+        	'nivel1' => 5,
+        	'nivel2' => 3,
+        	'nivel3' => 8
+    	]);
+
         	'name' => 'subtipoproductosp',
         	'display_name' => 'Subtipo de producto',
         	'nivel1' => 5,
-        	'nivel2' => 2,
-        	'nivel3' => 7
+        	'nivel2' => 3,
+        	'nivel3' => 9
     	]);
 
         //Tesoreria
@@ -413,12 +475,27 @@ class ModulosTableSeeder extends Seeder
             'nivel2' => 1
         ]);
 
+        Modulo::create([
+            'display_name' => 'Reportes',
+            'nivel1' => 6,
+            'nivel2' => 2
+        ]);
+
         // Modulos
         Modulo::create([
             'name' => 'facturap',
             'display_name' => 'Factura proveedor',
             'nivel1' => 6,
             'nivel2' => 1,
+            'nivel3' => 1
+        ]);
+
+        // Reportes
+        Modulo::create([
+            'name' => 'rhistorialproveedores',
+            'display_name' => 'Historial proveedores',
+            'nivel1' => 6,
+            'nivel2' => 2,
             'nivel3' => 1
         ]);
     }

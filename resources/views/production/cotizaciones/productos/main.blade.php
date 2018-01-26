@@ -306,7 +306,7 @@
                             <div class="form-group col-md-1">
                                 <input id="cotizacion2_viaticos_round" value="<%- cotizacion2_viaticos_round %>" class="form-control input-sm  calculate_formula" name="cotizacion2_viaticos_round" type="text" maxlength="5" data-input="RV">
                             </div>
-                            <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                            <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viáticos</label>
                             <div class="form-group col-md-3">
                                 <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm event-price" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency>
                             </div>
@@ -403,7 +403,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label class="col-sm-6">Viaticos</label>
+                            <label class="col-sm-6">Viáticos</label>
                             <div class="col-md-6 text-right">
                                 <label id="info-viaticos">0</label>
                             </div>
@@ -415,25 +415,31 @@
                             </div>
                         </div>
                         <div class="row">
+                            <label class="col-sm-6 control-label">Subtotal</label>
+                            <div class="form-group col-md-6">
+                                <input id="subtotal-price" class="form-control input-sm" data-currency disabled>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="cotizacion2_volumen" class="col-md-2 control-label">Volumen</label>
+                            <div class="form-group col-md-offset-1 col-md-3">
+                                <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
+                            </div>
+
+                            <div class="col-md-6">
+                                <input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled>
+                            </div>
+                        </div>
+                        <div class="row">
                             <label class="col-sm-6 control-label">Total</label>
                             <div class="form-group col-md-6">
                                 <input id="total-price" class="form-control input-sm" data-currency disabled>
                             </div>
                         </div>
-                        <div class="row">
-                            <label for="cotizacion2_volumen" class="col-md-2 control-label">Volumen</label>
-                            <div class="form-group col-md-3">
-                                <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
-                            </div>
-
-                            <div class="col-md-offset-1 col-md-6">
-                                <input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled>
-                            </div>
-                        </div>
                     </div>
                     <div class="box-footer">
                         <div class="col-sm-12">
-                            <b><small>Los campos de transporte, viaticos y areas se dividiran por la cantidad ingresada.</small></b>
+                            <b><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></b>
                         </div>
                     </div>
                 </div>

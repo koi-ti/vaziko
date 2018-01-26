@@ -22,8 +22,7 @@ app || (app = {});
             'click .submit-cotizacion6': 'submitCotizacion6',
             'change #cotizacion6_areap': 'changeAreap',
             'submit #form-cotizacion6-producto': 'onStoreCotizacion6',
-            'change .event-price': 'calculateCotizacion2',
-            'change #cotizacion2_volumen': 'changeVolumen'
+            'change .event-price': 'calculateCotizacion2'
         },
         parameters: {
             data: {
@@ -100,11 +99,12 @@ app || (app = {});
             this.$inputValor = this.$('#cotizacion6_valor');
 
             // Inputs cuadro de informacion
-            this.totalCotizacion2 = 0;
+            this.$inputVolumen = this.$('#cotizacion2_volumen');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
-            this.$precioCotizacion2 = this.$('#total-price');
+            this.$subtotal = this.$('#subtotal-price');
+            this.$total = this.$('#total-price');
             this.$cantidad = this.$('#cotizacion2_cantidad');
             this.$precio = this.$('#cotizacion2_precio_venta');
             this.$viaticos = this.$('#cotizacion2_viaticos');
@@ -142,7 +142,7 @@ app || (app = {});
                }
             });
 
-            // Materiales list
+            // Materiales li, ateCotizacion2st
             this.materialesProductopCotizacionListView = new app.MaterialesProductopCotizacionListView( {
                 collection: this.materialesProductopCotizacionList,
                 parameters: {
@@ -274,6 +274,7 @@ app || (app = {});
                     data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
                     data.cotizacion2_volumen = this.$('#cotizacion2_volumen').val();
                     data.cotizacion2_vtotal = this.$('#cotizacion2_vtotal').inputmask('unmaskedvalue');
+                    data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
 
                 this.model.save( data, {silent: true} );
             }
@@ -332,10 +333,10 @@ app || (app = {});
         },
 
         /**
-        * Event calculate cotizacion
+        * Evento para calcular cotizacion
         **/
         calculateCotizacion2: function() {
-            var cantidad = transporte = viaticos = areas = precio = 0;
+            var cantidad = transporte = viaticos = areas = precio = volumen = total = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
             cantidad = parseInt( this.$cantidad.val() );
@@ -343,6 +344,7 @@ app || (app = {});
             viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad );
             areas = Math.round( parseFloat( this.areasProductopCotizacionList.totalize()['total'] ) / cantidad );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+            volumen = parseInt( this.$inputVolumen.val() );
 
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( precio ) );
@@ -351,19 +353,13 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalCotizacion2 = precio + tranporte + viaticos + areas;
-            this.$precioCotizacion2.val( this.totalCotizacion2 );
+            subtotalCotizacion = precio + tranporte + viaticos + areas;
+            vcomision = Math.round( ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
+            total = subtotalCotizacion + vcomision;
 
-            this.$('#cotizacion2_volumen').trigger('change');
-        },
-
-        changeVolumen: function(e) {
-            var volumen = this.$(e.currentTarget).val();
-
-            // calcular comisiones
-            var vcomision = Math.round( ( this.totalCotizacion2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
-
+            this.$subtotal.val( subtotalCotizacion );
             this.$inputVcomision.val( vcomision );
+            this.$total.val( total );
         },
 
         /**
