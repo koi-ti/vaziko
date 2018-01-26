@@ -67,6 +67,8 @@ app || (app = {});
             'asientosnif/:asientonif(/)': 'getAsientosNifShow',
             'asientosnif/:asientonif/edit(/)': 'getAsientosNifEdit',
 
+            'cierresmensuales(/)': 'getCierreMensualCreate',
+
             'documentos(/)': 'getDocumentosMain',
             'documentos/create(/)': 'getDocumentosCreate',
             'documentos/:documento/edit(/)':'getDocumentosEdit',
@@ -778,6 +780,19 @@ app || (app = {});
 
             this.editAsientoNifView = new app.EditAsientoNifView({ model: this.asientoNifModel });
             this.asientoNifModel.fetch();
+        },
+        /**
+        * show view create cierre contable mensual
+        */
+        getCierreMensualCreate: function (){
+
+            if ( this.createCierreContableMensualView instanceof Backbone.View ){
+                this.createCierreContableMensualView.stopListening();
+                this.createCierreContableMensualView.undelegateEvents();
+            }
+
+            this.createCierreContableMensualView = new app.CreateCierreContableMensualView();
+            this.createCierreContableMensualView.render();
         },
         /**
         * show view show folders
