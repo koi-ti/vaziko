@@ -46,6 +46,7 @@ app || (app = {});
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
+            this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
             this.$inputTiempop = this.$inputContent.attr("data-tiempop");
 
             /* Render in <a> dashboard */
@@ -116,6 +117,10 @@ app || (app = {});
 
             if(this.$inputOrden.length > 0) {
                 this.$inputOrden.attr('data-tercero', data.id);
+            }
+
+            if(this.$inputFormapago.length > 0 || _.isNull(data.tercero_formapago) ) {
+                this.$inputFormapago.val( data.tercero_formapago );
             }
 
             if(this.$btnContact.length > 0) {
@@ -215,6 +220,4 @@ app || (app = {});
                 window.initComponent.initToUpper();
         }
     });
-
-
 })(jQuery, this, this.document);

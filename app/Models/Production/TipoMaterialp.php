@@ -5,10 +5,9 @@ namespace App\Models\Production;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\BaseModel;
-
 use Validator, Cache;
 
-class TipoMaterial extends BaseModel
+class TipoMaterialp extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -43,7 +42,7 @@ class TipoMaterial extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'tipomaterial_nombre' => 'required|max:25',
+            'tipomaterial_nombre' => 'required|max:50',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -54,14 +53,14 @@ class TipoMaterial extends BaseModel
         return false;
     }
 
-    public static function getTiposMaterial()
+    public static function getTiposMaterialp()
     {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }
 
         return Cache::rememberForever( self::$key_cache , function() {
-            $query = TipoMaterial::query();
+            $query = TipoMaterialp::query();
             $query->orderBy('tipomaterial_nombre', 'asc');
             $query->where('tipomaterial_activo', true);
             $collection = $query->lists('tipomaterial_nombre', 'id');

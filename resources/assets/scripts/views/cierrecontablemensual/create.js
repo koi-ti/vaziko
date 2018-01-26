@@ -49,7 +49,6 @@ app || (app = {});
                     }
                 }
             });
-
             msgConfirm.render();
         },
 
@@ -96,7 +95,7 @@ app || (app = {});
             // to fire plugins
             if( typeof window.initComponent.initSpinner == 'function' )
                 window.initComponent.initSpinner();
-        },
+        }
     });
 
 })(jQuery, this, this.document);

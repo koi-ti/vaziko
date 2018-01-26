@@ -70,7 +70,7 @@ class DetalleAreasController extends Controller
                         }
                     }
 
-                    $tiempo = sprintf('%s:%s', $request->orden6_horas, $request->orden6_minutos);
+                    $tiempo = "{$request->orden6_horas}:{$request->orden6_minutos}";
 
                     // Commit Transaction
                     return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'orden6_tiempo' => $tiempo]);

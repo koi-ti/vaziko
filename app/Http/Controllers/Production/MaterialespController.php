@@ -7,9 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Models\Production\Materialp, App\Models\Production\TipoMaterialp;
 use DB, Log, Datatables, Cache;
-
-use App\Models\Production\Materialp, App\Models\Production\TipoMaterial;
 
 class MaterialespController extends Controller
 {
@@ -22,15 +21,9 @@ class MaterialespController extends Controller
     {
         if ($request->ajax()) {
             $query = Materialp::query();
-            return Datatables::of($query)
-            ->filter(function($query) use ($request){
-
-                // Tipo Material
-                if($request->has('tipo')){
-                    $query->where('materialp_tipomaterial', $request->tipo );
-                }
-                
-            })->make(true);
+            $query->select('koi_materialp.*', 'tipomaterial_nombre');
+            $query->leftJoin('koi_tipomaterial', 'materialp_tipomaterial', '=', 'koi_tipomaterial.id');
+            return Datatables::of($query->get())->make(true);
         }
 
         return view('production.materiales.index');
@@ -61,9 +54,9 @@ class MaterialespController extends Controller
             if ($material->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // Recuperar TipoMaterial
-                    $tipomaterial = TipoMaterial::find($request->materialp_tipomaterial);
-                    if(!$tipomaterial instanceof TipoMaterial){
+                    // Recuperar TipoMaterialp
+                    $tipomaterial = TipoMaterialp::find($request->materialp_tipomaterial);
+                    if(!$tipomaterial instanceof TipoMaterialp){
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
                     }
@@ -136,9 +129,9 @@ class MaterialespController extends Controller
             if ($material->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // Recuperar TipoMaterial
-                    $tipomaterial = TipoMaterial::find($request->materialp_tipomaterial);
-                    if(!$tipomaterial instanceof TipoMaterial){
+                    // Recuperar TipoMaterialp
+                    $tipomaterial = TipoMaterialp::find($request->materialp_tipomaterial);
+                    if(!$tipomaterial instanceof TipoMaterialp){
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
                     }

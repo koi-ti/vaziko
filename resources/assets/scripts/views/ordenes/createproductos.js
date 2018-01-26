@@ -22,7 +22,7 @@ app || (app = {});
             'click .submit-ordenp6': 'submitOrdenp6',
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
-            'change .event-price': 'calculateOrdenp2',
+            'change .event-price': 'calculateOrdenp2'
         },
         parameters: {
             data: {
@@ -104,11 +104,6 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.totalOrdenp2 = 0;
-            this.tranporte = 0;
-            this.viaticos = 0;
-            this.precio = 0;
-            this.areas = 0;
-            this.cantidad = 1;
 
             this.$precioOrdenp2 = this.$('#total-price');
             this.$cantidad = this.$('#orden2_cantidad');
@@ -337,21 +332,23 @@ app || (app = {});
         *   Event calculate orden2
         **/
         calculateOrdenp2: function () {
+            var cantidad = transporte = viaticos = areas = precio = 0;
+
             // Igualar variables y quitar el inputmask
-            this.cantidad = parseInt( this.$cantidad.val() );
-            this.tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ) );
-            this.viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / parseFloat( this.cantidad ) );
-            this.areas = Math.round( parseFloat( this.areasProductopList.totalize()['total'] ) / parseFloat( this.cantidad ) );
-            this.precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+            cantidad = parseInt( this.$cantidad.val() );
+            tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / cantidad  );
+            viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad  );
+            areas = Math.round( parseFloat( this.areasProductopList.totalize()['total'] ) / cantidad  );
+            precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
 
             // Cuadros de informacion
-            this.$infoprecio.empty().html( window.Misc.currency( this.precio ) );
-            this.$infoviaticos.empty().html( window.Misc.currency( this.viaticos ) );
-            this.$infotransporte.empty().html( window.Misc.currency( this.tranporte ) );
-            this.$infoareas.empty().html( window.Misc.currency( this.areas ) );
+            this.$infoprecio.empty().html( window.Misc.currency( precio ) );
+            this.$infoviaticos.empty().html( window.Misc.currency( viaticos ) );
+            this.$infotransporte.empty().html( window.Misc.currency( tranporte ) );
+            this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalOrdenp2 = this.precio + this.tranporte + this.viaticos + this.areas;
+            this.totalOrdenp2 = precio + tranporte + viaticos + areas;
             this.$precioOrdenp2.val( this.totalOrdenp2 );
         },
 

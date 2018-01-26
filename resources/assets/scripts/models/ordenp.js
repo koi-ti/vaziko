@@ -26,7 +26,7 @@ app || (app = {});
             'orden_fecha_inicio': moment().format('YYYY-MM-DD'),
             'orden_fecha_entrega': moment().format('YYYY-MM-DD'),
             'orden_hora_entrega': '',
-            'orden_formapago': 'CO',
+            'orden_formapago': '',
             'orden_iva': '',
             'orden_contacto': '',
             'tcontacto_nombre': '',

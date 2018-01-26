@@ -113,7 +113,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" value="<%- tercero_nit %>" required>
+                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" data-formapago="orden_formapago" value="<%- tercero_nit %>" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-5 col-xs-10">
@@ -163,11 +163,7 @@
                                             </div>
                                             <label for="orden_formapago" class="col-sm-1 control-label">Forma pago</label>
                                             <div class="form-group col-md-2">
-                                                <select name="orden_formapago" id="orden_formapago" class="form-control" required>
-                                                    @foreach( config('koi.produccion.formaspago') as $key => $value)
-                                                    <option value="{{ $key }}" <%- orden_formapago == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" id="orden_formapago" name="orden_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- orden_formapago %>" maxlength="30" required readonly>
                                             </div>
                                             <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                                                 <label for="orden_iva" class="col-sm-1 control-label">Iva</label>

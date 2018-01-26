@@ -195,7 +195,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
-	Route::resource('tiposmaterialp', 'Production\TiposMaterialController', ['except' => ['destroy']]);
+	Route::resource('tipomaterialesp', 'Production\TipoMaterialespController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
 

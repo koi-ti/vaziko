@@ -21,7 +21,7 @@
 		<th class="border-tbr size-8" align="right">{{ $cotizacion->cotizacion1_fecha_inicio }}</th>
 	</tr>
 	<tr>
-		<th class="titleespecial size-8" align="left">Cotizacion</th>
+		<th class="titleespecial size-8" align="left">Cotización</th>
 		<th class="titleespecial size-8" align="right">{{ $cotizacion->cotizacion_codigo }}</th>
 	</tr>
 	<tr>

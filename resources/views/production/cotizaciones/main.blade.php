@@ -74,7 +74,7 @@
 
                                             <label for="cotizacion1_formapago" class="col-md-1 control-label">Forma de pago</label>
                                             <div class="form-group col-md-4">
-                                                <input type="text" id="cotizacion1_formapago" name="cotizacion1_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- cotizacion1_formapago %>" maxlength="30" required>
+                                                <input type="text" id="cotizacion1_formapago" name="cotizacion1_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- cotizacion1_formapago %>" maxlength="30" required readonly>
                                             </div>
                                         </div>
 
@@ -94,7 +94,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="cotizacion1_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="cotizacion1_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_cliente_nombre" data-contacto="btn-add-contact" value="<%- tercero_nit %>" required>
+                                                    <input id="cotizacion1_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="cotizacion1_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_cliente_nombre" data-contacto="btn-add-contact" data-formapago="cotizacion1_formapago" value="<%- tercero_nit %>" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-7 col-xs-10">

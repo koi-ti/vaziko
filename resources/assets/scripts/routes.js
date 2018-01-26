@@ -115,7 +115,7 @@ app || (app = {});
             'subactividadesp/:subactividadp/edit(/)': 'getSubActividadespEdit',
 
             'acabadosp(/)': 'getAcabadospMain',
-            'acabadosp/create(/)': 'getAcabadospCreate',
+            'acabadosp/create(es/)':'getAcabadospCreate',
             'acabadosp/:acabadop/edit(/)': 'getAcabadospEdit',
 
             'maquinasp(/)': 'getMaquinaspMain',
@@ -126,9 +126,9 @@ app || (app = {});
             'materialesp/create(/)': 'getMaterialespCreate',
             'materialesp/:materialp/edit(/)': 'getMaterialespEdit',
 
-            'tiposmaterialp(/)': 'getTiposMaterialpMain',
-            'tiposmaterialp/create(/)': 'getTiposMaterialpCreate',
-            'tiposmaterialp/:tiposmaterialp/edit(/)': 'getTiposMaterialpEdit',
+            'tipomaterialesp(/)': 'getTipoMaterialespMain',
+            'tipomaterialesp/create(/)': 'getTipoMaterialpCreate',
+            'tipomaterialesp/:tipomaterialesp/edit(/)': 'getTipoMaterialpEdit',
 
             'tipoproductosp(/)': 'getTipoProductopMain',
             'tipoproductosp/create(/)': 'getTipoProductopCreate',
@@ -1394,20 +1394,20 @@ app || (app = {});
         /**
         * show view main tipos de material produccion
         */
-        getTiposMaterialpMain: function () {
+        getTipoMaterialespMain: function () {
 
-            if ( this.mainTiposMaterialpView instanceof Backbone.View ){
-                this.mainTiposMaterialpView.stopListening();
-                this.mainTiposMaterialpView.undelegateEvents();
+            if ( this.mainTipoMaterialespView instanceof Backbone.View ){
+                this.mainTipoMaterialespView.stopListening();
+                this.mainTipoMaterialespView.undelegateEvents();
             }
 
-            this.mainTiposMaterialpView = new app.MainTiposMaterialpView( );
+            this.mainTipoMaterialespView = new app.MainTipoMaterialespView( );
         },
 
         /**
         * show view create tipos de material de produccion
         */
-        getTiposMaterialpCreate: function () {
+        getTipoMaterialpCreate: function () {
             this.tipomaterialpModel = new app.TipoMaterialpModel();
 
             if ( this.createTipoMaterialpView instanceof Backbone.View ){
@@ -1422,7 +1422,7 @@ app || (app = {});
         /**
         * show view edit tipos de material de produccion
         */
-        getTiposMaterialpEdit: function (tipomaterialp) {
+        getTipoMaterialpEdit: function (tipomaterialp) {
             this.tipomaterialpModel = new app.TipoMaterialpModel();
             this.tipomaterialpModel.set({'id': tipomaterialp}, {'silent':true});
 
