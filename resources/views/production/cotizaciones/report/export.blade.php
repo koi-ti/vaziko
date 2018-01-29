@@ -66,12 +66,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{--*/ $iva = $fiva = $total = 0 /*--}}
+				{{--*/ $iva = $productoIva = $preciototal = 0 /*--}}
 				@foreach( $data as $cotizacion2 )
 					{{--*/
 						$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
-						$fiva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
-						$total += $cotizacion2->detalle->cotizacion2_precio_total;
+						$productoIva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
+						$preciototal += $cotizacion2->detalle->cotizacion2_precio_total;
 					/*--}}
 					<tr>
 						<td colspan="3" class="border-cell">
@@ -89,17 +89,32 @@
 						</td>
 						<td class="border-cell" align="center">{{ $cotizacion2->detalle->cotizacion2_cantidad }}</td>
 						<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->detalle->cotizacion2_total_valor_unitario, 2, ',', '.') }}</td>
-						<td colspan="2" class="border-cell" align="right">{{ number_format($fiva, 2, ',', '.') }}</td>
+						<td colspan="2" class="border-cell" align="right">{{ number_format($productoIva, 2, ',', '.') }}</td>
 						<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->detalle->cotizacion2_precio_total, 2, ',', '.') }}</td>
 					</tr>
 					@endforeach
-
 			</tbody>
 			<tfoot>
+				{{-- Calcular iva total cotizacion --}}
+				{{--*/ $calculoiva = $totalcotizacion = 0; /*--}}
+				{{--*/
+					$calculoiva = $preciototal * $iva;
+					$totalcotizacion = $calculoiva + $preciototal;
+				/*--}}
 				<tr>
 					<td colspan="6" class="border-top" align="left" valign="top"></td>
+					<th colspan="2" align="left" class="border" valign="top">Subtotal</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($preciototal, 2, ',', '.') }}</th>
+				</tr>
+				<tr>
+					<td colspan="6" class="noborder" align="left" valign="top"></td>
+					<th colspan="2" align="left" class="border" valign="top">I.V.A({{ $cotizacion2->detalle->cotizacion1_iva }}%)</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($calculoiva, 2, ',', '.') }}</th>
+				</tr>
+				<tr>
+					<td colspan="6" class="noborder" align="left" valign="top"></td>
 					<th colspan="2" align="left" class="border" valign="top">Valor Total</th>
-					<th colspan="2" align="right" class="border" valign="top">{{ number_format($total, 2, ',', '.') }}</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($totalcotizacion, 2, ',', '.') }}</th>
 				</tr>
 			</tfoot>
 		</table>
