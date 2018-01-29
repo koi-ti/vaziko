@@ -171,7 +171,7 @@ class CierreContable
             }else if($objCuenta->plancuentas_naturaleza == 'C'){
                 $final = $item->inicial + ($item->creditomes - $item->debitomes);
             }
-            
+
             //Verifico que exista la cuenta en el mes y ano
             $query = SaldoTercero::query();
             $query->where('saldosterceros_ano', $this->cierre_ano);
@@ -201,7 +201,7 @@ class CierreContable
             if ($objCuenta->plancuentas_naturaleza == 'D') {
                 $objSaldoTercero->saldosterceros_debito_inicial =  $final;
                 $objSaldoTercero->saldosterceros_credito_inicial =  0;
-            }else if($objCuenta->plancuentas_naturalezas == 'C'){
+            }else if($objCuenta->plancuentas_naturaleza == 'C'){
                 $objSaldoTercero->saldosterceros_debito_inicial =  0;
                 $objSaldoTercero->saldosterceros_credito_inicial = $final;
             }else{
