@@ -46,7 +46,7 @@
 
 			<tr>
 				<th class="left">Forma pago</th>
-				<td class="left">{{ $orden->orden_formapago ? config('koi.produccion.formaspago')[$orden->orden_formapago] : ''  }}</td>
+				<td class="left">{{ $orden->orden_formapago }}</td>
 				<th class="left">Suministran</th>
 				<td class="left" colspan="3">{{ $orden->orden_suministran }}</td>
 			</tr>
