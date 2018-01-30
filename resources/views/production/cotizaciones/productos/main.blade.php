@@ -386,61 +386,49 @@
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
                 <div class="box box-primary">
-                    <div class="box-header with-border">
+                    <div class="box-header">
                         <h3 class="box-title">Información adicional</h3>
                     </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <label class="col-sm-6">Precio</label>
-                            <div class="col-md-6 text-right">
-                                <label id="info-precio">0</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-6">Transporte</label>
-                            <div class="col-md-6 text-right">
-                                <label id="info-transporte">0</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-6">Viáticos</label>
-                            <div class="col-md-6 text-right">
-                                <label id="info-viaticos">0</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-6">Áreas</label>
-                            <div class="col-md-6 text-right">
-                                <label id="info-areas">0,00</label>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-6 control-label">Subtotal</label>
-                            <div class="form-group col-md-6">
-                                <input id="subtotal-price" class="form-control input-sm" data-currency disabled>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="cotizacion2_volumen" class="col-md-2 control-label">Volumen</label>
-                            <div class="form-group col-md-offset-1 col-md-3">
-                                <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
-                            </div>
-
-                            <div class="col-md-6">
-                                <input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label class="col-sm-6 control-label">Total</label>
-                            <div class="form-group col-md-6">
-                                <input id="total-price" class="form-control input-sm" data-currency disabled>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="box-footer">
-                        <div class="col-sm-12">
-                            <b><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></b>
-                        </div>
+                    <div class="box-body no-padding">
+                        <table class="table table-condensed">
+                            <tbody>
+                                <tr>
+                                    <th  colspan="4">Precio</th>
+                                    <td class="text-right"><span id="info-precio"></span></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">Transporte</th>
+                                    <td class="text-right"><span id="info-transporte"></span></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">Viáticos</th>
+                                    <td class="text-right"><span id="info-viaticos"></span></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">Áreas</th>
+                                    <td class="text-right"><span id="info-areas"></span></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">Subtotal</th>
+                                    <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
+                                </tr>
+                                <tr>
+                                    <th>Volumen</th>
+                                    <td><input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100"></td>
+                                    <th colspan="2"><label class="checkbox-inline"><input type="checkbox" id="cotizacion2_redondear" name="cotizacion2_redondear" value="<%- cotizacion2_redondear %>" <%- parseInt(cotizacion2_redondear) ? 'checked': ''%>> Redondear</label></th>
+                                    <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="4">Total</th>
+                                    <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+                                </tr>
+                            </tfoot>
+                        </table>
                     </div>
                 </div>
             </div>

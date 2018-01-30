@@ -26,7 +26,7 @@ class CreateOrdenproduccionTable extends Migration
             $table->integer('orden_contacto')->unsigned();
             $table->integer('orden_cotizacion')->unsigned()->nullable();
             $table->integer('orden_iva')->unsigned();
-            $table->string('orden_formapago', 2)->comment = 'CT: Credito, Contado: CO';
+            $table->string('orden_formapago', 30)->comment = 'Lo que posea el tercero';
             $table->string('orden_suministran', 200)->nullable();
             $table->boolean('orden_anulada')->default(false);
             $table->boolean('orden_abierta')->default(true);

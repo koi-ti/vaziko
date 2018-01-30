@@ -133,7 +133,7 @@ class Cotizacion6Controller extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-                $cotizacion6 = Cotizacion6::find($id);
+                $cotizacion6 = Cotizacion6::select('koi_cotizacion6.id as id', 'cotizacion6_cotizacion2', 'cotizacion6_valor', DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', '-1') AS cotizacion6_minutos"), DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', '1') AS cotizacion6_horas"))->where('koi_cotizacion6.id', $id)->first();
                 if(!$cotizacion6 instanceof Cotizacion6){
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información del asiento o consulte al administrador.']);
                 }
@@ -144,23 +144,36 @@ class Cotizacion6Controller extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $tiempo = explode(':', $cotizacion6->cotizacion6_tiempo); // explode input tiempo 00:00
-                $horas = $tiempo[0]; // value for hour
-                $minutos = $tiempo[1]; // value for minutes
+                // Recuperar valor total de las areasp
+                $valorareasp = Cotizacion6::select( DB::raw("SUM( ((SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1) / 60 ) + SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1)) * cotizacion6_valor ) as valor_total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->first();
 
-                // Convertir minutos a horas y sumar horas enteras
-                $newhour = intval($horas) + (intval($minutos) / 60);
+                // Convertir minutos a horas y sumar horas
+                $tiempo = intval($cotizacion6->cotizacion6_horas) + (intval($cotizacion6->cotizacion6_minutos) / 60);
 
-                $areap = $cotizacion6->cotizacion6_valor * $newhour;
-                $unitario = $areap / $cotizacion2->cotizacion2_cantidad;
-                $valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario - round($unitario);
+                // recuperar valor a eliminar (areap * tiempo) / cantidad
+                $areaptotal = ($cotizacion6->cotizacion6_valor * $tiempo) / $cotizacion2->cotizacion2_cantidad;
+
+                // Recuperar valor de los campos existentes
+                $transporte = $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad;
+                $viaticos = $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad;
+                $areasp = $valorareasp->valor_total / $cotizacion2->cotizacion2_cantidad;
+
+                // Restar area a eliminar con el valor existente
+                $areapfinal = $areasp - $areaptotal;
+
+                // Valor recalculado
+                $valorunitario = $cotizacion2->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($areapfinal);
 
                 // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
-                $comision = ($valor_unitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                if($cotizacion2->cotizacion2_redondear == true){
+                    $comision = round(($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100))));
+                }else{
+                    $comision = ($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                }
 
                 // Quitar cotizacion2
-                $cotizacion2->cotizacion2_total_valor_unitario = $valor_unitario;
-                $cotizacion2->cotizacion2_vtotal = round($comision);
+                $cotizacion2->cotizacion2_total_valor_unitario = $valorunitario + $comision;
+                $cotizacion2->cotizacion2_vtotal = $comision;
                 $cotizacion2->save();
 
                 // Eliminar item productop4

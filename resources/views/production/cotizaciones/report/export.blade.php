@@ -47,7 +47,7 @@
 						<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono2 }}</td>
 					@endif
 					<th colspan="2" align="left" class="border">Tomado por:</th>
-					<td colspan="2" class="border">{{ Auth::user()->getName() }}</td>
+					<td colspan="2" class="border">{{ $cotizacion->usuario_nombre }}</td>
 				</tr>
 				<tr>
 					<th align="left" class="border-left">Email:</th>
@@ -66,50 +66,47 @@
 				</tr>
 			</thead>
 			<tbody>
-				{{--*/ $iva = $productoIva = $preciototal = 0 /*--}}
+				{{--*/ $iva = $ivaunitario = $ivatotal = $totalproducto = $subtotalcotizacion = $ivacotizacion = $totalcotizacion = 0 /*--}}
+
 				@foreach( $data as $cotizacion2 )
-					{{--*/
-						$iva = $cotizacion2->detalle->cotizacion1_iva / 100;
-						$productoIva = $cotizacion2->detalle->cotizacion2_total_valor_unitario * $iva;
-						$preciototal += $cotizacion2->detalle->cotizacion2_precio_total;
-					/*--}}
-					<tr>
-						<td colspan="3" class="border-cell">
-							<br>
-							{{ $cotizacion2->detalle->productop_nombre }}<br>
-							@if( isset($cotizacion2->materialesp) )
-								{{ "Material: $cotizacion2->materialesp" }} <br>
-							@endif
-							@if( isset($cotizacion2->acabadosp) )
-								{{ "Acabado: $cotizacion2->acabadosp" }} <br>
-							@endif
-							@if( $cotizacion2->detalle->tiro || $cotizacion2->detalle->retiro )
-								{{ "Tintas: {$cotizacion2->detalle->tiro} / {$cotizacion2->detalle->retiro}" }}
-							@endif
-						</td>
-						<td class="border-cell" align="center">{{ $cotizacion2->detalle->cotizacion2_cantidad }}</td>
-						<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->detalle->cotizacion2_total_valor_unitario, 2, ',', '.') }}</td>
-						<td colspan="2" class="border-cell" align="right">{{ number_format($productoIva, 2, ',', '.') }}</td>
-						<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->detalle->cotizacion2_precio_total, 2, ',', '.') }}</td>
-					</tr>
+						{{--*/
+							$iva = $cotizacion->cotizacion1_iva / 100;
+							$ivaunitario = $cotizacion2->cotizacion2_total_valor_unitario * $iva;
+							$ivatotal = $ivaunitario * $cotizacion2->cotizacion2_cantidad;
+							$totalproducto = $cotizacion2->cotizacion2_precio_total + $ivatotal;
+							$subtotalcotizacion += $cotizacion2->cotizacion2_precio_total;
+						/*--}}
+						<tr>
+							<td colspan="3" class="border-cell">
+								<br>
+								{{ $cotizacion2->productop_nombre }}<br>
+								{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
+								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
+								@if( $cotizacion2->tiro || $cotizacion2->retiro )
+									{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }}
+								@endif
+							</td>
+							<td class="border-cell" align="center">{{ $cotizacion2->cotizacion2_cantidad }}</td>
+							<td colspan="2" class="border-cell" align="right">{{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</td>
+							<td colspan="2" class="border-cell" align="right">{{ number_format($ivaunitario, 2, ',', '.') }}</td>
+							<td colspan="2" class="border-cell" align="right">{{ number_format($totalproducto, 2, ',', '.') }}</td>
+						</tr>
 					@endforeach
 			</tbody>
 			<tfoot>
-				{{-- Calcular iva total cotizacion --}}
-				{{--*/ $calculoiva = $totalcotizacion = 0; /*--}}
 				{{--*/
-					$calculoiva = $preciototal * $iva;
-					$totalcotizacion = $calculoiva + $preciototal;
+					$ivacotizacion = $subtotalcotizacion * $iva;
+					$totalcotizacion = $ivacotizacion + $subtotalcotizacion;
 				/*--}}
 				<tr>
 					<td colspan="6" class="border-top" align="left" valign="top"></td>
 					<th colspan="2" align="left" class="border" valign="top">Subtotal</th>
-					<th colspan="2" align="right" class="border" valign="top">{{ number_format($preciototal, 2, ',', '.') }}</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($subtotalcotizacion, 2, ',', '.') }}</th>
 				</tr>
 				<tr>
 					<td colspan="6" class="noborder" align="left" valign="top"></td>
-					<th colspan="2" align="left" class="border" valign="top">I.V.A({{ $cotizacion2->detalle->cotizacion1_iva }}%)</th>
-					<th colspan="2" align="right" class="border" valign="top">{{ number_format($calculoiva, 2, ',', '.') }}</th>
+					<th colspan="2" align="left" class="border" valign="top">I.V.A({{$cotizacion->cotizacion1_iva}}%)</th>
+					<th colspan="2" align="right" class="border" valign="top">{{ number_format($ivacotizacion, 2, ',', '.') }}</th>
 				</tr>
 				<tr>
 					<td colspan="6" class="noborder" align="left" valign="top"></td>

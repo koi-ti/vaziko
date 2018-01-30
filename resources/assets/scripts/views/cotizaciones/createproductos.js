@@ -22,7 +22,8 @@ app || (app = {});
             'click .submit-cotizacion6': 'submitCotizacion6',
             'change #cotizacion6_areap': 'changeAreap',
             'submit #form-cotizacion6-producto': 'onStoreCotizacion6',
-            'change .event-price': 'calculateCotizacion2'
+            'change .event-price': 'calculateCotizacion2',
+            'ifToggled #cotizacion2_redondear': 'redondearComision'
         },
         parameters: {
             data: {
@@ -100,6 +101,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
+            this.$checkRedondear = this.$('#cotizacion2_redondear');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
@@ -275,6 +277,7 @@ app || (app = {});
                     data.cotizacion2_volumen = this.$('#cotizacion2_volumen').val();
                     data.cotizacion2_vtotal = this.$('#cotizacion2_vtotal').inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                    data.cotizacion2_redondear = this.$checkRedondear.is(':checked');
 
                 this.model.save( data, {silent: true} );
             }
@@ -354,12 +357,20 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotalCotizacion = precio + tranporte + viaticos + areas;
-            vcomision = Math.round( ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
+            if( this.$checkRedondear.is(':checked') ) {
+                vcomision = Math.round(( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
+            }else{
+                vcomision = ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            }
             total = subtotalCotizacion + vcomision;
 
             this.$subtotal.val( subtotalCotizacion );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
+        },
+
+        redondearComision: function(e) {
+            this.calculateCotizacion2();
         },
 
         /**

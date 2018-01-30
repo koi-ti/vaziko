@@ -122,7 +122,7 @@
 									</div>
 									<div class="form-group col-md-6">
 										<label class="control-label">Forma pago</label>
-										<div>{{ $orden->orden_formapago ? config('koi.produccion.formaspago')[$orden->orden_formapago] : ''  }}</div>
+										<div>{{ $orden->orden_formapago }}</div>
 									</div>
 								</div>
 

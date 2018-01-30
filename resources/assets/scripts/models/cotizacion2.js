@@ -27,6 +27,7 @@ app || (app = {});
             'cotizacion2_precio_venta': 0,
             'cotizacion2_transporte': 0,
             'cotizacion2_viaticos': 0,
+            'cotizacion2_redondear': false,
             'cotizacion2_volumen': 0,
             'cotizacion2_vtotal': 0,
             'cotizacion2_observaciones': '',

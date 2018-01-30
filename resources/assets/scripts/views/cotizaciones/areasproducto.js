@@ -189,7 +189,7 @@ app || (app = {});
         */
         totalize: function(){
             // Llamar funcion de calculateOrdenp2 del modelo Ordnep2
-            this.parameters.model.trigger('calculateCotizacion2')
+            this.parameters.model.trigger('calculateCotizacion2');
 
             // Render table total areas
             var data = this.collection.totalize();

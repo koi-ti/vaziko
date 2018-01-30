@@ -39,6 +39,7 @@ class CreateCotizacion2Table extends Migration
             $table->boolean('cotizacion2_retiro')->default(false);
 
             $table->integer('cotizacion2_volumen')->default(0);
+            $table->boolean('cotizacion2_redondear')->default(false);
             $table->double('cotizacion2_vtotal')->default(0);
 
             $table->boolean('cotizacion2_yellow')->default(false);
