@@ -23,10 +23,11 @@ class CierreMensualController extends Controller
         // Recuperar Empresa
         $empresa = Empresa::getEmpresa();
         $date = date('Y-m-d',strtotime("$empresa->empresa_fecha_cierre_contabilidad + 1 month") );
+        $month = date('n', strtotime($date));
 
         // Prepare data msg
         $year = date('Y', strtotime($date));
-        $mes_msg = strtoupper(strftime('%B', strtotime($date)));
+        $mes_msg = strtoupper(config('koi.meses')[$month]);
 
         return view('accounting.cierremensual.index', ['mes' => $mes_msg, 'year' => $year]);
     }
@@ -66,7 +67,7 @@ class CierreMensualController extends Controller
                 $empresa->save();
 
                 // Prepare msg for view
-                $mes_msg = strtoupper(strftime('%B', strtotime($date)));
+                $mes_msg = strtoupper(config('koi.meses')[$month]);
 
                 // Commit Transaction
                 DB::commit();

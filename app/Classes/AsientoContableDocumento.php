@@ -209,11 +209,11 @@ class AsientoContableDocumento {
 				return $result;
 			}
 
-			// // Mayorizacion de saldos Contables
-			// $result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			// if($result != 'OK') {
-			// 	return $result;
-			// }
+			// Mayorizacion de saldos Contables
+			$result = $this->saldosContables($objCuenta, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			if($result != 'OK') {
+				return $result;
+			}
 		}
 		return 'OK';
 	}
