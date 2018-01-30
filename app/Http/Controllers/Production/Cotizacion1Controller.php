@@ -420,12 +420,6 @@ class Cotizacion1Controller extends Controller
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
 
-            // Comprobar que no exita orden de produccion
-            $orden = Ordenp::where('orden_cotizacion', $cotizacion->id)->first();
-            if($orden instanceof Ordenp){
-                return response()->json(['success' => false, 'errors' => 'No se puede clonar la cotización, porque tiene una orden de producción en proceso.']);
-            }
-
             DB::beginTransaction();
             try {
                 // Recuperar numero cotizacion
