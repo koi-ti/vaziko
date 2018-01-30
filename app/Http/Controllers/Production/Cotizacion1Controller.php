@@ -380,30 +380,27 @@ class Cotizacion1Controller extends Controller
             abort(404);
         }
 
-        $cotizacion2 = Cotizacion2::getCotizaciones2($cotizacion->id);
-        $title = sprintf('Cotización %s', $cotizacion->cotizacion_codigo);
+        $cotizaciones2 = Cotizacion2::getCotizaciones2($cotizacion->id);
+        $title = "Cotización {$cotizacion->cotizacion_codigo}";
 
         $data = [];
-        foreach ( $cotizacion2 as $detalle ) {
-            $items = new \stdClass();
-            $items->detalle = $detalle;
+        foreach ( $cotizaciones2 as $cotizacion2 ) {
+            $query = Cotizacion4::query();
+            $query->select(DB::raw("GROUP_CONCAT(materialp_nombre SEPARATOR ', ') AS materialp_nombre"));
+            $query->join('koi_materialp', 'cotizacion4_materialp', '=', 'koi_materialp.id');
+            $query->where('cotizacion4_cotizacion2', $cotizacion2->id);
+            $materialesp = $query->first();
 
+            $query = Cotizacion5::query();
+            $query->select(DB::raw("GROUP_CONCAT(acabadop_nombre SEPARATOR ', ') AS acabadop_nombre"));
+            $query->join('koi_acabadop', 'cotizacion5_acabadop', '=', 'koi_acabadop.id');
+            $query->where('cotizacion5_cotizacion2', $cotizacion2->id);
+            $acabadosp = $query->first();
 
-            $materialesp = Cotizacion4::where('cotizacion4_cotizacion2', $detalle->id)->get();
-            foreach ($materialesp as $materialp) {
-                $items->materialesp[] = $materialp->getName->materialp_nombre;
+            $cotizacion2->materialp_nombre = $materialesp->materialp_nombre;
+            $cotizacion2->acabadop_nombre = $acabadosp->acabadop_nombre;
 
-            }
-
-            $acabadosp = Cotizacion5::where('cotizacion5_cotizacion2', $detalle->id)->get();
-            foreach ($acabadosp as $acabadop) {
-                $items->acabadosp[] = $acabadop->getName->acabadop_nombre;
-            }
-
-            isset($items->materialesp) ? $items->materialesp = implode(', ', $items->materialesp) : null;
-            isset($items->acabadosp) ? $items->acabadosp = implode(', ', $items->acabadosp) : null;
-
-            $data[] = $items;
+            $data[] = $cotizacion2;
         }
 
         // Export pdf

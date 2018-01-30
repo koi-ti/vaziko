@@ -38,9 +38,6 @@ class CreateOrdenproduccion2Table extends Migration
             $table->boolean('orden2_tiro')->default(false);
             $table->boolean('orden2_retiro')->default(false);
 
-            $table->integer('orden2_volumen')->default(0);
-            $table->double('orden2_vtotal')->default(0);
-
             $table->boolean('orden2_yellow')->default(false);
             $table->boolean('orden2_magenta')->default(false);
             $table->boolean('orden2_cyan')->default(false);

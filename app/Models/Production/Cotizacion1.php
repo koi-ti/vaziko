@@ -33,8 +33,8 @@ class Cotizacion1 extends BaseModel
             'tcontacto_telefono' => 'required',
             'cotizacion1_iva' => 'integer|min:0|max:19',
             'cotizacion1_formapago' => "required|exists:koi_tercero,tercero_formapago,tercero_nit,{$data['cotizacion1_cliente']}",
-	        'cotizacion1_fecha_inicio' => 'required|date_format:Y-m-d',
-	        'cotizacion1_suministran' => 'max:200',
+  	        'cotizacion1_fecha_inicio' => 'required|date_format:Y-m-d',
+  	        'cotizacion1_suministran' => 'max:200',
         ];
 
         $validator = Validator::make($data, $rules);
@@ -48,7 +48,7 @@ class Cotizacion1 extends BaseModel
     public static function getCotizacion($id)
     {
         $query = Cotizacion1::query();
-        $query->select('koi_cotizacion1.*', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio', 'tcontacto_email', 'municipio_nombre');
+        $query->select('koi_cotizacion1.*', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio', 'tcontacto_email', 'municipio_nombre', DB::raw("CONCAT(u.tercero_nombre1,' ',u.tercero_apellido1) AS usuario_nombre"));
         $query->join('koi_tercero as t', 'cotizacion1_cliente', '=', 't.id');
         $query->join('koi_tercero as u', 'cotizacion1_usuario_elaboro', '=', 'u.id');
         $query->leftJoin('koi_tercero as ua', 'cotizacion1_usuario_anulo', '=', 'ua.id');
