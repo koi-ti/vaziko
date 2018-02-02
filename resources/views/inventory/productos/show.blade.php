@@ -105,6 +105,20 @@
                     <div>{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
                 </div>
             </div>
+
+            <div class="box-footer">
+                <div class="row">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                        <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                        @if($producto->id == $producto->producto_referencia)
+                            <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                        @endif
+                    </div>
+                </div>
+            </div>
+
             <div class="box box-success">
                 <div class="box-body table-responsive">
                     <table class="table table-striped table-condensed table-bordered" cellspacing="0">
@@ -172,19 +186,8 @@
                 </div>
             </div>
         </div>
-        <div class="box-footer">
-            <div class="row">
-                <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
-                    <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-                </div>
-                <div class="col-md-2 col-sm-6 col-xs-6 text-right">
-                    @if($producto->id == $producto->producto_referencia)
-                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
-                    @endif
-                </div>
-            </div>
-        </div>
     </div>
+
     <script type="text/template" id="itemrollo-product-tpl">
         <div class="row">
             <div class="col-sm-12 col-xs-12">

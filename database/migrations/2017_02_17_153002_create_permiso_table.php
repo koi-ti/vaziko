@@ -13,6 +13,8 @@ class CreatePermisoTable extends Migration
     public function up()
     {
         Schema::create('koi_permiso', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+
             $table->increments('id');
             $table->string('name')->unique();
             $table->string('display_name')->nullable();

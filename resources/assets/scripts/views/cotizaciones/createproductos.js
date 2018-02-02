@@ -357,12 +357,13 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotalCotizacion = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+
             if( this.$checkRedondear.is(':checked') ) {
-                vcomision = Math.round(( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
+                total = Math.round( subtotalCotizacion + vcomision );
             }else{
-                vcomision = ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+                total = subtotalCotizacion + vcomision;
             }
-            total = subtotalCotizacion + vcomision;
 
             this.$subtotal.val( subtotalCotizacion );
             this.$inputVcomision.val( vcomision );

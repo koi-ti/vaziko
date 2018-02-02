@@ -206,6 +206,7 @@ app || (app = {});
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
             this.componentSearchProductopView = new app.ComponentSearchProductopView();
             this.componentSearchContactoView = new app.ComponentSearchContactoView();
+            this.componentSearchCotizacionView = new app.ComponentSearchCotizacionView();
             this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},
 

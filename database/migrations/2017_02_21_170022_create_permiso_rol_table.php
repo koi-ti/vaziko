@@ -13,6 +13,8 @@ class CreatePermisoRolTable extends Migration
     public function up()
     {
         Schema::create('koi_permiso_rol', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            
             $table->integer('module_id')->unsigned();
             $table->integer('permission_id')->unsigned();
             $table->integer('role_id')->unsigned();
