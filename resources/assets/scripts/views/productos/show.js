@@ -49,13 +49,15 @@ app || (app = {});
                 this.$modalGeneric.modal('show');
                 this.$modalGeneric.find('.content-modal').empty().html(this.templateItemsRollo( ) );
                 this.$modalGeneric.find('.modal-title').text( 'Productos metrados' );
+                
+                this.referenceViews();
+            }
 
-            }else if (this.$(e.target).attr('data-action') === 'series'){
+            if (this.$(e.target).attr('data-action') === 'series' && this.prodbodeList.length == 0){
                 this.call = true;
                 this.$('#browse-prodbode-table').show();
+                this.referenceViews();
             }
-            this.referenceViews();
-
         },
 
         /**

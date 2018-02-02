@@ -394,7 +394,6 @@
 					$transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
 					$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
 					$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap;
-					$total = $subtotal + $cotizacion2->cotizacion2_vtotal;
 				/*--}}
 
 				<div class="col-sm-6 col-md-offset-3">
@@ -434,7 +433,7 @@
 									</tr>
 									<tr>
 										<th colspan="4">Total</th>
-										<th class="text-right"><span class="badge bg-green">{{ number_format($total, 2, ',', '.') }}</span></th>
+										<th class="text-right"><span class="badge bg-green">{{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span></th>
 									</tr>
 									</tbody>
 									<tfoot>

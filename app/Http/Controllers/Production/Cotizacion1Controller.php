@@ -53,6 +53,7 @@ class Cotizacion1Controller extends Controller
 
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
+
                     // Cotizacion codigo
                     if($request->has('cotizacion_numero')) {
                         $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) LIKE '%{$request->cotizacion_numero}%'");
