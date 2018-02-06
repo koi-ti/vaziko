@@ -550,6 +550,9 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_transporte = $cotizacion2->cotizacion2_transporte;
                     $orden2->orden2_precio_venta = $cotizacion2->cotizacion2_precio_venta;
                     $orden2->orden2_total_valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario;
+                    $orden2->orden2_volumen = $cotizacion2->cotizacion2_volumen;
+                    $orden2->orden2_redondear = $cotizacion2->cotizacion2_redondear;
+                    $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;
                     $orden2->orden2_tiro = $cotizacion2->cotizacion2_tiro;
