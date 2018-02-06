@@ -112,7 +112,7 @@
             <div class="box-body">
                 <div class="box box-info">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Información adicional del sr(a) <b>{{ Auth::user()->getName() }}</b></h3>
+                        <h3 class="box-title">Información adicional del sr(a) <b>{{ Auth::user()->getUsername() }}</b></h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                             </button>

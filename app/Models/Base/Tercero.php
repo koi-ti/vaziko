@@ -147,6 +147,11 @@ class Tercero extends BaseModel implements AuthenticatableContract,
         return $this->attributes['tercero_razonsocial'] ? $this->attributes['tercero_razonsocial'] : sprintf('%s %s %s %s', $this->attributes['tercero_nombre1'], $this->attributes['tercero_nombre2'], $this->attributes['tercero_apellido1'], $this->attributes['tercero_apellido2']);
     }
 
+    public function getUsername()
+    {
+        return "{$this->attributes['tercero_nombre1']} {$this->attributes['tercero_apellido1']}";
+    }
+
     public static function getTechnicalAdministrators()
     {
         if (Cache::has(self::$key_cache_tadministrators)) {

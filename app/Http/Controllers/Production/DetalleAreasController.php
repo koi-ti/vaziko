@@ -129,30 +129,47 @@ class DetalleAreasController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-                $orden6 = Ordenp6::find($id);
+                $orden6 = Ordenp6::select('koi_ordenproduccion6.id as id', 'orden6_orden2', 'orden6_valor', DB::raw("SUBSTRING_INDEX(orden6_tiempo, ':', '-1') AS orden6_minutos"), DB::raw("SUBSTRING_INDEX(orden6_tiempo, ':', '1') AS orden6_horas"))->where('koi_ordenproduccion6.id', $id)->first();
                 if(!$orden6 instanceof Ordenp6){
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
                 // Recuperar orden2
-                $orden2 = Ordenp2::find($orden6->orden6_orden2);
+                $orden2 = Ordenp2::find( $orden6->orden6_orden2 );
                 if(!$orden2 instanceof Ordenp2){
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $tiempo = explode(':', $orden6->orden6_tiempo); // explode input tiempo 00:00
-                $horas = $tiempo[0];  // value for hour
-                $minutos = $tiempo[1]; // value for minutes
+                // Recuperar valor total de las areasp
+                $valorareasp = Ordenp6::select( DB::raw("SUM( ((SUBSTRING_INDEX(orden6_tiempo, ':', -1) / 60 ) + SUBSTRING_INDEX(orden6_tiempo, ':', 1)) * orden6_valor ) as valor_total"))->where('orden6_orden2', $orden2->id)->first();
 
-                // Regla de tres para pasa min a horas
-                $newhour = intval($horas) + (intval($minutos) / 60);
+                // Convertir minutos a horas y sumar horas
+                $tiempo = intval($orden6->orden6_horas) + (intval($orden6->orden6_minutos) / 60);
 
-                $areap = $orden6->orden6_valor * $newhour;
-                $unitario = $areap / $orden2->orden2_cantidad;
-                $totalunitario = $orden2->orden2_total_valor_unitario - round($unitario);
+                // recuperar valor a eliminar (areap * tiempo) / cantidad
+                $areaptotal = ($orden6->orden6_valor * $tiempo) / $orden2->orden2_cantidad;
+
+                // Recuperar valor de los campos existentes
+                $transporte = $orden2->orden2_transporte / $orden2->orden2_cantidad;
+                $viaticos = $orden2->orden2_viaticos / $orden2->orden2_cantidad;
+                $areasp = $valorareasp->valor_total / $orden2->orden2_cantidad;
+
+                // Restar area a eliminar con el valor existente
+                $areapfinal = $areasp - $areaptotal;
+
+                // Valor recalculado
+                $valorunitario = $orden2->orden2_precio_venta + round($transporte) + round($viaticos) + round($areapfinal);
+
+                // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
+                if($orden2->orden2_redondear == true){
+                    $comision = round(($valorunitario / (((100-$orden2->orden2_volumen)/100))) * (1-(((100-$orden2->orden2_volumen)/100))));
+                }else{
+                    $comision = ($valorunitario / (((100-$orden2->orden2_volumen)/100))) * (1-(((100-$orden2->orden2_volumen)/100)));
+                }
 
                 // Quitar orden2
-                $orden2->orden2_total_valor_unitario = $totalunitario;
+                $orden2->orden2_total_valor_unitario = $valorunitario + $comision;
+                $orden2->orden2_vtotal = $comision;
                 $orden2->save();
 
                 // Eliminar item productop4
