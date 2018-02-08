@@ -23,7 +23,7 @@ app || (app = {});
             'change #cotizacion6_areap': 'changeAreap',
             'submit #form-cotizacion6-producto': 'onStoreCotizacion6',
             'change .event-price': 'calculateCotizacion2',
-            'ifToggled #cotizacion2_redondear': 'redondearComision'
+            'ifChanged #cotizacion2_redondear': 'redondearComision'
         },
         parameters: {
             data: {
@@ -356,15 +356,16 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotalCotizacion = precio + tranporte + viaticos + areas;
-            if( this.$checkRedondear.is(':checked') ) {
-                vcomision = Math.round(( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 ))));
-            }else{
-                vcomision = ( subtotalCotizacion / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
-            }
-            total = subtotalCotizacion + vcomision;
+            subtotalcotizacion2 = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotalcotizacion2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
 
-            this.$subtotal.val( subtotalCotizacion );
+            if( this.$checkRedondear.is(':checked') ) {
+                total = Math.round( subtotalcotizacion2 + vcomision );
+            }else{
+                total = subtotalcotizacion2 + vcomision;
+            }
+
+            this.$subtotal.val( subtotalcotizacion2 );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
         },

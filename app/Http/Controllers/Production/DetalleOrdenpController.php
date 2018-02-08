@@ -104,6 +104,7 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
+                    $orden2->orden2_redondear = $request->orden2_redondear;
                     $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
@@ -158,16 +159,6 @@ class DetalleOrdenpController extends Controller
                         $sumaareasp += $areap['total'];
                         $orden6->save();
                     }
-
-                    // Calcular valor unitario
-                    $totalareasp = $sumaareasp / $request->orden2_cantidad;
-                    $transporte = $request->orden2_transporte / $request->orden2_cantidad;
-                    $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
-                    $valorunitario = $orden2->orden2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
-
-                    // Actualizar orden2
-                    $orden2->orden2_total_valor_unitario = $valorunitario;
-                    $orden2->save();
 
                     // Commit Transaction
                     DB::commit();
@@ -290,6 +281,7 @@ class DetalleOrdenpController extends Controller
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
+                        $orden2->orden2_redondear = $request->orden2_redondear;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
                         $orden2->save();
 
@@ -379,19 +371,6 @@ class DetalleOrdenpController extends Controller
                                 }
                             }
                         }
-
-                        // Recuperar sumatoria areas guardadas
-                        $valorareasp = Ordenp6::select( DB::raw("SUM( ((SUBSTRING_INDEX(orden6_tiempo, ':', -1) / 60 ) + SUBSTRING_INDEX(orden6_tiempo, ':', 1)) * orden6_valor ) as valor_total"))->where('orden6_orden2', $orden2->id)->first();
-
-                        // Calcular valor unitario
-                        $totalareasp = $valorareasp->valor_total / $request->orden2_cantidad;
-                        $transporte = $request->orden2_transporte / $request->orden2_cantidad;
-                        $viaticos = $request->orden2_viaticos / $request->orden2_cantidad;
-                        $valorunitario = $request->orden2_precio_venta + round($transporte) + round($viaticos) + round($totalareasp);
-
-                        // Actualizar orden2
-                        $orden2->orden2_total_valor_unitario = $valorunitario;
-                        $orden2->save();
 
                         // Commit Transaction
                         DB::commit();

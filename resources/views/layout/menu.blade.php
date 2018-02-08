@@ -237,7 +237,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
-                        <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Reporte de tiempos</a>
+                        <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Tiempos</a>
                     </li>
                 </ul>
             </li>

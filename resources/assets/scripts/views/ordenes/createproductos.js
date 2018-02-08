@@ -22,7 +22,8 @@ app || (app = {});
             'click .submit-ordenp6': 'submitOrdenp6',
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
-            'change .event-price': 'calculateOrdenp2'
+            'change .event-price': 'calculateOrdenp2',
+            'ifChanged #orden2_redondear': 'redondearComision'
         },
         parameters: {
             data: {
@@ -103,9 +104,13 @@ app || (app = {});
             this.$inputValor = this.$('#orden6_valor');
 
             // Inputs cuadro de informacion
-            this.totalOrdenp2 = 0;
+            this.$inputVolumen = this.$('#orden2_volumen');
+            this.$checkRedondear = this.$('#orden2_redondear');
+            this.$inputVcomision = this.$('#orden2_vtotal');
 
-            this.$precioOrdenp2 = this.$('#total-price');
+            // Inputs from form
+            this.$subtotal = this.$('#subtotal-price');
+            this.$total = this.$('#total-price');
             this.$cantidad = this.$('#orden2_cantidad');
             this.$precio = this.$('#orden2_precio_venta');
             this.$viaticos = this.$('#orden2_viaticos');
@@ -272,6 +277,11 @@ app || (app = {});
                 e.preventDefault();
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                     data.ordenp6 = this.areasProductopList.toJSON();
+                    data.orden2_volumen = this.$('#orden2_volumen').val();
+                    data.orden2_vtotal = this.$('#orden2_vtotal').inputmask('unmaskedvalue');
+                    data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                    data.orden2_redondear = this.$checkRedondear.is(':checked');
+                    
                 this.model.save( data, {silent: true} );
             }
         },
@@ -332,7 +342,7 @@ app || (app = {});
         *   Event calculate orden2
         **/
         calculateOrdenp2: function () {
-            var cantidad = transporte = viaticos = areas = precio = 0;
+            var cantidad = transporte = viaticos = areas = precio = volumen = total = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
             cantidad = parseInt( this.$cantidad.val() );
@@ -340,6 +350,7 @@ app || (app = {});
             viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad  );
             areas = Math.round( parseFloat( this.areasProductopList.totalize()['total'] ) / cantidad  );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
+            volumen = parseInt( this.$inputVolumen.val() );
 
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( precio ) );
@@ -348,8 +359,22 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            this.totalOrdenp2 = precio + tranporte + viaticos + areas;
-            this.$precioOrdenp2.val( this.totalOrdenp2 );
+            subtotalordenp2 = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotalordenp2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+
+            if( this.$checkRedondear.is(':checked') ) {
+                total = Math.round( subtotalordenp2 + vcomision );
+            }else{
+                total = subtotalordenp2 + vcomision;
+            }
+
+            this.$subtotal.val( subtotalordenp2 );
+            this.$inputVcomision.val( vcomision );
+            this.$total.val( total );
+        },
+
+        redondearComision: function(e) {
+            this.calculateOrdenp2();
         },
 
         /**

@@ -13,6 +13,8 @@ class CreateUsuarioRolTable extends Migration
     public function up()
     {
         Schema::create('koi_usuario_rol', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
 

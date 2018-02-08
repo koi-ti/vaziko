@@ -13,10 +13,12 @@ class CreateModulosTable extends Migration
     public function up()
     {
         Schema::create('koi_modulo', function (Blueprint $table) {
+            $table->engine = 'InnoDB';
+            
             $table->increments('id');
             $table->string('name')->unique()->nullable();
             $table->string('display_name')->nullable();
-            
+
             $table->integer('nivel1')->default(0);
             $table->integer('nivel2')->default(0);
             $table->integer('nivel3')->default(0);
