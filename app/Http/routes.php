@@ -118,6 +118,7 @@ Route::group(['middleware' => 'auth'], function()
 		});
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
+	Route::resource('reglasasientos', 'Accounting\ReglaAsientoController', ['only' => ['index', 'store']]);
 	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);

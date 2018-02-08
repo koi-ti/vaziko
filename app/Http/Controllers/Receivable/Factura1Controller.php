@@ -205,7 +205,6 @@ class Factura1Controller extends Controller
                     // Update consecutive puntoventa_numero
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
-
                     // Prepara data asiento
                     $dataAsiento = $factura->prepararAsiento();
 
