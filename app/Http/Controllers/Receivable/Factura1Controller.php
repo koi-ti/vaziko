@@ -10,6 +10,7 @@ use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocument
 
 use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Receivable\ReteFuente, App\Models\Receivable\ReteIva;
+use App\Models\Accounting\ReglaAsiento;
 
 use App, View, Auth, DB, Log, Datatables;
 
@@ -205,18 +206,23 @@ class Factura1Controller extends Controller
                     // Update consecutive puntoventa_numero
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
-                    // Prepara data asiento
-                    $dataAsiento = $factura->prepararAsiento();
 
+                    // Prepara data asiento
+                    // $reglaAsiento = $factura->prepararAsiento();
+                    $reglaAsiento = ReglaAsiento::createAsiento($factura->id, 'FS', $factura->factura1_tercero);
+                    if (!$reglaAsiento->success) {
+                        DB::rollback();
+                        return response()->json(['success'=>false, 'errors'=>$reglaAsiento->error]);
+                    }
                     // Creo el objeto para manejar el asiento
-                    $objAsiento = new AsientoContableDocumento($dataAsiento->data);
+                    $objAsiento = new AsientoContableDocumento($reglaAsiento->data);
                     if($objAsiento->asiento_error) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
                     }
 
                     // Preparar asiento
-                    $result = $objAsiento->asientoCuentas($dataAsiento->cuentas);
+                    $result = $objAsiento->asientoCuentas($reglaAsiento->cuentas);
                     if($result != 'OK'){
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
@@ -229,16 +235,16 @@ class Factura1Controller extends Controller
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
                     // AsientoNif
-                    if (!empty($dataAsiento->dataNif)) {
+                    if (!empty($reglaAsiento->dataNif)) {
                         // Creo el objeto para manejar el asiento
-                        $objAsientoNif = new AsientoNifContableDocumento($dataAsiento->dataNif);
+                        $objAsientoNif = new AsientoNifContableDocumento($reglaAsiento->dataNif);
                         if($objAsientoNif->asientoNif_error) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $objAsiento->asientoNif_error]);
                         }
 
                         // Preparar asiento
-                        $result = $objAsientoNif->asientoCuentas($dataAsiento->cuentas);
+                        $result = $objAsientoNif->asientoCuentas($reglaAsiento->cuentas);
                         if($result != 'OK'){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $result]);
@@ -263,8 +269,9 @@ class Factura1Controller extends Controller
                     }
 
                     // Commit Transaction
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => "TODO ok"]);
                     DB::commit();
-
                     return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
                     DB::rollback();

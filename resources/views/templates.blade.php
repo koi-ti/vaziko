@@ -1267,6 +1267,10 @@
             <label class="control-label">Naturaleza</label>
             <div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
         </div>
+        <div class="form-group col-md-6">
+            <label class="control-label">Asiento N°</label>
+            <div><%- asiento1_numero %></div>
+        </div>
     </div>
 
     <!-- Orden -->

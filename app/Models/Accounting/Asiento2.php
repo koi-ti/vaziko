@@ -38,7 +38,7 @@ class Asiento2 extends Model
     public static function getAsiento2($asiento)
     {
         $query = Asiento2::query();
-        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_numero','asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
             DB::raw("(CASE WHEN t.tercero_persona = 'N'
                 THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
                         (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
@@ -72,7 +72,7 @@ class Asiento2 extends Model
     public static function getAsiento2Ordenp( $ordenp )
     {
         $query = Asiento2::query();
-        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
+        $query->select('koi_asiento2.*', 'asiento1_documentos', 'asiento1_numero','asiento1_id_documentos', 'documento_nombre', 'plancuentas_cuenta', 'plancuentas_naturaleza', 'plancuentas_nombre', DB::raw('centrocosto_codigo as centrocosto_codigo'), 'centrocosto_nombre', 't.tercero_nit',
             DB::raw("(CASE WHEN t.tercero_persona = 'N'
                 THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2,
                         (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)
