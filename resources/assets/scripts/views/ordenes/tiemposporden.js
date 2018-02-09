@@ -13,6 +13,7 @@ app || (app = {});
 
         el: '#browse-orden-tiemposp-list',
         events: {
+            'click .edit-tiempop-ordenp': 'editTiempop'
         },
         parameters: {
         	wrapper: null,
@@ -44,13 +45,41 @@ app || (app = {});
 
         },
 
+        editTiempop: function(e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = this.$(e.currentTarget).data('tiempo-resource');
+
+                // Open tiempopActionView
+                if ( this.tiempopActionView instanceof Backbone.View ){
+                    this.tiempopActionView.stopListening();
+                    this.tiempopActionView.undelegateEvents();
+                }
+
+                this.tiempopActionView = new app.TiempopActionView({
+                    collection: this.collection,
+                    parameters: {
+                        ordenp2: this.parameters.dataFilter.orden2_orden,
+                        data: data,
+                        action: 'ordenp',
+                    }
+                });
+
+                this.tiempopActionView.render();
+            }
+        },
+
         /**
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
         addOne: function (tiempopModel) {
             var view = new app.TiempopOrdenItemView({
-                model: tiempopModel
+                model: tiempopModel,
+                parameters: {
+                    edit: this.parameters.edit
+                }
             });
             tiempopModel.view = view;
             this.$el.prepend( view.render().el );

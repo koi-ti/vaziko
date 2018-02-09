@@ -53,14 +53,8 @@ app || (app = {});
         editTiempop: function(e){
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                var tiempo = {
-                    id: this.$(e.currentTarget).data('tiempo-resource'),
-                    fecha: this.$(e.currentTarget).data('tiempo-fecha'),
-                    horai: this.$(e.currentTarget).data('tiempo-hi'),
-                    horaf: this.$(e.currentTarget).data('tiempo-hf')
-                };
 
-                this.$modal.modal('show');
+                var data = this.$(e.currentTarget).data('tiempo-resource');
 
                 // Open tiempopActionView
                 if ( this.tiempopActionView instanceof Backbone.View ){
@@ -69,9 +63,10 @@ app || (app = {});
                 }
 
                 this.tiempopActionView = new app.TiempopActionView({
+                    collection: this.collection,
                     parameters: {
-                        collection: this.collection,
-                        model: tiempo
+                        data: data,
+                        action: 'tiempop',
                     }
                 });
 

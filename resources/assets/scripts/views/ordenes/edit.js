@@ -92,10 +92,11 @@ app || (app = {});
                }
             });
 
-            // Despachos pendientes list
+            // Tiemposp  list
             this.tiempopordenListView = new app.TiempopOrdenListView( {
                 collection: this.tiempopordenList,
                 parameters: {
+                    edit: true,
                     dataFilter: {
                         orden2_orden: this.model.get('id')
                     }
