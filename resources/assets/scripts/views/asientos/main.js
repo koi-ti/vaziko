@@ -59,15 +59,6 @@ app || (app = {});
                     { data: 'tercero_apellido2', name: 'tercero_apellido2' },
                     { data: 'asiento1_preguardado', name: 'asiento1_preguardado' }
                 ],
-				buttons: [
-					{
-						text: '<i class="fa fa-user-plus"></i> Nueva asiento',
-                        className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('asientos.create') ) )
-						}
-					}
-				],
                 columnDefs: [
                     {
                         targets: 0,

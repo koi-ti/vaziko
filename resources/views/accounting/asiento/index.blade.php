@@ -51,7 +51,7 @@
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <a href="{{ route('asientos.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-building-o"></i> Nueva asiento
+                                    <i class="fa fa-file-text-o"></i> Nuevo asiento
                                 </a>
                             </div>
                         </div>
