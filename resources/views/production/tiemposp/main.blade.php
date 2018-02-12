@@ -50,7 +50,7 @@
                         <div class="form-group col-md-5">
                             <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
                                 @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
+                                <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
                             <div class="help-block with-errors"></div>
@@ -100,13 +100,15 @@
                     </div>
                 </div>
 
-    			<div class="box-header with-border">
-    	        	<div class="row">
-    					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
-    						<button type="button" class="btn btn-primary btn-sm btn-block submit-tiempop">{{ trans('app.add') }}</button>
-    					</div>
-    				</div>
-    			</div>
+                @if( Auth::user()->ability('admin', 'crear', ['module' => 'tiemposp']) )
+        			<div class="box-header with-border">
+        	        	<div class="row">
+        					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
+        						<button type="button" class="btn btn-primary btn-sm btn-block submit-tiempop">{{ trans('app.add') }}</button>
+        					</div>
+        				</div>
+        			</div>
+                @endif
             {!! Form::close() !!}
 
             <div class="box-body">
@@ -131,7 +133,6 @@
                                     <th width="8%">Fecha</th>
                                     <th width="5%">H. inicio</th>
                                     <th width="5%">H. fin</th>
-                                    <th width="1%"></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -153,79 +154,80 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        <td class="text-center">
-            <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>" data-tiempo-fecha="<%- tiempop_fecha %>" data-tiempo-hi="<%- tiempop_hora_inicio %>" data-tiempo-hf="<%- tiempop_hora_fin %>">
-                <span><i class="fa fa-pencil-square-o"></i></span>
-            </a>
-        </td>
+        @if( Auth::user()->ability('admin', 'editar', ['module' => 'tiemposp']) )
+            <td class="text-center">
+                <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        @endif
     </script>
 
-    <section id="tiempop-content-section">
-        <!-- Modal generic producto -->
-        <div class="modal fade" id="modal-edit-tiempop" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog modal-md" role="document">
-                <div class="modal-content">
-                    <div class="modal-header small-box {{ config('koi.template.bg') }}">
-                        <button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                        <h4 class="inner-title-modal modal-title"></h4>
-                    </div>
-                    {!! Form::open(['id' => 'form-edit-tiempop', 'data-toggle' => 'validator']) !!}
-                        <div class="modal-body">
-                            <div class="content-modal">
-                            </div>
-                        </div>
-                    {!! Form::close() !!}
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-                        <button type="button" class="btn btn-primary btn-sm submit-edit-tiempop">Continuar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="modal fade" id="modal-tiempop-edit" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
+    	<div class="modal-dialog modal-md" role="document">
+    		<div class="modal-content">
+    			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+    				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+    					<span aria-hidden="true">&times;</span>
+    				</button>
+    				<h4 class="inner-title-modal modal-title"></h4>
+    			</div>
+    			{!! Form::open(['id' => 'form-edit-tiempop-component', 'data-toggle' => 'validator']) !!}
+    				<div class="modal-body" id="modal-tiempop-wrapper">
+    					<div id="error-eval-tiempop" class="alert alert-danger"></div>
+    					<div class="content-modal">
+    					</div>
+    				</div>
 
-        <script type="text/template" id="edit-tiempop-tpl">
-            <div class="row">
-                <input type="hidden" id="tiempop_id" value="<%- id %>">
-                <label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
-                <div class="form-group col-md-4">
-                    <div class="input-group">
-                        <div class="input-group-addon">
-                            <i class="fa fa-calendar"></i>
-                        </div>
-                        <input type="text" id="tiempop_fecha" name="tiempop_fecha" placeholder="Fecha inicio" value="<%- fecha %>" class="form-control input-sm datepicker" required>
-                    </div>
-                    <div class="help-block with-errors"></div>
-                </div>
-            </div>
+    				<div class="modal-footer">
+    					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+    					<button type="sumbit" class="btn btn-primary btn-sm">Continuar</button>
+    				</div>
+    			{!! Form::close() !!}
+    		</div>
+    	</div>
+    </div>
 
-            <div class="row">
-                <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
-                <div class="form-group col-md-4">
-                    <div class="bootstrap-timepicker">
-                        <div class="input-group">
-                            <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" value="<%- horai %>" class="form-control input-sm timepicker" required>
-                            <div class="input-group-addon">
-                                <i class="fa fa-clock-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="help-block with-errors"></div>
-                </div>
-                <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
-                <div class="form-group col-md-4">
-                    <div class="bootstrap-timepicker">
-                        <div class="input-group">
-                            <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" value="<%- horaf %>" class="form-control input-sm timepicker" required>
-                            <div class="input-group-addon">
-                                <i class="fa fa-clock-o"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="help-block with-errors"></div>
-                </div>
-            </div>
-        </script>
-    </section>
+    <script type="text/template" id="edit-tiempop-tpl">
+    	<div class="row">
+    		<input type="hidden" id="tiempop_id" value="<%- id %>">
+    		<label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
+    		<div class="form-group col-md-4">
+    			<div class="input-group">
+    				<div class="input-group-addon">
+    					<i class="fa fa-calendar"></i>
+    				</div>
+    				<input type="text" id="tiempop_fecha" name="tiempop_fecha" placeholder="Fecha inicio" value="<%- tiempop_fecha %>" class="form-control input-sm datepicker" required>
+    			</div>
+    			<div class="help-block with-errors"></div>
+    		</div>
+    	</div>
+
+    	<div class="row">
+    		<label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
+    		<div class="form-group col-md-4">
+    			<div class="bootstrap-timepicker">
+    				<div class="input-group">
+    					<input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" value="<%- tiempop_hora_inicio %>" class="form-control input-sm timepicker" required>
+    					<div class="input-group-addon">
+    						<i class="fa fa-clock-o"></i>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="help-block with-errors"></div>
+    		</div>
+    		<label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
+    		<div class="form-group col-md-4">
+    			<div class="bootstrap-timepicker">
+    				<div class="input-group">
+    					<input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" value="<%- tiempop_hora_fin %>" class="form-control input-sm timepicker" required>
+    					<div class="input-group-addon">
+    						<i class="fa fa-clock-o"></i>
+    					</div>
+    				</div>
+    			</div>
+    			<div class="help-block with-errors"></div>
+    		</div>
+    	</div>
+    </script>
 @stop

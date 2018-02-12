@@ -16,7 +16,7 @@ class CreateReglasasientoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-
+            
             $table->string('regla_cuenta',15)->comment('cuenta que se utiliza para el item');
             $table->string('regla_select',900);
             $table->string('regla_tabla',900);
