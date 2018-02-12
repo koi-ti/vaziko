@@ -25,6 +25,11 @@ app || (app = {});
             // collection
             this.tiempopList = new app.TiempopList();
 
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+
             // Attributes
             this.$form = this.$('#form-tiempop');
             this.$subactividadesp = this.$('#tiempop_subactividadp');
@@ -48,7 +53,10 @@ app || (app = {});
             this.tiempopListView = new app.TiempopListView( {
                 collection: this.tiempopList,
                 parameters: {
-                    wrapper: this.el
+                    wrapper: this.el,
+                    dataFilter: {
+                        type: 'tiemposp'
+                    }
                 }
             });
         },
@@ -105,7 +113,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                this.tiempopList.trigger( 'store' , data );
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -129,6 +137,35 @@ app || (app = {});
             if( typeof window.initComponent.initTimePicker == 'function' )
                 window.initComponent.initTimePicker();
         },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner( this.el );
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function ( model, resp, opts ) {
+            window.Misc.removeSpinner( this.el );
+
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.successRedirect( resp.msg, window.Misc.urlFull( Route.route('tiemposp.index') ) );
+            }
+        }
     });
 
 })(jQuery, this, this.document);

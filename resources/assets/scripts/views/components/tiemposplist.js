@@ -1,5 +1,5 @@
 /**
-* Class TiempopOrdenListView  of Backbone Router
+* Class TiempopListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.TiempopOrdenListView = Backbone.View.extend({
+    app.TiempopListView = Backbone.View.extend({
 
-        el: '#browse-orden-tiemposp-list',
-        events: {
-            'click .edit-tiempop-ordenp': 'editTiempop'
-        },
+        el: '#browse-tiemposp-global-list',
         parameters: {
         	wrapper: null,
             dataFilter: {}
@@ -24,10 +21,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Init Attributes
+            this.confCollection = { reset: true, data: {} };
+            this.$modal = $('#modal-tiempop-edit-component');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -35,53 +35,33 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {orden2_orden: this.parameters.dataFilter.orden2_orden}, reset: true });
+            // if was passed itemrollo code
+            if( !_.isUndefined(this.parameters.dataFilter.type) && !_.isNull(this.parameters.dataFilter.type) ){
+                this.confCollection.data = this.parameters.dataFilter;
+                this.collection.fetch( this.confCollection );
+            }
         },
 
         /*
         * Render View Element
         */
         render: function() {
-
-        },
-
-        editTiempop: function(e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = this.$(e.currentTarget).data('tiempo-resource');
-
-                // Open tiempopActionView
-                if ( this.tiempopActionView instanceof Backbone.View ){
-                    this.tiempopActionView.stopListening();
-                    this.tiempopActionView.undelegateEvents();
-                }
-
-                this.tiempopActionView = new app.TiempopActionView({
-                    collection: this.collection,
-                    parameters: {
-                        ordenp2: this.parameters.dataFilter.orden2_orden,
-                        data: data,
-                        action: 'ordenp',
-                    }
-                });
-
-                this.tiempopActionView.render();
-            }
         },
 
         /**
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
-        addOne: function (tiempopModel) {
-            var view = new app.TiempopOrdenItemView({
-                model: tiempopModel,
+        addOne: function ( detalletiempopModel ) {
+            var view = new app.TiempopItemView({
+                model: detalletiempopModel,
                 parameters: {
-                    edit: this.parameters.edit
+                    dataFilter: this.parameters.dataFilter,
+                    edit: this.parameters.edit,
                 }
             });
-            tiempopModel.view = view;
+
+            detalletiempopModel.view = view;
             this.$el.prepend( view.render().el );
         },
 

@@ -1123,12 +1123,14 @@ app || (app = {});
         * show view edit tiempop
         */
         getTiempopMain: function () {
+            this.tiempopModel = new app.TiempopModel();
+
             if ( this.mainTiempopView instanceof Backbone.View ){
                 this.mainTiempopView.stopListening();
                 this.mainTiempopView.undelegateEvents();
             }
 
-            this.mainTiempopView = new app.MainTiempopView( );
+            this.mainTiempopView = new app.MainTiempopView({ model: this.tiempopModel });
         },
 
         getAreaspMain: function () {

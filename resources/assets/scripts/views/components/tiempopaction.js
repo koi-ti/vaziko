@@ -16,13 +16,12 @@ app || (app = {});
         templateTiempopOrdenp: _.template(($('#edit-tiempop-ordenp-tpl').html() || '')),
         events: {
             'click .submit-ordenp': 'submitForm',
-            'submit #form-edit-tiempop-component': 'onUpdateModel',
+            'submit #form-edit-tiempop-component': 'updateModel',
             'change .change-actividadp': 'changeActividadp',
         },
         parameters: {
-            ordenp2: null,
             data: null,
-            action: null,
+            dataFilter: null,
         },
 
         /**
@@ -33,8 +32,9 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
-            this.$modalTpO = $('#modal-tiempop-ordenp-edit');
-            this.$modalTp = $('#modal-tiempop-edit');
+            this.$modal = $('#modal-tiempop-edit-component');
+            this.$wraper = this.$('#modal-tiempop-wrapper');
+            this.$wraperError = this.$('#error-eval-tiempop');
             this.$form =  this.$('#form-edit-tiempop-component');
         },
 
@@ -64,66 +64,30 @@ app || (app = {});
         },
 
         runAction: function() {
-            var _this = this;
+            var attributes = this.model.toJSON();
 
-            this.modelExits = _.find(this.collection.models, function(model) {
-                return model.get('id') == _this.parameters.data;
-            });
+            if( this.parameters.dataFilter.type == 'ordenp' ){
+                this.$modal.find('.modal-dialog').addClass('modal-lg');
+                this.$modal.find('.modal-title').text( 'Pestaña tiempo de producción - Editar # '+ attributes.id );
+                this.$modal.find('.content-modal').empty().html( this.templateTiempopOrdenp( attributes ) );
 
-            var attributes = this.modelExits.attributes;
+                // Recuperar input subactividad
+                this.$subactividadesp = this.$('#tiempop_subactividadp');
 
-            if( this.parameters.action == 'ordenp' ){
-                this.$modalTpO.find('.modal-title').text( 'Pestaña tiempo de producción - Editar # '+ attributes.id );
-                this.$modalTpO.find('.content-modal').empty().html( this.templateTiempopOrdenp( attributes ) );
+            }else if( this.parameters.dataFilter.type == 'tiemposp' ){
+                this.$modal.find('.modal-dialog').addClass('modal-md')
+                this.$modal.find('.modal-title').text( 'Tiempo de producción - Editar # '+ attributes.id );
+                this.$modal.find('.content-modal').empty().html( this.templateTiempop( attributes ) );
 
-                // Reference tiempop pestaña ordenp
-                this.referenceTiempopOrdenp();
-            }else if( this.parameters.action == 'tiempop' ){
-                this.$modalTp.find('.modal-title').text( 'Tiempo de producción - Editar # '+ attributes.id );
-                this.$modalTp.find('.content-modal').empty().html( this.templateTiempop( attributes ) );
-
-                // Reference tiempop modulo
-                this.referenceTiempop();
             }else{
                 return;
             }
 
-            this.listenTo( this.modelExits, 'sync', this.responseServer );
-            this.listenTo( this.modelExits, 'request', this.loadSpinner );
+            // Hide errors && Open modal
+            this.$wraperError.hide().empty();
+            this.$modal.modal('show');
+
             this.ready();
-        },
-
-        /**
-        * Reference tiempop pestaña de ordenp
-        */
-        referenceTiempopOrdenp: function( ) {
-        	var _this = this;
-
-            this.$wraper = this.$('#modal-tiempop-ordenp-wrapper');
-            this.$wraperErrorTpO = this.$('#error-eval-tiempop-ordenp');
-            this.$subactividadesp = this.$('#tiempop_subactividadp');
-
-            // Hide errors
-            this.$wraperErrorTpO.hide().empty();
-
-            // Open modal
-            this.$modalTpO.modal('show');
-        },
-
-        /**
-        * Reference facturap
-        */
-        referenceTiempop: function( ) {
-        	var _this = this;
-
-            this.$wraper = this.$('#modal-tiempop-wrapper');
-            this.$wraperErrorTp = this.$('#error-eval-tiempop');
-
-            // Hide errors
-            this.$wraperErrorTp.hide().empty();
-
-            // Open modal
-            this.$modalTp.modal('show');
         },
 
         /**
@@ -138,7 +102,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('subactividadesp.index', {actividadesp: actividadesp}) ),
                     type: 'GET',
                     beforeSend: function() {
-                        _this.$wraperErrorTpO.hide().empty();
+                        _this.$wraperError.hide().empty();
                         window.Misc.setSpinner( _this.$wraper );
                     }
                 })
@@ -156,8 +120,8 @@ app || (app = {});
 
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    _this.$wraperErrorTpO.empty().append( thrownError );
-                    _this.$wraperErrorTpO.show();
+                    _this.$wraperError.empty().append( thrownError );
+                    _this.$wraperError.show();
                 });
             }else{
                 // Limpiar subactividad cada vez eliminen el actividadp de select2
@@ -175,54 +139,14 @@ app || (app = {});
         /**
         *   Event update
         */
-        onUpdateModel: function(e){
+        updateModel: function(e){
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var model = this.modelExits;
-                if(model instanceof Backbone.Model ) {
-                    var data = window.Misc.formToJson( e.target );
-                        data.call = this.parameters.action;
+                var data = window.Misc.formToJson( e.target );
+                    data.type = this.parameters.dataFilter.type;
 
-                    model.save( data, {patch: true, silent: true} );
-                }
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.$wraper );
-        },
-
-
-        /**
-        * response of the server
-        */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.$wraper );
-
-            if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
-                alertify.success( resp.msg );
-                if( this.$modalTpO.length > 0 ){
-                    this.$modalTpO.modal('hide');
-                    this.collection.fetch({ data: {orden2_orden: this.parameters.ordenp2} });
-                }else if ( this.$modalTp.length > 0 ){
-                    this.$modalTp.modal('hide');
-                    this.collection.fetch();
-                }
+                this.model.save( data, {patch: true, silent: true} );
             }
         }
     });
