@@ -172,7 +172,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.model.get('id') })), '_blank');
+            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.model.get('cotizacion_codigo') })), '_blank');
         },
 
         /**

@@ -18,8 +18,8 @@ class TiempopController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('type'))
-        {
+
+        if($request->has('type')){
             $data = $request->all();
 
             $validator = Validator::make($data, [
@@ -27,61 +27,70 @@ class TiempopController extends Controller
                 'fecha_final' => 'required',
             ]);
 
+            // Validar que sean requeridos
             if ($validator->fails()) {
                 return redirect('/rtiemposp')
-                    	->withErrors($validator)
-                    	->withInput();
+                    ->withErrors($validator)
+                    ->withInput();
             }
 
+            // Validar fecha inicial no puede ser mayor a la final
             if($request->fecha_final < $request->fecha_inicial ){
                 return redirect('/rtiemposp')
-                    	->withErrors('La fecha final no puede ser menor a la inicial.')
-                    	->withInput();
+                    ->withErrors('La fecha final no puede ser menor a la inicial.')
+                    ->withInput();
             }
 
-            // Recuperar tercero
-            $tercero = Tercero::select('id', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_dir_nomenclatura', 'tercero_municipio',
-                DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
-            )->where('tercero_nit', $request->tiempop_tercero)->first();
-            if(!$tercero instanceof Tercero){
+            // Recuperar terceros
+            if( count($request->tiempop_tercero) <= 0 ){
                 return redirect('/rtiemposp')
-                    	->withErrors('No es posible recuperar cliente, por favor verifique la información o consulte al administrador.')
-                    	->withInput();
+                    ->withErrors('Por favor agregue un funcionario para generar el reporte.')
+                    ->withInput();
             }
 
-            // Recuperar tiempos del tercero
-            $query = Tiempop::query();
-            $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
-                CONCAT(
-                    (CASE WHEN tercero_persona = 'N'
-                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                        ELSE tercero_razonsocial
-                    END),
-                ' (', orden_referencia ,')'
-                ) AS tercero_nombre"
-            ));
-            $query->leftJoin('koi_ordenproduccion', 'tiempop_ordenp', '=', 'koi_ordenproduccion.id');
-            $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
-            $query->leftJoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
-            $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
-            $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
-            $query->where('tiempop_tercero', $tercero->id);
-            $query->where('tiempop_fecha', '>=', $request->fecha_inicial);
-            $query->where('tiempop_fecha', '<=', $request->fecha_final);
-            $query->orderBy('tiempop_fh_elaboro', 'asc');
-            $tiemposp = $query->get();
+            $tiempos = [];
+            foreach ($request->tiempop_tercero as $rtercero) {
+                $object = new \stdClass();
 
-            if( count($tiemposp) <= 0 ){
-                return redirect('/rtiemposp')
-                ->withErrors('El cliente no ha registrado ningun tiempo de producción.')
-                ->withInput();
+                $query = Tercero::query();
+                $query->select('koi_tercero.id', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"));
+                $query->where('tercero_nit', $rtercero);
+                $tercero = $query->first();
+
+                if(!$tercero instanceof Tercero){
+                    return redirect('/rtiemposp')
+                        ->withErrors("No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador.")
+                        ->withInput();
+
+                }
+                $object->tercero = $tercero;
+
+                // Recuperar tiempos del tercero
+                $query = Tiempop::query();
+                $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
+                    CONCAT(
+                        (CASE WHEN tercero_persona = 'N'
+                            THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                                (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                            )
+                            ELSE tercero_razonsocial
+                        END),
+                    ' (', orden_referencia ,')'
+                    ) AS tercero_nombre"
+                ));
+                $query->leftJoin('koi_ordenproduccion', 'tiempop_ordenp', '=', 'koi_ordenproduccion.id');
+                $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+                $query->leftJoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
+                $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
+                $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
+                $query->where('tiempop_tercero', $tercero->id);
+                $query->where('tiempop_fecha', '>=', $request->fecha_inicial);
+                $query->where('tiempop_fecha', '<=', $request->fecha_final);
+                $query->orderBy('tiempop_fecha', 'asc');
+                $tiemposp = $query->get();
+
+                $object->tiemposp = $tiemposp;
+                $tiempos[] = $object;
             }
 
             $fechai = $request->fecha_inicial;
@@ -95,9 +104,9 @@ class TiempopController extends Controller
             switch ($type) {
                 case 'pdf':
                     $pdf = App::make('dompdf.wrapper');
-                    $pdf->loadHTML(View::make('reports.production.tiemposp.report',  compact('tercero', 'fechai', 'fechaf', 'tiemposp', 'title', 'type'))->render());
+                    $pdf->loadHTML(View::make('reports.production.tiemposp.report',  compact('tiempos', 'fechai', 'fechaf', 'title', 'type'))->render());
                     $pdf->setPaper('A4', 'landscape')->setWarnings(false);
-                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'mayor_y_balance', date('Y_m_d'), date('H_m_s')));
+                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'tiempos_de_producción', date('Y_m_d'), date('H_m_s')));
                 break;
             }
         }

@@ -22,8 +22,9 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            // Recuperar iva
+            // Recuperar iva && cotizacion codigo
             this.$iva = this.$('#cotizacion1_iva');
+            this.codigo = this.$('#cotizacion_codigo').val();
 
             // Attributes
             this.productopCotizacionList = new app.ProductopCotizacionList();
@@ -137,7 +138,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.model.get('id') })), '_blank');
+            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.codigo })), '_blank');
         }
     });
 
