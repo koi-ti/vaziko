@@ -65,8 +65,8 @@ app || (app = {});
                 ],
                 columnDefs: [
 					{
+                        width: '10%',
 						targets: 0,
-						searchable: false,
 						render: function ( data, type, full, row ) {
 							return '<a href="#" class="a-koi-search-productop-component-table">' + data + '</a>';
 						}

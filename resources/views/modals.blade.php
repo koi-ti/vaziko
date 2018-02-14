@@ -543,7 +543,7 @@
 					<table id="koi-search-productop-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
 		                <thead>
 				            <tr>
-				                <th width="5%">Código</th>
+				                <th>Código</th>
 			                	<th>Nombre</th>
 				            </tr>
 				        </thead>
