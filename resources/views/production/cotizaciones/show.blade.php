@@ -120,6 +120,7 @@
 										<div>{{ $cotizacion->cotizacion1_terminado }}</div>
 									</div>
                                     <input type="hidden" id="cotizacion1_iva" value="{{ $cotizacion->cotizacion1_iva }}">
+                                    <input type="hidden" id="cotizacion_codigo" value="{{ $cotizacion->cotizacion_codigo }}">
 								</div>
 
 								<div class="row">

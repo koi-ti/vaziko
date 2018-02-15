@@ -31,7 +31,11 @@
                         <label class="control-label">Vencimiento</label>
                         <div>{{ $factura->factura1_fecha_vencimiento }}</div>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Número</label>
+                        <div>{{ $factura->factura1_numero }}</div>
+                    </div>
+                    <div class="form-group col-md-2">
                         <label class="control-label">Cuotas</label>
                         <div>{{ $factura->factura1_cuotas }}</div>
                     </div>

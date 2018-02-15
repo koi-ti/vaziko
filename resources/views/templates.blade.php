@@ -1267,6 +1267,10 @@
             <label class="control-label">Naturaleza</label>
             <div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
         </div>
+        <div class="form-group col-md-6">
+            <label class="control-label">Asiento N°</label>
+            <div><%- asiento1_numero %></div>
+        </div>
     </div>
 
     <!-- Orden -->
@@ -1309,7 +1313,7 @@
 
     <!-- Detalle -->
     <% if( !_.isUndefined(asiento1_documentos) && !_.isNull(asiento1_documentos) && asiento1_documentos != '') { %>
-        <% if( asiento1_documentos == 'FACT' && plancuentas_cuenta == '130505') { %>
+        <% if( asiento1_documentos == 'FACT') { %>
             <div class="row">
                 <div class="form-group col-md-12">
                     <label class="control-label">Documento</label>

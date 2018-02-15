@@ -461,7 +461,7 @@
                                 <div class="tab-pane" id="tab_tiemposp">
                                     <div class="box box-whithout-border">
                                         <div class="box-body table-responsive no-padding">
-                                            <table id="browse-orden-tiemposp-list" class="table table-bordered" cellspacing="0">
+                                            <table id="browse-tiemposp-global-list" class="table table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
                                                         <th width="2%">#</th>
@@ -548,6 +548,15 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
+        <% if(edit) { %>
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'tiemposp']) )
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>">
+                        <span><i class="fa fa-pencil-square-o"></i></span>
+                    </a>
+                </td>
+            @endif
+        <% } %>
     </script>
 
     <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">
@@ -578,5 +587,75 @@
 
     <script type="text/template" id="ordenp-despacho-delete-confirm-tpl">
         <p>¿Está seguro que desea eliminar el despacho para <b><%- tcontacto_nombre %></b> con fecha <b><%- despachop1_fecha %></b>?</p>
+    </script>
+
+    <script type="text/template" id="edit-tiempop-ordenp-tpl">
+        <div class="row">
+            <label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
+            <div class="form-group col-md-2">
+                <div class="input-group">
+                    <div class="input-group-addon">
+                        <i class="fa fa-calendar"></i>
+                    </div>
+                    <input type="text" id="tiempop_fecha" name="tiempop_fecha" placeholder="Fecha inicio" value="<%- tiempop_fecha %>" class="form-control input-sm datepicker" required>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
+            <div class="form-group col-md-4">
+                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-actividadp" required>
+                    @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+                        <option value="{{ $key }}" <%- tiempop_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                    @endforeach
+                </select>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label for="tiempop_subactividadp" class="control-label col-md-1">Subactividad</label>
+            <div class="form-group col-md-4">
+                <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear">
+                    <option value="<%- tiempop_subactividadp %>" <%- tiempop_subactividadp == 'tiempop_subactividadp' ? 'selected': ''%>><%- subactividadp_nombre %></option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <label for="tiempop_areap" class="control-label col-md-1">Área</label>
+            <div class="form-group col-md-4">
+                <select name="tiempop_areap" id="tiempop_areap" class="form-control select2-default-clear" required>
+                    @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                        <option value="{{ $key }}" <%- tiempop_areap == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                    @endforeach
+                </select>
+                <div class="help-block with-errors"></div>
+            </div>
+            <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
+            <div class="form-group col-md-2">
+                <div class="bootstrap-timepicker">
+                    <div class="input-group">
+                        <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" class="form-control input-sm timepicker" value="<%- tiempop_hora_inicio %>" required>
+                        <div class="input-group-addon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+            <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
+            <div class="form-group col-md-2">
+                <div class="bootstrap-timepicker">
+                    <div class="input-group">
+                        <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control input-sm timepicker" value="<%- tiempop_hora_fin %>" required>
+                        <div class="input-group-addon">
+                            <i class="fa fa-clock-o"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+        </div>
     </script>
 @stop

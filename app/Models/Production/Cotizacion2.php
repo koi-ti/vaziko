@@ -41,7 +41,7 @@ class Cotizacion2 extends BaseModel
             'cotizacion2_viaticos_round' => 'integer',
             'cotizacion2_precio_venta' => 'required',
             'cotizacion2_ancho' => 'numeric|min:0',
-            'cotizacion2_volumen' => 'min:0|integer',
+            'cotizacion2_volumen' => 'min:0|max:100|integer',
         ];
 
         $validator = Validator::make($data, $rules);

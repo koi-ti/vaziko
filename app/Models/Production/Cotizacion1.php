@@ -57,4 +57,17 @@ class Cotizacion1 extends BaseModel
         $query->where('koi_cotizacion1.id', $id);
         return $query->first();
     }
+
+    public static function getExportCotizacion($codigo)
+    {
+        $query = Cotizacion1::query();
+        $query->select('koi_cotizacion1.*', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio', 'tcontacto_email', 'municipio_nombre', DB::raw("CONCAT(u.tercero_nombre1,' ',u.tercero_apellido1) AS usuario_nombre"));
+        $query->join('koi_tercero as t', 'cotizacion1_cliente', '=', 't.id');
+        $query->join('koi_tercero as u', 'cotizacion1_usuario_elaboro', '=', 'u.id');
+        $query->leftJoin('koi_tercero as ua', 'cotizacion1_usuario_anulo', '=', 'ua.id');
+        $query->leftJoin('koi_municipio', 't.tercero_municipio', '=', 'koi_municipio.id');
+        $query->join('koi_tcontacto', 'cotizacion1_contacto', '=', 'koi_tcontacto.id');
+        $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) = '$codigo'");
+        return $query->first();
+    }
 }

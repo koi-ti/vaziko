@@ -118,6 +118,7 @@ Route::group(['middleware' => 'auth'], function()
 		});
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
+	Route::resource('reglasasientos', 'Accounting\ReglaAsientoController', ['only' => ['index', 'store']]);
 	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
@@ -189,6 +190,11 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
 	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'tiemposp'], function() {
+		Route::resource('detalle', 'Production\DetalleTiempospController', ['only' => ['index', 'update']]);
+	});
+
 	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);

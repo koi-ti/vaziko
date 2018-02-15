@@ -37,8 +37,9 @@ app || (app = {});
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
-            this.tiempopordenList = new app.TiempopOrdenList();
             this.asientoCuentasList = new app.AsientoCuentasList();
+            // Tiempop general
+            this.tiempopList = new app.TiempopList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -92,11 +93,13 @@ app || (app = {});
                }
             });
 
-            // Despachos pendientes list
-            this.tiempopordenListView = new app.TiempopOrdenListView( {
-                collection: this.tiempopordenList,
+            // Tiemposp  list
+            this.tiempopListView = new app.TiempopListView( {
+                collection: this.tiempopList,
                 parameters: {
+                    edit: true,
                     dataFilter: {
+                        type: 'ordenp',
                         orden2_orden: this.model.get('id')
                     }
                }

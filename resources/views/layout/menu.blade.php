@@ -83,14 +83,14 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas','cierresmensuales' ,'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance', 'rlibromayor', 'rlibrodiario', 'rauxcontable']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas','cierresmensuales' ,'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance', 'rlibromayor', 'rlibrodiario', 'rauxcontable','reglasasientos']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales', 'reglasasientos']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -104,6 +104,9 @@
                     <li class="{{ Request::segment(1) == 'cierresmensuales' ? 'active' : '' }}">
                         <a href="{{ route('cierresmensuales.index') }}"><i class="fa fa-window-close-o"></i> Cierre contable mensual</a>
                     </li>
+                    <!-- <li class="{{ Request::segment(1) == 'reglasasientos' ? 'active' : '' }}">
+                        <a href="{{ route('reglasasientos.index') }}"><i class="fa fa-asterisk"></i> Asiento con reglas</a>
+                    </li> -->
                 </ul>
             </li>
 

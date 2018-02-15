@@ -374,9 +374,9 @@ class Cotizacion1Controller extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function exportar($id)
+    public function exportar($codigo)
     {
-        $cotizacion = Cotizacion1::getCotizacion($id);
+        $cotizacion = Cotizacion1::getExportCotizacion($codigo);
         if(!$cotizacion instanceof Cotizacion1){
             abort(404);
         }
@@ -407,7 +407,7 @@ class Cotizacion1Controller extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'data' ,'title'))->render());
-        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'cotización', $cotizacion->id, date('Y_m_d'), date('H_m_s')));
+        return $pdf->stream("cotización_{$cotizacion->cotizacion_codigo}.pdf");
     }
 
     /**

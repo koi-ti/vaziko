@@ -16,13 +16,17 @@ class CreateReglasasientoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->integer('koi_regla_documento');
-            $table->integer('koi_regla_cuenta');
-            // $table->string('koi_regla_matematica', 40);
-
-            $table->foreign('koi_regla_documento')->references('id')->on('koi_documento')->onDelete('restrict');
-            $table->foreign('koi_regla_cuenta')->references('id')->on('koi_plancuentas')->onDelete('restrict');
-
+            
+            $table->string('regla_cuenta',15)->comment('cuenta que se utiliza para el item');
+            $table->string('regla_select',900);
+            $table->string('regla_tabla',900);
+            $table->string('regla_union', 1)->comment('naturaleza del item C o D');
+            $table->string('regla_valor',900)->comment('valor del item');
+            $table->string('regla_base',900)->comment('base para el item');
+            $table->string('regla_condicion',900);
+            $table->string('regla_grupo',900);
+            $table->string('regla_documento',5);
+            $table->boolean('regla_unica')->default(0);
         });
     }
 

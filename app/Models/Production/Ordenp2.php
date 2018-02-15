@@ -41,7 +41,7 @@ class Ordenp2 extends BaseModel
             'orden2_viaticos_round' => 'integer',
             'orden2_precio_venta' => 'required',
             'orden2_ancho' => 'numeric|min:0',
-            'orden2_volumen' => 'min:0|integer',
+            'orden2_volumen' => 'min:0|max:100|integer',
 
         ];
 

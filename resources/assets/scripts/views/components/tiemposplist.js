@@ -1,5 +1,5 @@
 /**
-* Class TiempopOrdenListView  of Backbone Router
+* Class TiempopListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,11 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.TiempopOrdenListView = Backbone.View.extend({
+    app.TiempopListView = Backbone.View.extend({
 
-        el: '#browse-orden-tiemposp-list',
-        events: {
-        },
+        el: '#browse-tiemposp-global-list',
         parameters: {
         	wrapper: null,
             dataFilter: {}
@@ -23,10 +21,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Init Attributes
+            this.confCollection = { reset: true, data: {} };
+            this.$modal = $('#modal-tiempop-edit-component');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -34,25 +35,33 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {orden2_orden: this.parameters.dataFilter.orden2_orden}, reset: true });
+            // if was passed itemrollo code
+            if( !_.isUndefined(this.parameters.dataFilter.type) && !_.isNull(this.parameters.dataFilter.type) ){
+                this.confCollection.data = this.parameters.dataFilter;
+                this.collection.fetch( this.confCollection );
+            }
         },
 
         /*
         * Render View Element
         */
         render: function() {
-
         },
 
         /**
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
-        addOne: function (tiempopModel) {
-            var view = new app.TiempopOrdenItemView({
-                model: tiempopModel
+        addOne: function ( detalletiempopModel ) {
+            var view = new app.TiempopItemView({
+                model: detalletiempopModel,
+                parameters: {
+                    dataFilter: this.parameters.dataFilter,
+                    edit: this.parameters.edit,
+                }
             });
-            tiempopModel.view = view;
+
+            detalletiempopModel.view = view;
             this.$el.prepend( view.render().el );
         },
 

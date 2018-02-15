@@ -54,7 +54,7 @@ class AsientoNif extends Model
                 return false;
             }
             // Validar contra fecha de cierre
-            if (strtotime($fecha_asiento) <= strtotime($empresa->fecha_cierre) ) {
+            if (strtotime($fecha_asienton) <= strtotime($empresa->fecha_cierre) ) {
                 $this->errors = "La fecha que intenta realizar el asiento: $fecha_asienton no esta PERMITIDA. Es menor a la del cierre contable : $empresa->fecha_cierre";
                 return false;
             }

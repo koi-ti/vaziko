@@ -461,6 +461,7 @@ class ModulosTableSeeder extends Seeder
         	'nivel3' => 8
     	]);
 
+        Modulo::create([
         	'name' => 'subtipoproductosp',
         	'display_name' => 'Subtipo de producto',
         	'nivel1' => 5,
