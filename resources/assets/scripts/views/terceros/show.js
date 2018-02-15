@@ -38,6 +38,7 @@ app || (app = {});
             this.contactsListView = new app.ContactsListView( {
                 collection: this.contactsList,
                 parameters: {
+                    edit: false,
                     dataFilter: {
                         tercero_id: this.model.get('id')
                     }

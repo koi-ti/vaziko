@@ -295,7 +295,7 @@
 												<h3 class="box-title">Roles de usuario</h3>
 											</div>
 											<div class="box-body table-responsive no-padding">
-												<table id="browse-roles-list" class="table table-hover table-bordered" cellspacing="0">
+												<table id="browse-roles-list" class="table table-bordered" cellspacing="0">
 													<tbody>
 														{{-- Render content roles --}}
 													</tbody>
@@ -310,7 +310,7 @@
 							<div class="tab-pane" id="tab_contactos">
 								<div class="box box-success">
 									<div class="box-body table-responsive no-padding">
-										<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+										<table id="browse-contact-list" class="table table-bordered" cellspacing="0" width="100%">
 											<thead>
 												<tr>
 													<th>Nombre</th>
@@ -331,7 +331,7 @@
 							<div class="tab-pane" id="tab_proveedor">
 								<div class="box box-success">
 									<div class="box-body table-responsive no-padding">
-										<table id="browse-facturap-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+										<table id="browse-facturap-list" class="table table-bordered" cellspacing="0" width="100%">
 											<thead>
 												<tr>
 													<th>Factura</th>
