@@ -415,7 +415,11 @@
                                 <tr>
                                     <th>Volumen</th>
                                     <td><input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100"></td>
-                                    <th colspan="2"><label class="checkbox-inline"><input type="checkbox" id="cotizacion2_redondear" name="cotizacion2_redondear" value="<%- cotizacion2_redondear %>" <%- parseInt(cotizacion2_redondear) ? 'checked': ''%>> Redondear</label></th>
+                                    <th colspan="2">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="cotizacion2_redondear" name="cotizacion2_redondear" value="<%- cotizacion2_redondear %>" <%- parseInt(cotizacion2_redondear) ? 'checked': ''%>> Redondear
+                                        </label>
+                                    </th>
                                     <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
                                 </tr>
                                 <tr>

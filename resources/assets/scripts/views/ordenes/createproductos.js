@@ -273,15 +273,15 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+                
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.ordenp6 = this.areasProductopList.toJSON();
-                    data.orden2_volumen = this.$('#orden2_volumen').val();
-                    data.orden2_vtotal = this.$('#orden2_vtotal').inputmask('unmaskedvalue');
+                    data.orden2_volumen = this.$inputVolumen.val();
+                    data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
                     data.orden2_redondear = this.$checkRedondear.is(':checked');
-                    
+                    data.ordenp6 = this.areasProductopList.toJSON();
+
                 this.model.save( data, {silent: true} );
             }
         },

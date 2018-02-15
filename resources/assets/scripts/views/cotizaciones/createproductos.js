@@ -271,13 +271,12 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
-                    data.cotizacion2_volumen = this.$('#cotizacion2_volumen').val();
-                    data.cotizacion2_vtotal = this.$('#cotizacion2_vtotal').inputmask('unmaskedvalue');
+                    data.cotizacion2_volumen = this.$inputVolumen.val();
+                    data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
                     data.cotizacion2_redondear = this.$checkRedondear.is(':checked');
+                    data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
             }
@@ -307,7 +306,7 @@ app || (app = {});
         **/
         changeAreap: function(e){
             var _this = this;
-            id = this.$(e.currentTarget).val();
+                id = this.$(e.currentTarget).val();
 
             if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
                 $.ajax({
