@@ -26,7 +26,7 @@ app || (app = {});
 
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
-            this.tiempopordenList = new app.TiempopOrdenList();
+            this.tiempopList = new app.TiempopList();
 
             // Reference views
             this.referenceViews();
@@ -59,11 +59,12 @@ app || (app = {});
                }
             });
 
-            // Despachos pendientes list
-            this.tiempopordenListView = new app.TiempopOrdenListView( {
-                collection: this.tiempopordenList,
+            // TiempopOrdenesp list
+            this.tiempopListView = new app.TiempopListView( {
+                collection: this.tiempopList,
                 parameters: {
                     dataFilter: {
+                        type: 'ordenp',
                         orden2_orden: this.model.get('id')
                     }
                }

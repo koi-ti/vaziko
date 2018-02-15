@@ -242,7 +242,7 @@
                         <div class="tab-pane" id="tab_tiemposp">
                             <div class="box box-whithout-border">
                                 <div class="box-body table-responsive no-padding">
-                                    <table id="browse-orden-tiemposp-list" class="table table-bordered" cellspacing="0">
+                                    <table id="browse-tiemposp-global-list" class="table table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
                                                 <th width="2%">#</th>
