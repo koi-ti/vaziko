@@ -52,7 +52,12 @@ app || (app = {});
         * @param Object contactModel Model instance
         */
         addOne: function (contactModel) {
-            var view = new app.ContactItemView( { model: contactModel } );
+            var view = new app.ContactItemView({
+                model: contactModel,
+                parameters: {
+                    edit: this.parameters.edit,
+                }
+            });
             this.$el.append( view.render().el );
         },
 

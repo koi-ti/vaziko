@@ -462,7 +462,7 @@
 						                    </form>
 						                    <!-- table table-bordered table-striped -->
 						                    <div class="table-responsive no-padding">
-						                        <table id="browse-roles-list" class="table table-hover table-bordered" cellspacing="0">
+						                        <table id="browse-roles-list" class="table table-bordered" cellspacing="0">
 						                            <thead>
 						                                <tr>
 						                                    <th width="5%"></th>
@@ -483,7 +483,7 @@
 						{{-- Tab contactos --}}
 						<div class="tab-pane" id="tab_contactos">
 						    <div class="row">
-								<div class="col-md-offset-4 col-md-4 col-sm-offset-2 col-sm-8 col-xs-12">
+								<div class="col-md-offset-5 col-md-2 col-sm-offset-2 col-sm-8 col-xs-12">
 									<button type="button" class="btn btn-primary btn-block btn-sm btn-add-tcontacto">
 										<i class="fa fa-user-plus"></i>  Nuevo contacto
 									</button>
@@ -493,7 +493,7 @@
 
 							<div class="box box-success">
 								<div class="box-body table-responsive no-padding">
-									<table id="browse-contact-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+									<table id="browse-contact-list" class="table table-bordered" cellspacing="0" width="100%">
 							            <thead>
 								            <tr>
 								                <th>Nombre</th>
@@ -521,11 +521,13 @@
 	<td><%- tcontacto_direccion %></td>
 	<td><%- tcontacto_telefono %></td>
 	<td><%- tcontacto_celular %></td>
-	<td class="text-center">
-		<a class="btn btn-default btn-xs btn-edit-tcontacto" data-resource="<%- id %>">
-			<span><i class="fa fa-pencil-square-o"></i></span>
-		</a>
-	</td>
+    <% if(edit) { %>
+    	<td class="text-center">
+    		<a class="btn btn-default btn-xs btn-edit-tcontacto" data-resource="<%- id %>">
+    			<span><i class="fa fa-pencil-square-o"></i></span>
+    		</a>
+    	</td>
+    <% } %>
 </script>
 
 <script type="text/template" id="roles-item-list-tpl">
@@ -1521,7 +1523,7 @@
             </div>
 
             <div class="box-body table-responsive no-padding">
-                <table id="browse-showinfo-asiento-list" class="table table-hover table-bordered" cellspacing="0">
+                <table id="browse-showinfo-asiento-list" class="table table-bordered" cellspacing="0">
                     <tr>
                         <th class="text-center">Item</th>
                         <th class="text-center"><%- !_.isNull( childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
