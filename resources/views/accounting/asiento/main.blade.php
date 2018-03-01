@@ -81,7 +81,7 @@
 
 							<label for="asiento1_numero" class="col-sm-1 control-label">Número</label>
 							<div class="form-group col-sm-2">
-								<input id="asiento1_numero" name="asiento1_numero" value="<%- asiento1_numero %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
+								<input id="asiento1_numero" name="asiento1_numero" value="<%- parseInt(asiento1_numero) %>" placeholder="Número" class="form-control input-sm input-toupper" type="number" required>
 							</div>
 
 							<% if(asiento1_preguardado) { %>
