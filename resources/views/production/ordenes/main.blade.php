@@ -32,6 +32,7 @@
                             <li><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
+                                <li><a href="#tab_tiempospcharts" data-toggle="tab">Gráficas de producción</a></li>
                             @endif
                             <li class="pull-right">
                                 <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
@@ -481,6 +482,59 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div class="tab-pane" id="tab_tiempospcharts">
+                                    <div class="box box-solid">
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="box box-primary">
+                                                        <div class="box-header with-border">
+                                                            <h3 class="box-title">Cliente</h3>
+                                                            <div class="box-tools pull-right">
+                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-body">
+                                                            <canvas class="chart-line" width="258" height="138"></canvas>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <div class="box box-primary">
+                                                        <div class="box-header with-border">
+                                                            <h3 class="box-title">Áreas</h3>
+                                                            <div class="box-tools pull-right">
+                                                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="box-body">
+                                                            <div class="row">
+                                                                <canvas class="chart-donut" width="258" height="138"></canvas>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="box box-primary">
+                                                        <div class="box-header with-border">
+                                                            <h3 class="box-title">Información adicional</h3>
+                                                        </div>
+                                                        <div class="box-body">
+                                                            <div class="row">
+                                                                <div class="col-md-12">
+                                                                    <p>Tiempo total gastados en la orden: <b class="tiempo-total"></b> minutos</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             @endif
                         <% } %>
                     </div>
@@ -549,7 +603,7 @@
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
         <% if(edit) { %>
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'tiemposp']) )
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                 <td class="text-center">
                     <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>">
                         <span><i class="fa fa-pencil-square-o"></i></span>

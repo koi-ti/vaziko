@@ -51,7 +51,6 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
                 attributes.edit = true;
             this.$el.html( this.template(attributes) );
@@ -63,6 +62,7 @@ app || (app = {});
 
             // Reference views and ready
             this.referenceViews();
+            this.referenceCharts();
             this.ready();
         },
 
@@ -328,6 +328,116 @@ app || (app = {});
             });
 
             cloneConfirm.render();
+        },
+
+        referenceCharts: function (){
+            var _this = this;
+
+            // Ajax charts
+            $.ajax({
+                url: window.Misc.urlFull( Route.route( 'ordenes.tiemposp.charts.index' ) ),
+                type: 'GET',
+                data: {
+                    orden_id: _this.model.id
+                },
+                beforeSend: function() {
+                    window.Misc.setSpinner( _this.spinnerCalendar );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( _this.spinnerCalendar );
+                if(!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if( _.isObject( resp.errors ) ) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+                    if( !resp.success ) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Render calendar
+                    _this.charts( resp );
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( _this.spinnerCalendar );
+                alertify.error(thrownError);
+            });
+
+        },
+
+        charts: function ( datos ){
+            var ctx = this.$('.chart-line').get(0).getContext('2d');
+            var chartbar = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: datos.chartempleado.labels,
+                    datasets: [{
+                        label: '# de minutos gastados',
+                        data: datos.chartempleado.data,
+                        backgroundColor: '#00a65a',
+                        strokeColor: '#00a65a',
+                        pointColor: '#00a65a',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                         xAxes: [{
+                              display: true,
+                              ticks: {
+                                  fontColor: 'black',
+                                  fontStyle: 'bold',
+                                  fontSize: 9
+                              }
+                          }]
+                    }
+                }
+            });
+
+            var gradients = [];
+            var r = 0, g = 100, b = 0, a = 1;
+            for (i = 0; i < 150; i++) {
+                // Verde
+                if (i >= 25 && i < 50) r -= 10.2;
+
+                var x = "rgba(" + Math.floor(r) + "," + Math.floor(g) + "," + Math.floor(b) + "," + a + ")";
+                gradients.push(x);
+                a -= 0.1;
+            }
+
+            var ctx = this.$('.chart-donut').get(0).getContext('2d');
+            var chartpie = new Chart(ctx ,{
+                type: 'doughnut',
+                data: {
+                    labels: datos.chartareap.labels,
+                    datasets: [{
+                        backgroundColor: gradients,
+                        data: datos.chartareap.data
+                    }]
+                },
+                options: {
+                    title: {
+                        display: true,
+                        text: 'A continuación se muestra el tiempo en minutos empleado por área.'
+                    },
+                    responsive: true,
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: 'black',
+                            fontStyle: 'bold',
+                            fontSize: 9
+                        }
+                    }
+                }
+            });
+
+            this.$('.tiempo-total').text(datos.tiempototal);
         },
 
         /**

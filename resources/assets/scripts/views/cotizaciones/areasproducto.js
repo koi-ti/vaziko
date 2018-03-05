@@ -39,21 +39,19 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
-        },
+            // Trigger on
+            this.on('totalize', this.totalize, this);
 
-        /*
-        * Render View Element
-        */
-        render: function() {
+            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
         * Render view contact by model
         * @param Object cotizacion6Model Model instance
         */
-        addOne: function (cotizacion6Model) {
+        addOne: function ( cotizacion6Model ) {
             var view = new app.AreasProductopCotizacionItemView({
+                collection: this.collection,
                 model: cotizacion6Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -61,9 +59,6 @@ app || (app = {});
             });
             cotizacion6Model.view = view;
             this.$el.append( view.render().el );
-
-            // Totaliza
-            this.totalize();
         },
 
         /**
@@ -72,6 +67,9 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
+
+            // Totalize
+            this.totalize();
         },
 
         /**
@@ -110,6 +108,7 @@ app || (app = {});
 
                         // Add model in collection
                         _this.collection.add(model);
+                        _this.totalize();
                     }
                 },
                 error : function(model, error) {
@@ -188,12 +187,13 @@ app || (app = {});
         *Render totales the collection
         */
         totalize: function(){
-            // Llamar funcion de calculateOrdenp2 del modelo Ordnep2
-            this.parameters.model.trigger('calculateCotizacion2');
-
-            // Render table total areas
+            // Totalize collection
             var data = this.collection.totalize();
-            if(this.$total.length){
+
+            // Llamar funcion de calculate del modelo createProducto(cotizacion)
+            this.model.trigger('calculateAll');
+
+            if( this.$total.length ){
                 this.$total.empty().html( window.Misc.currency( data.total ) );
             }
         },

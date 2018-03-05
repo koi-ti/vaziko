@@ -134,9 +134,13 @@ class Cotizacion2Controller extends Controller
                     $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
                     foreach ($areasp as $areap)
                     {
+                        // Recuperar tiempo
+                        $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
+
                         $cotizacion6 = new Cotizacion6;
                         $cotizacion6->fill($areap);
                         (!empty($areap['cotizacion6_areap'])) ? $cotizacion6->cotizacion6_areap = $areap['cotizacion6_areap'] : $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
+                        $cotizacion6->cotizacion6_tiempo = $newtime;
                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                         $cotizacion6->save();
                     }
@@ -326,6 +330,13 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                                     $cotizacion6->cotizacion6_areap = $area->id;
                                     $cotizacion6->save();
+                                }else{
+                                    $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
+                                    if($newtime != $areap['cotizacion6_tiempo']){
+                                        $cotizacion6->fill($areap);
+                                        $cotizacion6->cotizacion6_tiempo = $newtime;
+                                        $cotizacion6->save();
+                                    }
                                 }
                             }else{
                                 $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_nombre', $areap['cotizacion6_nombre'])->first();
@@ -335,6 +346,13 @@ class Cotizacion2Controller extends Controller
                                     $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
                                     $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                                     $cotizacion6->save();
+                                }else{
+                                    $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
+                                    if($newtime != $areap['cotizacion6_tiempo']){
+                                        $cotizacion6->fill($areap);
+                                        $cotizacion6->cotizacion6_tiempo = $newtime;
+                                        $cotizacion6->save();
+                                    }
                                 }
                             }
                         }

@@ -77,7 +77,7 @@ class Cotizacion6Controller extends Controller
                     $tiempo = "{$request->cotizacion6_horas}:{$request->cotizacion6_minutos}";
 
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'cotizacion6_tiempo' => $tiempo]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'cotizacion6_horas' => $request->cotizacion6_horas, 'cotizacion6_minutos' => $request->cotizacion6_minutos]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

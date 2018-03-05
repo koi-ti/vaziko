@@ -225,5 +225,5 @@ return [
 
     'template' => [
         'bg' => 'bg-green'
-    ]
+    ],
 ];

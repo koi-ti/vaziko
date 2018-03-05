@@ -53,6 +53,7 @@ app || (app = {});
             this.tiempopListView = new app.TiempopListView( {
                 collection: this.tiempopList,
                 parameters: {
+                    edit: true,
                     wrapper: this.el,
                     dataFilter: {
                         type: 'tiemposp'

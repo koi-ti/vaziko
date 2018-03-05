@@ -45,24 +45,6 @@ app || (app = {});
             this.runAction();
 		},
 
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if( typeof window.initComponent.initValidator == 'function' )
-                window.initComponent.initValidator();
-
-            if( typeof window.initComponent.initDatePicker == 'function' )
-                window.initComponent.initDatePicker();
-
-            if( typeof window.initComponent.initTimePicker == 'function' )
-                window.initComponent.initTimePicker();
-
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
-        },
-
         runAction: function() {
             var attributes = this.model.toJSON();
 
@@ -143,12 +125,30 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
+                var _this = this;
+                    data = window.Misc.formToJson( e.target );
                     data.type = this.parameters.dataFilter.type;
 
                 this.model.save( data, {patch: true, silent: true} );
             }
-        }
-    });
+        },
 
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
+
+            if( typeof window.initComponent.initDatePicker == 'function' )
+                window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initTimePicker == 'function' )
+                window.initComponent.initTimePicker();
+
+            if( typeof window.initComponent.initSelect2 == 'function' )
+                window.initComponent.initSelect2();
+        },
+    });
 })(jQuery, this, this.document);
