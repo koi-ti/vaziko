@@ -123,7 +123,7 @@ app || (app = {});
                     window.Misc.removeSpinner( _this.spinner );
                     if( _.isObject( resp ) ) {
                         if(!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
-                            _this.$numero.val(resp.documento_consecutivo + 1);
+                            _this.$numero.val(parseInt(resp.documento_consecutivo) + 1);
                             if(resp.documento_tipo_consecutivo == 'M') {
                                 _this.$numero.prop('readonly', false);
                             }else if (resp.documento_tipo_consecutivo == 'A'){
