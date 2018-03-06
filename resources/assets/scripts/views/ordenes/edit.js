@@ -62,7 +62,7 @@ app || (app = {});
 
             // Reference views and ready
             this.referenceViews();
-            // this.referenceCharts();
+            this.referenceCharts();
             this.ready();
         },
 

@@ -505,7 +505,7 @@ class OrdenpController extends Controller
      */
     public function charts(Request $request)
     {
-        Log::info('0');
+        dd($request->all());
         if($request->ajax()){
             Log::info('1');
 
