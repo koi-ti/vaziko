@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, Auth, DB, Log, Datatables;
-
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 
 class OrdenpController extends Controller
 {
@@ -21,7 +19,7 @@ class OrdenpController extends Controller
         $this->middleware('ability:admin,consultar');
         $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'clonar']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'cerrar']]);
-         $this->middleware('ability:admin,opcional1', ['only' => ['abrir']]);
+        $this->middleware('ability:admin,opcional1', ['only' => ['abrir']]);
     }
 
     /**
@@ -500,5 +498,61 @@ class OrdenpController extends Controller
             }
         }
         abort(403);
+    }
+
+    /**
+     * function charts ordenesp
+     */
+    public function charts(Request $request)
+    {
+        if($request->ajax()){
+            $ordenp = Ordenp::find($request->orden_id);
+            if( !$ordenp instanceof Ordenp ){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden']);
+            }
+
+            // Construir object con graficas
+            $object = new \stdClass();
+            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM(TIMESTAMPDIFF(MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_empleado"))
+                ->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id')
+                ->where('tiempop_ordenp', $ordenp->id)
+                ->groupBy('tercero_nombre')
+                ->get();
+
+            dd($empleados);
+
+            // Armar objecto para la grafica
+            $chartempleado = new \stdClass();
+            $chartempleado->labels = [];
+            $chartempleado->data = [];
+            foreach ($empleados as $empleado) {
+                $chartempleado->labels[] = $empleado->tercero_nombre;
+                $chartempleado->data[] = $empleado->tiempo_x_empleado;
+            }
+            $object->chartempleado = $chartempleado;
+
+            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_area"))
+                ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
+                ->where('tiempop_ordenp', $ordenp->id)
+                ->groupBy('areap_nombre')
+                ->get();
+
+            // Armar objecto para la grafica
+            $chartareap = new \stdClass();
+            $chartareap->labels = [];
+            $chartareap->data = [];
+            foreach ($areasp as $areap) {
+                $chartareap->labels[] = $areap->areap_nombre;
+                $chartareap->data[] = $areap->tiempo_x_area;
+            }
+            $object->chartareap = $chartareap;
+
+            $tiempototal = Tiempop::select(DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_total"))->first();
+            $object->tiempototal = $tiempototal->tiempo_total;
+
+            $object->success = true;
+            return response()->json($object);
+        }
+        abort(404);
     }
 }

@@ -166,7 +166,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 
 		Route::group(['prefix' => 'tiemposp'], function(){
-			Route::resource('charts', 'Production\OrdenesChartsTiempospController', ['only' => ['index']]);
+			Route::get('charts', ['as' => 'ordenes.tiemposp.charts', 'uses' => 'Production\OrdenpController@charts']);
 		});
 
 		Route::group(['prefix' => 'productos'], function()
