@@ -505,7 +505,6 @@ class OrdenpController extends Controller
      */
     public function charts(Request $request)
     {
-        dd($request->all());
         if($request->ajax()){
             $ordenp = Ordenp::find($request->orden_id);
             if( !$ordenp instanceof Ordenp ){
@@ -520,7 +519,7 @@ class OrdenpController extends Controller
                 ->groupBy('tercero_nombre')
                 ->get();
 
-            dd($empleados);
+            Log::info($empleados);
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
@@ -537,6 +536,8 @@ class OrdenpController extends Controller
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('areap_nombre')
                 ->get();
+
+            Log::error($areasp);
 
             // Armar objecto para la grafica
             $chartareap = new \stdClass();
