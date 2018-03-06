@@ -474,7 +474,7 @@ class OrdenpController extends Controller
 
             // Construir object con graficas
             $object = new \stdClass();
-            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)) ) as tiempo_x_empleado"))
+            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_empleado"))
                 ->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id')
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('tercero_nombre')
@@ -491,7 +491,7 @@ class OrdenpController extends Controller
             }
             $object->chartempleado = $chartempleado;
 
-            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_area"))
+            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_area"))
                 ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('areap_nombre')
@@ -502,13 +502,15 @@ class OrdenpController extends Controller
             $chartareap->labels = [];
             $chartareap->data = [];
             foreach ($areasp as $areap) {
+                $minutes = ($areap->tiempo_x_area / 60);
                 $chartareap->labels[] = $areap->areap_nombre;
-                $chartareap->data[] = $areap->tiempo_x_area;
+                $chartareap->data[] = $minutes;
             }
             $object->chartareap = $chartareap;
 
-            $tiempototal = Tiempop::select(DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_total"))->first();
-            $object->tiempototal = $tiempototal->tiempo_total;
+            $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->first();
+            $minutes = ($tiempototal->tiempo_total / 60);
+            $object->tiempototal = $minutes;
 
             $object->success = true;
             return response()->json($object);
