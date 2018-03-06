@@ -337,8 +337,9 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull( Route.route( 'ordenes.charts', {ordenes: _this.model.get('id')})),
+                url: window.Misc.urlFull( Route.route('ordenes.charts')),
                 type: 'GET',
+                data: { orden_id: _this.model.get('id') },
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -355,6 +356,7 @@ app || (app = {});
                         alertify.error(text);
                         return;
                     }
+
 
                     // Render calendar
                     // _this.charts( resp );
