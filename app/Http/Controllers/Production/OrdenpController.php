@@ -480,6 +480,8 @@ class OrdenpController extends Controller
                 ->groupBy('tercero_nombre')
                 ->get();
 
+            dd($empleados);
+
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
             $chartempleado->labels = [];
