@@ -26,11 +26,12 @@ class OrdenesChartsTiempospController extends Controller
 
             // Construir object con graficas
             $object = new \stdClass();
-            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_empleado"))
-                ->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id')
-                ->where('tiempop_ordenp', $ordenp->id)
-                ->groupBy('tercero_nombre')
-                ->get();
+            $query = Tiempop::query();
+            $query->select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM(TIMESTAMPDIFF(MINUTE,tiempop_hora_inicio,tiempop_hora_fin)) as tiempo_x_empleado"));
+            $query->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id');
+            $query->where('tiempop_ordenp', $ordenp->id);
+            $query->groupBy('tercero_nombre');
+            $empleados = $query->get();
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
@@ -47,7 +48,6 @@ class OrdenesChartsTiempospController extends Controller
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('areap_nombre')
                 ->get();
-
 
             // Armar objecto para la grafica
             $chartareap = new \stdClass();
