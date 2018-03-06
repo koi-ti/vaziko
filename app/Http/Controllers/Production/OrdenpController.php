@@ -508,7 +508,7 @@ class OrdenpController extends Controller
             }
             $object->chartareap = $chartareap;
 
-            $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->first();
+            $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->where('tiempop_ordenp', $ordenp->id)->first();
             $minutes = ($tiempototal->tiempo_total / 60);
             $object->tiempototal = $minutes;
 
