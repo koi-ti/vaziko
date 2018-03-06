@@ -505,6 +505,7 @@ class OrdenpController extends Controller
      */
     public function charts(Request $request)
     {
+        dd($request->all());
         if($request->ajax()){
             $ordenp = Ordenp::find($request->orden_id);
             if( !$ordenp instanceof Ordenp ){
