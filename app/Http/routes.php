@@ -164,7 +164,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
-		Route::get('charts', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
+		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
 
 		Route::group(['prefix' => 'productos'], function()
 		{

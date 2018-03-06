@@ -337,15 +337,14 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull( Route.route('ordenes.charts')),
+                url: window.Misc.urlFull( Route.route('ordenes.charts', { ordenes: _this.model.get('id') }) ),
                 type: 'GET',
-                data: { orden_id: _this.model.get('id') },
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner( _this.spinner );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 if(!_.isUndefined(resp.success)) {
                     // response success or error
                     var text = resp.success ? '' : resp.errors;
@@ -357,13 +356,12 @@ app || (app = {});
                         return;
                     }
 
-
                     // Render calendar
-                    // _this.charts( resp );
+                    _this.charts( resp );
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 alertify.error(thrownError);
             });
 

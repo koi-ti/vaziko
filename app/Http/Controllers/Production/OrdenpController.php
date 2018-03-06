@@ -464,10 +464,10 @@ class OrdenpController extends Controller
     /**
      * function charts ordenesp
      */
-    public function charts(Request $request)
+    public function charts(Request $request, $id)
     {
         if($request->ajax()){
-            $ordenp = Ordenp::find($request->orden_id);
+            $ordenp = Ordenp::find( $id );
             if( !$ordenp instanceof Ordenp ){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden']);
             }
@@ -480,38 +480,34 @@ class OrdenpController extends Controller
                 ->groupBy('tercero_nombre')
                 ->get();
 
-            Log::info($empleados);
+            // Armar objecto para la grafica
+            $chartempleado = new \stdClass();
+            $chartempleado->labels = [];
+            $chartempleado->data = [];
+            foreach ($empleados as $empleado) {
+                $chartempleado->labels[] = $empleado->tercero_nombre;
+                $chartempleado->data[] = $empleado->tiempo_x_empleado;
+            }
+            $object->chartempleado = $chartempleado;
+
+            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_area"))
+                ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
+                ->where('tiempop_ordenp', $ordenp->id)
+                ->groupBy('areap_nombre')
+                ->get();
 
             // Armar objecto para la grafica
-            // $chartempleado = new \stdClass();
-            // $chartempleado->labels = [];
-            // $chartempleado->data = [];
-            // foreach ($empleados as $empleado) {
-            //     $chartempleado->labels[] = $empleado->tercero_nombre;
-            //     $chartempleado->data[] = $empleado->tiempo_x_empleado;
-            // }
-            // $object->chartempleado = $chartempleado;
-            //
-            // $areasp = Tiempop::select('areap_nombre', DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_area"))
-            //     ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
-            //     ->where('tiempop_ordenp', $ordenp->id)
-            //     ->groupBy('areap_nombre')
-            //     ->get();
-            //
-            // Log::error($areasp);
-            //
-            // // Armar objecto para la grafica
-            // $chartareap = new \stdClass();
-            // $chartareap->labels = [];
-            // $chartareap->data = [];
-            // foreach ($areasp as $areap) {
-            //     $chartareap->labels[] = $areap->areap_nombre;
-            //     $chartareap->data[] = $areap->tiempo_x_area;
-            // }
-            // $object->chartareap = $chartareap;
-            //
-            // $tiempototal = Tiempop::select(DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_total"))->first();
-            // $object->tiempototal = $tiempototal->tiempo_total;
+            $chartareap = new \stdClass();
+            $chartareap->labels = [];
+            $chartareap->data = [];
+            foreach ($areasp as $areap) {
+                $chartareap->labels[] = $areap->areap_nombre;
+                $chartareap->data[] = $areap->tiempo_x_area;
+            }
+            $object->chartareap = $chartareap;
+
+            $tiempototal = Tiempop::select(DB::raw("SUM( TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_total"))->first();
+            $object->tiempototal = $tiempototal->tiempo_total;
 
             $object->success = true;
             return response()->json($object);
