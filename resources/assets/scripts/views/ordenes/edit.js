@@ -333,6 +333,7 @@ app || (app = {});
         referenceCharts: function (){
             var _this = this;
 
+            console.log(window.Misc.urlFull(Route.route('ordenes.charts')));
             // Ajax charts
             $.ajax({
                 url: window.Misc.urlFull(Route.route('ordenes.charts')),
@@ -345,23 +346,23 @@ app || (app = {});
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
-                if(!_.isUndefined(resp.success)) {
-                    // response success or error
-                    var text = resp.success ? '' : resp.errors;
-                    if( _.isObject( resp.errors ) ) {
-                        text = window.Misc.parseErrors(resp.errors);
-                    }
-                    if( !resp.success ) {
-                        alertify.error(text);
-                        return;
-                    }
-
-                    console.log(resp);
-
-                    // Render calendar
-                    // _this.charts( resp );
-                }
+                console.log(resp);
+                // window.Misc.removeSpinner( _this.el );
+                // if(!_.isUndefined(resp.success)) {
+                //     // response success or error
+                //     var text = resp.success ? '' : resp.errors;
+                //     if( _.isObject( resp.errors ) ) {
+                //         text = window.Misc.parseErrors(resp.errors);
+                //     }
+                //     if( !resp.success ) {
+                //         alertify.error(text);
+                //         return;
+                //     }
+                //
+                //
+                //     // Render calendar
+                //     // _this.charts( resp );
+                // }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 window.Misc.removeSpinner( _this.el );
