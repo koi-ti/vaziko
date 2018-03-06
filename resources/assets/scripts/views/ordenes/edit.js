@@ -41,6 +41,8 @@ app || (app = {});
             // Tiempop general
             this.tiempopList = new app.TiempopList();
 
+            console.log('hola');
+
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -333,41 +335,35 @@ app || (app = {});
         referenceCharts: function (){
             var _this = this;
 
-            console.log(window.Misc.urlFull(Route.route('ordenes.charts')));
-            // // Ajax charts
-            // $.ajax({
-            //     url: window.Misc.urlFull(Route.route('ordenes.charts')),
-            //     type: 'GET',
-            //     data: {
-            //         orden_id: _this.model.id
-            //     },
-            //     beforeSend: function() {
-            //         window.Misc.setSpinner( _this.el );
-            //     }
-            // })
-            // .done(function(resp) {
-            //     console.log(resp);
-            //     // window.Misc.removeSpinner( _this.el );
-            //     // if(!_.isUndefined(resp.success)) {
-            //     //     // response success or error
-            //     //     var text = resp.success ? '' : resp.errors;
-            //     //     if( _.isObject( resp.errors ) ) {
-            //     //         text = window.Misc.parseErrors(resp.errors);
-            //     //     }
-            //     //     if( !resp.success ) {
-            //     //         alertify.error(text);
-            //     //         return;
-            //     //     }
-            //     //
-            //     //
-            //     //     // Render calendar
-            //     //     // _this.charts( resp );
-            //     // }
-            // })
-            // .fail(function(jqXHR, ajaxOptions, thrownError) {
-            //     window.Misc.removeSpinner( _this.el );
-            //     alertify.error(thrownError);
-            // });
+            // Ajax charts
+            $.ajax({
+                url: window.Misc.urlFull( Route.route( 'ordenes.charts', {ordenes: _this.model.get('id')})),
+                type: 'GET',
+                beforeSend: function() {
+                    window.Misc.setSpinner( _this.el );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( _this.el );
+                if(!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if( _.isObject( resp.errors ) ) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+                    if( !resp.success ) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Render calendar
+                    // _this.charts( resp );
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( _this.el );
+                alertify.error(thrownError);
+            });
 
         },
 
