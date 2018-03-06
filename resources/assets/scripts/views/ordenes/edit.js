@@ -341,11 +341,11 @@ app || (app = {});
                     orden_id: _this.model.id
                 },
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.spinnerCalendar );
+                    window.Misc.setSpinner( _this.el );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.spinnerCalendar );
+                window.Misc.removeSpinner( _this.el );
                 if(!_.isUndefined(resp.success)) {
                     // response success or error
                     var text = resp.success ? '' : resp.errors;
@@ -357,12 +357,14 @@ app || (app = {});
                         return;
                     }
 
+                    console.log(resp);
+
                     // Render calendar
-                    _this.charts( resp );
+                    // _this.charts( resp );
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.spinnerCalendar );
+                window.Misc.removeSpinner( _this.el );
                 alertify.error(thrownError);
             });
 
