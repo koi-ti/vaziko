@@ -335,7 +335,7 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull(Route.route('ordenes.tiemposp.charts')),
+                url: window.Misc.urlFull(Route.route('ordenes.charts')),
                 type: 'GET',
                 data: {
                     orden_id: _this.model.id
