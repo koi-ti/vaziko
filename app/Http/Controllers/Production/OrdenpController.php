@@ -474,21 +474,20 @@ class OrdenpController extends Controller
 
             // Construir object con graficas
             $object = new \stdClass();
-            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM(TIMESTAMPDIFF(HOUR, tiempop_hora_inicio, tiempop_hora_fin) ) as tiempo_x_empleado"), 'tiempop_hora_inicio', 'tiempop_hora_fin')
+            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)) ) as tiempo_x_empleado"))
                 ->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id')
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('tercero_nombre')
                 ->get();
-
-            dd($empleados);
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
             $chartempleado->labels = [];
             $chartempleado->data = [];
             foreach ($empleados as $empleado) {
+                $minutes = ($empleado->tiempo_x_empleado / 60);
                 $chartempleado->labels[] = $empleado->tercero_nombre;
-                $chartempleado->data[] = $empleado->tiempo_x_empleado;
+                $chartempleado->data[] = $minutes;
             }
             $object->chartempleado = $chartempleado;
 
