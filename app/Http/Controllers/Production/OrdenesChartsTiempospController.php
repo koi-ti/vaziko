@@ -43,7 +43,7 @@ class OrdenesChartsTiempospController extends Controller
             }
             $object->chartempleado = $chartempleado;
 
-            $areasp = Tiempop::select('areap_nombre', DB::raw("TIMESTAMPDIFF (MINUTE, tiempop_hora_inicio, tiempop_hora_fin) as tiempo_x_area"))
+            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM( tiempop_hora_inicio - tiempop_hora_fin) as tiempo_x_area"))
                 ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
                 ->where('tiempop_ordenp', $ordenp->id)
                 ->groupBy('areap_nombre')
