@@ -60,6 +60,7 @@
                         <div class="form-group col-md-4">
                             <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required>
                             </select>
+                            <div class="help-block with-errors"></div>
                         </div>
                     </div>
 
