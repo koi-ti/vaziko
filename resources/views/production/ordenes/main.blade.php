@@ -74,9 +74,15 @@
                                                     <%- orden_codigo %>
                                                 </div>
                                             <% } %>
+                                            <% if( typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
+                                                <label class="col-sm-1 control-label">Cotización</label>
+                                                <div class="form-group col-md-1">
+                                                    <%- cotizacion_codigo %>
+                                                </div>
+                                            <% } %>
 
                                             <label for="orden_referencia" class="col-sm-1 control-label">Referencia</label>
-                                            <div class="form-group col-md-8">
+                                            <div class="form-group col-md-7">
                                                 <input id="orden_referencia" value="<%- orden_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden_referencia" type="text" maxlength="200" required>
                                             </div>
                                         </div>

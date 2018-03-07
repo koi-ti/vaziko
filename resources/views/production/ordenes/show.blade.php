@@ -71,7 +71,15 @@
                                             @endif
                                         </div>
 									</div>
-									<div class="form-group col-md-9">
+                                    @if( $orden->cotizacion_codigo )
+    									<div class="form-group col-md-2">
+    										<label class="control-label">Cotización</label>
+    										<div>
+                                                {{ $orden->cotizacion_codigo }}
+                                            </div>
+    									</div>
+                                    @endif
+									<div class="form-group col-md-7">
 										<label class="control-label">Referencia</label>
 										<div>{{ $orden->orden_referencia }}</div>
 									</div>
