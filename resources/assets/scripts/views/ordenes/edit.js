@@ -41,8 +41,6 @@ app || (app = {});
             // Tiempop general
             this.tiempopList = new app.TiempopList();
 
-            console.log('hola');
-
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -369,30 +367,55 @@ app || (app = {});
 
         charts: function ( datos ){
             var ctx = this.$('.chart-line').get(0).getContext('2d');
+
+            var green_black_gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                green_black_gradient.addColorStop(0, 'green');
+                green_black_gradient.addColorStop(1, 'black');
+
             var chartbar = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: datos.chartempleado.labels,
                     datasets: [{
-                        label: '# de minutos gastados',
+                        label: 'minutos gastados',
                         data: datos.chartempleado.data,
-                        backgroundColor: '#00a65a',
-                        strokeColor: '#00a65a',
-                        pointColor: '#00a65a',
-                        borderWidth: 1
+                        backgroundColor: green_black_gradient,
+                        hoverBackgroundColor: green_black_gradient,
+                        strokeColor: 'yellow',
+                        hoverBorderWidth: 2,
+						hoverBorderColor: 'white'
                     }]
                 },
                 options: {
                     responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Tiempo gastado por empleado.'
+                    },
+                    legend: { display: false },
                     scales: {
-                         xAxes: [{
-                              display: true,
-                              ticks: {
-                                  fontColor: 'black',
-                                  fontStyle: 'bold',
-                                  fontSize: 9
-                              }
-                          }]
+                        xAxes: [{
+                            type: 'category',
+                            labels: datos.chartempleado.labels,
+                            stacked: true,
+                            barPercentage: 1.,
+                            categoryPercentage: .5,
+                            ticks: {
+                                fontColor: 'black',
+                                fontStyle: 'bold',
+                                fontSize: 9
+                            },
+                            gridLines: {
+                                offsetGridLines: true
+                            }
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                fontColor: 'black',
+                                fontStyle: 'bold',
+                                fontSize: 9
+                            },
+                        }]
                     }
                 }
             });
@@ -400,12 +423,12 @@ app || (app = {});
             var gradients = [];
             var r = 0, g = 100, b = 0, a = 1;
             for (i = 0; i < 150; i++) {
-                // Verde
-                if (i >= 25 && i < 50) r -= 10.2;
+               // Verde
+               if (i >= 25 && i < 50) r -= 10.2;
 
-                var x = "rgba(" + Math.floor(r) + "," + Math.floor(g) + "," + Math.floor(b) + "," + a + ")";
-                gradients.push(x);
-                a -= 0.1;
+               var x = "rgba(" + Math.floor(r) + "," + Math.floor(g) + "," + Math.floor(b) + "," + a + ")";
+               gradients.push(x);
+               a -= 0.1;
             }
 
             var ctx = this.$('.chart-donut').get(0).getContext('2d');
@@ -419,11 +442,11 @@ app || (app = {});
                     }]
                 },
                 options: {
+                    responsive: true,
                     title: {
                         display: true,
-                        text: 'A continuación se muestra el tiempo en minutos empleado por área.'
+                        text: 'Tiempo gastado por área.'
                     },
-                    responsive: true,
                     legend: {
                         display: true,
                         position: 'right',
