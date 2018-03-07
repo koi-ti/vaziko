@@ -367,7 +367,6 @@ app || (app = {});
 
         charts: function ( datos ){
             var ctx = this.$('.chart-line').get(0).getContext('2d');
-
             var green_black_gradient = ctx.createLinearGradient(0, 0, 0, 300);
                 green_black_gradient.addColorStop(0, 'green');
                 green_black_gradient.addColorStop(1, 'black');
@@ -420,24 +419,13 @@ app || (app = {});
                 }
             });
 
-            var gradients = [];
-            var r = 0, g = 100, b = 0, a = 1;
-            for (i = 0; i < 150; i++) {
-               // Verde
-               if (i >= 25 && i < 50) r -= 10.2;
-
-               var x = "rgba(" + Math.floor(r) + "," + Math.floor(g) + "," + Math.floor(b) + "," + a + ")";
-               gradients.push(x);
-               a -= 0.1;
-            }
-
             var ctx = this.$('.chart-donut').get(0).getContext('2d');
             var chartpie = new Chart(ctx ,{
                 type: 'doughnut',
                 data: {
                     labels: datos.chartareap.labels,
                     datasets: [{
-                        backgroundColor: gradients,
+                        backgroundColor: window.Misc.getColorsRGB(),
                         data: datos.chartareap.data
                     }]
                 },
