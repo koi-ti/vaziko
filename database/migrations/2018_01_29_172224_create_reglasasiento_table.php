@@ -16,13 +16,11 @@ class CreateReglasasientoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            
             $table->string('regla_cuenta',15)->comment('cuenta que se utiliza para el item');
             $table->string('regla_select',900);
             $table->string('regla_tabla',900);
-            $table->string('regla_union', 1)->comment('naturaleza del item C o D');
-            $table->string('regla_valor',900)->comment('valor del item');
-            $table->string('regla_base',900)->comment('base para el item');
+            $table->string('regla_naturaleza', 1)->comment('naturaleza del item C o D');
+            $table->string('regla_union', 900);
             $table->string('regla_condicion',900);
             $table->string('regla_grupo',900);
             $table->string('regla_documento',5);

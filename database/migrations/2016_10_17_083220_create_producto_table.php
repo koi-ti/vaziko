@@ -23,6 +23,7 @@ class CreateProductoTable extends Migration
             $table->integer('producto_grupo')->unsigned();
             $table->integer('producto_subgrupo')->unsigned();
             $table->integer('producto_unidadmedida')->unsigned()->nullable();
+            $table->integer('producto_materialp')->unsigned()->nullable();
             $table->double('producto_precio')->default(0);
             $table->double('producto_costo')->default(0);
             $table->integer('producto_vidautil')->nullable();
@@ -34,6 +35,7 @@ class CreateProductoTable extends Migration
             $table->foreign('producto_subgrupo')->references('id')->on('koi_subgrupo')->onDelete('restrict');
             $table->foreign('producto_unidadmedida')->references('id')->on('koi_unidadmedida')->onDelete('restrict');
             $table->foreign('producto_referencia')->references('id')->on('koi_producto')->onDelete('restrict');
+            $table->foreign('producto_materialp')->references('id')->on('koi_materialp')->onDelete('restrict');
         });
     }
 
