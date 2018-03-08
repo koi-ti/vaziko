@@ -104,9 +104,6 @@
                     <li class="{{ Request::segment(1) == 'cierresmensuales' ? 'active' : '' }}">
                         <a href="{{ route('cierresmensuales.index') }}"><i class="fa fa-window-close-o"></i> Cierre contable mensual</a>
                     </li>
-                    <!-- <li class="{{ Request::segment(1) == 'reglasasientos' ? 'active' : '' }}">
-                        <a href="{{ route('reglasasientos.index') }}"><i class="fa fa-asterisk"></i> Asiento con reglas</a>
-                    </li> -->
                 </ul>
             </li>
 
