@@ -38,11 +38,7 @@ app || (app = {});
             this.$searchcotizacionCotizacion = this.$('#searchcotizacion_cotizacion_numero');
             this.$searchcotizacionTercero = this.$('#searchcotizacion_tercero');
             this.$searchcotizacionTerceroNombre = this.$('#searchcotizacion_tercero_nombre');
-
             this.$cotizacionSearchTable = this.$modalComponent.find('#koi-search-cotizacion-component-table');
-
-            /* Render in <a> dashboard */
-            this.$fieldRender = this.$($(e.currentTarget)).attr("data-render");
 
 			this.cotizacionSearchTable = this.$cotizacionSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -68,18 +64,6 @@ app || (app = {});
                 	[ 1, 'desc' ], [ 2, 'desc' ]
                 ],
                 columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        searchable: false,
-                        render: function ( data, type, full, row ) {
-                            // Render show tercero in dashboard
-                            if (_this.$fieldRender == "show")
-                            {
-                                return '<a href='+ window.Misc.urlFull( Route.route('cotizaciones.show', { cotizaciones: full.id}))+'>' + data + '</a>';
-                            }
-                        }
-                    },
                     {
                         targets: [1, 2],
                         visible: false

@@ -1027,6 +1027,14 @@
 				<i class="fa fa-plus"></i>
 			</button>
 		</div>
+        <div class="form-group col-md-4 col-xs-10">
+            <label for="producto_materialp" class="control-label">Material de producción</label>
+            <select name="producto_materialp" id="producto_materialp" class="form-control select2-default-clear">
+                @foreach( App\Models\Production\Materialp::getMateriales() as $key => $value)
+                    <option value="{{ $key }}" <%- producto_materialp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
 	</div>
 
 	<div class="row">

@@ -20,6 +20,7 @@ app || (app = {});
             'producto_codigo': '',
             'producto_codigoori': '',
             'producto_referencia': '',
+            'producto_materialp': '',
             'producto_grupo': '',
             'producto_subgrupo': '',
             'producto_unidadmedida': '',

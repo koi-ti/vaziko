@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use DB, Log, Datatables;
-
-use App\Models\Inventory\Producto;
 
 class ProductoController extends Controller
 {
@@ -73,6 +71,16 @@ class ProductoController extends Controller
             if ($producto->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // recuperar Materialp
+                    if( $request->has('producto_materialp') ){
+                        $materialp = Materialp::find($request->producto_materialp);
+                        if(!$materialp instanceof Materialp){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+                        $producto->producto_materialp = $materialp->id;
+                    }
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
@@ -146,6 +154,18 @@ class ProductoController extends Controller
 
                 DB::beginTransaction();
                 try {
+                    // recuperar Materialp
+                    if( $request->has('producto_materialp') ){
+                        $materialp = Materialp::find($request->producto_materialp);
+                        if(!$materialp instanceof Materialp){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+                        $producto->producto_materialp = $materialp->id;
+                    }else{
+                        $producto->producto_materialp = null;
+                    }
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);

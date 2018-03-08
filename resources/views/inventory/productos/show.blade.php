@@ -61,6 +61,12 @@
                     <label class="control-label">Subgrupo</label>
                     <div>{{ $producto->subgrupo_nombre }}</div>
                 </div>
+                @if( $producto->materialp_nombre )
+                    <div class="form-group col-md-3">
+                        <label class="control-label">Material de producción</label>
+                        <div>{{ $producto->materialp_nombre }}</div>
+                    </div>
+                @endif
             </div>
 
             <div class="row">

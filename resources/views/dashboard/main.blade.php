@@ -17,17 +17,17 @@
 			<div class="box-body">
 				<div class="row">
 					<div class="col-md-1">
-						<a class="btn btn-app btn-koi-search-tercero-component-table" data-render="show" title="Ver terceros">
+						<a class="btn btn-app" href="{{ route('terceros.index') }}" title="Ver terceros">
 							<i class="fa fa-users"></i> Terceros
 						</a>
 					</div>
 					<div class="col-md-1">
-						<a class="btn btn-app btn-koi-search-producto-component" data-render="show" title="Ver productos">
+						<a class="btn btn-app" href="{{ route('productos.index') }}" title="Ver productos">
 							<i class="fa fa-wrench"></i> Insumos
 						</a>
 					</div>
 					<div class="col-md-1">
-						<a class="btn btn-app btn-koi-search-orden-component-table" data-render="show" title="Ver ordenes">
+						<a class="btn btn-app" href="{{ route('ordenes.index') }}" title="Ver ordenes">
 							<i class="fa fa-building-o"></i> Ordenes
 						</a>
 					</div>
@@ -35,7 +35,7 @@
 
 				<div class="row">
 					<div class="col-md-1">
-						<a class="btn btn-app btn-koi-search-cotizacion-component-table" data-render="show" title="Ver cotizacioness">
+						<a class="btn btn-app" href="{{ route('cotizaciones.index') }}" title="Ver cotizacioness">
 							<i class="fa fa-puzzle-piece"></i> Cotizaciones
 						</a>
 					</div>
