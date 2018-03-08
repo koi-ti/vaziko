@@ -163,15 +163,13 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
-		Route::resource('tiemposp', 'Production\DetalleTiempospController', ['only' => ['index']]);
-
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
+		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
 
 		Route::group(['prefix' => 'productos'], function()
 		{
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
 			Route::get('search', ['as' => 'ordenes.productos.search', 'uses' => 'Production\DetalleOrdenpController@search']);
-
 			Route::resource('maquinas', 'Production\DetalleMaquinasController', ['only' => ['index']]);
 			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);

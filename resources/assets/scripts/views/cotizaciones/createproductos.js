@@ -17,13 +17,13 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
+            'ifChanged #cotizacion2_redondear': 'redondearComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
-            'submit #form-cotizacion-producto': 'onStore',
+            'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
             'change #cotizacion6_areap': 'changeAreap',
+            'submit #form-cotizacion-producto': 'onStore',
             'submit #form-cotizacion6-producto': 'onStoreCotizacion6',
-            'change .event-price': 'calculateCotizacion2',
-            'ifChanged #cotizacion2_redondear': 'redondearComision'
         },
         parameters: {
             data: {
@@ -50,7 +50,7 @@ app || (app = {});
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
-            this.listenTo( this.model, 'calculateCotizacion2', this.calculateCotizacion2 );
+            this.listenTo( this.model, 'calculateAll', this.calculateAll );
         },
 
         /*
@@ -119,7 +119,7 @@ app || (app = {});
             this.$infoareas = this.$('#info-areas');
 
             // Reference views
-            this.calculateCotizacion2();
+            this.calculateAll();
             this.referenceViews();
             this.ready();
         },
@@ -163,9 +163,9 @@ app || (app = {});
             // Areasp list
             this.areasProductopCotizacionListView = new app.AreasProductopCotizacionListView( {
                 collection: this.areasProductopCotizacionList,
+                model: this.model,
                 parameters: {
                     dataFilter: dataFilter,
-                    model: this.model,
                     edit: true,
                }
             });
@@ -337,7 +337,7 @@ app || (app = {});
         /**
         * Evento para calcular cotizacion
         **/
-        calculateCotizacion2: function() {
+        calculateAll: function() {
             var cantidad = transporte = viaticos = areas = precio = volumen = total = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
@@ -355,22 +355,25 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotalcotizacion2 = precio + tranporte + viaticos + areas;
-            vcomision = ( subtotalcotizacion2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            subtotal = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
 
             if( this.$checkRedondear.is(':checked') ) {
-                total = Math.round( subtotalcotizacion2 + vcomision );
+                total = Math.round( subtotal + vcomision );
             }else{
-                total = subtotalcotizacion2 + vcomision;
+                total = subtotal + vcomision;
             }
 
-            this.$subtotal.val( subtotalcotizacion2 );
+            this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
         },
 
+        /**
+        *   Event render input value
+        **/
         redondearComision: function(e) {
-            this.calculateCotizacion2();
+            this.calculateAll();
         },
 
         /**

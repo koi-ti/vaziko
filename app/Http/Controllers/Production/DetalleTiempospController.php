@@ -140,6 +140,7 @@ class DetalleTiempospController extends Controller
                     if ( $tiempop->isValid($data) ) {
                        DB::beginTransaction();
                        try{
+                           $subactividadp = null;
                            // Recuperar Actividadp
                            $actividadp = Actividadp::find($request->tiempop_actividadp);
                            if(!$actividadp instanceof Actividadp){
@@ -149,7 +150,6 @@ class DetalleTiempospController extends Controller
 
                            // Recuperar SubActividadp
                            if( !empty($request->tiempop_subactividadp) ){
-
                                $subactividadp = SubActividadp::find( $request->tiempop_subactividadp );
                                if(!$subactividadp instanceof SubActividadp){
                                    DB::rollback();
@@ -162,6 +162,7 @@ class DetalleTiempospController extends Controller
                                }
 
                                $tiempop->tiempop_subactividadp = $subactividadp->id;
+                               $subactividadp = $subactividadp->subactividadp_nombre;
                            }else{
                                $tiempop->tiempop_subactividadp = null;
                            }
@@ -181,7 +182,7 @@ class DetalleTiempospController extends Controller
 
                            // Commit Transaction
                            DB::commit();
-                           return response()->json(['success' => true, 'msg' => 'El tiempo se edito con exito.']);
+                           return response()->json(['success' => true, 'actividadp_nombre' => $actividadp->actividadp_nombre, 'subactividadp_nombre' => $subactividadp, 'areap_nombre' => $areap->areap_nombre, 'msg' => 'El tiempo se edito con exito.']);
                        }catch(\Exception $e){
                            DB::rollback();
                            Log::error($e->getMessage());

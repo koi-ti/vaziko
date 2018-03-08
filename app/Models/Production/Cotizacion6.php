@@ -48,7 +48,7 @@ class Cotizacion6 extends Model
     public static function getCotizaciones6($cotizacion2 = null)
     {
         $query = Cotizacion6::query();
-        $query->select('koi_cotizacion6.*', 'areap_nombre');
+        $query->select('koi_cotizacion6.*', DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) as cotizacion6_horas, SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1) as cotizacion6_minutos"), 'areap_nombre');
         $query->leftJoin('koi_areap', 'cotizacion6_areap', '=', 'koi_areap.id');
         $query->where('cotizacion6_cotizacion2', $cotizacion2);
         $query->orderBy('areap_nombre', 'asc');

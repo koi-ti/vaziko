@@ -33,13 +33,15 @@ app || (app = {});
             this.$modal = $('#modal-tiempop-edit-component');
             if( this.parameters.dataFilter.type == 'tiemposp' ){
                 this.template = this.templateTiempop;
+
             }else if( this.parameters.dataFilter.type == 'ordenp' ){
                 this.template = this.templateTiempopOrdenp;
+
             }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'sync', this.responseServer );
         },
 
         /**
@@ -76,25 +78,8 @@ app || (app = {});
             return this;
         },
 
-
-        /**
-        * response of the server
-        */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.$el );
-
+        responseServer: function( model, resp, opts ) {
             if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
                 // Open tiempopActionView
                 if ( this.tiempopActionView instanceof Backbone.View ){
                     this.tiempopActionView.stopListening();
@@ -102,13 +87,7 @@ app || (app = {});
                 }
 
                 this.$modal.modal('hide');
-                if( this.parameters.dataFilter.type == 'tiemposp' ){
-                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull( Route.route('tiemposp.index') ));
-                }else if( this.parameters.dataFilter.type == 'ordenp' ){
-                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull( Route.route('ordenes.edit', { ordenes: this.parameters.dataFilter.orden2_orden}), { trigger:true } ));
-                }else{
-                    return;
-                }
+                this.collection.trigger('reset');
             }
         }
     });

@@ -51,7 +51,6 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
                 attributes.edit = true;
             this.$el.html( this.template(attributes) );
@@ -63,6 +62,7 @@ app || (app = {});
 
             // Reference views and ready
             this.referenceViews();
+            this.referenceCharts();
             this.ready();
         },
 
@@ -328,6 +328,126 @@ app || (app = {});
             });
 
             cloneConfirm.render();
+        },
+
+        referenceCharts: function (){
+            var _this = this;
+
+            // Ajax charts
+            $.ajax({
+                url: window.Misc.urlFull( Route.route('ordenes.charts', { ordenes: _this.model.get('id') }) ),
+                type: 'GET',
+                beforeSend: function() {
+                    window.Misc.setSpinner( _this.spinner );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( _this.spinner );
+                if(!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if( _.isObject( resp.errors ) ) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+                    if( !resp.success ) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Render calendar
+                    _this.charts( resp );
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( _this.spinner );
+                alertify.error(thrownError);
+            });
+
+        },
+
+        charts: function ( datos ){
+            var ctx = this.$('.chart-line').get(0).getContext('2d');
+            var green_black_gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                green_black_gradient.addColorStop(0, 'green');
+                green_black_gradient.addColorStop(1, 'black');
+
+            var chartbar = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    datasets: [{
+                        label: 'minutos gastados',
+                        data: datos.chartempleado.data,
+                        backgroundColor: green_black_gradient,
+                        hoverBackgroundColor: green_black_gradient,
+                        strokeColor: 'yellow',
+                        hoverBorderWidth: 2,
+						hoverBorderColor: 'white'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Tiempo gastado por empleado.'
+                    },
+                    legend: { display: false },
+                    scales: {
+                        xAxes: [{
+                            type: 'category',
+                            labels: datos.chartempleado.labels,
+                            stacked: true,
+                            barPercentage: 1.,
+                            categoryPercentage: .5,
+                            ticks: {
+                                fontColor: 'black',
+                                fontStyle: 'bold',
+                                fontSize: 9
+                            },
+                            gridLines: {
+                                offsetGridLines: true
+                            }
+                        }],
+                        yAxes: [{
+                            stacked: true,
+                            ticks: {
+                                fontColor: 'black',
+                                fontStyle: 'bold',
+                                fontSize: 9
+                            },
+                        }]
+                    }
+                }
+            });
+
+            var ctx = this.$('.chart-donut').get(0).getContext('2d');
+            var chartpie = new Chart(ctx ,{
+                type: 'doughnut',
+                data: {
+                    labels: datos.chartareap.labels,
+                    datasets: [{
+                        backgroundColor: window.Misc.getColorsRGB(),
+                        data: datos.chartareap.data
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    title: {
+                        display: true,
+                        text: 'Tiempo gastado por área.'
+                    },
+                    legend: {
+                        display: true,
+                        position: 'right',
+                        labels: {
+                            fontColor: 'black',
+                            fontStyle: 'bold',
+                            fontSize: 9
+                        }
+                    }
+                }
+            });
+
+            this.$('.tiempo-total').text(datos.tiempototal);
         },
 
         /**

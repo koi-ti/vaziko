@@ -27,7 +27,6 @@ app || (app = {});
 
             // Init Attributes
             this.confCollection = { reset: true, data: {} };
-            this.$modal = $('#modal-tiempop-edit-component');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -42,18 +41,13 @@ app || (app = {});
             }
         },
 
-        /*
-        * Render View Element
-        */
-        render: function() {
-        },
-
         /**
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
         addOne: function ( detalletiempopModel ) {
             var view = new app.TiempopItemView({
+                collection: this.collection,
                 model: detalletiempopModel,
                 parameters: {
                     dataFilter: this.parameters.dataFilter,
@@ -85,6 +79,20 @@ app || (app = {});
         */
         responseServer: function ( target, resp, opts ) {
             window.Misc.removeSpinner( this.$el );
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                alertify.success(resp.msg);
+            }
         }
    });
 

@@ -22,6 +22,20 @@ app || (app = {});
         initialize : function(){
         },
 
+        /**
+        *   Evento para convertir minutos a horas
+        */
+        convertMinutesToHours: function ( model ){
+            var horas = parseInt( model.get('cotizacion6_horas') );
+            var minutos = parseInt( model.get('cotizacion6_minutos') );
+
+            // Regla de 3 para convertir min a horas
+            var total = horas + (minutos / 60);
+                total = _.isNaN( total ) ? 0 : parseFloat( total );
+
+            return total;
+        },
+
         validar: function( data ) {
             var error = { success: false, message: '' };
 
@@ -49,40 +63,25 @@ app || (app = {});
             var _this = this;
 
             return this.reduce(function(sum, model) {
-
-                var func = _this.convertirMinutos( model );
-                return sum + func * parseFloat(model.get('cotizacion6_valor'));
-
+                var func = _this.convertMinutesToHours( model );
+                return sum + func * parseFloat( model.get('cotizacion6_valor') );
             }, 0);
         },
 
-        totalRow: function( ){
+        totalAreap: function( ){
             var _this = this;
 
-            _.each(this.models, function(item){
-
-                var func = _this.convertirMinutos( item ),
-                    total = func * parseFloat(item.get('cotizacion6_valor'));
-                item.set('total', Math.round( total ) );
-
+            _.each(this.models, function( model ){
+                var func = _this.convertMinutesToHours( model ),
+                    total = func * parseFloat( model.get('cotizacion6_valor') );
+                model.set('total', Math.round( total ) );
             });
-        },
-
-        convertirMinutos: function ( model ){
-            var tiempo = model.get('cotizacion6_tiempo').split(':'),
-                horas = parseInt( tiempo[0] ),
-                minutos = parseInt( tiempo[1] );
-
-            // Regla de 3 para convertir min a horas
-            var total = horas + (minutos / 60);
-
-            return parseFloat( total );
         },
 
         totalize: function(  ) {
             var total = this.total();
-            this.totalRow();
-            return { 'total': Math.round(total) }
+                this.totalAreap();
+            return { 'total': Math.round( total ) }
         },
    });
 

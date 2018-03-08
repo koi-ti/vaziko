@@ -52,6 +52,50 @@
             return o;
         },
 
+        getColorsRGB: function(){
+            var getStepColor = function (colorA, colorB, value) {
+                return colorA.map(function (color, i) {
+                    return (color + value * (colorB[i] - color)) & 255;
+                });
+            };
+
+            var colorStops = [];
+            var colors = [];
+
+            var colorToRgb = {
+                "red": [255, 0, 0, 0],
+                "green": [0, 128, 0, 50],
+                "blue": [0, 0, 255, 100]
+            };
+
+            _.each(colorToRgb, function( color ) {
+                colorStops.push({
+                    percentage: color[3],
+                    color: [ color[0], color[1], color[2] ]
+                });
+            });
+
+            for ( var i = 0; i < 30; i++ ) {
+                var percentage = ( i / 30 ) * 100;
+
+                var j;
+                for (j = 0; j < colorStops.length; j++) {
+                    if ( colorStops[j].percentage > percentage ) {
+                        break;
+                    };
+                }
+
+                var lowerIndex = j == 1 ? 0 : j - 1;
+                var upperIndex = lowerIndex + 1;
+                var value = i / (30 / (colorStops.length - 1) ) % 1;
+
+                color = getStepColor( colorStops[lowerIndex].color , colorStops[upperIndex].color , value);
+                colors.push( "rgb("+color[0]+","+color[1]+","+color[2]+")" );
+            }
+
+            return colors;
+        },
+
         /**
         * validate the urls
         */

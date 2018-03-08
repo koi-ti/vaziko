@@ -62,6 +62,7 @@ elixir(function(mix) {
         paths.libs + 'accounting.js/accounting.min.js',
         paths.libs + 'underscore/underscore.js',
         paths.libs + 'backbone/backbone.js',
+        paths.libs + 'chart.js/dist/Chart.js',
         paths.libs + 'moment/moment.js',
         paths.libs + 'moment/locale/es.js',
         paths.libs + 'alertify.js/dist/js/alertify.js',

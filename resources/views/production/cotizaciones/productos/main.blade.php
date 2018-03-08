@@ -366,14 +366,14 @@
                                 <th></th>
                                 <th>Área</th>
                                 <th>Nombre</th>
-                                <th>Horas</th>
+                                <th colspan="2" class="text-center">Tiempo</th>
                                 <th>Valor</th>
                                 <th>Total</th>
                             </tr>
                         </thead>
                         <tfoot>
                             <tr>
-                                <td colspan="4"></td>
+                                <td colspan="5"></td>
                                 <th class="text-right">Total</th>
                                 <th class="text-right" id="total">0</th>
                             </tr>
@@ -477,7 +477,12 @@
        <% } %>
        <td><%- areap_nombre %></td>
        <td><%- cotizacion6_nombre %></td>
-       <td><%- cotizacion6_tiempo %></td>
+       <td class="form-group col-sm-1">
+           <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" value="<%- cotizacion6_horas %>" class="form-control input-xs change-time" data-type="hs" min="0" step="1" max="9999" required>
+       </td>
+       <td class="form-group col-sm-2">
+           <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" value="<%- cotizacion6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
+       </td>
        <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
     </script>
