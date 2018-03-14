@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, Auth, DB, Log, Datatables;
 
 class OrdenpController extends Controller
@@ -448,6 +448,13 @@ class OrdenpController extends Controller
                          $neworden5->orden5_orden2 = $neworden2->id;
                          $neworden5->save();
                     }
+                    // Areasp
+                    $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
+                    foreach ($areasp as $orden6) {
+                         $neworden6 = $orden6->replicate();
+                         $neworden6->orden6_orden2 = $neworden2->id;
+                         $neworden6->save();
+                    }
                 }
                 // Commit Transaction
                 DB::commit();
@@ -467,49 +474,87 @@ class OrdenpController extends Controller
     public function charts(Request $request, $id)
     {
         if($request->ajax()){
-            $ordenp = Ordenp::find( $id );
+            $ordenp = Ordenp::getOrden($id);
             if( !$ordenp instanceof Ordenp ){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden']);
             }
 
             // Construir object con graficas
             $object = new \stdClass();
-            $empleados = Tiempop::select( DB::raw("CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre"), DB::raw("SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_empleado"))
-                ->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id')
-                ->where('tiempop_ordenp', $ordenp->id)
-                ->groupBy('tercero_nombre')
-                ->get();
+            $sentencia = "(
+                    SELECT CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio) )) as tiempo_x_empleado
+                    FROM koi_tiempop
+                    INNER JOIN koi_tercero ON tiempop_tercero = koi_tercero.id
+                    WHERE tiempop_ordenp = $ordenp->id
+                    GROUP BY tercero_nombre)";
+            $empleados = DB::select($sentencia);
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
             $chartempleado->labels = [];
             $chartempleado->data = [];
             foreach ($empleados as $empleado) {
-                $minutes = ($empleado->tiempo_x_empleado / 60);
+                $hour = ($empleado->tiempo_x_empleado / 3600);
                 $chartempleado->labels[] = $empleado->tercero_nombre;
-                $chartempleado->data[] = $minutes;
+                $chartempleado->data[] = $hour;
             }
             $object->chartempleado = $chartempleado;
 
-            $areasp = Tiempop::select('areap_nombre', DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_area"))
-                ->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id')
-                ->where('tiempop_ordenp', $ordenp->id)
-                ->groupBy('areap_nombre')
-                ->get();
+            $sentencia = "(
+                    SELECT areap_nombre, SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_area
+                    FROM koi_tiempop
+                    INNER JOIN koi_areap ON tiempop_areap = koi_areap.id
+                    WHERE tiempop_ordenp = $ordenp->id
+                    GROUP BY areap_nombre)";
+            $areasp = DB::select($sentencia);
 
             // Armar objecto para la grafica
             $chartareap = new \stdClass();
             $chartareap->labels = [];
             $chartareap->data = [];
             foreach ($areasp as $areap) {
-                $minutes = ($areap->tiempo_x_area / 60);
+                $hour = ($areap->tiempo_x_area / 3600);
                 $chartareap->labels[] = $areap->areap_nombre;
-                $chartareap->data[] = $minutes;
+                $chartareap->data[] = $hour;
             }
             $object->chartareap = $chartareap;
 
+            $sentencia = "
+            SELECT areap_nombre, SUM(tiempo_x_areasp) as tiempo_areasp, SUM(tiempo_x_producto) as tiempo_producto
+            FROM (
+                SELECT areap_nombre, SUM(0) as tiempo_x_areasp, SUM( TIME_TO_SEC(orden6_tiempo) ) as tiempo_x_producto
+                FROM koi_ordenproduccion6
+                INNER JOIN koi_areap ON orden6_areap = koi_areap.id
+                INNER JOIN koi_ordenproduccion2 ON orden6_orden2 = koi_ordenproduccion2.id
+                WHERE orden2_orden = $ordenp->id
+                AND orden6_areap IS NOT NULL
+                GROUP BY areap_nombre
+            UNION
+                SELECT areap_nombre, SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_areasp, SUM(0) as tiempo_x_producto
+                FROM koi_tiempop
+                INNER JOIN koi_areap ON tiempop_areap = koi_areap.id
+                WHERE tiempop_ordenp = $ordenp->id
+                GROUP BY areap_nombre
+            ) x
+            GROUP BY areap_nombre";
+            $ordenes = DB::select($sentencia);
+
+            $chartcomparativa = new \stdClass();
+            $chartcomparativa->labels = [];
+            foreach ($ordenes as $orden6) {
+                // Armar objecto para la grafica
+                $minutesareap = ($orden6->tiempo_areasp / 3600);
+                $minutesorden = ($orden6->tiempo_producto / 3600);
+
+                $chartcomparativa->labels[] = $orden6->areap_nombre;
+                $chartcomparativa->tiempoareasp[] = $minutesareap;
+                $chartcomparativa->tiempoproductop[] = $minutesorden;
+            }
+            $object->chartcomparativa = $chartcomparativa;
+
             $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->where('tiempop_ordenp', $ordenp->id)->first();
-            $minutes = ($tiempototal->tiempo_total / 60);
+            $minutes = ($tiempototal->tiempo_total / 3600);
+            $object->orden_codigo = $ordenp->orden_codigo;
             $object->tiempototal = $minutes;
 
             $object->success = true;

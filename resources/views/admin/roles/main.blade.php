@@ -28,13 +28,26 @@
                     <form method="POST" accept-charset="UTF-8" id="form-roles" data-toggle="validator">
                         <div class="row">
                             <label for="display_name" class="col-sm-1 control-label">Nombre</label>
-                            <div class="form-group col-sm-3">
+                            <div class="form-group col-sm-4">
                                 <input id="display_name" value="<%- display_name %>" placeholder="Mostrar nombre" class="form-control input-sm" name="display_name" required>
                             </div>
 
                             <label for="name" class="col-sm-1 control-label">Key</label>
-                            <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-3">
                                 <input id="name" value="<%- name %>" placeholder="Nombre" class="form-control input-sm" name="name" <%- typeof(id) !== 'undefined' ? 'readonly' : ''%> >
+                            </div>
+
+                            <div class="col-sm-offset-2 col-sm-1 text-right">
+                                <div class="dropdown dropdown2">
+                                    <span class="dropspan"><i class="fa fa-question-circle"></i></span>
+                                    <div class="dropdown-content text-left">
+                                        <ul>
+                                            <li>Opcional 1, usado para personalizar consultas en modulos.</li>
+                                            <li>Opcional 2, usado para reabrir o cerrar modulos.</li>
+                                            <li>Opcional 3, usado para remover items en modulos.</li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -153,7 +166,9 @@
                 <thead>
                     <tr>
                         <% _.each(permissions, function(permission) { %>
-                            <th class="text-center"><%- permission.display_name %></th>
+                            <th class="text-center">
+                                <%- permission.display_name %>
+                            </th>
                         <% }); %>
                     </tr>
                 </thead>
