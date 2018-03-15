@@ -493,7 +493,7 @@ app || (app = {});
                                 backgroundColor: '#00A65A',
                                 hoverBackgroundColor: '#00A65A',
                                 hoverBorderWidth: 2,
-                                hoverBorderColor: 'white'
+                                hoverBorderColor: 'black'
                             },{
                                 label: 'Tiempo de producción',
                                 data: resp.chartcomparativa.tiempoproductop,
