@@ -425,6 +425,9 @@ app || (app = {});
                                 categoryPercentage: .5,
                                 gridLines: {
                                     offsetGridLines: true
+                                },
+                                ticks: {
+                                    autoSkip: false
                                 }
                             }],
                             yAxes: [{

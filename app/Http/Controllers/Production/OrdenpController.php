@@ -494,9 +494,9 @@ class OrdenpController extends Controller
             $chartempleado->labels = [];
             $chartempleado->data = [];
             foreach ($empleados as $empleado) {
-                $hour = ($empleado->tiempo_x_empleado / 3600);
+                $hours = ($empleado->tiempo_x_empleado / 3600);
                 $chartempleado->labels[] = $empleado->tercero_nombre;
-                $chartempleado->data[] = $hour;
+                $chartempleado->data[] = $hours;
             }
             $object->chartempleado = $chartempleado;
 
@@ -513,9 +513,9 @@ class OrdenpController extends Controller
             $chartareap->labels = [];
             $chartareap->data = [];
             foreach ($areasp as $areap) {
-                $hour = ($areap->tiempo_x_area / 3600);
+                $hours = ($areap->tiempo_x_area / 3600);
                 $chartareap->labels[] = $areap->areap_nombre;
-                $chartareap->data[] = $hour;
+                $chartareap->data[] = $hours;
             }
             $object->chartareap = $chartareap;
 
@@ -543,19 +543,19 @@ class OrdenpController extends Controller
             $chartcomparativa->labels = [];
             foreach ($ordenes as $orden6) {
                 // Armar objecto para la grafica
-                $minutesareap = ($orden6->tiempo_areasp / 3600);
-                $minutesorden = ($orden6->tiempo_producto / 3600);
+                $hoursareap = ($orden6->tiempo_areasp / 3600);
+                $hoursorden = ($orden6->tiempo_producto / 3600);
 
                 $chartcomparativa->labels[] = $orden6->areap_nombre;
-                $chartcomparativa->tiempoareasp[] = $minutesareap;
-                $chartcomparativa->tiempoproductop[] = $minutesorden;
+                $chartcomparativa->tiempoareasp[] = $hoursareap;
+                $chartcomparativa->tiempoproductop[] = $hoursorden;
             }
             $object->chartcomparativa = $chartcomparativa;
 
             $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->where('tiempop_ordenp', $ordenp->id)->first();
-            $minutes = ($tiempototal->tiempo_total / 3600);
+            $hours = ($tiempototal->tiempo_total / 3600);
             $object->orden_codigo = $ordenp->orden_codigo;
-            $object->tiempototal = $minutes;
+            $object->tiempototal = $hours;
 
             $object->success = true;
             return response()->json($object);

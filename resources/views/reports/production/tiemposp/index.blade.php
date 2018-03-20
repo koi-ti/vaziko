@@ -15,19 +15,19 @@
 
    	<section class="content">
 	    <div class="box box-success" id="rtiemposp-main">
-	    	<form action="{{ route('rtiemposp.index') }}" id="form-rtiemposp" method="GET" data-toggle="validator">
+	    	<form id="form-rtiemposp" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
                     @if (count($errors) > 0)
                         <div class="alert alert-danger">
                             <ul>
                                 @foreach ($errors->all() as $error)
-                                    <li>{{ $error }}</li>
+                                <li>{{ $error }}</li>
                                 @endforeach
                             </ul>
                         </div>
                     @endif
-                    
+
 					<div class="row">
                         <div class="form-group col-md-2 col-md-offset-4">
                             <label for="fecha_inicial" class="control-label">Fecha de inicio</label>
@@ -54,9 +54,14 @@
                     <div id="render-funcionarios"></div>
 
 					<div class="row">
-						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
+						<div class="col-md-1 col-md-offset-4 col-sm-6 col-xs-6">
+							<button type="submit" class="btn btn-block btn-danger btn-sm btn-export-pdf-koi-component">
+								<i class="fa fa-file-pdf-o"></i>
+							</button>
+						</div>
+						<div class="col-md-1 col-sm-6 col-xs-6">
+							<button type="submit" class="btn btn-primary btn-sm btn-block btn-export-chart-koi-component">
+                                <i class="fa fa-pie-chart"></i>
 							</button>
 						</div>
                         <div class="col-md-2 col-sm-6 col-xs-6">
@@ -68,6 +73,8 @@
 				</div>
 			</form>
 		</div>
+
+        <div id="render-chart"></div>
 	</section>
 
     <script type="text/template" id="add-funcionario-list">
@@ -91,6 +98,23 @@
                 <a class="btn btn-danger btn-xs funcionario-remove" data-resource="<%- count %>">
                     <span><i class="fa fa-times"></i></span>
                 </a>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="add-rtiempop-charts">
+        <div class="box box-success">
+            <div class="box-header with-border">
+                <h3 class="box-title">Tiempo total de funcionarios</h3>
+            </div>
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="chart-container">
+                            <canvas id="chart_funcionario" width="500" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </script>
