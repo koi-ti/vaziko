@@ -8,9 +8,9 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
-use App\Models\Base\Tercero;
+use App\Models\Base\Tercero, App\Models\Base\Empresa;
 
-use View, App, Excel, Validator, DB;
+use View, App, Excel, DB, Fpdf;
 
 class AuxiliarContableController extends Controller
 {
@@ -21,10 +21,6 @@ class AuxiliarContableController extends Controller
      */
     public function index(Request $request)
     {
-        if( env('APP_ENV') == 'local'){
-            ini_set('memory_limit', '-1');
-            set_time_limit(0);
-        }
         if ($request->has('type')) {
 
             $auxcontable = [];
@@ -76,10 +72,35 @@ class AuxiliarContableController extends Controller
                 break;
 
                 case 'pdf':
-                    $pdf = App::make('dompdf.wrapper');
-                    $pdf->loadHTML(View::make('reports.accounting.auxcontable.report',  compact('auxcontable', 'title', 'type'))->render());
-                    $pdf->setPaper('A4', 'landscape')->setWarnings(false);
-                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'auxcontable', date('Y_m_d'), date('H_m_s')));
+                    // Header paper
+                    $empresa = Empresa::getEmpresa();
+                    Fpdf::AddPage('L');
+                    Fpdf::SetFont('Arial','B',11);
+                    Fpdf::Cell(280,5,utf8_decode($empresa->tercero_razonsocial),0,0,'C');
+                    Fpdf::SetXY(85,17);
+                    Fpdf::SetFont('Arial','B',9);
+                    Fpdf::Cell(130,5,"NIT: $empresa->tercero_nit",0,0,'C');
+                    Fpdf::Line(22,22,280,22);
+                    Fpdf::SetXY(85,23);
+                    Fpdf::Cell(130, 5, utf8_decode($title), 0, 0,'C');
+                    Fpdf::Ln();
+
+                    // Header table
+                    Fpdf::SetFont('Arial','B',8);
+                    Fpdf::Cell(20,4,'Fecha',1);
+                    Fpdf::Cell(35,4,'Doc contable',1);
+                    Fpdf::Cell(20,4,utf8_decode('N° asiento'),1);
+                    Fpdf::Cell(30,4,'Nit',1);
+                    Fpdf::Cell(45,4,'Nombre',1);
+                    Fpdf::Cell(35,4,'Doc origen',1);
+                    Fpdf::Cell(20,4,utf8_decode('N° origen'),1);
+                    Fpdf::Cell(25,4,utf8_decode('Débito'),1);
+                    Fpdf::Cell(25,4,utf8_decode('Crédito'),1);
+                    Fpdf::Cell(25,4,'Base',1);
+                    Fpdf::Ln();
+
+                    Fpdf::Output(sprintf('%s_%s_%s.pdf', 'auxcontable', date('Y_m_d'), date('H_m_s')),'I');
+                    exit;
                 break;
             }
         }

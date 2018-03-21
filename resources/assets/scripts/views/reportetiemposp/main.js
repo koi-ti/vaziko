@@ -27,7 +27,7 @@ app || (app = {});
             // Render row funcionarios
             this.$wraperfuncionarios = this.$('#render-funcionarios');
             this.$wrapercharts = $('#render-chart');
-            this.count = 0;
+            this.count = 1;
 
             this.ready();
         },
@@ -58,7 +58,8 @@ app || (app = {});
 
                 switch (data.type) {
                     case 'pdf':
-                        window.Misc.redirect( window.Misc.urlFull(Route.route('rtiemposp.exportar', data)) );
+                        window.Misc.redirect( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ) );
+
                         break;
                     case 'chart':
 

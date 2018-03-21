@@ -99,6 +99,9 @@ label {
   color: green;
 }
 .btn-export-pdf-koi-component {
+  color: red;
+}
+.white {
   color: white;
 }
 .currency {

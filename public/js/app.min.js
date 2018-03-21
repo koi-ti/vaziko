@@ -1842,51 +1842,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class AsientoNifCuentasList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoNifCuentasList = Backbone.Collection.extend({
-
-        url: function() {
-            return window.Misc.urlFull( Route.route('asientosnif.detalle.index') );
-        },
-        model: app.AsientoNif2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function() {
-        },
-
-        debitos: function() {
-            return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('asienton2_debito'))
-            }, 0);
-        },
-
-        creditos: function() {
-            return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('asienton2_credito'))
-            }, 0);
-        },
-
-        totalize: function() {
-            var debitos = this.debitos();
-            var creditos = this.creditos();
-            return { 'debitos': debitos, 'creditos': creditos, 'diferencia': Math.abs(creditos - debitos)}
-        },
-   });
-
-})(this, this.document);
-
-/**
 * Class AsientoCuentasList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -1955,6 +1910,51 @@ app || (app = {});
         initialize : function() {
 
         }
+   });
+
+})(this, this.document);
+
+/**
+* Class AsientoNifCuentasList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoNifCuentasList = Backbone.Collection.extend({
+
+        url: function() {
+            return window.Misc.urlFull( Route.route('asientosnif.detalle.index') );
+        },
+        model: app.AsientoNif2Model,
+
+        /**
+        * Constructor Method
+        */
+        initialize : function() {
+        },
+
+        debitos: function() {
+            return this.reduce(function(sum, model) {
+                return sum + parseFloat(model.get('asienton2_debito'))
+            }, 0);
+        },
+
+        creditos: function() {
+            return this.reduce(function(sum, model) {
+                return sum + parseFloat(model.get('asienton2_credito'))
+            }, 0);
+        },
+
+        totalize: function() {
+            var debitos = this.debitos();
+            var creditos = this.creditos();
+            return { 'debitos': debitos, 'creditos': creditos, 'diferencia': Math.abs(creditos - debitos)}
+        },
    });
 
 })(this, this.document);
@@ -3078,168 +3078,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class CreateAcabadospView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateAcabadospView = Backbone.View.extend({
-
-        el: '#acabadosp-create',
-        template: _.template( ($('#add-acabadop-tpl').html() || '') ),
-        events: {
-            'submit #form-acabadosp': 'onStore'
-        },
-        parameters: {
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(opts) {
-            // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-acabadop');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
-            if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect( window.Misc.urlFull( Route.route('acabadosp.index') ) );
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainAcabadospView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainAcabadospView = Backbone.View.extend({
-
-        el: '#acabadosp-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize : function() {
-
-            this.$acabadospSearchTable = this.$('#acabadosp-search-table');
-
-            this.$acabadospSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('acabadosp.index') ),
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'acabadop_nombre', name: 'acabadop_nombre' },
-                    { data: 'acabadop_descripcion', name: 'acabadop_descripcion' }
-                ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo acabado',
-                        className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('acabadosp.create') ) )
-						}
-					}
-				],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id }) )  +'">' + data + '</a>';
-                        }
-                    }
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class CreateActividadView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3401,6 +3239,168 @@ app || (app = {});
                         width: '15%',
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('actividades.show', {actividades: full.id }) )  +'">' + data + '</a>';
+                        }
+                    }
+                ]
+			});
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateAcabadospView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateAcabadospView = Backbone.View.extend({
+
+        el: '#acabadosp-create',
+        template: _.template( ($('#add-acabadop-tpl').html() || '') ),
+        events: {
+            'submit #form-acabadosp': 'onStore'
+        },
+        parameters: {
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize : function(opts) {
+            // Initialize
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-acabadop');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+
+            if (!e.isDefaultPrevented()) {
+
+                e.preventDefault();
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function() {
+
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html( this.template(attributes) );
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if( typeof window.initComponent.initToUpper == 'function' )
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner( this.el );
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function ( model, resp, opts ) {
+            window.Misc.removeSpinner( this.el );
+
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect( window.Misc.urlFull( Route.route('acabadosp.index') ) );
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainAcabadospView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainAcabadospView = Backbone.View.extend({
+
+        el: '#acabadosp-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize : function() {
+
+            this.$acabadospSearchTable = this.$('#acabadosp-search-table');
+
+            this.$acabadospSearchTable.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+				processing: true,
+                serverSide: true,
+            	language: window.Misc.dataTableES(),
+                ajax: window.Misc.urlFull( Route.route('acabadosp.index') ),
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'acabadop_nombre', name: 'acabadop_nombre' },
+                    { data: 'acabadop_descripcion', name: 'acabadop_descripcion' }
+                ],
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo acabado',
+                        className: 'btn-sm',
+						action: function ( e, dt, node, config ) {
+							window.Misc.redirect( window.Misc.urlFull( Route.route('acabadosp.create') ) )
+						}
+					}
+				],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id }) )  +'">' + data + '</a>';
                         }
                     }
                 ]
@@ -20253,7 +20253,7 @@ app || (app = {});
             // Render row funcionarios
             this.$wraperfuncionarios = this.$('#render-funcionarios');
             this.$wrapercharts = $('#render-chart');
-            this.count = 0;
+            this.count = 1;
 
             this.ready();
         },
@@ -20284,7 +20284,8 @@ app || (app = {});
 
                 switch (data.type) {
                     case 'pdf':
-                        window.Misc.redirect( window.Misc.urlFull(Route.route('rtiemposp.exportar', data)) );
+                        window.Misc.redirect( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ) );
+
                         break;
                     case 'chart':
 

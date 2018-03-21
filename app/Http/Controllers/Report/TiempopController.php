@@ -109,7 +109,7 @@ class TiempopController extends Controller
             }
 
             $tiempos = [];
-            foreach ($request->tiempop_tercero as $rtercero) {
+            foreach ( explode(',', $request->tiempop_tercero[0]) as $rtercero) {
                 $object = new \stdClass();
 
                 $query = Tercero::query();
