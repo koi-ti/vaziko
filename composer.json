@@ -14,7 +14,8 @@
         "felixkiss/uniquewith-validator": "2.*",
         "maatwebsite/excel": "~2.1.0",
         "dompdf/dompdf": "~0.6.1",
-        "barryvdh/laravel-dompdf": "0.6.*"
+        "barryvdh/laravel-dompdf": "0.6.*",
+        "codedge/laravel-fpdf": "^1.2"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
