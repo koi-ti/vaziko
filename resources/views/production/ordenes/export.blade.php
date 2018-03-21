@@ -18,8 +18,12 @@
 			<tr>
 				<th width="10%" class="left">Código</th>
 				<td width="15%" class="left">{{ $orden->orden_codigo }}</td>
+				@if( $orden->cotizacion_codigo )
+					<th width="10%" class="left">Cotización</th>
+					<td width="15%" class="left">{{ $orden->cotizacion_codigo }}</td>
+				@endif
 				<th width="10%" class="left">Referencia</th>
-				<td class="left" colspan="3">{{ $orden->orden_referencia }}</td>
+				<td class="left" {!! !$orden->cotizacion_codigo ? 'colspan="3"' : '' !!}>{{ $orden->orden_referencia }}</td>
 			</tr>
 
 			<tr>

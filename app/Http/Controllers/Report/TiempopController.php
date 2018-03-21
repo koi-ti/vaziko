@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Tiempop, App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Areap, App\Models\Production\Actividadp, App\Models\Production\SubActividadp;
-use View, App, Validator, DB;
+use App\Models\Production\Tiempop, App\Models\Base\Tercero, App\Models\Report\ReporteTiempop;
+use View, App, Validator, DB, Log;
 
 class TiempopController extends Controller
 {
@@ -18,7 +18,67 @@ class TiempopController extends Controller
      */
     public function index(Request $request)
     {
+        return view('reports.production.tiemposp.index');
+    }
 
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function charts(Request $request)
+    {
+        $data = $request->all();
+        $rtiempop = new ReporteTiempop;
+        if($rtiempop->isValid($data)){
+            try{
+                $chart = new \stdClass();
+                $chart->labels = [];
+                $chart->data = [];
+                foreach ($request->tiempop_tercero as $rtercero) {
+                    $object = new \stdClass();
+
+                    $query = Tercero::query();
+                    $query->select('koi_tercero.id', DB::raw("CONCAT(tercero_nombre1,' ',tercero_apellido1) AS tercero_nombre"));
+                    $query->where('tercero_nit', $rtercero);
+                    $tercero = $query->first();
+
+                    if(!$tercero instanceof Tercero){
+                        return response()->json(['success' => false, 'errors' => "No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador."]);
+                    }
+
+                    // Recuperar tiempos del tercero
+                    $query = Tiempop::query();
+                    $query->select( DB::raw("SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total") );
+                    $query->where('tiempop_tercero', $tercero->id);
+                    $query->where('tiempop_fecha', '>=', $request->fecha_inicial);
+                    $query->where('tiempop_fecha', '<=', $request->fecha_final);
+                    $tiempop = $query->first();
+
+                    // Convertir segundos a horas
+                    $hours = ($tiempop->tiempo_total / 3600);
+
+                    $chart->labels[] = $tercero->tercero_nombre;
+                    $chart->data[] = $hours;
+                }
+                return response()->json(['success' => true, 'chart' => $chart]);
+            }catch(\Exception $e){
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        return response()->json(['success' => false, 'errors' => $rtiempop->errors]);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function exportar(Request $request)
+    {
         if($request->has('type')){
             $data = $request->all();
 
@@ -49,7 +109,7 @@ class TiempopController extends Controller
             }
 
             $tiempos = [];
-            foreach ($request->tiempop_tercero as $rtercero) {
+            foreach ( explode(',', $request->tiempop_tercero[0]) as $rtercero) {
                 $object = new \stdClass();
 
                 $query = Tercero::query();
@@ -59,22 +119,21 @@ class TiempopController extends Controller
 
                 if(!$tercero instanceof Tercero){
                     return redirect('/rtiemposp')
-                        ->withErrors("No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador.")
-                        ->withInput();
-
+                    ->withErrors("No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador.")
+                    ->withInput();
                 }
                 $object->tercero = $tercero;
 
                 // Recuperar tiempos del tercero
                 $query = Tiempop::query();
                 $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
-                    CONCAT(
-                        (CASE WHEN tercero_persona = 'N'
-                            THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                                (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                            )
-                            ELSE tercero_razonsocial
-                        END),
+                CONCAT(
+                    (CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                    (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                    )
+                    ELSE tercero_razonsocial
+                    END),
                     ' (', orden_referencia ,')'
                     ) AS tercero_nombre"
                 ));
@@ -110,72 +169,5 @@ class TiempopController extends Controller
                 break;
             }
         }
-        return view('reports.production.tiemposp.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

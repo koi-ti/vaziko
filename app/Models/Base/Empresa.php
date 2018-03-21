@@ -41,4 +41,11 @@ class Empresa extends Model
     {
         $this->attributes['empresa_nm_revisor'] = strtoupper($name);
     }
+
+    public static function getEmpresaHelp()
+    {
+        $query = Empresa::query();
+        $query->select('empresa_help');
+    	return $query->first();
+    }
 }

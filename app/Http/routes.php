@@ -264,9 +264,14 @@ Route::group(['middleware' => 'auth'], function()
 	| Reports Routes
 	|-------------------------
 	*/
+	Route::group(['prefix' => 'rtiemposp'], function(){
+		Route::get('charts', ['as' => 'rtiemposp.charts', 'uses' => 'Report\TiempopController@charts']);
+		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
+	});
+	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
+
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
-   	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
 	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
 	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);

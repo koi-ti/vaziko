@@ -14,6 +14,7 @@ app || (app = {});
       	el: 'body',
 		events: {
 			'click .btn-export-pdf-koi-component': 'onPdf',
+			'click .btn-export-chart-koi-component': 'onChart',
 			'click .btn-export-xls-koi-component': 'onXls',
 		},
 
@@ -28,10 +29,12 @@ app || (app = {});
 			this.$("#type-report-koi-component").val('pdf');
 		},
 
+		onChart: function(e) {
+			this.$("#type-report-koi-component").val('chart');
+		},
+
 		onXls: function(e) {
 			this.$("#type-report-koi-component").val('xls');
-		}
+		},
     });
-
-
 })(jQuery, this, this.document);

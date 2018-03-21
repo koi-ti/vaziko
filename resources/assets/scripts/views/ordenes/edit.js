@@ -13,6 +13,9 @@ app || (app = {});
 
         el: '#ordenes-create',
         template: _.template( ($('#add-ordenp-tpl').html() || '') ),
+        templateEmpleado: _.template( ($('#chart-empleado-ordenp').html() || '') ),
+        templateAreap: _.template( ($('#chart-areasp-ordenp').html() || '') ),
+        templateProductop: _.template( ($('#chart-productop-ordenp').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
             'click .close-ordenp': 'closeOrdenp',
@@ -59,6 +62,11 @@ app || (app = {});
             this.$product = this.$('#productop');
             this.$subtypeproduct = this.$('#subtypeproductop');
             this.spinner = this.$('#spinner-main');
+
+            // Render rows charts
+            this.$renderChartEmpleado = this.$('#render-chart-empleado');
+            this.$renderChartAreasp = this.$('#render-chart-areasp');
+            this.$renderChartProductop = this.$('#render-chart-productop');
 
             // Reference views and ready
             this.referenceViews();
@@ -365,89 +373,180 @@ app || (app = {});
 
         },
 
-        charts: function ( datos ){
-            var ctx = this.$('.chart-line').get(0).getContext('2d');
-            var green_black_gradient = ctx.createLinearGradient(0, 0, 0, 300);
-                green_black_gradient.addColorStop(0, 'green');
-                green_black_gradient.addColorStop(1, 'black');
+        charts: function ( resp ){
+            // Definir opciones globales para graficas del modulo
+            Chart.defaults.global.defaultFontColor="black";
+            Chart.defaults.global.defaultFontStyle="bold";
+            Chart.defaults.global.defaultFontSize=9;
+            Chart.defaults.global.title.fontSize=12;
 
-            var chartbar = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    datasets: [{
-                        label: 'minutos gastados',
-                        data: datos.chartempleado.data,
-                        backgroundColor: green_black_gradient,
-                        hoverBackgroundColor: green_black_gradient,
-                        strokeColor: 'yellow',
-                        hoverBorderWidth: 2,
-						hoverBorderColor: 'white'
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Tiempo gastado por empleado.'
-                    },
-                    legend: { display: false },
-                    scales: {
-                        xAxes: [{
-                            type: 'category',
-                            labels: datos.chartempleado.labels,
-                            stacked: true,
-                            barPercentage: 1.,
-                            categoryPercentage: .5,
-                            ticks: {
-                                fontColor: 'black',
-                                fontStyle: 'bold',
-                                fontSize: 9
-                            },
-                            gridLines: {
-                                offsetGridLines: true
-                            }
-                        }],
-                        yAxes: [{
-                            stacked: true,
-                            ticks: {
-                                fontColor: 'black',
-                                fontStyle: 'bold',
-                                fontSize: 9
-                            },
+            function formatTime( timeHour ){
+                var dias = Math.floor( timeHour / 24 );
+                var horas = Math.floor( timeHour - ( dias * 24 ) );
+                var minutos = Math.floor( ( timeHour - (dias * 24) - (horas) ) * 60 );
+
+                return dias+"d "+horas+"h "+minutos+"m";
+            }
+
+            // Chart empleado
+            if ( !_.isEmpty( resp.chartempleado.data ) ) {
+                this.$renderChartEmpleado.html( this.templateEmpleado() );
+
+                var ctx = this.$('#chart_empleado').get(0).getContext('2d');
+                var green_black_gradient = ctx.createLinearGradient(0, 0, 0, 300);
+                    green_black_gradient.addColorStop(0, 'green');
+                    green_black_gradient.addColorStop(1, 'black');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: resp.chartempleado.labels,
+                        datasets: [{
+                            label: 'tiempo empleado',
+                            data: resp.chartempleado.data,
+                            backgroundColor: green_black_gradient,
+                            hoverBackgroundColor: green_black_gradient,
+                            hoverBorderWidth: 2,
+                            hoverBorderColor: 'white'
                         }]
-                    }
-                }
-            });
-
-            var ctx = this.$('.chart-donut').get(0).getContext('2d');
-            var chartpie = new Chart(ctx ,{
-                type: 'doughnut',
-                data: {
-                    labels: datos.chartareap.labels,
-                    datasets: [{
-                        backgroundColor: window.Misc.getColorsRGB(),
-                        data: datos.chartareap.data
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    title: {
-                        display: true,
-                        text: 'Tiempo gastado por área.'
                     },
-                    legend: {
-                        display: true,
-                        position: 'right',
-                        labels: {
-                            fontColor: 'black',
-                            fontStyle: 'bold',
-                            fontSize: 9
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Tiempo gastado por empleado.'
+                        },
+                        legend: { display: false },
+                        scales: {
+                            xAxes: [{
+                                stacked: true,
+                                barThickness: 60,
+                                barPercentage: 1.,
+                                categoryPercentage: .5,
+                                gridLines: {
+                                    offsetGridLines: true
+                                },
+                                ticks: {
+                                    autoSkip: false
+                                }
+                            }],
+                            yAxes: [{
+                                stacked: true,
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Horas'
+                                },
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.datasets[item.datasetIndex].label+": "+formatTime(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
                         }
                     }
-                }
-            });
+                });
+            }
+            if ( !_.isEmpty( resp.chartareap.data ) ) {
+                this.$renderChartAreasp.html( this.templateAreap() );
 
-            this.$('.tiempo-total').text(datos.tiempototal);
+                var ctx = this.$('#chart_areas').get(0).getContext('2d');
+                new Chart(ctx ,{
+                    type: 'doughnut',
+                    data: {
+                        labels: resp.chartareap.labels,
+                        datasets: [{
+                            backgroundColor: window.Misc.getColorsRGB(),
+                            data: resp.chartareap.data
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Tiempo gastado por área.',
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.labels[item.index]+": "+formatTime(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
+                        },
+                    }
+                });
+            }
+            if ( !_.isEmpty( resp.chartcomparativa.labels ) ){
+                this.$renderChartProductop.html( this.templateProductop() );
+
+                var ctx = this.$('#chart_comparativa').get(0).getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: resp.chartcomparativa.labels,
+                        datasets: [
+                            {
+                                label: 'Tiempo cotizado',
+                                data: resp.chartcomparativa.tiempoareasp,
+                                backgroundColor: '#00A65A',
+                                hoverBackgroundColor: '#00A65A',
+                                hoverBorderWidth: 2,
+                                hoverBorderColor: 'black'
+                            },{
+                                label: 'Tiempo de producción',
+                                data: resp.chartcomparativa.tiempoproductop,
+                                backgroundColor: '#D8D8D8',
+                                hoverBackgroundColor: '#D8D8D8',
+                                hoverBorderWidth: 2,
+                                hoverBorderColor: 'black'
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Tiempo cotizado vs tiempo de producción.'
+                        },
+                        scales: {
+                            xAxes: [{
+                                barPercentage: 1.,
+                                categoryPercentage: .4,
+                                gridLines: {
+                                    offsetGridLines: true
+                                },
+                                ticks: {
+                                    autoSkip: false
+                                 }
+                            }],
+                            yAxes: [{
+                                ticks: {
+                                    beginAtZero:true,
+                                },
+                                scaleLabel: {
+                                    display: true,
+                                    labelString: 'Horas'
+                                },
+                            }]
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.datasets[item.datasetIndex].label+": "+formatTime(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
+                        },
+                    }
+                });
+            }
+
+            this.$('.tiempo-total').text( formatTime(resp.tiempototal) );
+            this.$('.orden-codigo').text( resp.orden_codigo );
         },
 
         /**

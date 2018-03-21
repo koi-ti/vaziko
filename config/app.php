@@ -151,7 +151,8 @@ return [
         Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class
+        Zizaco\Entrust\EntrustServiceProvider::class,
+        Codedge\Fpdf\FpdfServiceProvider::class
     ],
 
     /*
@@ -205,7 +206,8 @@ return [
         'Datatables' => Yajra\Datatables\Datatables::class,
         'PDF'       => Barryvdh\DomPDF\Facade::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
-        'Entrust'   => Zizaco\Entrust\EntrustFacade::class
+        'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
+        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class
     ],
 
 ];
