@@ -51,11 +51,28 @@
                         </div>
 					</div>
 
+                    <div class="row">
+                        <label for="tiempop_tercero" class="col-sm-1 col-md-offset-1 control-label">Funcionario</label>
+                        <div class="form-group col-sm-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tiempop_tercero">
+                                        <i class="fa fa-user"></i>
+                                    </button>
+                                </span>
+                                <input id="tiempop_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre" required>
+                            </div>
+                            <div class="help-block with-errors"></div>
+                        </div>
+                        <div class="col-sm-5 col-xs-10">
+                            <input id="tiempop_tercero_nombre" name="tiempop_tercero_nombre[]" placeholder="Nombre cliente" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                        </div>
+                    </div>
                     <div id="render-funcionarios"></div>
 
 					<div class="row">
 						<div class="col-md-1 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-block btn-danger btn-sm btn-export-pdf-koi-component">
+							<button type="submit" class="btn btn-block btn-danger white btn-sm btn-export-pdf-koi-component">
 								<i class="fa fa-file-pdf-o"></i>
 							</button>
 						</div>
