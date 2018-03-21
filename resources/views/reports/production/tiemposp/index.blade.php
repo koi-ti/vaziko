@@ -83,7 +83,7 @@
 						</div>
 						<div class="col-md-2 col-sm-6 col-xs-6">
 							<button type="submit" class="btn btn-primary btn-sm btn-block btn-export-chart-koi-component">
-                                <i class="fa fa-pie-chart"></i> Generar grafica
+                                <i class="fa fa-pie-chart"></i> Generar gráfica
 							</button>
 						</div>
 					</div>
@@ -122,7 +122,7 @@
     <script type="text/template" id="add-rtiempop-charts">
         <div class="box box-success">
             <div class="box-header with-border">
-                <h3 class="box-title">Tiempo total de funcionarios</h3>
+                <h3 class="box-title">Información adicional</h3>
             </div>
             <div class="box-body">
                 <div class="row">

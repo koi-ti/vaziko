@@ -58,7 +58,7 @@ app || (app = {});
 
                 switch (data.type) {
                     case 'pdf':
-                        window.Misc.redirect( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ) );
+                        window.open( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ), '_blank');
 
                         break;
                     case 'chart':
