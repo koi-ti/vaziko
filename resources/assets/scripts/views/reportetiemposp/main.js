@@ -17,7 +17,7 @@ app || (app = {});
         events: {
             'click .add-funcionario': 'addFuncionario',
             'click .funcionario-remove': 'removeFuncionario',
-            'submit #form-rtiemposp': 'onGenerateChart',
+            'submit #form-rtiemposp': 'onGenerateExport',
         },
 
         /**
@@ -27,7 +27,7 @@ app || (app = {});
             // Render row funcionarios
             this.$wraperfuncionarios = this.$('#render-funcionarios');
             this.$wrapercharts = $('#render-chart');
-            this.count = 1;
+            this.count = 2;
 
             this.ready();
         },
@@ -35,21 +35,21 @@ app || (app = {});
         addFuncionario: function(e) {
             e.preventDefault();
 
-            this.count++;
-            var attributes = {count: this.count};
+            var posactual = this.count,
+                attributes = {posactual: posactual};
 
             this.$wraperfuncionarios.append( this.template(attributes) );
+            this.count++;
         },
 
         removeFuncionario: function(e) {
             e.preventDefault();
 
-            var row = this.$(e.currentTarget).data('resource');
-            this.$('#row_'+row).remove();
-            this.count--;
+            var posactual = this.$(e.currentTarget).data('resource');
+            this.$('#row_'+posactual).remove();
         },
 
-        onGenerateChart: function(e) {
+        onGenerateExport: function(e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
@@ -58,7 +58,7 @@ app || (app = {});
 
                 switch (data.type) {
                     case 'pdf':
-                        window.Misc.redirect( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ) );
+                        window.open( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ), '_blank');
 
                         break;
                     case 'chart':
