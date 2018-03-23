@@ -5,7 +5,7 @@
 @section('content')
     <section class="content-header">
 		<h1>
-			Mayor y Balance
+			Reporte Mayor y Balance
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
@@ -59,7 +59,7 @@
 								@foreach( config('koi.meses') as $key => $value)
 									<option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
 								@endforeach
-								<option value="13">Trece</option>
+								<!-- <option value="13">Trece</option> -->
 							</select>
 						</div>
 

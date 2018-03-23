@@ -12,15 +12,12 @@
 			</tr>
 		</thead>
 		<tbody>
-            @while($startDate <= $endDate)
-                {{--*/
-                    $date = date('Y-m-d', $startDate);
-                    $tdebito = $tcredito = 0;
-                /*--}}
+            @foreach($asiento as $key => $items)
+                {{--*/ $tdebito = $tcredito = 0; /*--}}
                 <tr>
-                    <td class="size-8 bold" colspan="4">{{$date}}</td>
+                    <td class="size-8 bold" colspan="4">{{$key}}</td>
                 </tr>
-                @foreach ($asiento[$date] as $item)
+                @foreach ($items as $item)
                     <tr>
                         <td>{{ $item->plancuentas_cuenta }}</td>
                         <td>{{ $item->plancuentas_nombre }}</td>
@@ -35,8 +32,7 @@
                     <td class="size-8 bold">{{ number_format ($tdebito,2,',' , '.') }}</td>
                     <td class="size-8 bold">{{ number_format ($tcredito,2,',' , '.') }}</td>
                 </tr>
-                {{--*/ $startDate = strtotime("+1 day", $startDate); /*--}}
-            @endwhile
+            @endforeach
 		</tbody>
 	</table>
 @stop
