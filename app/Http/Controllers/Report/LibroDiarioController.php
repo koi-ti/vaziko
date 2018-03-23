@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Classes\Reports\Accounting\LibroDiario;
 use App\Models\Accounting\Asiento;
-use App\Classes\Reports\LibroDiario;
 
 use View, App, Excel, Validator, DB;
 

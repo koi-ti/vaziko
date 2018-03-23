@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Reports;
+namespace App\Classes\Reports\Accounting;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
 use Auth;
@@ -38,7 +38,7 @@ class AuxiliarContable extends FPDF
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
-        $this->Cell(0,10,utf8_decode('Pág ').$this->PageNo(),0,0,'L');
+        $this->Cell(0,10,utf8_decode('Pág ').$this->PageNo().'/{nb}',0,0,'L');
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
@@ -47,7 +47,7 @@ class AuxiliarContable extends FPDF
         $this->SetFont('Arial','B',8);
         $this->Cell(15,4,'Fecha',1);
         $this->Cell(50,4,'Doc contable',1);
-        $this->Cell(15,4,utf8_decode('Asiento'),1);
+        $this->Cell(15,4,'Asiento',1);
         $this->Cell(25,4,'Nit',1);
         $this->Cell(75,4,'Nombre',1);
         $this->Cell(20,4,'Doc origen',1);

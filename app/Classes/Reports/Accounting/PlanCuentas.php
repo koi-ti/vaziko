@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Reports;
+namespace App\Classes\Reports\Accounting;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
 use Auth;
@@ -38,7 +38,7 @@ class PlanCuentas extends FPDF
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
-        $this->Cell(0,10,utf8_decode('Pág ').$this->PageNo(),0,0,'L');
+        $this->Cell(0,10,utf8_decode('Pág ').$this->PageNo().'/{nb}',0,0,'L');
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 

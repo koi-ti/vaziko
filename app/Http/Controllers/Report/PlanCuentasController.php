@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Classes\Reports\Accounting\PlanCuentas;
 use App\Models\Accounting\PlanCuenta;
-use App\Classes\Reports\PlanCuentas;
 use Excel, View, App;
 
 class PlanCuentasController extends Controller

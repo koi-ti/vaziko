@@ -7,7 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use View, App, Excel, Validator, DB;
+use App\Classes\Reports\Accounting\LibroMayor;
+use View, App, Excel, DB;
 
 class LibroMayorController extends Controller
 {
@@ -106,10 +107,13 @@ class LibroMayorController extends Controller
                 break;
 
                 case 'pdf':
-                    $pdf = App::make('dompdf.wrapper');
-                    $pdf->loadHTML(View::make('reports.accounting.libromayor.report',  compact('saldos', 'title','type'))->render());
-                    $pdf->setPaper('letter', 'landscape')->setWarnings(false);
-                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'libromayor', date('Y_m_d'), date('H_m_s')));
+                    $pdf = new LibroMayor('L','mm', 'Letter');
+                    $pdf->buldReport($saldos, $title);
+
+                    // $pdf = App::make('dompdf.wrapper');
+                    // $pdf->loadHTML(View::make('reports.accounting.libromayor.report',  compact('saldos', 'title','type'))->render());
+                    // $pdf->setPaper('letter', 'landscape')->setWarnings(false);
+                    // return $pdf->stream(sprintf('%s_%s_%s.pdf', 'libromayor', date('Y_m_d'), date('H_m_s')));
                 break;
             }
         }

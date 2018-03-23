@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Classes\Reports\Accounting\AuxiliarContable;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
-use App\Classes\Reports\AuxiliarContable;
 
 use View, App, Excel, DB;
 
