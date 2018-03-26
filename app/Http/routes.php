@@ -276,4 +276,5 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
 	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
 	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
+	Route::resource('rimpuestos', 'Report\RelacionImpuestosController', ['only' => ['index']]);
 });

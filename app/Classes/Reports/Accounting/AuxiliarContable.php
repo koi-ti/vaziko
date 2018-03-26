@@ -45,16 +45,16 @@ class AuxiliarContable extends FPDF
     function headerTable()
     {
         $this->SetFont('Arial','B',8);
-        $this->Cell(15,4,'Fecha',1);
-        $this->Cell(50,4,'Doc contable',1);
-        $this->Cell(15,4,'Asiento',1);
-        $this->Cell(25,4,'Nit',1);
-        $this->Cell(75,4,'Nombre',1);
-        $this->Cell(20,4,'Doc origen',1);
-        $this->Cell(15,4,utf8_decode('N° origen'),1);
-        $this->Cell(25,4,utf8_decode('Débito'),1);
-        $this->Cell(25,4,utf8_decode('Crédito'),1);
-        $this->Cell(25,4,'Base',1);
+        $this->Cell(15,5,'Fecha',1);
+        $this->Cell(50,5,'Doc contable',1);
+        $this->Cell(15,5,'Asiento',1);
+        $this->Cell(25,5,'Nit',1);
+        $this->Cell(75,5,'Nombre',1);
+        $this->Cell(20,5,'Doc origen',1);
+        $this->Cell(15,5,utf8_decode('N° origen'),1);
+        $this->Cell(25,5,utf8_decode('Débito'),1);
+        $this->Cell(25,5,utf8_decode('Crédito'),1);
+        $this->Cell(25,5,'Base',1);
         $this->Ln();
     }
 
@@ -66,21 +66,21 @@ class AuxiliarContable extends FPDF
         foreach($data as $item){
             if ($cuenta != $item->cuenta) {
                 $this->SetFont('Arial', 'B', 8);
-                $this->Cell(280,4,$item->cuenta,0,0,'C');
+                $this->Cell(280,5,"$item->cuenta - $item->plancuentas_nombre",0,0,'C');
                 $this->Ln();
             }
             $this->SetFont('Arial', '', 7);
             $fill = !$fill;
-            $this->Cell(15,4,$item->date,'',0,'',$fill);
-            $this->Cell(50,4,$item->documento_nombre,'',0,'',$fill);
-            $this->Cell(15,4,$item->asiento1_numero,'',0,'C',$fill);
-            $this->Cell(25,4,$item->tercero_nit,'',0,'',$fill);
-            $this->Cell(75,4,utf8_decode($item->tercero_nombre),'',0,'',$fill);
-            $this->Cell(20,4,'-','',0,'C',$fill);
-            $this->Cell(15,4,'-','',0,'C',$fill);
-            $this->Cell(25,4,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(25,4,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(25,4,number_format ($item->base,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(15,5,$item->date,'',0,'',$fill);
+            $this->Cell(50,5,$item->documento_nombre,'',0,'',$fill);
+            $this->Cell(15,5,$item->asiento1_numero,'',0,'C',$fill);
+            $this->Cell(25,5,$item->tercero_nit,'',0,'',$fill);
+            $this->Cell(75,5,utf8_decode($item->tercero_nombre),'',0,'',$fill);
+            $this->Cell(20,5,'-','',0,'C',$fill);
+            $this->Cell(15,5,'-','',0,'C',$fill);
+            $this->Cell(25,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(25,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(25,5,number_format ($item->base,2,',' , '.'),'',0,'R',$fill);
             $this->Ln();
             $cuenta = $item->cuenta;
         }
