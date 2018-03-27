@@ -21,13 +21,13 @@ class LibroMayor extends FPDF
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
-        $this->Cell(220,5,utf8_decode($empresa->tercero_razonsocial),0,0,'C');
+        $this->Cell(280,5,utf8_decode($empresa->tercero_razonsocial),0,0,'C');
 		$this->SetXY(75,17);
 		$this->SetFont('Arial','B',8);
-        $this->Cell(70,5,"NIT: $empresa->tercero_nit",0,0,'C');
-		$this->Line(10,22,200,22);;
+        $this->Cell(130,5,"NIT: $empresa->tercero_nit",0,0,'C');
+		$this->Line(10,22,270,22);;
 		$this->SetXY(85,23);
-        $this->Cell(50, 5, $this->metadata['Title'], 0, 0,'C');
+        $this->Cell(110, 5, $this->metadata['Title'], 0, 0,'C');
         $this->Ln(5);
         $this->headerTable();
     }

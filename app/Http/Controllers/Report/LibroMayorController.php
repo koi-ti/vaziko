@@ -94,13 +94,13 @@ class LibroMayorController extends Controller
             $saldos = DB::select($sql);
 
             // Prepare data
-            $title = "Libro mayor $mes/$ano";
+            $title = "Libro mayor del $mes - $ano";
             $type = $request->type;
 
             switch ($type) {
                 case 'xls':
                     Excel::create(sprintf('%s_%s_%s', 'libromayor', date('Y_m_d'), date('H_m_s')), function($excel) use($saldos, $title, $type) {
-                        $excel->sheet('Excel', function($sheet) use($asiento, $title, $type) {
+                        $excel->sheet('Excel', function($sheet) use($saldos, $title, $type) {
                             $sheet->loadView('reports.accounting.libromayor.report', compact('saldos', 'title', 'type'));
                         });
                     })->download('xls');
@@ -109,11 +109,6 @@ class LibroMayorController extends Controller
                 case 'pdf':
                     $pdf = new LibroMayor('L','mm', 'Letter');
                     $pdf->buldReport($saldos, $title);
-
-                    // $pdf = App::make('dompdf.wrapper');
-                    // $pdf->loadHTML(View::make('reports.accounting.libromayor.report',  compact('saldos', 'title','type'))->render());
-                    // $pdf->setPaper('letter', 'landscape')->setWarnings(false);
-                    // return $pdf->stream(sprintf('%s_%s_%s.pdf', 'libromayor', date('Y_m_d'), date('H_m_s')));
                 break;
             }
         }

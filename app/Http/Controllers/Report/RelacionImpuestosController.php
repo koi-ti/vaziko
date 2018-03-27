@@ -55,7 +55,6 @@ class RelacionImpuestosController extends Controller
             // Prepare data
             $title = "Reporte relación de impuestos durante el período de $request->fecha_inicial hasta $request->fecha_final";
             $type = $request->type;
-
             // Generate file
             switch ($type) {
                 case 'xls':

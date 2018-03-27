@@ -37,8 +37,8 @@ class AuxiliarContableController extends Controller
             $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
             $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$fechaI'");
             $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$fechaF'");
-            $query->where('koi_plancuentas.plancuentas_cuenta', '>=',$request->filter_cuenta_inicio);
-            $query->where('koi_plancuentas.plancuentas_cuenta', '<=',$request->filter_cuenta_fin);
+            $query->whereRaw("plancuentas_cuenta >= '$request->filter_cuenta_inicio'");
+            $query->whereRaw("plancuentas_cuenta <= '$request->filter_cuenta_fin'");
 
             if ($request->has('filter_tercero')) {
                 $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
@@ -56,7 +56,7 @@ class AuxiliarContableController extends Controller
 
             // Prepare data
             $auxcontable = $query->get();
-            $title = "Auxiliar contable $request->filter_fecha_inicial / $request->filter_fecha_final";
+            $title = "Auxiliar contable desde $request->filter_fecha_inicial hasta $request->filter_fecha_final";
             $type = $request->type;
 
             switch ($type) {

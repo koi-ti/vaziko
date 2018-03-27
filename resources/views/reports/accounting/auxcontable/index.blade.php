@@ -89,7 +89,7 @@
 	                        </div>
 	                    </div>
 					</div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <label for="filter_order" class="control-label col-md-2 text-right col-md-offset-2">Ordenar por</label>
                         <div class="form-group col-md-2">
                             <select name="filter_order" id="filter_order" class="form-control" required>
@@ -98,7 +98,7 @@
                                 <option value="3">Saldos terceros</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
 				</div>
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
