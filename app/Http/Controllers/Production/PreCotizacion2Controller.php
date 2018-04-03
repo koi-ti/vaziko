@@ -223,8 +223,7 @@ class PreCotizacion2Controller extends Controller
                         $materiales = isset($data['detalle']) ? $data['detalle'] : null;
                         foreach ($materiales as $material) {
                             // Validar que el id sea entero(los temporales tienen letras)
-                            if( !is_int($material['id']) ){
-                                Log::info($material);
+                            if( isset( $material['precotizacion1_proveedor'] ) ){
                                 // Validar tercero y materialp
                                 $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
                                 if(!$tercero instanceof Tercero){
