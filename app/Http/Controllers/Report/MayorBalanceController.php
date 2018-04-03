@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Classes\Reports\Accounting\MayorBalance;
 use DB, View, Excel, App;
 
 class MayorBalanceController extends Controller
@@ -22,7 +23,7 @@ class MayorBalanceController extends Controller
         {
             // Preparar datos reporte
             $sql = '';
-            $title = sprintf('%s %s %s', 'Mayor Y Balance', $request->ano, config('koi.meses')[$request->mes]);
+            $title = sprintf('%s %s %s', 'Mayor y balance de ',  config('koi.meses')[$request->mes], $request->ano);
             $type = $request->type;
             $mes = $request->mes;
             $ano = $request->ano;
@@ -90,10 +91,8 @@ class MayorBalanceController extends Controller
                 break;
 
                 case 'pdf':
-                    $pdf = App::make('dompdf.wrapper');
-                    $pdf->loadHTML(View::make('reports.accounting.mayorbalance.report',  compact('saldos', 'title', 'type'))->render());
-                    $pdf->setPaper('A4', 'landscape')->setWarnings(false);
-                    return $pdf->download(sprintf('%s_%s_%s_%s_%s.pdf', 'mayor_y_balance', $request->ano, $request->mes, date('Y_m_d'), date('H_m_s')));
+                    $pdf = new MayorBalance('L','mm','Letter');
+                    $pdf->buldReport($saldos, $title);
                 break;
             }
         }

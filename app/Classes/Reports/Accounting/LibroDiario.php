@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Classes\Reports;
+namespace App\Classes\Reports\Accounting;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
 use Auth;

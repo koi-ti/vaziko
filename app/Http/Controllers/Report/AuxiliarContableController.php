@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Classes\Reports\Accounting\AuxiliarContable;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
-use App\Classes\Reports\AuxiliarContable;
 
 use View, App, Excel, DB;
 
@@ -23,18 +23,22 @@ class AuxiliarContableController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
+            list($año, $mes, $dia) = (explode('-',$request->filter_fecha_inicial));
+            list($añoF, $mesF, $diaF) = (explode('-',$request->filter_fecha_final));
+
+            $fechaI = sprintf('%s-%s-%s', intval($año), intval($mes), intval($dia));
+            $fechaF = sprintf('%s-%s-%s', intval($añoF), intval($mesF), intval($diaF));
 
             $query = Asiento2::query();
-            $query->select('asiento2_debito as debito', 'asiento2_credito as credito', 'asiento2_base as base', 'asiento1_numero', DB::raw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date"),'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"), 'documento_nombre', 'koi_plancuentas.plancuentas_cuenta as cuenta');
+            $query->select('asiento2_debito as debito', 'asiento2_credito as credito', 'asiento2_base as base', 'asiento1_numero', DB::raw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date"),'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"), 'documento_nombre', 'plancuentas_cuenta as cuenta', 'plancuentas_nombre');
             $query->join('koi_asiento1','asiento2_asiento','=','koi_asiento1.id');
             $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
             $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
             $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$request->filter_fecha_inicial'");
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$request->filter_fecha_final'");
-
-            $query->where('koi_plancuentas.plancuentas_cuenta', '>=',$request->filter_cuenta_inicio);
-            $query->where('koi_plancuentas.plancuentas_cuenta', '<=',$request->filter_cuenta_fin);
+            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$fechaI'");
+            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$fechaF'");
+            $query->whereRaw("plancuentas_cuenta >= '$request->filter_cuenta_inicio'");
+            $query->whereRaw("plancuentas_cuenta <= '$request->filter_cuenta_fin'");
 
             if ($request->has('filter_tercero')) {
                 $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
@@ -52,7 +56,7 @@ class AuxiliarContableController extends Controller
 
             // Prepare data
             $auxcontable = $query->get();
-            $title = "Auxiliar contable $request->filter_fecha_inicial / $request->filter_fecha_final";
+            $title = "Auxiliar contable desde $request->filter_fecha_inicial hasta $request->filter_fecha_final";
             $type = $request->type;
 
             switch ($type) {

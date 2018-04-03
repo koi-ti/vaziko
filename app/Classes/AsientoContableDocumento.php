@@ -429,21 +429,21 @@ class AsientoContableDocumento {
         		$objSaldoContable->saldoscontables_nivel8 = $niveles['nivel8'] ?: 0;
         		$objSaldoContable->saldoscontables_debito_mes = $debito ?: 0;
         		$objSaldoContable->saldoscontables_credito_mes = $credito ?: 0;
-        		// $objSaldoContable->save();
+        		$objSaldoContable->save();
 
         	}else{
         		// Debito
         		if ($debito){
 					$saldo = ($objSaldoContable->saldoscontables_debito_mes ? $objSaldoContable->saldoscontables_debito_mes : 0) + $debito;
 					$objSaldoContable->saldoscontables_debito_mes = $saldo;
-					// $objSaldoContable->save();
+					$objSaldoContable->save();
         		}
 
         		// Credito
         		if($credito){
 					$saldo = ($objSaldoContable->saldoscontables_credito_mes ? $objSaldoContable->saldoscontables_credito_mes : 0) + $credito;
 					$objSaldoContable->saldoscontables_credito_mes = $saldo;
-					// $objSaldoContable->save();
+					$objSaldoContable->save();
         		}
         	}
 
@@ -546,7 +546,7 @@ class AsientoContableDocumento {
 					}else{
 						return "No se puede definir la naturaleza {$saldo->plancuentas_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 					}
-					// $objSaldoContable->save();
+					$objSaldoContable->save();
 		        }
 
 				if($xmes == date('m') && $xano == date('Y')) {

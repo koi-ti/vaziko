@@ -14,7 +14,7 @@
     </section>
 
    	<section class="content">
-	    <div class="box box-success" id="empresa-create">
+	    <div class="box box-success">
 	    	<form action="{{ route('rplancuentas.index') }}" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
@@ -29,20 +29,19 @@
 							</select>
 						</div>
 					</div>
-
-					<div class="row">
-						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-								<i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-							</button>
-						</div>
-						<div class="col-md-2 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-							</button>
-						</div>
-					</div>
 				</div>
+                <div class="box-footer">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
+                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
+                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
+                        </button>
+                    </div>
+                </div>
 			</form>
 		</div>
 	</section>

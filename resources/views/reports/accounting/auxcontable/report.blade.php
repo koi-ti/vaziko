@@ -20,27 +20,25 @@
 		<tbody>
 
 			{{--*/ $cuenta = '' /*--}}
-			@foreach($auxcontable as $auxiliar)
-				@foreach($auxiliar as $item)
-					@if($cuenta != $item->cuenta)
-						<tr class="brtable">
-							<td colspan="10" class="center size-7 bold">{{ $item->cuenta }}</td>
-						</tr>
-					@endif
-					<tr>
-						<td class="size-6">{{$item->date}}</td>
-						<td class="size-6">{{$item->documento_nombre}}</td>
-						<td class="size-6">{{$item->asiento1_numero}}</td>
-						<td class="size-6">{{$item->tercero_nit}}</td>
-						<td class="size-6">{{$item->tercero_nombre}}</td>
-						<td class="center">-</td>
-						<td class="center">-</td>
-						<td class="size-6">{{ number_format ($item->debito,2,',' , '.') }}</td>
-						<td class="size-6">{{ number_format ($item->credito,2,',' , '.') }}</td>
-						<td class="size-6">{{ number_format ($item->base,2,',' , '.') }}</td>
+			@foreach($auxcontable as $item)
+				@if($cuenta != $item->cuenta)
+					<tr class="brtable">
+						<td colspan="10" class="center size-7 bold">{{ $item->cuenta }} - {{$item->plancuentas_nombre}}</td>
 					</tr>
-					{{--*/ $cuenta = $item->cuenta /*--}}
-				@endforeach
+				@endif
+				<tr>
+					<td class="size-6">{{$item->date}}</td>
+					<td class="size-6">{{$item->documento_nombre}}</td>
+					<td class="size-6">{{$item->asiento1_numero}}</td>
+					<td class="size-6">{{$item->tercero_nit}}</td>
+					<td class="size-6">{{$item->tercero_nombre}}</td>
+					<td class="center">-</td>
+					<td class="center">-</td>
+					<td class="size-6">{{ number_format ($item->debito,2,',' , '.') }}</td>
+					<td class="size-6">{{ number_format ($item->credito,2,',' , '.') }}</td>
+					<td class="size-6">{{ number_format ($item->base,2,',' , '.') }}</td>
+				</tr>
+				{{--*/ $cuenta = $item->cuenta /*--}}
 			@endforeach
 		</tbody>
 	</table>
