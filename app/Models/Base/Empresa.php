@@ -3,8 +3,9 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 
-class Empresa extends Model
+class Empresa extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -21,6 +22,13 @@ class Empresa extends Model
      * @var array
      */
     protected $fillable = ['empresa_niif', 'empresa_iva', 'empresa_cc_contador', 'empresa_tj_contador', 'empresa_nm_contador', 'empresa_cc_revisor', 'empresa_tj_revisor', 'empresa_nm_revisor'];
+
+    /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['empresa_round'];
 
     public static function getEmpresa()
     {

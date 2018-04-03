@@ -291,46 +291,34 @@
 	                <div class="box-body">
 		    			<div class="row">
 							<label class="control-label col-md-1">Fórmula</label>
-		    				<div class="form-group col-md-5">
+		    				<div class="form-group col-md-6">
 		    					<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
 		    				</div>
 
-							<label class="control-label col-md-1">Redondear</label>
-		    				<div class="form-group col-md-1">
-		    					<div>{{ $cotizacion2->cotizacion2_precio_round }}</div>
-		    				</div>
 							<label class="control-label col-md-1">Precio</label>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-4">
 								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
 							</div>
 		    			</div>
 		    			<div class="row">
 							<label class="control-label col-md-1">Fórmula</label>
-		    				<div class="form-group col-md-5">
+		    				<div class="form-group col-md-6">
 		    					<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
 		    				</div>
 
-							<label class="control-label col-md-1">Redondear</label>
-		    				<div class="form-group col-md-1">
-		    					<div>{{ $cotizacion2->cotizacion2_transporte_round }}</div>
-		    				</div>
 							<label class="control-label col-md-1">Transporte</label>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-4">
 								<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
 							</div>
 		    			</div>
 		    			<div class="row">
 							<label class="control-label col-md-1">Fórmula</label>
-		    				<div class="form-group col-md-5">
+		    				<div class="form-group col-md-6">
 		    					<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
 		    				</div>
 
-							<label class="control-label col-md-1">Redondear</label>
-		    				<div class="form-group col-md-1">
-		    					<div>{{ $cotizacion2->cotizacion2_viaticos_round }}</div>
-		    				</div>
 							<label class="control-label col-md-1">Viáticos</label>
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-4">
 								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
 							</div>
 		    			</div>
@@ -428,7 +416,7 @@
 									<tr>
 										<th>Volumen</th>
 										<td class="text-right"><span>{{ $cotizacion2->cotizacion2_volumen }}</span></td>
-										<th colspan="2" class="text-right"><label class="checkbox-inline"><input type="checkbox" disabled id="cotizacion2_redondear" name="cotizacion2_redondear" value="cotizacion2_redondear" {{ $cotizacion2->cotizacion2_redondear ? 'checked': '' }}> Redondear</label></th>
+										<th colspan="2" class="text-right"><label class="checkbox-inline"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_round ? 'checked': '' }}> Redondear</label></th>
 										<th class="text-right"><span>{{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span></th>
 									</tr>
 									<tr>

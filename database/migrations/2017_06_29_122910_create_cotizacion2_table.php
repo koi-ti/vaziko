@@ -25,9 +25,6 @@ class CreateCotizacion2Table extends Migration
             $table->text('cotizacion2_precio_formula');
             $table->text('cotizacion2_transporte_formula');
             $table->text('cotizacion2_viaticos_formula');
-            $table->string('cotizacion2_precio_round', 10);
-            $table->string('cotizacion2_transporte_round', 10);
-            $table->string('cotizacion2_viaticos_round', 10);
             $table->double('cotizacion2_viaticos')->default(0);
             $table->integer('cotizacion2_transporte')->default(0);
             $table->double('cotizacion2_precio_venta')->default(0);
@@ -39,7 +36,7 @@ class CreateCotizacion2Table extends Migration
             $table->boolean('cotizacion2_retiro')->default(false);
 
             $table->integer('cotizacion2_volumen')->default(0);
-            $table->boolean('cotizacion2_redondear')->default(false);
+            $table->boolean('cotizacion2_round')->default(false);
             $table->double('cotizacion2_vtotal')->default(0);
 
             $table->boolean('cotizacion2_yellow')->default(false);

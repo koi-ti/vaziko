@@ -543,15 +543,12 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_precio_formula = $cotizacion2->cotizacion2_precio_formula;
                     $orden2->orden2_transporte_formula = $cotizacion2->cotizacion2_transporte_formula;
                     $orden2->orden2_viaticos_formula = $cotizacion2->cotizacion2_viaticos_formula;
-                    $orden2->orden2_precio_round = $cotizacion2->cotizacion2_precio_round;
-                    $orden2->orden2_transporte_round = $cotizacion2->cotizacion2_transporte_round;
-                    $orden2->orden2_viaticos_round = $cotizacion2->cotizacion2_viaticos_round;
                     $orden2->orden2_viaticos = $cotizacion2->cotizacion2_viaticos;
                     $orden2->orden2_transporte = $cotizacion2->cotizacion2_transporte;
                     $orden2->orden2_precio_venta = $cotizacion2->cotizacion2_precio_venta;
                     $orden2->orden2_total_valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario;
                     $orden2->orden2_volumen = $cotizacion2->cotizacion2_volumen;
-                    $orden2->orden2_redondear = $cotizacion2->cotizacion2_redondear;
+                    $orden2->orden2_round = $cotizacion2->cotizacion2_round;
                     $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;

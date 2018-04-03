@@ -153,6 +153,14 @@ app || (app = {});
             'productosp/:producto(/)': 'getProductospShow',
             'productosp/:producto/edit(/)': 'getProductospEdit',
 
+            'precotizaciones(/)': 'getPreCotizacionesMain',
+            'precotizaciones/create(/)': 'getPreCotizacionesCreate',
+            'precotizaciones/:precotizaciones(/)': 'getPreCotizacionesShow',
+            'precotizaciones/:precotizaciones/edit(/)': 'getPreCotizacionesEdit',
+            'precotizaciones/productos/create(/)(?*queryString)': 'getPreCotizacionesProductoCreate',
+            'precotizaciones/productos/:producto(/)': 'getPreCotizacionesProductoShow',
+            'precotizaciones/productos/:producto/edit(/)': 'getPreCotizacionesProductoEdit',
+
             'cotizaciones(/)': 'getCotizacionesMain',
             'cotizaciones/create(/)': 'getCotizacionesCreate',
             'cotizaciones/:cotizaciones(/)': 'getCotizacionesShow',
@@ -1703,6 +1711,125 @@ app || (app = {});
 
             this.editProductopView = new app.EditProductopView({ model: this.productopModel });
             this.productopModel.fetch();
+        },
+
+        /**
+        * show view main precotizacion
+        */
+        getPreCotizacionesMain: function () {
+
+            if ( this.mainPreCotizacionesView instanceof Backbone.View ){
+                this.mainPreCotizacionesView.stopListening();
+                this.mainPreCotizacionesView.undelegateEvents();
+            }
+
+            this.mainPreCotizacionesView = new app.MainPreCotizacionesView( );
+        },
+
+        /**
+        * show view create precotizacion
+        */
+        getPreCotizacionesCreate: function () {
+            this.precotizacionModel = new app.PreCotizacionModel();
+
+            if ( this.createPreCotizacionView instanceof Backbone.View ){
+                this.createPreCotizacionView.stopListening();
+                this.createPreCotizacionView.undelegateEvents();
+            }
+
+            this.createPreCotizacionView = new app.CreatePreCotizacionView({ model: this.precotizacionModel });
+            this.createPreCotizacionView.render();
+        },
+
+        /**
+        * show view show precotizaicon
+        */
+        getPreCotizacionesShow: function (precotizacion) {
+            this.precotizacionModel = new app.PreCotizacionModel();
+            this.precotizacionModel.set({'id': precotizacion}, {silent: true});
+
+            if ( this.showPreCotizacionView instanceof Backbone.View ){
+                this.showPreCotizacionView.stopListening();
+                this.showPreCotizacionView.undelegateEvents();
+            }
+
+            this.showPreCotizacionView = new app.ShowPreCotizacionView({ model: this.precotizacionModel });
+        },
+
+        /**
+        * show view edit precotizacion produccion
+        */
+        getPreCotizacionesEdit: function (precotizacion) {
+            this.precotizacionModel = new app.PreCotizacionModel();
+            this.precotizacionModel.set({'id': precotizacion}, {'silent':true});
+
+            if ( this.editPreCotizacionView instanceof Backbone.View ){
+                this.editPreCotizacionView.stopListening();
+                this.editPreCotizacionView.undelegateEvents();
+            }
+
+            if ( this.createPreCotizacionView instanceof Backbone.View ){
+                this.createPreCotizacionView.stopListening();
+                this.createPreCotizacionView.undelegateEvents();
+            }
+
+            this.editPreCotizacionView = new app.EditPreCotizacionView({ model: this.precotizacionModel });
+            this.precotizacionModel.fetch();
+        },
+
+        /**
+        * show view create productos en precotizaciones
+        */
+        getPreCotizacionesProductoCreate: function (queryString) {
+            var queries = this.parseQueryString(queryString);
+            this.precotizacion2Model = new app.PreCotizacion2Model();
+
+            if ( this.createPreCotizacion2View instanceof Backbone.View ){
+                this.createPreCotizacion2View.stopListening();
+                this.createPreCotizacion2View.undelegateEvents();
+            }
+
+            this.createPreCotizacion2View = new app.CreatePreCotizacion2View({
+                model: this.precotizacion2Model,
+                parameters: {
+                    data : {
+                        precotizacion2_precotizacion1: queries.precotizacion,
+                        precotizacion2_productop: queries.productop
+                    }
+                }
+            });
+            this.createPreCotizacion2View.render();
+        },
+
+        /**
+        * show view edit cotizaciones
+        */
+        getPreCotizacionesProductoShow: function (producto) {
+            this.precotizacion2Model = new app.PreCotizacion2Model();
+            this.precotizacion2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.showPreCotizacion2View instanceof Backbone.View ){
+                this.showPreCotizacion2View.stopListening();
+                this.showPreCotizacion2View.undelegateEvents();
+            }
+
+            this.showPreCotizacion2View = new app.ShowPreCotizacion2View({ model: this.precotizacion2Model });
+        },
+
+        /**
+        * show view edit cotizaciones
+        */
+        getPreCotizacionesProductoEdit: function (producto) {
+            this.precotizacion2Model = new app.PreCotizacion2Model();
+            this.precotizacion2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.createPreCotizacion2View instanceof Backbone.View ){
+                this.createPreCotizacion2View.stopListening();
+                this.createPreCotizacion2View.undelegateEvents();
+            }
+
+            this.createPreCotizacion2View = new app.CreatePreCotizacion2View({ model: this.precotizacion2Model });
+            this.precotizacion2Model.fetch();
         },
 
         /**

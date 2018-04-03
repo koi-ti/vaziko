@@ -104,7 +104,7 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
-                    $orden2->orden2_redondear = $request->orden2_redondear;
+                    $orden2->orden2_round = $request->orden2_round;
                     $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
@@ -281,7 +281,7 @@ class DetalleOrdenpController extends Controller
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
-                        $orden2->orden2_redondear = $request->orden2_redondear;
+                        $orden2->orden2_round = $request->orden2_round;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
                         $orden2->save();
 
@@ -455,9 +455,6 @@ class DetalleOrdenpController extends Controller
             $valor = Ordenp2::calcString($equation);
             if(!is_numeric($valor)){
                 return response()->json(['precio_venta' => 0]);
-            }
-            if($request->has('round') && trim($request->round)!='' && is_numeric($request->round)) {
-                $valor = round($valor, $request->round);
             }
             return response()->json(['precio_venta' => $valor]);
         }

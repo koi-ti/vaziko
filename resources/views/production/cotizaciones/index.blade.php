@@ -74,7 +74,7 @@
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <a href="{{ route('cotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-puzzle-piece"></i> Nueva cotización
+                                    <i class="fa fa-plus"></i> Nuevo
                                 </a>
                             </div>
                         </div>
