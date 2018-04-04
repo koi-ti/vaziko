@@ -256,8 +256,6 @@ app || (app = {});
                     var formData = new FormData();
                         formData.append('precotizacion2', this.model.get('id'));
 
-                        console.log(this.$files);
-
                     _.each(this.$files, function(file, key){
                         formData.append('imagenes[]', file);
                     });
@@ -288,17 +286,18 @@ app || (app = {});
                             }
 
                             // Redirect to cotizacion
-                            // window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('precotizacion2_precotizacion1') })) );
+                            window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('precotizacion2_precotizacion1') })) );
                         }
                     })
                     .fail(function(jqXHR, ajaxOptions, thrownError) {
                         window.Misc.removeSpinner( _this.$wrapper );
                         alertify.error(thrownError);
                     });
+                }else{
+                    // Redirect to cotizacion
+                    window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
                 }
 
-                // Redirect to cotizacion
-                // window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
             }
         }
     });
