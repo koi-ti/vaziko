@@ -33,4 +33,11 @@ class PreCotizacion5 extends Model
         $this->errors = $validator->errors();
         return false;
     }
+
+    public static function getPreCotizaciones5($precotizacion2 = null)
+    {
+        $query = PreCotizacion5::query();
+        $query->where('precotizacion5_precotizacion2', $precotizacion2);
+        return $query->get();
+    }
 }

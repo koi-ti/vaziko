@@ -44,7 +44,38 @@
 				<div class="col-md-12" id="fine-uploader"></div>
 			</div><br>
 
-			<div class="box box-success" id="wrapper-productop-precotizacion">
+			<div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Impresiones</h3>
+                </div>
+
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="70%">Detalle</th>
+								<th width="15%">Alto</th>
+								<th width="15%">Ancho</th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach( App\Models\Production\PreCotizacion5::getPreCotizaciones5( $precotizacion2->id ) as $impresion )
+								<tr>
+									<td class="text-left">{{ $impresion->precotizacion5_texto }}</td>
+									<td class="text-left">{{ $impresion->precotizacion5_alto }}</td>
+									<td class="text-left">{{ $impresion->precotizacion5_ancho }}</td>
+								</tr>
+							@endforeach
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<div class="box box-success">
+				<div class="box-header with-border">
+                    <h3 class="box-title">Materiales de producción</h3>
+                </div>
+
 				<div class="box-body table-responsive no-padding">
 					<table id="browse-precotizacion-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
 						<thead>
