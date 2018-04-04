@@ -288,7 +288,7 @@ app || (app = {});
                             }
 
                             // Redirect to cotizacion
-                            window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('precotizacion2_precotizacion1') })) );
+                            // window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('precotizacion2_precotizacion1') })) );
                         }
                     })
                     .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -298,7 +298,7 @@ app || (app = {});
                 }
 
                 // Redirect to cotizacion
-                window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
+                // window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
             }
         }
     });
