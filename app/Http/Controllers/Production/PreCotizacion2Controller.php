@@ -212,7 +212,6 @@ class PreCotizacion2Controller extends Controller
     public function update(Request $request, $id)
     {
         if ($request->ajax()) {
-
             $data = $request->all();
             // Recuperar precotizacion2
             $precotizacion2 = PreCotizacion2::findOrFail($id);
@@ -232,7 +231,7 @@ class PreCotizacion2Controller extends Controller
                         $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                         foreach ($materiales as $material) {
                             // Validar que el id sea entero(los temporales tienen letras)
-                            if( isset( $material['precotizacion1_proveedor'] ) ){
+                            if( isset( $material['success'] ) ){
                                 // Validar tercero y materialp
                                 $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
                                 if(!$tercero instanceof Tercero){
@@ -258,8 +257,7 @@ class PreCotizacion2Controller extends Controller
                         // Impresiones
                         $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
                         foreach ($impresiones as $impresion) {
-                            // Validar que el id sea entero(los temporales tienen letras)
-                            if( !is_int($impresion['id']) ){
+                            if( isset($impresion['success']) ){
                                 $newprecotizacion5 = new PreCotizacion5;
                                 $newprecotizacion5->fill($impresion);
                                 $newprecotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
