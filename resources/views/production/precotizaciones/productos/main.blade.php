@@ -51,6 +51,49 @@
 
                 <div class="box box-primary">
                     <div class="box-header with-border">
+                        <h3 class="box-title">Impresiones</h3>
+                    </div>
+                    <div class="box-body" id="precotizacion5-wrapper-producto">
+                        <form method="POST" accept-charset="UTF-8" id="form-precotizacion5-producto" data-toggle="validator">
+                            <div class="row">
+                                <div class="form-group col-sm-7">
+                                    <input type="text" id="precotizacion5_texto" name="precotizacion5_texto" placeholder="Detalle" class="form-control input-xs" maxlength="150" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group col-sm-2">
+                                    <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group col-sm-2">
+                                    <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
+                                    <div class="help-block with-errors"></div>
+                                </div>
+                                <div class="form-group col-sm-1">
+                                    <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion5">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- table table-bordered table-striped -->
+                        <div class="box-body table-responsive no-padding">
+                            <table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th width="6%"></th>
+                                        <th width="70%">Detalle</th>
+                                        <th width="12%">Alto</th>
+                                        <th width="12%">Ancho</th>
+                                    </tr>
+                                </thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="box box-primary">
+                    <div class="box-header with-border">
                         <h3 class="box-title">Detalle</h3>
                     </div>
                     <div class="box-body" id="precotizacion3-wrapper-producto">
@@ -128,14 +171,31 @@
         </div>
     </script>
 
-    <script type="text/template" id="precotizacion-delete-confirm-tpl">
+    <script type="text/template" id="precotizacion-delete-materialp-confirm-tpl">
         <p>¿Está seguro que desea eliminar el material <b><%- materialp_nombre %> </b>?</p>
     </script>
 
-    <script type="text/template" id="precotizacion-producto-material-item-tpl">
+    <script type="text/template" id="precotizacion-delete-impresion-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el detalle <b><%- precotizacion5_texto %> </b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-impresion-item-tpl">
         <% if( edit ) { %>
            <td class="text-center">
-               <a class="btn btn-default btn-xs item-producto-precotizacion-remove" data-resource="<%- id %>">
+               <a class="btn btn-default btn-xs item-producto-impresion-precotizacion-remove" data-resource="<%- id %>">
+                   <span><i class="fa fa-times"></i></span>
+               </a>
+           </td>
+       <% } %>
+       <td><%- precotizacion5_texto %></td>
+       <td><%- precotizacion5_alto %></td>
+       <td><%- precotizacion5_ancho %></td>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-materialp-item-tpl">
+        <% if( edit ) { %>
+           <td class="text-center">
+               <a class="btn btn-default btn-xs item-producto-materialp-precotizacion-remove" data-resource="<%- id %>">
                    <span><i class="fa fa-times"></i></span>
                </a>
            </td>

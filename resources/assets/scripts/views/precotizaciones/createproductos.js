@@ -18,11 +18,10 @@ app || (app = {});
             'submit #form-precotizacion-producto': 'onStore',
             'click .submit-precotizacion3': 'submitPreCotizacion3',
             'submit #form-precotizacion3-producto': 'onStorePreCotizacion3',
+            'click .submit-precotizacion5': 'submitPreCotizacion5',
+            'submit #form-precotizacion5-producto': 'onStorePreCotizacion5',
         },
         parameters: {
-            data: {
-                precotizacion2_productop: null
-            }
         },
 
         /**
@@ -38,6 +37,7 @@ app || (app = {});
             // Attributes
             this.$wraperForm = this.$('#render-form-precotizacion-producto');
             this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
+            this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
             this.$files = [];
 
             // Events
@@ -54,7 +54,8 @@ app || (app = {});
             this.$wraperForm.html( this.template(attributes) );
 
             this.$form = this.$('#form-precotizacion-producto');
-            this.$formdetalle = this.$('#form-precotizacion3-producto');
+            this.$formmaterialesp = this.$('#form-precotizacion3-producto');
+            this.$formimpresiones = this.$('#form-precotizacion5-producto');
             this.$uploaderFile = this.$('#fine-uploader');
 
             // Reference views
@@ -67,20 +68,24 @@ app || (app = {});
         * reference to views
         */
         referenceViews: function () {
-            var dataFilter = { productop: this.parameters.data.precotizacion2_productop };
-
-            // Model exist
-            if( this.model.id != undefined ) {
-                dataFilter.precotizacion2 = this.model.get('id');
-                dataFilter.productop = this.model.get('precotizacion2_productop');
-            }
-
-            // Materiales li, ateCotizacion2st
+            // Materiales , Precotizacion2
             this.materialesProductopPreCotizacionListView = new app.MaterialesProductopPreCotizacionListView( {
                 collection: this.materialesProductopPreCotizacionList,
                 parameters: {
                     edit: true,
-                    dataFilter: dataFilter
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
+
+            this.impresionesProductopPreCotizacionListView = new app.ImpresionesProductopPreCotizacionListView( {
+                collection: this.impresionesProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
                }
             });
         },
@@ -100,7 +105,8 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.detalle = this.materialesProductopPreCotizacionList.toJSON();
+                    data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
+                    data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
             }
@@ -110,7 +116,7 @@ app || (app = {});
         * Event submit productop
         */
         submitPreCotizacion3: function (e) {
-            this.$formdetalle.submit();
+            this.$formmaterialesp.submit();
         },
 
         /**
@@ -122,6 +128,25 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                 this.materialesProductopPreCotizacionList.trigger( 'store' , data );
+            }
+        },
+
+        /**
+        * Event submit productop
+        */
+        submitPreCotizacion5: function (e) {
+            this.$formimpresiones.submit();
+        },
+
+        /**
+        * Event Create
+        */
+        onStorePreCotizacion5: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.impresionesProductopPreCotizacionList.trigger('store' , data);
             }
         },
 

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5;
 use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
@@ -88,8 +88,8 @@ class PreCotizacion2Controller extends Controller
                     $precotizacion2->precotizacion2_productop = $producto->id;
                     $precotizacion2->save();
 
-                    // Materiales
-                    $materiales = isset($data['detalle']) ? $data['detalle'] : null;
+                    // Materialesp
+                    $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         // Validar tercero y materialp
                         $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
@@ -107,10 +107,18 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
                         $precotizacion3->precotizacion3_proveedor = $tercero->id;
-                        $precotizacion3->precotizacion3_productop = $producto->id;
                         $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                         $precotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                         $precotizacion3->save();
+                    }
+
+                    // Impresiones
+                    $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
+                    foreach ($impresiones as $impresion) {
+                        $precotizacion5 = new PreCotizacion5;
+                        $precotizacion5->fill($impresion);
+                        $precotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
+                        $precotizacion5->save();
                     }
 
                     // Commit Transaction
@@ -204,6 +212,7 @@ class PreCotizacion2Controller extends Controller
     public function update(Request $request, $id)
     {
         if ($request->ajax()) {
+
             $data = $request->all();
             // Recuperar precotizacion2
             $precotizacion2 = PreCotizacion2::findOrFail($id);
@@ -220,7 +229,7 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion2->save();
 
                         // Materiales
-                        $materiales = isset($data['detalle']) ? $data['detalle'] : null;
+                        $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                         foreach ($materiales as $material) {
                             // Validar que el id sea entero(los temporales tienen letras)
                             if( isset( $material['precotizacion1_proveedor'] ) ){
@@ -240,10 +249,21 @@ class PreCotizacion2Controller extends Controller
                                 $newprecotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $newprecotizacion3->precotizacion3_materialp = $materialp->id;
                                 $newprecotizacion3->precotizacion3_proveedor = $tercero->id;
-                                $newprecotizacion3->precotizacion3_productop = $precotizacion2->precotizacion2_productop;
                                 $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                                 $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                                 $newprecotizacion3->save();
+                            }
+                        }
+
+                        // Impresiones
+                        $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
+                        foreach ($impresiones as $impresion) {
+                            // Validar que el id sea entero(los temporales tienen letras)
+                            if( !is_int($impresion['id']) ){
+                                $newprecotizacion5 = new PreCotizacion5;
+                                $newprecotizacion5->fill($impresion);
+                                $newprecotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
+                                $newprecotizacion5->save();
                             }
                         }
 

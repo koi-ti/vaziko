@@ -63,7 +63,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.spinner,
                     dataFilter: {
-                        'precotizacion2_precotizacion1': this.model.get('id')
+                        precotizacion2_precotizacion1: this.model.get('id')
                     }
                }
             });

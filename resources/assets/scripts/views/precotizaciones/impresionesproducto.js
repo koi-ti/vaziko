@@ -1,5 +1,5 @@
 /**
-* Class MaterialesProductopPreCotizacionListView  of Backbone Router
+* Class ImpresionesProductopPreCotizacionListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,11 +9,11 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MaterialesProductopPreCotizacionListView = Backbone.View.extend({
+    app.ImpresionesProductopPreCotizacionListView = Backbone.View.extend({
 
-        el: '#browse-precotizacion-producto-materiales-list',
+        el: '#browse-precotizacion-producto-impresiones-list',
         events: {
-            'click .item-producto-materialp-precotizacion-remove': 'removeOne'
+            'click .item-producto-impresion-precotizacion-remove': 'removeOne'
         },
         parameters: {
         	wrapper: null,
@@ -27,9 +27,6 @@ app || (app = {});
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Render total
-            this.$total = this.$('#total');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -50,19 +47,18 @@ app || (app = {});
 
         /**
         * Render view contact by model
-        * @param Object cotizacion4Model Model instance
+        * @param Object precotizacion5Model Model instance
         */
-        addOne: function (precotizacion3Model) {
-            var view = new app.MaterialesProductopPreCotizacionItemView({
-                model: precotizacion3Model,
+        addOne: function ( precotizacion5Model ) {
+            var view = new app.ImpresionesProductopPreCotizacionItemView({
+                model: precotizacion5Model,
                 parameters: {
                     edit: this.parameters.edit
                 }
             });
-            precotizacion3Model.view = view;
+            precotizacion5Model.view = view;
             this.$el.append( view.render().el );
 
-            this.totalize();
         },
 
         /**
@@ -84,8 +80,8 @@ app || (app = {});
             window.Misc.setSpinner( this.parameters.wrapper );
 
             // Add model in collection
-            var precotizacion3Model = new app.PreCotizacion3Model();
-            precotizacion3Model.save(data, {
+            var precotizacion5Model = new app.PreCotizacion5Model();
+            precotizacion5Model.save(data, {
                 success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
@@ -101,7 +97,7 @@ app || (app = {});
 
                         // Add model in collection
                         _this.collection.add(model);
-                        window.Misc.clearForm( $('#form-precotizacion3-producto') );
+                        window.Misc.clearForm( $('#form-precotizacion5-producto') );
                     }
                 },
                 error : function(model, error) {
@@ -124,7 +120,6 @@ app || (app = {});
                 if ( model instanceof Backbone.Model ) {
                     model.view.remove();
                     this.collection.remove(model);
-                    this.totalize();
                 }
             }else{
                 var reg = /[A-Za-z]/;
@@ -134,7 +129,6 @@ app || (app = {});
                     if ( model instanceof Backbone.Model ) {
                         model.view.remove();
                         this.collection.remove(model);
-                        this.totalize();
                     }
                 }
             }
@@ -148,9 +142,9 @@ app || (app = {});
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { materialp_nombre: model.get('materialp_nombre')},
-                    template: _.template( ($('#precotizacion-delete-materialp-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar material de producción',
+                    dataFilter: { precotizacion5_texto: model.get('precotizacion5_texto')},
+                    template: _.template( ($('#precotizacion-delete-impresion-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Eliminar detalle de impresión',
                     onConfirm: function () {
                         if ( model instanceof Backbone.Model ) {
                             model.destroy({
@@ -164,7 +158,6 @@ app || (app = {});
                                         }
 
                                         model.view.remove();
-                                        _this.totalize();
                                     }
                                 }
                             });
@@ -174,16 +167,6 @@ app || (app = {});
             });
 
             cancelConfirm.render();
-        },
-
-        /**
-        *Render totales the collection
-        */
-        totalize: function(){
-            var data = this.collection.totalize();
-            if(this.$total.length) {
-                this.$total.empty().html( window.Misc.currency( data.total ) );
-            }
         },
 
         /**

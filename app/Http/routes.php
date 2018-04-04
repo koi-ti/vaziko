@@ -206,10 +206,11 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'precotizaciones'], function(){
 		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
 		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
-		
+
 		Route::group(['prefix' => 'productos'], function(){
 			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('imagenes', 'Production\PreCotizacion4Controller');
+			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
 		});
 		Route::resource('productos', 'Production\PreCotizacion2Controller');
 	});

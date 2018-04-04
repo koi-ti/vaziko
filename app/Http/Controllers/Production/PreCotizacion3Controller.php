@@ -19,7 +19,12 @@ class PreCotizacion3Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return response()->json( PreCotizacion3::getPreCotizaciones3( $request->precotizacion2 ) );
+            $detalle = [];
+            if( $request->has('precotizacion2') ){
+                $detalle = PreCotizacion3::getPreCotizaciones3( $request->precotizacion2 );
+                return response()->json( $detalle );
+            }
+            return response()->json($detalle);
         }
         abort(404);
     }

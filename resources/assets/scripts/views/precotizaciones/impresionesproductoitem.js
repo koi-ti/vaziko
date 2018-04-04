@@ -1,5 +1,5 @@
 /**
-* Class MaterialesProductopPreCotizacionItemView  of Backbone Router
+* Class ImpresionesProductopPreCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MaterialesProductopPreCotizacionItemView = Backbone.View.extend({
+    app.ImpresionesProductopPreCotizacionItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#precotizacion-producto-materialp-item-tpl').html() || '') ),
+        template: _.template( ($('#precotizacion-producto-impresion-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },
