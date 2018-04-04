@@ -70,6 +70,8 @@ class PreCotizacion4Controller extends Controller
 
             // Validar que tenga imagenes
             $files = $request->imagenes;
+            Log::info($files);
+            
             if( !empty($files) ){
                 DB::beginTransaction();
                 try {

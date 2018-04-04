@@ -256,6 +256,8 @@ app || (app = {});
                     var formData = new FormData();
                         formData.append('precotizacion2', this.model.get('id'));
 
+                        console.log(this.$files);
+
                     _.each(this.$files, function(file, key){
                         formData.append('imagenes[]', file);
                     });
