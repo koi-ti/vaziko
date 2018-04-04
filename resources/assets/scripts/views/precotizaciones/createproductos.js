@@ -268,11 +268,11 @@ app || (app = {});
                         contentType: false,
                         processData: false,
                         beforeSend: function() {
-                            window.Misc.setSpinner( _this.$wrapper );
+                            window.Misc.setSpinner( _this.el );
                         }
                     })
                     .done(function(resp) {
-                        window.Misc.removeSpinner( _this.$wrapper );
+                        window.Misc.removeSpinner( _this.el );
                         if(!_.isUndefined(resp.success)) {
                             // response success or error
                             var text = resp.success ? '' : resp.errors;
@@ -290,14 +290,13 @@ app || (app = {});
                         }
                     })
                     .fail(function(jqXHR, ajaxOptions, thrownError) {
-                        window.Misc.removeSpinner( _this.$wrapper );
+                        window.Misc.removeSpinner( _this.el );
                         alertify.error(thrownError);
                     });
                 }else{
                     // Redirect to cotizacion
                     window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
                 }
-
             }
         }
     });
