@@ -224,20 +224,23 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'precotizaciones' ? 'active' : '' }}">
+                        <a href="{{ route('precotizaciones.index') }}"><i class="fa fa-envelope-open-o"></i> Pre-cotizaciones</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'cotizaciones' ? 'active' : '' }}">
-                        <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-puzzle-piece"></i> Cotizaciones</a>
+                        <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-envelope-o"></i> Cotizaciones</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
                         <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>

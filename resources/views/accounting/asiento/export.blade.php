@@ -59,8 +59,8 @@
 						<td class="left">{{ $asiento2->tercero_nit }}</td>
 						<td class="left">{{ $asiento2->centrocosto_nombre }}</td>
 						<td class="right">{{ number_format($asiento2->asiento2_base,2,'.',',') }}</td>
-						<td class="right">{{ number_format($asiento2->asiento2_credito,2,'.',',') }}</td>
 						<td class="right">{{ number_format($asiento2->asiento2_debito,2,'.',',') }}</td>
+						<td class="right">{{ number_format($asiento2->asiento2_credito,2,'.',',') }}</td>
 					</tr>
 
 					{{-- Calculo totales --}}

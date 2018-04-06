@@ -60,12 +60,12 @@
                                         <i class="fa fa-user"></i>
                                     </button>
                                 </span>
-                                <input id="tiempop_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre" required>
+                                <input id="tiempop_tercero" placeholder="Funcionario" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-sm-5 col-xs-10">
-                            <input id="tiempop_tercero_nombre" name="tiempop_tercero_nombre[]" placeholder="Nombre cliente" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                            <input id="tiempop_tercero_nombre" name="tiempop_tercero_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly required>
                         </div>
                         <div class="col-sm-1 col-xs-2">
                             <a class="btn btn-success btn-flat btn-sm add-funcionario">
@@ -104,12 +104,12 @@
                             <i class="fa fa-user"></i>
                         </button>
                     </span>
-                    <input id="tiempop_tercero_<%- posactual %>" placeholder="Cliente" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre_<%- posactual %>" required>
+                    <input id="tiempop_tercero_<%- posactual %>" placeholder="Funcionario" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre_<%- posactual %>" required>
                 </div>
                 <div class="help-block with-errors"></div>
             </div>
             <div class="col-sm-5 col-xs-10">
-                <input id="tiempop_tercero_nombre_<%- posactual %>" name="tiempop_tercero_nombre[]" placeholder="Nombre cliente" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                <input id="tiempop_tercero_nombre_<%- posactual %>" name="tiempop_tercero_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly required>
             </div>
             <div class="col-sm-1 col-xs-2 text-left">
                 <a class="btn btn-danger btn-flat btn-sm funcionario-remove" data-resource="<%- posactual %>">

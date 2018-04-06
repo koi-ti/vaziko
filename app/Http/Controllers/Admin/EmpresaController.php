@@ -94,6 +94,7 @@ class EmpresaController extends Controller
 
                     // Empresa
                     $empresa->fill($data);
+                    $empresa->fillBoolean($data);
                     $empresa->save();
 
                     // Commit Transaction

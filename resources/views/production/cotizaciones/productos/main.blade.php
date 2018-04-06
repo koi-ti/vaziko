@@ -271,43 +271,31 @@
                     <div class="box-body">
                         <div class="row">
                             <label for="cotizacion2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="cotizacion2_precio_formula" value="<%- cotizacion2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="cotizacion2_precio_formula" type="text" maxlength="200" data-input="P">
                             </div>
-                            <label for="cotizacion2_precio_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="cotizacion2_precio_round" value="<%- cotizacion2_precio_round %>" class="form-control input-sm calculate_formula" name="cotizacion2_precio_round" type="text" maxlength="5" data-input="RP">
-                            </div>
                             <label for="cotizacion2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="cotizacion2_precio_venta" value="<%- cotizacion2_precio_venta %>" placeholder="Precio" class="form-control input-sm event-price" name="cotizacion2_precio_venta" type="text" maxlength="30" data-currency required>
                             </div>
                         </div>
                         <div class="row">
                             <label for="cotizacion2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="cotizacion2_transporte_formula" value="<%- cotizacion2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="cotizacion2_transporte_formula" type="text" maxlength="200" data-input="T">
                             </div>
-                            <label for="cotizacion2_transporte_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="cotizacion2_transporte_round" value="<%- cotizacion2_transporte_round %>" class="form-control input-sm  calculate_formula" name="cotizacion2_transporte_round" type="text" maxlength="5" data-input="RT">
-                            </div>
                             <label for="cotizacion2_transporte" class="col-sm-1 control-label">Transporte</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="cotizacion2_transporte" value="<%- cotizacion2_transporte %>" class="form-control input-sm event-price" name="cotizacion2_transporte" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                         <div class="row">
                             <label for="cotizacion2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="cotizacion2_viaticos_formula" value="<%- cotizacion2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="cotizacion2_viaticos_formula" type="text" maxlength="200" data-input="V">
                             </div>
-                            <label for="cotizacion2_viaticos_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="cotizacion2_viaticos_round" value="<%- cotizacion2_viaticos_round %>" class="form-control input-sm  calculate_formula" name="cotizacion2_viaticos_round" type="text" maxlength="5" data-input="RV">
-                            </div>
                             <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viáticos</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm event-price" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
@@ -417,7 +405,7 @@
                                     <td><input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100"></td>
                                     <th colspan="2">
                                         <label class="checkbox-inline">
-                                            <input type="checkbox" id="cotizacion2_redondear" name="cotizacion2_redondear" value="<%- cotizacion2_redondear %>" <%- parseInt(cotizacion2_redondear) ? 'checked': ''%>> Redondear
+                                            <input type="checkbox" id="cotizacion2_round" name="cotizacion2_round" value="<%- cotizacion2_round %>" <%- parseInt(cotizacion2_round) ? 'checked': ''%>> Redondear
                                         </label>
                                     </th>
                                     <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>

@@ -203,6 +203,19 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
 
+	Route::group(['prefix' => 'precotizaciones'], function(){
+		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
+		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
+
+		Route::group(['prefix' => 'productos'], function(){
+			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
+		});
+		Route::resource('productos', 'Production\PreCotizacion2Controller');
+	});
+	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['except' => ['destroy']]);
+
 	Route::group(['prefix' => 'cotizaciones'], function(){
 		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
 		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
@@ -223,6 +236,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('productos', 'Production\Cotizacion2Controller');
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
+
 
 	Route::group(['prefix' => 'productosp'], function(){
 		Route::get('search', ['as' => 'productosp.search', 'uses' => 'Production\ProductopController@search']);

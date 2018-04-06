@@ -51,7 +51,7 @@
 
 							<% if(edit) { %>
 								<div class="col-md-1 col-sm-2 col-xs-2 text-right pull-right">
-									<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" class="btn btn-danger btn-sm btn-block">
+									<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" target="_blank" class="btn btn-danger btn-sm btn-block">
 										<i class="fa fa-file-pdf-o"></i>
 									</a>
 								</div>

@@ -25,9 +25,6 @@ class CreateOrdenproduccion2Table extends Migration
             $table->text('orden2_precio_formula');
             $table->text('orden2_transporte_formula');
             $table->text('orden2_viaticos_formula');
-            $table->string('orden2_precio_round', 10);
-            $table->string('orden2_transporte_round', 10);
-            $table->string('orden2_viaticos_round', 10);
             $table->double('orden2_viaticos')->default(0);
             $table->integer('orden2_transporte')->default(0);
             $table->double('orden2_precio_venta')->default(0);
@@ -39,7 +36,7 @@ class CreateOrdenproduccion2Table extends Migration
             $table->boolean('orden2_retiro')->default(false);
 
             $table->integer('orden2_volumen')->default(0);
-            $table->boolean('orden2_redondear')->default(false);
+            $table->boolean('orden2_round')->default(false);
             $table->double('orden2_vtotal')->default(0);
 
             $table->boolean('orden2_yellow')->default(false);

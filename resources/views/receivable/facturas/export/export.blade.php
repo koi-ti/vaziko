@@ -31,7 +31,7 @@
 				<th width="20%" class="center">&nbsp;&nbsp;&nbsp;{{ $factura->tercero_telefono2 }}</th>
 			@elseif ( !empty($factura->tercero_celular) )
 				<th width="20%" class="center">&nbsp;&nbsp;&nbsp;{{ $factura->tercero_celular }}</th>
-			@else 
+			@else
 				<th width="20%" class="center"></th>
 			@endif
 
@@ -42,10 +42,10 @@
 		<tr>
 			<th width="8%" class="left"></th>
 			<th width="20%" class="left">{{ $factura->factura1_fecha }}</th>
-			
+
 			<th width="8%" class="left"></th>
 			<th width="20%" class="center">{{ $factura->factura1_fecha_vencimiento }}</th>
-			
+
 			<th width="8%" class="left"></th>
 			@if( ($factura->factura1_cuotas == 1) )
 				<th colspan="2" class="center">CONTADO</th>
@@ -68,12 +68,12 @@
 		<tbody>
 			@if(count($detalle) > 0)
 				@foreach($detalle as $ordenp2)
-					{{--*/ $totalRow = $ordenp2->factura2_cantidad * $ordenp2->orden2_precio_venta; /*--}}
+					{{--*/ $totalRow = $ordenp2->factura2_cantidad * $ordenp2->orden2_total_valor_unitario; /*--}}
 					<tr>
 						<td class="left">{{ $ordenp2->orden2_id }}</td>
 						<td class="left">{{ $ordenp2->productop_nombre }}</td>
 						<td class="center">{{ $ordenp2->factura2_cantidad }}</td>
-						<td class="right">{{ number_format($ordenp2->orden2_precio_venta,2,'.',',') }}</td>
+						<td class="right">{{ number_format($ordenp2->orden2_total_valor_unitario,2,'.',',') }}</td>
 						<td class="right">{{ number_format($totalRow,2,'.',',') }}</td>
 					</tr>
 				@endforeach

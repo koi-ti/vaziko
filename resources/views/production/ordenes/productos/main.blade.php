@@ -278,43 +278,31 @@
                     <div class="box-body">
                         <div class="row">
                             <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_precio_formula" type="text" maxlength="200" data-input="P">
                             </div>
-                            <label for="orden2_precio_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="orden2_precio_round" value="<%- orden2_precio_round %>" class="form-control input-sm calculate_formula" name="orden2_precio_round" type="text" maxlength="5" data-input="RP">
-                            </div>
                             <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm event-price" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
                             </div>
                         </div>
                         <div class="row">
                             <label for="orden2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="orden2_transporte_formula" value="<%- orden2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_transporte_formula" type="text" maxlength="200" data-input="T">
                             </div>
-                            <label for="orden2_transporte_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="orden2_transporte_round" value="<%- orden2_transporte_round %>" class="form-control input-sm  calculate_formula" name="orden2_transporte_round" type="text" maxlength="5" data-input="RT">
-                            </div>
                             <label for="orden2_transporte" class="col-sm-1 control-label">Transporte</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm event-price" name="orden2_transporte" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
                         <div class="row">
                             <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
-                            <div class="form-group col-md-5">
+                            <div class="form-group col-md-6">
                                 <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-input="V">
                             </div>
-                            <label for="orden2_viaticos_round" class="col-sm-1 control-label">Redondear</label>
-                            <div class="form-group col-md-1">
-                                <input id="orden2_viaticos_round" value="<%- orden2_viaticos_round %>" class="form-control input-sm  calculate_formula" name="orden2_viaticos_round" type="text" maxlength="5" data-input="RV">
-                            </div>
                             <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-4">
                                 <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm event-price" name="orden2_viaticos" type="text" maxlength="30" data-currency>
                             </div>
                         </div>
@@ -422,8 +410,14 @@
                                 </tr>
                                 <tr>
                                     <th>Volumen</th>
-                                    <td><input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100"></td>
-                                    <th colspan="2"><label class="checkbox-inline"><input type="checkbox" id="orden2_redondear" name="orden2_redondear" value="<%- orden2_redondear %>" <%- parseInt(orden2_redondear) ? 'checked': ''%>> Redondear</label></th>
+                                    <td>
+                                        <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100">
+                                    </td>
+                                    <th colspan="2">
+                                        <label class="checkbox-inline">
+                                            <input type="checkbox" id="orden2_round" name="orden2_round" value="<%- orden2_round %>" <%- parseInt(orden2_round) ? 'checked': ''%>> Redondear
+                                        </label>
+                                    </th>
                                     <td><input id="orden2_vtotal" name="orden2_vtotal" class="form-control input-sm" type="text" value="<%- orden2_vtotal %>" data-currency disabled></td>
                                 </tr>
                                 <tr>

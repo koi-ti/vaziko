@@ -44,6 +44,7 @@ app || (app = {});
             'tercero_autoretenedor_ica': false,
             'actividad_tarifa' : '',
             'empresa_niif' : '',
+            'empresa_round' : false,
             'empresa_iva' : ''
         }
     });

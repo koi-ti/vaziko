@@ -17,7 +17,7 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
-            'ifChanged #cotizacion2_redondear': 'redondearComision',
+            'ifChanged #cotizacion2_round': 'roundComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
@@ -71,11 +71,6 @@ app || (app = {});
             this.$inputFormulaTransporte = this.$('#cotizacion2_transporte_formula');
             this.$inputFormulaViaticos = this.$('#cotizacion2_viaticos_formula');
 
-            // Inputs render round
-            this.$inputRoundPrecio = this.$('#cotizacion2_precio_round');
-            this.$inputRoundTranporte = this.$('#cotizacion2_transporte_round');
-            this.$inputRoundViaticos = this.$('#cotizacion2_viaticos_round');
-
             // Inputs render formulas
             this.$inputPrecio = this.$('#cotizacion2_precio_venta');
             this.$inputTranporte = this.$('#cotizacion2_transporte');
@@ -101,7 +96,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
-            this.$checkRedondear = this.$('#cotizacion2_redondear');
+            this.$checkRound = this.$('#cotizacion2_round');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
@@ -178,19 +173,16 @@ app || (app = {});
         	var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
 
-            if( inputformula == 'P' || inputformula == 'RP'){
+            if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
-                this.$inputRound = this.$inputRoundPrecio;
                 this.$inputRenderFormula = this.$inputPrecio;
 
-            }else if( inputformula == 'T' || inputformula == 'RT'){
+            }else if( inputformula == 'T' ){
                 this.$inputFormula = this.$inputFormulaTransporte;
-                this.$inputRound = this.$inputRoundTranporte;
                 this.$inputRenderFormula = this.$inputTranporte;
 
-            }else if( inputformula == 'V' || inputformula == 'RV'){
+            }else if( inputformula == 'V' ){
                 this.$inputFormula = this.$inputFormulaViaticos;
-                this.$inputRound = this.$inputRoundViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
             }else{
@@ -198,7 +190,6 @@ app || (app = {});
             }
 
         	var formula = this.$inputFormula.val();
-        	var round = this.$inputRound.val();
 
         	// sanitize input and replace
         	formula = formula.replaceAll("(","n");
@@ -209,7 +200,7 @@ app || (app = {});
             $.ajax({
                 url: window.Misc.urlFull(Route.route('cotizaciones.productos.formula')),
                 type: 'GET',
-                data: { equation: formula, round: round },
+                data: { equation: formula },
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -275,7 +266,7 @@ app || (app = {});
                     data.cotizacion2_volumen = this.$inputVolumen.val();
                     data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.cotizacion2_redondear = this.$checkRedondear.is(':checked');
+                    data.cotizacion2_round = this.$checkRound.is(':checked');
                     data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -358,7 +349,7 @@ app || (app = {});
             subtotal = precio + tranporte + viaticos + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
 
-            if( this.$checkRedondear.is(':checked') ) {
+            if( this.$checkRound.is(':checked') ) {
                 total = Math.round( subtotal + vcomision );
             }else{
                 total = subtotal + vcomision;
@@ -372,7 +363,7 @@ app || (app = {});
         /**
         *   Event render input value
         **/
-        redondearComision: function(e) {
+        roundComision: function(e) {
             this.calculateAll();
         },
 

@@ -23,7 +23,7 @@ app || (app = {});
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
-            'ifChanged #orden2_redondear': 'redondearComision'
+            'ifChanged #orden2_round': 'roundComision'
         },
         parameters: {
             data: {
@@ -64,17 +64,11 @@ app || (app = {});
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
-            this.$inputRound = null;
 
             // Inputs render round
             this.$inputFormulaPrecio = this.$('#orden2_precio_formula');
             this.$inputFormulaTransporte = this.$('#orden2_transporte_formula');
             this.$inputFormulaViaticos = this.$('#orden2_viaticos_formula');
-
-            // Inputs render round
-            this.$inputRoundPrecio = this.$('#orden2_precio_round');
-            this.$inputRoundTranporte = this.$('#orden2_transporte_round');
-            this.$inputRoundViaticos = this.$('#orden2_viaticos_round');
 
             // Inputs render formulas
             this.$inputPrecio = this.$('#orden2_precio_venta');
@@ -82,7 +76,6 @@ app || (app = {});
             this.$inputViaticos = this.$('#orden2_viaticos');
 
             this.$inputFormula = this.$('#orden2_precio_formula');
-            this.$inputRound = this.$('#orden2_round_formula');
             this.$inputPrecio = this.$('#orden2_precio_venta');
 
             // Tiro
@@ -105,7 +98,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#orden2_volumen');
-            this.$checkRedondear = this.$('#orden2_redondear');
+            this.$checkRound = this.$('#orden2_round');
             this.$inputVcomision = this.$('#orden2_vtotal');
 
             // Inputs from form
@@ -182,19 +175,16 @@ app || (app = {});
             var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
 
-            if( inputformula == 'P' || inputformula == 'RP'){
+            if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
-                this.$inputRound = this.$inputRoundPrecio;
                 this.$inputRenderFormula = this.$inputPrecio;
 
-            }else if( inputformula == 'T' || inputformula == 'RT'){
+            }else if( inputformula == 'T' ){
                 this.$inputFormula = this.$inputFormulaTransporte;
-                this.$inputRound = this.$inputRoundTranporte;
                 this.$inputRenderFormula = this.$inputTranporte;
 
-            }else if( inputformula == 'V' || inputformula == 'RV'){
+            }else if( inputformula == 'V' ){
                 this.$inputFormula = this.$inputFormulaViaticos;
-                this.$inputRound = this.$inputRoundViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
             }else{
@@ -202,7 +192,6 @@ app || (app = {});
             }
 
         	var formula = this.$inputFormula.val();
-        	var round = this.$inputRound.val();
 
         	// sanitize input and replace
         	formula = formula.replaceAll("(","n");
@@ -213,7 +202,7 @@ app || (app = {});
             $.ajax({
                 url: window.Misc.urlFull(Route.route('ordenes.productos.formula')),
                 type: 'GET',
-                data: { equation: formula, round: round },
+                data: { equation: formula },
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -274,12 +263,12 @@ app || (app = {});
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                
+
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                     data.orden2_volumen = this.$inputVolumen.val();
                     data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.orden2_redondear = this.$checkRedondear.is(':checked');
+                    data.orden2_round = this.$checkRound.is(':checked');
                     data.ordenp6 = this.areasProductopList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -362,7 +351,7 @@ app || (app = {});
             subtotalordenp2 = precio + tranporte + viaticos + areas;
             vcomision = ( subtotalordenp2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
 
-            if( this.$checkRedondear.is(':checked') ) {
+            if( this.$checkRound.is(':checked') ) {
                 total = Math.round( subtotalordenp2 + vcomision );
             }else{
                 total = subtotalordenp2 + vcomision;
@@ -373,7 +362,7 @@ app || (app = {});
             this.$total.val( total );
         },
 
-        redondearComision: function(e) {
+        roundComision: function(e) {
             this.calculateOrdenp2();
         },
 

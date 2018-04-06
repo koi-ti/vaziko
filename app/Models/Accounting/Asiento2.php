@@ -134,7 +134,7 @@ class Asiento2 extends Model
         if(isset($data['CentroCosto']) && !empty($data['CentroCosto'])) {
             $objCentroCosto = CentroCosto::find($data['CentroCosto']);
             if(!$objCentroCosto instanceof CentroCosto) {
-                $response->error = "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
+                $response->error = "No es posible recuperar centro de costo, por favor verifique la información del asiento o consulte al administrador.";
                 return $response;
             }
         }
