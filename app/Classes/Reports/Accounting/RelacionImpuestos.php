@@ -45,11 +45,12 @@ class RelacionImpuestos extends FPDF
     function headerTable()
     {
         $this->SetFont('Arial','B',8);
-        $this->Cell(25,5,'NIT',1);
-        $this->Cell(100,5,'NOMBRE',1);
-        $this->Cell(30,5,'BASE',1);
-        $this->Cell(30,5,'IMPUESTOS',1);
-        $this->Cell(85,5,utf8_decode('DIRECCIÓN'),1);
+        $this->Cell(20,5,'NIT',1);
+        $this->Cell(95,5,'NOMBRE',1);
+        $this->Cell(20,5,'BASE',1);
+        $this->Cell(20,5,utf8_decode('DÉBITO'),1);
+        $this->Cell(20,5,utf8_decode('CRÉDITO'),1);
+        $this->Cell(95,5,utf8_decode('DIRECCIÓN'),1);
         $this->Ln();
     }
 
@@ -59,42 +60,64 @@ class RelacionImpuestos extends FPDF
         $this->SetFillColor(247,247,247);
         $this->SetFont('Arial', '', 8);
         $cuenta = '' ;
-        $tbase = $timpuesto = 0;
+        $debito = $credito = $tbase = $tdebito = $tcredito = 0;
         foreach($data as $key => $item){
             if ($cuenta != $item->plancuentas_cuenta) {
-                $this->SetFont('Arial', 'B', 8);
                 if ($key > 0) {
-                    $this->Cell(125,5,'Total',0,0,'R');
-                    $this->Cell(30,5,number_format ($tbase,2,',' , '.'),0,0,'');
-                    $this->Cell(30,5,number_format ($timpuesto,2,',' , '.'),0,0,'');
-                    $this->Ln();
-                    $tbase = $timpuesto = 0;
+                    $this->totalAccount($tbase, $tdebito, $tcredito);
+                    $tbase = $tdebito = $tcredito = 0;
                 }
+                $this->SetFont('Arial', 'B', 8);
                 $nombre = $item->plancuentas_nombre;
                 $this->Cell(280,5,"$item->plancuentas_cuenta -  $nombre : Tasa $item->plancuentas_tasa %",0,0,'');
                 $this->Ln();
             }
-            $tbase += $item->base;
-            $timpuesto += $item->impuesto;
 
             $this->SetFont('Arial', '', 7);
             $fill = !$fill;
-            $this->Cell(25,4,$item->tercero_nit,'',0,'',$fill);
-            $this->Cell(100,4,utf8_decode($item->tercero_nombre),'',0,'',$fill);
-            $this->Cell(30,4,number_format ($item->base,2,',' , '.'),'',0,'',$fill);
-            $this->Cell(30,4,number_format ($item->impuesto,2,',' , '.'),'',0,'',$fill);
-            $this->Cell(85,4,$item->tercero_direccion,'',0,'',$fill);
+            $this->Cell(20,4,$item->tercero_nit,'',0,'',$fill);
+            $this->Cell(95,4,utf8_decode($item->tercero_nombre),'',0,'',$fill);
+            $this->Cell(20,4,number_format ($item->base,2,',' , '.'),'',0,'',$fill);
+            $this->Cell(20,4,number_format ($item->debito,2,',' , '.'),'',0,'',$fill);
+            $this->Cell(20,4,number_format ($item->credito,2,',' , '.'),'',0,'',$fill);
+            $this->Cell(95,4,utf8_decode("$item->tercero_direccion|$item->municipio_nombre|$item->tercero_telefono1"),'',0,'',$fill);
             $this->Ln();
+
             $cuenta = $item->plancuentas_cuenta;
+            $debito += $item->debito;
+            $credito += $item->credito;
+            $tbase += $item->base;
+            $tdebito += $item->debito;
+            $tcredito +=  $item->credito;
 
             if ($key == $data->count()-1) {
-                $this->SetFont('Arial', 'B', 8);
-                $this->Cell(125,5,'Total',0,0,'R');
-                $this->Cell(30,5,number_format ($tbase,2,',' , '.'),0,0,'');
-                $this->Cell(30,5,number_format ($timpuesto,2,',' , '.'),0,0,'');
-                $tbase = $timpuesto = 0;
+                $this->totalAccount($tbase, $tdebito, $tcredito);
+                $tbase = $tdebito = $tcredito = 0;
             }
         }
-        $this->Output(sprintf('%s_%s_%s.pdf', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')),'d');
+        $this->totalNaturaleza($debito, $credito);
+        $this->Output('d',sprintf('%s_%s_%s.pdf', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')));
+    }
+
+    function totalAccount($tbase, $tdebito, $tcredito)
+    {
+        $this->SetFont('Arial', 'B', 7);
+        $this->Cell(115,5,'Total',0,0,'R');
+        $this->Cell(20,5,number_format ($tbase,2,',' , '.'),0,0,'');
+        $this->Cell(20,5,number_format ($tdebito,2,',' , '.'),0,0,'');
+        $this->Cell(20,5,number_format ($tcredito,2,',' , '.'),0,0,'');
+        $this->Ln();
+    }
+    function totalNaturaleza($debito, $credito)
+    {
+        $total = number_format ($debito - $credito,2,',' , '.');
+        if ($debito < $credito)
+            $total = number_format ($credito - $debito,2,',' , '.'). ' CR';
+
+        $this->SetFont('Arial', 'B', 7);
+        $this->Ln();
+        $this->Cell(135,5,utf8_decode('Total CRÉDITO ó DÉBITO'),0,0,'R');
+        $this->Cell(40,5,$total,0,0,'R');
+        $this->Ln();
     }
 }

@@ -124,7 +124,7 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if( _.isUndefined(this.parameters.dataFilter.cotizacion2) ){
+            if( _.isUndefined(this.parameters.dataFilter.precotizacion2) ){
                 if ( model instanceof Backbone.Model ) {
                     model.view.remove();
                     this.collection.remove(model);

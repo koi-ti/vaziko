@@ -139,7 +139,7 @@ class PreCotizacion6Controller extends Controller
                 }
 
                 // Recuperar precotizacion2
-                $precotizacion2 = PreCotizacion2::find( $precotizacion6->cotizacion6_precotizacion2 );
+                $precotizacion2 = PreCotizacion2::find( $precotizacion6->precotizacion6_precotizacion2 );
                 if(!$precotizacion2 instanceof PreCotizacion2){
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
                 }

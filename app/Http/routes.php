@@ -292,4 +292,8 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
 	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
 	Route::resource('rimpuestos', 'Report\RelacionImpuestosController', ['only' => ['index']]);
+	Route::resource('restadocartera', 'Report\EstadoCarteraController', ['only' => ['index']]);
+	Route::resource('rauxcuentabeneficiario', 'Report\AuxCuentaBeneficiarioController', ['only' => ['index']]);
+	Route::resource('rauxbeneficiariocuenta', 'Report\AuxBeneficiarioCuentaController', ['only' => ['index']]);
+	Route::resource('rauxporcuenta', 'Report\AuxPorCuentaController', ['only' => ['index']]);
 });
