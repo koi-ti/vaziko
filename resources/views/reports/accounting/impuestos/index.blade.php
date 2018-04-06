@@ -86,16 +86,6 @@
 	                        </div>
 	                    </div>
 					</div>
-                    <!-- <div class="row">
-                        <div class="form-group col-md-6 col-md-offset-5">
-                            <label class="checkbox-inline" for="list_sumary">
-                                <input type="checkbox" id="list_sumary" class="chec" name="list_sumary" value="list_sumary"> Resumido
-                            </label>
-                            <label class="checkbox-inline" for="list_detail">
-                                <input type="checkbox" id="list_detail" name="list_detail" value="list_detail"> Detallado
-                            </label>
-                        </div>
-                    </div> -->
 				</div>
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">

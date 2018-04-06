@@ -1,21 +1,21 @@
 @extends('layout.layout')
 
-@section('title') Reporte auxiliares contables @stop
+@section('title') Reporte auxiliar cuenta/beneficiario @stop
 
 @section('content')
     <section class="content-header">
 		<h1>
-			Reporte auxiliares contables
+			Reporte auxiliar cuenta/beneficiario
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
-			<li class="active">Reporte auxiliares contables</li>
+			<li class="active">Reporte auxiliar cuenta/beneficiario</li>
 		</ol>
     </section>
 
    	<section class="content">
 	    <div class="box box-success">
-	    	<form action="{{ route('rauxcontable.index') }}" method="GET" data-toggle="validator">
+	    	<form action="{{ route('rauxcuentabeneficiario.index') }}" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
                     <div class="row">
@@ -35,38 +35,21 @@
 					    </div>
 					</div>
                     <div class="row">
-						<label for="filter_cuenta_inicio" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta inicio</label>
+						<label for="filter_cuenta" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta</label>
 						<div class="form-group col-sm-3 col-md-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
-									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="filter_cuenta_inicio">
+									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="filter_cuenta">
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="filter_cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_inicio" type="text" maxlength="15" data-name="filter_cuenta_inicio_nombre" required>
+								<input id="filter_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta" type="text" maxlength="15" data-name="filter_cuenta_nombre" required>
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
-							<input id="filter_cuenta_inicio_nombre" name="filter_cuenta_inicio_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
+							<input id="filter_cuenta_nombre" name="filter_cuenta_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
 						</div>
 					</div>
-                    <div class="row">
-                        <label for="filter_cuenta_fin" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta final</label>
-                        <div class="form-group col-sm-3 col-md-2">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="filter_cuenta_fin">
-                                        <i class="fa fa-tasks"></i>
-                                    </button>
-                                </span>
-                                <input id="filter_cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_fin" type="text" maxlength="15" data-name="filter_cuenta_fin_nombre" required>
-                            </div>
-                        </div>
-                        <div class="col-sm-6 col-md-4">
-                            <input id="filter_cuenta_fin_nombre" name="filter_cuenta_fin_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
-                        </div>
-                    </div>
-
 					<div class="row">
                         <label for="filter_fecha_inicial" class="control-label col-md-2 text-right col-md-offset-2">Fecha inicial</label>
 	                    <div class="form-group col-md-2">
@@ -87,16 +70,6 @@
 	                        </div>
 	                    </div>
 					</div>
-                    <!-- <div class="row">
-                        <label for="filter_order" class="control-label col-md-2 text-right col-md-offset-2">Ordenar por</label>
-                        <div class="form-group col-md-2">
-                            <select name="filter_order" id="filter_order" class="form-control" required>
-                                <option value="1">Fecha</option>
-                                <option value="2">Documento</option>
-                                <option value="3">Saldos terceros</option>
-                            </select>
-                        </div>
-                    </div> -->
 				</div>
                 <div class="box-footer">
                     <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">

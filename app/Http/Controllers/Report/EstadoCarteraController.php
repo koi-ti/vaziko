@@ -7,12 +7,12 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Classes\Reports\Accounting\RelacionImpuestos;
-use App\Models\Accounting\Asiento2;
+use App\Classes\Reports\Receivable\EstadoCartera;
+use App\Models\Receivable\Factura4;
 use App\Models\Base\Tercero;
 use Excel, View, App, DB;
 
-class RelacionImpuestosController extends Controller
+class EstadoCarteraController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -22,58 +22,50 @@ class RelacionImpuestosController extends Controller
     public function index(Request $request)
     {
         if($request->has('type')) {
-            list($año, $mes, $dia) = (explode('-',$request->fecha_inicial));
-            list($añoF, $mesF, $diaF) = (explode('-',$request->fecha_final));
-            $fechaI = sprintf('%s-%s-%s', intval($año), intval($mes), intval($dia));
-            $fechaF = sprintf('%s-%s-%s', intval($añoF), intval($mesF), intval($diaF));
 
-            $query = Asiento2::query();
-            $query->select(DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"),'tercero_nit', 'tercero_direccion','tercero_telefono1','municipio_nombre','plancuentas_nombre', 'plancuentas_cuenta', 'plancuentas_tasa', DB::raw("SUM(asiento2_base) as base, SUM(asiento2_debito) as debito, SUM(asiento2_credito) as credito, CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date") );
-            $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
-            $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
-            $query->join('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id');
+            $query = Factura4::query();
+            $query->select('koi_factura4.*', 'factura1_numero', 'factura1_fecha', 'factura1_prefijo', DB::raw('DATEDIFF(factura4_vencimiento, NOW() ) as days'), DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"),'tercero_nit', 'tercero_direccion','tercero_telefono1','municipio_nombre' );
+            $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
+            $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
             $query->join('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
-            $query->whereRaw("plancuentas_cuenta >= '$request->cuenta_inicio'");
-            $query->whereRaw("plancuentas_cuenta <= '$request->cuenta_fin'");
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$fechaI'");
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$fechaF'");
+            $query->where('factura4_saldo', '<>',  0);
+            $query->whereRaw("factura1_fecha <= '$request->filter_fecha'");
 
-            // Filter tercero
             if($request->has('filter_tercero')) {
                 $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
                 // Validate Tercero
                 if (!$tercero instanceof Tercero) {
-                    return redirect('/rimpuestos')
+                    return redirect('/restadocartera')
                     ->withErrors("No es posible recuperar tercero, por favor verifique la información o consulte al administrador.")
                     ->withInput();
                 }
-                $query->where('asiento2_beneficiario', $tercero->id);
+                $query->where('factura1_tercero', $tercero->id);
             }
-            $query->groupBy('tercero_nit','plancuentas_cuenta');
-            $query->orderBy('plancuentas_cuenta', 'asc');
+            $query->orderBy('tercero_nit', 'asc');
+            $query->orderBy('factura4_vencimiento', 'asc');
             $data = $query->get();
-            // dd($data);
+
             // Prepare data
-            $title = "Reporte relación de impuestos durante el período de $request->fecha_inicial hasta $request->fecha_final";
+            $title = "Reporte estado de cartera";
             $type = $request->type;
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')), function($excel) use($data, $title, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'estado_cartera', date('Y_m_d'), date('H_m_s')), function($excel) use($data, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($data, $title, $type) {
-                            $sheet->loadView('reports.accounting.impuestos.report', compact('data', 'title', 'type'));
+                            $sheet->loadView('reports.receivable.estadocartera.report', compact('data', 'title', 'type'));
                         });
                     })->download('xls');
                 break;
 
                 case 'pdf':
-                    $pdf = new RelacionImpuestos('L', 'mm', 'Letter');
+                    $pdf = new EstadoCartera('L', 'mm', 'Letter');
                     $pdf->buldReport($data, $title);
                 break;
             }
         }
 
-        return view('reports.accounting.impuestos.index');
+        return view('reports.receivable.estadocartera.index');
     }
 
     /**
