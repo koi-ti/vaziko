@@ -463,32 +463,8 @@ class AsientoController extends Controller
         $detalle = Asiento2::getAsiento2($asiento->id);
         $title = 'Asiento contable';
 
-        // Export pdf
-        $empresa = Empresa::getEmpresa();
-        Fpdf::AddPage();
-        Fpdf::SetFont('Arial','B',11);
-        Fpdf::Cell(190,5,utf8_decode($empresa->tercero_razonsocial),0,0,'C');
-        Fpdf::SetXY(85,17);
-        Fpdf::SetFont('Arial','B',10);
-        Fpdf::Cell(40,5,"NIT: $empresa->tercero_nit",0,0,'C');
-        Fpdf::Line(22,22,180,22);
-        Fpdf::SetXY(85,23);
-        Fpdf::Cell(40, 5, utf8_decode($title), 0, 0,'C');
-        Fpdf::Ln();
-
-        // Header table
-        Fpdf::Cell(30,5,'CUENTA',1);
-        Fpdf::Cell(90,5,'NOMBRE',1);
-        Fpdf::Cell(10,5,'NV',1);
-        Fpdf::Cell(15,5,'C/D',1);
-        Fpdf::Cell(20,5,'TER',1);
-        Fpdf::Cell(25,5,'TASA',1);
-        Fpdf::Ln();
-
-        Fpdf::Output('I', sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
-        exit;
-        // $pdf = App::make('dompdf.wrapper');
-        // $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
-        // return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
     }
 }

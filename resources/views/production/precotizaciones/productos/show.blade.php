@@ -112,6 +112,54 @@
 					</table>
 				</div>
 			</div>
+
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h3 class="box-title">Áreas de producción</h3>
+				</div>
+				<div class="box-body">
+					<div class="box-body table-responsive no-padding">
+	                    <table id="browse-precotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+	                        <thead>
+	                            <tr>
+	                                <th>Área</th>
+	                                <th>Nombre</th>
+	                                <th>Horas</th>
+	                                <th>Valor</th>
+	                                <th>Total</th>
+	                            </tr>
+	                        </thead>
+							<tbody>
+								{{-- variables para calcular las areas --}}
+								{{--*/ $area = $sumareap = $totalareap = 0; /*--}}
+								@foreach( App\Models\Production\PreCotizacion6::getPreCotizaciones6( $precotizacion2->id ) as $areap)
+									{{--*/
+										$tiempo = explode(':', $areap->precotizacion6_tiempo);
+										$area = round( ($tiempo[0] + ($tiempo[1] / 60)) * $areap->precotizacion6_valor );
+										$sumareap += $area;
+										$totalareap = round( $sumareap / $precotizacion2->precotizacion2_cantidad );
+									/*--}}
+
+									<tr>
+										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
+		                                <td>{{ $areap->precotizacion6_nombre == '' ? '-': $areap->precotizacion6_nombre }}</td>
+		                                <td class="text-left">{{  $areap->precotizacion6_tiempo }}</td>
+										<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
+		                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+	                        <tfoot>
+	                            <tr>
+	                                <td colspan="3"></td>
+	                                <th class="text-right">Total</th>
+	                                <th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+	                            </tr>
+	                        </tfoot>
+	                    </table>
+	                </div>
+				</div>
+			</div>
 		</div>
 	</div>
 @stop

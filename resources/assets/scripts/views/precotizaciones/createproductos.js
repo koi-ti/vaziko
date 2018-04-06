@@ -20,6 +20,9 @@ app || (app = {});
             'submit #form-precotizacion3-producto': 'onStorePreCotizacion3',
             'click .submit-precotizacion5': 'submitPreCotizacion5',
             'submit #form-precotizacion5-producto': 'onStorePreCotizacion5',
+            'change #precotizacion6_areap': 'changeAreap',
+            'click .submit-precotizacion6': 'submitPreCotizacion6',
+            'submit #form-precotizacion6-producto': 'onStorePreCotizacion6',
         },
         parameters: {
         },
@@ -28,7 +31,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
-            _.bindAll(this, 'onSessionRequestComplete', 'onSubmitFile');
+            _.bindAll(this, 'onSessionRequestComplete');
 
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
@@ -38,7 +41,7 @@ app || (app = {});
             this.$wraperForm = this.$('#render-form-precotizacion-producto');
             this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
             this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
-            this.$files = [];
+            this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -56,7 +59,13 @@ app || (app = {});
             this.$form = this.$('#form-precotizacion-producto');
             this.$formmaterialesp = this.$('#form-precotizacion3-producto');
             this.$formimpresiones = this.$('#form-precotizacion5-producto');
+            this.$formareasp = this.$('#form-precotizacion6-producto');
             this.$uploaderFile = this.$('#fine-uploader');
+
+            // Rerence inputs
+            this.$inputArea = this.$('#precotizacion6_nombre');
+            this.$inputTiempo = this.$('#precotizacion6_tiempo');
+            this.$inputValor = this.$('#precotizacion6_valor');
 
             // Reference views
             this.referenceViews();
@@ -88,6 +97,18 @@ app || (app = {});
                     }
                }
             });
+
+            // Areasp list
+            this.areasProductopPreCotizacionListView = new app.AreasProductopPreCotizacionListView( {
+                collection: this.areasProductopPreCotizacionList,
+                model: this.model,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
         },
 
         /**
@@ -107,6 +128,7 @@ app || (app = {});
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                     data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                     data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
+                    data.areasp = this.areasProductopPreCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
             }
@@ -151,6 +173,58 @@ app || (app = {});
         },
 
         /**
+        * Event submit productop
+        */
+        submitPreCotizacion6: function (e) {
+            this.$formareasp.submit();
+        },
+
+        /**
+        * Event Create
+        */
+        onStorePreCotizacion6: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopPreCotizacionList.trigger('store' , data);
+            }
+        },
+
+        /**
+        *   Event render input value
+        **/
+        changeAreap: function(e){
+            var _this = this;
+                id = this.$(e.currentTarget).val();
+
+            if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$inputArea.val('').attr('readonly', true);
+                    _this.$inputTiempo.val('');
+                    _this.$inputValor.val( resp.areap_valor );
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$inputArea.val('').attr('readonly', false);
+                this.$inputTiempo.val('');
+                this.$inputValor.val('');
+            }
+        },
+
+        /**
         * UploadPictures
         */
         uploadPictures: function(e) {
@@ -181,11 +255,10 @@ app || (app = {});
             }
 
             this.$uploaderFile.fineUploader({
-                debug: false,
+                debug: true,
                 template: 'qq-template',
                 multiple: true,
                 interceptSubmit: true,
-                paramsInBody: false,
                 autoUpload: false,
                 omitDefaultParams: true,
                 session: session,
@@ -214,7 +287,6 @@ app || (app = {});
                     tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
                 },
                 callbacks: {
-                    onSubmit: _this.onSubmitFile,
                     onSessionRequestComplete: _this.onSessionRequestComplete,
                 },
             });
@@ -225,11 +297,6 @@ app || (app = {});
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);
             }, this);
-        },
-
-        onSubmitFile: function (id, name) {
-            var file = this.$uploaderFile.fineUploader('getFile', id);
-            this.$files.push( file );
         },
 
         /**
@@ -275,14 +342,16 @@ app || (app = {});
                 }
 
                 // Subir imagenes
+                this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                 if( this.$files.length > 0 ){
                     var _this = this;
 
                     var formData = new FormData();
                         formData.append('precotizacion2', this.model.get('id'));
 
+                    // Traer archivos agregados correctamente
                     _.each(this.$files, function(file, key){
-                        formData.append('imagenes[]', file);
+                        formData.append('imagenes[]', file.file);
                     });
 
                     $.ajax({

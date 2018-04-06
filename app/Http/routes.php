@@ -211,6 +211,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
 		});
 		Route::resource('productos', 'Production\PreCotizacion2Controller');
 	});

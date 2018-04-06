@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Areap;
 use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
@@ -119,6 +119,21 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion5->fill($impresion);
                         $precotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
                         $precotizacion5->save();
+                    }
+
+                    // Areap
+                    $areasp = isset($data['areasp']) ? $data['areasp'] : null;
+                    foreach ($areasp as $areap)
+                    {
+                        // Recuperar tiempo
+                        $newtime = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+
+                        $precotizacion6 = new PreCotizacion6;
+                        $precotizacion6->fill($areap);
+                        (!empty($areap['precotizacion6_areap'])) ? $precotizacion6->precotizacion6_areap = $areap['precotizacion6_areap'] : $precotizacion6->precotizacion6_nombre = $areap['precotizacion6_nombre'];
+                        $precotizacion6->precotizacion6_tiempo = $newtime;
+                        $precotizacion6->precotizacion6_precotizacion2 = $precotizacion2->id;
+                        $precotizacion6->save();
                     }
 
                     // Commit Transaction
@@ -265,6 +280,43 @@ class PreCotizacion2Controller extends Controller
                             }
                         }
 
+                        // Areasp
+                        $areasp = isset($data['areasp']) ? $data['areasp'] : null;
+                        foreach($areasp as $areap) {
+                            if( isset($areap['success']) ){
+                                // Recuperar tiempo
+                                $newtime = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+
+                                $newprecotizacion6 = new PreCotizacion6;
+                                $newprecotizacion6->fill($areap);
+                                ( !empty($areap['precotizacion6_areap']) ) ? $newprecotizacion6->precotizacion6_areap = $areap['precotizacion6_areap'] : $newprecotizacion6->precotizacion6_nombre = $areap['precotizacion6_nombre'];
+                                $newprecotizacion6->precotizacion6_tiempo = $newtime;
+                                $newprecotizacion6->precotizacion6_precotizacion2 = $precotizacion2->id;
+                                $newprecotizacion6->save();
+                            }else{
+                                if( !empty($areap['precotizacion6_areap']) ){
+                                    $area = Areap::find($areap['precotizacion6_areap']);
+                                    if(!$area instanceof Areap){
+                                        DB::rollback();
+                                        return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
+                                    }
+
+                                    $precotizacion6 = PreCotizacion6::where('precotizacion6_precotizacion2', $precotizacion2->id)->where('precotizacion6_areap', $area->id)->first();
+                                }else{
+                                    $precotizacion6 = PreCotizacion6::where('precotizacion6_precotizacion2', $precotizacion2->id)->where('precotizacion6_nombre', $areap['precotizacion6_nombre'])->first();
+                                }
+                                $newtime = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+
+                                if( $precotizacion6 instanceof PreCotizacion6 ) {
+                                    if($newtime != $areap['precotizacion6_tiempo']){
+                                        $precotizacion6->fill($areap);
+                                        $precotizacion6->precotizacion6_tiempo = $newtime;
+                                        $precotizacion6->save();
+                                    }
+                                }
+                            }
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $precotizacion2->id]);
@@ -302,6 +354,10 @@ class PreCotizacion2Controller extends Controller
                 DB::table('koi_precotizacion3')->where('precotizacion3_precotizacion2', $precotizacion2->id)->delete();
 
                 DB::table('koi_precotizacion4')->where('precotizacion4_precotizacion2', $precotizacion2->id)->delete();
+
+                DB::table('koi_precotizacion5')->where('precotizacion5_precotizacion2', $precotizacion2->id)->delete();
+
+                DB::table('koi_precotizacion6')->where('precotizacion6_precotizacion2', $precotizacion2->id)->delete();
 
                 if( Storage::has("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1") ) {
                     Storage::deleteDirectory("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1");
