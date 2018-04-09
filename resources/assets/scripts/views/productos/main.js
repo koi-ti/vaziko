@@ -37,6 +37,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('productos.index') ),
                     data: function( data ) {
+                        data.datatables = true;
                         data.persistent = true;
                         data.producto_codigo = _this.$searchCod.val();
                         data.producto_nombre = _this.$searchName.val();

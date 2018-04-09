@@ -82,10 +82,11 @@
 							<tr>
 								<th width="30%">Proveedor</th>
 								<th width="15%">Material</th>
-								<th width="20%">Dimensiones</th>
+								<th width="15%">Insumo</th>
+								<th width="10%">Dimensiones</th>
 								<th width="5%">Cantidad</th>
-								<th width="15%">Valor unidad</th>
-								<th width="15%">Valor</th>
+								<th width="12%">Valor unidad</th>
+								<th width="12%">Valor</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -94,6 +95,7 @@
 								<tr>
 									<td>{{ $materialp->tercero_nombre }}</td>
 									<td>{{ $materialp->materialp_nombre }}</td>
+									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 									<td>{{ $materialp->precotizacion3_medidas }}</td>
 									<td class="text-center">{{ $materialp->precotizacion3_cantidad }}</td>
 									<td class="text-right">{{ number_format($materialp->precotizacion3_valor_unitario, 2, ',', '.') }}</td>
@@ -104,7 +106,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="4"></td>
+								<td colspan="5"></td>
 								<th class="text-right">Total</th>
 								<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
 							</tr>

@@ -18,6 +18,7 @@ app || (app = {});
             'submit #form-precotizacion-producto': 'onStore',
             'click .submit-precotizacion3': 'submitPreCotizacion3',
             'submit #form-precotizacion3-producto': 'onStorePreCotizacion3',
+            'change #precotizacion3_materialp': 'changeMaterialp',
             'click .submit-precotizacion5': 'submitPreCotizacion5',
             'submit #form-precotizacion5-producto': 'onStorePreCotizacion5',
             'change #precotizacion6_areap': 'changeAreap',
@@ -62,7 +63,10 @@ app || (app = {});
             this.$formareasp = this.$('#form-precotizacion6-producto');
             this.$uploaderFile = this.$('#fine-uploader');
 
-            // Rerence inputs
+            // Rerence inputs materialp
+            this.$selectinsumos = this.$('#precotizacion3_producto');
+
+            // Rerence inputs areasp
             this.$inputArea = this.$('#precotizacion6_nombre');
             this.$inputTiempo = this.$('#precotizacion6_tiempo');
             this.$inputValor = this.$('#precotizacion6_valor');
@@ -150,6 +154,39 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                 this.materialesProductopPreCotizacionList.trigger( 'store' , data );
+            }
+        },
+
+        /**
+        * Event change select materialp
+        */
+        changeMaterialp: function (e) {
+            var _this = this;
+                materialp = this.$(e.currentTarget).val();
+
+            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.el );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.el );
+
+                    _this.$selectinsumos.empty().val(0).removeAttr('disabled');
+                    _this.$selectinsumos.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$selectinsumos.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
+                    });
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.el );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
             }
         },
 
@@ -255,7 +292,7 @@ app || (app = {});
             }
 
             this.$uploaderFile.fineUploader({
-                debug: true,
+                debug: false,
                 template: 'qq-template',
                 multiple: true,
                 interceptSubmit: true,

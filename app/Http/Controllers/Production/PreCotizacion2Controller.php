@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Areap;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Areap, App\Models\Inventory\Producto;
 use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
@@ -94,16 +94,28 @@ class PreCotizacion2Controller extends Controller
                         // Validar tercero y materialp
                         $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
                         if(!$tercero instanceof Tercero){
+                            DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                         }
 
                         $materialp = Materialp::find($material['precotizacion3_materialp']);
                         if(!$materialp instanceof Materialp){
+                            DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
                         $precotizacion3 = new PreCotizacion3;
                         $precotizacion3->fill($material);
+
+                        if( !empty($material['precotizacion3_producto']) ){
+                            $insumo = Producto::find($material['precotizacion3_producto']);
+                            if(!$insumo instanceof Producto){
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                            }
+                            $precotizacion3->precotizacion3_producto = $insumo->id;
+                        }
+
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
                         $precotizacion3->precotizacion3_proveedor = $tercero->id;
@@ -250,16 +262,28 @@ class PreCotizacion2Controller extends Controller
                                 // Validar tercero y materialp
                                 $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
                                 if(!$tercero instanceof Tercero){
+                                    DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                                 }
 
                                 $materialp = Materialp::find($material['precotizacion3_materialp']);
                                 if(!$materialp instanceof Materialp){
+                                    DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                                 }
 
                                 $newprecotizacion3 = new PreCotizacion3;
                                 $newprecotizacion3->fill($material);
+
+                                if( !empty($material['precotizacion3_producto']) ){
+                                    $insumo = Producto::find($material['precotizacion3_producto']);
+                                    if(!$insumo instanceof Producto){
+                                        DB::rollback();
+                                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                                    }
+                                    $newprecotizacion3->precotizacion3_producto = $insumo->id;
+                                }
+
                                 $newprecotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $newprecotizacion3->precotizacion3_materialp = $materialp->id;
                                 $newprecotizacion3->precotizacion3_proveedor = $tercero->id;

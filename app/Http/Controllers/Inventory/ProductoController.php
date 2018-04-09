@@ -23,13 +23,15 @@ class ProductoController extends Controller
             $query = Producto::query();
             $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre');
 
-            // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
-                session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
-                session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
-            }
 
-            return Datatables::of($query)
+            if( $request->has('datatables') ) {
+                // Persistent data filter
+                if($request->has('persistent') && $request->persistent) {
+                    session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
+                    session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
+                }
+
+                return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Codigo
                     if($request->has('producto_codigo')) {
@@ -42,6 +44,13 @@ class ProductoController extends Controller
                     }
                 })
                 ->make(true);
+            }
+
+            if( $request->has('materialp') ){
+                $query->where('producto_materialp', $request->materialp);
+            }
+            return response()->json($query->get());
+
         }
         return view('inventory.productos.index');
     }

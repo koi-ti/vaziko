@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion3;
+use App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion3, App\Models\Inventory\Producto;
 use DB, Log;
 
 class PreCotizacion3Controller extends Controller
@@ -63,8 +63,18 @@ class PreCotizacion3Controller extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
+                    $producto = null;
+                    if($request->has('precotizacion3_producto')){
+                        $insumo = Producto::find($request->precotizacion3_producto);
+                        if(!$insumo instanceof Producto){
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo de ese material, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $producto = $insumo->producto_nombre;
+                    }
+
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'tercero_nombre' => $request->precotizacion1_proveedor_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'tercero_nombre' => $request->precotizacion1_proveedor_nombre, 'producto_nombre' => $producto]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

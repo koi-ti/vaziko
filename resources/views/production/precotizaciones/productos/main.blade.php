@@ -101,7 +101,7 @@
                     <div class="box-body" id="precotizacion3-wrapper-producto">
                         <form method="POST" accept-charset="UTF-8" id="form-precotizacion3-producto" data-toggle="validator">
                             <div class="row">
-                                <div class="form-group col-sm-3">
+                                <div class="form-group col-sm-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-btn">
                                             <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion1_proveedor">
@@ -111,16 +111,23 @@
                                         <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" required>
                                     </div>
                                 </div>
-                                <div class="col-sm-5">
+                                <div class="col-sm-8">
                                     <input id="precotizacion1_proveedor_nombre" name="precotizacion1_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
                                 </div>
+                            </div>
 
-                                <div class="form-group col-sm-4">
-                                    <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear">
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear" data-placeholder="Material de producción" required>
                                         <option value="">Seleccione</option>
                                         @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
                                             <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <select name="precotizacion3_producto" id="precotizacion3_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled>
+                                        <option value="">Seleccione</option>
                                     </select>
                                 </div>
                             </div>
@@ -152,15 +159,16 @@
                                         <th></th>
                                         <th width="30%">Proveedor</th>
                                         <th width="15%">Material</th>
-                                        <th width="20%">Dimensiones</th>
+                                        <th width="15%">Insumo</th>
+                                        <th width="10%">Dimensiones</th>
                                         <th width="5%">Cantidad</th>
-                                        <th width="15%">Valor unidad</th>
-                                        <th width="15%">Valor</th>
+                                        <th width="10%">Valor unidad</th>
+                                        <th width="10%">Valor</th>
                                     </tr>
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="5"></td>
+                                        <td colspan="6"></td>
                                         <th class="text-right">Total</th>
                                         <th class="text-right" id="total">0</th>
                                     </tr>
@@ -262,6 +270,7 @@
         <% } %>
         <td><%- tercero_nombre %></td>
         <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion3_medidas %></td>
         <td><%- precotizacion3_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_unitario ) %></td>
