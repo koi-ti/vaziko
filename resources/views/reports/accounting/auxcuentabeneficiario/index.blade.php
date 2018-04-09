@@ -43,7 +43,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="filter_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta" type="text" maxlength="15" data-name="filter_cuenta_nombre" required>
+								<input id="filter_cuenta" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta" type="text" maxlength="15" data-name="filter_cuenta_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
