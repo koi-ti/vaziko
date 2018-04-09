@@ -27,7 +27,7 @@ class AuxCuentaBeneficiarioController extends Controller
             $validator = Validator::make($data, [
                 'filter_fecha_inicial' => 'required',
                 'filter_fecha_inicial' => 'required',
-                'filter_cuenta' => 'required|numeric',
+                'filter_cuenta' => 'numeric',
                 'filter_tercero' => 'numeric',
             ]);
 
@@ -78,11 +78,11 @@ class AuxCuentaBeneficiarioController extends Controller
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
             $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
             $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
-            
+
             // Prepare data
             $auxcontable = $query->get();
             $title = "Libro auxiliar cuenta-beneficiario $request->filter_fecha_inicial hasta $request->filter_fecha_final";
-            $subtitle = "$cuenta->plancuentas_cuenta-$cuenta->plancuentas_nombre";
+            $subtitle =  !isset($cuenta) ? 'TODAS LAS CUENTAS' : "$cuenta->plancuentas_cuenta-$cuenta->plancuentas_nombre";
             $subtitleTercero = !isset($tercero) ? 'TODOS LOS TERCEROS' : $tercero->getName();
             $type = $request->type;
 

@@ -23,70 +23,48 @@ class AuxBeneficiarioCuentaController extends Controller
     {
         if ($request->has('type')) {
             // Preparar datos reporte
-            $sql = '';
-            $title = sprintf('%s %s %s', 'Mayor y balance de ',  config('koi.meses')[$request->mes_inicial], $request->ano_inicial);
+            $query = Asiento2::query();
+            $query->select('asiento2_detalle', 'asiento2_debito as debito', 'asiento2_credito as credito', 'asiento1_numero', DB::raw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date"),'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"), 'documento_nombre', 'folder_nombre', 'plancuentas_cuenta', 'plancuentas_nombre');
+            $query->join('koi_asiento1','asiento2_asiento','=','koi_asiento1.id');
+            $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
+            $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
+            $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
+            $query->leftJoin('koi_folder', 'koi_documento.documento_folder', '=', 'koi_folder.id');
+            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes) >= '$request->ano_inicial-$request->mes_inicial'");
+            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes) <= '$request->ano_final-$request->mes_final'");
+
+            if ($request->has('filter_cuenta')) {
+                $cuenta = PlanCuenta::where('plancuentas_cuenta',$request->filter_cuenta)->first();
+                // Validate Plan Cuenta
+                if (!$cuenta instanceof PlanCuenta) {
+                    return redirect('/rauxbeneficiariocuenta')
+                    ->withErrors("No es posible recuperar plan  de cuenta, por favor verifique la información o consulte al administrador.")
+                    ->withInput();
+                }
+                $query->where('asiento2_cuenta', $cuenta->id);
+            }
+
+            if ($request->has('filter_tercero')) {
+                $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
+                // Validate Tercero
+                if (!$tercero instanceof Tercero) {
+                    return redirect('/rauxbeneficiariocuenta')
+                    ->withErrors("No es posible recuperar tercero, por favor verifique la información o consulte al administrador.")
+                    ->withInput();
+                }
+                $query->where('asiento2_beneficiario', $tercero->id);
+            }
+            $query->orderBy('koi_asiento2.asiento2_beneficiario', 'asc');
+            $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
+            $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
+            $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
+
+            // Prepare data
+            $auxcontable = $query->get();
+            $title = sprintf('%s %s %s %s %s %s', 'Libro auxiliar beneficiario-cuenta en el lapso de tiempo de ',  config('koi.meses')[$request->mes_inicial], $request->ano_inicial,'hasta ', config('koi.meses')[$request->mes_final], $request->ano_final );
+            $subtitleTercero = !isset($tercero) ? 'TODOS LOS TERCEROS' : $tercero->getName();
             $type = $request->type;
-            $mes = $request->mes_inicial;
-            $ano = $request->ano_inicial;
-            $auxcontable = [];
-
-            if($mes == 1) {
-                $mes2 = 13;
-                $ano2 = $ano - 1;
-            }else{
-                $mes2 = $mes - 1;
-                $ano2 = $ano;
-            }
-
-            // Preparar sql
-            $sql = "
-                SELECT cuenta.plancuentas_nombre, cuenta.plancuentas_cuenta, cuenta.plancuentas_naturaleza, cuenta.plancuentas_nivel, (CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,'',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2, (CASE WHEN (t.tercero_razonsocial IS NOT NULL AND t.tercero_razonsocial != '') THEN CONCAT(' - ', t.tercero_razonsocial) ELSE '' END)) ELSE t.tercero_razonsocial END) AS tercero_nombre, t.tercero_nit,
-                (select (CASE when cuenta.plancuentas_naturaleza = 'D'
-                        THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
-                        ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial)
-                        END)
-                    FROM koi_saldoscontables
-                    WHERE saldoscontables_mes = $mes2
-                    and saldoscontables_ano = $ano2
-                    and saldoscontables_cuenta = cuenta.id
-                ) as inicial,
-                (select (saldoscontables_debito_mes)
-                    FROM koi_saldoscontables
-                    WHERE saldoscontables_mes = $mes
-                    and saldoscontables_ano = $ano
-                    and saldoscontables_cuenta = cuenta.id
-                ) as debitomes,
-                (select (saldoscontables_credito_mes)
-                    FROM koi_saldoscontables
-                    WHERE saldoscontables_mes = $mes
-                    and saldoscontables_ano = $ano
-                    and saldoscontables_cuenta = cuenta.id
-                ) as creditomes
-                FROM koi_plancuentas as cuenta, koi_tercero as t, koi_asiento2 as asiento2
-                WHERE cuenta.id IN (
-                    SELECT s.saldoscontables_cuenta
-                    FROM koi_saldoscontables as s
-                    WHERE s.saldoscontables_mes = $mes AND s.saldoscontables_ano = $ano
-                    UNION
-                    SELECT s.saldoscontables_cuenta
-                    FROM koi_saldoscontables as s
-                    WHERE s.saldoscontables_mes = $mes2 AND s.saldoscontables_ano = $ano2
-                )
-                AND t.id = asiento2.asiento2_beneficiario";
-
-            // Filters
-            if($request->has('filter_cuenta') ) {
-                $sql .= "
-                    AND RPAD(cuenta.plancuentas_cuenta, 15, 0) >= RPAD({$request->filter_cuenta}, 15, 0)";
-            }
-            if($request->has('filter_tercero') ) {
-                $sql .= "
-                    AND t.tercero_nit = $request->filter_tercero";
-            }
-            $sql .= " ORDER BY t.tercero_nit, cuenta.plancuentas_cuenta ASC";
-            $auxcontable = DB::select($sql);
-
-            dd($auxcontable);
+            // dd($auxcontable);
             switch ($type) {
                 case 'xls':
                     Excel::create(sprintf('%s_%s_%s', 'auxcuentabeneficiario', date('Y_m_d'), date('H_m_s')), function($excel) use($auxcontable, $title, $type) {
@@ -98,7 +76,7 @@ class AuxBeneficiarioCuentaController extends Controller
 
                 case 'pdf':
                     $pdf = new AuxBeneficiarioCuenta('L','mm','A4');
-                    $pdf->buldReport($auxcontable, $title, $subtitle, $subtitleTercero);
+                    $pdf->buldReport($auxcontable, $title, $subtitleTercero);
                 break;
             }
         }
