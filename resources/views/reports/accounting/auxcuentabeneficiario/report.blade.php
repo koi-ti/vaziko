@@ -66,6 +66,23 @@
 					$tdebito += $item->debito;
 					$tcredito +=  $item->credito;
 				/*--}}
+				@if ($key == $auxcontable->count()-1)
+					{{--*/ list($nit, $nombre) = explode('-', $nombre); /*--}}
+					<tr>
+						<th colspan="4">TOTAL {{$nombre}}</th>
+						<th>{{number_format ($tdebito,2,',' , '.')}}</th>
+						<th>{{number_format ($tcredito,2,',' , '.')}}</th>
+
+						<!-- Obtener saldo -->
+						{{--*/ $saldo = number_format ($tdebito - $tcredito,2,',' , '.') /*--}}
+						@if ($tdebito < $tcredito)
+							{{--*/ $saldo = number_format ($tcredito - $tdebito,2,',' , '.'). ' CR' /*--}}
+						@endif
+
+						<th>{{ $saldo }}</th>
+						{{--*/ $tdebito = $tcredito = 0; /*--}}
+					</tr>
+				@endif
 			@endforeach
 			<tr>
 				<th colspan="4">TOTALES</th>
@@ -77,7 +94,6 @@
 					{{--*/ $saldo = number_format ($credito - $debito,2,',' , '.'). ' CR' /*--}}
 				@endif
 				<th>{{$saldo}}</th>
-				$this->Cell(30,5,$this->getSaldo($debito, $credito),'',0,'R');
 			</tr>
 		</tbody>
 	</table>

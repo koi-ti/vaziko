@@ -128,14 +128,11 @@
                     <li class="{{ Request::segment(1) == 'rauxcontable' ? 'active' : '' }}">
                         <a href="{{ route('rauxcontable.index') }}"><i class="fa fa-circle-o"></i> Auxiliar contable</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'rauxcuentabeneficiario' ? 'active' : '' }}">
-                        <a href="{{ route('rauxcuentabeneficiario.index') }}"><i class="fa fa-circle-o"></i> Libro cuenta/beneficiario</a>
-                    </li>
                     <li class="{{ Request::segment(1) == 'rauxbeneficiariocuenta' ? 'active' : '' }}">
                         <a href="{{ route('rauxbeneficiariocuenta.index') }}"><i class="fa fa-circle-o"></i> Libro beneficiario/cuenta</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'rauxporcuenta' ? 'active' : '' }}">
-                        <a href="{{ route('rauxporcuenta.index') }}"><i class="fa fa-circle-o"></i> Libro por cuenta</a>
+                    <li class="{{ Request::segment(1) == 'rauxcuentabeneficiario' ? 'active' : '' }}">
+                        <a href="{{ route('rauxcuentabeneficiario.index') }}"><i class="fa fa-circle-o"></i> Libro cuenta/beneficiario</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'rlibrodiario' ? 'active' : '' }}">
                         <a href="{{ route('rlibrodiario.index') }}"><i class="fa fa-circle-o"></i> Libro diario</a>
@@ -143,11 +140,14 @@
                     <li class="{{ Request::segment(1) == 'rlibromayor' ? 'active' : '' }}">
                         <a href="{{ route('rlibromayor.index') }}"><i class="fa fa-circle-o"></i> Libro mayor</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
-                        <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
+                    <li class="{{ Request::segment(1) == 'rauxporcuenta' ? 'active' : '' }}">
+                        <a href="{{ route('rauxporcuenta.index') }}"><i class="fa fa-circle-o"></i> Libro por cuenta</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'rmayorbalance' ? 'active' : '' }}">
                         <a href="{{ route('rmayorbalance.index') }}"><i class="fa fa-circle-o"></i> Mayor y balance</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
+                        <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'rimpuestos' ? 'active' : '' }}">
                         <a href="{{ route('rimpuestos.index') }}"><i class="fa fa-circle-o"></i> Relación de impuestos</a>

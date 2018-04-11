@@ -25,9 +25,9 @@
                             <input id="searchfactura_tercero_nombre" name="searchfactura_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly value="{{ session('searchfactura_tercero_nombre') }}">
                         </div>
 
-                        <label for="searchfactura_numero" class="col-sm-1 control-label">Numero</label>
+                        <label for="searchfactura_numero" class="col-sm-1 control-label">Número</label>
                         <div class="col-sm-2">
-                            <input id="searchfactura_numero" placeholder="Numero" class="form-control input-sm" name="searchfactura_numero" type="text" maxlength="15" value="{{ session('searchfactura_numero') }}">
+                            <input id="searchfactura_numero" placeholder="Número" class="form-control input-sm" name="searchfactura_numero" type="text" maxlength="15" value="{{ session('searchfactura_numero') }}">
                         </div>
                     </div>
 
@@ -51,7 +51,7 @@
                 <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
                     <thead>
                         <tr>
-                            <th >Numero</th>
+                            <th >Número</th>
                             <th >Prefijo</th>
                             <th >Nit</th>
                             <th >Cliente</th>
