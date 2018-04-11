@@ -162,6 +162,10 @@
 	    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
 	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
 	    	</div>
+			<div class="form-group col-md-3">
+	    		<label for="tercero_formapago" class="control-label">Forma de pago</label>
+	    		<input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm" name="tercero_formapago"  type="text" maxlength="30">
+	    	</div>
 		</div>
 
 	    <div class="row">

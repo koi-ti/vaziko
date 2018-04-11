@@ -20,7 +20,7 @@ class CreatePrecotizacion3Table extends Migration
              $table->integer('precotizacion3_materialp')->unsigned();
              $table->integer('precotizacion3_producto')->unsigned()->nullable();
              $table->integer('precotizacion3_proveedor')->unsigned();
-             $table->integer('precotizacion3_cantidad')->default(0);
+             $table->double('precotizacion3_cantidad')->default(0);
              $table->string('precotizacion3_medidas', 50);
              $table->double('precotizacion3_valor_unitario')->default(0);
              $table->double('precotizacion3_valor_total')->default(0);

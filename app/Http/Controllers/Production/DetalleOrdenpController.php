@@ -345,30 +345,12 @@ class DetalleOrdenpController extends Controller
                         // Areas
                         $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
                         foreach($areasp as $areap) {
-                            if(!empty($areap['orden6_areap'])){
-                                $area = Areap::find($areap['orden6_areap']);
-                                if(!$area instanceof Areap){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
-                                }
-
-                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_areap', $area->id)->first();
-                                if(!$orden6 instanceof Ordenp6) {
-                                    $orden6 = new Ordenp6;
-                                    $orden6->fill($areap);
-                                    $orden6->orden6_orden2 = $orden2->id;
-                                    $orden6->orden6_areap = $area->id;
-                                    $orden6->save();
-                                }
-                            }else{
-                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_nombre', $areap['orden6_nombre'])->first();
-                                if(!$orden6 instanceof Ordenp6) {
-                                    $orden6 = new Ordenp6;
-                                    $orden6->fill($areap);
-                                    $orden6->orden6_nombre = $areap['orden6_nombre'];
-                                    $orden6->orden6_orden2 = $orden2->id;
-                                    $orden6->save();
-                                }
+                            if( isset($areap['success']) ){
+                                $orden6 = new Ordenp6;
+                                $orden6->fill($areap);
+                                ( !empty($areap['orden6_areap']) ) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
+                                $orden6->orden6_orden2 = $orden2->id;
+                                $orden6->save();
                             }
                         }
 

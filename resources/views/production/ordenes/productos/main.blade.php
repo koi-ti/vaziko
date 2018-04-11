@@ -237,7 +237,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
+                            <h3 class="box-title">Máquinas de producción</h3>
                         </div>
                         <div class="box-body" id="browse-orden-producto-maquinas-list">
                             {{-- render maquinas list --}}
@@ -249,7 +249,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Materiales</h3>
+                            <h3 class="box-title">Materiales de producción</h3>
                         </div>
                         <div class="box-body" id="browse-orden-producto-materiales-list">
                             {{-- render materiales list --}}
@@ -261,7 +261,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Acabados</h3>
+                            <h3 class="box-title">Acabados de producción</h3>
                         </div>
                         <div class="box-body" id="browse-orden-producto-acabados-list">
                             {{-- render acabados list --}}
@@ -314,14 +314,14 @@
         {{-- Content areasp --}}
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Áreas</h3>
+                <h3 class="box-title">Áreas de producción</h3>
             </div>
             <div class="box-body">
                 <form method="POST" accept-charset="UTF-8" id="form-ordenp6-producto" data-toggle="validator">
 
                     <div class="row">
                         <div class="form-group col-sm-5 col-md-offset-1">
-                            <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear">
+                            <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear" data-placeholder="Áreas de producción">
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>

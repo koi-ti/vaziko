@@ -46,7 +46,7 @@
 			</div><br>
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
-				<div class="box box-primary">
+				<div class="box box-success">
                     <div class="box-body">
                         @if($producto->productop_abierto)
                             <div class="row">
@@ -94,7 +94,7 @@
 			@endif
 
 			@if($producto->productop_3d)
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -127,7 +127,7 @@
             @endif
 
             @if($producto->productop_tiro || $producto->productop_retiro)
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
@@ -224,9 +224,9 @@
             <div class="row">
 				{{-- Content maquinas --}}
 				<div class="col-sm-4">
-					<div class="box box-primary">
+					<div class="box box-success">
 						<div class="box-header with-border">
-							<h3 class="box-title">Máquinas</h3>
+							<h3 class="box-title">Máquinas de producción</h3>
 						</div>
 						<div class="box-body">
 							@foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
@@ -244,9 +244,9 @@
 
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Materiales</h3>
+                            <h3 class="box-title">Materiales de producción</h3>
                         </div>
                         <div class="box-body">
                             @foreach( App\Models\Production\Cotizacion4::getCotizaciones4($producto->id, $cotizacion2->id) as $material)
@@ -264,9 +264,9 @@
 
                 {{-- Content acabados --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Acabados</h3>
+                            <h3 class="box-title">Acabados de producción</h3>
                         </div>
                         <div class="box-body">
                             @foreach( App\Models\Production\Cotizacion5::getCotizaciones5($producto->id, $cotizacion2->id) as $acabado)
@@ -284,7 +284,7 @@
             </div>
 
 			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-				<div class="box box-primary">
+				<div class="box box-success">
 	                <div class="box-header with-border">
 	                    <h3 class="box-title">Fórmulas</h3>
 	                </div>
@@ -326,13 +326,13 @@
 				</div>
             @endif
 
-			<div class="box box-primary">
+			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Áreas</h3>
+					<h3 class="box-title">Áreas de producción</h3>
 				</div>
 				<div class="box-body">
 					<div class="box-body table-responsive no-padding">
-	                    <table id="browse-cotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+	                    <table id="browse-cotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
 	                        <thead>
 	                            <tr>
 	                                <th>Área</th>
@@ -385,7 +385,7 @@
 				/*--}}
 
 				<div class="col-sm-6 col-md-offset-3">
-					<div class="box box-primary">
+					<div class="box box-success">
 	                    <div class="box-header">
 	                        <h3 class="box-title">Información adicional</h3>
 	                    </div>

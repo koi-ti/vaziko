@@ -36,7 +36,7 @@
 							<div class="col-md-5">
 								<select name="search_documento" id="search_documento" class="form-control select2-default-clear">
 									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
-									<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
+										<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>

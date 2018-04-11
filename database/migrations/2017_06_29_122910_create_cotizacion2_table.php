@@ -36,7 +36,7 @@ class CreateCotizacion2Table extends Migration
             $table->boolean('cotizacion2_retiro')->default(false);
 
             $table->integer('cotizacion2_volumen')->default(0);
-            $table->boolean('cotizacion2_round')->default(false);
+            $table->string('cotizacion2_round', 10);
             $table->double('cotizacion2_vtotal')->default(0);
 
             $table->boolean('cotizacion2_yellow')->default(false);

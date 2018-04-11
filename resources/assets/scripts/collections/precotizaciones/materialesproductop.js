@@ -25,14 +25,14 @@ app || (app = {});
 
         totalRow: function( ){
             _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('precotizacion3_valor_unitario') ) * parseInt( model.get('precotizacion3_cantidad') );
+                var total = parseFloat( model.get('precotizacion3_valor_unitario') ) * model.get('precotizacion3_cantidad');
                 model.set('precotizacion3_valor_total', total);
             });
         },
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('precotizacion3_valor_unitario') ) * parseInt( model.get('precotizacion3_cantidad') );
+                return sum + parseFloat( model.get('precotizacion3_valor_unitario') ) * model.get('precotizacion3_cantidad');
             }, 0);
         },
 

@@ -17,7 +17,7 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
-            'ifChanged #cotizacion2_round': 'roundComision',
+            // 'ifChanged #cotizacion2_round': 'roundComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
@@ -96,7 +96,8 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
-            this.$checkRound = this.$('#cotizacion2_round');
+            // this.$checkRound = this.$('#cotizacion2_round');
+            this.$inputRound = this.$('#cotizacion2_round');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
@@ -172,6 +173,7 @@ app || (app = {});
         changeFormula: function (e) {
         	var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
+                checkround = false;
 
             if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
@@ -185,22 +187,40 @@ app || (app = {});
                 this.$inputFormula = this.$inputFormulaViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
+            }else if( inputformula == 'R' ){
+                checkround = true;
+                this.$inputRound = this.$inputRound;
+                this.$inputRenderFormula = this.$inputVcomision;
             }else{
                 return;
             }
 
-        	var formula = this.$inputFormula.val();
+            if (!checkround) {
+                var formula = this.$inputFormula.val();
 
-        	// sanitize input and replace
-        	formula = formula.replaceAll("(","n");
-        	formula = formula.replaceAll(")","m");
-        	formula = formula.replaceAll("+","t");
+                // sanitize input and replace
+                formula = formula.replaceAll("(","n");
+                formula = formula.replaceAll(")","m");
+                formula = formula.replaceAll("+","t");
+
+                data = {equation: formula};
+            }else{
+                var round = this.$inputRound.val();
+                var comision = this.$inputVcomision.inputmask('unmaskedvalue');
+
+                if( typeof(comision) === 'undefined' && _.isUndefined(comision) && _.isNull(comision) && comision == '' ){
+                    comision = 0;
+                }
+
+                data = {comision: comision, round: round};
+            }
+            // console.log(data);
 
         	// Eval formula
             $.ajax({
                 url: window.Misc.urlFull(Route.route('cotizaciones.productos.formula')),
                 type: 'GET',
-                data: { equation: formula },
+                data: data,
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -349,11 +369,11 @@ app || (app = {});
             subtotal = precio + tranporte + viaticos + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
 
-            if( this.$checkRound.is(':checked') ) {
-                total = Math.round( subtotal + vcomision );
-            }else{
-                total = subtotal + vcomision;
-            }
+            // if( this.$checkRound.is(':checked') ) {
+            //     total = Math.round( subtotal + vcomision );
+            // }else{
+            //     total = subtotal + vcomision;
+            // }
 
             this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
@@ -363,9 +383,9 @@ app || (app = {});
         /**
         *   Event render input value
         **/
-        roundComision: function(e) {
-            this.calculateAll();
-        },
+        // roundComision: function(e) {
+        //     this.calculateAll();
+        // },
 
         /**
         * fires libraries js

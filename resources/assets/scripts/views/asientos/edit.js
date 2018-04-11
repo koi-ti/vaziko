@@ -17,6 +17,7 @@ app || (app = {});
             'change select#asiento1_documento': 'documentoChanged',
             'submit #form-item-asiento': 'onStoreItem',
             'change input#asiento2_base': 'baseChanged',
+            'change input#asiento2_valor': 'valorChanged',
             'click .submit-asiento': 'submitAsiento',
             'submit #form-asientos': 'onStore',
         },
@@ -49,6 +50,7 @@ app || (app = {});
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
             this.$inputDocumento = this.$("#asiento1_documento");
+            this.roundEmpresa = this.$("#empresa_round").val();
             this.spinner = this.$('#spinner-main');
 
             // Reference views
@@ -167,11 +169,11 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                data.asiento1_id = this.model.get('id');
+                    data.asiento1_id = this.model.get('id');
 
-                // Definir tercero
-                data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
-                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
+                    // Definir tercero
+                    data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
+                    data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
 
                 // Evaluate account
                 window.Misc.evaluateActionsAccount({
@@ -218,10 +220,25 @@ app || (app = {});
 
             // Set valor
             if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                this.$inputValor.val( (tasa * base) / 100 );
+                if( parseInt(this.roundEmpresa) ){
+                    this.$inputValor.val( Math.round( (tasa * base) / 100) );
+                }else{
+                    this.$inputValor.val( (tasa * base) / 100 );
+                }
             }else{
                 // Case without plancuentas_tasa
                 this.$inputValor.val('');
+            }
+        },
+
+        /**
+        * Change Valor
+        */
+        valorChanged: function(e) {
+            var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
+
+            if( parseInt(this.roundEmpresa) ){
+                this.$inputValor.val( Math.round( valor ) );
             }
         },
 

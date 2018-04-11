@@ -33,6 +33,8 @@
 								<input id="asiento1_ano" value="<%- asiento1_ano %>" placeholder="Año" class="form-control input-sm input-toupper" name="asiento1_ano" type="number" maxlength="4" data-minlength="4" required>
 							</div>
 
+							{{--*/ isset($roundempresa) ? $round = $roundempresa : $round = false /*--}}
+
 							<div class="form-group col-sm-2">
 								<select name="asiento1_mes" id="asiento1_mes" class="form-control" required>
 									@foreach( config('koi.meses') as $key => $value)
@@ -200,6 +202,7 @@
 									<div class="form-group col-sm-2">
 										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
 										<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
+										<input id="empresa_round" name="empresa_round" value="{{ $round }}" type="hidden">
 									</div>
 								</div>
 

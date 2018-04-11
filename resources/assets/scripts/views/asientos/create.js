@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'change input#asiento2_base': 'baseChanged',
+            'change input#asiento2_valor': 'valorChanged',
             'submit #form-asientos': 'onStore',
         },
 
@@ -35,6 +36,7 @@ app || (app = {});
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
             this.spinner = this.$('#spinner-main');
+            this.roundEmpresa = this.$("#empresa_round").val();
 
             // Events listener
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -42,27 +44,6 @@ app || (app = {});
 
             // to fire plugins
             this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
-
-            if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
-
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
-
-            if( typeof window.initComponent.initValidator == 'function' )
-                window.initComponent.initValidator();
-
-            if( typeof window.initComponent.initDatePicker == 'function' )
-                window.initComponent.initDatePicker();
         },
 
         documentoChanged: function(e) {
@@ -157,11 +138,47 @@ app || (app = {});
 
             // Set valor
             if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                this.$inputValor.val( (tasa * base) / 100 );
+                if( parseInt(this.roundEmpresa) ){
+                    this.$inputValor.val( Math.round( (tasa * base) / 100) );
+                }else{
+                    this.$inputValor.val( (tasa * base) / 100 );
+                }
             }else{
                 // Case without plancuentas_tasa
                 this.$inputValor.val('');
             }
+        },
+
+        /**
+        * Change Valor
+        */
+        valorChanged: function(e) {
+            var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
+
+            if( parseInt(this.roundEmpresa) ){
+                this.$inputValor.val( Math.round( valor ) );
+            }
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if( typeof window.initComponent.initToUpper == 'function' )
+                window.initComponent.initToUpper();
+
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
+
+            if( typeof window.initComponent.initSelect2 == 'function' )
+                window.initComponent.initSelect2();
+
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
+
+            if( typeof window.initComponent.initDatePicker == 'function' )
+                window.initComponent.initDatePicker();
         },
 
         /**

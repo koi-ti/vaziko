@@ -34,7 +34,7 @@ class PreCotizacion3 extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'precotizacion3_cantidad' => 'required|min:1|integer',
+            'precotizacion3_cantidad' => 'required|min:1',
             'precotizacion3_medidas' => 'required',
             'precotizacion3_valor_unitario' => 'required',
         ];
