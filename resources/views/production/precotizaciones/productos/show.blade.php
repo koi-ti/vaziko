@@ -121,7 +121,7 @@
 				</div>
 				<div class="box-body">
 					<div class="box-body table-responsive no-padding">
-	                    <table id="browse-precotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+	                    <table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
 	                        <thead>
 	                            <tr>
 	                                <th>Área</th>

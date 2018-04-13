@@ -522,12 +522,11 @@ class OrdenpController extends Controller
             $sentencia = "
             SELECT areap_nombre, SUM(tiempo_x_areasp) as tiempo_areasp, SUM(tiempo_x_producto) as tiempo_producto
             FROM (
-                SELECT areap_nombre, SUM(0) as tiempo_x_areasp, SUM( TIME_TO_SEC(orden6_tiempo) ) as tiempo_x_producto
+                SELECT (CASE WHEN orden6_areap THEN areap_nombre ELSE orden6_nombre END) AS areap_nombre, SUM(0) as tiempo_x_areasp, SUM( TIME_TO_SEC(orden6_tiempo) ) as tiempo_x_producto
                 FROM koi_ordenproduccion6
-                INNER JOIN koi_areap ON orden6_areap = koi_areap.id
+                LEFT JOIN koi_areap ON orden6_areap = koi_areap.id
                 INNER JOIN koi_ordenproduccion2 ON orden6_orden2 = koi_ordenproduccion2.id
                 WHERE orden2_orden = $ordenp->id
-                AND orden6_areap IS NOT NULL
                 GROUP BY areap_nombre
             UNION
                 SELECT areap_nombre, SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_areasp, SUM(0) as tiempo_x_producto
@@ -543,12 +542,12 @@ class OrdenpController extends Controller
             $chartcomparativa->labels = [];
             foreach ($ordenes as $orden6) {
                 // Armar objecto para la grafica
-                $hoursareap = ($orden6->tiempo_areasp / 3600);
-                $hoursorden = ($orden6->tiempo_producto / 3600);
+                $hoursproduction = ($orden6->tiempo_areasp / 3600);
+                $hourscotizacion = ($orden6->tiempo_producto / 3600);
 
                 $chartcomparativa->labels[] = $orden6->areap_nombre;
-                $chartcomparativa->tiempoareasp[] = $hoursareap;
-                $chartcomparativa->tiempoproductop[] = $hoursorden;
+                $chartcomparativa->tiempoproduction[] = $hoursproduction;
+                $chartcomparativa->tiempocotizacion[] = $hourscotizacion;
             }
             $object->chartcomparativa = $chartcomparativa;
 

@@ -379,62 +379,64 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Información adicional</h3>
-                    </div>
-                    <div class="box-body no-padding">
-                        <table class="table table-condensed">
-                            <tbody>
-                                <tr>
-                                    <th  colspan="4">Precio</th>
-                                    <td class="text-right"><span id="info-precio"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Transporte</th>
-                                    <td class="text-right"><span id="info-transporte"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Viáticos</th>
-                                    <td class="text-right"><span id="info-viaticos"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Áreas</th>
-                                    <td class="text-right"><span id="info-areas"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Subtotal</th>
-                                    <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th>Volumen</th>
-                                    <td>
-                                        <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100">
-                                    </td>
-                                    <th colspan="2">
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="orden2_round" name="orden2_round" value="<%- orden2_round %>" <%- parseInt(orden2_round) ? 'checked': ''%>> Redondear
-                                        </label>
-                                    </th>
-                                    <td><input id="orden2_vtotal" name="orden2_vtotal" class="form-control input-sm" type="text" value="<%- orden2_vtotal %>" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Total</th>
-                                    <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Información adicional</h3>
+                        </div>
+                        <div class="box-body no-padding">
+                            <table class="table table-condensed">
+                                <tbody>
+                                    <tr>
+                                        <th  colspan="4">Precio</th>
+                                        <td class="text-right"><span id="info-precio"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Transporte</th>
+                                        <td class="text-right"><span id="info-transporte"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Viáticos</th>
+                                        <td class="text-right"><span id="info-viaticos"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Áreas</th>
+                                        <td class="text-right"><span id="info-areas"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Subtotal</th>
+                                        <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Volumen</th>
+                                        <td>
+                                            <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100">
+                                        </td>
+                                        <th colspan="2">
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" id="orden2_round" name="orden2_round" value="<%- orden2_round %>" <%- parseInt(orden2_round) ? 'checked': ''%>> Redondear
+                                            </label>
+                                        </th>
+                                        <td><input id="orden2_vtotal" name="orden2_vtotal" class="form-control input-sm" type="text" value="<%- orden2_vtotal %>" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Total</th>
+                                        <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </script>
 
     <script type="text/template" id="orden-producto-maquina-item-tpl">

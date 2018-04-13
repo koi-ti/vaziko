@@ -320,6 +320,7 @@
 	    			</div>
 				</div>
             @endif
+			
 			<div class="box box-success">
 				<div class="box-header with-border">
 					<h3 class="box-title">Áreas de producción</h3>
@@ -368,72 +369,74 @@
 				</div>
 			</div>
 
-			<div class="row">
-				{{-- Content informacion --}}
-				{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
+			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+				<div class="row">
+					{{-- Content informacion --}}
+					{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
 
-				{{--*/
-					$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
-					$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
-					$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
-				/*--}}
+					{{--*/
+						$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
+						$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
+						$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
+					/*--}}
 
-				<div class="col-sm-6 col-md-offset-3">
-					<div class="box box-success">
-	                    <div class="box-header">
-	                        <h3 class="box-title">Información adicional</h3>
-	                    </div>
+					<div class="col-sm-6 col-md-offset-3">
+						<div class="box box-success">
+		                    <div class="box-header">
+		                        <h3 class="box-title">Información adicional</h3>
+		                    </div>
 
-						<div class="box-body no-padding">
-							<table class="table table-condensed">
-								<tbody>
-									<tr>
-										<th  colspan="4">Precio</th>
-										<td class="text-right"><span>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Transporte</th>
-										<td class="text-right"><span>{{ number_format($transporte, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Viáticos</th>
-										<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Áreas</th>
-										<td class="text-right"><span>{{ number_format($totalareap, 2, ',', '.') }}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Subtotal</th>
-										<th class="text-right"><span>{{ number_format($subtotal, 2, ',', '.') }}</span></th>
-									</tr>
-									<tr>
-										<th>Volumen</th>
-										<td class="text-right">
-											<span>{{ $ordenp2->orden2_volumen }}</span>
-										</td>
-										<th colspan="2" class="text-right">
-											<label class="checkbox-inline">
-												<input type="checkbox" disabled {{ $ordenp2->orden2_round ? 'checked': '' }}> Redondear
-											</label>
-										</th>
-										<th class="text-right"><span>{{ number_format($ordenp2->orden2_vtotal, 2, ',', '.') }}</span></th>
-									</tr>
-									<tr>
-										<th colspan="4">Total</th>
-										<th class="text-right"><span class="badge bg-green">{{ number_format($ordenp2->orden2_total_valor_unitario, 2, ',', '.') }}</span></th>
-									</tr>
-								</tbody>
-								<tfoot>
-									<tr>
-										<th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
-									</tr>
-								</tfoot>
-							</table>
+							<div class="box-body no-padding">
+								<table class="table table-condensed">
+									<tbody>
+										<tr>
+											<th  colspan="4">Precio</th>
+											<td class="text-right"><span>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Transporte</th>
+											<td class="text-right"><span>{{ number_format($transporte, 2, ',', '.')}}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Viáticos</th>
+											<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Áreas</th>
+											<td class="text-right"><span>{{ number_format($totalareap, 2, ',', '.') }}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Subtotal</th>
+											<th class="text-right"><span>{{ number_format($subtotal, 2, ',', '.') }}</span></th>
+										</tr>
+										<tr>
+											<th>Volumen</th>
+											<td class="text-right">
+												<span>{{ $ordenp2->orden2_volumen }}</span>
+											</td>
+											<th colspan="2" class="text-right">
+												<label class="checkbox-inline">
+													<input type="checkbox" disabled {{ $ordenp2->orden2_round ? 'checked': '' }}> Redondear
+												</label>
+											</th>
+											<th class="text-right"><span>{{ number_format($ordenp2->orden2_vtotal, 2, ',', '.') }}</span></th>
+										</tr>
+										<tr>
+											<th colspan="4">Total</th>
+											<th class="text-right"><span class="badge bg-green">{{ number_format($ordenp2->orden2_total_valor_unitario, 2, ',', '.') }}</span></th>
+										</tr>
+									</tbody>
+									<tfoot>
+										<tr>
+											<th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+										</tr>
+									</tfoot>
+								</table>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			@endif
 		</div>
 	</div>
 @stop

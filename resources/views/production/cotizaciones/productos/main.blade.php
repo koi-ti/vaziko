@@ -371,57 +371,67 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Información adicional</h3>
-                    </div>
-                    <div class="box-body no-padding">
-                        <table class="table table-condensed">
-                            <tbody>
-                                <tr>
-                                    <th  colspan="4">Precio</th>
-                                    <td class="text-right"><span id="info-precio"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Transporte</th>
-                                    <td class="text-right"><span id="info-transporte"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Viáticos</th>
-                                    <td class="text-right"><span id="info-viaticos"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Áreas</th>
-                                    <td class="text-right"><span id="info-areas"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Subtotal</th>
-                                    <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th>Volumen</th>
-                                    <td><input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100"></td>
-                                    <th>Redondear</th>
-                                    <td><input id="cotizacion2_round" name="cotizacion2_round" class="form-control input-sm calculate_formula" value="<%- cotizacion2_round %>" type="text" maxlength="5" data-input="R"></td>
-                                    <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Total</th>
-                                    <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Información adicional</h3>
+                        </div>
+                        <div class="box-body no-padding">
+                            <form data-toggle="validator">
+                            <table class="table table-condensed">
+                                <tbody>
+                                    <tr>
+                                        <th  colspan="4">Precio</th>
+                                        <td class="text-right"><span id="info-precio"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Transporte</th>
+                                        <td class="text-right"><span id="info-transporte"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Viáticos</th>
+                                        <td class="text-right"><span id="info-viaticos"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Áreas</th>
+                                        <td class="text-right"><span id="info-areas"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Subtotal</th>
+                                        <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Volumen</th>
+                                        <td class="form-group">
+                                            <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
+                                            <div class="help-block with-errors"></div>
+                                        </td>
+                                        <th>Redondear</th>
+                                        <td class="form-group">
+                                            <input id="cotizacion2_round" name="cotizacion2_round" class="form-control input-sm event-price" value="<%- cotizacion2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                            <div class="help-block with-errors"></div>
+                                        </td>
+                                        <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Total</th>
+                                        <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </script>
 
     <script type="text/template" id="cotizacion-producto-maquina-item-tpl">

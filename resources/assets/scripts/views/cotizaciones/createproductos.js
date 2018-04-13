@@ -17,7 +17,6 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
-            // 'ifChanged #cotizacion2_round': 'roundComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
@@ -64,7 +63,6 @@ app || (app = {});
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
-            this.$inputRound = null;
 
             // Inputs render round
             this.$inputFormulaPrecio = this.$('#cotizacion2_precio_formula');
@@ -96,7 +94,6 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
-            // this.$checkRound = this.$('#cotizacion2_round');
             this.$inputRound = this.$('#cotizacion2_round');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
@@ -173,7 +170,6 @@ app || (app = {});
         changeFormula: function (e) {
         	var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
-                checkround = false;
 
             if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
@@ -187,40 +183,22 @@ app || (app = {});
                 this.$inputFormula = this.$inputFormulaViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
-            }else if( inputformula == 'R' ){
-                checkround = true;
-                this.$inputRound = this.$inputRound;
-                this.$inputRenderFormula = this.$inputVcomision;
             }else{
                 return;
             }
 
-            if (!checkround) {
-                var formula = this.$inputFormula.val();
+            var formula = this.$inputFormula.val();
 
-                // sanitize input and replace
-                formula = formula.replaceAll("(","n");
-                formula = formula.replaceAll(")","m");
-                formula = formula.replaceAll("+","t");
-
-                data = {equation: formula};
-            }else{
-                var round = this.$inputRound.val();
-                var comision = this.$inputVcomision.inputmask('unmaskedvalue');
-
-                if( typeof(comision) === 'undefined' && _.isUndefined(comision) && _.isNull(comision) && comision == '' ){
-                    comision = 0;
-                }
-
-                data = {comision: comision, round: round};
-            }
-            // console.log(data);
+            // sanitize input and replace
+            formula = formula.replaceAll("(","n");
+            formula = formula.replaceAll(")","m");
+            formula = formula.replaceAll("+","t");
 
         	// Eval formula
             $.ajax({
                 url: window.Misc.urlFull(Route.route('cotizaciones.productos.formula')),
                 type: 'GET',
-                data: data,
+                data: {equation: formula},
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -237,7 +215,6 @@ app || (app = {});
         },
 
         changedTiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow.iCheck('check');
@@ -286,7 +263,7 @@ app || (app = {});
                     data.cotizacion2_volumen = this.$inputVolumen.val();
                     data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.cotizacion2_round = this.$checkRound.is(':checked');
+                    data.cotizacion2_round = this.$inputRound.val();
                     data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -368,24 +345,21 @@ app || (app = {});
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + tranporte + viaticos + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            total = subtotal + vcomision;
 
-            // if( this.$checkRound.is(':checked') ) {
-            //     total = Math.round( subtotal + vcomision );
-            // }else{
-            //     total = subtotal + vcomision;
-            // }
+            round = this.$inputRound.val();
+            if( round <= 2 || round >= -2){
+                // Calcular round decimales
+                var exp = Math.pow(10, round);
+                total = Math.round(total*exp)/exp;
+            }else{
+                return;
+            }
 
             this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
         },
-
-        /**
-        *   Event render input value
-        **/
-        // roundComision: function(e) {
-        //     this.calculateAll();
-        // },
 
         /**
         * fires libraries js

@@ -503,6 +503,10 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
+            if(!$cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+            
             DB::beginTransaction();
             try {
                 // Recuperar numero cotizacion

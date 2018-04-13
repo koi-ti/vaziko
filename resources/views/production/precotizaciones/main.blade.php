@@ -50,6 +50,9 @@
                                                 <a role="menuitem" tabindex="-1" href="#" class="close-precotizacion">
                                                     <i class="fa fa-lock"></i>Cerrar pre-cotizacion
                                                 </a>
+                                                <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
+                                                    <i class="fa fa-envelope-o"></i>Generar cotización
+                                                </a>
                                             </li>
                                         </ul>
                                     </li>
@@ -185,6 +188,10 @@
 
     <script type="text/template" id="precotizacion-close-confirm-tpl">
         <p>¿Está seguro que desea cerrar la pre-cotización <b><%- precotizacion_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-generate-confirm-tpl">
+        <p>¿Está seguro que desea generar la cotización <b><%- precotizacion_codigo %> - <%- precotizacion_referencia %></b>?</p>
     </script>
 
     <script type="text/template" id="precotizacion-producto-item-list-tpl">

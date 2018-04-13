@@ -87,7 +87,7 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->fillBoolean($data);
                     $cotizacion2->cotizacion2_productop = $producto->id;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
-                    $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
+                    // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                     $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_saldo = $cotizacion2->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
@@ -251,7 +251,7 @@ class Cotizacion2Controller extends Controller
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
-                        $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
+                        // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                         $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
                         $cotizacion2->save();
@@ -421,27 +421,14 @@ class Cotizacion2Controller extends Controller
             $equation = str_replace("m", ")", $equation);
             $equation = preg_replace("/[^0-9+\-.*\/()%]/", '', $equation);
 
-            if( trim($equation) != '' )
-            {
+            if( trim($equation) != '' ){
                 $valor = Cotizacion2::calcString($equation);
                 if(!is_numeric($valor)){
                     return response()->json(['precio_venta' => 0]);
                 }
-                if($request->has('round') && trim($request->round)!='' && is_numeric($request->round)) {
-                    $valor = round($valor, $request->round);
-                }
                 return response()->json(['precio_venta' => $valor]);
             }
         }
-
-        if( $request->has('comision') ){
-            dd( is_numeric($request->comision), is_numeric($request->round), round($request->comision, $request->round) );
-            if($request->has('round') && trim($request->round)!='' && is_numeric($request->round)) {
-                $valor = round($request->comision, $request->round);
-            }
-            return response()->json(['precio_venta' => $valor]);
-        }
-
         return response()->json(['precio_venta' => 0]);
     }
 
