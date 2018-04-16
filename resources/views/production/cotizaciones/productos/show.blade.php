@@ -10,15 +10,9 @@
 	<div class="box box-success" id="cotizaciones-productos-create">
 		<div class="box-header with-border">
             <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
+                <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
                     <a href="{{ route('cotizaciones.show', ['cotizaciones' => $cotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
-
-				@if( Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones'])  && $cotizacion->cotizacion1_abierta)
-	                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-	                    <a href="{{ route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-	                </div>
-	         	@endif
             </div>
         </div>
 

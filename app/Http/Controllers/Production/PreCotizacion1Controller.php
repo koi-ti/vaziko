@@ -315,6 +315,12 @@ class PreCotizacion1Controller extends Controller
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
+            // Validar que no exista una cotizacion vinculada
+            $cotizacion = Cotizacion1::where('cotizacion1_precotizacion', $precotizacion->id)->first();
+            if($cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'La pre-cotización ya se ha registrado, por favor verifique la información o consulte al administrador.']);
+            }
+
             $empresa = Empresa::getEmpresa();
             DB::beginTransaction();
             try{
@@ -333,11 +339,9 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                 $cotizacion->cotizacion1_formapago = $precotizacion->tercero_formapago;
                 $cotizacion->cotizacion1_precotizacion = $precotizacion->id;
-                $cotizacion->cotizacion1_suministran = '';
                 $cotizacion->cotizacion1_anulada = false;
                 $cotizacion->cotizacion1_abierta = true;
                 $cotizacion->cotizacion1_observaciones = $precotizacion->precotizacion1_observaciones;
-                $cotizacion->cotizacion1_terminado = '';
                 $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
                 $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
                 $cotizacion->save();
@@ -348,52 +352,15 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2 = new Cotizacion2;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
                     $cotizacion2->cotizacion2_productop = $precotizacion2->precotizacion2_productop;
-                    $cotizacion2->cotizacion2_referencia = '';
+                    $cotizacion2->cotizacion2_precotizacion2 = $precotizacion2->id;
                     $cotizacion2->cotizacion2_cantidad = $precotizacion2->precotizacion2_cantidad;
-                    $cotizacion2->cotizacion2_saldo = '';
-                    $cotizacion2->cotizacion2_facturado = '';
-                    $cotizacion2->cotizacion2_precio_formula = '';
-                    $cotizacion2->cotizacion2_transporte_formula = '';
-                    $cotizacion2->cotizacion2_viaticos_formula = '';
-                    $cotizacion2->cotizacion2_viaticos = '';
-                    $cotizacion2->cotizacion2_transporte = '';
-                    $cotizacion2->cotizacion2_precio_venta = '';
-                    $cotizacion2->cotizacion2_total_valor_unitario = '';
-                    $cotizacion2->cotizacion2_volumen = '';
-                    $cotizacion2->cotizacion2_round = '';
-                    $cotizacion2->cotizacion2_vtotal = '';
-                    $cotizacion2->cotizacion2_entregado = '';
-                    $cotizacion2->cotizacion2_observaciones = '';
-                    $cotizacion2->cotizacion2_tiro = '';
-                    $cotizacion2->cotizacion2_retiro = '';
-                    $cotizacion2->cotizacion2_yellow = '';
-                    $cotizacion2->cotizacion2_magenta = '';
-                    $cotizacion2->cotizacion2_cyan = '';
-                    $cotizacion2->cotizacion2_key = '';
-                    $cotizacion2->cotizacion2_color1 = '';
-                    $cotizacion2->cotizacion2_color2 = '';
-                    $cotizacion2->cotizacion2_nota_tiro = '';
-                    $cotizacion2->cotizacion2_yellow2 = '';
-                    $cotizacion2->cotizacion2_magenta2 = '';
-                    $cotizacion2->cotizacion2_cyan2 = '';
-                    $cotizacion2->cotizacion2_key2 = '';
-                    $cotizacion2->cotizacion2_color12 = '';
-                    $cotizacion2->cotizacion2_color22 = '';
-                    $cotizacion2->cotizacion2_nota_retiro = '';
-                    $cotizacion2->cotizacion2_ancho = '';
-                    $cotizacion2->cotizacion2_alto = '';
-                    $cotizacion2->cotizacion2_c_ancho = '';
-                    $cotizacion2->cotizacion2_c_alto = '';
-                    $cotizacion2->cotizacion2_3d_ancho = '';
-                    $cotizacion2->cotizacion2_3d_alto = '';
-                    $cotizacion2->cotizacion2_3d_profundidad = '';
                     $cotizacion2->cotizacion2_usuario_elaboro = $cotizacion->cotizacion1_usuario_elaboro;
                     $cotizacion2->cotizacion2_fecha_elaboro = $cotizacion->cotizacion1_fecha_elaboro;
                     $cotizacion2->save();
 
                     // Recuperar Materiales de pre-cotizacion para generar cotizacion
                     $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
-                    $totalmaterial = 0;
+                    $totalmaterial = $totalareasp = 0;
                     foreach ($materiales as $precotizacion3) {
                          $cotizacion4 = new Cotizacion4;
                          $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
@@ -404,7 +371,7 @@ class PreCotizacion1Controller extends Controller
                     }
 
                     // Recuperar Areasp de cotizacion para generar orden
-                    $areasp = PreCotizacion6::where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
+                    $areasp = PreCotizacion6::select('koi_precotizacion6.*', DB::raw("((SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) / 60) + SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1)) * precotizacion6_valor as total_areap"))->where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
                     foreach ($areasp as $precotizacion6) {
                          $cotizacion6 = new Cotizacion6;
                          $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
@@ -413,10 +380,14 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion6->cotizacion6_tiempo = $precotizacion6->precotizacion6_tiempo;
                          $cotizacion6->cotizacion6_valor = $precotizacion6->precotizacion6_valor;
                          $cotizacion6->save();
+
+                         // Convertir minutos a horas y sumar horas
+                         $totalareasp += round($precotizacion6->total_areap) / $cotizacion2->cotizacion2_cantidad;
                     }
 
                     // Actualizar precio en cotizacion2;
                     $cotizacion2->cotizacion2_precio_venta = $totalmaterial;
+                    $cotizacion2->cotizacion2_total_valor_unitario = $totalmaterial + $totalareasp;
                     $cotizacion2->save();
                 }
 

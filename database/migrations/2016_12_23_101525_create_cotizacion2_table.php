@@ -18,6 +18,7 @@ class CreateCotizacion2Table extends Migration
             $table->increments('id');
             $table->integer('cotizacion2_cotizacion')->unsigned();
             $table->integer('cotizacion2_productop')->unsigned();
+            $table->integer('cotizacion2_precotizacion2')->unsigned()->nullable();
             $table->string('cotizacion2_referencia', 200);
             $table->integer('cotizacion2_cantidad')->default(0);
             $table->integer('cotizacion2_saldo')->default(0);
@@ -68,6 +69,7 @@ class CreateCotizacion2Table extends Migration
 
             $table->foreign('cotizacion2_cotizacion')->references('id')->on('koi_cotizacion1')->onDelete('restrict');
             $table->foreign('cotizacion2_productop')->references('id')->on('koi_productop')->onDelete('restrict');
+            $table->foreign('cotizacion2_precotizacion2')->references('id')->on('koi_precotizacion2')->onDelete('restrict');
             $table->foreign('cotizacion2_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
     }
