@@ -16,7 +16,7 @@ app || (app = {});
         events: {
             'change select#asiento1_documento': 'documentoChanged',
             'change input#asiento2_base': 'baseChanged',
-            'change input#asiento2_valor': 'valorChanged',
+            'change .round-module': 'roundModule',
             'submit #form-asientos': 'onStore',
         },
 
@@ -36,7 +36,7 @@ app || (app = {});
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
             this.spinner = this.$('#spinner-main');
-            this.roundEmpresa = this.$("#empresa_round").val();
+            this.roundempresa = this.$("#empresa_round").val();
 
             // Events listener
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -94,6 +94,7 @@ app || (app = {});
                 // Definir tercero
                 data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
                 data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
+                data.round_module = this.roundempresa;
 
                 window.Misc.evaluateActionsAccount({
                     'data': data,
@@ -138,7 +139,7 @@ app || (app = {});
 
             // Set valor
             if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                if( parseInt(this.roundEmpresa) ){
+                if( parseInt(this.roundempresa) ){
                     this.$inputValor.val( Math.round( (tasa * base) / 100) );
                 }else{
                     this.$inputValor.val( (tasa * base) / 100 );
@@ -149,14 +150,11 @@ app || (app = {});
             }
         },
 
-        /**
-        * Change Valor
-        */
-        valorChanged: function(e) {
+        roundModule: function(e) {
             var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
 
-            if( parseInt(this.roundEmpresa) ){
-                this.$inputValor.val( Math.round( valor ) );
+            if( parseInt( this.roundempresa ) ){
+                this.$(e.currentTarget).val( Math.round(valor) );
             }
         },
 

@@ -56,8 +56,7 @@ class AsientoController extends Controller
      */
     public function create()
     {
-        $empresa = Empresa::getEmpresa();
-        return view('accounting.asiento.create', ['roundempresa' => $empresa->empresa_round]);
+        return view('accounting.asiento.create');
     }
 
     /**
@@ -279,8 +278,7 @@ class AsientoController extends Controller
             return redirect()->route('asientos.show', ['asiento' => $asiento]);
         }
 
-        $empresa = Empresa::getEmpresa();
-        return view('accounting.asiento.create', ['asiento' => $asiento, 'roundempresa' => $empresa->empresa_round]);
+        return view('accounting.asiento.create', ['asiento' => $asiento]);
     }
 
     /**
