@@ -36,6 +36,14 @@ class AuxPorCuentaController extends Controller
                     ->withInput();
             }
 
+            // Saldo inicial de la cuenta
+            $saldo = new \stdClass();
+            $saldo->inicial = 0 ;
+            $saldo->debitomes = 0 ;
+            $saldo->creditomes = 0 ;
+            $saldo->final = 0 ;
+
+            // Query
             $query = Asiento2::query();
             $query->select('asiento2_detalle', 'asiento2_debito as debito', 'asiento2_credito as credito', 'asiento1_numero', DB::raw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date"),'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"), 'documento_nombre', 'folder_codigo');
             $query->join('koi_asiento1','asiento2_asiento','=','koi_asiento1.id');
@@ -45,6 +53,7 @@ class AuxPorCuentaController extends Controller
             $query->where('koi_asiento1.asiento1_ano', $request->ano);
             $query->where('koi_asiento1.asiento1_mes', $request->mes);
 
+            // Filters
             if ($request->has('cuenta_inicio')) {
                 $cuenta = PlanCuenta::where('plancuentas_cuenta',$request->cuenta_inicio)->first();
                 // Validate Plan Cuenta
@@ -63,6 +72,8 @@ class AuxPorCuentaController extends Controller
                     $mes2 = $mes - 1;
                     $ano2 = $ano;
                 }
+
+                // Query saldo inicial de la cuenta
                 $sqlSaldo = "
                 SELECT plancuentas_cuenta,
                 (select (CASE when plancuentas_naturaleza = 'D'
@@ -108,17 +119,20 @@ class AuxPorCuentaController extends Controller
                 $query->where('asiento2_cuenta', $cuenta->id);
             }
 
+            // Ordenrs
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
             $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
             $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
 
             // Prepare data
             $auxcontable = $query->get();
-            $saldo = DB::selectOne($sqlSaldo);
-            $saldo->inicial = !is_null($saldo->inicial) ? $saldo->inicial : 0 ;
-            $saldo->debitomes = !is_null($saldo->debitomes) ? $saldo->debitomes : 0 ;
-            $saldo->creditomes = !is_null($saldo->creditomes) ? $saldo->creditomes : 0 ;
-            $saldo->final = !is_null($saldo->final) ? $saldo->final : 0 ;
+            $saldoInicial = DB::selectOne($sqlSaldo);
+            if (!is_null($saldoInicial)) {
+                $saldo->inicial = !is_null($saldoInicial->inicial) ? $saldo->inicial : 0 ;
+                $saldo->debitomes = !is_null($saldoInicial->debitomes) ? $saldo->debitomes : 0 ;
+                $saldo->creditomes = !is_null($saldoInicial->creditomes) ? $saldo->creditomes : 0 ;
+                $saldo->final = !is_null($saldo->final) ? $saldo->final : 0 ;
+            }
             $title = sprintf('%s %s %s', 'Libro auxiliar por cuenta ',  config('koi.meses')[$request->mes], $request->ano) ;
             $subtitle = "$cuenta->plancuentas_cuenta - $cuenta->plancuentas_nombre";
             $type = $request->type;

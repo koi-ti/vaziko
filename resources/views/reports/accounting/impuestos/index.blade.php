@@ -43,7 +43,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_inicio" type="text" maxlength="15" data-name="cuenta_inicio_nombre" required>
+								<input id="cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_inicio" type="text" maxlength="15" data-name="cuenta_inicio_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
@@ -59,7 +59,7 @@
                                         <i class="fa fa-tasks"></i>
                                     </button>
                                 </span>
-                                <input id="cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_fin" type="text" maxlength="15" data-name="cuenta_fin_nombre" required>
+                                <input id="cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_fin" type="text" maxlength="15" data-name="cuenta_fin_nombre" >
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-4">

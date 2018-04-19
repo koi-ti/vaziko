@@ -43,7 +43,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="filter_cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_inicio" type="text" maxlength="15" data-name="filter_cuenta_inicio_nombre" required>
+								<input id="filter_cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_inicio" type="text" maxlength="15" data-name="filter_cuenta_inicio_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
@@ -59,14 +59,13 @@
                                         <i class="fa fa-tasks"></i>
                                     </button>
                                 </span>
-                                <input id="filter_cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_fin" type="text" maxlength="15" data-name="filter_cuenta_fin_nombre" required>
+                                <input id="filter_cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_fin" type="text" maxlength="15" data-name="filter_cuenta_fin_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-4">
                             <input id="filter_cuenta_fin_nombre" name="filter_cuenta_fin_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
                         </div>
                     </div>
-
 					<div class="row">
                         <label for="filter_fecha_inicial" class="control-label col-md-2 text-right col-md-offset-2">Fecha inicial</label>
 	                    <div class="form-group col-md-2">
@@ -111,15 +110,6 @@
                     </div>
                 </div>
 			</form>
-            @if (count($errors) > 0)
-			    <div class="alert alert-danger">
-			        <ul>
-			            @foreach ($errors->all() as $error)
-			                <li>{{ $error }}</li>
-			            @endforeach
-			        </ul>
-			    </div>
-			@endif
 		</div>
 	</section>
 @stop

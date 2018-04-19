@@ -28,31 +28,28 @@ class RelacionImpuestosController extends Controller
             $fechaF = sprintf('%s-%s-%s', intval($añoF), intval($mesF), intval($diaF));
 
             $query = Asiento2::query();
-            $query->select(DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"),'tercero_nit', 'tercero_direccion','tercero_telefono1','municipio_nombre','plancuentas_nombre', 'plancuentas_cuenta', 'plancuentas_tasa', DB::raw("SUM(asiento2_base) as base, SUM(asiento2_debito) as debito, SUM(asiento2_credito) as credito, CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date") );
+            $query->select(DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"),'tercero_nit', DB::raw("IF(tercero_dir_nomenclatura = '', tercero_direccion, tercero_dir_nomenclatura) AS  tercero_direccion"), 'tercero_telefono1','municipio_nombre','plancuentas_nombre', 'plancuentas_cuenta', 'plancuentas_tasa', DB::raw("SUM(asiento2_base) as base, SUM(asiento2_debito) as debito, SUM(asiento2_credito) as credito, CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date") );
             $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
             $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
             $query->join('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id');
             $query->join('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
-            $query->whereRaw("plancuentas_cuenta >= '$request->cuenta_inicio'");
-            $query->whereRaw("plancuentas_cuenta <= '$request->cuenta_fin'");
             $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$fechaI'");
             $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$fechaF'");
 
             // Filter tercero
-            if($request->has('filter_tercero')) {
-                $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
-                // Validate Tercero
-                if (!$tercero instanceof Tercero) {
-                    return redirect('/rimpuestos')
-                    ->withErrors("No es posible recuperar tercero, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
-                }
-                $query->where('asiento2_beneficiario', $tercero->id);
+            if ($request->has('cuenta_inicio')) {
+                $query->whereRaw("plancuentas_cuenta >= '$request->cuenta_inicio'");
             }
+            if ($request->has('cuenta_fin')) {
+                $query->whereRaw("plancuentas_cuenta <= '$request->cuenta_fin'");
+            }
+            if($request->has('filter_tercero')) {
+                $query->where('tercero_nit', $request->filter_tercero);
+            }
+            $query->where('asiento2_base', '>', 0);
             $query->groupBy('tercero_nit','plancuentas_cuenta');
             $query->orderBy('plancuentas_cuenta', 'asc');
             $data = $query->get();
-            // dd($data);
             // Prepare data
             $title = "Reporte relación de impuestos durante el período de $request->fecha_inicial hasta $request->fecha_final";
             $type = $request->type;

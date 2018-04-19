@@ -72,9 +72,12 @@ class MayorBalanceController extends Controller
                     WHERE s.saldoscontables_mes = $mes2 AND s.saldoscontables_ano = $ano2
                 )";
             // Filters
-            if($request->has('cuenta_inicio') && $request->has('cuenta_fin')) {
+            if($request->has('cuenta_inicio')) {
                 $sql .= "
-                    AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)
+                    AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)";
+            }
+            if($request->has('cuenta_fin')) {
+                $sql .= "
                     AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) <= RPAD({$request->cuenta_fin}, 15, 0) ";
             }
             $sql .= " ORDER BY plancuentas_cuenta ASC";
