@@ -42,6 +42,7 @@ app || (app = {});
             'tercero_gran_contribuyente': false,
             'tercero_autoretenedor_renta': false,
             'tercero_autoretenedor_ica': false,
+            'tercero_formapago' : '',
             'actividad_tarifa' : '',
             'empresa_niif' : '',
             'empresa_round' : false,

@@ -277,7 +277,7 @@ app || (app = {});
                     onConfirm: function () {
                         // Generate orden
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.generar', { cotizaciones: _this.model.get('id') }) ),
+                            url: route,
                             type: 'GET',
                             beforeSend: function() {
                                 window.Misc.setSpinner( _this.spinner );

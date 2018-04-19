@@ -39,7 +39,9 @@ app || (app = {});
 
             // Inventario
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
-            'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario'
+            'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario',
+
+            'change .round-module': 'roundModule'
         },
         parameters: {
             data: { },
@@ -58,6 +60,8 @@ app || (app = {});
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
             this.$modalCt = this.$('#modal-asiento-cartera-component');
+
+            console.log(this.parameters);
 
             // Collection cuotas
             this.cuotasFPList = new app.CuotasFPList();
@@ -696,6 +700,17 @@ app || (app = {});
             }else{
                 // Create model
                 this.model.save( this.parameters.data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Change Valor
+        */
+        roundModule: function(e) {
+            var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
+
+            if( parseInt(this.parameters.data.empresa_round) ){
+                this.$(e.currentTarget).val( Math.round( valor ) );
             }
         },
 

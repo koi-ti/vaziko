@@ -17,7 +17,6 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
-            'ifChanged #cotizacion2_round': 'roundComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
@@ -64,7 +63,6 @@ app || (app = {});
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
-            this.$inputRound = null;
 
             // Inputs render round
             this.$inputFormulaPrecio = this.$('#cotizacion2_precio_formula');
@@ -81,12 +79,16 @@ app || (app = {});
             this.$inputMagenta = this.$('#cotizacion2_magenta');
             this.$inputCyan = this.$('#cotizacion2_cyan');
             this.$inputKey = this.$('#cotizacion2_key');
+            this.$inputColor1 = this.$('#cotizacion2_color1');
+            this.$inputColor2 = this.$('#cotizacion2_color2');
 
             // Retiro
             this.$inputYellow2 = this.$('#cotizacion2_yellow2');
             this.$inputMagenta2 = this.$('#cotizacion2_magenta2');
             this.$inputCyan2 = this.$('#cotizacion2_cyan2');
             this.$inputKey2 = this.$('#cotizacion2_key2');
+            this.$inputColor12 = this.$('#cotizacion2_color12');
+            this.$inputColor22 = this.$('#cotizacion2_color22');
 
             // Ordenp6
             this.$formCotizacion6 = this.$('#form-cotizacion6-producto');
@@ -96,7 +98,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
-            this.$checkRound = this.$('#cotizacion2_round');
+            this.$inputRound = this.$('#cotizacion2_round');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
@@ -189,18 +191,18 @@ app || (app = {});
                 return;
             }
 
-        	var formula = this.$inputFormula.val();
+            var formula = this.$inputFormula.val();
 
-        	// sanitize input and replace
-        	formula = formula.replaceAll("(","n");
-        	formula = formula.replaceAll(")","m");
-        	formula = formula.replaceAll("+","t");
+            // sanitize input and replace
+            formula = formula.replaceAll("(","n");
+            formula = formula.replaceAll(")","m");
+            formula = formula.replaceAll("+","t");
 
         	// Eval formula
             $.ajax({
                 url: window.Misc.urlFull(Route.route('cotizaciones.productos.formula')),
                 type: 'GET',
-                data: { equation: formula },
+                data: {equation: formula},
                 beforeSend: function() {
                     window.Misc.setSpinner( _this.el );
                 }
@@ -217,18 +219,21 @@ app || (app = {});
         },
 
         changedTiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow.iCheck('check');
                 this.$inputMagenta.iCheck('check');
                 this.$inputCyan.iCheck('check');
                 this.$inputKey.iCheck('check');
+                this.$inputColor1.iCheck('check');
+                this.$inputColor2.iCheck('check');
             }else{
                 this.$inputYellow.iCheck('uncheck');
                 this.$inputMagenta.iCheck('uncheck');
                 this.$inputCyan.iCheck('uncheck');
                 this.$inputKey.iCheck('uncheck');
+                this.$inputColor1.iCheck('uncheck');
+                this.$inputColor2.iCheck('uncheck');
             }
         },
 
@@ -240,11 +245,15 @@ app || (app = {});
                 this.$inputMagenta2.iCheck('check');
                 this.$inputCyan2.iCheck('check');
                 this.$inputKey2.iCheck('check');
+                this.$inputColor12.iCheck('check');
+                this.$inputColor22.iCheck('check');
             }else{
                 this.$inputYellow2.iCheck('uncheck');
                 this.$inputMagenta2.iCheck('uncheck');
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
+                this.$inputColor12.iCheck('uncheck');
+                this.$inputColor22.iCheck('uncheck');
             }
         },
 
@@ -266,7 +275,7 @@ app || (app = {});
                     data.cotizacion2_volumen = this.$inputVolumen.val();
                     data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.cotizacion2_round = this.$checkRound.is(':checked');
+                    data.cotizacion2_round = this.$inputRound.val();
                     data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -348,23 +357,20 @@ app || (app = {});
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + tranporte + viaticos + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            total = subtotal + vcomision;
 
-            if( this.$checkRound.is(':checked') ) {
-                total = Math.round( subtotal + vcomision );
+            round = this.$inputRound.val();
+            if( round <= 2 || round >= -2){
+                // Calcular round decimales
+                var exp = Math.pow(10, round);
+                total = Math.round(total*exp)/exp;
             }else{
-                total = subtotal + vcomision;
+                return;
             }
 
             this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
-        },
-
-        /**
-        *   Event render input value
-        **/
-        roundComision: function(e) {
-            this.calculateAll();
         },
 
         /**

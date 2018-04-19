@@ -413,8 +413,7 @@ app || (app = {});
                     options: {
                         responsive: true,
                         title: {
-                            display: true,
-                            text: 'Tiempo gastado por empleado.'
+                            display: false,
                         },
                         legend: { display: false },
                         scales: {
@@ -464,8 +463,7 @@ app || (app = {});
                     options: {
                         responsive: true,
                         title: {
-                            display: true,
-                            text: 'Tiempo gastado por área.',
+                            display: false,
                         },
                         legend: {
                             display: true,
@@ -491,18 +489,18 @@ app || (app = {});
                         labels: resp.chartcomparativa.labels,
                         datasets: [
                             {
-                                label: 'Tiempo cotizado',
-                                data: resp.chartcomparativa.tiempoareasp,
+                                label: 'Tiempo de producción',
+                                data: resp.chartcomparativa.tiempoproduction,
                                 backgroundColor: '#00A65A',
                                 hoverBackgroundColor: '#00A65A',
-                                hoverBorderWidth: 2,
+                                hoverBorderWidth: 1,
                                 hoverBorderColor: 'black'
                             },{
-                                label: 'Tiempo de producción',
-                                data: resp.chartcomparativa.tiempoproductop,
+                                label: 'Tiempo cotizado',
+                                data: resp.chartcomparativa.tiempocotizacion,
                                 backgroundColor: '#D8D8D8',
                                 hoverBackgroundColor: '#D8D8D8',
-                                hoverBorderWidth: 2,
+                                hoverBorderWidth: 1,
                                 hoverBorderColor: 'black'
                             }
                         ]
@@ -510,8 +508,7 @@ app || (app = {});
                     options: {
                         responsive: true,
                         title: {
-                            display: true,
-                            text: 'Tiempo cotizado vs tiempo de producción.'
+                            display: false,
                         },
                         scales: {
                             xAxes: [{

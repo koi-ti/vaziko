@@ -39,6 +39,7 @@ app || (app = {});
             this.$form = this.$('#form-ordenes');
             this.spinner = this.$('#spinner-main');
 
+            // This ready
             this.ready();
         },
 
@@ -54,8 +55,8 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+                
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }

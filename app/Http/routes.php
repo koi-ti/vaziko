@@ -205,6 +205,7 @@ Route::group(['middleware' => 'auth'], function()
 
 	Route::group(['prefix' => 'precotizaciones'], function(){
 		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
+		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
 		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
 
 		Route::group(['prefix' => 'productos'], function(){

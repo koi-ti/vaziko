@@ -47,7 +47,8 @@ app || (app = {});
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
             this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
-            this.$inputTiempop = this.$inputContent.attr("data-tiempop");
+            this.$inputTiempop = this.$inputContent.data("tiempop");
+            this.$inputProveedor = this.$inputContent.data("proveedor");
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -61,6 +62,7 @@ app || (app = {});
                         data.tercero_nit = _this.$searchNit.val();
                         data.tercero_nombre = _this.$searchName.val();
                         data.tercero_tiempop = _this.$inputTiempop;
+                        data.tercero_proveedor = _this.$inputProveedor;
                     }
                 },
                 columns: [
@@ -148,7 +150,8 @@ app || (app = {});
             this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
             this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
-            this.$inputTiempop = this.$inputContent.attr("data-tiempop");
+            this.$inputTiempop = this.$inputContent.data("tiempop");
+            this.$inputProveedor = this.$inputContent.data("proveedor");
 
             if(this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
@@ -162,7 +165,8 @@ app || (app = {});
             }
 
             var tercero = this.$inputContent.val(),
-                tiempop = this.$inputTiempop;
+                tiempop = this.$inputTiempop,
+                proveedor = this.$inputProveedor;
 
 
             // Before eval clear data
@@ -173,7 +177,11 @@ app || (app = {});
                 $.ajax({
                     url: window.Misc.urlFull(Route.route('terceros.search')),
                     type: 'GET',
-                    data: { tercero_nit: tercero, tiempop_tercero: tiempop },
+                    data: {
+                        tercero_nit: tercero,
+                        tiempop_tercero: tiempop,
+                        tercero_proveedor: proveedor
+                    },
                     beforeSend: function() {
                         _this.$inputName.val('');
                         window.Misc.setSpinner( _this.$wraperConten );

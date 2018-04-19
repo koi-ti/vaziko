@@ -108,7 +108,7 @@
                                                 <i class="fa fa-user"></i>
                                             </button>
                                         </span>
-                                        <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" required>
+                                        <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" data-proveedor="true" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-8">
@@ -133,7 +133,7 @@
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-2">
-                                    <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" class="form-control input-xs" min="1" step="1" required>
+                                    <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" class="form-control input-xs" min="1" step="0.1" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-6">
@@ -202,15 +202,16 @@
 
                             <div class="row">
                                 <div class="form-group col-sm-2 col-md-offset-2">
-                                    <input type="number" id="precotizacion6_horas" name="precotizacion6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" max="9999" required>
+                                    <input type="number" id="precotizacion6_horas" name="precotizacion6_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <input type="number" id="precotizacion6_minutos" name="precotizacion6_minutos" placeholder="Minutos" class="form-control input-xs" min="00" step="01" max="59" required>
+                                    <input type="number" id="precotizacion6_minutos" name="precotizacion6_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="00" step="01" max="59" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-3">
-                                    <input id="precotizacion6_valor" name="precotizacion6_valor" class="form-control input-sm" type="text" required data-currency>
+                                    <input id="precotizacion6_valor" name="precotizacion6_valor" class="form-control input-sm" type="text" data-currency required>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-1">
                                     <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion6">

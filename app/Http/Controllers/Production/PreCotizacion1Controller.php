@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion6, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables;
 
 class PreCotizacion1Controller extends Controller
@@ -279,6 +279,10 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
             DB::beginTransaction();
             try {
                 // Orden
@@ -298,6 +302,111 @@ class PreCotizacion1Controller extends Controller
     }
 
     /**
+     * Cerrar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function generar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $precotizacion = PreCotizacion1::getPreCotizacion($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            // Validar que no exista una cotizacion vinculada
+            $cotizacion = Cotizacion1::where('cotizacion1_precotizacion', $precotizacion->id)->first();
+            if($cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'La pre-cotización ya se ha registrado, por favor verifique la información o consulte al administrador.']);
+            }
+
+            $empresa = Empresa::getEmpresa();
+            DB::beginTransaction();
+            try{
+                // Recuperar numero precotizacion
+                $numero = Cotizacion1::where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
+                $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
+                // Cotizacion
+                $cotizacion = new Cotizacion1;
+                $cotizacion->cotizacion1_cliente = $precotizacion->precotizacion1_cliente;
+                $cotizacion->cotizacion1_referencia = $precotizacion->precotizacion1_referencia;
+                $cotizacion->cotizacion1_numero = $numero;
+                $cotizacion->cotizacion1_ano = $precotizacion->precotizacion1_ano;
+                $cotizacion->cotizacion1_fecha_inicio = $precotizacion->precotizacion1_fecha;
+                $cotizacion->cotizacion1_contacto = $precotizacion->precotizacion1_contacto;
+                $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
+                $cotizacion->cotizacion1_formapago = $precotizacion->tercero_formapago;
+                $cotizacion->cotizacion1_precotizacion = $precotizacion->id;
+                $cotizacion->cotizacion1_anulada = false;
+                $cotizacion->cotizacion1_abierta = true;
+                $cotizacion->cotizacion1_observaciones = $precotizacion->precotizacion1_observaciones;
+                $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
+                $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
+                $cotizacion->save();
+
+                // Recuperar Productop de cotizacion para generar orden
+                $productos = PreCotizacion2::where('precotizacion2_precotizacion1', $precotizacion->id)->orderBy('id', 'asc')->get();
+                foreach ($productos as $precotizacion2) {
+                    $cotizacion2 = new Cotizacion2;
+                    $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
+                    $cotizacion2->cotizacion2_productop = $precotizacion2->precotizacion2_productop;
+                    $cotizacion2->cotizacion2_precotizacion2 = $precotizacion2->id;
+                    $cotizacion2->cotizacion2_cantidad = $precotizacion2->precotizacion2_cantidad;
+                    $cotizacion2->cotizacion2_usuario_elaboro = $cotizacion->cotizacion1_usuario_elaboro;
+                    $cotizacion2->cotizacion2_fecha_elaboro = $cotizacion->cotizacion1_fecha_elaboro;
+                    $cotizacion2->save();
+
+                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
+                    $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
+                    $totalmaterial = $totalareasp = 0;
+                    foreach ($materiales as $precotizacion3) {
+                         $cotizacion4 = new Cotizacion4;
+                         $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
+                         $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
+                         $cotizacion4->save();
+
+                         $totalmaterial += $precotizacion3->precotizacion3_valor_total;
+                    }
+
+                    // Recuperar Areasp de cotizacion para generar orden
+                    $areasp = PreCotizacion6::select('koi_precotizacion6.*', DB::raw("((SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) / 60) + SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1)) * precotizacion6_valor as total_areap"))->where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($areasp as $precotizacion6) {
+                         $cotizacion6 = new Cotizacion6;
+                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                         $cotizacion6->cotizacion6_areap = $precotizacion6->precotizacion6_areap;
+                         $cotizacion6->cotizacion6_nombre = $precotizacion6->precotizacion6_nombre;
+                         $cotizacion6->cotizacion6_tiempo = $precotizacion6->precotizacion6_tiempo;
+                         $cotizacion6->cotizacion6_valor = $precotizacion6->precotizacion6_valor;
+                         $cotizacion6->save();
+
+                         // Convertir minutos a horas y sumar horas
+                         $totalareasp += round($precotizacion6->total_areap) / $cotizacion2->cotizacion2_cantidad;
+                    }
+
+                    // Actualizar precio en cotizacion2;
+                    $cotizacion2->cotizacion2_precio_venta = $totalmaterial;
+                    $cotizacion2->cotizacion2_total_valor_unitario = $totalmaterial + $totalareasp;
+                    $cotizacion2->save();
+                }
+
+                $precotizacion->precotizacion1_abierta = false;
+                $precotizacion->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Se genero con exito la cotizacion', 'cotizacion_id' => $cotizacion->id]);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
      * Abrir the specified resource.
      *
      * @param  int  $id
@@ -307,6 +416,15 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al administrador.']);
+            }
+
+            // Validar que no exista una cotizacion vinculada
+            $cotizacion = Cotizacion1::where('cotizacion1_precotizacion', $precotizacion->id)->first();
+            if($cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'La pre-cotización se encuentra en proceso de cotización, por favor verifique la información o consulte al administrador.']);
+            }
 
             DB::beginTransaction();
             try {

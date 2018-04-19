@@ -230,7 +230,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Máquinas</h3>
+                            <h3 class="box-title">Máquinas de producción</h3>
                         </div>
                         <div class="box-body" id="browse-cotizacion-producto-maquinas-list">
                             {{-- render maquinas list --}}
@@ -242,7 +242,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Materiales</h3>
+                            <h3 class="box-title">Materiales de producción</h3>
                         </div>
                         <div class="box-body" id="browse-cotizacion-producto-materiales-list">
                             {{-- render materiales list --}}
@@ -254,7 +254,7 @@
                 <div class="col-sm-4">
                     <div class="box box-primary">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Acabados</h3>
+                            <h3 class="box-title">Acabados de producción</h3>
                         </div>
                         <div class="box-body" id="browse-cotizacion-producto-acabados-list">
                             {{-- render acabados list --}}
@@ -307,13 +307,13 @@
         {{-- Content areasp --}}
         <div class="box box-primary">
             <div class="box-header with-border">
-                <h3 class="box-title">Áreas</h3>
+                <h3 class="box-title">Áreas de producción</h3>
             </div>
             <div class="box-body">
                 <form method="POST" accept-charset="UTF-8" id="form-cotizacion6-producto" data-toggle="validator">
                     <div class="row">
                         <div class="form-group col-sm-5 col-md-offset-1">
-                            <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear">
+                            <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear" data-placeholder="Áreas de producción">
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
                                     <option value="{{ $key }}">{{ $value }}</option>
@@ -371,60 +371,67 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="box box-primary">
-                    <div class="box-header">
-                        <h3 class="box-title">Información adicional</h3>
-                    </div>
-                    <div class="box-body no-padding">
-                        <table class="table table-condensed">
-                            <tbody>
-                                <tr>
-                                    <th  colspan="4">Precio</th>
-                                    <td class="text-right"><span id="info-precio"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Transporte</th>
-                                    <td class="text-right"><span id="info-transporte"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Viáticos</th>
-                                    <td class="text-right"><span id="info-viaticos"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Áreas</th>
-                                    <td class="text-right"><span id="info-areas"></span></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Subtotal</th>
-                                    <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th>Volumen</th>
-                                    <td><input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100"></td>
-                                    <th colspan="2">
-                                        <label class="checkbox-inline">
-                                            <input type="checkbox" id="cotizacion2_round" name="cotizacion2_round" value="<%- cotizacion2_round %>" <%- parseInt(cotizacion2_round) ? 'checked': ''%>> Redondear
-                                        </label>
-                                    </th>
-                                    <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
-                                </tr>
-                                <tr>
-                                    <th colspan="4">Total</th>
-                                    <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
-                                </tr>
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
-                                </tr>
-                            </tfoot>
-                        </table>
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title">Información adicional</h3>
+                        </div>
+                        <div class="box-body no-padding">
+                            <form data-toggle="validator">
+                            <table class="table table-condensed">
+                                <tbody>
+                                    <tr>
+                                        <th  colspan="4">Precio</th>
+                                        <td class="text-right"><span id="info-precio"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Transporte</th>
+                                        <td class="text-right"><span id="info-transporte"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Viáticos</th>
+                                        <td class="text-right"><span id="info-viaticos"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Áreas</th>
+                                        <td class="text-right"><span id="info-areas"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Subtotal</th>
+                                        <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Volumen</th>
+                                        <td class="form-group">
+                                            <input id="cotizacion2_volumen" name="cotizacion2_volumen" class="form-control input-sm event-price" value="<%- cotizacion2_volumen %>" type="number" min="0" max="100">
+                                            <div class="help-block with-errors"></div>
+                                        </td>
+                                        <th>Redondear</th>
+                                        <td class="form-group">
+                                            <input id="cotizacion2_round" name="cotizacion2_round" class="form-control input-sm event-price" value="<%- cotizacion2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                            <div class="help-block with-errors"></div>
+                                        </td>
+                                        <td><input id="cotizacion2_vtotal" name="cotizacion2_vtotal" class="form-control input-sm" type="text" value="<%- cotizacion2_vtotal %>" data-currency disabled></td>
+                                    </tr>
+                                    <tr>
+                                        <th colspan="4">Total</th>
+                                        <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
+                                    </tr>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        @endif
     </script>
 
     <script type="text/template" id="cotizacion-producto-maquina-item-tpl">

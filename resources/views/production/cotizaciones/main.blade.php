@@ -66,6 +66,12 @@
                                                     <%- cotizacion_codigo %>
                                                 </div>
                                             <% } %>
+                                            <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
+                                                <label class="col-sm-1 control-label">Pre-cotización</label>
+                                                <div class="form-group col-md-1">
+                                                    <%- precotizacion_codigo %>
+                                                </div>
+                                            <% } %>
 
                                             <label for="cotizacion1_fecha_inicio" class="col-md-1 control-label">F. Inicio</label>
                                             <div class="form-group col-md-2">
@@ -244,16 +250,16 @@
                                                                 @endif
                                                             </tr>
                                                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
-                                                                <th colspan="5" class="text-right" id="iva-total">0</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Total</th>
-                                                                <th colspan="5" class="text-right" id="total-total">0</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
+                                                                    <th colspan="5" class="text-right" id="iva-total">0</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Total</th>
+                                                                    <th colspan="5" class="text-right" id="total-total">0</th>
+                                                                </tr>
                                                             @endif
                                                         </tfoot>
                                                     </table>

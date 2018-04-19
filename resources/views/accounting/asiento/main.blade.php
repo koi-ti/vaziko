@@ -198,8 +198,14 @@
 									</div>
 
 									<div class="form-group col-sm-2">
-										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm" data-currency readonly="readonly" type="text">
+										<input id="asiento2_base" name="asiento2_base" placeholder="Base" class="form-control input-sm round-module" data-currency readonly="readonly" type="text">
 										<input id="asiento2_tasa" name="asiento2_tasa" type="hidden">
+
+										{{--*/
+											$empresa = App\Models\Base\Empresa::getEmpresa();
+											$round = $empresa->empresa_round;
+										/*--}}
+										<input id="empresa_round" name="empresa_round" type="hidden" value="{{ $round }}">
 									</div>
 								</div>
 
@@ -211,7 +217,7 @@
 										<label for="asiento2_valor" class="control-label">Valor</label>
 									</div>
 									<div class="form-group col-sm-2">
-										<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm" data-currency type="text" required>
+										<input id="asiento2_valor" name="asiento2_valor" placeholder="Valor" class="form-control input-sm round-module" data-currency type="text" required>
 									</div>
 									<div class="form-group col-sm-1">
 										<button type="submit" class="btn btn-success btn-sm btn-block">
@@ -417,7 +423,7 @@
 	    <td class="text-right"><%- window.Misc.currency(facturap2_valor) %></td>
 	    <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
 	    <td>
-			<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm" data-currency type="text">
+			<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm round-module" data-currency type="text">
 	    </td>
 	</script>
 
@@ -533,7 +539,7 @@
 	    <td><%- factura1_numero %></td>
 	    <td><%- factura4_cuota %></td>
 	    <td><%- window.Misc.currency(factura4_saldo) %></td>
-	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
+	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm round-module" data-currency-negative></td>
     </script>
 
 	<script type="text/template" id="asiento-item-delete-confirm-tpl">

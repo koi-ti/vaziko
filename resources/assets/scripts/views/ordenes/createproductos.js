@@ -11,7 +11,7 @@ app || (app = {});
 
     app.CreateOrdenp2View = Backbone.View.extend({
 
-        el: '#ordenes-productos-create',
+        el: '#create-ordenp-producto',
         template: _.template( ($('#add-orden-producto-tpl').html() || '') ),
         events: {
             'change .calculate_formula': 'changeFormula',
@@ -35,12 +35,18 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
+            _.bindAll(this, 'onSessionRequestComplete');
+
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.edit = false;
+
+            if( this.model.id != undefined ){
+                this.edit = true;
+            }
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-orden-producto');
             this.maquinasProductopList = new app.MaquinasProductopList();
             this.materialesProductopList = new app.MaterialesProductopList();
             this.acabadosProductopList = new app.AcabadosProductopList();
@@ -57,10 +63,12 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = this.edit;
+            this.$el.html( this.template(attributes) );
+
             this.$form = this.$('#form-orden-producto');
+            this.spinner = this.$('#spinner-main');
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
@@ -83,12 +91,16 @@ app || (app = {});
             this.$inputMagenta = this.$('#orden2_magenta');
             this.$inputCyan = this.$('#orden2_cyan');
             this.$inputKey = this.$('#orden2_key');
+            this.$inputColor1 = this.$('#orden2_color1');
+            this.$inputColor2 = this.$('#orden2_color2');
 
             // Retiro
             this.$inputYellow2 = this.$('#orden2_yellow2');
             this.$inputMagenta2 = this.$('#orden2_magenta2');
             this.$inputCyan2 = this.$('#orden2_cyan2');
             this.$inputKey2 = this.$('#orden2_key2');
+            this.$inputColor12 = this.$('#orden2_color12');
+            this.$inputColor22 = this.$('#orden2_color22');
 
             // Ordenp6
             this.$formOrdenp6 = this.$('#form-ordenp6-producto');
@@ -109,11 +121,18 @@ app || (app = {});
             this.$viaticos = this.$('#orden2_viaticos');
             this.$transporte = this.$('#orden2_transporte');
 
+            // Fine uploader
+            this.$uploaderFile = this.$('#fine-uploader');
+
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
+
+            if( !_.isNull( this.model.get('precotizacion2_id') ) ){
+                this.uploadPictures();
+            }
 
             // Reference views
             this.calculateOrdenp2();
@@ -204,16 +223,16 @@ app || (app = {});
                 type: 'GET',
                 data: { equation: formula },
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner( _this.spinner );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 _this.$inputRenderFormula.val(0);
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 alertify.error(thrownError);
             });
         },
@@ -226,11 +245,15 @@ app || (app = {});
                 this.$inputMagenta.iCheck('check');
                 this.$inputCyan.iCheck('check');
                 this.$inputKey.iCheck('check');
+                this.$inputColor1.iCheck('check');
+                this.$inputColor2.iCheck('check');
             }else{
                 this.$inputYellow.iCheck('uncheck');
                 this.$inputMagenta.iCheck('uncheck');
                 this.$inputCyan.iCheck('uncheck');
                 this.$inputKey.iCheck('uncheck');
+                this.$inputColor1.iCheck('uncheck');
+                this.$inputColor2.iCheck('uncheck');
             }
         },
 
@@ -242,11 +265,15 @@ app || (app = {});
                 this.$inputMagenta2.iCheck('check');
                 this.$inputCyan2.iCheck('check');
                 this.$inputKey2.iCheck('check');
+                this.$inputColor12.iCheck('check');
+                this.$inputColor22.iCheck('check');
             }else{
                 this.$inputYellow2.iCheck('uncheck');
                 this.$inputMagenta2.iCheck('uncheck');
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
+                this.$inputColor12.iCheck('uncheck');
+                this.$inputColor22.iCheck('uncheck');
             }
         },
 
@@ -362,8 +389,50 @@ app || (app = {});
             this.$total.val( total );
         },
 
+        /**
+        * Call event calculate change checkbox
+        **/
         roundComision: function(e) {
-            this.calculateOrdenp2();
+           this.calculateOrdenp2();
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        precotizacion2: this.model.get('precotizacion2_id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         /**
@@ -394,14 +463,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error

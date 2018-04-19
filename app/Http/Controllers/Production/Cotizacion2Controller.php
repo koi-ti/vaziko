@@ -87,7 +87,7 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->fillBoolean($data);
                     $cotizacion2->cotizacion2_productop = $producto->id;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
-                    $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
+                    // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                     $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_saldo = $cotizacion2->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
@@ -251,7 +251,7 @@ class Cotizacion2Controller extends Controller
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
-                        $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
+                        // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                         $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
                         $cotizacion2->save();
@@ -316,40 +316,30 @@ class Cotizacion2Controller extends Controller
                         // Areas
                         $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
                         foreach($areasp as $areap) {
-                            if(!empty($areap['cotizacion6_areap'])){
-                                $area = Areap::find($areap['cotizacion6_areap']);
-                                if(!$area instanceof Areap){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
-                                }
+                            if( isset($areap['success']) ){
+                                // Recuperar tiempo
+                                $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
 
-                                $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
-                                $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_areap', $area->id)->first();
-                                if(!$cotizacion6 instanceof Cotizacion6) {
-                                    $cotizacion6 = new Cotizacion6;
-                                    $cotizacion6->fill($areap);
-                                    $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                                    $cotizacion6->cotizacion6_tiempo = $newtime;
-                                    $cotizacion6->cotizacion6_areap = $area->id;
-                                    $cotizacion6->save();
-                                }else{
-                                    if($newtime != $areap['cotizacion6_tiempo']){
-                                        $cotizacion6->fill($areap);
-                                        $cotizacion6->cotizacion6_tiempo = $newtime;
-                                        $cotizacion6->save();
-                                    }
-                                }
+                                $cotizacion6 = new Cotizacion6;
+                                $cotizacion6->fill($areap);
+                                ( !empty($areap['cotizacion6_areap']) ) ? $cotizacion6->cotizacion6_areap = $areap['cotizacion6_areap'] : $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
+                                $cotizacion6->cotizacion6_tiempo = $newtime;
+                                $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                                $cotizacion6->save();
                             }else{
-                                $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
-                                $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_nombre', $areap['cotizacion6_nombre'])->first();
-                                if(!$cotizacion6 instanceof Cotizacion6) {
-                                    $cotizacion6 = new Cotizacion6;
-                                    $cotizacion6->fill($areap);
-                                    $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
-                                    $cotizacion6->cotizacion6_tiempo = $newtime;
-                                    $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                                    $cotizacion6->save();
+                                if( !empty($areap['cotizacion6_areap']) ){
+                                    $area = Areap::find($areap['cotizacion6_areap']);
+                                    if(!$area instanceof Areap){
+                                        DB::rollback();
+                                        return response()->json(['success' => false, 'errors' => 'No es posible actualizar las áreas de producción, por favor consulte al administrador.']);
+                                    }
+
+                                    $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_areap', $area->id)->first();
                                 }else{
+                                    $cotizacion6 = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->where('cotizacion6_nombre', $areap['cotizacion6_nombre'])->first();
+                                }
+                                $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
+                                if( $cotizacion6 instanceof Cotizacion6 ) {
                                     if($newtime != $areap['cotizacion6_tiempo']){
                                         $cotizacion6->fill($areap);
                                         $cotizacion6->cotizacion6_tiempo = $newtime;
@@ -424,19 +414,20 @@ class Cotizacion2Controller extends Controller
      */
     public function formula(Request $request)
     {
-        // sanitize input and replace
-        $equation = str_replace("t", "+", $request->equation);
-        $equation = str_replace("n", "(", $equation);
-        $equation = str_replace("m", ")", $equation);
-        $equation = preg_replace("/[^0-9+\-.*\/()%]/", '', $equation);
+        if( $request->has('equation') ){
+            // sanitize input and replace
+            $equation = str_replace("t", "+", $request->equation);
+            $equation = str_replace("n", "(", $equation);
+            $equation = str_replace("m", ")", $equation);
+            $equation = preg_replace("/[^0-9+\-.*\/()%]/", '', $equation);
 
-        if( trim($equation) != '' && $request->has('equation') )
-        {
-            $valor = Cotizacion2::calcString($equation);
-            if(!is_numeric($valor)){
-                return response()->json(['precio_venta' => 0]);
+            if( trim($equation) != '' ){
+                $valor = Cotizacion2::calcString($equation);
+                if(!is_numeric($valor)){
+                    return response()->json(['precio_venta' => 0]);
+                }
+                return response()->json(['precio_venta' => $valor]);
             }
-            return response()->json(['precio_venta' => $valor]);
         }
         return response()->json(['precio_venta' => 0]);
     }

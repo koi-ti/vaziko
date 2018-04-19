@@ -60,6 +60,10 @@ class TerceroController extends Controller
                     if($request->has('tercero_tiempop')){
                         $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
                     }
+
+                    if($request->has('tercero_proveedor')){
+                        $query->where('tercero_proveedor', true);
+                    }
                 })
                 ->make(true);
         }
@@ -265,6 +269,11 @@ class TerceroController extends Controller
             if($request->has('tiempop_tercero')){
                 $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
             }
+
+            if($request->has('tercero_proveedor')){
+                $query->where('tercero_proveedor', true);
+            }
+
             $tercero = $query->first();
 
             if($tercero instanceof Tercero) {

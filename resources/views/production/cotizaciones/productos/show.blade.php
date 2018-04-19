@@ -10,15 +10,9 @@
 	<div class="box box-success" id="cotizaciones-productos-create">
 		<div class="box-header with-border">
             <div class="row">
-                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
+                <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
                     <a href="{{ route('cotizaciones.show', ['cotizaciones' => $cotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
-
-                @if($cotizacion->cotizacion1_abierta)
-	                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-	                    <a href="{{ route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-	                </div>
-	         	@endif
             </div>
         </div>
 
@@ -46,7 +40,7 @@
 			</div><br>
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
-				<div class="box box-primary">
+				<div class="box box-success">
                     <div class="box-body">
                         @if($producto->productop_abierto)
                             <div class="row">
@@ -94,7 +88,7 @@
 			@endif
 
 			@if($producto->productop_3d)
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -127,7 +121,7 @@
             @endif
 
             @if($producto->productop_tiro || $producto->productop_retiro)
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
@@ -224,9 +218,9 @@
             <div class="row">
 				{{-- Content maquinas --}}
 				<div class="col-sm-4">
-					<div class="box box-primary">
+					<div class="box box-success">
 						<div class="box-header with-border">
-							<h3 class="box-title">Máquinas</h3>
+							<h3 class="box-title">Máquinas de producción</h3>
 						</div>
 						<div class="box-body">
 							@foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, $cotizacion2->id) as $maquina)
@@ -244,9 +238,9 @@
 
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Materiales</h3>
+                            <h3 class="box-title">Materiales de producción</h3>
                         </div>
                         <div class="box-body">
                             @foreach( App\Models\Production\Cotizacion4::getCotizaciones4($producto->id, $cotizacion2->id) as $material)
@@ -264,9 +258,9 @@
 
                 {{-- Content acabados --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-success">
                         <div class="box-header with-border">
-                            <h3 class="box-title">Acabados</h3>
+                            <h3 class="box-title">Acabados de producción</h3>
                         </div>
                         <div class="box-body">
                             @foreach( App\Models\Production\Cotizacion5::getCotizaciones5($producto->id, $cotizacion2->id) as $acabado)
@@ -284,7 +278,7 @@
             </div>
 
 			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-				<div class="box box-primary">
+				<div class="box box-success">
 	                <div class="box-header with-border">
 	                    <h3 class="box-title">Fórmulas</h3>
 	                </div>
@@ -326,13 +320,13 @@
 				</div>
             @endif
 
-			<div class="box box-primary">
+			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Áreas</h3>
+					<h3 class="box-title">Áreas de producción</h3>
 				</div>
 				<div class="box-body">
 					<div class="box-body table-responsive no-padding">
-	                    <table id="browse-cotizacion-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+	                    <table id="browse-cotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
 	                        <thead>
 	                            <tr>
 	                                <th>Área</th>
@@ -374,66 +368,69 @@
 				</div>
 			</div>
 
-			<div class="row">
-				{{-- Content informacion --}}
-				{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
+			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+				<div class="row">
+					{{-- Content informacion --}}
+					{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
 
-				{{--*/
-					$transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
-					$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
-					$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap;
-				/*--}}
+					{{--*/
+						$transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
+						$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
+						$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap;
+					/*--}}
 
-				<div class="col-sm-6 col-md-offset-3">
-					<div class="box box-primary">
-	                    <div class="box-header">
-	                        <h3 class="box-title">Información adicional</h3>
-	                    </div>
+					<div class="col-sm-6 col-md-offset-3">
+						<div class="box box-success">
+		                    <div class="box-header">
+		                        <h3 class="box-title">Información adicional</h3>
+		                    </div>
 
-						<div class="box-body no-padding">
-							<table class="table table-condensed">
-								<tbody>
-									<tr>
-										<th  colspan="4">Precio</th>
-										<td class="text-right"><span>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Transporte</th>
-										<td class="text-right"><span>{{ number_format($transporte, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Viáticos</th>
-										<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Áreas</th>
-										<td class="text-right"><span>{{ number_format($totalareap, 2, ',', '.') }}</span></td>
-									</tr>
-									<tr>
-										<th colspan="4">Subtotal</th>
-										<th class="text-right"><span>{{ number_format($subtotal, 2, ',', '.') }}</span></th>
-									</tr>
-									<tr>
-										<th>Volumen</th>
-										<td class="text-right"><span>{{ $cotizacion2->cotizacion2_volumen }}</span></td>
-										<th colspan="2" class="text-right"><label class="checkbox-inline"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_round ? 'checked': '' }}> Redondear</label></th>
-										<th class="text-right"><span>{{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span></th>
-									</tr>
-									<tr>
-										<th colspan="4">Total</th>
-										<th class="text-right"><span class="badge bg-green">{{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span></th>
-									</tr>
-									</tbody>
-									<tfoot>
+							<div class="box-body no-padding">
+								<table class="table table-condensed">
+									<tbody>
 										<tr>
-											<th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+											<th  colspan="4">Precio</th>
+											<td class="text-right"><span>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</span></td>
 										</tr>
-									</tfoot>
-								</table>
+										<tr>
+											<th colspan="4">Transporte</th>
+											<td class="text-right"><span>{{ number_format($transporte, 2, ',', '.')}}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Viáticos</th>
+											<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Áreas</th>
+											<td class="text-right"><span>{{ number_format($totalareap, 2, ',', '.') }}</span></td>
+										</tr>
+										<tr>
+											<th colspan="4">Subtotal</th>
+											<th class="text-right"><span>{{ number_format($subtotal, 2, ',', '.') }}</span></th>
+										</tr>
+										<tr>
+											<th>Volumen</th>
+											<td class="text-left"><span>{{ $cotizacion2->cotizacion2_volumen }}</span></td>
+											<th class="text-center">Redondear</th>
+											<td class="text-left"><span>{{ $cotizacion2->cotizacion2_round }}</span></td>
+											<th class="text-right"><span>{{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span></th>
+										</tr>
+										<tr>
+											<th colspan="4">Total</th>
+											<th class="text-right"><span class="badge bg-green">{{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span></th>
+										</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+				@endif
 			</div>
 		</div>
 @stop
