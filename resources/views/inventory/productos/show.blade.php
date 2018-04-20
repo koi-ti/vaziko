@@ -105,7 +105,7 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label class="control-label">Largo</label>
-                        <div>{{ $producto->producto_ancho }}</div>
+                        <div>{{ $producto->producto_largo }}</div>
                     </div>
                 @endif
             </div>
