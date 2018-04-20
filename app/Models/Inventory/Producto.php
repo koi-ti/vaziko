@@ -5,7 +5,6 @@ namespace App\Models\Inventory;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\BaseModel;
-
 use DB, Validator;
 
 class Producto extends BaseModel
@@ -24,7 +23,7 @@ class Producto extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['producto_codigo', 'producto_codigoori', 'producto_nombre', 'producto_grupo', 'producto_subgrupo', 'producto_unidadmedida', 'producto_vidautil'];
+    protected $fillable = ['producto_codigo', 'producto_codigoori', 'producto_nombre', 'producto_vidautil', 'producto_ancho', 'producto_largo'];
 
     /**
      * The attributes that are mass boolean assignable.
@@ -47,7 +46,9 @@ class Producto extends BaseModel
             'producto_codigoori' => 'required|max:15|min:1',
             'producto_nombre' => 'required|max:200',
             'producto_grupo' => 'required',
-            'producto_subgrupo' => 'required'
+            'producto_subgrupo' => 'required',
+            'producto_ancho' => 'required_if:producto_metrado,true|numeric',
+            'producto_largo' => 'required_if:producto_metrado,true|numeric',
         ];
 
         if ($this->exists){
@@ -63,6 +64,7 @@ class Producto extends BaseModel
                 $this->errors = 'Producto no puede ser metrado y manejar serie al mismo tiempo, por favor verifique la información del asiento o consulte al administrador.';
                 return false;
             }
+
             return true;
         }
         $this->errors = $validator->errors();

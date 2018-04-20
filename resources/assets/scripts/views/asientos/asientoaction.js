@@ -61,8 +61,6 @@ app || (app = {});
             this.$modalIn = this.$('#modal-asiento-inventario-component');
             this.$modalCt = this.$('#modal-asiento-cartera-component');
 
-            console.log(this.parameters);
-
             // Collection cuotas
             this.cuotasFPList = new app.CuotasFPList();
             // Collection item rollo

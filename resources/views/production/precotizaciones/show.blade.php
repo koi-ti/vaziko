@@ -49,7 +49,7 @@
                     </div>
 				</div>
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="form-group col-md-8">
                         <label class="control-label">Referencia</label>
                         <div>{{ $precotizacion->precotizacion1_referencia }}</div>
                     </div>

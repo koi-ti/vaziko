@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Inventory\Producto, App\Models\Production\Materialp;
+use App\Models\Inventory\Producto, App\Models\Production\Materialp, App\Models\Inventory\Grupo, App\Models\Inventory\SubGrupo, App\Models\Inventory\Unidad;
 use DB, Log, Datatables;
 
 class ProductoController extends Controller
@@ -23,13 +23,14 @@ class ProductoController extends Controller
             $query = Producto::query();
             $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre');
 
-
             if( $request->has('datatables') ) {
                 // Persistent data filter
                 if($request->has('persistent') && $request->persistent) {
                     session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
                     session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
                 }
+                $query->leftJoin('koi_materialp', 'producto_materialp', '=', 'koi_materialp.id');
+                $query->addSelect('materialp_nombre');
 
                 return Datatables::of($query)
                 ->filter(function($query) use($request) {
@@ -90,9 +91,34 @@ class ProductoController extends Controller
                         $producto->producto_materialp = $materialp->id;
                     }
 
+                    // Validar grupo y SubGrupo$
+                    $grupo = Grupo::find($request->producto_grupo);
+                    if(!$grupo instanceof Grupo){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el grupo, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    $subgrupo = SubGrupo::find($request->producto_subgrupo);
+                    if(!$subgrupo instanceof SubGrupo){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subgrupo, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    if( $request->has('producto_unidadmedida') ){
+                        $unidadmedida = Unidad::find($request->producto_unidadmedida);
+                        if(!$unidadmedida instanceof Unidad){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar la unidad de medida, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $producto->producto_unidadmedida = $unidadmedida->id;
+                    }
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->producto_grupo = $grupo->id;
+                    $producto->producto_subgrupo = $subgrupo->id;
                     $producto->save();
 
                     // En la creación siempre producto_referencia = id
@@ -175,9 +201,34 @@ class ProductoController extends Controller
                         $producto->producto_materialp = null;
                     }
 
+                    // Validar grupo y SubGrupo$
+                    $grupo = Grupo::find($request->producto_grupo);
+                    if(!$grupo instanceof Grupo){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el grupo, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    $subgrupo = SubGrupo::find($request->producto_subgrupo);
+                    if(!$subgrupo instanceof SubGrupo){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subgrupo, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    if( $request->has('producto_unidadmedida') ){
+                        $unidadmedida = Unidad::find($request->producto_unidadmedida);
+                        if(!$unidadmedida instanceof Unidad){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar la unidad de medida, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $producto->producto_unidadmedida = $unidadmedida->id;
+                    }
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->producto_grupo = $grupo->id;
+                    $producto->producto_subgrupo = $subgrupo->id;
                     $producto->save();
 
                     // Commit Transaction
@@ -259,8 +310,6 @@ class ProductoController extends Controller
             $response->errors = "No es posible realizar movimientos para productos que no manejan unidades";
             $response->success = false;
         }
-        // dd($request->all());
-
         return response()->json($response);
     }
 }

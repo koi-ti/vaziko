@@ -87,7 +87,6 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->fillBoolean($data);
                     $cotizacion2->cotizacion2_productop = $producto->id;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
-                    // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                     $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_saldo = $cotizacion2->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
@@ -110,10 +109,10 @@ class Cotizacion2Controller extends Controller
                     $materiales = Cotizacion4::getCotizaciones4($cotizacion2->cotizacion2_productop, $cotizacion2->id);
                     foreach ($materiales as $material)
                     {
-                        if($request->has("cotizacion4_materialp_$material->id")) {
+                        if($request->has("cotizacion4_materialp_{$material->materialp_id}_{$material->cotizacion4_id}")) {
                             $cotizacion4 = new Cotizacion4;
                             $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
-                            $cotizacion4->cotizacion4_materialp = $material->id;
+                            $cotizacion4->cotizacion4_materialp = $material->materialp_id;
                             $cotizacion4->save();
                         }
                     }
@@ -251,7 +250,6 @@ class Cotizacion2Controller extends Controller
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
-                        // $cotizacion2->cotizacion2_round = $request->cotizacion2_round;
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                         $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
                         $cotizacion2->save();
@@ -279,12 +277,12 @@ class Cotizacion2Controller extends Controller
                         $materiales = Cotizacion4::getCotizaciones4($cotizacion2->cotizacion2_productop, $cotizacion2->id);
                         foreach ($materiales as $material)
                         {
-                            $cotizacion4 = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->where('cotizacion4_materialp', $material->id)->first();
-                            if($request->has("cotizacion4_materialp_$material->id")) {
+                            $cotizacion4 = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->where('cotizacion4_materialp', $material->materialp_id)->where('koi_cotizacion4.id', $material->cotizacion4_id)->first();
+                            if( $request->has("cotizacion4_materialp_{$material->materialp_id}_{$material->cotizacion4_id}") ) {
                                 if(!$cotizacion4 instanceof Cotizacion4) {
                                     $cotizacion4 = new Cotizacion4;
                                     $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
-                                    $cotizacion4->cotizacion4_materialp = $material->id;
+                                    $cotizacion4->cotizacion4_materialp = $material->materialp_id;
                                     $cotizacion4->save();
                                 }
                             }else{

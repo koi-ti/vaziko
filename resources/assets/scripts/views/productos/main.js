@@ -45,7 +45,8 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'producto_codigo', name: 'producto_codigo' },
-                    { data: 'producto_nombre', name: 'producto_nombre' }
+                    { data: 'producto_nombre', name: 'producto_nombre' },
+                    { data: 'materialp_nombre', name: 'materialp_nombre' }
                 ],
 				buttons: [
 					{

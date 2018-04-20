@@ -365,6 +365,8 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4 = new Cotizacion4;
                          $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
                          $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
+                         $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
+                         $cotizacion4->cotizacion4_precio = $precotizacion3->precotizacion3_valor_total;
                          $cotizacion4->save();
 
                          $totalmaterial += $precotizacion3->precotizacion3_valor_total;
@@ -386,6 +388,7 @@ class PreCotizacion1Controller extends Controller
                     }
 
                     // Actualizar precio en cotizacion2;
+                    $cotizacion2->cotizacion2_precio_formula = $totalmaterial;
                     $cotizacion2->cotizacion2_precio_venta = $totalmaterial;
                     $cotizacion2->cotizacion2_total_valor_unitario = $totalmaterial + $totalareasp;
                     $cotizacion2->save();

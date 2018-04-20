@@ -49,7 +49,7 @@
                         <div class="box box-whithout-border">
                             <div class="box-body">
                             	<div class="row">
-									<div class="col-md-2">
+									<div class="form-group col-md-2">
 										<label class="control-label">Código</label>
 										<div>
                                             {{ $cotizacion->cotizacion_codigo }}
@@ -63,24 +63,24 @@
                                         </div>
 									</div>
                                     @if( $cotizacion->cotizacion1_precotizacion )
-    									<div class="col-md-2">
+    									<div class="form-group col-md-2">
     										<label>Pre-cotización</label>
                                             <div>{{ $cotizacion->precotizacion_codigo }}</div>
     									</div>
                                     @endif
-									<div class="col-md-7">
+									<div class="form-group col-md-7">
 										<label class="control-label">Referencia</label>
 										<div>{{ $cotizacion->cotizacion1_referencia }}</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-md-2">
+									<div class="form-group col-md-2">
 										<label class="control-label">F. Inicio</label>
 										<div>{{ $cotizacion->cotizacion1_fecha_inicio }}</div>
 									</div>
 
-									<div class="col-md-7">
+									<div class="form-group col-md-7">
 										<label class="control-label">Cliente</label>
 										<div>
 											<a href="{{ route('terceros.show', ['terceros' =>  $cotizacion->cotizacion1_cliente ]) }}">
@@ -89,39 +89,39 @@
 										</div>
 									</div>
 
-									<div class="col-md-3">
+									<div class="form-group col-md-3">
 										<label class="control-label">Forma de pago</label>
 										<div>{{ $cotizacion->cotizacion1_formapago }}</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-md-6">
+									<div class="form-group col-md-6">
 										<label class="control-label">Contacto</label>
 										<div>{{ $cotizacion->tcontacto_nombre }}</div>
 									</div>
-									<div class="col-md-3">
+									<div class="form-group col-md-3">
 										<label class="control-label">Teléfono</label>
 										<div>{{ $cotizacion->tcontacto_telefono }}</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-md-12">
+									<div class="form-group col-md-12">
 										<label class="control-label">Suministran</label>
 										<div>{{ $cotizacion->cotizacion1_suministran }}</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-md-12">
+									<div class="form-group col-md-12">
 										<label class="control-label">Detalle</label>
 										<div>{{ $cotizacion->cotizacion1_observaciones }}</div>
 									</div>
 								</div>
 
 								<div class="row">
-									<div class="col-md-12">
+									<div class="form-group col-md-12">
 										<label class="control-label">Terminado</label>
 										<div>{{ $cotizacion->cotizacion1_terminado }}</div>
 									</div>
@@ -130,14 +130,14 @@
 								</div>
 
 								<div class="row">
-									<div class="col-md-2">
+									<div class="form-group col-md-2">
 										<label class="control-label">Usuario elaboro</label>
 										<div>
 											<a href="{{ route('terceros.show', ['terceros' =>  $cotizacion->cotizacion1_usuario_elaboro ]) }}" title="Ver tercero">
 												{{ $cotizacion->username_elaboro }}</a>
 										</div>
 									</div>
-									<div class="col-md-2">
+									<div class="form-group col-md-2">
 										<label class="control-label">Fecha elaboro</label>
 										<div>{{ $cotizacion->cotizacion1_fecha_elaboro }}</div>
 									</div>
@@ -151,7 +151,7 @@
 
                                 <br />
 
-                                <div class="box box-success" id="wrapper-productop-cotizacion">
+                                <div class="box box-danger" id="wrapper-productop-cotizacion">
                                    	<div class="box-body">
                                    		<!-- table table-bordered table-striped -->
                                         <div class="box-body table-responsive no-padding">
