@@ -297,4 +297,14 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('rauxcuentabeneficiario', 'Report\AuxCuentaBeneficiarioController', ['only' => ['index']]);
 	Route::resource('rauxbeneficiariocuenta', 'Report\AuxBeneficiarioCuentaController', ['only' => ['index']]);
 	Route::resource('rauxporcuenta', 'Report\AuxPorCuentaController', ['only' => ['index']]);
+
+	/*
+	|-------------------------
+	| Imports Routes
+	|-------------------------
+	*/
+	Route::group(['prefix' => 'import'], function()
+	{
+		Route::post('asientos',['as' =>'asientos.import','uses'=>'Accounting\AsientoController@import'] );
+	});
 });

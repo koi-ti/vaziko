@@ -37,6 +37,7 @@ var app = app || {};
             this.initAlertify();
             this.initInputMask();
             this.initSelect2();
+            this.initSelectFile();
             this.initToUpper();
             this.initSpinner();
             this.initDatePicker();
@@ -157,7 +158,17 @@ var app = app || {};
                 });
             }
         },
+        /**
+        * Init toUpper
+        */
+        initSelectFile: function () {
+            $('.selectfile').change(function(){
+                var filetext = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
+                var readonly = $(this).parents('.input-group').find(':text');
 
+                readonly.val(filetext);
+            });
+        },  
         /**
         * Init toUpper
         */
