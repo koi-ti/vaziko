@@ -14,8 +14,8 @@ app || (app = {});
         el: '#productos-create',
         template: _.template( ($('#add-producto-tpl').html() || '') ),
         events: {
-            'ifChecked #producto_serie': 'serieChange',
-            'ifChecked #producto_metrado': 'metradoChange',
+            'ifChanged #producto_serie': 'serieChange',
+            'ifChanged #producto_metrado': 'metradoChange',
             'submit #form-productos': 'onStore'
         },
         parameters: {
@@ -38,24 +38,10 @@ app || (app = {});
             this.listenTo( this.model, 'request', this.loadSpinner );
         },
 
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-
-            if (!e.isDefaultPrevented()) {
-
-                e.preventDefault();
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
         /*
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
             this.$wraperForm.html( this.template(attributes) );
 
@@ -63,14 +49,22 @@ app || (app = {});
             this.$inputSerie = this.$("#producto_serie");
             this.$inputMetrado = this.$("#producto_metrado");
 
+            // Inputs metrado
+            this.$ancho = this.$('#producto_ancho');
+            this.$largo = this.$('#producto_largo');
+
             this.ready();
         },
 
         serieChange: function (e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ) {
                 this.$inputMetrado.iCheck('uncheck');
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
+            }else {
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
             }
         },
 
@@ -78,6 +72,23 @@ app || (app = {});
             var selected = $(e.target).is(':checked');
             if( selected ) {
                 this.$inputSerie.iCheck('uncheck');
+                this.$ancho.removeAttr('readonly');
+                this.$largo.removeAttr('readonly');
+            }else {
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
+            }
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save( data, {patch: true, silent: true} );
             }
         },
 
@@ -86,6 +97,9 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
+            if( typeof window.initComponent.initValidator == 'function' )
+                window.initComponent.initValidator();
+
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
@@ -108,7 +122,6 @@ app || (app = {});
         */
         responseServer: function ( model, resp, opts ) {
             window.Misc.removeSpinner( this.el );
-
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

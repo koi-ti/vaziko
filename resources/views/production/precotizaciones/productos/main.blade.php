@@ -101,6 +101,13 @@
                     <div class="box-body" id="precotizacion3-wrapper-producto">
                         <form method="POST" accept-charset="UTF-8" id="form-precotizacion3-producto" data-toggle="validator">
                             <div class="row">
+                                @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
+                                    <div class="form-group col-md-4">
+                                        <label>{{ $value }}</label>
+                                    </div>
+                                @endforeach
+                            </div><br>
+                            <div class="row">
                                 <div class="form-group col-sm-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-btn">
@@ -110,6 +117,7 @@
                                         </span>
                                         <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" data-proveedor="true" required>
                                     </div>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-sm-8">
                                     <input id="precotizacion1_proveedor_nombre" name="precotizacion1_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
@@ -124,11 +132,13 @@
                                             <option value="{{ $key }}">{{ $value }}</option>
                                         @endforeach
                                     </select>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-6">
-                                    <select name="precotizacion3_producto" id="precotizacion3_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled>
+                                    <select name="precotizacion3_producto" id="precotizacion3_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled required>
                                         <option value="">Seleccione</option>
                                     </select>
+                                    <div class="help-block with-errors"></div>
                                 </div>
                             </div>
                             <div class="row">

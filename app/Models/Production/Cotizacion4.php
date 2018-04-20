@@ -20,7 +20,7 @@ class Cotizacion4 extends Model
     public static function getCotizaciones4($productop = null, $cotizacion2 = null)
     {
         $query = Productop5::query();
-        $query->select('koi_materialp.id as id', 'materialp_nombre', ($cotizacion2 != null ? DB::raw("CASE WHEN koi_cotizacion4.id IS NOT NULL THEN true ELSE false END as activo") : DB::raw('false AS activo')) );
+        $query->select('koi_materialp.id as materialp_id', 'materialp_nombre', ($cotizacion2 != null ? DB::raw("CASE WHEN koi_cotizacion4.id IS NOT NULL THEN true ELSE false END as activo") : DB::raw('false AS activo')));
 
         $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
         if($cotizacion2 != null) {
@@ -28,6 +28,7 @@ class Cotizacion4 extends Model
 				$join->on('cotizacion4_materialp', '=', 'koi_materialp.id')
 					->where('cotizacion4_cotizacion2', '=', $cotizacion2);
 	        });
+            $query->addSelect('cotizacion4_cantidad', 'cotizacion4_precio', 'koi_cotizacion4.id as cotizacion4_id');
 	  	}
 
         $query->where('productop5_productop', $productop);

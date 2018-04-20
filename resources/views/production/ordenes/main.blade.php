@@ -210,7 +210,7 @@
                                     <br>
 
                                     <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                                        <div class="box box-success">
+                                        <div class="box box-primary">
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
@@ -413,7 +413,7 @@
                                             </div>
                                         </form><br/>
 
-                                        <div class="box box-success">
+                                        <div class="box box-primary">
                                             <div class="box-body">
                                                 <!-- table table-bordered table-striped -->
                                                 <div class="box-body table-responsive no-padding">

@@ -51,7 +51,7 @@
             </div>
 
             @if($producto->productop_abierto || $producto->productop_cerrado)
-                <div class="box box-primary">
+                <div class="box box-danger">
                     <div class="box-body">
                         @if($producto->productop_abierto)
                             <div class="row">
@@ -99,7 +99,7 @@
             @endif
 
             @if($producto->productop_3d)
-                <div class="box box-primary">
+                <div class="box box-danger">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -132,7 +132,7 @@
             @endif
 
             @if($producto->productop_tiro || $producto->productop_retiro)
-                <div class="box box-primary">
+                <div class="box box-danger">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-2 col-sm-1 control-label"></label>
@@ -228,7 +228,7 @@
             <div class="row">
                 {{-- Content maquinas --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Máquinas de producción</h3>
                         </div>
@@ -240,7 +240,7 @@
 
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales de producción</h3>
                         </div>
@@ -252,7 +252,7 @@
 
                 {{-- Content acabados --}}
                 <div class="col-sm-4">
-                    <div class="box box-primary">
+                    <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados de producción</h3>
                         </div>
@@ -264,7 +264,7 @@
             </div>
 
             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                <div class="box box-primary">
+                <div class="box box-danger">
                     <div class="box-header with-border">
                         <h3 class="box-title">Fórmulas</h3>
                     </div>
@@ -305,7 +305,7 @@
         </form>
 
         {{-- Content areasp --}}
-        <div class="box box-primary">
+        <div class="box box-danger">
             <div class="box-header with-border">
                 <h3 class="box-title">Áreas de producción</h3>
             </div>
@@ -374,7 +374,7 @@
         @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
             <div class="row">
                 <div class="col-md-6 col-md-offset-3">
-                    <div class="box box-primary">
+                    <div class="box box-danger">
                         <div class="box-header">
                             <h3 class="box-title">Información adicional</h3>
                         </div>
@@ -443,11 +443,19 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-material-item-tpl">
-        <div class="form-group col-md-12">
-            <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_<%- id %>">
-                <input type="checkbox" id="cotizacion4_materialp_<%- id %>" name="cotizacion4_materialp_<%- id %>" value="cotizacion4_materialp_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
+        <div class="form-group <%- (cotizacion4_cantidad && cotizacion4_precio ) ? 'col-md-7' : 'col-md-12' %>">
+            <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>">
+                <input type="checkbox" id="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" name="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" value="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
+        <% if (cotizacion4_cantidad && cotizacion4_precio ) { %>
+            <div class="form-group col-md-2 text-center">
+                <div><%- cotizacion4_cantidad %></div>
+            </div>
+            <div class="form-group col-md-3 text-right">
+                <div><%- window.Misc.currency( cotizacion4_precio ) %></div>
+            </div>
+        <% } %>
     </script>
 
     <script type="text/template" id="cotizacion-producto-acabado-item-tpl">

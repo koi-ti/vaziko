@@ -984,16 +984,19 @@
 		<div class="form-group col-md-3">
 			<label for="producto_codigo" class="control-label">Código</label>
 			<input type="text" id="producto_codigo" name="producto_codigo" value="<%- producto_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+            <div class="help-block with-errors"></div>
 		</div>
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>
 			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+            <div class="help-block with-errors"></div>
 		</div>
 
 		<div class="form-group col-md-6">
 			<label for="producto_nombre" class="control-label">Nombre</label>
 			<input type="text" id="producto_nombre" name="producto_nombre" value="<%- producto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+            <div class="help-block with-errors"></div>
 		</div>
 	</div>
 
@@ -1005,6 +1008,7 @@
 					<option value="{{ $key }}" <%- producto_grupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
+            <div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group col-md-1 col-xs-2 text-right">
 			<div>&nbsp;</div>
@@ -1020,6 +1024,7 @@
 					<option value="{{ $key }}" <%- producto_subgrupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
+            <div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group col-md-1 col-xs-2 text-right">
 			<div>&nbsp;</div>
@@ -1060,19 +1065,30 @@
 	</div>
 
 	<div class="row">
-		<div class="form-group col-md-2 col-xs-12">
+		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_unidades" class="control-label">¿Maneja unidades?</label>
 			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- parseInt(producto_unidades) ? 'checked': ''%>></div>
 		</div>
 
-		<div class="form-group col-md-2 col-xs-6">
-			<label for="producto_serie" class="control-label">¿Meneja serie?</label>
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_serie" class="control-label">¿Maneja serie?</label>
 			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- parseInt(producto_serie) ? 'checked': ''%>></div>
 		</div>
 
-		<div class="form-group col-md-2 col-xs-6">
+		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_metrado" class="control-label">¿Producto metrado?</label>
 			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- parseInt(producto_metrado) ? 'checked': ''%>></div>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_ancho" class="control-label">Ancho</label>
+            <input type="number" id="producto_ancho" name="producto_ancho" value="<%- producto_ancho %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
+            <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_largo" class="control-label">Largo</label>
+            <input type="number" id="producto_largo" name="producto_largo" value="<%- producto_largo %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
+            <div class="help-block with-errors"></div>
 		</div>
 	</div>
 </script>

@@ -53,7 +53,7 @@
 								</div><br>
 
 								@if($producto->productop_abierto || $producto->productop_cerrado)
-									<div class="box box-success">
+									<div class="box box-primary">
 										<div class="box-body">
 											@if($producto->productop_abierto)
 												<div class="row">
@@ -101,7 +101,7 @@
 								@endif
 
 								@if($producto->productop_3d)
-									<div class="box box-success">
+									<div class="box box-primary">
 										<div class="box-body">
 											<div class="row">
 												<label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -134,7 +134,7 @@
 								@endif
 
 								@if($producto->productop_tiro || $producto->productop_retiro)
-									<div class="box box-success">
+									<div class="box box-primary">
 										<div class="box-body">
 											<div class="row">
 												<label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
@@ -230,7 +230,7 @@
 								<div class="row">
 									{{-- Content maquinas --}}
 									<div class="col-sm-4">
-										<div class="box box-success">
+										<div class="box box-primary">
 											<div class="box-header with-border">
 												<h3 class="box-title">Máquinas de producción</h3>
 											</div>
@@ -250,7 +250,7 @@
 
 									{{-- Content materiales --}}
 									<div class="col-sm-4">
-										<div class="box box-success">
+										<div class="box box-primary">
 											<div class="box-header with-border">
 												<h3 class="box-title">Materiales de producción</h3>
 											</div>
@@ -270,7 +270,7 @@
 
 									{{-- Content acabados --}}
 									<div class="col-sm-4">
-										<div class="box box-success">
+										<div class="box box-primary">
 											<div class="box-header with-border">
 												<h3 class="box-title">Acabados de producción</h3>
 											</div>
@@ -290,7 +290,7 @@
 								</div>
 
 								@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-									<div class="box box-success">
+									<div class="box box-primary">
 										<div class="box-header with-border">
 											<h3 class="box-title">Fórmulas</h3>
 										</div>
@@ -329,7 +329,7 @@
 									</div>
 								@endif
 
-								<div class="box box-success">
+								<div class="box box-primary">
 									<div class="box-header with-border">
 										<h3 class="box-title">Áreas de producción</h3>
 									</div>
@@ -389,7 +389,7 @@
 										/*--}}
 
 										<div class="col-sm-6 col-md-offset-3">
-											<div class="box box-success">
+											<div class="box box-primary">
 												<div class="box-header">
 													<h3 class="box-title">Información adicional</h3>
 												</div>

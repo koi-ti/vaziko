@@ -172,7 +172,7 @@
 
                                 <br />
 
-                                <div class="box box-success" id="wrapper-productop-orden">
+                                <div class="box box-primary" id="wrapper-productop-orden">
                                    	<div class="box-body">
                                    		<!-- table table-bordered table-striped -->
                                         <div class="box-body table-responsive no-padding">

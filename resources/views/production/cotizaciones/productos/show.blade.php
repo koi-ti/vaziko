@@ -10,7 +10,7 @@
 	<div class="box box-success" id="cotizaciones-productos-create">
 		<div class="box-header with-border">
             <div class="row">
-                <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
+                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
                     <a href="{{ route('cotizaciones.show', ['cotizaciones' => $cotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
             </div>
@@ -40,7 +40,7 @@
 			</div><br>
 
 			@if($producto->productop_abierto || $producto->productop_cerrado)
-				<div class="box box-success">
+				<div class="box box-danger">
                     <div class="box-body">
                         @if($producto->productop_abierto)
                             <div class="row">
@@ -88,7 +88,7 @@
 			@endif
 
 			@if($producto->productop_3d)
-                <div class="box box-success">
+                <div class="box box-danger">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -121,7 +121,7 @@
             @endif
 
             @if($producto->productop_tiro || $producto->productop_retiro)
-                <div class="box box-success">
+                <div class="box box-danger">
                     <div class="box-body">
                         <div class="row">
                             <label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
@@ -218,7 +218,7 @@
             <div class="row">
 				{{-- Content maquinas --}}
 				<div class="col-sm-4">
-					<div class="box box-success">
+					<div class="box box-danger">
 						<div class="box-header with-border">
 							<h3 class="box-title">Máquinas de producción</h3>
 						</div>
@@ -238,18 +238,26 @@
 
                 {{-- Content materiales --}}
                 <div class="col-sm-4">
-                    <div class="box box-success">
+                    <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales de producción</h3>
                         </div>
                         <div class="box-body">
                             @foreach( App\Models\Production\Cotizacion4::getCotizaciones4($producto->id, $cotizacion2->id) as $material)
                                 <div class="row">
-                                    <div class="form-group col-md-12">
+									<div class="form-group {!! ($material->cotizacion4_cantidad && $material->cotizacion4_precio) ? 'col-md-7' : 'col-md-12' !!}">
                                         <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_{{ $material->id }}">
                                             <input type="checkbox" id="cotizacion4_materialp_{{ $material->id }}" name="cotizacion4_materialp_{{ $material->id }}" value="cotizacion4_materialp_{{ $material->id }}" {{ $material->activo ? 'checked': '' }} disabled> {{ $material->materialp_nombre }}
                                         </label>
                                     </div>
+									@if( $material->cotizacion4_cantidad && $material->cotizacion4_precio )
+	                                    <div class="form-group col-md-2">
+											<div>{{ $material->cotizacion4_cantidad }}</div>
+	                                    </div>
+	                                    <div class="form-group col-md-3">
+											<div>{{ number_format($material->cotizacion4_precio,'2',',','.') }}</div>
+	                                    </div>
+									@endif
                                 </div>
                             @endforeach
                         </div>
@@ -258,7 +266,7 @@
 
                 {{-- Content acabados --}}
                 <div class="col-sm-4">
-                    <div class="box box-success">
+                    <div class="box box-danger">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados de producción</h3>
                         </div>
@@ -278,7 +286,7 @@
             </div>
 
 			@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-				<div class="box box-success">
+				<div class="box box-danger">
 	                <div class="box-header with-border">
 	                    <h3 class="box-title">Fórmulas</h3>
 	                </div>
@@ -320,7 +328,7 @@
 				</div>
             @endif
 
-			<div class="box box-success">
+			<div class="box box-danger">
 				<div class="box-header with-border">
 					<h3 class="box-title">Áreas de producción</h3>
 				</div>
@@ -380,7 +388,7 @@
 					/*--}}
 
 					<div class="col-sm-6 col-md-offset-3">
-						<div class="box box-success">
+						<div class="box box-danger">
 		                    <div class="box-header">
 		                        <h3 class="box-title">Información adicional</h3>
 		                    </div>

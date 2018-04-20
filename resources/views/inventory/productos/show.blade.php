@@ -97,6 +97,17 @@
                         <input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" disabled {{ $producto->producto_metrado ? 'checked': '' }}>
                     </div>
                 </div>
+
+                @if( $producto->producto_metrado )
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Ancho</label>
+                        <div>{{ $producto->producto_ancho }}</div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Largo</label>
+                        <div>{{ $producto->producto_largo }}</div>
+                    </div>
+                @endif
             </div>
 
             <div class="row">
