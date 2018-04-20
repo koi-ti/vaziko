@@ -1082,12 +1082,12 @@
 
 		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_ancho" class="control-label">Ancho</label>
-            <input type="number" id="producto_ancho" name="producto_ancho" value="<%- producto_ancho %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'disabled': ''%> required>
+            <input type="number" id="producto_ancho" name="producto_ancho" value="<%- producto_ancho %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
             <div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_largo" class="control-label">Largo</label>
-            <input type="number" id="producto_largo" name="producto_largo" value="<%- producto_largo %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'disabled': ''%> required>
+            <input type="number" id="producto_largo" name="producto_largo" value="<%- producto_largo %>" placeholder="Ancho" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
             <div class="help-block with-errors"></div>
 		</div>
 	</div>

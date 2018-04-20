@@ -60,11 +60,11 @@ app || (app = {});
             var selected = $(e.target).is(':checked');
             if( selected ) {
                 this.$inputMetrado.iCheck('uncheck');
-                this.$ancho.val(0).prop('disabled', true);
-                this.$largo.val(0).prop('disabled', true);
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
             }else {
-                this.$ancho.val(0).prop('disabled', true);
-                this.$largo.val(0).prop('disabled', true);
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
             }
         },
 
@@ -72,11 +72,11 @@ app || (app = {});
             var selected = $(e.target).is(':checked');
             if( selected ) {
                 this.$inputSerie.iCheck('uncheck');
-                this.$ancho.removeAttr('disabled');
-                this.$largo.removeAttr('disabled');
+                this.$ancho.removeAttr('readonly');
+                this.$largo.removeAttr('readonly');
             }else {
-                this.$ancho.val(0).prop('disabled', true);
-                this.$largo.val(0).prop('disabled', true);
+                this.$ancho.val(0).prop('readonly', true);
+                this.$largo.val(0).prop('readonly', true);
             }
         },
 

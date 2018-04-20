@@ -180,7 +180,6 @@ class ProductoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $producto = Producto::findOrFail($id);
             if ($producto->isValid($data)) {
                 if($producto->id != $producto->producto_referencia ) {
