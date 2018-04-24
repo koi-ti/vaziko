@@ -36,7 +36,6 @@ app || (app = {});
                 collection: this.detalleFactura2List,
                 parameters: {
                     edit: false,
-                    call: 'show',
                     dataFilter: {
                         factura2: this.model.get('id')
                     }

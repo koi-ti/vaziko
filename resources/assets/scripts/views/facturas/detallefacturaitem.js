@@ -14,8 +14,10 @@ app || (app = {});
         tagName: 'tr',
         className: 'form-group',
         template: _.template( ($('#facturado-item-list-tpl').html() || '') ),
+        events: {
+            'change .change-cantidad': 'changeCantidad'
+        },
         parameters: {
-            call: null,
         },
 
         /**
@@ -26,7 +28,7 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            if(this.parameters.call == 'show'){
+            if( !this.parameters.edit ){
                 this.template = _.template( ($('#add-factura-item-tpl').html() || '') );
             }
 
@@ -41,7 +43,24 @@ app || (app = {});
             var attributes = this.model.toJSON();
             this.$el.html( this.template(attributes) );
             return this;
-        }
+        },
+
+        changeCantidad: function(e) {
+            var selector = this.$(e.currentTarget);
+
+            // rules && validate
+            var min = selector.attr('min');
+            var max = selector.attr('max');
+            if( selector.val() < parseInt(min) || selector.val() > parseInt(max) || _.isEmpty( selector.val() ) ){
+                selector.parent().addClass('has-error');
+                return;
+            }else{
+                selector.parent().removeClass('has-error');
+            }
+
+            // Settear el valor al modelo
+            this.model.set({ "factura2_cantidad": selector.val() }, {silent: true});
+        },
     });
 
 })(jQuery, this, this.document);

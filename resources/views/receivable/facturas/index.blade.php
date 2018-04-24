@@ -1,12 +1,18 @@
 @extends('receivable.facturas.main')
 
-@section('breadcrumb')
-    <li class="active">Facturas</li>
-@stop
-
 @section('module')
-    <div id="facturas-main">
-        <div class="box box-success">
+    <section class="content-header">
+        <h1>
+            Facturas <small>Administración de facturas</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
+            <li class="active">Facturas</li>
+        </ol>
+    </section>
+
+    <section class="content">
+        <div class="box box-success" id="facturas-main">
             <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-factura-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
                     <div class="form-group">
@@ -60,5 +66,5 @@
                 </table>
             </div>
         </div>
-    </div>
+    </section>
 @stop

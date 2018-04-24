@@ -53,8 +53,8 @@ app || (app = {});
         addOne: function (factura2Model) {
             var view = new app.DetalleFacturaItemView({
                 model: factura2Model,
-                parameters:{
-                    call: this.parameters.call,
+                parameters: {
+                    edit: this.parameters.edit,
                 }
             });
             factura2Model.view = view;
@@ -79,22 +79,22 @@ app || (app = {});
         storeOne: function (data) {
             var _this = this
 
-            // Validate duplicate store 
+            // Validate duplicate store
             var result = this.collection.validar( data );
             if( !result.success ){
                 alertify.error( result.error );
-                return;                
+                return;
             }
 
             // Set Spinner
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.parameters.wrapper );
 
             // Add model in collection
             var factura2Model = new app.Factura2Model();
             factura2Model.save(data, {
                 success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.el );
+                        window.Misc.removeSpinner( _this.parameters.wrapper );
 
                         // response success or error
                         var text = resp.success ? '' : resp.errors;
@@ -112,7 +112,7 @@ app || (app = {});
                     }
                 },
                 error : function(model, error) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.parameters.wrapper );
                     alertify.error(error.statusText)
                 }
             });
@@ -148,15 +148,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
+            window.Misc.removeSpinner( this.parameters.wrapper );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
@@ -166,11 +165,10 @@ app || (app = {});
 
                 if( !resp.success ) {
                     alertify.error(text);
-                    return; 
+                    return;
                 }
-                
-                $('#factura1_orden').val('');
-                $('#factura1_orden_beneficiario').val('');
+
+                window.Misc.clearForm( this.parameters.form );
             }
         }
    });

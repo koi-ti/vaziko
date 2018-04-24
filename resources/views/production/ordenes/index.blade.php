@@ -1,6 +1,5 @@
 @extends('production.ordenes.main')
 
-
 @section('module')
     <section class="content-header">
         <h1>

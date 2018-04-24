@@ -30,6 +30,7 @@ class Factura4Controller extends Controller
             $query->orderBy('factura4_vencimiento', 'desc');
 
             if ($request->has('tercero_id')) {
+
                 // Pestaña Cartera tercero
                 $query->addSelect('puntoventa_prefijo', DB::raw("DATEDIFF(factura4_vencimiento, NOW() ) as days"));
                 $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');

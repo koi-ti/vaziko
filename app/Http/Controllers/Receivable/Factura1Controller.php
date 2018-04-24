@@ -7,11 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento;
-
-use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Receivable\ReteFuente, App\Models\Receivable\ReteIva;
-use App\Models\Accounting\ReglaAsiento;
-
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Accounting\ReglaAsiento;
 use App, View, Auth, DB, Log, Datatables;
 
 class Factura1Controller extends Controller
@@ -107,12 +103,6 @@ class Factura1Controller extends Controller
                         return response()->json(['success'=>false, 'errors'=>'No es posible recuperar informacion de la empresa, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    // Validar Cuotas
-                    if($request->factura1_cuotas <= 0){
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'La cantidad cuotas no puede ser menor ó igual a 0.']);
-                    }
-
                     $factura->fill($data);
                     $factura->factura1_tercero = $tercero->id;
                     $factura->factura1_puntoventa = $puntoventa->id;
@@ -123,68 +113,51 @@ class Factura1Controller extends Controller
                     $factura->factura1_fh_elaboro = date('Y-m-d H:m:s');
                     $factura->save();
 
-                    // Calcular subtotal factura
-                    $subtotal = 0;
+                    // Detalle de la factura (ordenesp2)
+                    $detalle = isset($data['detalle']) ? $data['detalle'] : null;
+                    $subtotal = $rtfuente = $rtiva = $rtica = 0;
+                    foreach ($detalle as $item){
 
-                    // Validate cantidad
-                    $cantidad = 0;
-
-                    $detail = null;
-
-                    // Recuperar ordenesp2
-                    $ordenp2 = Ordenp2::getDetails()->get();
-                    foreach ($ordenp2 as $child) {
-
-                        if( $request->has("detail.facturado_cantidad_$child->id") ) {
-                            // Declarar variable request->get($array, $default = null, depp->mantener)
-                            $detail = $request->get("detail[facturado_cantidad_$child->id]", null, true);
-
-                            if( $detail > $child->orden2_cantidad || $detail < 0){
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => "La cantidad ingresada en la orden No. $child->id no es correcta, por favor verifique la información o consulte al administrador."]);
-                            }
-
-                            if( $detail != 0 ){
-                                $factura2 = new Factura2;
-                                $factura2->factura2_factura1 = $factura->id;
-                                $factura2->factura2_orden2 = $child->id;
-                                $factura2->factura2_cantidad = $detail;
-                                $factura2->save();
-
-                                $subtotal += $detail * $child->orden2_total_valor_unitario;
-                                $cantidad += $detail;
-
-                                // Actualizar orden2_facturado de Orden2
-                                $child->orden2_facturado = $child->orden2_facturado + $detail;
-                                $child->save();
-                            }
+                        // Validar ordenp2
+                        $ordenp2 = Ordenp2::find($item['id']);
+                        if(!$ordenp2 instanceof Ordenp2){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => "No es posible recuperar el producto No. {$item['id']}, por favor verifique la información o consulte al administrador."]);
                         }
-                    }
 
-                    // Validar que se ingrese un item en el detalle de la factura
-                    if($cantidad == 0){
-                        DB::rollback();
-                        return response()->json(['success'=>false, 'errors'=>'Por favor ingrese al menos un producto a facturar.']);
+                        // Validar que tenga cantidad
+                        if( $item['factura2_cantidad'] <= 0 || $item['factura2_cantidad'] > $ordenp2->orden2_cantidad){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => "La cantidad ingresada en el producto No. {$item['id']} no es correcta, por favor verifique la información o consulte al administrador."]);
+                        }
+
+                        // Guardar factura2
+                        $factura2 = new Factura2;
+                        $factura2->factura2_factura1 = $factura->id;
+                        $factura2->factura2_orden2 = $ordenp2->id;
+                        $factura2->factura2_cantidad = $item['factura2_cantidad'];
+                        $factura2->save();
+
+                        $subtotal += $item['factura2_cantidad'] * $ordenp2->orden2_total_valor_unitario;
+
+                        // Actualizar orden2_facturado de Orden2
+                        $ordenp2->orden2_facturado += $item['factura2_cantidad'];
+                        $ordenp2->save();
                     }
 
                     // Calcular Retefuente, Reteiva, Reteica, Iva, Total
                     $iva = ( round($subtotal) * $empresa->empresa_iva ) / 100;
-
-                    $rtfuente = 0;
                     if( $tercero->tercero_regimen == 2 && config('koi.terceros.regimen')[$tercero->tercero_regimen] == 'Común' && $subtotal >= $empresa->empresa_base_retefuente_factura){
                         $rtfuente = ($subtotal * $empresa->empresa_porcentaje_retefuente_factura) / 100;
                     }
 
-                    $rtiva = 0;
                     if( $tercero->tercero_gran_contribuyente && $subtotal >= $empresa->empresa_base_reteiva_factura ){
                         $rtiva = ($iva * $empresa->empresa_porcentaje_reteiva_factura) / 100;
                     }
 
-                    $rtica = 0;
                     if( $subtotal >= $empresa->empresa_base_ica_compras && $tercero->tercero_municipio == $empresa->tercero_municipio){
                         $rtica = ($subtotal * $empresa->actividad_tarifa) / 1000;
                     }
-
                     $total = round($subtotal) + round($iva) - round($rtfuente) - round($rtica) - round($rtiva);
 
                     // Actualizar factura--iva subtotal
@@ -197,23 +170,30 @@ class Factura1Controller extends Controller
                     $factura->save();
 
                     // Crear Factura4 -> cuotas
-                    $result = $factura->storeFactura4($factura);
-                    if(!$result->success){
-                        DB::rollback();
-                        return $result->error;
+                    if ( $factura->factura1_cuotas > 0 ) {
+                        $valor = $factura->factura1_total / $factura->factura1_cuotas;
+                        $fecha = $factura->factura1_fecha_vencimiento;
+
+                        for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
+                            $factura4 = new Factura4;
+                            $factura4->factura4_factura1 = $factura->id;
+                            $factura4->factura4_cuota = $i;
+                            $factura4->factura4_valor = round($valor);
+                            $factura4->factura4_saldo = round($valor);
+                            $factura4->factura4_vencimiento = $fecha;
+                            $fechavencimiento = date('Y-m-d',strtotime('+1 months', strtotime($fecha)));
+                            $fecha = $fechavencimiento;
+                            $factura4->save();
+                        }
                     }
 
-                    // Update consecutive puntoventa_numero
-                    $puntoventa->puntoventa_numero = $consecutive;
-                    $puntoventa->save();
-
                     // Prepara data asiento
-                    // $reglaAsiento = $factura->prepararAsiento();
                     $reglaAsiento = ReglaAsiento::createAsiento($factura->id, 'FS', $factura->factura1_tercero);
                     if (!$reglaAsiento->success) {
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>$reglaAsiento->error]);
                     }
+
                     // Creo el objeto para manejar el asiento
                     $objAsiento = new AsientoContableDocumento($reglaAsiento->data);
                     if($objAsiento->asiento_error) {
@@ -234,6 +214,7 @@ class Factura1Controller extends Controller
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
+
                     // AsientoNif
                     if (!empty($reglaAsiento->dataNif)) {
                         // Creo el objeto para manejar el asiento
@@ -259,6 +240,7 @@ class Factura1Controller extends Controller
                         // Recuperar el Id del asiento y guardar en la factura
                         $factura->factura1_asienton1 = $objAsientoNif->asientoNif->id;
                     }
+
                     // Recuperar el Id del asiento y guardar en la factura
                     $factura->factura1_asiento = $objAsiento->asiento->id;
                     $factura->save();
@@ -268,9 +250,11 @@ class Factura1Controller extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento de la factura.']);
                     }
 
+                    // Actualizar consecutivo del puntoventa
+                    $puntoventa->puntoventa_numero = $consecutive;
+                    $puntoventa->save();
+
                     // Commit Transaction
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => "TODO ok"]);
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){

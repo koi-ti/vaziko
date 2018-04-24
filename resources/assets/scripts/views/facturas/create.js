@@ -13,13 +13,10 @@ app || (app = {});
 
         el: '#factura-create',
         template: _.template(($('#add-facturas-tpl').html() || '') ),
-        templateDetail: _.template(($('#add-detail-factura').html() || '') ),
         events: {
             'click .submit-factura' :'submitFactura',
             'submit #form-factura' :'onStore',
             'submit #form-detail-factura' :'onStoreItem',
-        },
-        parameters: {
         },
 
         /**
@@ -27,7 +24,6 @@ app || (app = {});
         */
         initialize : function() {
             // Attributes
-            this.$wraperForm = this.$('#render-form-factura');
             this.detalleFactura2List = new app.DetalleFactura2List();
 
             // Events
@@ -41,17 +37,35 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
-            
-            // Render Detail factura
-            this.$renderDetail = this.$('#render-detail');
-            this.$renderDetail.html( this.templateDetail({}) );
+            this.$el.html( this.template(attributes) );
 
             this.$form = this.$('#form-factura');
-            this.$formDetail = this.$('#form-detail-factura');
+            this.$formdetail = this.$('#form-detail-factura');
+
+            // wrapper $detail
+            this.$wrapperdetail = this.$('#wrapper-detalle-factura');
+            this.spinner = this.$('#spinner-main');
 
             this.referenceView();
             this.ready();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceView: function(){
+           // Detalle factura list
+           this.detalleFacturaView = new app.DetalleFacturaView({
+               collection: this.detalleFactura2List,
+               parameters: {
+                   wrapper: this.$wrapperdetail,
+                   form: this.$formdetail,
+                   edit: true,
+                   dataFilter: {
+                       factura1_orden: this.model.get('id')
+                   }
+               }
+           });
         },
 
         /**
@@ -69,28 +83,15 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                    data.detail = window.Misc.formToJson( this.$formDetail );
+                    data.detalle = this.detalleFactura2List.toJSON();
 
                 this.model.save( data, {patch: true, silent: true} );
-            }   
-        },  
-
-         /**
-        * reference to views
-        */
-        referenceView: function(){
-            // Detalle factura list
-            this.detalleFacturaView = new app.DetalleFacturaView({
-                collection: this.detalleFactura2List,
-                parameters: {
-                    edit: false,
-                    dataFilter: {
-                        'factura1_orden': this.model.get('id')
-                    }
-                }
-            });
+            }
         },
 
+        /**
+        * Event Create detalle facturas
+        */
         onStoreItem: function(e){
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
@@ -105,29 +106,31 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
-            
             if( typeof window.initComponent.initValidator == 'function' )
                 window.initComponent.initValidator();
 
+            if( typeof window.initComponent.initToUpper == 'function' )
+                window.initComponent.initToUpper();
+
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initSelect2 == 'function' )
+                window.initComponent.initSelect2();
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
+            window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
@@ -137,7 +140,7 @@ app || (app = {});
 
                 if( !resp.success ) {
                     alertify.error(text);
-                    return; 
+                    return;
                 }
 
                 // CreateFacturaView undelegateEvents
