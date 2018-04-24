@@ -390,17 +390,21 @@
                                                             <th>Área</th>
                                                             <th>Nombre</th>
                                                             <th>Horas</th>
-                                                            <th>Valor</th>
-                                                            <th>Total</th>
+                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                <th>Valor</th>
+                                                                <th>Total</th>
+                                                            @endif
                                                         </tr>
                                                     </thead>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="4"></td>
-                                                            <th class="text-right">Total</th>
-                                                            <th class="text-right" id="total">0</th>
-                                                        </tr>
-                                                    </tfoot>
+                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                                <th class="text-right">Total</th>
+                                                                <th class="text-right" id="total">0</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    @endif
                                                 </table>
                                             </div>
                                         </div>
@@ -521,7 +525,9 @@
        <td><%- areap_nombre %></td>
        <td><%- orden6_nombre %></td>
        <td><%- orden6_tiempo %></td>
-       <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
-       <td class="text-right"><%- window.Misc.currency( total ) %></td>
+       @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+           <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
+           <td class="text-right"><%- window.Misc.currency( total ) %></td>
+       @endif
     </script>
 @stop

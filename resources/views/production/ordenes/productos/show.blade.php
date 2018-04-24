@@ -341,8 +341,10 @@
 														<th>Área</th>
 														<th>Nombre</th>
 														<th>Horas</th>
-														<th>Valor</th>
-														<th>Total</th>
+														@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+															<th>Valor</th>
+															<th>Total</th>
+														@endif
 													</tr>
 												</thead>
 												<tbody>
@@ -360,18 +362,22 @@
 															<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 															<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
 															<td class="text-center">{{  $areap->orden6_tiempo }}</td>
-															<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
-															<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+															@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+																<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
+																<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+															@endif
 														</tr>
 													@endforeach
 												</tbody>
-												<tfoot>
-													<tr>
-														<td colspan="3"></td>
-														<th class="text-right">Total</th>
-														<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
-													</tr>
-												</tfoot>
+												@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+													<tfoot>
+														<tr>
+															<td colspan="3"></td>
+															<th class="text-right">Total</th>
+															<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+														</tr>
+													</tfoot>
+												@endif
 											</table>
 										</div>
 									</div>

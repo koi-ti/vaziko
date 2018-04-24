@@ -355,17 +355,21 @@
                                 <th>Área</th>
                                 <th>Nombre</th>
                                 <th colspan="2" class="text-center">Tiempo</th>
-                                <th>Valor</th>
-                                <th>Total</th>
+                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                    <th>Valor</th>
+                                    <th>Total</th>
+                                @endif
                             </tr>
                         </thead>
-                        <tfoot>
-                            <tr>
-                                <td colspan="5"></td>
-                                <th class="text-right">Total</th>
-                                <th class="text-right" id="total">0</th>
-                            </tr>
-                        </tfoot>
+                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                            <tfoot>
+                                <tr>
+                                    <td colspan="5"></td>
+                                    <th class="text-right">Total</th>
+                                    <th class="text-right" id="total">0</th>
+                                </tr>
+                            </tfoot>
+                        @endif
                     </table>
                 </div>
             </div>
@@ -486,7 +490,9 @@
        <td class="form-group col-sm-2">
            <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" value="<%- cotizacion6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
        </td>
-       <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
-       <td class="text-right"><%- window.Misc.currency( total ) %></td>
+       @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+           <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
+           <td class="text-right"><%- window.Misc.currency( total ) %></td>
+       @endif     
     </script>
 @stop

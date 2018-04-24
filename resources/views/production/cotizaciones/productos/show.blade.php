@@ -340,8 +340,10 @@
 	                                <th>Área</th>
 	                                <th>Nombre</th>
 	                                <th>Horas</th>
-	                                <th>Valor</th>
-	                                <th>Total</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+		                                <th>Valor</th>
+		                                <th>Total</th>
+									@endif
 	                            </tr>
 	                        </thead>
 							<tbody>
@@ -359,18 +361,22 @@
 										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 		                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
 		                                <td class="text-left">{{  $areap->cotizacion6_tiempo }}</td>
-										<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
-		                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+											<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
+			                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 								@endforeach
 							</tbody>
-	                        <tfoot>
-	                            <tr>
-	                                <td colspan="3"></td>
-	                                <th class="text-right">Total</th>
-	                                <th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
-	                            </tr>
-	                        </tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+		                        <tfoot>
+		                            <tr>
+		                                <td colspan="3"></td>
+		                                <th class="text-right">Total</th>
+		                                <th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+		                            </tr>
+		                        </tfoot>
+							@endif
 	                    </table>
 	                </div>
 				</div>
