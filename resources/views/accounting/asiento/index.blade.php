@@ -33,12 +33,15 @@
                             </div>
 
 							<label for="search_documento" class="col-md-1 control-label">Documento</label>
-							<div class="col-md-5">
+							<div class="col-md-4">
 								<select name="search_documento" id="search_documento" class="form-control select2-default-clear">
 									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
 										<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
 									@endforeach
 								</select>
+							</div>
+							<div class="col-md-1">
+								<a href="#" class="btn btn-default btn-sm btn-import-modal"><i class="fa fa-upload"></i> Importar</a>
 							</div>
                         </div>
 

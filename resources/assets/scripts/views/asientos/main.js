@@ -14,7 +14,8 @@ app || (app = {});
         el: '#asientos-main',
         events: {
             'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
+            'click .btn-clear': 'clear',
+            'click .btn-import-modal': 'import'
         },
 
         /**
@@ -115,6 +116,29 @@ app || (app = {});
             this.$searchDocumento.val('').trigger('change');
 
             this.asientosSearchTable.ajax.reload();
+        },
+
+        /*
+        * Import data of Excel
+        */
+        import: function(e) {
+            var _this = this;
+
+            e.preventDefault();
+
+            // ImportActionView undelegateEvents
+            if ( this.importActionView instanceof Backbone.View ){
+                this.importActionView.stopListening();
+                this.importActionView.undelegateEvents();
+            }
+            this.importActionView = new app.ImportDataActionView({
+                parameters: {
+                    title: 'asientos',
+                    url: window.Misc.urlFull( Route.route('asientos.import') ),
+                    datatable: _this.asientosSearchTable
+                }
+            });
+            this.importActionView.render();
         },
     });
 
