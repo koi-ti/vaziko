@@ -1,6 +1,5 @@
 @extends('production.ordenes.main')
 
-
 @section('module')
     <section class="content-header">
         <h1>
@@ -75,7 +74,7 @@
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <a href="{{ route('ordenes.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-building-o"></i> Nueva orden
+                                    <i class="fa fa-plus"></i> Nuevo
                                 </a>
                             </div>
                         </div>

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Receivable\Factura2;
 use DB;
 
@@ -92,20 +91,12 @@ class Factura2Controller extends Controller
     public function store(Request $request)
     {
         if ($request->ajax()) {
-            $data = $request->all();
-
-            $factura2 = new Factura2;
-            DB::beginTransaction();
             try {
                 //Recuperar ordenp2
                 $ordenp2 = Ordenp2::getDetail($request->factura1_orden);
                 if(!$ordenp2 instanceof Ordenp2){
-                    DB::rollback();
                     return response()->json(['success'=>false, 'errors'=>'No es posible recuperar la orden, por favor verifique la informacion o consulte al administrador.']);
                 }
-
-                // Commit Transaction
-                DB::commit();
 
                 return response()->json(['success' => true,
                     'id' => $ordenp2->id,
@@ -115,13 +106,10 @@ class Factura2Controller extends Controller
                     'orden2_total_valor_unitario' => $ordenp2->orden2_total_valor_unitario,
                     'orden_codigo' => $ordenp2->orden_codigo]);
             }catch(\Exception $e){
-                DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
-            return response()->json(['success' => false, 'errors' => $factura2->errors]);
         }
         abort(403);
     }
-
 }

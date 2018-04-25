@@ -984,16 +984,19 @@
 		<div class="form-group col-md-3">
 			<label for="producto_codigo" class="control-label">Código</label>
 			<input type="text" id="producto_codigo" name="producto_codigo" value="<%- producto_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+            <div class="help-block with-errors"></div>
 		</div>
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>
 			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+            <div class="help-block with-errors"></div>
 		</div>
 
 		<div class="form-group col-md-6">
 			<label for="producto_nombre" class="control-label">Nombre</label>
 			<input type="text" id="producto_nombre" name="producto_nombre" value="<%- producto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
+            <div class="help-block with-errors"></div>
 		</div>
 	</div>
 
@@ -1005,6 +1008,7 @@
 					<option value="{{ $key }}" <%- producto_grupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
+            <div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group col-md-1 col-xs-2 text-right">
 			<div>&nbsp;</div>
@@ -1020,6 +1024,7 @@
 					<option value="{{ $key }}" <%- producto_subgrupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
+            <div class="help-block with-errors"></div>
 		</div>
 		<div class="form-group col-md-1 col-xs-2 text-right">
 			<div>&nbsp;</div>
@@ -1060,19 +1065,30 @@
 	</div>
 
 	<div class="row">
-		<div class="form-group col-md-2 col-xs-12">
+		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_unidades" class="control-label">¿Maneja unidades?</label>
 			<div><input type="checkbox" id="producto_unidades" name="producto_unidades" value="producto_unidades" <%- parseInt(producto_unidades) ? 'checked': ''%>></div>
 		</div>
 
-		<div class="form-group col-md-2 col-xs-6">
-			<label for="producto_serie" class="control-label">¿Meneja serie?</label>
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_serie" class="control-label">¿Maneja serie?</label>
 			<div><input type="checkbox" id="producto_serie" name="producto_serie" value="producto_serie" <%- parseInt(producto_serie) ? 'checked': ''%>></div>
 		</div>
 
-		<div class="form-group col-md-2 col-xs-6">
+		<div class="form-group col-md-2 col-xs-4">
 			<label for="producto_metrado" class="control-label">¿Producto metrado?</label>
 			<div><input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" <%- parseInt(producto_metrado) ? 'checked': ''%>></div>
+		</div>
+
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_ancho" class="control-label">Ancho</label>
+            <input type="number" id="producto_ancho" name="producto_ancho" value="<%- producto_ancho %>" placeholder="Ancho" step="0.1" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
+            <div class="help-block with-errors"></div>
+		</div>
+		<div class="form-group col-md-2 col-xs-4">
+			<label for="producto_largo" class="control-label">Largo</label>
+            <input type="number" id="producto_largo" name="producto_largo" value="<%- producto_largo %>" placeholder="Ancho" step="0.1" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
+            <div class="help-block with-errors"></div>
 		</div>
 	</div>
 </script>
@@ -1553,4 +1569,65 @@
     <td><%- sucursal_nombre %></td>
     <td><%- producto_codigo %></td>
     <td><%- producto_nombre %></td>
+</script>
+
+<script type="text/template" id="qq-template">
+    <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ trans('app.files.drop') }}">
+        <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+            <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+        </div>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+            <span class="qq-upload-drop-area-text-selector"></span>
+        </div>
+        <div class="buttons">
+            <div class="qq-upload-button-selector qq-upload-button">
+                <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+            </div>
+        </div>
+        <span class="qq-drop-processing-selector qq-drop-processing">
+            <span>{{ trans('app.files.process') }}</span>
+            <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+        </span>
+        <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+            <li>
+                <div class="qq-progress-bar-container-selector">
+                    <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                </div>
+                <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                <a class="preview-link" target="_blank">
+                    <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                </a>
+                <span class="qq-upload-file-selector qq-upload-file"></span>
+                <span class="qq-upload-size-selector qq-upload-size"></span>
+                <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
+                <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
+                <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+            </li>
+        </ul>
+
+        <dialog class="qq-alert-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">Cerrar</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-confirm-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">No</button>
+                <button type="button" class="qq-ok-button-selector">Si</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-prompt-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <input type="text">
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">{{ trans('app.cancel') }}</button>
+                <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
+            </div>
+        </dialog>
+    </div>
 </script>

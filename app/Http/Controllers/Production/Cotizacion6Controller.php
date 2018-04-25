@@ -165,7 +165,7 @@ class Cotizacion6Controller extends Controller
                 $valorunitario = $cotizacion2->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($areapfinal);
 
                 // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
-                if($cotizacion2->cotizacion2_redondear == true){
+                if($cotizacion2->cotizacion2_round == true){
                     $comision = round(($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100))));
                 }else{
                     $comision = ($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));

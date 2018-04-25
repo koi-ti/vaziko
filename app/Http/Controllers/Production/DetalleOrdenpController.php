@@ -104,7 +104,6 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
-                    $orden2->orden2_redondear = $request->orden2_redondear;
                     $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
@@ -281,7 +280,6 @@ class DetalleOrdenpController extends Controller
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
-                        $orden2->orden2_redondear = $request->orden2_redondear;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
                         $orden2->save();
 
@@ -345,30 +343,12 @@ class DetalleOrdenpController extends Controller
                         // Areas
                         $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
                         foreach($areasp as $areap) {
-                            if(!empty($areap['orden6_areap'])){
-                                $area = Areap::find($areap['orden6_areap']);
-                                if(!$area instanceof Areap){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible actualizar las areas, por favor consulte al administrador.']);
-                                }
-
-                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_areap', $area->id)->first();
-                                if(!$orden6 instanceof Ordenp6) {
-                                    $orden6 = new Ordenp6;
-                                    $orden6->fill($areap);
-                                    $orden6->orden6_orden2 = $orden2->id;
-                                    $orden6->orden6_areap = $area->id;
-                                    $orden6->save();
-                                }
-                            }else{
-                                $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_nombre', $areap['orden6_nombre'])->first();
-                                if(!$orden6 instanceof Ordenp6) {
-                                    $orden6 = new Ordenp6;
-                                    $orden6->fill($areap);
-                                    $orden6->orden6_nombre = $areap['orden6_nombre'];
-                                    $orden6->orden6_orden2 = $orden2->id;
-                                    $orden6->save();
-                                }
+                            if( isset($areap['success']) ){
+                                $orden6 = new Ordenp6;
+                                $orden6->fill($areap);
+                                ( !empty($areap['orden6_areap']) ) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
+                                $orden6->orden6_orden2 = $orden2->id;
+                                $orden6->save();
                             }
                         }
 
@@ -429,7 +409,6 @@ class DetalleOrdenpController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleOrdenpController', 'destroy', $e->getMessage()));
@@ -455,9 +434,6 @@ class DetalleOrdenpController extends Controller
             $valor = Ordenp2::calcString($equation);
             if(!is_numeric($valor)){
                 return response()->json(['precio_venta' => 0]);
-            }
-            if($request->has('round') && trim($request->round)!='' && is_numeric($request->round)) {
-                $valor = round($valor, $request->round);
             }
             return response()->json(['precio_venta' => $valor]);
         }

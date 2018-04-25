@@ -42,6 +42,7 @@
                             <tr>
                                 <th>Código</th>
                                 <th>Nombre</th>
+                                <th>Material</th>
                             </tr>
                         </thead>
                     </table>

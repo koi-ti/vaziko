@@ -61,12 +61,10 @@
                     <label class="control-label">Subgrupo</label>
                     <div>{{ $producto->subgrupo_nombre }}</div>
                 </div>
-                @if( $producto->materialp_nombre )
                     <div class="form-group col-md-3">
                         <label class="control-label">Material de producción</label>
-                        <div>{{ $producto->materialp_nombre }}</div>
+                            <div>{!! $producto->materialp_nombre ? $producto->materialp_nombre : "-" !!}</div>
                     </div>
-                @endif
             </div>
 
             <div class="row">
@@ -99,6 +97,17 @@
                         <input type="checkbox" id="producto_metrado" name="producto_metrado" value="producto_metrado" disabled {{ $producto->producto_metrado ? 'checked': '' }}>
                     </div>
                 </div>
+
+                @if( $producto->producto_metrado )
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Ancho</label>
+                        <div>{{ $producto->producto_ancho }}</div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Largo</label>
+                        <div>{{ $producto->producto_largo }}</div>
+                    </div>
+                @endif
             </div>
 
             <div class="row">

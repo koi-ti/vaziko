@@ -503,6 +503,10 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
+            if(!$cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
             DB::beginTransaction();
             try {
                 // Recuperar numero cotizacion
@@ -536,6 +540,7 @@ class Cotizacion1Controller extends Controller
                     $orden2 = new Ordenp2;
                     $orden2->orden2_orden = $orden->id;
                     $orden2->orden2_productop = $cotizacion2->cotizacion2_productop;
+                    $orden2->orden2_cotizacion2 = $cotizacion2->id;
                     $orden2->orden2_referencia = $cotizacion2->cotizacion2_referencia;
                     $orden2->orden2_cantidad = $cotizacion2->cotizacion2_cantidad;
                     $orden2->orden2_saldo = $cotizacion2->cotizacion2_saldo;
@@ -543,15 +548,12 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_precio_formula = $cotizacion2->cotizacion2_precio_formula;
                     $orden2->orden2_transporte_formula = $cotizacion2->cotizacion2_transporte_formula;
                     $orden2->orden2_viaticos_formula = $cotizacion2->cotizacion2_viaticos_formula;
-                    $orden2->orden2_precio_round = $cotizacion2->cotizacion2_precio_round;
-                    $orden2->orden2_transporte_round = $cotizacion2->cotizacion2_transporte_round;
-                    $orden2->orden2_viaticos_round = $cotizacion2->cotizacion2_viaticos_round;
                     $orden2->orden2_viaticos = $cotizacion2->cotizacion2_viaticos;
                     $orden2->orden2_transporte = $cotizacion2->cotizacion2_transporte;
                     $orden2->orden2_precio_venta = $cotizacion2->cotizacion2_precio_venta;
                     $orden2->orden2_total_valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario;
                     $orden2->orden2_volumen = $cotizacion2->cotizacion2_volumen;
-                    $orden2->orden2_redondear = $cotizacion2->cotizacion2_redondear;
+                    $orden2->orden2_round = $cotizacion2->cotizacion2_round;
                     $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;

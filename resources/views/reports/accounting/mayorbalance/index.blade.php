@@ -5,7 +5,7 @@
 @section('content')
     <section class="content-header">
 		<h1>
-			Mayor y Balance
+			Reporte Mayor y Balance
 		</h1>
 		<ol class="breadcrumb">
 			<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
@@ -14,7 +14,7 @@
     </section>
 
    	<section class="content">
-	    <div class="box box-success" id="empresa-create">
+	    <div class="box box-success">
 	    	<form action="{{ route('rmayorbalance.index') }}" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
@@ -27,7 +27,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_inicio" type="text" maxlength="15" data-wrapper="asientos-create" data-name="cuenta_inicio_nombre">
+								<input id="cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_inicio" type="text" maxlength="15" data-name="cuenta_inicio_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
@@ -36,7 +36,7 @@
 					</div>
 
 					<div class="row">
-						<label for="cuenta_fin" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta Inicio</label>
+						<label for="cuenta_fin" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta Final</label>
 						<div class="form-group col-sm-3 col-md-2">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
@@ -44,7 +44,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_fin" type="text" maxlength="15" data-wrapper="asientos-create" data-name="cuenta_fin_nombre">
+								<input id="cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="cuenta_fin" type="text" maxlength="15" data-name="cuenta_fin_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
@@ -59,7 +59,7 @@
 								@foreach( config('koi.meses') as $key => $value)
 									<option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
 								@endforeach
-								<option value="13">Trece</option>
+								<!-- <option value="13">Trece</option> -->
 							</select>
 						</div>
 
@@ -72,20 +72,19 @@
 							</select>
 						</div>
 					</div>
-
-					<div class="row">
-						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-								<i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-							</button>
-						</div>
-						<div class="col-md-2 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-							</button>
-						</div>
-					</div>
 				</div>
+                <div class="box-footer">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
+                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
+                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
+                        </button>
+                    </div>
+                </div>
 			</form>
 		</div>
 	</section>

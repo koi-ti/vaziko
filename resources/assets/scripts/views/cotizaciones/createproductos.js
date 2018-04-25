@@ -17,7 +17,6 @@ app || (app = {});
             'change .calculate_formula': 'changeFormula',
             'ifChanged #cotizacion2_tiro': 'changedTiro',
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
-            'ifChanged #cotizacion2_redondear': 'redondearComision',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
             'click .submit-cotizacion6': 'submitCotizacion6',
@@ -38,9 +37,13 @@ app || (app = {});
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.edit = false;
+
+            if( this.model.id != undefined ){
+                this.edit = true;
+            }
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-cotizacion-producto');
             this.maquinasProductopCotizacionList = new app.MaquinasProductopCotizacionList();
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.acabadosProductopCotizacionList = new app.AcabadosProductopCotizacionList();
@@ -58,23 +61,19 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = this.edit;
+            this.$el.html( this.template(attributes) );
 
             this.$form = this.$('#form-cotizacion-producto');
+            this.spinner = this.$('#spinner-main');
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
-            this.$inputRound = null;
 
             // Inputs render round
             this.$inputFormulaPrecio = this.$('#cotizacion2_precio_formula');
             this.$inputFormulaTransporte = this.$('#cotizacion2_transporte_formula');
             this.$inputFormulaViaticos = this.$('#cotizacion2_viaticos_formula');
-
-            // Inputs render round
-            this.$inputRoundPrecio = this.$('#cotizacion2_precio_round');
-            this.$inputRoundTranporte = this.$('#cotizacion2_transporte_round');
-            this.$inputRoundViaticos = this.$('#cotizacion2_viaticos_round');
 
             // Inputs render formulas
             this.$inputPrecio = this.$('#cotizacion2_precio_venta');
@@ -86,12 +85,16 @@ app || (app = {});
             this.$inputMagenta = this.$('#cotizacion2_magenta');
             this.$inputCyan = this.$('#cotizacion2_cyan');
             this.$inputKey = this.$('#cotizacion2_key');
+            this.$inputColor1 = this.$('#cotizacion2_color1');
+            this.$inputColor2 = this.$('#cotizacion2_color2');
 
             // Retiro
             this.$inputYellow2 = this.$('#cotizacion2_yellow2');
             this.$inputMagenta2 = this.$('#cotizacion2_magenta2');
             this.$inputCyan2 = this.$('#cotizacion2_cyan2');
             this.$inputKey2 = this.$('#cotizacion2_key2');
+            this.$inputColor12 = this.$('#cotizacion2_color12');
+            this.$inputColor22 = this.$('#cotizacion2_color22');
 
             // Ordenp6
             this.$formCotizacion6 = this.$('#form-cotizacion6-producto');
@@ -101,7 +104,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#cotizacion2_volumen');
-            this.$checkRedondear = this.$('#cotizacion2_redondear');
+            this.$inputRound = this.$('#cotizacion2_round');
             this.$inputVcomision = this.$('#cotizacion2_vtotal');
 
             // Inputs from form
@@ -178,82 +181,84 @@ app || (app = {});
         	var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
 
-            if( inputformula == 'P' || inputformula == 'RP'){
+            if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
-                this.$inputRound = this.$inputRoundPrecio;
                 this.$inputRenderFormula = this.$inputPrecio;
 
-            }else if( inputformula == 'T' || inputformula == 'RT'){
+            }else if( inputformula == 'T' ){
                 this.$inputFormula = this.$inputFormulaTransporte;
-                this.$inputRound = this.$inputRoundTranporte;
                 this.$inputRenderFormula = this.$inputTranporte;
 
-            }else if( inputformula == 'V' || inputformula == 'RV'){
+            }else if( inputformula == 'V' ){
                 this.$inputFormula = this.$inputFormulaViaticos;
-                this.$inputRound = this.$inputRoundViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
             }else{
                 return;
             }
 
-        	var formula = this.$inputFormula.val();
-        	var round = this.$inputRound.val();
+            var formula = this.$inputFormula.val();
 
-        	// sanitize input and replace
-        	formula = formula.replaceAll("(","n");
-        	formula = formula.replaceAll(")","m");
-        	formula = formula.replaceAll("+","t");
+            // sanitize input and replace
+            formula = formula.replaceAll("(","n");
+            formula = formula.replaceAll(")","m");
+            formula = formula.replaceAll("+","t");
 
         	// Eval formula
             $.ajax({
                 url: window.Misc.urlFull(Route.route('cotizaciones.productos.formula')),
                 type: 'GET',
-                data: { equation: formula, round: round },
+                data: {equation: formula},
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner( _this.spinner );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
             	_this.$inputRenderFormula.val(0);
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 alertify.error(thrownError);
             });
         },
 
         changedTiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow.iCheck('check');
                 this.$inputMagenta.iCheck('check');
                 this.$inputCyan.iCheck('check');
                 this.$inputKey.iCheck('check');
+                this.$inputColor1.iCheck('check');
+                this.$inputColor2.iCheck('check');
             }else{
                 this.$inputYellow.iCheck('uncheck');
                 this.$inputMagenta.iCheck('uncheck');
                 this.$inputCyan.iCheck('uncheck');
                 this.$inputKey.iCheck('uncheck');
+                this.$inputColor1.iCheck('uncheck');
+                this.$inputColor2.iCheck('uncheck');
             }
         },
 
         changedRetiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow2.iCheck('check');
                 this.$inputMagenta2.iCheck('check');
                 this.$inputCyan2.iCheck('check');
                 this.$inputKey2.iCheck('check');
+                this.$inputColor12.iCheck('check');
+                this.$inputColor22.iCheck('check');
             }else{
                 this.$inputYellow2.iCheck('uncheck');
                 this.$inputMagenta2.iCheck('uncheck');
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
+                this.$inputColor12.iCheck('uncheck');
+                this.$inputColor22.iCheck('uncheck');
             }
         },
 
@@ -275,7 +280,7 @@ app || (app = {});
                     data.cotizacion2_volumen = this.$inputVolumen.val();
                     data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.cotizacion2_redondear = this.$checkRedondear.is(':checked');
+                    data.cotizacion2_round = this.$inputRound.val();
                     data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -357,23 +362,20 @@ app || (app = {});
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + tranporte + viaticos + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            total = subtotal + vcomision;
 
-            if( this.$checkRedondear.is(':checked') ) {
-                total = Math.round( subtotal + vcomision );
+            round = this.$inputRound.val();
+            if( round <= 2 || round >= -2){
+                // Calcular round decimales
+                var exp = Math.pow(10, round);
+                total = Math.round(total*exp)/exp;
             }else{
-                total = subtotal + vcomision;
+                return;
             }
 
             this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
-        },
-
-        /**
-        *   Event render input value
-        **/
-        redondearComision: function(e) {
-            this.calculateAll();
         },
 
         /**
@@ -404,15 +406,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
+            window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

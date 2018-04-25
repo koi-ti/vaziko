@@ -30,6 +30,8 @@ class CreateProductoTable extends Migration
             $table->boolean('producto_unidades')->default(true)->comment = 'Si es falso no hace suma /resta de unidades, ni valida unidades en el inventario';
             $table->boolean('producto_serie')->default(false)->comment = 'El producto maneja serie';
             $table->boolean('producto_metrado')->default(false)->comment = 'El producto se va a vender por metros';
+            $table->double('producto_ancho')->default(0)->comment = 'Cuando el producto es metrado';
+            $table->double('producto_largo')->default(0)->comment = 'Cuando el producto es metrado';
 
             $table->foreign('producto_grupo')->references('id')->on('koi_grupo')->onDelete('restrict');
             $table->foreign('producto_subgrupo')->references('id')->on('koi_subgrupo')->onDelete('restrict');

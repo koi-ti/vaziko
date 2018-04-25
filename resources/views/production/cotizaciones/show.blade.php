@@ -62,7 +62,13 @@
                                             @endif
                                         </div>
 									</div>
-									<div class="form-group col-md-9">
+                                    @if( $cotizacion->cotizacion1_precotizacion )
+    									<div class="form-group col-md-2">
+    										<label>Pre-cotización</label>
+                                            <div>{{ $cotizacion->precotizacion_codigo }}</div>
+    									</div>
+                                    @endif
+									<div class="form-group col-md-7">
 										<label class="control-label">Referencia</label>
 										<div>{{ $cotizacion->cotizacion1_referencia }}</div>
 									</div>
@@ -145,7 +151,7 @@
 
                                 <br />
 
-                                <div class="box box-success" id="wrapper-productop-cotizacion">
+                                <div class="box box-danger" id="wrapper-productop-cotizacion">
                                    	<div class="box-body">
                                    		<!-- table table-bordered table-striped -->
                                         <div class="box-body table-responsive no-padding">

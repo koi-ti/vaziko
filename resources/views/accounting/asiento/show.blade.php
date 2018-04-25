@@ -11,7 +11,7 @@
 			<li class="active">{{ $asiento->id }}</li>
 		</ol>
 	</section>
-	
+
 	<section class="content">
 		<div class="box box-success" id="asientos-show">
 			<div class="box-body">
@@ -30,7 +30,7 @@
 					</div>
 
 					<div class="col-md-1 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-						<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" class="btn btn-danger btn-sm btn-block">
+						<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" target="_blank" class="btn btn-danger btn-sm btn-block">
 							<i class="fa fa-file-pdf-o"></i>
 						</a>
 					</div>

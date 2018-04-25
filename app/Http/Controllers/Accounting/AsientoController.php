@@ -6,13 +6,9 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Auth, View, App;
-
-use App\Classes\AsientoContableDocumento;
-use App\Classes\AsientoNifContableDocumento;
-
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto;
+use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\Folder, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto, App\Models\Base\Empresa;
+use DB, Log, Datatables, Auth, View, App, Fpdf, Excel;
 
 class AsientoController extends Controller
 {
@@ -234,8 +230,6 @@ class AsientoController extends Controller
                             }
                         }
                         // Commit Transaction
-                        // DB::rollback();
-                        // return response()->json(['success' => false, 'errors' => 'Todo ok']);
                         DB::commit();
                         return response()->json(['success' => true, 'id' => ( isset($asiento->id) ) ? $asiento->id : '', 'nif' => ( isset($asientoNif->id) ) ? $asientoNif->id : '' ]);
                     }catch(\Exception $e){
@@ -428,19 +422,8 @@ class AsientoController extends Controller
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $result]);
                         }
-
-                        // Insertar movimientos asiento
-                        // foreach ($asiento2 as $item) {
-                        //     $result = $item->movimientos();
-                        //     if($result != 'OK') {
-                        //         DB::rollback();
-                        //         return response()->json(['success' => false, 'errors' => $result]);
-                        //     }
-                        // }
                     }
                     // Commit Transaction
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => "TODO OK"]);
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento->id]);
                 }catch(\Exception $e){
@@ -480,9 +463,187 @@ class AsientoController extends Controller
         $detalle = Asiento2::getAsiento2($asiento->id);
         $title = 'Asiento contable';
 
-        // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
-        return $pdf->download(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
+    }
+    /**
+     * Import data in Excel .csv the specified resource.
+     * @param  Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function import(Request $request)
+    {
+        // Validate required file
+        if (!$request->hasFile('file')) {
+            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo .csv."]);
+        }
+        // Validate file is .csv
+        if ($request->file->getClientMimeType() !== 'text/csv' ){
+            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo .csv."]);
+        }
+
+        DB::beginTransaction();
+        try {
+            $excel = Excel::load($request->file)->get();
+
+            // Recuperar tercero
+            $tercero = Tercero::where('tercero_nit', $request->tercero)->first();
+            if(!$tercero instanceof Tercero) {
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+            }
+
+            // Recuerar folder
+            $folder = Folder::find($request->folder);
+            if(!$folder instanceof Folder) {
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar folder, por favor verifique la información del asiento o consulte al administrador.']);
+            }
+            // Recuerar documento
+            $documento = Documento::find($request->documento);
+            if(!$documento instanceof Documento) {
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
+            }
+
+            if($documento->documento_actual){
+                $asiento = new Asiento;
+
+                // Consecutivo
+                if($documento->documento_tipo_consecutivo == 'A'){
+                    $asiento->asiento1_numero = $documento->documento_consecutivo + 1;
+                }
+
+                // Encabezado por defecto
+                $asiento->asiento1_ano = intval( date('Y') );
+                $asiento->asiento1_mes = intval( date('m') );
+                $asiento->asiento1_dia = intval( date('d') );
+                $asiento->asiento1_folder = $folder->id;
+                $asiento->asiento1_documento = $documento->id;
+                $asiento->asiento1_beneficiario = $tercero->id;
+                $asiento->asiento1_preguardado = false;
+                $asiento->asiento1_usuario_elaboro = Auth::user()->id;
+                $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
+                $asiento->save();
+
+                $cuentas = [];
+                foreach ($excel as $row) {
+                    // Asiento2
+                    $arCuenta = [];
+                    $arCuenta['Cuenta'] = intval($row->cuenta);
+                    $arCuenta['Tercero'] = $row->beneficiario;
+                    $arCuenta['Detalle'] = $row->detalle;
+                    $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
+                    $arCuenta['CentroCosto'] = intval($row->centrocosto) > 0 ? intval($row->centrocosto) : '';
+                    $arCuenta['Base'] = $row->base;
+                    $arCuenta['Credito'] = $row->credito;
+                    $arCuenta['Debito'] = $row->debito;
+                    $arCuenta['Orden'] = '';
+                    $cuentas[] = $arCuenta;
+                }
+                // Creo el objeto para manejar el asiento
+                $asiento->asiento1_beneficiario = $tercero->tercero_nit;
+                $objAsiento = new AsientoContableDocumento($asiento->toArray(), $asiento);
+                if($objAsiento->asiento_error) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                }
+
+                // Preparar asiento
+                $result = $objAsiento->asientoCuentas($cuentas);
+                if($result != 'OK'){
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+
+                // Insertar asiento
+                $result = $objAsiento->insertarAsiento();
+                if($result != 'OK') {
+                    DB::rollback();
+                    Log::info($result);
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+            }
+            if ($documento->documento_nif) {
+                $asientoNif = new AsientoNif;
+
+                // Consecutivo
+                if($documento->documento_tipo_consecutivo == 'A'){
+                    $asientoNif->asienton1_numero = $documento->documento_consecutivo + 1;
+                }
+
+                // AsientoNif1
+                $asientoNif->asienton1_ano = intval( date('Y') );
+                $asientoNif->asienton1_mes = intval( date('m') );
+                $asientoNif->asienton1_dia = intval( date('d') );
+                $asientoNif->asienton1_asiento =  isset($asiento->id) ? $asiento->id : null;
+                $asientoNif->asienton1_folder = $folder->id;
+                $asientoNif->asienton1_documento = $documento->id;
+                $asientoNif->asienton1_beneficiario = $tercero->id;
+                $asientoNif->asienton1_preguardado = false;
+                $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
+                $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:m:s');
+                $asientoNif->save();
+
+                $cuentas = [];
+                foreach ($excel as $row) {
+
+                    // Recupero plancuenta
+                    $plancuenta = Plancuenta::where('plancuentas_cuenta',intval($row->cuenta))->first();
+                    if (!$plancuenta instanceof Plancuenta) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => "No es posible recuperar plan de cuenta, por favor verifique la información o consulte a su administrador"]);
+                    }
+
+                    $plancuentaNif = PlanCuentaNif::find($plancuenta->plancuentas_equivalente);
+                    if (!$plancuentaNif instanceof PlanCuentaNif) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => "No es posible encontrar plan de cuenta NIF, por favor verifique la información o consulte a su administrador"]);
+                    }
+
+                    // Asiento2
+                    $arCuenta = [];
+                    $arCuenta['Cuenta'] = $plancuentaNif->plancuentasn_cuenta;
+                    $arCuenta['Tercero'] = intval($row->beneficiario);
+                    $arCuenta['Detalle'] = $row->detalle;
+                    $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
+                    $arCuenta['CentroCosto'] = intval($row->centrocosto) > 0 ? intval($row->centrocosto) : '';
+                    $arCuenta['Base'] = $row->base;
+                    $arCuenta['Credito'] = $row->credito;
+                    $arCuenta['Debito'] = $row->debito;
+                    $arCuenta['Orden'] = '';
+                    $cuentas[] = $arCuenta;
+                }
+
+                // Creo el objeto para manejar el asiento
+                $asientoNif->asienton1_beneficiario = $tercero->tercero_nit;
+                $objAsiento = new AsientoNifContableDocumento($asientoNif->toArray(), $asientoNif);
+                if($objAsiento->asientoNif_error) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $objAsiento->asientoNif_error]);
+                }
+
+                // Preparar asiento
+                $result = $objAsiento->asientoCuentas($cuentas);
+                if($result != 'OK'){
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+
+                // Insertar asiento
+                $result = $objAsiento->insertarAsientoNif();
+                if($result != 'OK') {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+            }
+            DB::commit();
+            return response()->json(['success'=> true, 'msg'=> 'Se ha importado con exito los datos']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error($e->getMessage());
+            return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+        }
     }
 }

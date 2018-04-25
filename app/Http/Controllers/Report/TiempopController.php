@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Classes\Reports\Production\TiempoProduccion;
 use App\Models\Production\Tiempop, App\Models\Base\Tercero, App\Models\Report\ReporteTiempop;
 use View, App, Validator, DB, Log;
 
@@ -152,20 +153,15 @@ class TiempopController extends Controller
                 $tiempos[] = $object;
             }
 
-            $fechai = $request->fecha_inicial;
-            $fechaf = $request->fecha_final;
-
             // Preparar datos reporte
-            $title = sprintf('%s %s %s %s', 'Tiempos de producción de ', $fechai, ' a ', $fechaf );
+            $title = utf8_decode("Tiempos de producción de $request->fecha_inicial a $request->fecha_final");
             $type = $request->type;
 
             // Generate file
             switch ($type) {
                 case 'pdf':
-                    $pdf = App::make('dompdf.wrapper');
-                    $pdf->loadHTML(View::make('reports.production.tiemposp.report',  compact('tiempos', 'fechai', 'fechaf', 'title', 'type'))->render());
-                    $pdf->setPaper('A4', 'landscape')->setWarnings(false);
-                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'tiempos_de_producción', date('Y_m_d'), date('H_m_s')));
+                    $pdf = new TiempoProduccion('L', 'mm', 'A4');
+                    $pdf->buldReport($tiempos, $title);
                 break;
             }
         }

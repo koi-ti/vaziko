@@ -161,7 +161,7 @@ class DetalleAreasController extends Controller
                 $valorunitario = $orden2->orden2_precio_venta + round($transporte) + round($viaticos) + round($areapfinal);
 
                 // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
-                if($orden2->orden2_redondear == true){
+                if($orden2->orden2_round == true){
                     $comision = round(($valorunitario / (((100-$orden2->orden2_volumen)/100))) * (1-(((100-$orden2->orden2_volumen)/100))));
                 }else{
                     $comision = ($valorunitario / (((100-$orden2->orden2_volumen)/100))) * (1-(((100-$orden2->orden2_volumen)/100)));

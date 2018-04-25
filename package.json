@@ -5,6 +5,7 @@
   },
   "dependencies": {
     "bootstrap-sass": "^3.0.0",
+    "fine-uploader": "^5.16.0",
     "laravel-elixir": "^4.0.0"
   }
 }

@@ -124,7 +124,30 @@
 		</div>
 	</div>
 </div>
-
+<!-- Modal import file -->
+<div class="modal fade" id="modal-import-file-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="inner-title-modal modal-title"></h4>
+			</div>
+			<div class="box box-solid" id="modal-wrapper-import-file">
+				<form  id="form-import-component" data-toggle="validator">
+					<div class="modal-body">
+						<div class="content-modal"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+						<button type="button" class="btn btn-primary btn-sm btn-import">Continuar</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
 <!-- Modal search -->
 <div class="modal fade" id="modal-search-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -791,3 +814,59 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/template" id="import-data-tpl">
+	<% if(title == 'asientos'){ %>
+		<div class="row">
+			<div class="form-group col-md-4">
+				<div class="input-group input-group-sm">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero">
+							<i class="fa fa-user"></i>
+						</button>
+					</span>
+					<input id="tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="tercero" type="text" maxlength="15" data-wrapper="modal-wrapper-import-file" data-name="tercero_nombre" required>
+				</div>
+			</div>
+			<div class="col-md-8">
+				<input id="tercero_nombre" name="tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="folder" class=" control-label">Folder</label>
+				<select name="folder" id="folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper="spinner-main" data-documents="documento" required>
+					@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
+						<option value="{{ $key }}">{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-12">
+				<label for="documento" class="control-label">Documento</label>
+				<select name="documento" id="documento" class="form-control select2-default" required>
+					@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
+						<option value="{{ $key }}">{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+	<% } %>
+	<div class="row">
+		<div class="form-group col-md-12">
+			<label for="file" class="control-label">Archivo</label>
+			<div class="input-group">
+				<label class="input-group-btn">
+					<span class="btn btn-primary btn-sm">
+						Buscar <input type="file" id="file" name="file" class="selectfile">
+					</span>
+				</label>
+				<input type="text" class="form-control input-sm" readonly>
+			</div>
+			<span class="help-block">
+				Por favor, seleccione un archivo tipo <b>.csv </b>
+			</span>
+		</div>
+	</div>
+</script>

@@ -15,7 +15,9 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-
+            'cotizacion4_id': '',
+            'cotizacion4_cantidad': '',
+            'cotizacion4_precio': ''
         }
     });
 

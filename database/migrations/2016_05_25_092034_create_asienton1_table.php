@@ -26,7 +26,6 @@ class CreateAsienton1Table extends Migration
             $table->string('asienton1_documentos', 4)->nullable();
             $table->integer('asienton1_id_documentos')->nullable()->unsigned();
             $table->integer('asienton1_beneficiario')->unsigned();
-            $table->integer('asienton1_sucursal')->unsigned()->nullable();
             $table->boolean('asienton1_preguardado')->default(false);
             $table->text('asienton1_detalle')->nullable();
             $table->integer('asienton1_usuario_elaboro')->unsigned();
@@ -35,7 +34,6 @@ class CreateAsienton1Table extends Migration
             $table->foreign('asienton1_asiento')->references('id')->on('koi_asiento1')->onDelete('restrict');
             $table->foreign('asienton1_documento')->references('id')->on('koi_documento')->onDelete('restrict');
             $table->foreign('asienton1_beneficiario')->references('id')->on('koi_tercero')->onDelete('restrict');
-            $table->foreign('asienton1_sucursal')->references('id')->on('koi_sucursal')->onDelete('restrict');
             $table->foreign('asienton1_folder')->references('id')->on('koi_folder')->onDelete('restrict');
             $table->foreign('asienton1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
 

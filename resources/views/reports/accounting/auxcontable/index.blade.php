@@ -43,7 +43,7 @@
 										<i class="fa fa-tasks"></i>
 									</button>
 								</span>
-								<input id="filter_cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_inicio" type="text" maxlength="15" data-wrapper="asientos-create" data-name="filter_cuenta_inicio_nombre" required>
+								<input id="filter_cuenta_inicio" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_inicio" type="text" maxlength="15" data-name="filter_cuenta_inicio_nombre">
 							</div>
 						</div>
 						<div class="col-sm-6 col-md-4">
@@ -59,14 +59,13 @@
                                         <i class="fa fa-tasks"></i>
                                     </button>
                                 </span>
-                                <input id="filter_cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_fin" type="text" maxlength="15" data-wrapper="asientos-create" data-name="filter_cuenta_fin_nombre" required>
+                                <input id="filter_cuenta_fin" placeholder="Cuenta" class="form-control plancuenta-koi-component" name="filter_cuenta_fin" type="text" maxlength="15" data-name="filter_cuenta_fin_nombre">
                             </div>
                         </div>
                         <div class="col-sm-6 col-md-4">
                             <input id="filter_cuenta_fin_nombre" name="filter_cuenta_fin_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
                         </div>
                     </div>
-
 					<div class="row">
                         <label for="filter_fecha_inicial" class="control-label col-md-2 text-right col-md-offset-2">Fecha inicial</label>
 	                    <div class="form-group col-md-2">
@@ -77,9 +76,7 @@
 	                            <input type="text" id="filter_fecha_inicial" name="filter_fecha_inicial" class="form-control input-sm datepicker" value="{{ date('Y-m-d') }}" required>
 	                        </div>
 	                    </div>
-                    </div>
-                    <div class="row">
-                        <label for="filter_fecha_final" class="control-label col-md-2 text-right col-md-offset-2">Fecha final</label>
+                        <label for="filter_fecha_final" class="control-label col-md-1">Fecha final</label>
 	                    <div class="form-group col-md-2">
 	                        <div class="input-group">
 	                            <div class="input-group-addon">
@@ -89,7 +86,7 @@
 	                        </div>
 	                    </div>
 					</div>
-                    <div class="row">
+                    <!-- <div class="row">
                         <label for="filter_order" class="control-label col-md-2 text-right col-md-offset-2">Ordenar por</label>
                         <div class="form-group col-md-2">
                             <select name="filter_order" id="filter_order" class="form-control" required>
@@ -98,21 +95,20 @@
                                 <option value="3">Saldos terceros</option>
                             </select>
                         </div>
-                    </div>
-
-					<div class="box-footer">
-						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-								<i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-							</button>
-						</div>
-						<div class="col-md-2 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-							</button>
-						</div>
-					</div>
+                    </div> -->
 				</div>
+                <div class="box-footer">
+                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
+                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
+                        </button>
+                    </div>
+                    <div class="col-md-2 col-sm-6 col-xs-6">
+                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
+                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
+                        </button>
+                    </div>
+                </div>
 			</form>
 		</div>
 	</section>

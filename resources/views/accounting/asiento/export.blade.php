@@ -6,7 +6,7 @@
 		<tbody>
 			<tr>
 				<th width="15%">Fecha</th>
-				<td width="10%">{{ sprintf('%s-%s-%s', $asiento->asiento1_ano, $asiento->asiento1_mes, $asiento->asiento1_dia) }}</td>
+				<td width="10%">{{ "$asiento->asiento1_ano-$asiento->asiento1_mes-$asiento->asiento1_dia" }}</td>
 				@if($asiento->asiento1_preguardado)
 					<th colspan="4" class="right">PRE-GUARDADO</th>
 				@endif
@@ -59,8 +59,8 @@
 						<td class="left">{{ $asiento2->tercero_nit }}</td>
 						<td class="left">{{ $asiento2->centrocosto_nombre }}</td>
 						<td class="right">{{ number_format($asiento2->asiento2_base,2,'.',',') }}</td>
-						<td class="right">{{ number_format($asiento2->asiento2_credito,2,'.',',') }}</td>
 						<td class="right">{{ number_format($asiento2->asiento2_debito,2,'.',',') }}</td>
+						<td class="right">{{ number_format($asiento2->asiento2_credito,2,'.',',') }}</td>
 					</tr>
 
 					{{-- Calculo totales --}}

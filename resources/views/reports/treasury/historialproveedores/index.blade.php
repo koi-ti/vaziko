@@ -19,7 +19,7 @@
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
 					<div class="row">
-					    <label for="filter_tercero" class="col-md-1 col-md-1 control-label">Proveedor</label>
+					    <label for="filter_tercero" class="col-md-1 col-md-1 control-label col-md-offset-3">Proveedor</label>
 					    <div class="form-group col-md-2">
 					        <div class="input-group input-group-sm">
 					            <span class="input-group-btn">
@@ -35,7 +35,7 @@
 					    </div>
 					</div>
 					<div class="row">
-						<label for="filter_fecha_inicio" class="col-sm-1 control-label">Fecha inicio</label>
+						<label for="filter_fecha_inicio" class="col-sm-1 control-label col-md-offset-3">Fecha inicio</label>
 	                    <div class="form-group col-md-2">
 	                        <div class="input-group">
 	                            <div class="input-group-addon">
@@ -44,8 +44,6 @@
 	                            <input type="text" id="filter_fecha_inicio" name="filter_fecha_inicio" class="form-control input-sm datepicker" value="{{ date('Y-m-d') }}" required>
 	                        </div>
 	                    </div>
-					</div>
-					<div class="row">
 						<label for="filter_fecha_fin" class="col-sm-1 control-label">Fecha fin</label>
 	                    <div class="form-group col-md-2">
 	                        <div class="input-group">

@@ -62,7 +62,7 @@ class Factura2 extends Model
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->where('factura2_factura1', $factura);
-        
+
         return $query->get();
     }
 }

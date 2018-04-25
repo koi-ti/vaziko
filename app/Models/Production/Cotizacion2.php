@@ -29,16 +29,21 @@ class Cotizacion2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_round', 'cotizacion2_transporte_round', 'cotizacion2_viaticos_round', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario'];
+    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round'];
+
+    /**
+     * The attributes that are mass assignable nullable.
+     *
+     * @var array
+     */
+    protected $nullable = ['cotizacion2_precotizacion2'];
 
     public function isValid($data)
     {
         $rules = [
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
-            'cotizacion2_precio_round' => 'integer',
-            'cotizacion2_transporte_round' => 'integer',
-            'cotizacion2_viaticos_round' => 'integer',
+            'cotizacion2_round' => 'required|min:-2|max:2|numeric',
             'cotizacion2_precio_venta' => 'required',
             'cotizacion2_ancho' => 'numeric|min:0',
             'cotizacion2_volumen' => 'min:0|max:100|integer',

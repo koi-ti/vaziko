@@ -29,7 +29,9 @@ app || (app = {});
             'producto_vidautil': 0,
             'producto_unidades': true,
             'producto_serie': false,
-            'producto_metrado': false
+            'producto_metrado': false,
+            'producto_ancho': 0,
+            'producto_largo': 0
         }
     });
 

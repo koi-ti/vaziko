@@ -3,8 +3,7 @@
 namespace App\Models\Receivable;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Accounting\Asiento2, App\Models\Base\Empresa, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto, App\Models\Receivable\Factura2;
-
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura4;
 use DB, Validator;
 
 class Factura1 extends Model
@@ -32,41 +31,22 @@ class Factura1 extends Model
             'factura1_numero' => 'unique:koi_factura1',
             'factura1_prefijo' => 'unique:koi_factura1',
             'factura1_fecha_vencimiento' => 'required',
-            'factura1_cuotas' => 'required|integer',
+            'factura1_cuotas' => 'required|integer|min:1',
         ];
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
+            // Validar Carritos
+            $detalle = isset($data['detalle']) ? $data['detalle'] : null;
+            if(!isset($detalle) || $detalle == null || !is_array($detalle) || count($detalle) == 0) {
+                $this->errors = 'Por favor ingrese al menos un producto a facturar.';
+                return false;
+            }
+
             return true;
         }
         $this->errors = $validator->errors();
         return false;
-    }
-
-    public function storeFactura4(Factura1 $factura)
-    {
-        $response = new \stdClass();
-        $response->success = false;
-
-        if ($factura->factura1_cuotas > 0) {
-            $valor = $factura->factura1_total / $factura->factura1_cuotas;
-            $fecha = $factura->factura1_fecha_vencimiento;
-
-            for ($i=1; $i <= $factura->factura1_cuotas; $i++) {
-                $factura4 = new Factura4;
-                $factura4->factura4_factura1 = $factura->id;
-                $factura4->factura4_cuota = $i;
-                $factura4->factura4_valor = round($valor);
-                $factura4->factura4_saldo = round($valor);
-                $factura4->factura4_vencimiento = $fecha;
-                $fechavencimiento = date('Y-m-d',strtotime('+1 months', strtotime($fecha)));
-                $fecha = $fechavencimiento;
-                $factura4->save();
-            }
-        }
-
-        $response->success = true;
-        return $response;
     }
 
     public function actualizarFactura4($movchildren, $naturaleza){

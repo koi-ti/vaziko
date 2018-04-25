@@ -62,7 +62,7 @@
     </li>
 
     {{-- Cartera --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['facturas']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['facturas', 'restadocartera']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-suitcase"></i> <span>Cartera</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -79,18 +79,30 @@
                     </li>
                 </ul>
             </li>
+
+            {{-- Reportes cartera --}}
+            <li class="{{ in_array(Request::segment(1), ['restadocartera']) ? 'active' : '' }}">
+                <a href="#">
+                    <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'restadocartera' ? 'active' : '' }}">
+                        <a href="{{ route('restadocartera.index') }}"><i class="fa fa-circle-o"></i> Estado de cartera</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas','cierresmensuales' ,'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance', 'rlibromayor', 'rlibrodiario', 'rauxcontable','reglasasientos']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas','cierresmensuales' ,'plancuentasnif','centroscosto', 'folders', 'documentos', 'rplancuentas', 'rmayorbalance', 'rlibromayor', 'rlibrodiario', 'rauxcontable', 'rimpuestos', 'rauxcuentabeneficiario', 'rauxbeneficiariocuenta', 'rauxporcuenta']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales', 'reglasasientos']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -102,13 +114,13 @@
                         <a href="{{ route('asientosnif.index') }}"><i class="fa fa-file-text"></i> Asientos NIF</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'cierresmensuales' ? 'active' : '' }}">
-                        <a href="{{ route('cierresmensuales.index') }}"><i class="fa fa-window-close-o"></i> Cierre contable mensual</a>
+                        <a href="{{ route('cierresmensuales.index') }}"><i class="fa fa-window-close-o"></i> Cierre mensual</a>
                     </li>
                 </ul>
             </li>
 
             {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rplancuentas', 'rmayorbalance', 'rauxcontable', 'rlibrodiario', 'rlibromayor']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rplancuentas', 'rmayorbalance', 'rauxcontable', 'rlibrodiario', 'rlibromayor', 'rimpuestos', 'rauxcuentabeneficiario', 'rauxbeneficiariocuenta', 'rauxporcuenta']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -116,17 +128,29 @@
                     <li class="{{ Request::segment(1) == 'rauxcontable' ? 'active' : '' }}">
                         <a href="{{ route('rauxcontable.index') }}"><i class="fa fa-circle-o"></i> Auxiliar contable</a>
                     </li>
+                    <li class="{{ Request::segment(1) == 'rauxbeneficiariocuenta' ? 'active' : '' }}">
+                        <a href="{{ route('rauxbeneficiariocuenta.index') }}"><i class="fa fa-circle-o"></i> Libro beneficiario/cuenta</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rauxcuentabeneficiario' ? 'active' : '' }}">
+                        <a href="{{ route('rauxcuentabeneficiario.index') }}"><i class="fa fa-circle-o"></i> Libro cuenta/beneficiario</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'rlibrodiario' ? 'active' : '' }}">
                         <a href="{{ route('rlibrodiario.index') }}"><i class="fa fa-circle-o"></i> Libro diario</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'rlibromayor' ? 'active' : '' }}">
                         <a href="{{ route('rlibromayor.index') }}"><i class="fa fa-circle-o"></i> Libro mayor</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
-                        <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
+                    <li class="{{ Request::segment(1) == 'rauxporcuenta' ? 'active' : '' }}">
+                        <a href="{{ route('rauxporcuenta.index') }}"><i class="fa fa-circle-o"></i> Libro por cuenta</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'rmayorbalance' ? 'active' : '' }}">
                         <a href="{{ route('rmayorbalance.index') }}"><i class="fa fa-circle-o"></i> Mayor y balance</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rplancuentas' ? 'active' : '' }}">
+                        <a href="{{ route('rplancuentas.index') }}"><i class="fa fa-circle-o"></i> Plan cuentas</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rimpuestos' ? 'active' : '' }}">
+                        <a href="{{ route('rimpuestos.index') }}"><i class="fa fa-circle-o"></i> Relación de impuestos</a>
                     </li>
                 </ul>
             </li>
@@ -200,20 +224,23 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'precotizaciones' ? 'active' : '' }}">
+                        <a href="{{ route('precotizaciones.index') }}"><i class="fa fa-envelope-open-o"></i> Pre-cotizaciones</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'cotizaciones' ? 'active' : '' }}">
-                        <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-puzzle-piece"></i> Cotizaciones</a>
+                        <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-envelope-o"></i> Cotizaciones</a>
                     </li>
                     <li class="{{ Request::segment(1) == 'productosp' ? 'active' : '' }}">
                         <a href="{{ route('productosp.index') }}"><i class="fa fa-barcode"></i> Productos</a>

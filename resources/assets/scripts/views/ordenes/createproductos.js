@@ -11,7 +11,7 @@ app || (app = {});
 
     app.CreateOrdenp2View = Backbone.View.extend({
 
-        el: '#ordenes-productos-create',
+        el: '#create-ordenp-producto',
         template: _.template( ($('#add-orden-producto-tpl').html() || '') ),
         events: {
             'change .calculate_formula': 'changeFormula',
@@ -23,7 +23,6 @@ app || (app = {});
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
-            'ifChanged #orden2_redondear': 'redondearComision'
         },
         parameters: {
             data: {
@@ -35,12 +34,18 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
+            _.bindAll(this, 'onSessionRequestComplete');
+
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.edit = false;
+
+            if( this.model.id != undefined ){
+                this.edit = true;
+            }
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-orden-producto');
             this.maquinasProductopList = new app.MaquinasProductopList();
             this.materialesProductopList = new app.MaterialesProductopList();
             this.acabadosProductopList = new app.AcabadosProductopList();
@@ -57,24 +62,20 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = this.edit;
+            this.$el.html( this.template(attributes) );
+
             this.$form = this.$('#form-orden-producto');
+            this.spinner = this.$('#spinner-main');
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
-            this.$inputRound = null;
 
             // Inputs render round
             this.$inputFormulaPrecio = this.$('#orden2_precio_formula');
             this.$inputFormulaTransporte = this.$('#orden2_transporte_formula');
             this.$inputFormulaViaticos = this.$('#orden2_viaticos_formula');
-
-            // Inputs render round
-            this.$inputRoundPrecio = this.$('#orden2_precio_round');
-            this.$inputRoundTranporte = this.$('#orden2_transporte_round');
-            this.$inputRoundViaticos = this.$('#orden2_viaticos_round');
 
             // Inputs render formulas
             this.$inputPrecio = this.$('#orden2_precio_venta');
@@ -82,7 +83,6 @@ app || (app = {});
             this.$inputViaticos = this.$('#orden2_viaticos');
 
             this.$inputFormula = this.$('#orden2_precio_formula');
-            this.$inputRound = this.$('#orden2_round_formula');
             this.$inputPrecio = this.$('#orden2_precio_venta');
 
             // Tiro
@@ -90,12 +90,16 @@ app || (app = {});
             this.$inputMagenta = this.$('#orden2_magenta');
             this.$inputCyan = this.$('#orden2_cyan');
             this.$inputKey = this.$('#orden2_key');
+            this.$inputColor1 = this.$('#orden2_color1');
+            this.$inputColor2 = this.$('#orden2_color2');
 
             // Retiro
             this.$inputYellow2 = this.$('#orden2_yellow2');
             this.$inputMagenta2 = this.$('#orden2_magenta2');
             this.$inputCyan2 = this.$('#orden2_cyan2');
             this.$inputKey2 = this.$('#orden2_key2');
+            this.$inputColor12 = this.$('#orden2_color12');
+            this.$inputColor22 = this.$('#orden2_color22');
 
             // Ordenp6
             this.$formOrdenp6 = this.$('#form-ordenp6-producto');
@@ -105,7 +109,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#orden2_volumen');
-            this.$checkRedondear = this.$('#orden2_redondear');
+            this.$inputRound = this.$('#orden2_round');
             this.$inputVcomision = this.$('#orden2_vtotal');
 
             // Inputs from form
@@ -116,11 +120,18 @@ app || (app = {});
             this.$viaticos = this.$('#orden2_viaticos');
             this.$transporte = this.$('#orden2_transporte');
 
+            // Fine uploader
+            this.$uploaderFile = this.$('#fine-uploader');
+
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
+
+            if( !_.isNull( this.model.get('precotizacion2_id') ) ){
+                this.uploadPictures();
+            }
 
             // Reference views
             this.calculateOrdenp2();
@@ -182,19 +193,16 @@ app || (app = {});
             var _this = this,
                 inputformula = this.$(e.currentTarget).data('input');
 
-            if( inputformula == 'P' || inputformula == 'RP'){
+            if( inputformula == 'P' ){
                 this.$inputFormula = this.$inputFormulaPrecio;
-                this.$inputRound = this.$inputRoundPrecio;
                 this.$inputRenderFormula = this.$inputPrecio;
 
-            }else if( inputformula == 'T' || inputformula == 'RT'){
+            }else if( inputformula == 'T' ){
                 this.$inputFormula = this.$inputFormulaTransporte;
-                this.$inputRound = this.$inputRoundTranporte;
                 this.$inputRenderFormula = this.$inputTranporte;
 
-            }else if( inputformula == 'V' || inputformula == 'RV'){
+            }else if( inputformula == 'V' ){
                 this.$inputFormula = this.$inputFormulaViaticos;
-                this.$inputRound = this.$inputRoundViaticos;
                 this.$inputRenderFormula = this.$inputViaticos;
 
             }else{
@@ -202,7 +210,6 @@ app || (app = {});
             }
 
         	var formula = this.$inputFormula.val();
-        	var round = this.$inputRound.val();
 
         	// sanitize input and replace
         	formula = formula.replaceAll("(","n");
@@ -213,51 +220,57 @@ app || (app = {});
             $.ajax({
                 url: window.Misc.urlFull(Route.route('ordenes.productos.formula')),
                 type: 'GET',
-                data: { equation: formula, round: round },
+                data: { equation: formula },
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner( _this.spinner );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 _this.$inputRenderFormula.val(0);
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 alertify.error(thrownError);
             });
         },
 
         changedTiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow.iCheck('check');
                 this.$inputMagenta.iCheck('check');
                 this.$inputCyan.iCheck('check');
                 this.$inputKey.iCheck('check');
+                this.$inputColor1.iCheck('check');
+                this.$inputColor2.iCheck('check');
             }else{
                 this.$inputYellow.iCheck('uncheck');
                 this.$inputMagenta.iCheck('uncheck');
                 this.$inputCyan.iCheck('uncheck');
                 this.$inputKey.iCheck('uncheck');
+                this.$inputColor1.iCheck('uncheck');
+                this.$inputColor2.iCheck('uncheck');
             }
         },
 
         changedRetiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow2.iCheck('check');
                 this.$inputMagenta2.iCheck('check');
                 this.$inputCyan2.iCheck('check');
                 this.$inputKey2.iCheck('check');
+                this.$inputColor12.iCheck('check');
+                this.$inputColor22.iCheck('check');
             }else{
                 this.$inputYellow2.iCheck('uncheck');
                 this.$inputMagenta2.iCheck('uncheck');
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
+                this.$inputColor12.iCheck('uncheck');
+                this.$inputColor22.iCheck('uncheck');
             }
         },
 
@@ -274,12 +287,12 @@ app || (app = {});
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                
+
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                     data.orden2_volumen = this.$inputVolumen.val();
                     data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.orden2_redondear = this.$checkRedondear.is(':checked');
+                    data.orden2_round = this.$inputRound.val();
                     data.ordenp6 = this.areasProductopList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -359,22 +372,61 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotalordenp2 = precio + tranporte + viaticos + areas;
-            vcomision = ( subtotalordenp2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            subtotal = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            total = subtotal + vcomision;
 
-            if( this.$checkRedondear.is(':checked') ) {
-                total = Math.round( subtotalordenp2 + vcomision );
+            round = this.$inputRound.val();
+            if( round <= 2 || round >= -2){
+                // Calcular round decimales
+                var exp = Math.pow(10, round);
+                total = Math.round(total*exp)/exp;
             }else{
-                total = subtotalordenp2 + vcomision;
+                return;
             }
 
-            this.$subtotal.val( subtotalordenp2 );
+            this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
         },
 
-        redondearComision: function(e) {
-            this.calculateOrdenp2();
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        precotizacion2: this.model.get('precotizacion2_id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         /**
@@ -405,14 +457,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
 
             if(!_.isUndefined(resp.success)) {
                 // response success or error
