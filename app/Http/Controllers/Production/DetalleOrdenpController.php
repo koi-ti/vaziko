@@ -126,10 +126,10 @@ class DetalleOrdenpController extends Controller
                     $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
                     foreach ($materiales as $material)
                     {
-                        if($request->has("orden4_materialp_$material->id")) {
+                        if($request->has("orden4_materialp_{$material->materialp_id}_{$material->orden4_id}")) {
                             $orden4 = new Ordenp4;
                             $orden4->orden4_orden2 = $orden2->id;
-                            $orden4->orden4_materialp = $material->id;
+                            $orden4->orden4_materialp = $material->materialp_id;
                             $orden4->save();
                         }
                     }
@@ -306,12 +306,12 @@ class DetalleOrdenpController extends Controller
                         $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
                         foreach ($materiales as $material)
                         {
-                            $orden4 = Ordenp4::where('orden4_orden2', $orden2->id)->where('orden4_materialp', $material->id)->first();
-                            if($request->has("orden4_materialp_$material->id")) {
+                            $orden4 = Ordenp4::where('orden4_orden2', $orden2->id)->where('orden4_materialp', $material->materialp_id)->where('koi_ordenproduccion4.id', $material->orden4_id)->first();
+                            if($request->has("orden4_materialp_{$material->materialp_id}_{$material->orden4_id}")) {
                                 if(!$orden4 instanceof Ordenp4) {
                                     $orden4 = new Ordenp4;
                                     $orden4->orden4_orden2 = $orden2->id;
-                                    $orden4->orden4_materialp = $material->id;
+                                    $orden4->orden4_materialp = $material->materialp_id;
                                     $orden4->save();
                                 }
                             }else{

@@ -21,8 +21,6 @@ class CreateOrdenproduccion4Table extends Migration
 
             $table->foreign('orden4_orden2')->references('id')->on('koi_ordenproduccion2')->onDelete('restrict');
             $table->foreign('orden4_materialp')->references('id')->on('koi_materialp')->onDelete('restrict');
-
-            $table->unique(['orden4_orden2', 'orden4_materialp']);
         });
     }
 
