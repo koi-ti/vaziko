@@ -442,14 +442,15 @@
                                                                 </tr>
                                                                 <tr>
                                                                     <th>Volumen</th>
-                                                                    <td>
+                                                                    <td class="form-group">
                                                                         <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100">
+                                                                        <div class="help-block with-errors"></div>
                                                                     </td>
-                                                                    <th colspan="2">
-                                                                        <label class="checkbox-inline">
-                                                                            <input type="checkbox" id="orden2_round" name="orden2_round" value="<%- orden2_round %>" <%- parseInt(orden2_round) ? 'checked': ''%>> Redondear
-                                                                        </label>
-                                                                    </th>
+                                                                    <th>Redondear</th>
+                                                                    <td class="form-group">
+                                                                        <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                                                        <div class="help-block with-errors"></div>
+                                                                    </td>
                                                                     <td><input id="orden2_vtotal" name="orden2_vtotal" class="form-control input-sm" type="text" value="<%- orden2_vtotal %>" data-currency disabled></td>
                                                                 </tr>
                                                                 <tr>
@@ -471,6 +472,7 @@
                                 </div>
                             </div>
                         </div>
+                        
                         @if($orden->orden_cotizacion)
                             <div class="tab-pane" id="tab_imagenes">
                                 <div class="box box-solid">

@@ -37,9 +37,13 @@ app || (app = {});
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.edit = false;
+
+            if( this.model.id != undefined ){
+                this.edit = true;
+            }
 
             // Attributes
-            this.$wraperForm = this.$('#render-form-cotizacion-producto');
             this.maquinasProductopCotizacionList = new app.MaquinasProductopCotizacionList();
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.acabadosProductopCotizacionList = new app.AcabadosProductopCotizacionList();
@@ -57,9 +61,11 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = this.edit;
+            this.$el.html( this.template(attributes) );
 
             this.$form = this.$('#form-cotizacion-producto');
+            this.spinner = this.$('#spinner-main');
 
             this.$inputFormula = null;
             this.$inputRenderFormula = null;
@@ -204,16 +210,16 @@ app || (app = {});
                 type: 'GET',
                 data: {equation: formula},
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner( _this.spinner );
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
             	_this.$inputRenderFormula.val(0);
-                window.Misc.removeSpinner( _this.el );
+                window.Misc.removeSpinner( _this.spinner );
                 alertify.error(thrownError);
             });
         },
@@ -238,7 +244,6 @@ app || (app = {});
         },
 
         changedRetiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow2.iCheck('check');
@@ -401,15 +406,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
+            window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

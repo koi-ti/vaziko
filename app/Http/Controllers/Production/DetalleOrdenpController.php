@@ -104,7 +104,6 @@ class DetalleOrdenpController extends Controller
                     $orden2->fillBoolean($data);
                     $orden2->orden2_productop = $producto->id;
                     $orden2->orden2_orden = $orden->id;
-                    $orden2->orden2_round = $request->orden2_round;
                     $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
@@ -281,7 +280,6 @@ class DetalleOrdenpController extends Controller
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
-                        $orden2->orden2_round = $request->orden2_round;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
                         $orden2->save();
 
@@ -411,7 +409,6 @@ class DetalleOrdenpController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleOrdenpController', 'destroy', $e->getMessage()));

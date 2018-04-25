@@ -23,7 +23,6 @@ app || (app = {});
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
-            'ifChanged #orden2_round': 'roundComision'
         },
         parameters: {
             data: {
@@ -110,7 +109,7 @@ app || (app = {});
 
             // Inputs cuadro de informacion
             this.$inputVolumen = this.$('#orden2_volumen');
-            this.$checkRound = this.$('#orden2_round');
+            this.$inputRound = this.$('#orden2_round');
             this.$inputVcomision = this.$('#orden2_vtotal');
 
             // Inputs from form
@@ -238,7 +237,6 @@ app || (app = {});
         },
 
         changedTiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow.iCheck('check');
@@ -258,7 +256,6 @@ app || (app = {});
         },
 
         changedRetiro: function(e) {
-
             var selected = $(e.target).is(':checked');
             if( selected ){
                 this.$inputYellow2.iCheck('check');
@@ -295,7 +292,7 @@ app || (app = {});
                     data.orden2_volumen = this.$inputVolumen.val();
                     data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                     data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.orden2_round = this.$checkRound.is(':checked');
+                    data.orden2_round = this.$inputRound.val();
                     data.ordenp6 = this.areasProductopList.toJSON();
 
                 this.model.save( data, {silent: true} );
@@ -375,25 +372,22 @@ app || (app = {});
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotalordenp2 = precio + tranporte + viaticos + areas;
-            vcomision = ( subtotalordenp2 / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            subtotal = precio + tranporte + viaticos + areas;
+            vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
+            total = subtotal + vcomision;
 
-            if( this.$checkRound.is(':checked') ) {
-                total = Math.round( subtotalordenp2 + vcomision );
+            round = this.$inputRound.val();
+            if( round <= 2 || round >= -2){
+                // Calcular round decimales
+                var exp = Math.pow(10, round);
+                total = Math.round(total*exp)/exp;
             }else{
-                total = subtotalordenp2 + vcomision;
+                return;
             }
 
-            this.$subtotal.val( subtotalordenp2 );
+            this.$subtotal.val( subtotal );
             this.$inputVcomision.val( vcomision );
             this.$total.val( total );
-        },
-
-        /**
-        * Call event calculate change checkbox
-        **/
-        roundComision: function(e) {
-           this.calculateOrdenp2();
         },
 
         /**
