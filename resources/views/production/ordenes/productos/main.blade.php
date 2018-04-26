@@ -472,7 +472,7 @@
                                 </div>
                             </div>
                         </div>
-                        
+
                         @if($orden->orden_cotizacion)
                             <div class="tab-pane" id="tab_imagenes">
                                 <div class="box box-solid">
@@ -498,8 +498,8 @@
 
     <script type="text/template" id="orden-producto-material-item-tpl">
         <div class="form-group col-md-12">
-            <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- id %>">
-                <input type="checkbox" id="orden4_materialp_<%- id %>" name="orden4_materialp_<%- id %>" value="orden4_materialp_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
+            <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>">
+                <input type="checkbox" id="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" name="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" value="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
     </script>

@@ -100,11 +100,11 @@
 
                 @if( $producto->producto_metrado )
                     <div class="form-group col-md-2">
-                        <label class="control-label">Ancho</label>
+                        <label class="control-label">Ancho (Metros)</label>
                         <div>{{ $producto->producto_ancho }}</div>
                     </div>
                     <div class="form-group col-md-2">
-                        <label class="control-label">Largo</label>
+                        <label class="control-label">Largo (Metros)</label>
                         <div>{{ $producto->producto_largo }}</div>
                     </div>
                 @endif

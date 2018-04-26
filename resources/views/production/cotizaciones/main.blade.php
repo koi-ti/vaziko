@@ -41,9 +41,9 @@
                                         <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
                                             <i class="fa fa-clone"></i>Clonar cotización
                                         </a>
-                                        {{--<a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
+                                        <a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
                                             <i class="fa fa-sticky-note"></i>Generar orden
-                                        </a>--}}
+                                        </a>
                                         @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-cotizacion">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
