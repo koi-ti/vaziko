@@ -24,6 +24,8 @@ app || (app = {});
             'change #precotizacion6_areap': 'changeAreap',
             'click .submit-precotizacion6': 'submitPreCotizacion6',
             'submit #form-precotizacion6-producto': 'onStorePreCotizacion6',
+            'ifChanged #precotizacion2_tiro': 'changedTiro',
+            'ifChanged #precotizacion2_retiro': 'changedRetiro',
         },
         parameters: {
         },
@@ -70,6 +72,22 @@ app || (app = {});
             this.$inputArea = this.$('#precotizacion6_nombre');
             this.$inputTiempo = this.$('#precotizacion6_tiempo');
             this.$inputValor = this.$('#precotizacion6_valor');
+
+            // Tiro
+            this.$inputYellow = this.$('#precotizacion2_yellow');
+            this.$inputMagenta = this.$('#precotizacion2_magenta');
+            this.$inputCyan = this.$('#precotizacion2_cyan');
+            this.$inputKey = this.$('#precotizacion2_key');
+            this.$inputColor1 = this.$('#precotizacion2_color1');
+            this.$inputColor2 = this.$('#precotizacion2_color2');
+
+            // Retiro
+            this.$inputYellow2 = this.$('#precotizacion2_yellow2');
+            this.$inputMagenta2 = this.$('#precotizacion2_magenta2');
+            this.$inputCyan2 = this.$('#precotizacion2_cyan2');
+            this.$inputKey2 = this.$('#precotizacion2_key2');
+            this.$inputColor12 = this.$('#precotizacion2_color12');
+            this.$inputColor22 = this.$('#precotizacion2_color22');
 
             // Reference views
             this.referenceViews();
@@ -315,7 +333,7 @@ app || (app = {});
                 },
                 validation: {
                     itemLimit: 10,
-                    sizeLimit: ( 4 * 1024 ) * 1024, // 4mb,
+                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
                     allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
                 },
                 messages: {
@@ -336,6 +354,44 @@ app || (app = {});
             }, this);
         },
 
+        changedTiro: function(e) {
+            var selected = $(e.target).is(':checked');
+            if( selected ){
+                this.$inputYellow.iCheck('check');
+                this.$inputMagenta.iCheck('check');
+                this.$inputCyan.iCheck('check');
+                this.$inputKey.iCheck('check');
+                this.$inputColor1.iCheck('check');
+                this.$inputColor2.iCheck('check');
+            }else{
+                this.$inputYellow.iCheck('uncheck');
+                this.$inputMagenta.iCheck('uncheck');
+                this.$inputCyan.iCheck('uncheck');
+                this.$inputKey.iCheck('uncheck');
+                this.$inputColor1.iCheck('uncheck');
+                this.$inputColor2.iCheck('uncheck');
+            }
+        },
+
+        changedRetiro: function(e) {
+            var selected = $(e.target).is(':checked');
+            if( selected ){
+                this.$inputYellow2.iCheck('check');
+                this.$inputMagenta2.iCheck('check');
+                this.$inputCyan2.iCheck('check');
+                this.$inputKey2.iCheck('check');
+                this.$inputColor12.iCheck('check');
+                this.$inputColor22.iCheck('check');
+            }else{
+                this.$inputYellow2.iCheck('uncheck');
+                this.$inputMagenta2.iCheck('uncheck');
+                this.$inputCyan2.iCheck('uncheck');
+                this.$inputKey2.iCheck('uncheck');
+                this.$inputColor12.iCheck('uncheck');
+                this.$inputColor22.iCheck('uncheck');
+            }
+        },
+
         /**
         * fires libraries js
         */
@@ -352,6 +408,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();
+
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
         },
 
         /**

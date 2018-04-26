@@ -34,15 +34,196 @@
 			</div>
 
 			<div class="row">
+				<label class="control-label col-md-1">Ancho</label>
+				<div class="form-group col-md-2">
+					<div>{{ $precotizacion2->precotizacion2_ancho }}</div>
+				</div>
+				<label class="control-label col-md-1">Alto</label>
+				<div class="form-group col-md-2">
+					<div>{{ $precotizacion2->precotizacion2_alto }}</div>
+				</div>
 				<label class="control-label col-md-1">Cantidad</label>
-				<div class="form-group col-md-1">
+				<div class="form-group col-md-2">
 					<div>{{ $precotizacion2->precotizacion2_cantidad }}</div>
 				</div>
 			</div>
 
-			<div class="row">
-				<div class="col-md-12" id="fine-uploader"></div>
-			</div><br>
+			@if($producto->productop_abierto || $producto->productop_cerrado)
+				<div class="box box-success">
+					<div class="box-body">
+						@if($producto->productop_abierto)
+							<div class="row">
+								<label class="col-sm-offset-1 col-sm-1 control-label">Abierto</label>
+								<label for="precotizacion2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+								<div class="form-group col-md-3">
+									<div class="col-md-9">
+										{{ $precotizacion2->precotizacion2_ancho }}
+									</div>
+									<div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
+								</div>
+
+								<label for="precotizacion2_alto" class="col-sm-1 control-label text-right">Alto</label>
+								<div class="form-group col-md-3">
+									<div class="col-md-9">
+										{{ $precotizacion2->precotizacion2_alto }}
+									</div>
+									<div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
+								</div>
+							</div>
+						@endif
+
+						@if($producto->productop_cerrado)
+							<div class="row">
+								<label class="col-sm-offset-1 col-sm-1 control-label">Cerrado</label>
+								<label for="precotizacion2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+								<div class="form-group col-md-3">
+									<div class="col-md-9">
+										{{ $precotizacion2->precotizacion2_c_ancho }}
+									</div>
+									<div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
+								</div>
+
+								<label for="precotizacion2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
+								<div class="form-group col-md-3">
+									<div class="col-md-9">
+										{{ $precotizacion2->precotizacion2_c_alto }}
+									</div>
+									<div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
+								</div>
+							</div>
+						@endif
+					</div>
+				</div>
+			@endif
+
+			@if($producto->productop_3d)
+				<div class="box box-success">
+					<div class="box-body">
+						<div class="row">
+							<label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
+							<label for="precotizacion2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+							<div class="form-group col-md-2">
+								<div class="col-md-9">
+									{{ $precotizacion2->precotizacion2_3d_ancho }}
+								</div>
+								<div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
+							</div>
+
+							<label for="precotizacion2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
+							<div class="form-group col-md-2">
+								<div class="col-md-9">
+									{{ $precotizacion2->precotizacion2_3d_alto }}
+								</div>
+								<div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
+							</div>
+
+							<label for="precotizacion2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
+							<div class="form-group col-md-2">
+								<div class="col-md-9">
+									{{ $precotizacion2->precotizacion2_3d_profundidad }}
+								</div>
+								<div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			@endif
+
+			@if($producto->productop_tiro || $producto->productop_retiro)
+				<div class="box box-success">
+					<div class="box-body">
+						<div class="row">
+							<label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
+							<label class="col-sm-1 col-xs-1 control-label">C</label>
+							<label class="col-sm-1 col-xs-1 control-label">M</label>
+							<label class="col-sm-1 col-xs-1 control-label">Y</label>
+							<label class="col-sm-1 col-xs-1 control-label">K</label>
+							<label class="col-sm-1 col-xs-1 control-label">P1</label>
+							<label class="col-sm-1 col-xs-1 control-label">P2</label>
+						</div>
+
+						@if($producto->productop_tiro)
+							<div class="row">
+								<div class="col-sm-offset-2 col-md-1 col-xs-3">
+									<label for="precotizacion2_tiro" class="control-label">T</label>
+									<input type="checkbox" disabled id="precotizacion2_tiro" name="precotizacion2_tiro" value="precotizacion2_tiro" {{ $precotizacion2->precotizacion2_tiro ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_yellow" name="precotizacion2_yellow" value="precotizacion2_yellow" {{ $precotizacion2->precotizacion2_yellow ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_magenta" name="precotizacion2_magenta" value="precotizacion2_magenta" {{ $precotizacion2->precotizacion2_magenta ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_cyan" name="precotizacion2_cyan" value="precotizacion2_cyan" {{ $precotizacion2->precotizacion2_cyan ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_key" name="precotizacion2_key" value="precotizacion2_key" {{ $precotizacion2->precotizacion2_key ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_color1" name="precotizacion2_color1" value="precotizacion2_color1" {{ $precotizacion2->precotizacion2_color1 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_color2" name="precotizacion2_color2" value="precotizacion2_color2" {{ $precotizacion2->precotizacion2_color2 ? 'checked': '' }}>
+								</div>
+							</div>
+						@endif
+
+						@if($producto->productop_retiro)
+							<div class="row">
+								<div class="col-sm-offset-2 col-md-1 col-xs-3">
+									<label for="precotizacion2_retiro" class="control-label">R</label>
+									<input type="checkbox" disabled id="precotizacion2_retiro" name="precotizacion2_retiro" value="precotizacion2_retiro" {{ $precotizacion2->precotizacion2_retiro ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_yellow2" name="precotizacion2_yellow2" value="precotizacion2_yellow2" {{ $precotizacion2->precotizacion2_yellow2 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_magenta2" name="precotizacion2_magenta2" value="precotizacion2_magenta2" {{ $precotizacion2->precotizacion2_magenta2 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_cyan2" name="precotizacion2_cyan2" value="precotizacion2_cyan2" {{ $precotizacion2->precotizacion2_cyan2 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_key2" name="precotizacion2_key2" value="precotizacion2_key2" {{ $precotizacion2->precotizacion2_key2 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_color12" name="precotizacion2_color12" value="precotizacion2_color12" {{ $precotizacion2->precotizacion2_color12 ? 'checked': '' }}>
+								</div>
+								<div class="col-md-1 col-xs-1">
+									<input type="checkbox" disabled id="precotizacion2_color22" name="precotizacion2_color22" value="precotizacion2_color22" {{ $precotizacion2->precotizacion2_color22 ? 'checked': '' }}>
+								</div>
+							</div>
+						@endif
+
+						<div class="row">
+							@if($producto->productop_tiro)
+								<div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+									<label for="precotizacion2_nota_tiro" class="control-label">Nota tiro</label>
+									<div>{{ $precotizacion2->precotizacion2_nota_tiro }}</div>
+								</div>
+							@endif
+
+							@if($producto->productop_retiro)
+								<div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+									<label for="precotizacion2_nota_retiro" class="control-label">Nota retiro</label>
+									<div>{{ $precotizacion2->precotizacion2_nota_retiro }}</div>
+								</div>
+							@endif
+						</div>
+					</div>
+				</div>
+			@endif
+
+			<div class="box box-success">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Imágenes</h3>
+                </div>
+
+				<div class="box-body table-responsive no-padding">
+					<div id="fine-uploader"></div>
+				</div>
+			</div>
 
 			<div class="box box-success">
                 <div class="box-header with-border">
