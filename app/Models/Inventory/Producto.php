@@ -23,7 +23,7 @@ class Producto extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['producto_codigo', 'producto_codigoori', 'producto_nombre', 'producto_vidautil', 'producto_ancho', 'producto_largo'];
+    protected $fillable = ['producto_codigoori', 'producto_nombre', 'producto_vidautil', 'producto_ancho', 'producto_largo'];
 
     /**
      * The attributes that are mass boolean assignable.
@@ -42,7 +42,6 @@ class Producto extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'producto_codigo' => 'required|max:15|min:1|unique:koi_producto',
             'producto_codigoori' => 'required|max:15|min:1',
             'producto_nombre' => 'required|max:200',
             'producto_grupo' => 'required',
@@ -50,12 +49,6 @@ class Producto extends BaseModel
             'producto_ancho' => 'required_if:producto_metrado,true|numeric',
             'producto_largo' => 'required_if:producto_metrado,true|numeric',
         ];
-
-        if ($this->exists){
-            $rules['producto_codigo'] .= ',producto_codigo,' . $this->id;
-        }else{
-            $rules['producto_codigo'] .= '|required';
-        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes())

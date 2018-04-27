@@ -179,6 +179,21 @@
 			</div>
 	    </div>
 
+        <div class="row">
+            <div class="form-group col-md-3">
+                <label for="tercero_sigla" class="control-label">Sigla</label>
+                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="4">
+            </div>
+            <div class="form-group col-md-3">
+                <label for="tercero_codigopostal" class="control-label">Código postal</label>
+                <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6" required>
+            </div>
+            <div class="form-group col-md-3">
+                <label for="tercero_formapago" class="control-label">Forma de pago</label>
+                <input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
+            </div>
+        </div>
+
 	    <div class="row">
 	    	<div class="form-group col-md-3">
 				<label for="tercero_telefono1" class="control-label">Teléfono</label>
@@ -229,10 +244,6 @@
 			<div class="form-group col-md-3">
 	    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
 	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
-	    	</div>
-			<div class="form-group col-md-3">
-	    		<label for="tercero_formapago" class="control-label">Forma de pago</label>
-	    		<input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
 	    	</div>
 		</div>
 
@@ -981,11 +992,12 @@
 
 <script type="text/template" id="add-producto-tpl">
 	<div class="row">
-		<div class="form-group col-md-3">
-			<label for="producto_codigo" class="control-label">Código</label>
-			<input type="text" id="producto_codigo" name="producto_codigo" value="<%- producto_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
-            <div class="help-block with-errors"></div>
-		</div>
+        <% if( !_.isUndefined(producto_codigo) && !_.isNull(producto_codigo) && producto_codigo) { %>
+    		<div class="form-group col-md-3">
+                <label class="control-label">Código</label>
+                <input type="text" value="<%- producto_codigo %>" class="form-control input-sm input-toupper" disabled>
+    		</div>
+        <% } %>
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>

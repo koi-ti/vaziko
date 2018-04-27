@@ -114,9 +114,14 @@ class ProductoController extends Controller
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
+                    // Recuperar numero cotizacion
+                    $numero = DB::table('koi_producto')->max('producto_codigo');
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->producto_codigo = $numero;
                     $producto->producto_grupo = $grupo->id;
                     $producto->producto_subgrupo = $subgrupo->id;
                     $producto->save();
