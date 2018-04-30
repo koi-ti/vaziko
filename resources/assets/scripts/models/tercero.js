@@ -38,6 +38,8 @@ app || (app = {});
             'tercero_cc_representante' : '',
             'tercero_representante' : '',
             'tercero_formapago' : '',
+            'tercero_sigla' : '',
+            'tercero_codigopostal' : '',
             'tercero_activo': false,
             'tercero_responsable_iva': false,
             'tercero_autoretenedor_cree': false,

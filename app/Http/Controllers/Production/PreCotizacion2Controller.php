@@ -84,6 +84,7 @@ class PreCotizacion2Controller extends Controller
 
                     // Cotizacion2
                     $precotizacion2->fill($data);
+                    $precotizacion2->fillBoolean($data);
                     $precotizacion2->precotizacion2_precotizacion1 = $precotizacion->id;
                     $precotizacion2->precotizacion2_productop = $producto->id;
                     $precotizacion2->save();
@@ -252,6 +253,7 @@ class PreCotizacion2Controller extends Controller
                     try {
                         // Cotizacion2
                         $precotizacion2->fill($data);
+                        $precotizacion2->fillBoolean($data);
                         $precotizacion2->save();
 
                         // Materiales

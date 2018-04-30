@@ -3,9 +3,10 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 use Validator;
 
-class PreCotizacion2 extends Model
+class PreCotizacion2 extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -17,11 +18,18 @@ class PreCotizacion2 extends Model
     public $timestamps = false;
 
     /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['precotizacion2_tiro', 'precotizacion2_retiro', 'precotizacion2_yellow', 'precotizacion2_magenta', 'precotizacion2_cyan', 'precotizacion2_key', 'precotizacion2_color1', 'precotizacion2_color2', 'precotizacion2_yellow2', 'precotizacion2_magenta2', 'precotizacion2_cyan2', 'precotizacion2_key2', 'precotizacion2_color12', 'precotizacion2_color22'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = ['precotizacion2_cantidad'];
+    protected $fillable = ['precotizacion2_cantidad', 'precotizacion2_ancho', 'precotizacion2_alto', 'precotizacion2_c_ancho', 'precotizacion2_c_alto', 'precotizacion2_3d_ancho', 'precotizacion2_3d_alto', 'precotizacion2_3d_profundidad', 'precotizacion2_nota_tiro', 'precotizacion2_nota_retiro'];
 
     public function isValid($data)
     {

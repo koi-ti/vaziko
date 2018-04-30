@@ -43,6 +43,9 @@ class CreateTerceroTable extends Migration
             $table->string('tercero_cc_representante', 15)->nullable();
             $table->string('tercero_representante', 200)->nullable();
 
+            $table->string('tercero_sigla', 5)->nullable();
+            $table->string('tercero_codigopostal', 6);
+
             $table->boolean('tercero_activo')->default(false);
             $table->boolean('tercero_responsable_iva')->default(false);
             $table->boolean('tercero_autoretenedor_cree')->default(false);

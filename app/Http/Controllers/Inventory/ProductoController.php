@@ -63,7 +63,11 @@ class ProductoController extends Controller
      */
     public function create()
     {
-        return view('inventory.productos.create');
+        // Recuperar numero cotizacion
+        $numero = DB::table('koi_producto')->max('producto_codigo');
+        $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
+        return view('inventory.productos.create', ['codigo' => $numero]);
     }
 
     /**
@@ -114,9 +118,14 @@ class ProductoController extends Controller
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
+                    // Recuperar numero cotizacion
+                    $numero = DB::table('koi_producto')->max('producto_codigo');
+                    $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->producto_codigo = $numero;
                     $producto->producto_grupo = $grupo->id;
                     $producto->producto_subgrupo = $subgrupo->id;
                     $producto->save();
@@ -166,7 +175,7 @@ class ProductoController extends Controller
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
-        return view('inventory.productos.edit', ['producto' => $producto]);
+        return view('inventory.productos.edit', ['producto' => $producto, 'codigo' => $producto->producto_codigo]);
     }
 
     /**
