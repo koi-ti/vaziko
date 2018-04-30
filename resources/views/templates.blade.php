@@ -992,12 +992,12 @@
 
 <script type="text/template" id="add-producto-tpl">
 	<div class="row">
-        <% if( !_.isUndefined(producto_codigo) && !_.isNull(producto_codigo) && producto_codigo) { %>
+        @if( isset($codigo) )
     		<div class="form-group col-md-3">
                 <label class="control-label">Código</label>
-                <input type="text" value="<%- producto_codigo %>" class="form-control input-sm input-toupper" disabled>
+                <input type="text" value="{{ $codigo }}" class="form-control input-sm input-toupper" disabled>
     		</div>
-        <% } %>
+        @endif
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>
