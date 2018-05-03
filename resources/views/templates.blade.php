@@ -182,7 +182,7 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label for="tercero_sigla" class="control-label">Sigla</label>
-                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="4">
+                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="20">
             </div>
             <div class="form-group col-md-3">
                 <label for="tercero_codigopostal" class="control-label">Código postal</label>

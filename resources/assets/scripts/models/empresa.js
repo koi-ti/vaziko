@@ -46,6 +46,7 @@ app || (app = {});
             'actividad_tarifa' : '',
             'empresa_niif' : '',
             'empresa_round' : false,
+            'empresa_rango' : 0,
             'empresa_iva' : ''
         }
     });
