@@ -29,19 +29,18 @@ class SubGrupo extends Model
      *
      * @var array
      */
-    protected $fillable = ['subgrupo_codigo', 'subgrupo_nombre'];
+    protected $fillable = ['subgrupo_nombre'];
 
     public function isValid($data)
     {
         $rules = [
-            'subgrupo_codigo' => 'required|max:4|min:1|unique:koi_subgrupo',
-            'subgrupo_nombre' => 'required|max:50'
+            'subgrupo_nombre' => 'required|max:50|unique:koi_subgrupo'
         ];
 
         if ($this->exists){
-            $rules['subgrupo_codigo'] .= ',subgrupo_codigo,' . $this->id;
+            $rules['subgrupo_nombre'] .= ',subgrupo_nombre,' . $this->id;
         }else{
-            $rules['subgrupo_codigo'] .= '|required';
+            $rules['subgrupo_nombre'] .= '|required';
         }
 
         $validator = Validator::make($data, $rules);

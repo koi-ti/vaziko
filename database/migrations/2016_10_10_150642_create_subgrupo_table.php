@@ -16,7 +16,6 @@ class CreateSubgrupoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('subgrupo_codigo', 4)->unique();
             $table->string('subgrupo_nombre', 200);
 
         });

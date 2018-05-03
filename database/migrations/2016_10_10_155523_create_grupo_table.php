@@ -16,7 +16,6 @@ class CreateGrupoTable extends Migration
             $table->engine = 'InnoDB';
 
             $table->increments('id');
-            $table->string('grupo_codigo', 4)->unique();
             $table->string('grupo_nombre', 200);
 
         });

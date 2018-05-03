@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('subgrupos.index')}}">Subgrupos</a></li>
-    <li class="active">{{ $subgrupo->subgrupo_codigo }}</li>
+    <li class="active">{{ $subgrupo->id }}</li>
 @stop
 
 @section('module')
@@ -11,10 +11,8 @@
             <div class="row">
                 <div class="form-group col-md-2">
                     <label class="control-label">Código</label>
-                    <div>{{ $subgrupo->subgrupo_codigo }}</div>
+                    <div>{{ $subgrupo->id }}</div>
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>
                     <div>{{ $subgrupo->subgrupo_nombre }}</div>

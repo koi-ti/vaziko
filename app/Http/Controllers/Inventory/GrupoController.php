@@ -22,7 +22,6 @@ class GrupoController extends Controller
     {
         if ($request->ajax()) {
             $query = Grupo::query();
-            $query->select('koi_grupo.id as id', 'grupo_codigo', 'grupo_nombre');
             return Datatables::of($query)->make(true);
         }
         return view('inventory.grupos.index');
