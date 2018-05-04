@@ -29,20 +29,20 @@ class Grupo extends Model
      *
      * @var array
      */
-    protected $fillable = ['grupo_codigo', 'grupo_nombre'];
+    protected $fillable = ['grupo_nombre'];
 
     public function isValid($data)
     {
         $rules = [
-            'grupo_codigo' => 'required|max:4|min:1|unique:koi_grupo',
-            'grupo_nombre' => 'required|max:50'
+            'grupo_nombre' => 'required|max:50|unique:koi_grupo'
         ];
 
         if ($this->exists){
-            $rules['grupo_codigo'] .= ',grupo_codigo,' . $this->id;
+            $rules['grupo_nombre'] .= ',grupo_nombre,' . $this->id;
         }else{
-            $rules['grupo_codigo'] .= '|required';
+            $rules['grupo_nombre'] .= '|required';
         }
+
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {

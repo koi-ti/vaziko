@@ -16,7 +16,6 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-        	'subgrupo_codigo': '',
         	'subgrupo_nombre': ''
         }
     });

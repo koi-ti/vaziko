@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 	<li><a href="{{ route('grupos.index') }}">Grupos</a></li>
-	<li><a href="{{ route('grupos.show', ['grupos' => $grupo->id]) }}">{{ $grupo->grupo_codigo }}</a></li>
+	<li><a href="{{ route('grupos.show', ['grupos' => $grupo->id]) }}">{{ $grupo->id }}</a></li>
 	<li class="active">Editar</li>
 @stop
 
@@ -12,7 +12,7 @@
 			<div class="box-body" id="render-form-grupo">
 				{{-- Render form grupo --}}
 			</div>
-	        
+
 			<div class="box-footer with-border">
 	        	<div class="row">
 					<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">

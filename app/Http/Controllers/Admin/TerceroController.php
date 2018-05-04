@@ -52,6 +52,7 @@ class TerceroController extends Controller
                             $query->orWhereRaw("tercero_apellido1 LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("tercero_apellido2 LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("tercero_razonsocial LIKE '%{$request->tercero_nombre}%'");
+                            $query->orWhereRaw("tercero_sigla LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) LIKE '%{$request->tercero_nombre}%'");
                         });
                     }

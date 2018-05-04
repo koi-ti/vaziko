@@ -74,8 +74,8 @@ class Tercero extends BaseModel implements AuthenticatableContract,
             'tercero_direccion' => 'required',
             'tercero_municipio' => 'required',
             'tercero_actividad' => 'required',
-            'tercero_sigla' => 'max:4',
-            'tercero_codigopostal' => 'required|max:6'
+            'tercero_sigla' => 'max:20',
+            'tercero_codigopostal' => 'numeric'
         ];
 
         if ($this->exists){

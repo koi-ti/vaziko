@@ -182,11 +182,11 @@
         <div class="row">
             <div class="form-group col-md-3">
                 <label for="tercero_sigla" class="control-label">Sigla</label>
-                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="4">
+                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="20">
             </div>
             <div class="form-group col-md-3">
                 <label for="tercero_codigopostal" class="control-label">Código postal</label>
-                <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6" required>
+                <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6">
             </div>
             <div class="form-group col-md-3">
                 <label for="tercero_formapago" class="control-label">Forma de pago</label>
@@ -947,12 +947,12 @@
 {{-- Inventory templates --}}
 <script type="text/template" id="add-subgrupo-tpl">
     <div class="row">
-		<div class="form-group col-md-2">
-			<label for="subgrupo_codigo" class="control-label">Código</label>
-			<input type="text" id="subgrupo_codigo" name="subgrupo_codigo" value="<%- subgrupo_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
-		</div>
-    </div>
-    <div class="row">
+        @if( isset($subgrupo->id) )
+    		<div class="form-group col-md-2">
+    			<label class="control-label">Código</label>
+    			<input type="text" value="<%- id %>" placeholder="Código" class="form-control input-sm input-toupper" disabled>
+    		</div>
+        @endif
 		<div class="form-group col-md-8">
 			<label for="subgrupo_nombre" class="control-label">Nombre</label>
 			<input type="text" id="subgrupo_nombre" name="subgrupo_nombre" value="<%- subgrupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
@@ -962,12 +962,12 @@
 
 <script type="text/template" id="add-grupo-tpl">
     <div class="row">
-		<div class="form-group col-md-2">
-			<label for="grupo_codigo" class="control-label">Código</label>
-			<input type="text" id="grupo_codigo" name="grupo_codigo" value="<%- grupo_codigo %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="4" required>
-		</div>
-    </div>
-    <div class="row">
+        @if( isset($grupo->id) )
+    		<div class="form-group col-md-2">
+    			<label class="control-label">Código</label>
+    			<input type="text" value="<%- id %>" placeholder="Código" class="form-control input-sm input-toupper" disabled>
+    		</div>
+        @endif
 		<div class="form-group col-md-8">
 			<label for="grupo_nombre" class="control-label">Nombre</label>
 			<input type="text" id="grupo_nombre" name="grupo_nombre" value="<%- grupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>

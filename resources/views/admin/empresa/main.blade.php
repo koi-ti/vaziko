@@ -109,6 +109,12 @@
 				<input id="tercero_email" value="<%- tercero_email %>" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
 			    <div class="help-block with-errors"></div>
 			</div>
+
+			<div class="form-group col-md-3">
+				<label for="empresa_rango" class="control-label">Rango</label>
+				<input id="empresa_rango" value="<%- empresa_rango %>" placeholder="Rango" class="form-control input-sm" name="empresa_rango" type="number" min="1" max="1000" step="1">
+			    <div class="help-block with-errors"></div>
+			</div>
 	    </div>
 
 	    <div class="row">

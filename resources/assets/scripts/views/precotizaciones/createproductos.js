@@ -78,16 +78,12 @@ app || (app = {});
             this.$inputMagenta = this.$('#precotizacion2_magenta');
             this.$inputCyan = this.$('#precotizacion2_cyan');
             this.$inputKey = this.$('#precotizacion2_key');
-            this.$inputColor1 = this.$('#precotizacion2_color1');
-            this.$inputColor2 = this.$('#precotizacion2_color2');
 
             // Retiro
             this.$inputYellow2 = this.$('#precotizacion2_yellow2');
             this.$inputMagenta2 = this.$('#precotizacion2_magenta2');
             this.$inputCyan2 = this.$('#precotizacion2_cyan2');
             this.$inputKey2 = this.$('#precotizacion2_key2');
-            this.$inputColor12 = this.$('#precotizacion2_color12');
-            this.$inputColor22 = this.$('#precotizacion2_color22');
 
             // Reference views
             this.referenceViews();
@@ -361,15 +357,11 @@ app || (app = {});
                 this.$inputMagenta.iCheck('check');
                 this.$inputCyan.iCheck('check');
                 this.$inputKey.iCheck('check');
-                this.$inputColor1.iCheck('check');
-                this.$inputColor2.iCheck('check');
             }else{
                 this.$inputYellow.iCheck('uncheck');
                 this.$inputMagenta.iCheck('uncheck');
                 this.$inputCyan.iCheck('uncheck');
                 this.$inputKey.iCheck('uncheck');
-                this.$inputColor1.iCheck('uncheck');
-                this.$inputColor2.iCheck('uncheck');
             }
         },
 
@@ -380,15 +372,11 @@ app || (app = {});
                 this.$inputMagenta2.iCheck('check');
                 this.$inputCyan2.iCheck('check');
                 this.$inputKey2.iCheck('check');
-                this.$inputColor12.iCheck('check');
-                this.$inputColor22.iCheck('check');
             }else{
                 this.$inputYellow2.iCheck('uncheck');
                 this.$inputMagenta2.iCheck('uncheck');
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
-                this.$inputColor12.iCheck('uncheck');
-                this.$inputColor22.iCheck('uncheck');
             }
         },
 

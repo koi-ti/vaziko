@@ -22,7 +22,6 @@ class SubGrupoController extends Controller
     {
         if ($request->ajax()) {
             $query = SubGrupo::query();
-            $query->select('koi_subgrupo.id as id', 'subgrupo_codigo', 'subgrupo_nombre');
             return Datatables::of($query)->make(true);
         }
         return view('inventory.subgrupos.index');

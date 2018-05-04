@@ -29,7 +29,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 ajax: window.Misc.urlFull( Route.route('grupos.index') ),
                 columns: [
-                    { data: 'grupo_codigo', name: 'grupo_codigo' },
+                    { data: 'id', name: 'id' },
                     { data: 'grupo_nombre', name: 'grupo_nombre' }
                 ],
 				buttons: [
