@@ -49,6 +49,9 @@
                                             <i class="fa fa-lock"></i>Cerrar orden
                                         </a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                            <a role="menuitem" tabindex="-1" href="#" class="complete-ordenp">
+                                                <i class="fa fa-handshake-o"></i>Culminar orden
+                                            </a>
                                             <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
                                                 <i class="fa fa-clone"></i>Clonar orden
                                             </a>
@@ -582,6 +585,10 @@
 
     <script type="text/template" id="ordenp-close-confirm-tpl">
         <p>¿Está seguro que desea cerrar la orden de producción <b><%- orden_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-complete-confirm-tpl">
+        <p>¿Está a punto de culminar la orden de producción <b><%- orden_codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="ordenp-clone-confirm-tpl">

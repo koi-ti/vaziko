@@ -18,6 +18,7 @@ app || (app = {});
         events: {
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
+            'click .close-ordenp': 'closeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp'
         },
 
@@ -130,6 +131,57 @@ app || (app = {});
 
             cancelConfirm.render();
         },
+
+        /**
+        * Close ordenp
+        */
+        closeOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
+                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Cerrar orden de producción',
+                    onConfirm: function () {
+                        // Close orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.spinner );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.spinner );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.spinner );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
+        },
+
 
         /**
         * Clone ordenp

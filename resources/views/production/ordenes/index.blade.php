@@ -30,6 +30,7 @@
                                     <option value="A" {{ session('searchordenp_ordenp_estado') == 'A' ? 'selected': '' }}>Abiertas</option>
                                     <option value="N" {{ session('searchordenp_ordenp_estado') == 'N' ? 'selected': '' }}>Anuladas</option>
                                     <option value="C" {{ session('searchordenp_ordenp_estado') == 'C' ? 'selected': '' }}>Cerradas</option>
+                                    <option value="T" {{ session('searchordenp_ordenp_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
                                 </select>
                             </div>
 

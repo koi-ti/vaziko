@@ -38,6 +38,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                responsive: true,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {
@@ -59,6 +60,9 @@ app || (app = {});
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' }
                 ],
+                rowReorder: {
+                   selector: 'td:nth-child(1)'
+               },
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]
                 ],
@@ -77,7 +81,7 @@ app || (app = {});
                         width: '10%',
                     },
                     {
-                        targets: 3,
+                        targets: [3, 4, 5],
                         width: '10%',
                     }
                 ],
@@ -86,6 +90,8 @@ app || (app = {});
                         $(row).css( {"color":"#00a65a"} );
                     }else if ( parseInt(data.orden_anulada) ) {
                         $(row).css( {"color":"red"} );
+                    }else if ( parseInt(data.orden_culminada) ) {
+                        $(row).css( {"color":"#0073b7"} );
                     }
                 }
 			});

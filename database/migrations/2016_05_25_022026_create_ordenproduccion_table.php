@@ -29,6 +29,7 @@ class CreateOrdenproduccionTable extends Migration
             $table->string('orden_formapago', 30)->comment = 'Lo que posea el tercero';
             $table->string('orden_suministran', 200)->nullable();
             $table->boolean('orden_anulada')->default(false);
+            $table->boolean('orden_culminada')->default(false);
             $table->boolean('orden_abierta')->default(true);
             $table->text('orden_observaciones')->nullable();
             $table->text('orden_terminado')->nullable();

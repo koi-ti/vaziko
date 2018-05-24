@@ -13,15 +13,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\MigrateAcabados::class,
-        \App\Console\Commands\MigrateContactos::class,
-        \App\Console\Commands\MigrateMaquinas::class,
-        \App\Console\Commands\MigrateMateriales::class,
-        \App\Console\Commands\MigrateOrdenes::class,
-        \App\Console\Commands\MigrateDetalleOrdenes::class,
-        \App\Console\Commands\MigrateProductos::class,
-        \App\Console\Commands\actualizarordenes::class,
-        \App\Console\Commands\MigrateTerceros::class
+        Commands\ControlTiemposp::class
     ];
 
     /**
@@ -32,6 +24,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-
+        $schedule->command('control:tiemposp')->cron('30 6 * * 0,2,3,4,5,6');
     }
 }

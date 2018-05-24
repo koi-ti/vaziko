@@ -467,6 +467,7 @@ class AsientoController extends Controller
         $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
     }
+
     /**
      * Import data in Excel .csv the specified resource.
      * @param  Request  $request
@@ -491,7 +492,7 @@ class AsientoController extends Controller
             $tercero = Tercero::where('tercero_nit', $request->tercero)->first();
             if(!$tercero instanceof Tercero) {
                 DB::rollback();
-                return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                return response()->json(['success' => false, 'errors' => "No es posible recuperar beneficiario con nit $request->tercero, por favor verifique la información del asiento o consulte al administrador."]);
             }
 
             // Recuerar folder
