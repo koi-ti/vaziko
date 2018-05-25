@@ -27,7 +27,7 @@ app || (app={});
                 serverSide: true,
                 language: window.Misc.dataTableES(),
                 pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('folders.index') ),
                 columns: [
                     { data: 'folder_codigo', name: 'folder_codigo' },

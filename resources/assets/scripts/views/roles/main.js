@@ -30,7 +30,7 @@ app || (app = {});
                 language: window.Misc.dataTableES(),
                 ajax: window.Misc.urlFull( Route.route('roles.index') ),
                 pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 columns: [
                     { data: 'display_name', name: 'display_name' },
                     { data: 'name', name: 'name' },
