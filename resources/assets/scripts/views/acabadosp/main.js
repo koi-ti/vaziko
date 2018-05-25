@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$acabadospSearchTable = this.$('#acabadosp-search-table');
+            var paginacion = this.$acabadospSearchTable.data('paginacion');
 
             this.$acabadospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('acabadosp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },

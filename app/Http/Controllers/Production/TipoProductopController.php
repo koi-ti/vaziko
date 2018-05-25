@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\TipoProductop;
 use DB, Log, Datatables, Cache;
 
@@ -23,7 +22,7 @@ class TipoProductopController extends Controller
             $query = TipoProductop::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.tipoproductosp.index');
+        return view('production.tipoproductosp.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**
@@ -124,7 +123,7 @@ class TipoProductopController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
                     Cache::forget( TipoProductop::$key_cache );
 

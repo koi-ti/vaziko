@@ -24,6 +24,7 @@ app || (app = {});
         initialize : function() {
             var _this = this;
             this.$asientosSearchTable = this.$('#asientos-search-table');
+            var paginacion = this.$asientosSearchTable.data('paginacion');
 
             // References
             this.$searchTercero = this.$('#search_tercero');
@@ -37,6 +38,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('asientos.index') ),
                     data: function( data ) {

@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Datatables;
-
 use App\Models\Base\Departamento;
+use Datatables;
 
 class DepartamentoController extends Controller
 {
@@ -23,7 +21,7 @@ class DepartamentoController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Departamento::query())->make(true);
         }
-        return view('admin.departamentos.index');
+        return view('admin.departamentos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**
@@ -57,8 +55,8 @@ class DepartamentoController extends Controller
     {
         $departamento = Departamento::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($departamento);    
-        }        
+            return response()->json($departamento);
+        }
         return view('admin.departamentos.show', ['departamento' => $departamento]);
     }
 
@@ -70,7 +68,7 @@ class DepartamentoController extends Controller
      */
     public function edit($id)
     {
-        // 
+        //
     }
 
     /**

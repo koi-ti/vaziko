@@ -46,7 +46,7 @@ class AsientoController extends Controller
                 })
                 ->make(true);
         }
-        return view('accounting.asiento.index');
+        return view('accounting.asiento.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

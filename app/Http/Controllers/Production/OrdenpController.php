@@ -106,7 +106,7 @@ class OrdenpController extends Controller
                 })
                 ->make(true);
         }
-        return view('production.ordenes.index');
+        return view('production.ordenes.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

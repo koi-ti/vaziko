@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Production\Areap;
+use DB, Log, Datatables, Cache;
 
 class AreaspController extends Controller
 {
@@ -24,7 +22,7 @@ class AreaspController extends Controller
             $query = Areap::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.areas.index');
+        return view('production.areas.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

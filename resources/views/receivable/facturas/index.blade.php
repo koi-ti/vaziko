@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-2 col-xs-4">
                             <a href="{{ route('facturas.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-pencil-square-o"></i> Nueva factura
+                                <i class="fa fa-plus"></i> Nueva factura
                             </a>
                         </div>
                     </div>
@@ -54,7 +54,7 @@
             </div>
 
             <div class="box-body table-index">
-                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
                     <thead>
                         <tr>
                             <th >Número</th>

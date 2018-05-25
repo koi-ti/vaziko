@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Production\Maquinap;
+use DB, Log, Datatables, Cache;
 
 class MaquinaspController extends Controller
 {
@@ -24,7 +22,7 @@ class MaquinaspController extends Controller
             $query = Maquinap::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.maquinas.index');
+        return view('production.maquinas.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

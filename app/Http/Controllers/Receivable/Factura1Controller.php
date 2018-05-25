@@ -53,7 +53,7 @@ class Factura1Controller extends Controller
                 })
                 ->make(true);
         }
-        return view('receivable.facturas.index');
+        return view('receivable.facturas.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

@@ -6,9 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Datatables, DB;
 use App\Models\Base\Permiso;
+use Datatables, DB;
 
 class PermisoController extends Controller
 {
@@ -23,7 +22,7 @@ class PermisoController extends Controller
             $query = Permiso::query();
             return Datatables::of($query)->make(true);
         }
-        return view('admin.permisos.index');
+        return view('admin.permisos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

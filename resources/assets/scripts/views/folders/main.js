@@ -17,6 +17,7 @@ app || (app={});
         initialize: function () {
 
             this.$foldersSearchTable = this.$('#folders-search-table');
+            var paginacion = this.$foldersSearchTable.data('paginacion');
 
             this.$foldersSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -25,6 +26,8 @@ app || (app={});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('folders.index') ),
                 columns: [
                     { data: 'folder_codigo', name: 'folder_codigo' },
@@ -32,7 +35,7 @@ app || (app={});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-user-plus"></i> Agregar Folder',
+                        text: '<i class="fa fa-plus"></i> Nuevo folder',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
                                 window.Misc.redirect(window.Misc.urlFull( Route.route('folders.create') ) )

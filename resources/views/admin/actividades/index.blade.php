@@ -1,6 +1,6 @@
 @extends('admin.actividades.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
     <li class="active">Actividades</li>
 @stop
 
@@ -8,7 +8,7 @@
 	<div id="actividades-main">
 		<div class="box box-success">
 			<div class="box-body table-responsive">
-				<table id="actividades-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+				<table id="actividades-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
 			        <thead>
 			            <tr>
 			                <th>Codigo</th>

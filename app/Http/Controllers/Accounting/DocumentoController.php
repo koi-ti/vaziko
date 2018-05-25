@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables;
-
 use App\Models\Accounting\Documento;
+use DB, Log, Datatables;
 
 class DocumentoController extends Controller
 {
@@ -26,7 +24,7 @@ class DocumentoController extends Controller
             $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
             return Datatables::of($query->get())->make(true);
         }
-        return view("accounting.documentos.index");
+        return view('accounting.documentos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

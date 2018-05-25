@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables;
-
 use App\Models\Accounting\Folder;
+use DB, Log, Datatables;
 
 class FolderController extends Controller
 {
@@ -18,17 +16,17 @@ class FolderController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request) 
+    public function index(Request $request)
     {
         if ($request->ajax()) {
             $query = Folder::query();
             $query->select('koi_folder.id as id','folder_codigo', 'folder_nombre');
             return Datatables::of($query)->make(true);
         }
-        return view('accounting.folders.index');
+        return view('accounting.folders.index', ['empresa' => parent::getPaginacion()]);
     }
-    
-    /** 
+
+    /**
     * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
@@ -37,7 +35,7 @@ class FolderController extends Controller
     {
         return view('accounting.folders.create');
     }
-    
+
     /**
      * Store a newly created resource in storage.
      *
@@ -48,7 +46,7 @@ class FolderController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $folder = new Folder;
             if ($folder->isValid($data)) {
                 DB::beginTransaction();
@@ -70,7 +68,7 @@ class FolderController extends Controller
         }
         abort(403);
     }
-    
+
     /**
      * Display the specified resource.
      *
@@ -81,11 +79,11 @@ class FolderController extends Controller
     {
         $folder = Folder::findOrFail($id);
         if ($request->ajax()) {
-            return response()->json($folder);    
-        }        
+            return response()->json($folder);
+        }
         return view('accounting.folders.show', ['folder' => $folder]);
     }
-    
+
     /**
      * Show the form for editing the specified resource.
      *
@@ -97,7 +95,7 @@ class FolderController extends Controller
         $folder = Folder::findOrFail($id);
         return view('accounting.folders.edit', ['folder' => $folder]);
     }
-        
+
     /**
      * Update the specified resource in storage.
      *
@@ -109,7 +107,7 @@ class FolderController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-            
+
             $folder = Folder::findOrFail($id);
             if ($folder->isValid($data)) {
                 DB::beginTransaction();
@@ -131,7 +129,7 @@ class FolderController extends Controller
         }
         abort(403);
     }
-        
+
     /**
      * Remove the specified resource from storage.
      *

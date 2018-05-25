@@ -31,6 +31,7 @@ app || (app = {});
             this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
             this.$searchordenpReferencia = this.$('#searchordenp_ordenp_referencia');
             this.$searchordenpProductop = this.$('#searchordenp_ordenp_productop');
+            var paginacion = this.$ordersSearchTable.data('paginacion');
 
             this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -38,7 +39,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
-                responsive: true,
+                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('ordenes.index') ),
                     data: function( data ) {

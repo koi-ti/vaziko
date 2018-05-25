@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$sucursalesSearchTable = this.$('#sucursales-search-table');
+            var paginacion = this.$sucursalesSearchTable.data('paginacion');
 
             this.$sucursalesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,13 +28,15 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('sucursales.index') ),
                 columns: [
                     { data: 'sucursal_nombre', name: 'sucursal_nombre' }
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nueva sucursal',
+						text: '<i class="fa fa-plus"></i> Nueva sucursal',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('sucursales.create') ) )

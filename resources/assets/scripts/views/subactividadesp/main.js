@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$subactividadespSearchTable = this.$('#subactividadesp-search-table');
+            var paginacion = this.$subactividadespSearchTable.data('paginacion');
 
             this.$subactividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull( Route.route('subactividadesp.index') ),
                     data: function( data ) {
@@ -41,7 +44,7 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-user-plus"></i> Nueva Subactividad',
+                        text: '<i class="fa fa-plus"></i> Nueva subactividad',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
                                 window.Misc.redirect( window.Misc.urlFull( Route.route('subactividadesp.create') ) )

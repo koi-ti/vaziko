@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$puntosventaSearchTable = this.$('#puntosventa-search-table');
+            var paginacion = this.$puntosventaSearchTable.data('paginacion');
 
             this.$puntosventaSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('puntosventa.index') ),
                 columns: [
                     { data: 'puntoventa_nombre', name: 'puntoventa_nombre' },
@@ -36,7 +39,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo punto de venta',
+						text: '<i class="fa fa-plus"></i> Nuevo punto de venta',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('puntosventa.create') ) )

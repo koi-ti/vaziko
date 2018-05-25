@@ -25,6 +25,8 @@ app || (app = {});
 
             // Rerefences
             this.$productosSearchTable = this.$('#productos-search-table');
+            var paginacion = this.$productosSearchTable.data('paginacion');
+
             this.$searchCod = this.$('#producto_codigo');
             this.$searchName = this.$('#producto_nombre');
 
@@ -34,6 +36,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('productos.index') ),
                     data: function( data ) {

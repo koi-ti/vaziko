@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$gruposSearchTable = this.$('#grupos-search-table');
+            var paginacion = this.$gruposSearchTable.data('paginacion');
 
             this.$gruposSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('grupos.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
@@ -34,7 +37,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo grupo',
+						text: '<i class="fa fa-plus"></i> Nuevo grupo',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('grupos.create') ) )

@@ -71,7 +71,7 @@ class PreCotizacion1Controller extends Controller
                     }
                 })->make(true);
         }
-        return view('production.precotizaciones.index');
+        return view('production.precotizaciones.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

@@ -48,7 +48,7 @@
             </div>
 
             <div class="box-body table-index">
-                <table id="facturasp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                <table id="facturasp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
                     <thead>
                         <tr>
                             <th >Código</th>

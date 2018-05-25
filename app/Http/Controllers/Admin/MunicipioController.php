@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Datatables, DB;
-
 use App\Models\Base\Municipio;
+use Datatables, DB;
 
 class MunicipioController extends Controller
 {
@@ -49,7 +47,7 @@ class MunicipioController extends Controller
             $query->orderby('municipio_nombre','asc');
             return response()->json($query->get());
         }
-        return view('admin.municipios.index');
+        return view('admin.municipios.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

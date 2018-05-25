@@ -1,14 +1,14 @@
 @extends('accounting.centroscosto.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
 	<li class="active">Centros de costo</li>
 @stop
 
-@section('module')	
+@section('module')
 	<div id="centroscosto-main">
 		<div class="box box-success">
 			<div class="box-body table-responsive">
-				<table id="centroscosto-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+				<table id="centroscosto-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
 			        <thead>
 			            <tr>
 			                <th>Código</th>

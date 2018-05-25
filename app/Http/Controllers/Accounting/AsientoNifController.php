@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Classes\AsientoNifContableDocumento;
-
 use App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\CentroCosto;
-
 use DB, Log, Datatables, Auth, View, App;
 
 class AsientoNifController extends Controller
@@ -28,7 +25,7 @@ class AsientoNifController extends Controller
             $query->join('koi_tercero', 'koi_asienton1.asienton1_beneficiario', '=', 'koi_tercero.id');
             return Datatables::of($query->get())->make(true);
         }
-        return view('accounting.asientonif.index');
+        return view('accounting.asientonif.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**
@@ -80,7 +77,7 @@ class AsientoNifController extends Controller
     public function edit($id)
     {
         $asientoNif = AsientoNif::findOrFail($id);
-        // Get document and valid show or edit 
+        // Get document and valid show or edit
         $documento = Documento::find($asientoNif->asienton1_documento);
         if($asientoNif->asienton1_preguardado == false || $documento->documento_actual == true ) {
             return redirect()->route('asientosnif.show', ['asientoNif' => $asientoNif]);

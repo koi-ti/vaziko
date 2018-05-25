@@ -27,6 +27,7 @@ app || (app = {});
             this.$productospSearchTable = this.$('#productosp-search-table');
             this.$searchCod = this.$('#productop_codigo');
             this.$searchName = this.$('#productop_nombre');
+            var paginacion = this.$productospSearchTable.data('paginacion');
 
             this.productospSearchTable = this.$productospSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -34,6 +35,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('productosp.index') ),
                     data: function( data ) {

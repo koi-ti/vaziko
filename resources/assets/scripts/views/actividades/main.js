@@ -17,8 +17,9 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            
+
             this.$actividadesSearchTable = this.$('#actividades-search-table');
+            var paginacion = this.$actividadesSearchTable.data('paginacion');
 
             this.$actividadesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, -1], [paginacion, 10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull( Route.route('actividades.index') ),
                     data: function( data ) {
@@ -36,12 +39,12 @@ app || (app = {});
                 columns: [
                     { data: 'actividad_codigo', name: 'actividad_codigo' },
                     { data: 'actividad_nombre', name: 'actividad_nombre'},
-                    { data: 'actividad_categoria', name: 'actividad_categoria'}, 
+                    { data: 'actividad_categoria', name: 'actividad_categoria'},
                     { data: 'actividad_tarifa', name: 'actividad_tarifa' }
                 ],
                 buttons: [
-                    { 
-                        text: '<i class="fa fa-user-plus"></i> Nueva actividad', 
+                    {
+                        text: '<i class="fa fa-plus"></i> Nueva actividad',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
                                 window.Misc.redirect( window.Misc.urlFull( Route.route('actividades.create') ) )

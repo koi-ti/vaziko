@@ -17,7 +17,7 @@
 		<div id="municipios-main">
 			<div class="box box-success">
 				<div class="box-body table-responsive">
-					<table id="municipios-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+					<table id="municipios-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
 				        <thead>
 				            <tr>
 				                <th>Codigo Dpto.</th>
@@ -30,5 +30,5 @@
 				</div>
 			</div>
 		</div>
-    </section>    
+    </section>
 @stop
