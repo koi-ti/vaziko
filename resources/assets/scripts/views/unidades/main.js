@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$unidadesSearchTable = this.$('#unidades-search-table');
+            var paginacion = this.$unidadesSearchTable.data('paginacion');
 
             this.$unidadesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('unidades.index') ),
                 columns: [
                     { data: 'unidadmedida_sigla', name: 'unidadmedida_sigla' },
@@ -34,7 +37,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo unidad',
+						text: '<i class="fa fa-plus"></i> Nueva unidad',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('unidades.create') ) )

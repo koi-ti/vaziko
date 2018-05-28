@@ -30,6 +30,7 @@
                                     <option value="A" {{ session('searchordenp_ordenp_estado') == 'A' ? 'selected': '' }}>Abiertas</option>
                                     <option value="N" {{ session('searchordenp_ordenp_estado') == 'N' ? 'selected': '' }}>Anuladas</option>
                                     <option value="C" {{ session('searchordenp_ordenp_estado') == 'C' ? 'selected': '' }}>Cerradas</option>
+                                    <option value="T" {{ session('searchordenp_ordenp_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
                                 </select>
                             </div>
 
@@ -74,14 +75,14 @@
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <a href="{{ route('ordenes.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-plus"></i> Nuevo
+                                    <i class="fa fa-plus"></i> Nueva orden
                                 </a>
                             </div>
                         </div>
                     {!! Form::close() !!}
 
                     <div class="box-body table-responsive">
-                        <table id="ordenes-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                        <table id="ordenes-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
                             <thead>
                                 <tr>
                                     <th>Código</th>

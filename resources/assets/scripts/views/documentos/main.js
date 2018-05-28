@@ -17,6 +17,7 @@ app || (app = {});
         initialize: function () {
 
             this.$documentosSearchTable = this.$('#documentos-search-table');
+            var paginacion = this.$documentosSearchTable.data('paginacion');
 
             this.$documentosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -25,6 +26,8 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('documentos.index') ),
                 columns: [
                     { data: 'documento_codigo', name: 'documento_codigo' },
@@ -35,7 +38,7 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-user-plus"></i> Nuevo documento',
+                        text: '<i class="fa fa-plus"></i> Nuevo documento',
                         className: 'btn-sm',
                         action: function ( e, dt, node, config ) {
                                 window.Misc.redirect( window.Misc.urlFull( Route.route('documentos.create') ) )

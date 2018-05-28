@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\Productop, App\Models\Production\Productop2, App\Models\Production\Productop3, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\TipoProductop, App\Models\Production\SubtipoProductop;
 use Auth, DB, Log, Datatables, Cache;
 
@@ -52,7 +51,7 @@ class ProductopController extends Controller
             }
             return response()->json($query->get());
         }
-        return view('production.productos.index');
+        return view('production.productos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

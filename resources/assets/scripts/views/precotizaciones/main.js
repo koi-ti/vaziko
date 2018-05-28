@@ -29,6 +29,7 @@ app || (app = {});
             this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
             this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
             this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
+            var paginacion = this.$precotizacionesSearchTable.data('paginacion');
 
             this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -36,6 +37,7 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
+                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
                     data: function( data ) {

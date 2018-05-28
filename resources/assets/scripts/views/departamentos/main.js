@@ -15,13 +15,16 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            
+
             this.$departamentosSearchTable = this.$('#departamentos-search-table');
+            var paginacion = this.$departamentosSearchTable.data('paginacion');
 
             this.$departamentosSearchTable.DataTable({
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('departamentos.index') ),
                 columns: [
                     { data: 'departamento_codigo', name: 'departamento_codigo' },

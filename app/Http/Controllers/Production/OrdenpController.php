@@ -30,7 +30,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta',
+            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -82,9 +82,17 @@ class OrdenpController extends Controller
                         }
                         if($request->orden_estado == 'C') {
                             $query->where('orden_abierta', false);
+                            $query->where('orden_culminada', false);
                         }
                         if($request->orden_estado == 'N') {
                             $query->where('orden_anulada', true);
+                        }
+                        if($request->orden_estado == 'T') {
+                            $query->where('orden_culminada', true);
+                        }
+                        if($request->orden_estado == 'AT') {
+                            $query->where('orden_abierta', true);
+                            $query->orWhere('orden_culminada', true);
                         }
                     }
                     // Referencia
@@ -99,7 +107,7 @@ class OrdenpController extends Controller
                 })
                 ->make(true);
         }
-        return view('production.ordenes.index');
+        return view('production.ordenes.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**
@@ -214,7 +222,7 @@ class OrdenpController extends Controller
         if(!$orden instanceof Ordenp) {
             abort(404);
         }
-        if($orden->orden_abierta == false || $orden->orden_anulada == true) {
+        if($orden->orden_abierta == false || $orden->orden_anulada == true || $orden->orden_culminada == true) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
         return view('production.ordenes.create', ['orden' => $orden]);
@@ -333,10 +341,41 @@ class OrdenpController extends Controller
             try {
                 // Orden
                 $orden->orden_abierta = false;
+                $orden->orden_culminada = false;
                 $orden->save();
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden cerrada con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
+     * Cerrar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function completar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden = Ordenp::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Orden
+                $orden->orden_culminada = true;
+                $orden->orden_anulada = false;
+                $orden->orden_abierta = false;
+                $orden->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Culmino la orden de producción con exito.']);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());
@@ -360,7 +399,9 @@ class OrdenpController extends Controller
             try {
                 // Orden
                 $orden->orden_abierta = true;
+                $orden->orden_culminada = false;
                 $orden->save();
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);

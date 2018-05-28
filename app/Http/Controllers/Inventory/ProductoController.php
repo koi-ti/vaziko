@@ -53,7 +53,7 @@ class ProductoController extends Controller
             return response()->json($query->get());
 
         }
-        return view('inventory.productos.index');
+        return view('inventory.productos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

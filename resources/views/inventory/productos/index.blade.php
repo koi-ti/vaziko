@@ -30,14 +30,14 @@
                         </div>
                         <div class="col-md-2 col-xs-4">
                             <a href="{{ route('productos.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nuevo
+                                <i class="fa fa-plus"></i> Nuevo insumo
                             </a>
                         </div>
                     </div>
                 {!! Form::close() !!}
 
                 <div class="table-responsive">
-                    <table id="productos-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+                    <table id="productos-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
                         <thead>
                             <tr>
                                 <th>Código</th>

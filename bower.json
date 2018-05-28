@@ -8,12 +8,13 @@
     "alertify.js": "alertifyjs#~1.0.10",
     "backbone": "1.3.2",
     "bootstrap-validator": "~0.9.0",
-    "datatables.net-buttons": "~1.1.2",
-    "datatables.net-buttons-bs": "~1.1.2",
     "font-awesome": "fontawesome#~4.7.0",
     "jquery-ui": "~1.11.4",
     "jquery.inputmask": "~3.3.1",
     "moment": "~2.10.6",
-    "chart.js": "^2.7.1"
+    "chart.js": "^2.7.1",
+    "datatables.net-buttons": "~1.1.2",
+    "datatables.net-buttons-bs": "~1.1.2",
+    "datatables.net-responsive-dt": "^2.2.0"
   }
 }

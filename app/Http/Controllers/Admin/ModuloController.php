@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Datatables, DB;
-
 use App\Models\Base\Modulo;
+use Datatables, DB;
 
 class ModuloController extends Controller
 {
@@ -25,7 +23,7 @@ class ModuloController extends Controller
             $query->whereNotNull('name');
             return Datatables::of($query)->make(true);
         }
-        return view('admin.modulos.index');
+        return view('admin.modulos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

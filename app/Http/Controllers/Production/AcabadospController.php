@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Production\Acabadop;
+use DB, Log, Datatables, Cache;
 
 class AcabadospController extends Controller
 {
@@ -24,7 +22,7 @@ class AcabadospController extends Controller
             $query = Acabadop::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.acabados.index');
+        return view('production.acabados.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

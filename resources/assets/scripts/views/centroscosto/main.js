@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
+            var paginacion = this.$centroscostoSearchTable.data('paginacion');
 
             this.$centroscostoSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('centroscosto.index') ),
                 columns: [
                     { data: 'centrocosto_codigo', name: 'centrocosto_codigo' },
@@ -37,7 +40,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo centro de costo',
+						text: '<i class="fa fa-plus"></i> Nuevo centro de costo',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('centroscosto.create') ) )

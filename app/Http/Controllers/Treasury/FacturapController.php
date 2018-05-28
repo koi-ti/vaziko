@@ -41,12 +41,12 @@ class FacturapController extends Controller
 
             return Datatables::of($query)
                 ->filter(function ($query) use ($request){
-                    // Referencia 
+                    // Referencia
                     if($request->has('referencia')){
                         $query->whereRaw("facturap1_factura LIKE '%{$request->referencia}%'");
                     }
 
-                    // Fecha 
+                    // Fecha
                     if($request->has('facturap_fecha')){
                         $query->whereRaw("facturap1_fecha LIKE '%{$request->facturap_fecha}%'");
                     }
@@ -58,7 +58,7 @@ class FacturapController extends Controller
                 })
                 ->make(true);
         }
-        return view('treasury.facturasp.index');
+        return view('treasury.facturasp.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

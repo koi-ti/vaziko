@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Inventory\Unidad;
+use DB, Log, Datatables, Cache;
 
 class UnidadesMedidaController extends Controller
 {
@@ -24,7 +22,7 @@ class UnidadesMedidaController extends Controller
             $query = Unidad::query();
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.unidades.index');
+        return view('inventory.unidades.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

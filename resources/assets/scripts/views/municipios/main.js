@@ -19,11 +19,14 @@ app || (app = {});
         initialize : function() {
 
             this.$municipiosSearchTable = this.$('#municipios-search-table');
+            var paginacion = this.$municipiosSearchTable.data('paginacion');
 
             this.$municipiosSearchTable.DataTable({
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull( Route.route('municipios.index') ),
                     data: function( data ) {

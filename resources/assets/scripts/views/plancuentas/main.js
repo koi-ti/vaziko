@@ -26,6 +26,7 @@ app || (app = {});
             this.$plancuentasSearchTable = this.$('#plancuentas-search-table');
             this.$searchCuenta = this.$('#plancuentas_cuenta');
             this.$searchName = this.$('#plancuentas_nombre');
+            var paginacion = this.$plancuentasSearchTable.data('paginacion');
 
             this.plancuentasSearchTable = this.$plancuentasSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -33,6 +34,7 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('plancuentas.index') ),
                     data: function( data ) {

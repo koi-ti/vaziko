@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Base\PuntoVenta;
+use DB, Log, Datatables, Cache;
 
 class PuntoVentaController extends Controller
 {
@@ -25,7 +23,7 @@ class PuntoVentaController extends Controller
             $query->select('koi_puntoventa.id as id', 'puntoventa_nombre', 'puntoventa_prefijo', 'puntoventa_resolucion_dian', 'puntoventa_numero');
             return Datatables::of($query)->make(true);
         }
-        return view('admin.puntosventa.index');
+        return view('admin.puntosventa.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

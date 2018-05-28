@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\Materialp, App\Models\Production\TipoMaterialp;
 use DB, Log, Datatables, Cache;
 
@@ -26,7 +25,7 @@ class MaterialespController extends Controller
             return Datatables::of($query->get())->make(true);
         }
 
-        return view('production.materiales.index');
+        return view('production.materiales.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

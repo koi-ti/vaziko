@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Inventory\Grupo;
+use DB, Log, Datatables, Cache;
 
 class GrupoController extends Controller
 {
@@ -24,7 +22,7 @@ class GrupoController extends Controller
             $query = Grupo::query();
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.grupos.index');
+        return view('inventory.grupos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

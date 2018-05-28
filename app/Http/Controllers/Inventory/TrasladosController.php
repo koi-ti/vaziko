@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Auth;
-
 use App\Models\Base\Sucursal, App\Models\Inventory\Traslado1, App\Models\Inventory\Traslado2, App\Models\Inventory\Producto, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo;
+use DB, Log, Datatables, Auth;
 
 class TrasladosController extends Controller
 {
@@ -27,7 +25,7 @@ class TrasladosController extends Controller
             $query->join('koi_sucursal as d', 'traslado1_destino', '=', 'd.id');
             return Datatables::of($query->get())->make(true);
         }
-        return view('inventory.traslados.index');
+        return view('inventory.traslados.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

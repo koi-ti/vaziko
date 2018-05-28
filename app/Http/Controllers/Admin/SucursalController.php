@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Base\Sucursal;
+use DB, Log, Datatables, Cache;
 
 class SucursalController extends Controller
 {
@@ -25,7 +23,7 @@ class SucursalController extends Controller
             $query->select('koi_sucursal.id as id', 'sucursal_nombre');
             return Datatables::of($query)->make(true);
         }
-        return view('admin.sucursal.index');
+        return view('admin.sucursal.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
 use DB, Log, Cache, Datatables;
 
@@ -41,7 +40,7 @@ class PlanCuentasNifController extends Controller
                 })
                 ->make(true);
         }
-        return view('accounting.plancuentasnif.index');
+        return view('accounting.plancuentasnif.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

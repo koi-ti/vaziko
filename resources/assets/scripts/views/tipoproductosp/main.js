@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$tipoproductospSearchTable = this.$('#tipoproductosp-search-table');
+            var paginacion = this.$tipoproductospSearchTable.data('paginacion');
 
             this.$tipoproductospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('tipoproductosp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
@@ -35,7 +38,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo tipo',
+						text: '<i class="fa fa-plus"></i> Nuevo tipo de producto',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('tipoproductosp.create') ) )

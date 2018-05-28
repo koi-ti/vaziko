@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Base\Actividad;
 use DB, Log, Datatables, Cache;
 
@@ -29,7 +28,7 @@ class ActividadController extends Controller
             $data = [];
             $query->select('koi_actividad.id', DB::raw("UPPER(CONCAT(actividad_codigo, ' - ', actividad_nombre)) as text"));
             $query->orderby('actividad_codigo', 'asc');
-            
+
             if($request->has('id')){
                 $query->where('koi_actividad.id', $request->id);
             }
@@ -50,7 +49,7 @@ class ActividadController extends Controller
 
             return $data;
         }
-        return view('admin.actividades.index');
+        return view('admin.actividades.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

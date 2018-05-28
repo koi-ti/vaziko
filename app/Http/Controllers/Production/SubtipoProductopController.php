@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\SubtipoProductop, App\Models\Production\TipoProductop;
 use DB, Log, Datatables, Cache;
 
@@ -35,7 +34,7 @@ class SubtipoProductopController extends Controller
              }
              return response()->json($query->get());
          }
-         return view('production.subtipoproductosp.index');
+         return view('production.subtipoproductosp.index', ['empresa' => parent::getPaginacion()]);
      }
 
     /**

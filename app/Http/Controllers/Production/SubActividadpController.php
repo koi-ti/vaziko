@@ -34,7 +34,7 @@ class SubActividadpController extends Controller
 
              return response()->json($query->get());
          }
-         return view('production.subactividadesp.index');
+         return view('production.subactividadesp.index', ['empresa' => parent::getPaginacion()]);
      }
 
     /**

@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$subtipoproductospSearchTable = this.$('#subtipoproductosp-search-table');
+            var paginacion = this.$subtipoproductospSearchTable.data('paginacion');
 
             this.$subtipoproductospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull( Route.route('subtipoproductosp.index') ),
                     data: function( data ) {
@@ -41,7 +44,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo Subtipo',
+						text: '<i class="fa fa-plus"></i> Nuevo subtipo de producto',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('subtipoproductosp.create') ) )

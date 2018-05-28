@@ -22,7 +22,7 @@ class ActividadpController extends Controller
             $query = Actividadp::query();
             return Datatables::of($query)->make(true);
         }
-        return view('production.actividadesp.index');
+        return view('production.actividadesp.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

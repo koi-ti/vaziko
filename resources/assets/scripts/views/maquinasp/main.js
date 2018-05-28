@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$maquinaspSearchTable = this.$('#maquinasp-search-table');
+            var paginacion = this.$maquinaspSearchTable.data('paginacion');
 
             this.$maquinaspSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+            	pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('maquinasp.index') ),
                 columns: [
                     { data: 'id', name: 'id' },

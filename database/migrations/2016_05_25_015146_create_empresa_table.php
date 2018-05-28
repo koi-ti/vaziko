@@ -34,7 +34,7 @@ class CreateEmpresaTable extends Migration
             $table->string('empresa_tj_revisor', 15)->nullable();
             $table->string('empresa_nm_revisor', 200)->nullable();
             $table->boolean('empresa_round')->default(false);
-            $table->integer('empresa_rango')->unsigned();
+            $table->integer('empresa_paginacion')->unsigned();
             $table->text('empresa_help')->nullable();
             $table->date('empresa_fecha_cierre_contabilidad')->nullable();
 

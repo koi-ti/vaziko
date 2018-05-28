@@ -19,6 +19,7 @@ app || (app = {});
         initialize : function() {
 
             this.$subgruposSearchTable = this.$('#subgrupos-search-table');
+            var paginacion = this.$subgruposSearchTable.data('paginacion');
 
             this.$subgruposSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27,6 +28,8 @@ app || (app = {});
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
+                pageLength: paginacion,
+                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('subgrupos.index') ),
                 columns: [
                     { data: 'id', name: 'id' },
@@ -34,7 +37,7 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo subgrupo',
+						text: '<i class="fa fa-plus"></i> Nuevo subgrupo',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
 							window.Misc.redirect( window.Misc.urlFull( Route.route('subgrupos.create') ) )

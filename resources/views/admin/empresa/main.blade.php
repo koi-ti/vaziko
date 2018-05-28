@@ -111,8 +111,8 @@
 			</div>
 
 			<div class="form-group col-md-3">
-				<label for="empresa_rango" class="control-label">Rango</label>
-				<input id="empresa_rango" value="<%- empresa_rango %>" placeholder="Rango" class="form-control input-sm" name="empresa_rango" type="number" min="1" max="1000" step="1">
+				<label for="empresa_paginacion" class="control-label">Paginación</label>
+				<input id="empresa_paginacion" value="<%- empresa_paginacion %>" placeholder="Rango" class="form-control input-sm" name="empresa_paginacion" type="number" min="1" max="1000" step="1">
 			    <div class="help-block with-errors"></div>
 			</div>
 	    </div>

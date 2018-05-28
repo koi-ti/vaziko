@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Treasury\Facturap2;
+use DB, Log, Datatables, Cache;
 
 class TerceroController extends Controller
 {
@@ -68,7 +66,7 @@ class TerceroController extends Controller
                 })
                 ->make(true);
         }
-        return view('admin.terceros.index');
+        return view('admin.terceros.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

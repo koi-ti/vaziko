@@ -39,6 +39,12 @@
                                     </a>
                                 @endif
 
+                                @if( $orden->orden_culminada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                                    <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
+                                        <i class="fa fa-lock"></i>Cerrar orden
+                                    </a>
+                                @endif
+
                                 @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
                                     <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
                                         <i class="fa fa-clone"></i>Clonar orden
@@ -62,10 +68,13 @@
 										<label class="control-label">Código</label>
 										<div>
                                             {{ $orden->orden_codigo }}
+
                                             @if($orden->orden_anulada)
                                                 <span class="label label-danger">ANULADA</span>
                                             @elseif($orden->orden_abierta)
                                                 <span class="label label-success">ABIERTA</span>
+                                            @elseif($orden->orden_culminada)
+                                                <span class="label bg-blue">CULMINADO</span>
                                             @else
                                                 <span class="label label-warning">CERRADA</span>
                                             @endif
@@ -282,6 +291,10 @@
 
     <script type="text/template" id="ordenp-open-confirm-tpl">
         <p>¿Está seguro que desea reabrir la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-close-confirm-tpl">
+        <p>¿Está seguro que desea cerrar la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
     </script>
 
     <script type="text/template" id="ordenp-clone-confirm-tpl">

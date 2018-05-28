@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Inventory\SubGrupo;
+use DB, Log, Datatables, Cache;
 
 class SubGrupoController extends Controller
 {
@@ -24,7 +22,7 @@ class SubGrupoController extends Controller
             $query = SubGrupo::query();
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.subgrupos.index');
+        return view('inventory.subgrupos.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**

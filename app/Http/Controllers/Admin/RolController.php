@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log, Datatables, Cache;
-
 use App\Models\Base\Rol, App\Models\Base\Permiso;
+use DB, Log, Datatables, Cache;
 
 class RolController extends Controller
 {
@@ -24,7 +22,7 @@ class RolController extends Controller
             $query = Rol::query();
             return Datatables::of($query)->make(true);
         }
-        return view('admin.roles.index');
+        return view('admin.roles.index', ['empresa' => parent::getPaginacion()]);
     }
 
     /**
