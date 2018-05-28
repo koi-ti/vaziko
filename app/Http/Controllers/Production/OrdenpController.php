@@ -82,6 +82,7 @@ class OrdenpController extends Controller
                         }
                         if($request->orden_estado == 'C') {
                             $query->where('orden_abierta', false);
+                            $query->where('orden_culminada', false);
                         }
                         if($request->orden_estado == 'N') {
                             $query->where('orden_anulada', true);
