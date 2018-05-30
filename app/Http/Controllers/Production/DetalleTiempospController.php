@@ -117,13 +117,20 @@ class DetalleTiempospController extends Controller
                     }
 
                     if( $request->tiempop_hora_fin <= $request->tiempop_hora_inicio ){
-                        return response()->json(['success' => false, 'errors' => 'La hora final no puede ser menor o igual a la incial, por favor consulte al administrador.']);
+                        return response()->json(['success' => false, 'errors' => 'La hora final no puede ser menor o igual a la incial, por favor verifique la información o consulte al administrador.']);
+                    }
+
+                    // Recuperar ordenp
+                    $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$request->tiempop_ordenp_edit'")->first();
+                    if(!$ordenp instanceof Ordenp){
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden, por favor verifique la información o consulte al administrador.']);
                     }
 
                     DB::beginTransaction();
                     try{
                         // Tiempop
                         $tiempop->fill($data);
+                        $tiempop->tiempop_ordenp = $ordenp->id;
                         $tiempop->save();
 
                         // Commit Transaction

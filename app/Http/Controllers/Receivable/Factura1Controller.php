@@ -106,7 +106,7 @@ class Factura1Controller extends Controller
                     $factura->fill($data);
                     $factura->factura1_tercero = $tercero->id;
                     $factura->factura1_puntoventa = $puntoventa->id;
-                    $factura->factura1_numero = $puntoventa->puntoventa_numero;
+                    $factura->factura1_numero = $consecutive;
                     $factura->factura1_prefijo = $puntoventa->puntoventa_prefijo;
                     $factura->factura1_porcentaje_iva = $empresa->empresa_iva;
                     $factura->factura1_usuario_elaboro = Auth::user()->id;

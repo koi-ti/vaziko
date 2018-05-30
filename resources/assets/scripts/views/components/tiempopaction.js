@@ -15,7 +15,7 @@ app || (app = {});
         templateTiempop: _.template(($('#edit-tiempop-tpl').html() || '')),
         templateTiempopOrdenp: _.template(($('#edit-tiempop-ordenp-tpl').html() || '')),
         events: {
-            'click .submit-ordenp': 'submitForm',
+            'click .submit-modal-tiempop': 'submitForm',
             'submit #form-edit-tiempop-component': 'updateModel',
             'change .change-actividadp': 'changeActividadp',
         },
@@ -49,18 +49,14 @@ app || (app = {});
             var attributes = this.model.toJSON();
 
             if( this.parameters.dataFilter.type == 'ordenp' ){
-                this.$modal.find('.modal-dialog').addClass('modal-lg');
                 this.$modal.find('.modal-title').text( 'Pestaña tiempo de producción - Editar # '+ attributes.id );
                 this.$modal.find('.content-modal').empty().html( this.templateTiempopOrdenp( attributes ) );
 
                 // Recuperar input subactividad
                 this.$subactividadesp = this.$('#tiempop_subactividadp');
-
             }else if( this.parameters.dataFilter.type == 'tiemposp' ){
-                this.$modal.find('.modal-dialog').addClass('modal-md')
                 this.$modal.find('.modal-title').text( 'Tiempo de producción - Editar # '+ attributes.id );
                 this.$modal.find('.content-modal').empty().html( this.templateTiempop( attributes ) );
-
             }else{
                 return;
             }

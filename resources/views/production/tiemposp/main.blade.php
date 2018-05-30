@@ -14,7 +14,7 @@
     </section>
 
    	<section class="content">
-	    <div class="box box-success" id="tiempop-create">
+	    <div class="box box-success" id="tiempop-main">
 		 	{!! Form::open(['id' => 'form-tiempop', 'data-toggle' => 'validator']) !!}
                 <div class="box-body">
                     <div class="row">
@@ -50,7 +50,7 @@
                         <div class="form-group col-md-5">
                             <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
                                 @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
-                                <option value="{{ $key }}">{{ $value }}</option>
+                                    <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
                             <div class="help-block with-errors"></div>
@@ -58,8 +58,7 @@
 
                         <label for="tiempop_subactividadp" class="control-label col-md-1">Subactividad</label>
                         <div class="form-group col-md-4">
-                            <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required>
-                            </select>
+                            <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required></select>
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
@@ -136,9 +135,6 @@
                                     <th width="5%">H. fin</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                {{-- Render content --}}
-                            </tbody>
                         </table>
                     </div>
                 </div>
@@ -155,22 +151,36 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        <% if(edit) { %>
-            @if( Auth::user()->ability('admin', 'editar', ['module' => 'tiemposp']) )
-                <td class="text-center">
-                    <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>">
-                        <span><i class="fa fa-pencil-square-o"></i></span>
-                    </a>
-                </td>
-            @endif
-        <% } %>
+        @if( Auth::user()->ability('admin', 'editar', ['module' => 'tiemposp']) )
+            <td class="text-center">
+                <a class="btn btn-default btn-xs edit-tiempop" data-tiempop-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        @endif
     </script>
 
     <script type="text/template" id="edit-tiempop-tpl">
+        <div class="row">
+            <label for="tiempop_ordenp" class="col-md-1 control-label">Orden</label>
+            <div class="form-group col-md-2">
+                <div class="input-group input-group-sm">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="tiempop_ordenp_edit">
+                            <i class="fa fa-building-o"></i>
+                        </button>
+                    </span>
+                    <input id="tiempop_ordenp_edit" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp_edit" type="text" maxlength="15" data-estado="AT" data-name="tiempop_ordenp_beneficiario_edit" value="<%- orden_codigo %>">
+                </div>
+            </div>
+            <div class="col-md-9">
+                <input id="tiempop_ordenp_beneficiario_edit" name="tiempop_ordenp_beneficiario" placeholder="Orden beneficiario" class="form-control input-sm" type="text" value="<%- tercero_nombre %>" readonly>
+            </div>
+        </div>
+
     	<div class="row">
-    		<input type="hidden" id="tiempop_id" value="<%- id %>">
     		<label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
-    		<div class="form-group col-md-4">
+    		<div class="form-group col-md-3">
     			<div class="input-group">
     				<div class="input-group-addon">
     					<i class="fa fa-calendar"></i>
@@ -179,11 +189,9 @@
     			</div>
     			<div class="help-block with-errors"></div>
     		</div>
-    	</div>
 
-    	<div class="row">
     		<label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
-    		<div class="form-group col-md-4">
+    		<div class="form-group col-md-3">
     			<div class="bootstrap-timepicker">
     				<div class="input-group">
     					<input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" value="<%- tiempop_hora_inicio %>" class="form-control input-sm timepicker" required>
@@ -194,8 +202,9 @@
     			</div>
     			<div class="help-block with-errors"></div>
     		</div>
+
     		<label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
-    		<div class="form-group col-md-4">
+    		<div class="form-group col-md-3">
     			<div class="bootstrap-timepicker">
     				<div class="input-group">
     					<input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" value="<%- tiempop_hora_fin %>" class="form-control input-sm timepicker" required>

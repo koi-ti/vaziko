@@ -22,6 +22,30 @@
                 <div class="box-body">
                     <form method="POST" accept-charset="UTF-8" id="form-factura" data-toggle="validator">
                         <div class="row">
+                            <label for="factura1_tercero" class="col-sm-1 col-md-1 control-label">Cliente</label>
+                            <div class="form-group col-sm-2">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table " data-field="factura1_tercero">
+                                            <i class="fa fa-user"></i>
+                                        </button>
+                                    </span>
+                                    <input id="factura1_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="factura1_tercero" type="text" maxlength="15" data-orden2="factura1_orden" data-name="factura1_tercero_nombre" value="<%- tercero_nit %>" data-formapago="tercero_formapago" required>
+                                    <input id="tercero_formapago" name="tercero_formapago" type="hidden">
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <div class="col-sm-4 col-md-5 col-xs-10">
+                                <input id="factura1_tercero_nombre" name="factura1_tercero_nombre" placeholder="Nombre cliente" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" readonly required>
+                            </div>
+
+                            <label for="factura1_cuotas" class="col-md-1 control-label">Cuotas</label>
+                            <div class="form-group col-sm-1 col-md-1">
+                                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="1" step="1" value="1" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <label for="factura1_fecha" class="col-md-1 control-label">Fecha</label>
                             <div class="form-group col-md-2">
                                 <input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker"  value="<%- factura1_fecha %>" required>
@@ -42,29 +66,6 @@
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <label for="factura1_tercero" class="col-sm-1 col-md-1 control-label">Cliente</label>
-                            <div class="form-group col-sm-2">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table " data-field="factura1_tercero">
-                                            <i class="fa fa-user"></i>
-                                        </button>
-                                    </span>
-                                    <input id="factura1_tercero" placeholder="Cliente" class="form-control tercero-koi-component" name="factura1_tercero" type="text" maxlength="15" data-orden2="factura1_orden" data-name="factura1_tercero_nombre" value="<%- tercero_nit %>" required>
-                                </div>
-                                <div class="help-block with-errors"></div>
-                            </div>
-                            <div class="col-sm-4 col-md-5 col-xs-10">
-                                <input id="factura1_tercero_nombre" name="factura1_tercero_nombre" placeholder="Nombre cliente" class="form-control input-sm" type="text" maxlength="15" value="<%- tercero_nombre %>" readonly required>
-                            </div>
-
-                            <label for="factura1_cuotas" class="col-md-1 control-label">Cuotas</label>
-                            <div class="form-group col-sm-1 col-md-1">
-                                <input id="factura1_cuotas" name="factura1_cuotas" class="form-control input-sm" type="number" min="1" step="1" value="1" required>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>

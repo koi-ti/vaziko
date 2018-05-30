@@ -73,7 +73,6 @@ app || (app = {});
             this.tiempopListView = new app.TiempopListView( {
                 collection: this.tiempopList,
                 parameters: {
-                    edit: true,
                     dataFilter: {
                         type: 'ordenp',
                         orden2_orden: this.model.get('id')

@@ -189,7 +189,7 @@
                 <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6">
             </div>
             <div class="form-group col-md-3">
-                <label for="tercero_formapago" class="control-label">Forma de pago</label>
+                <label for="tercero_formapago" class="control-label">Forma de pago <small>(dias)</small></label>
                 <input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
             </div>
         </div>

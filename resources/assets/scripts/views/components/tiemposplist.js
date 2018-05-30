@@ -12,6 +12,9 @@ app || (app = {});
     app.TiempopListView = Backbone.View.extend({
 
         el: '#browse-tiemposp-global-list',
+        events: {
+            'click .edit-tiempop': 'editTiempop',
+        },
         parameters: {
         	wrapper: null,
             dataFilter: {}
@@ -27,6 +30,7 @@ app || (app = {});
 
             // Init Attributes
             this.confCollection = { reset: true, data: {} };
+            this.$modal = $('#modal-tiempop-edit-component');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -45,18 +49,16 @@ app || (app = {});
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
-        addOne: function ( detalletiempopModel ) {
+        addOne: function ( tiempopModel ) {
             var view = new app.TiempopItemView({
-                collection: this.collection,
-                model: detalletiempopModel,
+                model: tiempopModel,
                 parameters: {
                     dataFilter: this.parameters.dataFilter,
-                    edit: this.parameters.edit,
                 }
             });
 
-            detalletiempopModel.view = view;
-            this.$el.prepend( view.render().el );
+            tiempopModel.view = view;
+            this.$el.append( view.render().el );
         },
 
         /**
@@ -65,6 +67,31 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
+        },
+
+        /**
+        *  Edit tiempo de produccion
+        **/
+        editTiempop: function(e){
+            e.preventDefault();
+
+            var resource = this.$(e.currentTarget).data('tiempop-resource'),
+                model = this.collection.get(resource);
+
+            // Open tiempopActionView
+            if ( this.tiempopActionView instanceof Backbone.View ){
+               this.tiempopActionView.stopListening();
+               this.tiempopActionView.undelegateEvents();
+            }
+
+            this.tiempopActionView = new app.TiempopActionView({
+                model: model,
+                parameters: {
+                    dataFilter: this.parameters.dataFilter,
+                }
+            });
+
+           this.tiempopActionView.render();
         },
 
         /**
@@ -91,7 +118,9 @@ app || (app = {});
                     return;
                 }
 
-                alertify.success(resp.msg);
+                this.collection.fetch( this.confCollection );
+                this.$modal.modal('hide');
+                alertify.success( resp.msg );
             }
         }
    });
