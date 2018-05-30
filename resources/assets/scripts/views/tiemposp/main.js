@@ -93,7 +93,7 @@ app || (app = {});
         /**
         * Event submit productop
         */
-        submitTiempop: function (e) {
+        submitForm: function (e) {
             this.$form.submit();
         },
 
