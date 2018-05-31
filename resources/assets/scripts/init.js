@@ -168,7 +168,7 @@ var app = app || {};
 
                 readonly.val(filetext);
             });
-        },  
+        },
         /**
         * Init toUpper
         */

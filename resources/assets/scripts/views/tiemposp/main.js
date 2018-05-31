@@ -11,10 +11,10 @@ app || (app = {});
 
     app.MainTiempopView = Backbone.View.extend({
 
-        el: '#tiempop-create',
+        el: '#tiempop-main',
         events: {
-            'click .submit-tiempop': 'submitTiempop',
-            'submit #form-tiempop': 'onStoreTiempop',
+            'click .submit-tiempop': 'submitForm',
+            'submit #form-tiempop': 'onStore',
             'change #tiempop_actividadp': 'changeActividadp'
         },
 
@@ -22,44 +22,18 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            // collection
+            // collection && Attributes
             this.tiempopList = new app.TiempopList();
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-
-            // Attributes
             this.$form = this.$('#form-tiempop');
             this.$subactividadesp = this.$('#tiempop_subactividadp');
+
+            // Events
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
 
             // Reference views and ready
             this.referenceViews();
             this.ready();
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function(){
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Despachos pendientes list
-            this.tiempopListView = new app.TiempopListView( {
-                collection: this.tiempopList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.el,
-                    dataFilter: {
-                        type: 'tiemposp'
-                    }
-                }
-            });
         },
 
         /**
@@ -100,16 +74,33 @@ app || (app = {});
         },
 
         /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Despachos pendientes list
+            this.tiempopListView = new app.TiempopListView( {
+                collection: this.tiempopList,
+                parameters: {
+                    wrapper: this.el,
+                    dataFilter: {
+                        type: 'tiemposp'
+                    }
+                }
+            });
+        },
+
+
+        /**
         * Event submit productop
         */
-        submitTiempop: function (e) {
+        submitForm: function (e) {
             this.$form.submit();
         },
 
         /**
         * Event Create Forum Post
         */
-        onStoreTiempop: function (e) {
+        onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
@@ -151,7 +142,6 @@ app || (app = {});
         */
         responseServer: function ( model, resp, opts ) {
             window.Misc.removeSpinner( this.el );
-
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

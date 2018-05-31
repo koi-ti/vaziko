@@ -1,5 +1,10 @@
 @extends('admin.terceros.main')
 
+@section('breadcrumb')
+	<li><a href="{{ route('terceros.index') }}">Terceros</a></li>
+	<li class="active">{{ $tercero->tercero_nit }}</li>
+@stop
+
 @section('module')
 	<div class="box box-success" id="terceros-show">
 		<div class="box-body">
@@ -88,7 +93,7 @@
 				</div>
 
 				<div class="form-group col-md-3">
-					<label class="control-label">Forma de pago</label>
+					<label class="control-label">Forma de pago <small>(dias)</small></label>
 					<div>{{ $tercero->tercero_formapago }}</div>
 				</div>
 			</div>

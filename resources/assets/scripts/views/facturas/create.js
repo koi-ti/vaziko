@@ -17,6 +17,7 @@ app || (app = {});
             'click .submit-factura' :'submitFactura',
             'submit #form-factura' :'onStore',
             'submit #form-detail-factura' :'onStoreItem',
+            'change #factura1_fecha_vencimiento' :'changeVencimiento'
         },
 
         /**
@@ -44,6 +45,8 @@ app || (app = {});
 
             // wrapper $detail
             this.$wrapperdetail = this.$('#wrapper-detalle-factura');
+            this.$fechavencimiento = this.$('#factura1_fecha_vencimiento');
+            this.formapago = this.$('#tercero_formapago');
             this.spinner = this.$('#spinner-main');
 
             this.referenceView();
@@ -66,6 +69,24 @@ app || (app = {});
                    }
                }
            });
+        },
+
+        changeVencimiento: function(e){
+            e.preventDefault();
+
+            var formapago = parseInt( this.formapago.val() );
+            if( formapago > 0){
+                var fecha = this.$(e.currentTarget).val().split('-');
+
+                var nuevafecha = new Date(fecha[0], fecha[1]-1, fecha[2]);
+                    nuevafecha.setDate(nuevafecha.getDate() + formapago);
+
+                    year = nuevafecha.getFullYear();
+                    month = nuevafecha.getMonth()+1;
+                    day = nuevafecha.getDate();
+
+                this.$fechavencimiento.val( year+'-'+month+'-'+day );
+            }
         },
 
         /**

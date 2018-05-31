@@ -45,6 +45,32 @@
 	</div>
 </div>
 
+<!-- Modal generic producto -->
+<div class="modal fade" id="modal-tiempop-edit-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-lg" role="document">
+		<div class="modal-content">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="inner-title-modal modal-title"></h4>
+			</div>
+			{!! Form::open(['id' => 'form-edit-tiempop-component', 'data-toggle' => 'validator']) !!}
+				<div class="modal-body" id="modal-tiempop-wrapper">
+					<div id="error-eval-tiempop" class="alert alert-danger"></div>
+					<div class="content-modal">
+					</div>
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+					<button type="button" class="btn btn-primary btn-sm submit-modal-tiempop">Continuar</button>
+				</div>
+			{!! Form::close() !!}
+		</div>
+	</div>
+</div>
+
 <!-- Modal address -->
 <div class="modal fade" id="modal-address-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-xlg" role="document">
@@ -788,32 +814,6 @@
 		</div>
 	{!! Form::close() !!}
 </script>
-
-<!-- Modal generic producto -->
-<div class="modal fade" id="modal-tiempop-edit-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header small-box {{ config('koi.template.bg') }}">
-				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-				<h4 class="inner-title-modal modal-title"></h4>
-			</div>
-			{!! Form::open(['id' => 'form-edit-tiempop-component', 'data-toggle' => 'validator']) !!}
-				<div class="modal-body" id="modal-tiempop-wrapper">
-					<div id="error-eval-tiempop" class="alert alert-danger"></div>
-					<div class="content-modal">
-					</div>
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
-					<button type="button" class="btn btn-primary btn-sm submit-ordenp">Continuar</button>
-				</div>
-			{!! Form::close() !!}
-		</div>
-	</div>
-</div>
 
 <script type="text/template" id="import-data-tpl">
 	<% if(title == 'asientos'){ %>

@@ -562,15 +562,13 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        <% if(edit) { %>
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                <td class="text-center">
-                    <a class="btn btn-default btn-xs edit-tiempop" data-tiempo-resource="<%- id %>">
-                        <span><i class="fa fa-pencil-square-o"></i></span>
-                    </a>
-                </td>
-            @endif
-        <% } %>
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+            <td class="text-center">
+                <a class="btn btn-default btn-xs edit-tiempop" data-tiempop-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        @endif
     </script>
 
     <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">
