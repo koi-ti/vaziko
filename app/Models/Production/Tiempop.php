@@ -75,7 +75,7 @@ class Tiempop extends BaseModel
         $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
         $query->where('tiempop_tercero', Auth::user()->id);
-        $query->orderBy('koi_tiempop.id', 'asc');
+        $query->orderBy('koi_tiempop.id', 'desc');
 
         return $query->get();
     }
@@ -95,7 +95,7 @@ class Tiempop extends BaseModel
         $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
         $query->where('tiempop_ordenp', $ordenp2);
-        $query->orderBy('tiempop_fh_elaboro', 'asc');
+        $query->orderBy('koi_tiempop.id', 'desc');
 
         return $query->get();
     }

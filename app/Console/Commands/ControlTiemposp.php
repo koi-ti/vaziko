@@ -54,9 +54,8 @@ class ControlTiemposp extends Command
 
             // Recuperar usuarios con rol de (operario)
             $data = [];
-            $usuariosrol = UsuarioRol::select('koi_usuario_rol.*', 'tercero_nit', DB::raw("CONCAT(tercero_nombre1,' ',tercero_apellido1) AS tercero_nombre"))->where('role_id', $rol->id)->join('koi_tercero', 'user_id', '=', 'koi_tercero.id')->get();
+            $usuariosrol = UsuarioRol::select('koi_usuario_rol.*', 'tercero_nit', 'tercero_activo', DB::raw("CONCAT(tercero_nombre1,' ',tercero_apellido1) AS tercero_nombre"))->where('role_id', $rol->id)->where('tercero_activo', true)->join('koi_tercero', 'user_id', '=', 'koi_tercero.id')->get();
             foreach ($usuariosrol as $usuario) {
-
                 // Tiempos de produccion del usuario
                 $operario = new \stdClass();
                 $tiemposp = Tiempop::where('tiempop_tercero', $usuario->user_id)->whereRaw("SUBSTRING_INDEX(tiempop_fh_elaboro, ' ', 1) = '$this->previusdate'")->count();
@@ -72,7 +71,7 @@ class ControlTiemposp extends Command
             $empresa = Empresa::getEmpresa();
             if( !empty($empresa->tercero_email) ){
 
-                if(count($data) > 0){
+                if( count($data) > 0 ){
                     $datos = ['operarios' => $data, 'fecha' => $this->previusdate];
                     Mail::send('emails.tiemposp.control', $datos, function($msj) use ($empresa){
                         $msj->from('soportekoiti@gmail.com', $empresa->tercero_razonsocial);
