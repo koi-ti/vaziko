@@ -222,7 +222,7 @@ class OrdenpController extends Controller
         if(!$orden instanceof Ordenp) {
             abort(404);
         }
-        if($orden->orden_abierta == false || $orden->orden_anulada == true || $orden->orden_culminada == true) {
+        if($orden->orden_abierta == false || $orden->orden_anulada == true) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
         return view('production.ordenes.create', ['orden' => $orden]);
@@ -451,7 +451,13 @@ class OrdenpController extends Controller
                 $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
                 // Orden
                 $neworden = $orden->replicate();
-                $neworden->orden_abierta = true;
+                if( $orden->orden_culminada ){
+                    $neworden->orden_abierta = false;
+                    $neworden->orden_culminada = true;
+                }else{
+                    $neworden->orden_abierta = true;
+                    $neworden->orden_culminada = false;
+                }
                 $neworden->orden_anulada = false;
                 $neworden->orden_ano = date('Y');
                 $neworden->orden_numero = $numero;
