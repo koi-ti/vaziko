@@ -284,16 +284,16 @@
                                 <div class="form-group col-sm-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion1_proveedor">
+                                            <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion3_proveedor">
                                                 <i class="fa fa-user"></i>
                                             </button>
                                         </span>
-                                        <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" data-proveedor="true" required>
+                                        <input id="precotizacion3_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion3_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion3_proveedor_nombre" data-proveedor="true" required>
                                     </div>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input id="precotizacion1_proveedor_nombre" name="precotizacion1_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                                    <input id="precotizacion3_proveedor_nombre" name="precotizacion3_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
                                 </div>
                             </div>
 
@@ -457,7 +457,7 @@
                 </a>
             </td>
         <% } %>
-        <td><%- tercero_nombre %></td>
+        <td><%- proveedor_nombre %></td>
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion3_medidas %></td>
@@ -503,7 +503,7 @@
         <div class="row">
             <label class="col-sm-2 control-label">Proveedor</label>
             <div class="form-group col-sm-10">
-                <label class="label-xs"><%- precotizacion1_proveedor %> - <%- precotizacion1_proveedor_nombre %></label>
+                <label class="label-xs"><%- proveedor_nit %> - <%- proveedor_nombre %></label>
             </div>
         </div>
         <div class="row">

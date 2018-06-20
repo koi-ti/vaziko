@@ -93,7 +93,7 @@ class PreCotizacion2Controller extends Controller
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
+                        $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
                         if(!$tercero instanceof Tercero){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
@@ -260,9 +260,10 @@ class PreCotizacion2Controller extends Controller
                         $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                         foreach ($materiales as $material) {
                             // Validar que el id sea entero(los temporales tienen letras)
-                            if( isset( $material['success'] ) ){
+
+                            if( isset( $material['success']) ){
                                 // Validar tercero y materialp
-                                $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
+                                $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
                                 if(!$tercero instanceof Tercero){
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
@@ -292,6 +293,18 @@ class PreCotizacion2Controller extends Controller
                                 $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                                 $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                                 $newprecotizacion3->save();
+                            }
+
+                            if( isset($material['change']) ){
+                                // Recuperar material y actuzalizr
+                                $precotizacion3 = PreCotizacion3::findOrFail($material['id']);
+                                if(!$precotizacion3 instanceof PreCotizacion3){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $precotizacion3->fill($material);
+                                $precotizacion3->save();
                             }
                         }
 

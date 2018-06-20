@@ -43,7 +43,7 @@ app || (app = {});
         runAction: function() {
             var attributes = this.model.toJSON();
 
-            this.$modal.find('.modal-title').text('Materiales de producción - Editar ('+attributes.precotizacion1_proveedor_nombre+')');
+            this.$modal.find('.modal-title').text('Materiales de producción - Editar ('+attributes.proveedor_nombre+')');
             this.$modal.find('.content-modal').empty().html( this.template( attributes ) );
 
             // Hide errors && Open modal
@@ -83,6 +83,11 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
+
+                var reg = /[A-Za-z]/;
+                if( !reg.test( this.model.get('id') ) ){
+                    this.model.set('change', true);
+                }
 
                 this.model.set('precotizacion3_cantidad', data.precotizacion3_cantidad);
                 this.model.set('precotizacion3_medidas', data.precotizacion3_medidas);
