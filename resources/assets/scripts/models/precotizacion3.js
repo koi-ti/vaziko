@@ -17,8 +17,8 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'materialp_nombre': '',
-            'tercero_nombre': '',
-            'tercero_nit': '',
+            'proveedor_nombre': '',
+            'proveedor_nit': '',
             'precotizacion3_materialp': '',
             'precotizacion3_proveedor': '',
             'precotizacion3_medidas': '',

@@ -69,7 +69,7 @@ class PreCotizacion3Controller extends Controller
                     }
 
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'proveedor_nombre' => $request->precotizacion3_proveedor_nombre, 'producto_nombre' => $insumo->producto_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'proveedor_nombre' => $request->precotizacion3_proveedor_nombre, 'proveedor_nit' => $proveedor->tercero_nit, 'producto_nombre' => $insumo->producto_nombre]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
