@@ -148,14 +148,15 @@ class DetalleOrdenpController extends Controller
 
                     // Areap
                     $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
-                    $sumaareasp = 0;
                     foreach ($areasp as $areap)
                     {
+                        $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+
                         $orden6 = new Ordenp6;
                         $orden6->fill($areap);
                         (!empty($areap['orden6_areap'])) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
                         $orden6->orden6_orden2 = $orden2->id;
-                        $sumaareasp += $areap['total'];
+                        $orden6->orden6_tiempo = $newtime;
                         $orden6->save();
                     }
 
@@ -344,11 +345,34 @@ class DetalleOrdenpController extends Controller
                         $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
                         foreach($areasp as $areap) {
                             if( isset($areap['success']) ){
+                                $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+
                                 $orden6 = new Ordenp6;
                                 $orden6->fill($areap);
                                 ( !empty($areap['orden6_areap']) ) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
                                 $orden6->orden6_orden2 = $orden2->id;
+                                $orden6->orden6_tiempo = $newtime;
                                 $orden6->save();
+                            }else{
+                                if( !empty($areap['orden6_areap']) ){
+                                    $area = Areap::find( $areap['orden6_areap'] );
+                                    if(!$area instanceof Areap){
+                                        DB::rollback();
+                                        return response()->json(['success' => false, 'errors' => 'No es posible actualizar las áreas de producción, por favor consulte al administrador.']);
+                                    }
+
+                                    $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_areap', $area->id)->first();
+                                }else{
+                                    $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_nombre', $areap['orden6_nombre'])->first();
+                                }
+                                $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+                                if( $orden6 instanceof Ordenp6 ) {
+                                    if($newtime != $areap['orden6_tiempo']){
+                                        $orden6->fill($areap);
+                                        $orden6->orden6_tiempo = $newtime;
+                                        $orden6->save();
+                                    }
+                                }
                             }
                         }
 

@@ -13,7 +13,8 @@ app || (app = {});
 
         el: '#browse-precotizacion-producto-materiales-list',
         events: {
-            'click .item-producto-materialp-precotizacion-remove': 'removeOne'
+            'click .item-producto-materialp-precotizacion-remove': 'removeOne',
+            'click .item-producto-materialp-precotizacion-edit': 'editOne'
         },
         parameters: {
         	wrapper: null,
@@ -38,6 +39,7 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
+            // listen totalize
             this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
@@ -176,11 +178,34 @@ app || (app = {});
             cancelConfirm.render();
         },
 
+        editOne: function(e){
+            e.preventDefault();
+
+            // Open tiempopActionView
+            if ( this.tiempopActionView instanceof Backbone.View ){
+                this.tiempopActionView.stopListening();
+                this.tiempopActionView.undelegateEvents();
+            }
+
+            var resource = this.$(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            if( model instanceof Backbone.Model ){
+                this.materialesProductoActionView = new app.MaterialesProductoActionView({
+                    model: model,
+                    collection: this.collection,
+                });
+
+                this.materialesProductoActionView.render();
+            }
+        },
+
         /**
         *Render totales the collection
         */
         totalize: function(){
             var data = this.collection.totalize();
+
             if(this.$total.length) {
                 this.$total.empty().html( window.Misc.currency( data.total ) );
             }

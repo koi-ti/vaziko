@@ -14,6 +14,7 @@ app || (app = {});
         el: '#browse-precotizacion-productop-list',
         events: {
             'click .item-precotizacion-producto-remove': 'removeOne',
+            'click .item-precotizacion-producto-clone': 'cloneOne'
         },
         parameters: {
         	wrapper: null,
@@ -114,6 +115,41 @@ app || (app = {});
             });
 
             cancelConfirm.render();
+        },
+
+        /**
+        * Event clone item
+        */
+        cloneOne: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                route = window.Misc.urlFull( Route.route('precotizaciones.productos.clonar', { productos: model.get('id') }) ),
+                data = { precotizacion2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#precotizacion-productop-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar producto pre-cotización',
+                    onConfirm: function () {
+                        // Clonar producto
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.parameters.wrapper,
+                            'callback': (function(_this){
+                                return function(resp){
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('precotizaciones.productos.show', { productos: resp.id })) );
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         },
 
         /**

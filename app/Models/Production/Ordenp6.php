@@ -49,7 +49,7 @@ class Ordenp6 extends Model
     public static function getOrdenesp6($ordenp2 = null)
     {
         $query = Ordenp6::query();
-        $query->select('koi_ordenproduccion6.*', 'areap_nombre');
+        $query->select('koi_ordenproduccion6.*', DB::raw("SUBSTRING_INDEX(orden6_tiempo, ':', 1) as orden6_horas, SUBSTRING_INDEX(orden6_tiempo, ':', -1) as orden6_minutos"), 'areap_nombre');
         $query->leftJoin('koi_areap', 'orden6_areap', '=', 'koi_areap.id');
         $query->where('orden6_orden2', $ordenp2);
         $query->orderBy('areap_nombre', 'asc');

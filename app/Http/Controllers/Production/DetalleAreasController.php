@@ -53,6 +53,10 @@ class DetalleAreasController extends Controller
                 try {
                     $areap_nombre = null;
 
+                    if($request->orden6_horas == 0 && $request->orden6_minutos == 0){
+                        return response()->json(['success' => false, 'errors' => 'No puede ingresar horas y minutos en 0.']);
+                    }
+
                     if(empty(trim($request->orden6_valor)) || is_null(trim($request->orden6_valor))){
                         return response()->json(['success' => false, 'errors' => 'El campo valor es obligatorio.']);
                     }

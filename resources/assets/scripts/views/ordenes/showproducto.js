@@ -38,7 +38,7 @@ app || (app = {});
                 session: {
                     endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
                     params: {
-                        precotizacion2: _this.$uploaderFile.data('referencia'),
+                        precotizacion2: _this.$uploaderFile.data('refe'),
                     },
                     refreshOnRequest: false
                 },

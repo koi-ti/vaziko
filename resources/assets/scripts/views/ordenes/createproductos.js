@@ -23,6 +23,8 @@ app || (app = {});
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
+            'click .submit-ordenp7': 'submitOrdenp7',
+            'submit #form-ordenp7-producto': 'onStoreOrdenp7'
         },
         parameters: {
             data: {
@@ -50,6 +52,7 @@ app || (app = {});
             this.materialesProductopList = new app.MaterialesProductopList();
             this.acabadosProductopList = new app.AcabadosProductopList();
             this.areasProductopList = new app.AreasProductopList();
+            this.impresionesProductopOrdenpList = new app.ImpresionesProductopOrdenpList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -67,6 +70,7 @@ app || (app = {});
             this.$el.html( this.template(attributes) );
 
             this.$form = this.$('#form-orden-producto');
+            this.$formimpresiones = this.$('#form-ordenp7-producto');
             this.spinner = this.$('#spinner-main');
 
             this.$inputFormula = null;
@@ -116,8 +120,6 @@ app || (app = {});
             this.$viaticos = this.$('#orden2_viaticos');
             this.$transporte = this.$('#orden2_transporte');
 
-            // Fine uploader
-            this.$uploaderFile = this.$('#fine-uploader');
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
@@ -125,6 +127,8 @@ app || (app = {});
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
 
+            // Fine uploader
+            this.$uploaderFile = this.$('#fine-uploader');
             if( !_.isNull( this.model.get('precotizacion2_id') ) ){
                 this.uploadPictures();
             }
@@ -178,6 +182,14 @@ app || (app = {});
                     dataFilter: dataFilter,
                     model: this.model,
                     edit: true
+               }
+            });
+
+            this.impresionesProductopOrdenpListView = new app.ImpresionesProductopOrdenpListView( {
+                collection: this.impresionesProductopOrdenpList,
+                parameters: {
+                    dataFilter: dataFilter,
+                    edit: true,
                }
             });
         },
@@ -282,6 +294,7 @@ app || (app = {});
                     data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
                     data.orden2_round = this.$inputRound.val();
                     data.ordenp6 = this.areasProductopList.toJSON();
+                    data.impresiones = this.impresionesProductopOrdenpList.toJSON();
 
                 this.model.save( data, {silent: true} );
             }
@@ -305,6 +318,26 @@ app || (app = {});
                 this.areasProductopList.trigger( 'store' , data );
             }
         },
+
+        /**
+        * Event submit productop
+        */
+        submitOrdenp7: function (e) {
+            this.$formimpresiones.submit();
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreOrdenp7: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.impresionesProductopOrdenp.trigger('store' , data);
+            }
+        },
+
 
         /**
         *   Event render input value

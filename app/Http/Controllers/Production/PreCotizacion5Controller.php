@@ -114,7 +114,7 @@ class PreCotizacion5Controller extends Controller
                  // Recuperar precotizacion5
                  $precotizacion5 = PreCotizacion5::find( $id );
                  if(!$precotizacion5 instanceof PreCotizacion5){
-                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el item a eliminar, por favor verifique la información del asiento o consulte al administrador.']);
+                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el item a eliminar, por favor verifique la información o consulte al administrador.']);
                  }
 
                  // Eliminar item precotizacion5

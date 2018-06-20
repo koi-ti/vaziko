@@ -12,7 +12,7 @@
 			<li class="active">Producto</li>
 		</ol>
 	</section>
-	
+
 	<section class="content">
 		<div class="box box-success" id="cotizaciones-productos-show">
 			<div class="box-header with-border">
@@ -217,6 +217,43 @@
 	                	{{ $cotizacion2->cotizacion2_observaciones }}
 	                </div>
 	            </div><br/>
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Imágenes</h3>
+					</div>
+
+					<div class="box-body table-responsive no-padding">
+						<div id="fine-uploader" data-refe="{{ $cotizacion2->cotizacion2_precotizacion2 }}"></div>
+					</div>
+				</div>
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Impresiones</h3>
+					</div>
+
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="70%">Detalle</th>
+									<th width="15%">Alto</th>
+									<th width="15%">Ancho</th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach( App\Models\Production\Cotizacion7::getCotizaciones7( $cotizacion2->id ) as $impresion )
+									<tr>
+										<td class="text-left">{{ $impresion->cotizacion7_texto }}</td>
+										<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
+										<td class="text-left">{{ $impresion->cotizacion7_ancho }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
 
 				<div class="row">
 					{{-- Content maquinas --}}

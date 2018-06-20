@@ -50,6 +50,9 @@
                                                 <a role="menuitem" tabindex="-1" href="#" class="close-precotizacion">
                                                     <i class="fa fa-lock"></i>Cerrar pre-cotizacion
                                                 </a>
+                                                <a role="menuitem" tabindex="-1" href="#" class="clone-precotizacion">
+                                                    <i class="fa fa-clone"></i>Clonar pre-cotización
+                                                </a>
                                                 <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
                                                     <i class="fa fa-envelope-o"></i>Generar cotización
                                                 </a>
@@ -167,6 +170,7 @@
                                         <thead>
                                             <tr>
                                                 <th width="2%"></th>
+                                                <th width="2%"></th>
                                                 <th width="5%">Código</th>
                                                 <th width="60%">Nombre</th>
                                                 <th width="5%">Cantidad</th>
@@ -194,12 +198,27 @@
         <p>¿Está seguro que desea generar la cotización <b><%- precotizacion_codigo %> - <%- precotizacion_referencia %></b>?</p>
     </script>
 
+    <script type="text/template" id="precotizacion-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar la pre-cotización <b><%- precotizacion_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-productop-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar el producto <b><%- precotizacion2_codigo %> - <%- productop_nombre %></b>?</p>
+    </script>
+
     <script type="text/template" id="precotizacion-producto-item-list-tpl">
         <% if(edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-precotizacion-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                     <span><i class="fa fa-times"></i></span>
                 </a>
+            </td>
+            <td class="text-center">
+                @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                    <a class="btn btn-default btn-xs item-precotizacion-producto-clone" data-resource="<%- id %>" title="Clonar producto">
+                        <span><i class="fa fa-clone"></i></span>
+                    </a>
+                @endif
             </td>
         <% } %>
         <td>
