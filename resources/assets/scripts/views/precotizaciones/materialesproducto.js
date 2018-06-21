@@ -181,10 +181,10 @@ app || (app = {});
         editOne: function(e){
             e.preventDefault();
 
-            // Open tiempopActionView
-            if ( this.tiempopActionView instanceof Backbone.View ){
-                this.tiempopActionView.stopListening();
-                this.tiempopActionView.undelegateEvents();
+            // Open materialesProductoActionView
+            if ( this.materialesProductoActionView instanceof Backbone.View ){
+                this.materialesProductoActionView.stopListening();
+                this.materialesProductoActionView.undelegateEvents();
             }
 
             var resource = this.$(e.currentTarget).attr("data-resource"),
