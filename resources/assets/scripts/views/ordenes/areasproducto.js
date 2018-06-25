@@ -39,6 +39,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
+            // Trigger on
+            this.on('totalize', this.totalize, this);
             this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
@@ -54,6 +56,7 @@ app || (app = {});
         */
         addOne: function (ordenp6Model) {
             var view = new app.AreasProductopItemView({
+                collection: this.collection,
                 model: ordenp6Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -61,9 +64,6 @@ app || (app = {});
             });
             ordenp6Model.view = view;
             this.$el.append( view.render().el );
-
-            // Totaliza
-            this.totalize();
         },
 
         /**
@@ -72,6 +72,9 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
+
+            // Totaliza
+            this.totalize();
         },
 
         /**
@@ -110,6 +113,7 @@ app || (app = {});
 
                         // Add model in collection
                         _this.collection.add(model);
+                        _this.totalize();
                     }
                 },
                 error : function(model, error) {

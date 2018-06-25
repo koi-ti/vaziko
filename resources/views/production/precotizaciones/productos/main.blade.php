@@ -284,16 +284,16 @@
                                 <div class="form-group col-sm-4">
                                     <div class="input-group input-group-sm">
                                         <span class="input-group-btn">
-                                            <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion1_proveedor">
+                                            <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion3_proveedor">
                                                 <i class="fa fa-user"></i>
                                             </button>
                                         </span>
-                                        <input id="precotizacion1_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion1_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion1_proveedor_nombre" data-proveedor="true" required>
+                                        <input id="precotizacion3_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="precotizacion3_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="precotizacion3_proveedor_nombre" data-proveedor="true" required>
                                     </div>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="col-sm-8">
-                                    <input id="precotizacion1_proveedor_nombre" name="precotizacion1_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                                    <input id="precotizacion3_proveedor_nombre" name="precotizacion3_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
                                 </div>
                             </div>
 
@@ -339,7 +339,7 @@
                             <table id="browse-precotizacion-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
                                 <thead>
                                     <tr>
-                                        <th></th>
+                                        <th colspan="2"></th>
                                         <th width="30%">Proveedor</th>
                                         <th width="15%">Material</th>
                                         <th width="15%">Insumo</th>
@@ -351,7 +351,7 @@
                                 </thead>
                                 <tfoot>
                                     <tr>
-                                        <td colspan="6"></td>
+                                        <td colspan="7"></td>
                                         <th class="text-right">Total</th>
                                         <th class="text-right" id="total">0</th>
                                     </tr>
@@ -451,8 +451,13 @@
                     <span><i class="fa fa-times"></i></span>
                 </a>
             </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-materialp-precotizacion-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
         <% } %>
-        <td><%- tercero_nombre %></td>
+        <td><%- proveedor_nombre %></td>
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion3_medidas %></td>
@@ -492,5 +497,43 @@
        </td>
        <td class="text-right"><%- window.Misc.currency( precotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
+    </script>
+
+    <script type="text/template" id="edit-materialproducto-tpl">
+        <div class="row">
+            <label class="col-sm-2 control-label">Proveedor</label>
+            <div class="form-group col-sm-10">
+                <label class="label-xs"><%- proveedor_nit %> - <%- proveedor_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-2 control-label">Material de producción</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- materialp_nombre %></label>
+            </div>
+
+            <label class="col-sm-2 control-label">Insumo</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- producto_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-1 control-label">Cantidad</label>
+            <div class="form-group col-sm-2">
+                <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" value="<%- precotizacion3_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Medidas</label>
+            <div class="form-group col-sm-4">
+                <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs" maxlength="50" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Valor</label>
+            <div class="form-group col-sm-3">
+                <input id="precotizacion3_valor_unitario" name="precotizacion3_valor_unitario" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" required data-currency>
+            </div>
+        </div>
     </script>
 @stop

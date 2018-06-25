@@ -53,8 +53,8 @@ class PreCotizacion3Controller extends Controller
             if ( $precotizacion3->isValid($data) ) {
                 try {
                     // Validar tercero y materialp
-                    $tercero = Tercero::where('tercero_nit', $request->precotizacion1_proveedor)->first();
-                    if(!$tercero instanceof Tercero){
+                    $proveedor = Tercero::where('tercero_nit', $request->precotizacion3_proveedor)->first();
+                    if(!$proveedor instanceof Tercero){
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                     }
 
@@ -69,7 +69,7 @@ class PreCotizacion3Controller extends Controller
                     }
 
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'tercero_nombre' => $request->precotizacion1_proveedor_nombre, 'producto_nombre' => $insumo->producto_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'proveedor_nombre' => $request->precotizacion3_proveedor_nombre, 'proveedor_nit' => $proveedor->tercero_nit, 'producto_nombre' => $insumo->producto_nombre]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

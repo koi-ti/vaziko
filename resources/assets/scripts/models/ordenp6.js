@@ -17,7 +17,8 @@ app || (app = {});
         defaults: {
             'orden6_areap': '',
         	'orden6_nombre': '',
-            'orden6_tiempo': '',
+            'orden6_horas': '',
+            'orden6_minutos': '',
             'orden6_valor': 0,
         	'areap_nombre': '',
         	'total': 0,

@@ -45,26 +45,36 @@ app || (app = {});
             return error;
         },
 
+        /**
+        *   Evento para convertir minutos a horas
+        */
+        convertMinutesToHours: function ( model ){
+            var horas = parseInt( model.get('orden6_horas') );
+            var minutos = parseInt( model.get('orden6_minutos') );
+
+            // Regla de 3 para convertir min a horas
+            var total = horas + (minutos / 60);
+                total = _.isNaN( total ) ? 0 : parseFloat( total );
+
+            return total;
+        },
+
         total: function() {
             var _this = this;
 
-            return this.reduce(function(sum, model){
-
-                var func =  _this.convertirMinutos( model );
-                return sum + func * parseFloat(model.get('orden6_valor'));
-
+            return this.reduce(function(sum, model) {
+                var func = _this.convertMinutesToHours( model );
+                return sum + func * parseFloat( model.get('orden6_valor') );
             }, 0);
         },
 
-        totalRow: function( ){
+        totalAreap: function( ){
             var _this = this;
 
-            _.each( this.models, function(item) {
-
-                var func = _this.convertirMinutos( item );
-                var total = func * parseFloat(item.get('orden6_valor'));
-                item.set('total', Math.round( total ));
-
+            _.each(this.models, function( model ){
+                var func = _this.convertMinutesToHours( model ),
+                    total = func * parseFloat( model.get('orden6_valor') );
+                model.set('total', Math.round( total ) );
             });
         },
 
@@ -79,10 +89,9 @@ app || (app = {});
             return parseFloat( total );
         },
 
-
         totalize: function(  ) {
             var total = this.total();
-            this.totalRow();
+                this.totalAreap();
             return { 'total': Math.round( total ) }
         },
    });

@@ -17,6 +17,7 @@ app || (app = {});
             'click .submit-precotizacion': 'submitForm',
             'submit #form-precotizaciones': 'onStore',
             'click .close-precotizacion': 'closePreCotizacion',
+            'click .clone-precotizacion': 'clonePreCotizacion',
             'click .generate-precotizacion': 'generatePreCotizacion',
         },
         parameters: {
@@ -137,6 +138,40 @@ app || (app = {});
             });
 
             cancelConfirm.render();
+        },
+
+        /**
+        * Clone precotizacion
+        */
+        clonePreCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                route = window.Misc.urlFull( Route.route('precotizaciones.clonar', { precotizaciones: this.model.get('id') }) ),
+                data = { precotizacion_codigo: this.model.get('precotizacion_codigo') };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#precotizacion-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar pre-cotización',
+                    onConfirm: function () {
+                        // Clone orden
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.spinner,
+                            'callback': (function (_this) {
+                                return function ( resp )
+                                {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: resp.id })) );
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
         },
 
         /**

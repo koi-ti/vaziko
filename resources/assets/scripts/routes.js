@@ -167,6 +167,7 @@ app || (app = {});
             'cotizaciones/:cotizaciones(/)': 'getCotizacionesShow',
             'cotizaciones/:cotizaciones/edit(/)': 'getCotizacionesEdit',
             'cotizaciones/productos/create(/)(?*queryString)': 'getCotizacionesProductoCreate',
+            'cotizaciones/productos/:producto(/)': 'getCotizacionesProductoShow',
             'cotizaciones/productos/:producto/edit(/)': 'getCotizacionesProductoEdit',
 
             // Treasury
@@ -1950,6 +1951,21 @@ app || (app = {});
 
             this.createCotizacion2View = new app.CreateCotizacion2View({ model: this.cotizacion2Model });
             this.cotizacion2Model.fetch();
+        },
+
+        /**
+        * show view edit cotizaciones
+        */
+        getCotizacionesProductoShow: function (producto) {
+            this.cotizacion2Model = new app.Cotizacion2Model();
+            this.cotizacion2Model.set({'id': producto}, {'silent':true});
+
+            if ( this.showCotizacion2View instanceof Backbone.View ){
+                this.showCotizacion2View.stopListening();
+                this.showCotizacion2View.undelegateEvents();
+            }
+
+            this.showCotizacion2View = new app.ShowCotizacion2View({ model: this.cotizacion2Model });
         },
 
         /**

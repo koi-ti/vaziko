@@ -118,7 +118,7 @@ class Cotizacion2 extends BaseModel
     public static function getCotizacion2( $cotizacion2 )
     {
         $query = Cotizacion2::query();
-        $query->select('koi_cotizacion2.*',
+        $query->select('koi_cotizacion2.*', 'koi_precotizacion2.id as precotizacion2_id',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -158,6 +158,8 @@ class Cotizacion2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me5', 'productop_3d_profundidad_med', '=', 'me5.id');
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
+
+        $query->leftJoin('koi_precotizacion2', 'cotizacion2_precotizacion2', '=', 'koi_precotizacion2.id');
         $query->where('koi_cotizacion2.id', $cotizacion2);
         return $query->first();
     }

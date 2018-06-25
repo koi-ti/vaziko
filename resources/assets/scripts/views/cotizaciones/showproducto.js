@@ -1,5 +1,5 @@
 /**
-* Class ShowOrdenp2View
+* Class ShowCotizacion2View
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,9 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ShowOrdenp2View = Backbone.View.extend({
+    app.ShowCotizacion2View = Backbone.View.extend({
 
-        el: '#ordenes-productos-show',
+        el: '#cotizaciones-productos-show',
 
         /**
         * Constructor Method

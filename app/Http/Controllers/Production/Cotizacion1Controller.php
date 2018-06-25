@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7;
 use App, View, Auth, DB, Log, Datatables;
 
 class Cotizacion1Controller extends Controller
@@ -621,6 +621,17 @@ class Cotizacion1Controller extends Controller
                          $orden6->orden6_tiempo = $cotizacion6->cotizacion6_tiempo;
                          $orden6->orden6_valor = $cotizacion6->cotizacion6_valor;
                          $orden6->save();
+                    }
+
+                    // Recuperar impresiones de cotizacion para generar orden
+                    $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($impresiones as $cotizacion7) {
+                         $orden7 = new Ordenp7;
+                         $orden7->orden7_orden2 = $orden2->id;
+                         $orden7->orden7_texto = $cotizacion7->cotizacion7_texto;
+                         $orden7->orden7_ancho = $cotizacion7->cotizacion7_ancho;
+                         $orden7->orden7_alto = $cotizacion7->cotizacion7_alto;
+                         $orden7->save();
                     }
                 }
 

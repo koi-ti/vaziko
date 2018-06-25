@@ -3,6 +3,7 @@
 /resources/assets/libs
 public/storage
 /storage/temp
+storage/app
 Homestead.yaml
 Homestead.json
 .env

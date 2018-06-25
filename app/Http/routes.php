@@ -175,6 +175,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
 			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\DetalleImpresionesController', ['only' => ['index']]);
 		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 
@@ -208,8 +209,10 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
 		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
 		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
+		Route::get('clonar/{precotizaciones}', ['as' => 'precotizaciones.clonar', 'uses' => 'Production\PreCotizacion1Controller@clonar']);
 
 		Route::group(['prefix' => 'productos'], function(){
+			Route::get('clonar/{productos}', ['as' => 'precotizaciones.productos.clonar', 'uses' => 'Production\PreCotizacion2Controller@clonar']);
 			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
@@ -235,6 +238,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
 			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\Cotizacion7Controller', ['only' => ['index']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
 	});

@@ -149,13 +149,13 @@ class PreCotizacion4Controller extends Controller
                 $precotizacion4 = PreCotizacion4::find($id);
                 if(!$precotizacion4 instanceof PreCotizacion4){
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la pre-cotizacion, por favor verifique la información del pedido o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la pre-cotización, por favor verifique la información del pedido o consulte al administrador.']);
                 }
 
                 $precotizacion2 = PreCotizacion2::find($request->precotizacion2);
                 if(!$precotizacion2 instanceof PreCotizacion2){
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotizacion, por favor verifique la información del pedido o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información del pedido o consulte al administrador.']);
                 }
 
                 if( $precotizacion4->precotizacion4_precotizacion2 != $precotizacion2->id ){

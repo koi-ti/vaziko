@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Areap, App\Models\Inventory\Producto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
 use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
@@ -93,7 +93,7 @@ class PreCotizacion2Controller extends Controller
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
+                        $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
                         if(!$tercero instanceof Tercero){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
@@ -260,9 +260,10 @@ class PreCotizacion2Controller extends Controller
                         $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                         foreach ($materiales as $material) {
                             // Validar que el id sea entero(los temporales tienen letras)
-                            if( isset( $material['success'] ) ){
+
+                            if( isset( $material['success']) ){
                                 // Validar tercero y materialp
-                                $tercero = Tercero::where('tercero_nit', $material['precotizacion1_proveedor'])->first();
+                                $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
                                 if(!$tercero instanceof Tercero){
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
@@ -292,6 +293,18 @@ class PreCotizacion2Controller extends Controller
                                 $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                                 $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                                 $newprecotizacion3->save();
+                            }
+
+                            if( isset($material['change']) ){
+                                // Recuperar material y actuzalizr
+                                $precotizacion3 = PreCotizacion3::findOrFail($material['id']);
+                                if(!$precotizacion3 instanceof PreCotizacion3){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $precotizacion3->fill($material);
+                                $precotizacion3->save();
                             }
                         }
 
@@ -397,6 +410,79 @@ class PreCotizacion2Controller extends Controller
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Precotizacion2Controller', 'destroy', $e->getMessage()));
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
+     * Clonar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function clonar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $precotizacion2 = PreCotizacion2::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                $newprecotizacion2 = $precotizacion2->replicate();
+                $newprecotizacion2->save();
+
+                // Proveedor
+                $proveedores = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
+                foreach ($proveedores as $precotizacion3) {
+                     $newprecotizacion3 = $precotizacion3->replicate();
+                     $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                     $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
+                     $newprecotizacion3->save();
+                }
+
+                // Imagenes
+                $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
+                foreach ($imagenes as $precotizacion4) {
+                     $newprecotizacion4 = $precotizacion4->replicate();
+                     $newprecotizacion4->precotizacion4_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion4->precotizacion4_usuario_elaboro = Auth::user()->id;
+                     $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                     $newprecotizacion4->save();
+
+                     // Recuperar imagen y copy
+                     if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
+
+                         $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";
+                         $newfile = "pre-cotizaciones/precotizacion_{$newprecotizacion2->precotizacion2_precotizacion1}/producto_{$newprecotizacion4->precotizacion4_precotizacion2}/{$newprecotizacion4->precotizacion4_archivo}";
+
+                         // Copy file storege laravel
+                         Storage::copy($oldfile, $newfile);
+                     }
+                }
+
+                // Impresiones
+                $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
+                foreach ($impresiones as $precotizacion5) {
+                     $newprecotizacion5 = $precotizacion5->replicate();
+                     $newprecotizacion5->precotizacion5_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion5->save();
+                }
+
+                // Areasp
+                $areasp = PreCotizacion6::where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
+                foreach ($areasp as $precotizacion6) {
+                     $newprecotizacion6 = $precotizacion6->replicate();
+                     $newprecotizacion6->precotizacion6_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion6->save();
+                }
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'id' => $newprecotizacion2->id, 'msg' => 'Producto de pre-cotización clonado con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
         }

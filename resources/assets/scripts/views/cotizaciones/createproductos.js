@@ -22,7 +22,7 @@ app || (app = {});
             'click .submit-cotizacion6': 'submitCotizacion6',
             'change #cotizacion6_areap': 'changeAreap',
             'submit #form-cotizacion-producto': 'onStore',
-            'submit #form-cotizacion6-producto': 'onStoreCotizacion6',
+            'submit #form-cotizacion6-producto': 'onStoreCotizacion6'
         },
         parameters: {
             data: {
@@ -34,6 +34,8 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
+            _.bindAll(this, 'onSessionRequestComplete');
+
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
@@ -48,6 +50,7 @@ app || (app = {});
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.acabadosProductopCotizacionList = new app.AcabadosProductopCotizacionList();
             this.areasProductopCotizacionList = new app.AreasProductopCotizacionList();
+            this.impresionesProductopCotizacionList = new app.ImpresionesProductopCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -117,6 +120,11 @@ app || (app = {});
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
 
+            this.$uploaderFile = this.$('#fine-uploader');
+            if( !_.isNull( this.model.get('precotizacion2_id') ) ){
+                this.uploadPictures();
+            }
+
             // Reference views
             this.calculateAll();
             this.referenceViews();
@@ -166,6 +174,13 @@ app || (app = {});
                 parameters: {
                     dataFilter: dataFilter,
                     edit: true,
+               }
+            });
+
+            this.impresionesProductopCotizacionListView = new app.ImpresionesProductopCotizacionListView( {
+                collection: this.impresionesProductopCotizacionList,
+                parameters: {
+                    dataFilter: dataFilter,
                }
             });
         },
@@ -248,6 +263,45 @@ app || (app = {});
                 this.$inputCyan2.iCheck('uncheck');
                 this.$inputKey2.iCheck('uncheck');
             }
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        precotizacion2: this.model.get('precotizacion2_id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         /**

@@ -323,6 +323,39 @@
                         @endif
                     </form>
 
+                    @if( $cotizacion->cotizacion1_precotizacion )
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Imágenes</h3>
+                            </div>
+
+                            <div class="box-body table-responsive no-padding">
+                                <div id="fine-uploader"></div>
+                            </div>
+                        </div>
+
+                        {{-- Content impresiones --}}
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Impresiones</h3>
+                            </div>
+                            <div class="box-body" id="cotizacion7-wrapper-producto">
+                                <!-- table table-bordered table-striped -->
+                                <div class="box-body table-responsive no-padding">
+                                    <table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th width="70%">Detalle</th>
+                                                <th width="12%">Alto</th>
+                                                <th width="12%">Ancho</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     {{-- Content areasp --}}
                     <div class="box box-danger">
                         <div class="box-header with-border">
@@ -516,5 +549,11 @@
            <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
            <td class="text-right"><%- window.Misc.currency( total ) %></td>
        @endif
+    </script>
+
+    <script type="text/template" id="cotizacion-producto-impresion-item-tpl">
+       <td><%- cotizacion7_texto %></td>
+       <td><%- cotizacion7_alto %></td>
+       <td><%- cotizacion7_ancho %></td>
     </script>
 @stop

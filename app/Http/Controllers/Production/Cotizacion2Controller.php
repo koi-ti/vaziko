@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
 use Auth, DB, Log, Datatables;
 
 class Cotizacion2Controller extends Controller
@@ -392,6 +392,9 @@ class Cotizacion2Controller extends Controller
                 // Areasp
                 DB::table('koi_cotizacion6')->where('cotizacion6_cotizacion2', $cotizacion2->id)->delete();
 
+                // Impresiones
+                DB::table('koi_cotizacion7')->where('cotizacion7_cotizacion2', $cotizacion2->id)->delete();
+
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
 
@@ -479,6 +482,14 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion6 = $cotizacion6->replicate();
                      $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion6->save();
+                }
+
+                // Impresiones
+                $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
+                foreach ($impresiones as $cotizacion7) {
+                     $newcotizacion7 = $cotizacion7->replicate();
+                     $newcotizacion7->cotizacion7_cotizacion2 = $newcotizacion2->id;
+                     $newcotizacion7->save();
                 }
 
                 // Commit Transaction
