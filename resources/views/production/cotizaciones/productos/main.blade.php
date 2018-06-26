@@ -324,7 +324,7 @@
                     </form>
 
                     @if( $cotizacion->cotizacion1_precotizacion )
-                        <div class="box box-danger">
+                        {{--<div class="box box-danger">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Imágenes</h3>
                             </div>
@@ -332,7 +332,7 @@
                             <div class="box-body table-responsive no-padding">
                                 <div id="fine-uploader"></div>
                             </div>
-                        </div>
+                        </div>--}}
 
                         {{-- Content impresiones --}}
                         <div class="box box-danger">
@@ -346,8 +346,8 @@
                                         <thead>
                                             <tr>
                                                 <th width="70%">Detalle</th>
-                                                <th width="12%">Alto</th>
                                                 <th width="12%">Ancho</th>
+                                                <th width="12%">Alto</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -553,7 +553,7 @@
 
     <script type="text/template" id="cotizacion-producto-impresion-item-tpl">
        <td><%- cotizacion7_texto %></td>
-       <td><%- cotizacion7_alto %></td>
        <td><%- cotizacion7_ancho %></td>
+       <td><%- cotizacion7_alto %></td>
     </script>
 @stop

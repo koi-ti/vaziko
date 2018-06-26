@@ -235,11 +235,11 @@
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
-                                    <div class="help-block with-errors"></div>
+                                  <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
+                                  <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-2">
-                                    <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
+                                    <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
                                     <div class="help-block with-errors"></div>
                                 </div>
                                 <div class="form-group col-sm-1">
@@ -257,8 +257,8 @@
                                     <tr>
                                         <th width="6%"></th>
                                         <th width="70%">Detalle</th>
-                                        <th width="12%">Alto</th>
                                         <th width="12%">Ancho</th>
+                                        <th width="12%">Alto</th>
                                     </tr>
                                 </thead>
                             </table>
@@ -475,8 +475,8 @@
            </td>
        <% } %>
        <td><%- precotizacion5_texto %></td>
-       <td><%- precotizacion5_alto %></td>
        <td><%- precotizacion5_ancho %></td>
+       <td><%- precotizacion5_alto %></td>
     </script>
 
     <script type="text/template" id="precotizacion-producto-areasp-item-tpl">

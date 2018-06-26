@@ -218,36 +218,34 @@
 	                </div>
 	            </div><br/>
 
-				<div class="box box-danger">
+				{{--<div class="box box-danger">
 					<div class="box-header with-border">
 						<h3 class="box-title">Imágenes</h3>
 					</div>
-
 					<div class="box-body table-responsive no-padding">
-						<div id="fine-uploader" data-refe="{{ $cotizacion2->cotizacion2_precotizacion2 }}"></div>
+						<div id="fine-uploader" data-refe="cotizacion2->cotizacion2_precotizacion2"></div>
 					</div>
-				</div>
+				</div>--}}
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
 						<h3 class="box-title">Impresiones</h3>
 					</div>
-
 					<div class="box-body table-responsive no-padding">
 						<table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
 									<th width="70%">Detalle</th>
-									<th width="15%">Alto</th>
 									<th width="15%">Ancho</th>
+									<th width="15%">Alto</th>
 								</tr>
 							</thead>
 							<tbody>
 								@foreach( App\Models\Production\Cotizacion7::getCotizaciones7( $cotizacion2->id ) as $impresion )
 									<tr>
 										<td class="text-left">{{ $impresion->cotizacion7_texto }}</td>
-										<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
 										<td class="text-left">{{ $impresion->cotizacion7_ancho }}</td>
+										<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
 									</tr>
 								@endforeach
 							</tbody>
@@ -432,7 +430,6 @@
 							$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
 							$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap;
 						/*--}}
-
 						<div class="col-sm-6 col-md-offset-3">
 							<div class="box box-danger">
 			                    <div class="box-header">

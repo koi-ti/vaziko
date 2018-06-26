@@ -38,12 +38,12 @@
                                             <i class="fa fa-lock"></i>Cerrar cotización
                                         </a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
-                                        <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
-                                            <i class="fa fa-clone"></i>Clonar cotización
-                                        </a>
-                                        <a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
-                                            <i class="fa fa-sticky-note"></i>Generar orden
-                                        </a>
+                                            <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
+                                                <i class="fa fa-clone"></i>Clonar cotización
+                                            </a>
+                                            <a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
+                                                <i class="fa fa-sticky-note"></i>Generar orden
+                                            </a>
                                         @endif
                                         <a role="menuitem" tabindex="-1" href="#" class="export-cotizacion">
                                             <i class="fa fa-file-pdf-o"></i>Exportar
@@ -230,8 +230,8 @@
                                                                 <th width="5%">Cantidad</th>
                                                                 <th width="6%">Facturado</th>
                                                                 @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-                                                                <th width="10%" class="text-right">Precio</th>
-                                                                <th width="10%" class="text-right">Total</th>
+                                                                    <th width="10%" class="text-right">Precio</th>
+                                                                    <th width="10%" class="text-right">Total</th>
                                                                 @endif
                                                             </tr>
                                                         </thead>

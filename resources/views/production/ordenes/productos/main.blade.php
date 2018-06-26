@@ -331,15 +331,14 @@
                     </form>
 
                     @if( $orden->cotizacion1_precotizacion )
-                        <div class="box box-primary">
+                        {{--<div class="box box-primary">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Imágenes</h3>
                             </div>
-
                             <div class="box-body table-responsive no-padding">
                                 <div id="fine-uploader"></div>
                             </div>
-                        </div>
+                        </div>--}}
 
                         {{-- Content impresiones --}}
                         <div class="box box-primary">
@@ -353,8 +352,8 @@
                                         <thead>
                                             <tr>
                                                 <th width="70%">Detalle</th>
-                                                <th width="12%">Alto</th>
                                                 <th width="12%">Ancho</th>
+                                                <th width="12%">Alto</th>
                                             </tr>
                                         </thead>
                                     </table>
@@ -550,7 +549,7 @@
 
     <script type="text/template" id="orden-producto-impresion-item-tpl">
        <td><%- orden7_texto %></td>
-       <td><%- orden7_alto %></td>
        <td><%- orden7_ancho %></td>
+       <td><%- orden7_alto %></td>
     </script>
 @stop
