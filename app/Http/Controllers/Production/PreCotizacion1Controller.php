@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion1Controller extends Controller
@@ -315,12 +315,7 @@ class PreCotizacion1Controller extends Controller
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
-            // Validar que no exista una cotizacion vinculada
-            $cotizacion = Cotizacion1::where('cotizacion1_precotizacion', $precotizacion->id)->first();
-            if($cotizacion instanceof Cotizacion1){
-                return response()->json(['success' => false, 'errors' => 'La pre-cotización ya se ha registrado, por favor verifique la información o consulte al administrador.']);
-            }
-
+            // Recuperar empresa
             $empresa = Empresa::getEmpresa();
             DB::beginTransaction();
             try{
@@ -419,6 +414,30 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion7->cotizacion7_ancho = $precotizacion5->precotizacion5_ancho;
                          $cotizacion7->cotizacion7_alto = $precotizacion5->precotizacion5_alto;
                          $cotizacion7->save();
+                    }
+
+                    // Recuperar Imagenes de pre-cotizacion para generar cotizacion
+                    $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($imagenes as $precotizacion4) {
+                         $oldname = explode('[PRE_]', $precotizacion4->precotizacion4_archivo);
+                         $name = "[COT_]{$oldname[1]}";
+
+                         $cotizacion8 = new Cotizacion8;
+                         $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
+                         $cotizacion8->cotizacion8_archivo = $name;
+                         $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                         $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                         $cotizacion8->save();
+
+                         // Recuperar imagen y copiar
+                         if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
+
+                             $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";
+                             $newfile = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion8->cotizacion8_cotizacion2}/{$cotizacion8->cotizacion8_archivo}";
+
+                             // Copy file storege laravel
+                             Storage::copy($oldfile, $newfile);
+                         }
                     }
 
                     // Actualizar precio en cotizacion2;
@@ -534,7 +553,7 @@ class PreCotizacion1Controller extends Controller
                         $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
                         $newprecotizacion4->save();
 
-                        // Recuperar imagen y copy
+                        // Recuperar imagen y copiar
                         if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
 
                             $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";

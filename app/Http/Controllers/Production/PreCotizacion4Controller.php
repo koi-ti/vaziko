@@ -75,7 +75,7 @@ class PreCotizacion4Controller extends Controller
                 try {
                     foreach ($files as $file) {
                         // Recuperar nombre de archivo
-                        $name = $file->getClientOriginalName();
+                        $name = "[PRE_]{$file->getClientOriginalName()}";
 
                         Storage::put("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion2->id}/$name", file_get_contents($file->getRealPath()));
 

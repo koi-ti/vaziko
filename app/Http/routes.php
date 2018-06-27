@@ -176,6 +176,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
 			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\DetalleImpresionesController', ['only' => ['index']]);
+			Route::resource('imagenes', 'Production\DetalleImagenespController', ['only' => ['index', 'store', 'destroy']]);
 		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 
@@ -239,6 +240,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
 			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\Cotizacion7Controller', ['only' => ['index']]);
+			Route::resource('imagenes', 'Production\Cotizacion8Controller', ['only' => ['index', 'store', 'destroy']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
 	});

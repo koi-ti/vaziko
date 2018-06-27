@@ -50,12 +50,14 @@
                                                 <a role="menuitem" tabindex="-1" href="#" class="close-precotizacion">
                                                     <i class="fa fa-lock"></i>Cerrar pre-cotizacion
                                                 </a>
-                                                <a role="menuitem" tabindex="-1" href="#" class="clone-precotizacion">
-                                                    <i class="fa fa-clone"></i>Clonar pre-cotización
-                                                </a>
-                                                <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
-                                                    <i class="fa fa-envelope-o"></i>Generar cotización
-                                                </a>
+                                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                                    <a role="menuitem" tabindex="-1" href="#" class="clone-precotizacion">
+                                                        <i class="fa fa-clone"></i>Clonar pre-cotización
+                                                    </a>
+                                                    {{--<a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
+                                                        <i class="fa fa-envelope-o"></i>Generar cotización
+                                                    </a>--}}
+                                                @endif
                                             </li>
                                         </ul>
                                     </li>
@@ -170,7 +172,9 @@
                                         <thead>
                                             <tr>
                                                 <th width="2%"></th>
-                                                <th width="2%"></th>
+                                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                                    <th width="2%"></th>
+                                                @endif
                                                 <th width="5%">Código</th>
                                                 <th width="60%">Nombre</th>
                                                 <th width="5%">Cantidad</th>
@@ -213,13 +217,13 @@
                     <span><i class="fa fa-times"></i></span>
                 </a>
             </td>
-            <td class="text-center">
-                @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+            @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                <td class="text-center">
                     <a class="btn btn-default btn-xs item-precotizacion-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
-                @endif
-            </td>
+                </td>
+            @endif
         <% } %>
         <td>
             <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.show', {productos: id}) ) %>" title="Ver producto"><%- id %></a>

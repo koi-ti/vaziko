@@ -219,36 +219,34 @@
 				</div><br/>
 
 				@if( $orden->cotizacion1_precotizacion )
-					<div class="box box-primary">
+					{{--<div class="box box-primary">
 						<div class="box-header with-border">
 							<h3 class="box-title">Imágenes</h3>
 						</div>
-
 						<div class="box-body table-responsive no-padding">
-							<div id="fine-uploader" data-refe="{{ $ordenp2->precotizacion2_id }}"></div>
+							<div id="fine-uploader" data-refe="ordenp2->precotizacion2_id"></div>
 						</div>
-					</div>
+					</div>--}}
 
 					<div class="box box-primary">
 						<div class="box-header with-border">
 							<h3 class="box-title">Impresiones</h3>
 						</div>
-
 						<div class="box-body table-responsive no-padding">
 							<table id="browse-orden-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
 								<thead>
 									<tr>
 										<th width="70%">Detalle</th>
-										<th width="15%">Alto</th>
 										<th width="15%">Ancho</th>
+										<th width="15%">Alto</th>
 									</tr>
 								</thead>
 								<tbody>
 									@foreach( App\Models\Production\Ordenp7::getOrdenesp7( $ordenp2->id ) as $impresion )
 										<tr>
 											<td class="text-left">{{ $impresion->orden7_texto }}</td>
-											<td class="text-left">{{ $impresion->orden7_alto }}</td>
 											<td class="text-left">{{ $impresion->orden7_ancho }}</td>
+											<td class="text-left">{{ $impresion->orden7_alto }}</td>
 										</tr>
 									@endforeach
 								</tbody>
