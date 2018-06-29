@@ -18,7 +18,6 @@ class CreateOrdenproduccion2Table extends Migration
             $table->increments('id');
             $table->integer('orden2_orden')->unsigned();
             $table->integer('orden2_productop')->unsigned();
-            $table->integer('orden2_cotizacion2')->unsigned()->nullable();
             $table->string('orden2_referencia', 200);
             $table->integer('orden2_cantidad')->default(0);
             $table->integer('orden2_saldo')->default(0);
@@ -69,7 +68,6 @@ class CreateOrdenproduccion2Table extends Migration
 
             $table->foreign('orden2_orden')->references('id')->on('koi_ordenproduccion')->onDelete('restrict');
             $table->foreign('orden2_productop')->references('id')->on('koi_productop')->onDelete('restrict');
-            $table->foreign('orden2_cotizacion2')->references('id')->on('koi_cotizacion2')->onDelete('restrict');
             $table->foreign('orden2_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
     }

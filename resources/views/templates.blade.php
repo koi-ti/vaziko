@@ -1591,11 +1591,14 @@
         <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
-        <div class="buttons">
-            <div class="qq-upload-button-selector qq-upload-button">
-                <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+
+        @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', ['module' => 'ordenes']) )
+            <div class="buttons">
+                <div class="qq-upload-button-selector qq-upload-button">
+                    <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+                </div>
             </div>
-        </div>
+        @endif
         <span class="qq-drop-processing-selector qq-drop-processing">
             <span>{{ trans('app.files.process') }}</span>
             <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
@@ -1613,7 +1616,9 @@
                 <span class="qq-upload-size-selector qq-upload-size"></span>
                 <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                 <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', ['module' => 'ordenes']) )
+                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                @endif
                 <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
             </li>
         </ul>

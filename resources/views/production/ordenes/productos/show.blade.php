@@ -218,16 +218,16 @@
 					</div>
 				</div><br/>
 
-				@if( $orden->cotizacion1_precotizacion )
-					{{--<div class="box box-primary">
-						<div class="box-header with-border">
-							<h3 class="box-title">Imágenes</h3>
-						</div>
-						<div class="box-body table-responsive no-padding">
-							<div id="fine-uploader" data-refe="ordenp2->precotizacion2_id"></div>
-						</div>
-					</div>--}}
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Imágenes</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<div id="fine-uploader"></div>
+					</div>
+				</div>
 
+				@if( $orden->cotizacion1_precotizacion )
 					<div class="box box-primary">
 						<div class="box-header with-border">
 							<h3 class="box-title">Impresiones</h3>

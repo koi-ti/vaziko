@@ -13,7 +13,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Commands\ControlTiemposp::class
+        Commands\ControlTiemposp::class,
+        Commands\RutinaImagenes::class
     ];
 
     /**

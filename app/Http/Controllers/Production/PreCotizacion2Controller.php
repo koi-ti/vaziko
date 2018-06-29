@@ -63,7 +63,12 @@ class PreCotizacion2Controller extends Controller
     public function store(Request $request)
     {
         if($request->ajax()){
+
             $data = $request->all();
+            $data['impresiones'] = json_decode($data['impresiones']);
+            $data['materialesp'] = json_decode($data['materialesp']);
+            $data['areasp'] = json_decode($data['areasp']);
+
             $precotizacion2 = new PreCotizacion2;
             if ($precotizacion2->isValid($data)) {
                 DB::beginTransaction();
@@ -93,30 +98,31 @@ class PreCotizacion2Controller extends Controller
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
+                        $tercero = Tercero::where('tercero_nit', $material->precotizacion3_proveedor)->first();
                         if(!$tercero instanceof Tercero){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        $materialp = Materialp::find($material['precotizacion3_materialp']);
+                        $materialp = Materialp::find($material->precotizacion3_materialp);
                         if(!$materialp instanceof Materialp){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        $precotizacion3 = new PreCotizacion3;
-                        $precotizacion3->fill($material);
-
-                        if( !empty($material['precotizacion3_producto']) ){
-                            $insumo = Producto::find($material['precotizacion3_producto']);
-                            if(!$insumo instanceof Producto){
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
-                            }
-                            $precotizacion3->precotizacion3_producto = $insumo->id;
+                        $insumo = Producto::find($material->precotizacion3_producto);
+                        if(!$insumo instanceof Producto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                         }
 
+                        // Guardar individual porque sale error por ser objeto decodificado
+                        $precotizacion3 = new PreCotizacion3;
+                        $precotizacion3->precotizacion3_cantidad = $material->precotizacion3_cantidad;
+                        $precotizacion3->precotizacion3_medidas = $material->precotizacion3_medidas;
+                        $precotizacion3->precotizacion3_valor_unitario = $material->precotizacion3_valor_unitario;
+                        $precotizacion3->precotizacion3_valor_total = $material->precotizacion3_valor_total;
+                        $precotizacion3->precotizacion3_producto = $insumo->id;
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
                         $precotizacion3->precotizacion3_proveedor = $tercero->id;
@@ -129,7 +135,9 @@ class PreCotizacion2Controller extends Controller
                     $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
                     foreach ($impresiones as $impresion) {
                         $precotizacion5 = new PreCotizacion5;
-                        $precotizacion5->fill($impresion);
+                        $precotizacion5->precotizacion5_texto = $impresion->precotizacion5_texto;
+                        $precotizacion5->precotizacion5_alto = $impresion->precotizacion5_alto;
+                        $precotizacion5->precotizacion5_ancho = $impresion->precotizacion5_ancho;
                         $precotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
                         $precotizacion5->save();
                     }
@@ -139,19 +147,35 @@ class PreCotizacion2Controller extends Controller
                     foreach ($areasp as $areap)
                     {
                         // Recuperar tiempo
-                        $newtime = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+                        $newtime = "{$areap->precotizacion6_horas}:{$areap->precotizacion6_minutos}";
 
                         $precotizacion6 = new PreCotizacion6;
-                        $precotizacion6->fill($areap);
-                        (!empty($areap['precotizacion6_areap'])) ? $precotizacion6->precotizacion6_areap = $areap['precotizacion6_areap'] : $precotizacion6->precotizacion6_nombre = $areap['precotizacion6_nombre'];
+                        $precotizacion6->precotizacion6_valor = $areap->precotizacion6_valor;
+                        (!empty($areap->precotizacion6_areap)) ? $precotizacion6->precotizacion6_areap = $areap->precotizacion6_areap : $precotizacion6->precotizacion6_nombre = $areap->precotizacion6_nombre;
                         $precotizacion6->precotizacion6_tiempo = $newtime;
                         $precotizacion6->precotizacion6_precotizacion2 = $precotizacion2->id;
                         $precotizacion6->save();
                     }
 
+                    // Reuperar imagenes y almacenar en storage/app/precotizacines
+                    foreach ($data['imagenes'] as $image) {
+                        // Recuperar nombre de archivo
+                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+
+                        Storage::put("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name", file_get_contents($image->getRealPath()));
+
+                        // Insertar imagen
+                        $imagen = new PreCotizacion4;
+                        $imagen->precotizacion4_archivo = $name;
+                        $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
+                        $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
+                        $imagen->save();
+                    }
+
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true, 'id' => $precotizacion2->id]);
+                    return response()->json(['success' => true, 'id' => $precotizacion2->id, 'id_precotizacion' => $precotizacion->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -241,6 +265,7 @@ class PreCotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
+
             // Recuperar precotizacion2
             $precotizacion2 = PreCotizacion2::findOrFail($id);
 
@@ -275,18 +300,15 @@ class PreCotizacion2Controller extends Controller
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                                 }
 
-                                $newprecotizacion3 = new PreCotizacion3;
-                                $newprecotizacion3->fill($material);
-
-                                if( !empty($material['precotizacion3_producto']) ){
-                                    $insumo = Producto::find($material['precotizacion3_producto']);
-                                    if(!$insumo instanceof Producto){
-                                        DB::rollback();
-                                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
-                                    }
-                                    $newprecotizacion3->precotizacion3_producto = $insumo->id;
+                                $insumo = Producto::find($material['precotizacion3_producto']);
+                                if(!$insumo instanceof Producto){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                                 }
 
+                                $newprecotizacion3 = new PreCotizacion3;
+                                $newprecotizacion3->fill($material);
+                                $newprecotizacion3->precotizacion3_producto = $insumo->id;
                                 $newprecotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $newprecotizacion3->precotizacion3_materialp = $materialp->id;
                                 $newprecotizacion3->precotizacion3_proveedor = $tercero->id;
@@ -358,7 +380,7 @@ class PreCotizacion2Controller extends Controller
 
                         // Commit Transaction
                         DB::commit();
-                        return response()->json(['success' => true, 'id' => $precotizacion2->id]);
+                        return response()->json(['success' => true, 'id' => $precotizacion2->id, 'id_precotizacion' => $precotizacion->id]);
                     }catch(\Exception $e){
                         DB::rollback();
                         Log::error($e->getMessage());
@@ -392,18 +414,22 @@ class PreCotizacion2Controller extends Controller
                 // Materiales
                 DB::table('koi_precotizacion3')->where('precotizacion3_precotizacion2', $precotizacion2->id)->delete();
 
+                // Imagenes
                 DB::table('koi_precotizacion4')->where('precotizacion4_precotizacion2', $precotizacion2->id)->delete();
 
+                // Impresiones
                 DB::table('koi_precotizacion5')->where('precotizacion5_precotizacion2', $precotizacion2->id)->delete();
 
+                // Areasp
                 DB::table('koi_precotizacion6')->where('precotizacion6_precotizacion2', $precotizacion2->id)->delete();
-
-                if( Storage::has("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1") ) {
-                    Storage::deleteDirectory("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1");
-                }
 
                 // Eliminar item precotizacion2
                 $precotizacion2->delete();
+
+                // Recuperar cartepta y eliminar
+                if( Storage::has("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id") ) {
+                    Storage::deleteDirectory("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id");
+                }
 
                 DB::commit();
                 return response()->json(['success' => true]);
@@ -451,10 +477,10 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion4->save();
 
                      // Recuperar imagen y copy
-                     if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
+                     if( Storage::has("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$precotizacion4->precotizacion4_archivo") ) {
 
-                         $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";
-                         $newfile = "pre-cotizaciones/precotizacion_{$newprecotizacion2->precotizacion2_precotizacion1}/producto_{$newprecotizacion4->precotizacion4_precotizacion2}/{$newprecotizacion4->precotizacion4_archivo}";
+                         $oldfile = "pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$precotizacion4->precotizacion4_archivo";
+                         $newfile = "pre-cotizaciones/precotizacion_$newprecotizacion2->precotizacion2_precotizacion1/producto_$newprecotizacion2->id/$newprecotizacion4->precotizacion4_archivo";
 
                          // Copy file storege laravel
                          Storage::copy($oldfile, $newfile);

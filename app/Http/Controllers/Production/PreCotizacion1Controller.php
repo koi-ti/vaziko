@@ -347,7 +347,6 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2 = new Cotizacion2;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
                     $cotizacion2->cotizacion2_productop = $precotizacion2->precotizacion2_productop;
-                    $cotizacion2->cotizacion2_precotizacion2 = $precotizacion2->id;
                     $cotizacion2->cotizacion2_cantidad = $precotizacion2->precotizacion2_cantidad;
                     $cotizacion2->cotizacion2_tiro = $precotizacion2->precotizacion2_tiro;
                     $cotizacion2->cotizacion2_retiro = $precotizacion2->precotizacion2_retiro;
@@ -419,12 +418,9 @@ class PreCotizacion1Controller extends Controller
                     // Recuperar Imagenes de pre-cotizacion para generar cotizacion
                     $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
                     foreach ($imagenes as $precotizacion4) {
-                         $oldname = explode('[PRE_]', $precotizacion4->precotizacion4_archivo);
-                         $name = "[COT_]{$oldname[1]}";
-
                          $cotizacion8 = new Cotizacion8;
                          $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
-                         $cotizacion8->cotizacion8_archivo = $name;
+                         $cotizacion8->cotizacion8_archivo = $precotizacion4->precotizacion4_archivo;
                          $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
                          $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
                          $cotizacion8->save();
@@ -474,12 +470,6 @@ class PreCotizacion1Controller extends Controller
             $precotizacion = PreCotizacion1::findOrFail($id);
             if(!$precotizacion instanceof PreCotizacion1){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al administrador.']);
-            }
-
-            // Validar que no exista una cotizacion vinculada
-            $cotizacion = Cotizacion1::where('cotizacion1_precotizacion', $precotizacion->id)->first();
-            if($cotizacion instanceof Cotizacion1){
-                return response()->json(['success' => false, 'errors' => 'La pre-cotización se encuentra en proceso de cotización, por favor verifique la información o consulte al administrador.']);
             }
 
             DB::beginTransaction();

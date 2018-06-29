@@ -30,13 +30,6 @@ class Ordenp2 extends BaseModel
      */
     protected $fillable = ['orden2_referencia', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_observaciones', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round'];
 
-    /**
-     * The attributes that are mass assignable nullable.
-     *
-     * @var array
-     */
-    protected $nullable = ['orden2_cotizacion2'];
-
     public function isValid($data)
     {
         $rules = [
@@ -116,7 +109,7 @@ class Ordenp2 extends BaseModel
     public static function getOrdenp2($ordenp2)
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.*', 'koi_precotizacion2.id as precotizacion2_id',
+        $query->select('koi_ordenproduccion2.*',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -157,8 +150,6 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
 
-        $query->leftJoin('koi_cotizacion2', 'orden2_cotizacion2', '=', 'koi_cotizacion2.id');
-        $query->leftJoin('koi_precotizacion2', 'cotizacion2_precotizacion2', '=', 'koi_precotizacion2.id');
         $query->where('koi_ordenproduccion2.id', $ordenp2);
         return $query->first();
     }

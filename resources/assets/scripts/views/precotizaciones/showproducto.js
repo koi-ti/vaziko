@@ -32,7 +32,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-template-precotizacion',
                 autoUpload: false,
                 dragDrop: false,
                 session: {

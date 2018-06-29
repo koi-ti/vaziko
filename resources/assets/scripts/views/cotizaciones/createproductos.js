@@ -34,7 +34,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
-            // _.bindAll(this, 'onSessionRequestComplete');
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
@@ -120,14 +120,13 @@ app || (app = {});
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
 
-            // this.$uploaderFile = this.$('#fine-uploader');
-            // if( !_.isNull( this.model.get('precotizacion2_id') ) ){
-            //     this.uploadPictures();
-            // }
+            // Render uploader file
+            this.$uploaderFile = this.$('#fine-uploader');
 
             // Reference views
             this.calculateAll();
             this.referenceViews();
+            this.uploadPictures();
             this.ready();
         },
 
@@ -265,44 +264,107 @@ app || (app = {});
             }
         },
 
-        // /**
-        // * UploadPictures
-        // */
-        // uploadPictures: function(e) {
-        //     var _this = this;
-        //
-        //     this.$uploaderFile.fineUploader({
-        //         debug: false,
-        //         template: 'qq-template',
-        //         dragDrop: false,
-        //         session: {
-        //             endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-        //             params: {
-        //                 precotizacion2: this.model.get('precotizacion2_id'),
-        //             },
-        //             refreshOnRequest: false
-        //         },
-        //         thumbnails: {
-        //             placeholders: {
-        //                 notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-        //                 waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-        //             }
-        //         },
-        //         callbacks: {
-        //             onSessionRequestComplete: _this.onSessionRequestComplete,
-        //         },
-        //     });
-        //
-        //     this.$uploaderFile.find('.buttons').remove();
-        //     this.$uploaderFile.find('.qq-upload-drop-area').remove();
-        // },
-        //
-        // onSessionRequestComplete: function (id, name, resp) {
-        //     _.each( id, function (value, key){
-        //         var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-        //         previewLink.attr("href", value.thumbnailUrl);
-        //     }, this);
-        // },
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this,
+                autoUpload = false;
+                session = {};
+                deleteFile = {};
+                request = {};
+
+
+            // Model exists
+            if( this.model.id != undefined ){
+                var session = {
+                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                    params: {
+                        cotizacion2: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                }
+
+                var deleteFile = {
+                    enabled: true,
+                    forceConfirm: true,
+                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion2: this.model.get('id')
+                    }
+                }
+
+                var request = {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion2: this.model.get('id')
+                    }
+                }
+
+                var autoUpload = true;
+            }
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                multiple: true,
+                interceptSubmit: true,
+                autoUpload: autoUpload,
+                omitDefaultParams: true,
+                session: session,
+                request: request,
+                retry: {
+                    maxAutoAttempts: 3,
+                },
+                deleteFile: deleteFile,
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                validation: {
+                    itemLimit: 10,
+                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
+                },
+                messages: {
+                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+                },
+                callbacks: {
+                    onComplete: _this.onCompleteLoadFile,
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+        },
+
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
+        onCompleteLoadFile: function (id, name, resp) {
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
+            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
+            this.$uploaderFile.fineUploader('setName', id, resp.name);
+
+            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
+            previewLink.attr("href", resp.url);
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
 
         /**
         * Event submit productop
@@ -318,14 +380,46 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.cotizacion2_volumen = this.$inputVolumen.val();
-                    data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
-                    data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
-                    data.cotizacion2_round = this.$inputRound.val();
-                    data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
+                /**
+                * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
+                * El metodo put no es compatible con formData
+                */
+                if( this.model.id != undefined ){
+                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.cotizacion2_volumen = this.$inputVolumen.val();
+                        data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
+                        data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                        data.cotizacion2_round = this.$inputRound.val();
+                        data.cotizacion6 = this.areasProductopCotizacionList.toJSON();
 
-                this.model.save( data, {silent: true} );
+                    this.model.save( data, {silent: true} );
+
+                }else{
+                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.cotizacion2_volumen = this.$inputVolumen.val();
+                        data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
+                        data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                        data.cotizacion2_round = this.$inputRound.val();
+                        data.cotizacion6 = JSON.stringify(this.areasProductopCotizacionList);
+
+
+                    this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
+                    var formData = new FormData();
+                    _.each(this.$files, function(file, key){
+                        formData.append('imagenes[]', file.file );
+                    });
+
+                    // Recorrer archivos para mandarlos texto plano
+                    _.each(data, function(value, key){
+                        formData.append(key, value);
+                    });
+
+                    this.model.save( null, {
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    });
+                }
             }
         },
 
@@ -469,7 +563,7 @@ app || (app = {});
                 }
 
                 // Redirect to cotizacion
-                window.Misc.redirect( window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: this.model.get('cotizacion2_cotizacion') })) );
+                window.Misc.redirect( window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id_cotizacion })) );
             }
         }
     });

@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7;
-use App, View, Auth, DB, Log, Datatables;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8;
+use App, View, Auth, DB, Log, Datatables, Storage;
 
 class Cotizacion1Controller extends Controller
 {
@@ -479,6 +479,34 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
                          $newcotizacion6->save();
                     }
+
+                    // Impresiones
+                    $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($impresiones as $cotizacion7) {
+                         $newcotizacion7 = $cotizacion7->replicate();
+                         $newcotizacion7->cotizacion7_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion7->save();
+                    }
+
+                    // Imagenes
+                    $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($imagenes as $cotizacion8) {
+                         $newcotizacion8 = $cotizacion8->replicate();
+                         $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                         $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                         $newcotizacion8->save();
+
+                         // Recuperar imagen y copiar
+                         if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
+
+                             $oldfile = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
+                             $newfile = "cotizaciones/cotizacion_$newcotizacion2->cotizacion2_cotizacion/producto_$newcotizacion2->id/$newcotizacion8->cotizacion8_archivo";
+
+                             // Copy file storege laravel
+                             Storage::copy($oldfile, $newfile);
+                         }
+                    }
                 }
 
                 // Commit Transaction
@@ -540,7 +568,6 @@ class Cotizacion1Controller extends Controller
                     $orden2 = new Ordenp2;
                     $orden2->orden2_orden = $orden->id;
                     $orden2->orden2_productop = $cotizacion2->cotizacion2_productop;
-                    $orden2->orden2_cotizacion2 = $cotizacion2->id;
                     $orden2->orden2_referencia = $cotizacion2->cotizacion2_referencia;
                     $orden2->orden2_cantidad = $cotizacion2->cotizacion2_cantidad;
                     $orden2->orden2_saldo = $cotizacion2->cotizacion2_saldo;
@@ -632,6 +659,27 @@ class Cotizacion1Controller extends Controller
                          $orden7->orden7_ancho = $cotizacion7->cotizacion7_ancho;
                          $orden7->orden7_alto = $cotizacion7->cotizacion7_alto;
                          $orden7->save();
+                    }
+
+                    // Recuperar impresiones de cotizacion para generar orden
+                    $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($imagenes as $cotizacion8) {
+                        $orden8 = new Ordenp8;
+                        $orden8->orden8_orden2 = $orden2->id;
+                        $orden8->orden8_archivo = $cotizacion8->cotizacion8_archivo;
+                        $orden8->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                        $orden8->orden8_usuario_elaboro = Auth::user()->id;
+                        $orden8->save();
+
+                        // Recuperar imagen y copiar
+                        if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
+
+                            $oldfile = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
+                            $newfile = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
+
+                            // Copy file storege laravel
+                            Storage::copy($oldfile, $newfile);
+                        }
                     }
                 }
 
