@@ -477,17 +477,15 @@ class AsientoController extends Controller
     {
         // Validate required file
         if (!$request->hasFile('file')) {
-            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo .csv."]);
+            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo"]);
         }
         // Validate file is .csv
         if ($request->file->getClientMimeType() !== 'text/csv' ){
-            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo .csv."]);
+            return response()->json(['success' => false, 'errors' => "Por favor, seleccione un archivo con extensión .csv"]);
         }
 
         DB::beginTransaction();
         try {
-            $excel = Excel::load($request->file)->get();
-
             // Recuperar tercero
             $tercero = Tercero::where('tercero_nit', $request->tercero)->first();
             if(!$tercero instanceof Tercero) {
@@ -508,32 +506,47 @@ class AsientoController extends Controller
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
             }
 
+            // Uploaded file
+            $excel = Excel::load($request->file)->get();
+            $headers = $excel->first()->keys()->toArray();
+            $defaultHeaders = array_combine($headers, $headers);
+            $consecutive = $documento->documento_consecutivo;
+            $validator = \Validator::make($defaultHeaders, [
+                'cuenta' => 'required',
+                'centrocosto' => 'required',
+                'beneficiario' => 'required',
+                'debito' => 'required',
+                'credito' => 'required',
+                'base' => 'required',
+                'detalle' => 'required'
+            ]);
+            if ($validator->fails()) {
+                DB::rollback();
+                $validator->errors()->add('comment', 'Estos campos mencionados no estan presentes en el encabezado del archivo');
+                return response()->json(['success' => false, 'errors' => $validator->errors()]);
+            }
+
             if($documento->documento_actual){
                 $asiento = new Asiento;
-
-                // Consecutivo
-                if($documento->documento_tipo_consecutivo == 'A'){
-                    $asiento->asiento1_numero = $documento->documento_consecutivo + 1;
-                }
-
+                $consecutive++;
                 // Encabezado por defecto
                 $asiento->asiento1_ano = intval( date('Y') );
                 $asiento->asiento1_mes = intval( date('m') );
                 $asiento->asiento1_dia = intval( date('d') );
+                $asiento->asiento1_numero = $consecutive;
                 $asiento->asiento1_folder = $folder->id;
                 $asiento->asiento1_documento = $documento->id;
                 $asiento->asiento1_beneficiario = $tercero->id;
                 $asiento->asiento1_preguardado = false;
                 $asiento->asiento1_usuario_elaboro = Auth::user()->id;
                 $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
-                $asiento->save();
 
                 $cuentas = [];
                 foreach ($excel as $row) {
                     // Asiento2
                     $arCuenta = [];
                     $arCuenta['Cuenta'] = intval($row->cuenta);
-                    $arCuenta['Tercero'] = $row->beneficiario;
+                    $arCuenta['Tercero'] = intval($row->beneficiario);
                     $arCuenta['Detalle'] = $row->detalle;
                     $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
                     $arCuenta['CentroCosto'] = intval($row->centrocosto) > 0 ? intval($row->centrocosto) : '';
@@ -562,22 +575,18 @@ class AsientoController extends Controller
                 $result = $objAsiento->insertarAsiento();
                 if($result != 'OK') {
                     DB::rollback();
-                    Log::info($result);
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
             }
             if ($documento->documento_nif) {
                 $asientoNif = new AsientoNif;
-
-                // Consecutivo
-                if($documento->documento_tipo_consecutivo == 'A'){
-                    $asientoNif->asienton1_numero = $documento->documento_consecutivo + 1;
-                }
+                $consecutive++;
 
                 // AsientoNif1
                 $asientoNif->asienton1_ano = intval( date('Y') );
                 $asientoNif->asienton1_mes = intval( date('m') );
                 $asientoNif->asienton1_dia = intval( date('d') );
+                $asientoNif->asienton1_numero = $consecutive;
                 $asientoNif->asienton1_asiento =  isset($asiento->id) ? $asiento->id : null;
                 $asientoNif->asienton1_folder = $folder->id;
                 $asientoNif->asienton1_documento = $documento->id;
@@ -585,7 +594,6 @@ class AsientoController extends Controller
                 $asientoNif->asienton1_preguardado = false;
                 $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
                 $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:m:s');
-                $asientoNif->save();
 
                 $cuentas = [];
                 foreach ($excel as $row) {
@@ -639,6 +647,9 @@ class AsientoController extends Controller
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
             }
+            // Save Consecutive
+            $documento->documento_consecutivo = $consecutive;
+            $documento->save();
             DB::commit();
             return response()->json(['success'=> true, 'msg'=> 'Se ha importado con exito los datos']);
         } catch (\Exception $e) {

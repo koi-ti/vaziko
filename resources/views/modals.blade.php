@@ -890,6 +890,19 @@
 			</div>
 			<span class="help-block">
 				Por favor, seleccione un archivo tipo <b>.csv </b>
+				<% if(title == 'asientos'){ %>
+					<div class="dropdown">
+						<span class="dropspan"><i class="fa fa-question-circle"></i></span>
+						<div class="dropdown-content">
+							<b>Tips</b>
+							<li>Número de cuenta valido para realizar asientos</li>
+							<li>Diferencia ente débito y crédito sen igual a 0</li>
+							<li>Valores positivos, sin puntos y/o comas</li>
+							<li>Nit del beneficiario debe existir en el módulo de terceros</li>
+							<li>Encabezado del documento: cuenta, centrocosto, beneficiario, debito, credito, base, detalle</li>
+						</div>
+					</div>
+				<% } %>
 			</span>
 		</div>
 	</div>
