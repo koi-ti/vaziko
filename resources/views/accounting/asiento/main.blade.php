@@ -238,8 +238,8 @@
 					                <th>Beneficiario</th>
 					                <th>Centro Costo</th>
 					                <th>Base</th>
-					                <th>Debito</th>
-					                <th>Credito</th>
+					                <th>Débito</th>
+					                <th>Crédito</th>
 					                <th></th>
 					            </tr>
 								<tfoot>

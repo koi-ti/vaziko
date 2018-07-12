@@ -182,7 +182,6 @@ class AsientoContableDocumento {
 				$asiento2 = Asiento2::find($cuenta['Id']);
 			}
 
-
 			if(!$asiento2 instanceof Asiento2) {
 				$asiento2 = new Asiento2;
 				$result = $asiento2->store($this->asiento, $cuenta);
