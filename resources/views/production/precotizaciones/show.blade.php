@@ -43,6 +43,11 @@
                                     <a role="menuitem" tabindex="-1" href="#" class="open-precotizacion">
                                         <i class="fa fa-unlock"></i>Reabrir pre-cotización
                                     </a>
+                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                        <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
+                                            <i class="fa fa-envelope-o"></i>Generar cotización
+                                        </a>
+                                    @endif
                                 </li>
                             </ul>
                         </li>
@@ -123,5 +128,9 @@
 
     <script type="text/template" id="precotizaciones-open-confirm-tpl">
         <p>¿Está seguro que desea reabrir la pre-cotizacion <b>{{ $precotizacion->precotizacion_codigo }}</b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-generate-confirm-tpl">
+        <p>¿Está seguro que desea generar la cotización <b>{{ $precotizacion->precotizacion_codigo }} - {{ $precotizacion->precotizacion1_referencia }}</b>?</p>
     </script>
 @stop

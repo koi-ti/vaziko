@@ -34,7 +34,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
-            _.bindAll(this, 'onSessionRequestComplete');
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
@@ -143,12 +143,41 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
-                    data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
-                    data.areasp = this.areasProductopPreCotizacionList.toJSON();
+                /**
+                * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
+                * El metodo put no es compatible con formData
+                */
+                if( this.model.id != undefined ){
+                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
+                        data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
+                        data.areasp = this.areasProductopPreCotizacionList.toJSON();
 
-                this.model.save( data, {silent: true} );
+                    this.model.save( data, {silent: true});
+
+                }else{
+                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
+                    data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
+                    data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
+
+                    this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
+                    var formData = new FormData();
+                    _.each(this.$files, function(file, key){
+                        formData.append('imagenes[]', file.file );
+                    });
+
+                    // Recorrer archivos para mandarlos texto plano
+                    _.each(data, function(value, key){
+                        formData.append(key, value);
+                    });
+
+                    this.model.save( null, {
+                        data: formData,
+                        processData: false,
+                        contentType: false
+                    });
+                }
             }
         },
 
@@ -280,8 +309,10 @@ app || (app = {});
         */
         uploadPictures: function(e) {
             var _this = this,
+                autoUpload = false;
                 session = {};
                 deleteFile = {};
+                request = {};
 
             // Model exists
             if( this.model.id != undefined ){
@@ -303,20 +334,28 @@ app || (app = {});
                         precotizacion2: this.model.get('id')
                     }
                 }
+
+                var request = {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        '_token': $('meta[name="csrf-token"]').attr('content'),
+                        precotizacion2: this.model.get('id')
+                    }
+                }
+
+                var autoUpload = true;
             }
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-template-precotizacion',
                 multiple: true,
                 interceptSubmit: true,
-                autoUpload: false,
+                autoUpload: autoUpload,
                 omitDefaultParams: true,
                 session: session,
-                request: {
-                    inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                },
+                request: request,
                 retry: {
                     maxAutoAttempts: 3,
                 },
@@ -338,9 +377,25 @@ app || (app = {});
                     tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
                 },
                 callbacks: {
+                    onComplete: _this.onCompleteLoadFile,
                     onSessionRequestComplete: _this.onSessionRequestComplete,
                 },
             });
+        },
+
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
+        onCompleteLoadFile: function (id, name, resp) {
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
+            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
+            this.$uploaderFile.fineUploader('setName', id, resp.name);
+
+            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
+            previewLink.attr("href", resp.url);
         },
 
         onSessionRequestComplete: function (id, name, resp) {
@@ -425,56 +480,8 @@ app || (app = {});
                     return;
                 }
 
-                // Subir imagenes
-                this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
-                if( this.$files.length > 0 ){
-                    var _this = this;
-
-                    var formData = new FormData();
-                        formData.append('precotizacion2', this.model.get('id'));
-
-                    // Traer archivos agregados correctamente
-                    _.each(this.$files, function(file, key){
-                        formData.append('imagenes[]', file.file);
-                    });
-
-                    $.ajax({
-                        url: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.store') ),
-                        data: formData,
-                        type: 'POST',
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        beforeSend: function() {
-                            window.Misc.setSpinner( _this.el );
-                        }
-                    })
-                    .done(function(resp) {
-                        window.Misc.removeSpinner( _this.el );
-                        if(!_.isUndefined(resp.success)) {
-                            // response success or error
-                            var text = resp.success ? '' : resp.errors;
-                            if( _.isObject( resp.errors ) ) {
-                                text = window.Misc.parseErrors(resp.errors);
-                            }
-
-                            if( !resp.success ) {
-                                alertify.error(text);
-                                return;
-                            }
-
-                            // Redirect to cotizacion
-                            window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('precotizacion2_precotizacion1') })) );
-                        }
-                    })
-                    .fail(function(jqXHR, ajaxOptions, thrownError) {
-                        window.Misc.removeSpinner( _this.el );
-                        alertify.error(thrownError);
-                    });
-                }else{
-                    // Redirect to cotizacion
-                    window.Misc.redirect( window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: this.model.get('precotizacion2_precotizacion1') })) );
-                }
+                // Redirect to cotizacion
+                window.Misc.redirect( window.Misc.urlFull( Route.route('precotizaciones.edit', { precotizaciones: resp.id_precotizacion })) );
             }
         }
     });

@@ -31,13 +31,6 @@ class Cotizacion2 extends BaseModel
      */
     protected $fillable = ['cotizacion2_referencia', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_observaciones', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round'];
 
-    /**
-     * The attributes that are mass assignable nullable.
-     *
-     * @var array
-     */
-    protected $nullable = ['cotizacion2_precotizacion2'];
-
     public function isValid($data)
     {
         $rules = [
@@ -118,7 +111,7 @@ class Cotizacion2 extends BaseModel
     public static function getCotizacion2( $cotizacion2 )
     {
         $query = Cotizacion2::query();
-        $query->select('koi_cotizacion2.*', 'koi_precotizacion2.id as precotizacion2_id',
+        $query->select('koi_cotizacion2.*',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -159,7 +152,6 @@ class Cotizacion2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
 
-        $query->leftJoin('koi_precotizacion2', 'cotizacion2_precotizacion2', '=', 'koi_precotizacion2.id');
         $query->where('koi_cotizacion2.id', $cotizacion2);
         return $query->first();
     }

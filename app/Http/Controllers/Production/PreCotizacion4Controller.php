@@ -62,35 +62,37 @@ class PreCotizacion4Controller extends Controller
     public function store(Request $request)
     {
         if ($request->ajax()) {
-            // Recuperar orden
-            $precotizacion2 = PreCotizacion2::find($request->precotizacion2);
+            // Recuperar precotizacion
+            $precotizacion2 = PreCotizacion2::find( $request->precotizacion2 );
             if(!$precotizacion2 instanceof PreCotizacion2){
                 abort(404);
             }
 
             // Validar que tenga imagenes
-            $files = $request->imagenes;
-            if( !empty($files) ){
+            $file = $request->file;
+            if( !empty($file) ){
                 DB::beginTransaction();
                 try {
-                    foreach ($files as $file) {
-                        // Recuperar nombre de archivo
-                        $name = "[PRE_]{$file->getClientOriginalName()}";
 
-                        Storage::put("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion2->id}/$name", file_get_contents($file->getRealPath()));
+                    // Recuperar nombre de archivo
+                    $name = str_random(4)."_{$file->getClientOriginalName()}";
 
-                        // Insertar imagen
-                        $imagen = new PreCotizacion4;
-                        $imagen->precotizacion4_archivo = $name;
-                        $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
-                        $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
-                        $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
-                        $imagen->save();
-                    }
+                    Storage::put("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name", file_get_contents($file->getRealPath()));
+
+                    // Retornar url href
+                    $url = url("storage/pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name");
+
+                    // Insertar imagen
+                    $imagen = new PreCotizacion4;
+                    $imagen->precotizacion4_archivo = $name;
+                    $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
+                    $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
+                    $imagen->save();
 
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true]);
+                    return response()->json(['success' => true, 'id' => $imagen->id, 'name' => $imagen->precotizacion4_archivo, 'url' => $url]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -149,18 +151,18 @@ class PreCotizacion4Controller extends Controller
                 $precotizacion4 = PreCotizacion4::find($id);
                 if(!$precotizacion4 instanceof PreCotizacion4){
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la pre-cotización, por favor verifique la información del pedido o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la pre-cotización, por favor verifique la información o consulte al administrador.']);
                 }
 
                 $precotizacion2 = PreCotizacion2::find($request->precotizacion2);
                 if(!$precotizacion2 instanceof PreCotizacion2){
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información del pedido o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al administrador.']);
                 }
 
                 if( $precotizacion4->precotizacion4_precotizacion2 != $precotizacion2->id ){
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'La imagen que esta intentando eliminar no corresponde al detalle, por favor verifique la información del pedido o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'La imagen que esta intentando eliminar no corresponde al detalle, por favor verifique la información o consulte al administrador.']);
                 }
 
                 // Eliminar item detallepedido
@@ -173,7 +175,7 @@ class PreCotizacion4Controller extends Controller
                 return response()->json(['success' => true]);
             }catch(\Exception $e){
                 DB::rollback();
-                Log::error(sprintf('%s -> %s: %s', 'PreCotizacion4Controller', 'destroy', $e->getMessage()));
+                Log::error("PreCotizacion4Controller->destroy:{$e->getMessage()}");
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
         }

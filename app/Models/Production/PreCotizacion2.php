@@ -39,6 +39,7 @@ class PreCotizacion2 extends BaseModel
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
+
             // Validar Carritos
             $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
             if(!isset($impresiones) || $impresiones == null || !is_array($impresiones) || count($impresiones) == 0) {

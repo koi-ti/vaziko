@@ -54,9 +54,9 @@
                                                     <a role="menuitem" tabindex="-1" href="#" class="clone-precotizacion">
                                                         <i class="fa fa-clone"></i>Clonar pre-cotización
                                                     </a>
-                                                    {{--<a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
+                                                    <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
                                                         <i class="fa fa-envelope-o"></i>Generar cotización
-                                                    </a>--}}
+                                                    </a>
                                                 @endif
                                             </li>
                                         </ul>

@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Auth, DB, Log, Datatables;
-
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap;
+use Auth, DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
 {
@@ -147,22 +145,41 @@ class DetalleOrdenpController extends Controller
                     }
 
                     // Areap
-                    $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
+                    $areasp = isset($data['ordenp6']) ? json_decode( $data['ordenp6'] ) : null;
                     foreach ($areasp as $areap)
                     {
-                        $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+                        $newtime = "$areap->orden6_horas:$areap->orden6_minutos";
 
                         $orden6 = new Ordenp6;
-                        $orden6->fill($areap);
-                        (!empty($areap['orden6_areap'])) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
+                        $orden6->orden6_valor = $areap->orden6_valor;
+                        (!empty($areap->orden6_areap)) ? $orden6->orden6_areap = $areap->orden6_areap : $orden6->orden6_nombre = $areap->orden6_nombre;
                         $orden6->orden6_orden2 = $orden2->id;
                         $orden6->orden6_tiempo = $newtime;
                         $orden6->save();
                     }
 
+
+
+                    // Recuperar imagenes y almacenar en storage/app/cotizacines
+                    $imagenes = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    foreach ($imagenes as $image) {
+                        // Recuperar nombre de archivo
+                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+
+                        Storage::put("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$name", file_get_contents($image->getRealPath()));
+
+                        // Insertar imagen
+                        $imagen = new Ordenp8;
+                        $imagen->orden8_archivo = $name;
+                        $imagen->orden8_orden2 = $orden2->id;
+                        $imagen->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->orden8_usuario_elaboro = Auth::user()->id;
+                        $imagen->save();
+                    }
+
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true]);
+                    return response()->json(['success' => true, 'id_orden' => $orden->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -378,7 +395,7 @@ class DetalleOrdenpController extends Controller
 
                         // Commit Transaction
                         DB::commit();
-                        return response()->json(['success' => true, 'id' => $orden2->id]);
+                        return response()->json(['success' => true, 'id' => $orden2->id, 'id_orden' => $orden->id]);
                     }catch(\Exception $e){
                         DB::rollback();
                         Log::error($e->getMessage());
@@ -428,8 +445,18 @@ class DetalleOrdenpController extends Controller
                 // Areasp
                 DB::table('koi_ordenproduccion6')->where('orden6_orden2', $orden2->id)->delete();
 
+                // Impresiones
+                DB::table('koi_ordenproduccion7')->where('orden7_orden2', $orden2->id)->delete();
+
+                // Imagenes
+                DB::table('koi_ordenproduccion8')->where('orden8_orden2', $orden2->id)->delete();
+
                 // Eliminar item orden2
                 $orden2->delete();
+
+                if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id") ) {
+                    Storage::deleteDirectory("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id");
+                }
 
                 DB::commit();
                 return response()->json(['success' => true]);
@@ -513,6 +540,34 @@ class DetalleOrdenpController extends Controller
                      $neworden6 = $orden6->replicate();
                      $neworden6->orden6_orden2 = $neworden2->id;
                      $neworden6->save();
+                }
+
+                // Impŕesiones
+                $impresiones = Ordenp7::where('orden7_orden2', $orden2->id)->get();
+                foreach ($impresiones as $orden7) {
+                     $neworden7 = $orden7->replicate();
+                     $neworden7->orden7_orden2 = $neworden2->id;
+                     $neworden7->save();
+                }
+
+                // Imagenes
+                $imagenes = Ordenp8::where('orden8_orden2', $orden2->id)->get();
+                foreach ($imagenes as $orden8) {
+                     $neworden8 = $orden8->replicate();
+                     $neworden8->orden8_orden2 = $neworden2->id;
+                     $neworden8->orden8_usuario_elaboro = Auth::user()->id;
+                     $neworden8->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                     $neworden8->save();
+
+                     // Recuperar imagen y copiar
+                     if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+
+                         $oldfile = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
+                         $newfile = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
+
+                         // Copy file storege laravel
+                         Storage::copy($oldfile, $newfile);
+                     }
                 }
 
                 // Commit Transaction

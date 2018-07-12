@@ -323,17 +323,16 @@
                         @endif
                     </form>
 
+                    <div class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Imágenes</h3>
+                        </div>
+                        <div class="box-body table-responsive no-padding">
+                            <div id="fine-uploader"></div>
+                        </div>
+                    </div>
+
                     @if( $cotizacion->cotizacion1_precotizacion )
-                        {{--<div class="box box-danger">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Imágenes</h3>
-                            </div>
-
-                            <div class="box-body table-responsive no-padding">
-                                <div id="fine-uploader"></div>
-                            </div>
-                        </div>--}}
-
                         {{-- Content impresiones --}}
                         <div class="box box-danger">
                             <div class="box-header with-border">

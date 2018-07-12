@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
-use Auth, DB, Log, Datatables;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
+use Auth, DB, Log, Datatables, Storage;
 
 class Cotizacion2Controller extends Controller
 {
@@ -130,23 +130,40 @@ class Cotizacion2Controller extends Controller
                     }
 
                     // Areap
-                    $areasp = isset($data['cotizacion6']) ? $data['cotizacion6'] : null;
+                    $areasp = isset($data['cotizacion6']) ? json_decode($data['cotizacion6']) : null;
                     foreach ($areasp as $areap)
                     {
                         // Recuperar tiempo
-                        $newtime = "{$areap['cotizacion6_horas']}:{$areap['cotizacion6_minutos']}";
+                        $newtime = "{$areap->cotizacion6_horas}:{$areap->cotizacion6_minutos}";
 
                         $cotizacion6 = new Cotizacion6;
-                        $cotizacion6->fill($areap);
-                        (!empty($areap['cotizacion6_areap'])) ? $cotizacion6->cotizacion6_areap = $areap['cotizacion6_areap'] : $cotizacion6->cotizacion6_nombre = $areap['cotizacion6_nombre'];
+                        $cotizacion6->cotizacion6_valor = $areap->cotizacion6_valor;
+                        (!empty($areap->cotizacion6_areap)) ? $cotizacion6->cotizacion6_areap = $areap->cotizacion6_areap : $cotizacion6->cotizacion6_nombre = $areap->cotizacion6_nombre;
                         $cotizacion6->cotizacion6_tiempo = $newtime;
                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                         $cotizacion6->save();
                     }
 
+                    // Recuperar imagenes y almacenar en storage/app/cotizacines
+                    $imagenes = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    foreach ($imagenes as $image) {
+                        // Recuperar nombre de archivo
+                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+
+                        Storage::put("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$name", file_get_contents($image->getRealPath()));
+
+                        // Insertar imagen
+                        $imagen = new Cotizacion8;
+                        $imagen->cotizacion8_archivo = $name;
+                        $imagen->cotizacion8_cotizacion2 = $cotizacion2->id;
+                        $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
+                        $imagen->save();
+                    }
+
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true]);
+                    return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -349,7 +366,7 @@ class Cotizacion2Controller extends Controller
 
                         // Commit Transaction
                         DB::commit();
-                        return response()->json(['success' => true, 'id' => $cotizacion2->id]);
+                        return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
                     }catch(\Exception $e){
                         DB::rollback();
                         Log::error($e->getMessage());
@@ -395,8 +412,15 @@ class Cotizacion2Controller extends Controller
                 // Impresiones
                 DB::table('koi_cotizacion7')->where('cotizacion7_cotizacion2', $cotizacion2->id)->delete();
 
+                // Imagens
+                DB::table('koi_cotizacion8')->where('cotizacion8_cotizacion2', $cotizacion2->id)->delete();
+
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
+
+                if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id") ) {
+                    Storage::deleteDirectory("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id");
+                }
 
                 DB::commit();
                 return response()->json(['success' => true]);
@@ -490,6 +514,26 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion7 = $cotizacion7->replicate();
                      $newcotizacion7->cotizacion7_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion7->save();
+                }
+
+                // Imagenes
+                $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
+                foreach ($imagenes as $cotizacion8) {
+                     $newcotizacion8 = $cotizacion8->replicate();
+                     $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
+                     $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                     $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                     $newcotizacion8->save();
+
+                     // Recuperar imagen y copiar
+                     if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
+
+                         $oldfile = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
+                         $newfile = "cotizaciones/cotizacion_$newcotizacion2->cotizacion2_cotizacion/producto_$newcotizacion2->id/$newcotizacion8->cotizacion8_archivo";
+
+                         // Copy file storege laravel
+                         Storage::copy($oldfile, $newfile);
+                     }
                 }
 
                 // Commit Transaction
