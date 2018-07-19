@@ -2,6 +2,8 @@
 /node_modules
 /resources/assets/libs
 public/storage
+public/js
+public/css
 /storage/temp
 storage/app
 Homestead.yaml
