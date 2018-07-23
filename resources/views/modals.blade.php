@@ -889,7 +889,7 @@
 				<input type="text" class="form-control input-sm" readonly>
 			</div>
 			<span class="help-block">
-				Por favor, seleccione un archivo tipo <b>.csv </b>
+				Por favor, seleccione un archivo de tipo <b>.xls</b>
 				<% if(title == 'asientos'){ %>
 					<div class="dropdown">
 						<span class="dropspan"><i class="fa fa-question-circle"></i></span>
