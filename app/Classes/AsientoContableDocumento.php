@@ -11,11 +11,12 @@ class AsientoContableDocumento {
 	public $asiento;
 	private $beneficiario;
 	private $documento;
+	private $import;
 	private $asiento_cuentas = [];
 	public $asiento_error = NULL;
 	private $empresa;
 
-	function __construct(Array $data, Asiento $asiento = null)
+	function __construct(Array $data, Asiento $asiento = null, $import = false)
 	{
 		// Cuando se edita termina un asiento ya existe $asiento
 		if(!$asiento instanceof Asiento) {
@@ -69,6 +70,7 @@ class AsientoContableDocumento {
 			return;
 		}
 
+		$this->import = $import;
 
         // Validar cierre contable
 		$date_asiento = "{$this->asiento->asiento1_ano}-{$this->asiento->asiento1_mes}-{$this->asiento->asiento1_dia}";
@@ -95,7 +97,7 @@ class AsientoContableDocumento {
 			// Recuperar cuenta
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $cuenta['Cuenta'])->first();
             if(!$objCuenta instanceof PlanCuenta) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (asientoCuentas). ";
+                return "No es posible recuperar cuenta {$cuenta['Cuenta']}, por favor verifique la información del asiento o consulte al administrador (asientoCuentas). ";
             }
 
 			// Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
@@ -144,10 +146,10 @@ class AsientoContableDocumento {
 				return "El nivel 7 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el Asiento. $srnivel";
 			}
 
-			if (floatval($cuenta['Debito']) > 0 && $cuenta['Credito'] == 0) {
+			if (floatval(abs($cuenta['Debito'])) > 0 && $cuenta['Credito'] == 0) {
 				$debito += round($cuenta['Debito'],2);
 
-			}else if (floatval($cuenta['Credito']) > 0 && $cuenta['Debito'] == 0) {
+			}else if (floatval(abs($cuenta['Credito'])) > 0 && $cuenta['Debito'] == 0) {
 				$credito += round($cuenta['Credito'],2);
 
 			}else{
@@ -155,7 +157,7 @@ class AsientoContableDocumento {
 			}
 		}
 
-		$resta = round(abs($credito-$debito),2);
+		$resta = round(abs($credito) - abs($debito),2);
 		if ($resta>0.01 || ($credito === 0 && $debito === 0)) {
 			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($debito-$credito);
 		}
@@ -184,7 +186,7 @@ class AsientoContableDocumento {
 
 			if(!$asiento2 instanceof Asiento2) {
 				$asiento2 = new Asiento2;
-				$result = $asiento2->store($this->asiento, $cuenta);
+				$result = $asiento2->store($this->asiento, $cuenta, $this->import);
 	            if(!$result->success) {
 	                return $result->error;
 	            }

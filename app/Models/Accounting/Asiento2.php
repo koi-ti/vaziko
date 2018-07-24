@@ -103,7 +103,7 @@ class Asiento2 extends Model
         return $query->get();
     }
 
-    public function store(Asiento $asiento, Array $data)
+    public function store(Asiento $asiento, Array $data, $import)
     {
         $response = new \stdClass();
         $response->success = false;
@@ -140,17 +140,19 @@ class Asiento2 extends Model
         }
 
         // Validar valores
-        if($data['Naturaleza'] == 'C') {
-            if(!is_numeric($data['Credito']) || $data['Credito'] <= 0) {
-                $response->error = "Valor no puede ser menor o igual a 0.";
-                return $response;
+        if (!$import) {
+            if($data['Naturaleza'] == 'C') {
+                if(!is_numeric($data['Credito']) || $data['Credito'] <= 0) {
+                    $response->error = "Valor no puede ser menor o igual a 0 ({$data['Credito']}).";
+                    return $response;
+                }
             }
-        }
 
-        if($data['Naturaleza'] == 'D') {
-            if(!is_numeric($data['Debito']) || $data['Debito'] <= 0) {
-                $response->error = "Valor no puede ser menor o igual a 0 ({$data['Debito']}).";
-                return $response;
+            if($data['Naturaleza'] == 'D') {
+                if(!is_numeric($data['Debito']) || $data['Debito'] <= 0) {
+                    $response->error = "Valor no puede ser menor o igual a 0 ({$data['Debito']}).";
+                    return $response;
+                }
             }
         }
 

@@ -66,7 +66,7 @@ class AsientoNif2 extends Model
         return $query->get();
     }
 
-    public function store(AsientoNif $asientoNif, Array $data)
+    public function store(AsientoNif $asientoNif, Array $data, $import)
     {
         $response = new \stdClass();
         $response->success = false;
@@ -101,19 +101,21 @@ class AsientoNif2 extends Model
                 return $response;
             }
         }
-
-        // Validar valores
-        if($data['Naturaleza'] == 'C') {
-            if(!is_numeric($data['Credito']) || $data['Credito'] <= 0) {
-                $response->error = "Valor no puede ser menor o igual a 0.";
-                return $response;
+        
+        if (!$import) {
+            // Validar valores
+            if($data['Naturaleza'] == 'C') {
+                if(!is_numeric($data['Credito']) || $data['Credito'] <= 0) {
+                    $response->error = "Valor no puede ser menor o igual a 0.";
+                    return $response;
+                }
             }
-        }
 
-        if($data['Naturaleza'] == 'D') {
-            if(!is_numeric($data['Debito']) || $data['Debito'] <= 0) {
-                $response->error = "Valor no puede ser menor o igual a 0 ({$data['Debito']}).";
-                return $response;
+            if($data['Naturaleza'] == 'D') {
+                if(!is_numeric($data['Debito']) || $data['Debito'] <= 0) {
+                    $response->error = "Valor no puede ser menor o igual a 0 ({$data['Debito']}).";
+                    return $response;
+                }
             }
         }
 

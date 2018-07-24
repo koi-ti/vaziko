@@ -10,12 +10,13 @@ class AsientoNifContableDocumento {
 
 	public $asientoNif;
 	private $beneficiario;
+	private $import;
 	private $documento;
 	private $asientoNif_cuentas = [];
 	public $asientoNif_error = NULL;
 	private $empresa;
 
-	function __construct(Array $data, AsientoNif $asientoNif = null)
+	function __construct(Array $data, AsientoNif $asientoNif = null, $import = false)
 	{
 		// Cuando se edita termina un asiento ya existe $asientoNif
 		if(!$asientoNif instanceof AsientoNif) {
@@ -69,6 +70,7 @@ class AsientoNifContableDocumento {
 			return;
 		}
 
+		$this->import = $import;
         // Validar cierre contable
 		// if( $this->asientoNif1_fecha <= $empresa->empresa_fecha_contabilidad){
 		// 	$this->asientoNif_error = 'La fecha que intenta realizar el asiento: '.$this->asientoNif1_fecha.' no esta PERMITIDA. Es menor a la del cierre contable :'.$empresa->empresa_fecha_contabilidad;
@@ -141,10 +143,10 @@ class AsientoNifContableDocumento {
 				return "El nivel 7 de la cuenta {$cuenta['Cuenta']} es cero y un nivel inferior es distinto de cero. No se puede realizar el AsientoNif. $srnivel";
 			}
 
-			if (floatval($cuenta['Debito']) > 0 && $cuenta['Credito'] == 0) {
+			if (floatval(abs($cuenta['Debito'])) > 0 && $cuenta['Credito'] == 0) {
 				$debito += round($cuenta['Debito'],2);
 
-			}else if (floatval($cuenta['Credito']) > 0 && $cuenta['Debito'] == 0) {
+			}else if (floatval(abs($cuenta['Credito'])) > 0 && $cuenta['Debito'] == 0) {
 				$credito += round($cuenta['Credito'],2);
 
 			}else{
@@ -152,7 +154,7 @@ class AsientoNifContableDocumento {
 			}
 		}
 
-		$resta = round(abs($credito-$debito),2);
+		$resta = round(abs($credito)-abs($debito),2);
 		if ($resta>0.01 || ($credito === 0 && $debito === 0)) {
 			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($debito-$credito);
 		}
@@ -181,7 +183,7 @@ class AsientoNifContableDocumento {
 
 			if(!$asientoNif2 instanceof AsientoNif2) {
 				$asientoNif2 = new AsientoNif2;
-				$result = $asientoNif2->store($this->asientoNif, $cuenta);
+				$result = $asientoNif2->store($this->asientoNif, $cuenta, $this->import);
 	            if(!$result->success) {
 	                return $result->error;
 	            }
