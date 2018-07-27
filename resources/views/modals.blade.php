@@ -505,7 +505,7 @@
             </div>
 			<div class="row">
                 <label for="search_ordenp_estado" class="col-md-1 control-label">Estado</label>
-				<div class="col-md-offset-4 col-md-4">
+				<div class="col-md-offset-3 col-md-5">
 					<select name="searchordenp_ordenp_estado" id="searchordenp_ordenp_estado" class="form-control">
 						<option value="" selected>Todas</option>
 						<option value="A">Abiertas</option>
