@@ -503,6 +503,18 @@
                     <input id="search_ordenpnombre" name="search_ordenpnombre" placeholder="Tercero" class="form-control input-sm" type="text" readonly>
                 </div>
             </div>
+			<div class="row">
+                <label for="search_ordenp_estado" class="col-md-1 control-label">Estado</label>
+				<div class="col-md-offset-4 col-md-4">
+					<select name="searchordenp_ordenp_estado" id="searchordenp_ordenp_estado" class="form-control">
+						<option value="" selected>Todas</option>
+						<option value="A">Abiertas</option>
+						<option value="N">Anuladas</option>
+						<option value="C">Cerradas</option>
+						<option value="T">Culminadas</option>
+					</select>
+				</div>
+            </div><br>
 
 			<div class="form-group">
 				<div class="col-md-offset-4 col-md-2 col-xs-6">

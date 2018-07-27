@@ -39,6 +39,7 @@ app || (app = {});
             // References
             this.$searchOrdenp = this.$('#search_ordenp');
             this.$searchOrdenpNombre = this.$('#search_ordenpnombre');
+            this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
 
             this.$ordersSearchTable = this.$modalComponent.find('#koi-search-ordenp2-component-table');
             this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
@@ -63,6 +64,7 @@ app || (app = {});
                     	data.datatables = true;
                         data.search_ordenp = _this.$searchOrdenp.val();
                         data.search_ordenpnombre = _this.$searchOrdenpNombre.val();
+                        data.search_ordenpestado = _this.$searchordenpEstado.val();
                     }
                 },
                 columns: [
@@ -91,7 +93,6 @@ app || (app = {});
                         visible: false,
                     }
                 ]
-
 			});
 
             // Modal show
@@ -120,6 +121,7 @@ app || (app = {});
 
             this.$searchOrdenp.val('');
             this.$searchOrdenpNombre.val('');
+            this.$searchordenpEstado.val('');
 
             this.ordersSearchTable.ajax.reload();
 		},

@@ -158,7 +158,7 @@ class Ordenp2 extends BaseModel
     public static function getDetails()
     {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden_cliente', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_cliente', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
             ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
@@ -203,7 +203,6 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
         $query->whereRaw('orden2_total_valor_unitario <> 0');
-        $query->where('orden_abierta', true);
         return $query;
     }
 
