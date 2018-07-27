@@ -158,11 +158,10 @@ class PreCotizacion2Controller extends Controller
                     }
 
                     // Reuperar imagenes y almacenar en storage/app/precotizacines
-                    foreach ($data['imagenes'] as $image) {
+                    $images = isset($data['imagenes']) ? $data['imagenes'] : null;
+                    foreach ($images as $image) {
                         // Recuperar nombre de archivo
                         $name = str_random(4)."_{$image->getClientOriginalName()}";
-
-                        Storage::put("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name", file_get_contents($image->getRealPath()));
 
                         // Insertar imagen
                         $imagen = new PreCotizacion4;
@@ -171,6 +170,8 @@ class PreCotizacion2Controller extends Controller
                         $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
                         $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
+
+                        Storage::put("pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name", file_get_contents($image->getRealPath()));
                     }
 
                     // Commit Transaction

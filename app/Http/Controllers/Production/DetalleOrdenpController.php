@@ -161,8 +161,8 @@ class DetalleOrdenpController extends Controller
 
 
                     // Recuperar imagenes y almacenar en storage/app/cotizacines
-                    $imagenes = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
-                    foreach ($imagenes as $image) {
+                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    foreach ($images as $image) {
                         // Recuperar nombre de archivo
                         $name = str_random(4)."_{$image->getClientOriginalName()}";
 
@@ -551,8 +551,8 @@ class DetalleOrdenpController extends Controller
                 }
 
                 // Imagenes
-                $imagenes = Ordenp8::where('orden8_orden2', $orden2->id)->get();
-                foreach ($imagenes as $orden8) {
+                $images = Ordenp8::where('orden8_orden2', $orden2->id)->get();
+                foreach ($images as $orden8) {
                      $neworden8 = $orden8->replicate();
                      $neworden8->orden8_orden2 = $neworden2->id;
                      $neworden8->orden8_usuario_elaboro = Auth::user()->id;

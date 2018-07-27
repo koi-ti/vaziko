@@ -145,12 +145,10 @@ class Cotizacion2Controller extends Controller
                     }
 
                     // Recuperar imagenes y almacenar en storage/app/cotizacines
-                    $imagenes = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
-                    foreach ($imagenes as $image) {
+                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    foreach ($images as $image) {
                         // Recuperar nombre de archivo
                         $name = str_random(4)."_{$image->getClientOriginalName()}";
-
-                        Storage::put("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$name", file_get_contents($image->getRealPath()));
 
                         // Insertar imagen
                         $imagen = new Cotizacion8;
@@ -159,6 +157,8 @@ class Cotizacion2Controller extends Controller
                         $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
                         $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
+
+                        Storage::put("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$name", file_get_contents($image->getRealPath()));
                     }
 
                     // Commit Transaction
@@ -517,8 +517,8 @@ class Cotizacion2Controller extends Controller
                 }
 
                 // Imagenes
-                $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
-                foreach ($imagenes as $cotizacion8) {
+                $images = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
+                foreach ($images as $cotizacion8) {
                      $newcotizacion8 = $cotizacion8->replicate();
                      $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;

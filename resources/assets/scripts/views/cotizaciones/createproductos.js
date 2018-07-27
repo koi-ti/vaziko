@@ -417,6 +417,7 @@ app || (app = {});
                     this.model.save( null, {
                         data: formData,
                         processData: false,
+                        silent: true,
                         contentType: false
                     });
                 }
