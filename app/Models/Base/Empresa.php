@@ -21,7 +21,7 @@ class Empresa extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['empresa_niif', 'empresa_iva', 'empresa_cc_contador', 'empresa_tj_contador', 'empresa_nm_contador', 'empresa_cc_revisor', 'empresa_tj_revisor', 'empresa_nm_revisor', 'empresa_paginacion'];
+    protected $fillable = ['empresa_niif', 'empresa_iva', 'empresa_cc_contador', 'empresa_tj_contador', 'empresa_nm_contador', 'empresa_cc_revisor', 'empresa_tj_revisor', 'empresa_nm_revisor', 'empresa_paginacion', 'empresa_base_ica_compras', 'empresa_base_ica_servicios','empresa_porcentaje_retefuente_factura', 'empresa_base_retefuente_factura', 'empresa_base_reteiva_factura', 'empresa_porcentaje_reteiva_factura'];
 
     /**
      * The attributes that are mass boolean assignable.

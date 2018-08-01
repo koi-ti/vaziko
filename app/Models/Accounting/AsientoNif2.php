@@ -66,7 +66,7 @@ class AsientoNif2 extends Model
         return $query->get();
     }
 
-    public function store(AsientoNif $asientoNif, Array $data, $import)
+    public function store(AsientoNif $asientoNif, Array $data, $import = false)
     {
         $response = new \stdClass();
         $response->success = false;
@@ -101,7 +101,7 @@ class AsientoNif2 extends Model
                 return $response;
             }
         }
-        
+
         if (!$import) {
             // Validar valores
             if($data['Naturaleza'] == 'C') {

@@ -854,6 +854,31 @@
 <script type="text/template" id="import-data-tpl">
 	<% if(title == 'asientos'){ %>
 		<div class="row">
+            <div class="form-group col-sm-4">
+                <select name="ano" id="ano" class="form-control" required>
+                    @for($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </select>
+            </div>
+
+            <div class="form-group col-sm-5">
+                <select name="mes" id="mes" class="form-control" required>
+                    @foreach( config('koi.meses') as $key => $value)
+                        <option value="{{ $key }}">{{ $value }}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="form-group col-sm-2">
+                <select name="dia" id="dia" class="form-control" required>
+                    @for($i = 1; $i <= 31; $i++)
+                        <option value="{{ $i }}">{{ $i }}</option>
+                    @endfor
+                </select>
+            </div>
+        </div>
+		<div class="row">
 			<div class="form-group col-md-4">
 				<div class="input-group input-group-sm">
 					<span class="input-group-btn">

@@ -214,6 +214,28 @@
                                         @endforeach
                                     </select>
 						    	</div>
+								<div class="form-group col-md-2">
+						    		<label for="empresa_base_retefuente_factura" class="control-label">Retefuente</label>
+                                    <input name="empresa_base_retefuente_factura" id="empresa_base_retefuente_factura" class="form-control input-sm" value="<%- empresa_base_retefuente_factura %>" data-currency></input>
+						    	</div>
+								<div class="form-group col-md-2">
+						    		<label for="empresa_porcentaje_retefuente_factura" class="control-label">Retefuente %</label>
+                                	<input type="text" id="empresa_porcentaje_retefuente_factura" name="empresa_porcentaje_retefuente_factura" value="<%- empresa_porcentaje_retefuente_factura %>" class="form-control input-sm spinner-percentage" maxlength="4" required>
+						    	</div>
+								<div class="form-group col-md-2">
+						    		<label for="empresa_base_reteiva_factura" class="control-label">ReteIva</label>
+                                    <input name="empresa_base_reteiva_factura" id="empresa_base_reteiva_factura" class="form-control input-sm" value="<%- empresa_base_reteiva_factura %> "data-currency></input>
+						    	</div>
+                                <div class="form-group col-md-2">
+                                    <label for="empresa_porcentaje_reteiva_factura" class="control-label">ReteIva %</label>
+                                    <input type="text" id="empresa_porcentaje_reteiva_factura" name="empresa_porcentaje_reteiva_factura" value="<%- empresa_porcentaje_reteiva_factura %>" class="form-control input-sm spinner-percentage" maxlength="4" required>
+                                </div>
+								<div class="form-group col-md-2">
+						    		<label for="empresa_base_ica_compras" class="control-label">ReteIca</label>
+                                    <input name="empresa_base_ica_compras" id="empresa_base_ica_compras" class="form-control input-sm" value="<%- empresa_base_ica_compras %>" data-currency></input>
+						    	</div>
+                            </div>
+                            <div class="row">
 						    	<div class="form-group col-md-10 col-sm-12 col-xs-12">
 									<label class="control-label"></label>
 									<div class="row">

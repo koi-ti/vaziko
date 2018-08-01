@@ -544,15 +544,15 @@ class AsientoController extends Controller
                     $cuentas[] = $arCuenta;
                 }
             },false);
-
+            Log::info($cuentas);
             if($documento->documento_actual){
                 $asiento = new Asiento;
                 $consecutive++;
 
                 // Encabezado por defecto
-                $asiento->asiento1_ano = intval( date('Y') );
-                $asiento->asiento1_mes = intval( date('m') );
-                $asiento->asiento1_dia = intval( date('d') );
+                $asiento->asiento1_ano = $request->ano;
+                $asiento->asiento1_mes = $request->mes;
+                $asiento->asiento1_dia = $request->dia;
                 $asiento->asiento1_numero = $consecutive;
                 $asiento->asiento1_folder = $folder->id;
                 $asiento->asiento1_documento = $documento->id;
@@ -568,12 +568,14 @@ class AsientoController extends Controller
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
                 }
+
                 // Preparar asiento
                 $result = $objAsiento->asientoCuentas($cuentas);
                 if($result != 'OK'){
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
+
                 // Insertar asiento
                 $result = $objAsiento->insertarAsiento();
                 if($result != 'OK') {
@@ -585,9 +587,9 @@ class AsientoController extends Controller
                 $asientoNif = new AsientoNif;
                 $consecutive++;
                 // AsientoNif1
-                $asientoNif->asienton1_ano = intval( date('Y') );
-                $asientoNif->asienton1_mes = intval( date('m') );
-                $asientoNif->asienton1_dia = intval( date('d') );
+                $asientoNif->asienton1_ano = $request->ano;
+                $asientoNif->asienton1_mes = $request->mes;
+                $asientoNif->asienton1_dia = $request->dia;
                 $asientoNif->asienton1_numero = $consecutive;
                 $asientoNif->asienton1_asiento =  isset($asiento->id) ? $asiento->id : null;
                 $asientoNif->asienton1_folder = $folder->id;

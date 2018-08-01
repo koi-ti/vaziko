@@ -124,6 +124,40 @@
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">SUBTOTAL</th>
+                                            <td class="text-center" id="subtotal-facturado">0</td>
+                                            <td></td>
+                                            <td class="text-right"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">IVA </th>
+                                            <td colspan="3" class="text-right"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">RTE FTE</th>
+                                            <td colspan="3" class="text-right"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">RTE ICA</th>
+                                            <td colspan="3" class="text-right"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">RTE IVA</th>
+                                            <td colspan="3" class="text-right"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <th class="text-right">TOTAL</th>
+                                            <td colspan="3" class="text-right"></td>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>

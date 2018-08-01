@@ -203,7 +203,7 @@ class AsientoContableDocumento {
 		    if(!$objTercero instanceof Tercero) {
 		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
 		    }
-
+			\Log::info('insertarAsiento2');
 			// Mayorizacion de saldos x tercero
 			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
 			if($result != 'OK') {

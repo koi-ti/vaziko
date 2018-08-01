@@ -103,7 +103,7 @@ class Asiento2 extends Model
         return $query->get();
     }
 
-    public function store(Asiento $asiento, Array $data, $import)
+    public function store(Asiento $asiento, Array $data, $import = false)
     {
         $response = new \stdClass();
         $response->success = false;
