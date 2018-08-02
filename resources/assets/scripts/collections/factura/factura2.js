@@ -40,9 +40,19 @@ app || (app = {});
                 response.error = 'La orden No. '+ data.factura1_orden +' ya se encuentra registrada.';
                 return response;
             }
+            $('#iva-create').attr('readonly', false);
+            $('#rtefuente-create').attr('readonly', false);
+            $('#rteica-create').attr('readonly', false);
+            $('#rteiva-create').attr('readonly', false);
 
             response.success = true;
             return response;
+        },
+
+        subtotal: function(){
+            return this.reduce(function(sum, model) {
+                return sum + (parseInt(model.get('factura2_cantidad')) * parseFloat(model.get('orden2_total_valor_unitario')))
+            }, 0);
         },
 
         renderSubtotal: function(){
@@ -54,9 +64,10 @@ app || (app = {});
 
         totalize: function() {
             var facturado = this.facturado();
-            // var subtotal = this.subtotal();
+            var subtotal = this.subtotal();
+
             this.renderSubtotal();
-            return { 'facturado': facturado }
+            return { 'facturado': facturado, 'subtotal': subtotal }
         },
    });
 

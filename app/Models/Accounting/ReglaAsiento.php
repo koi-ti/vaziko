@@ -71,34 +71,34 @@ class ReglaAsiento extends Model
                 // Id Documento
                 $asiento1_id_documentos = $factura->id;
                 $numeroDocumento = $factura->factura1_numero;
-                break;
-        }
-        // Prepare Data asiento
-        $object->data = [
-            'asiento1_mes' => (Int) date('m'),
-            'asiento1_ano' => (Int) date('Y'),
-            'asiento1_dia' => (Int) date('d'),
-            'asiento1_numero' => $documento->documento_consecutivo + 1,
-            'asiento1_folder' => $documento->documento_folder,
-            'asiento1_documento' => $documento->id,
-            'asiento1_documentos' => $documento->documento_codigo,
-            'asiento1_id_documentos' => $asiento1_id_documentos,
-            'asiento1_beneficiario' => $asiento1_beneficiario,
-        ];
+                // Prepare Data asiento
+                $object->data = [
+                    'asiento1_mes' => (int) date('m', strtotime($factura->factura1_fecha)),
+                    'asiento1_ano' => (int) date('Y', strtotime($factura->factura1_fecha)),
+                    'asiento1_dia' => (int) date('d', strtotime($factura->factura1_fecha)),
+                    'asiento1_numero' => $documento->documento_consecutivo + 1,
+                    'asiento1_folder' => $documento->documento_folder,
+                    'asiento1_documento' => $documento->id,
+                    'asiento1_documentos' => $documento->documento_codigo,
+                    'asiento1_id_documentos' => $asiento1_id_documentos,
+                    'asiento1_beneficiario' => $asiento1_beneficiario,
+                ];
 
-        // Prepare Data Asiento nif
-        if ($documento->documento_nif) {
-            $object->dataNif = [
-                'asienton1_mes' => (Int) date('m'),
-                'asienton1_ano' => (Int) date('Y'),
-                'asienton1_dia' => (Int) date('d'),
-                'asienton1_numero' => $documento->documento_consecutivo + 1,
-                'asienton1_folder' => $documento->documento_folder,
-                'asienton1_documento' => $documento->id,
-                'asienton1_documentos' => $documento->documento_codigo,
-                'asienton1_id_documentos' => $asiento1_id_documentos,
-                'asienton1_beneficiario' => $asiento1_beneficiario,
-            ];
+                // Prepare Data Asiento nif
+                if ($documento->documento_nif) {
+                    $object->dataNif = [
+                        'asienton1_mes' => (int) date('m', strtotime($factura->factura1_fecha)),
+                        'asienton1_ano' => (int) date('Y', strtotime($factura->factura1_fecha)),
+                        'asienton1_dia' => (int) date('d', strtotime($factura->factura1_fecha)),
+                        'asienton1_numero' => $documento->documento_consecutivo + 1,
+                        'asienton1_folder' => $documento->documento_folder,
+                        'asienton1_documento' => $documento->id,
+                        'asienton1_documentos' => $documento->documento_codigo,
+                        'asienton1_id_documentos' => $asiento1_id_documentos,
+                        'asienton1_beneficiario' => $asiento1_beneficiario,
+                    ];
+                }
+            break;
         }
         // Consulto reglas
         $rules_sql ="

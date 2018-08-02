@@ -17,7 +17,8 @@ app || (app = {});
             'click .submit-factura' :'submitFactura',
             'submit #form-factura' :'onStore',
             'submit #form-detail-factura' :'onStoreItem',
-            'change #factura1_fecha_vencimiento' :'changeVencimiento'
+            'change #factura1_fecha_vencimiento' :'changeVencimiento',
+            'change .change-impuestos' :'changeImpuestos'
         },
 
         /**
@@ -26,7 +27,7 @@ app || (app = {});
         initialize : function() {
             // Attributes
             this.detalleFactura2List = new app.DetalleFactura2List();
-
+            this.impuestos = {};
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -89,6 +90,15 @@ app || (app = {});
             }
         },
 
+
+        changeImpuestos: function(e){
+            var value = $(e.currentTarget).inputmask('unmaskedvalue'),
+                key = $(e.currentTarget).attr('id');
+                total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
+                $('#total-create').html(window.Misc.currency(total))
+                this.impuestos[key] = value;
+        },
+
         /**
         * Event submit factura1
         */
@@ -105,7 +115,7 @@ app || (app = {});
 
                 var data = window.Misc.formToJson( e.target );
                     data.detalle = this.detalleFactura2List.toJSON();
-
+                    data.impuestos = this.impuestos;
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -118,6 +128,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
+                    data.tercero =  this.$('#factura1_tercero').val()
                 this.detalleFactura2List.trigger( 'store', data );
             }
         },

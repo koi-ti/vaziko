@@ -138,6 +138,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('comentario', 'Receivable\Factura3Controller', ['only' => ['index', 'store']]);
 		Route::resource('facturado', 'Receivable\Factura2Controller', ['only' => ['index', 'store']]);
 		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);
+		Route::get('impuestos', ['as' => 'facturas.impuestos', 'uses' => 'Receivable\Factura1Controller@impuestos']);
 	});
 	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show','create','store']]);
    	/*

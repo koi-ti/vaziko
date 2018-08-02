@@ -115,7 +115,7 @@ class Factura1Controller extends Controller
 
                     // Detalle de la factura (ordenesp2)
                     $detalle = isset($data['detalle']) ? $data['detalle'] : null;
-                    $subtotal = $rtfuente = $rtiva = $rtica = 0;
+                    $subtotal = $rtfuente = $rtiva = $rtica = $iva = 0;
                     foreach ($detalle as $item){
 
                         // Validar ordenp2
@@ -146,18 +146,26 @@ class Factura1Controller extends Controller
                     }
 
                     // Calcular Retefuente, Reteiva, Reteica, Iva, Total
-                    $iva = ( round($subtotal) * $empresa->empresa_iva ) / 100;
+                    $iva = isset($request->impuestos['iva-create']) ? $request->impuestos['iva-create'] : ( round($subtotal) * $empresa->empresa_iva ) / 100;
+
                     if( $tercero->tercero_regimen == 2 && config('koi.terceros.regimen')[$tercero->tercero_regimen] == 'Común' && $subtotal >= $empresa->empresa_base_retefuente_factura){
                         $rtfuente = ($subtotal * $empresa->empresa_porcentaje_retefuente_factura) / 100;
                     }
+
+                    $rtfuente = isset($request->impuestos['rtefuente-create']) ? $request->impuestos['rtefuente-create'] : $rtfuente;
 
                     if( $tercero->tercero_gran_contribuyente && $subtotal >= $empresa->empresa_base_reteiva_factura ){
                         $rtiva = ($iva * $empresa->empresa_porcentaje_reteiva_factura) / 100;
                     }
 
+                    $rtiva = isset($request->impuestos['rteiva-create']) ? $request->impuestos['rteiva-create'] : $rtiva;
+
                     if( $subtotal >= $empresa->empresa_base_ica_compras && $tercero->tercero_municipio == $empresa->tercero_municipio){
                         $rtica = ($subtotal * $empresa->actividad_tarifa) / 1000;
                     }
+
+                    $rtica = isset($request->impuestos['rteica-create']) ? $request->impuestos['rteica-create'] : $rtica;
+
                     $total = round($subtotal) + round($iva) - round($rtfuente) - round($rtica) - round($rtiva);
 
                     // Actualizar factura--iva subtotal
@@ -255,6 +263,8 @@ class Factura1Controller extends Controller
                     $puntoventa->save();
 
                     // Commit Transaction
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => "OK"]);
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
@@ -337,5 +347,49 @@ class Factura1Controller extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML( View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render() );
         return $pdf->stream( sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')) );
+    }
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function impuestos(Request $request)
+    {
+        // Recuperar Tercero
+        $tercero = Tercero::where('tercero_nit', $request->item['tercero'])->first();
+        if(!$tercero instanceof Tercero){
+            return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+        }
+
+        // Recuperar iva Empresa
+        $empresa = Empresa::getEmpresa();
+        if(!$empresa instanceof Empresa){
+            return response()->json(['success'=>false, 'errors'=>'No es posible recuperar informacion de la empresa, por favor verifique la información o consulte al administrador.']);
+        }
+
+        $rtfuente = $rtiva = $rtica = 0;
+        $subtotal =  floatval($request->item['subtotal']);
+        $iva = ( $subtotal * $empresa->empresa_iva ) / 100;
+        $p_iva = $empresa->empresa_iva;
+        //  Retefuente
+        if( $tercero->tercero_regimen == 2 && config('koi.terceros.regimen')[$tercero->tercero_regimen] == 'Común' && $subtotal >= $empresa->empresa_base_retefuente_factura){
+            $rtfuente = ($subtotal * $empresa->empresa_porcentaje_retefuente_factura) / 100;
+        }
+
+        // Reteiva
+        if( $tercero->tercero_gran_contribuyente && $subtotal >= $empresa->empresa_base_reteiva_factura ){
+            $rtiva = ($iva * $empresa->empresa_porcentaje_reteiva_factura) / 100;
+        }
+
+        // Reteica
+        if( $subtotal >= $empresa->empresa_base_ica_compras && $tercero->tercero_municipio == $empresa->tercero_municipio){
+            $rtica = ($subtotal * $empresa->actividad_tarifa) / 1000;
+        }
+
+        // Total
+        $total = round($subtotal) + round($iva) - round($rtfuente) - round($rtica) - round($rtiva);
+
+        return response()->json(['success' => true, 'subtotal' => $subtotal, 'iva' => $iva, 'p_iva' => $p_iva,'rtefuente' => $rtfuente, 'rteica' => $rtica, 'rteiva' => $rtiva, 'total' => $total ]);
     }
 }

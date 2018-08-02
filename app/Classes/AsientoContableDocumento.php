@@ -158,8 +158,8 @@ class AsientoContableDocumento {
 		}
 
 		$resta = round(abs($credito) - abs($debito),2);
-		if ($resta>0.01 || ($credito === 0 && $debito === 0)) {
-			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($debito-$credito);
+		if (abs($resta)>0.01 || ($credito === 0 && $debito === 0)) {
+			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($resta);
 		}
 		return 'OK';
 	}
@@ -203,7 +203,7 @@ class AsientoContableDocumento {
 		    if(!$objTercero instanceof Tercero) {
 		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
 		    }
-			\Log::info('insertarAsiento2');
+
 			// Mayorizacion de saldos x tercero
 			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Naturaleza'], $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
 			if($result != 'OK') {

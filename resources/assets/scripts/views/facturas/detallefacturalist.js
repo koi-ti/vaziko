@@ -14,7 +14,9 @@ app || (app = {});
         el: '#browse-detalle-factura-list',
         events: {
             'click .item-detail-factura-remove': 'removeOne',
+            'change .change-cantidad': 'changeCantidad'
         },
+
         parameters: {
             dataFilter: {}
         },
@@ -32,6 +34,7 @@ app || (app = {});
 
             // References
             this.$facturado = this.$('#subtotal-facturado');
+            this.impuestos = {};
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -72,6 +75,51 @@ app || (app = {});
             this.collection.forEach( this.addOne, this );
         },
 
+
+        changeCantidad: function(e) {
+            var selector = this.$(e.currentTarget);
+
+            // rules && validate
+            var min = selector.attr('min');
+            var max = selector.attr('max');
+            if( selector.val() < parseInt(min) || selector.val() > parseInt(max) || _.isEmpty( selector.val() ) ){
+                selector.parent().addClass('has-error');
+                return;
+            }else{
+                selector.parent().removeClass('has-error');
+            }
+
+            // Settear el valor al modelo
+            var resource = $(e.currentTarget).attr("data-resource");
+            var model = this.collection.get(resource);
+            model.set({ "factura2_cantidad": selector.val() }, {silent: true});
+            this.impuestos.subtotal = this.collection.totalize().subtotal;
+            this.impuestos.tercero = model.get('tercero');
+            this.calculateImpuestos();
+        },
+
+        calculateImpuestos: function() {
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('facturas.impuestos')),
+                type: 'GET',
+                data:{ item: this.impuestos }
+            })
+            .done(function(resp) {
+                if (!resp.success) {
+                    alertify.error(resp.errors);
+                }
+                $('#subtotal-create').html(window.Misc.currency(resp.subtotal))
+                $('#p_iva-create').html('IVA ' + resp.p_iva + ' %')
+                $('#iva-create').val(window.Misc.currency(resp.iva))
+                $('#rtefuente-create').val(window.Misc.currency(resp.rtefuente))
+                $('#rteica-create').val(window.Misc.currency(resp.rteica))
+                $('#rteiva-create').val(window.Misc.currency(resp.rteiva))
+                $('#total-create').html(window.Misc.currency(resp.total))
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                alertify.error(thrownError);
+            });
+        },
         /**
         * store
         * @param form element
@@ -128,8 +176,17 @@ app || (app = {});
             var model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
+                this.impuestos.tercero = model.get('tercero');
                 model.view.remove();
                 this.collection.remove(model);
+                this.impuestos.subtotal = this.collection.totalize().subtotal;
+                this.calculateImpuestos();
+            }
+            if (!this.collection.length)  {
+                $('#iva-create').attr('readonly', true);
+                $('#rtefuente-create').attr('readonly', true)
+                $('#rteica-create').attr('readonly', true)
+                $('#rteiva-create').attr('readonly', true)
             }
         },
 

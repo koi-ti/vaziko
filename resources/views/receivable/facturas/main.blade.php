@@ -117,45 +117,37 @@
                                             <th width="5%">Código</th>
                                             <th width="50%">Producto</th>
                                             <th width="10%">Orden</th>
-                                            <th width="10%">Cantidad</th>
                                             <th width="5%">Saldo</th>
                                             <th class="text-center" width="5%">Facturado</th>
+                                            <th width="10%">Cantidad</th>
                                             <th class="text-center" width="10%">V. Unitario</th>
                                         </tr>
                                     </thead>
                                     <tbody></tbody>
                                     <tfoot>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">SUBTOTAL</th>
-                                            <td class="text-center" id="subtotal-facturado">0</td>
-                                            <td></td>
-                                            <td class="text-right"></td>
+                                            <th class="text-right" colspan="6">SUBTOTAL</th>
+                                            <td colspan="2" class="text-right" id="subtotal-create"></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">IVA </th>
-                                            <td colspan="3" class="text-right"></td>
+                                            <th class="text-right" colspan="6" id="p_iva-create">IVA </th>
+                                            <td colspan="2"><input readonly type="text" id="iva-create" class="form-control imput-sm change-impuestos" data-currency></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">RTE FTE</th>
-                                            <td colspan="3" class="text-right"></td>
+                                            <th class="text-right" colspan="6">RTE FTE</th>
+                                            <td colspan="2"><input readonly type="text" id="rtefuente-create" class="form-control imput-sm change-impuestos" data-currency></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">RTE ICA</th>
-                                            <td colspan="3" class="text-right"></td>
+                                            <th class="text-right" colspan="6">RTE ICA</th>
+                                            <td colspan="2"><input readonly type="text" id="rteica-create" class="form-control imput-sm change-impuestos" data-currency></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">RTE IVA</th>
-                                            <td colspan="3" class="text-right"></td>
+                                            <th class="text-right" colspan="6">RTE IVA</th>
+                                            <td colspan="2"><input readonly type="text" id="rteiva-create" class="form-control imput-sm change-impuestos" data-currency></td>
                                         </tr>
                                         <tr>
-                                            <td></td>
-                                            <th class="text-right">TOTAL</th>
-                                            <td colspan="3" class="text-right"></td>
+                                            <th class="text-right" colspan="6">TOTAL</th>
+                                            <td colspan="2" class="text-right"  id="total-create"></td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -184,11 +176,11 @@
         <td><%- id %></td>
         <td><%- productop_nombre %></td>
         <td><%- orden_codigo %></td>
-        <td>
-            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" class="form-control input-sm change-cantidad" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required>
-        </td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
+        <td>
+            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" data-resource="<%- id %>" class="form-control input-sm change-cantidad" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required>
+        </td>
         <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
     </script>
 

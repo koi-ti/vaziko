@@ -17,6 +17,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'factura2_cantidad': 0,
+            'factura2_subtotal': 0,
         }
     });
 

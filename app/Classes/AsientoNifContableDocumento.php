@@ -155,8 +155,8 @@ class AsientoNifContableDocumento {
 		}
 
 		$resta = round(abs($credito)-abs($debito),2);
-		if ($resta>0.01 || ($credito === 0 && $debito === 0)) {
-			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($debito-$credito);
+		if (abs($resta)>0.01 || ($credito === 0 && $debito === 0)) {
+			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($resta);
 		}
 		return 'OK';
 	}
