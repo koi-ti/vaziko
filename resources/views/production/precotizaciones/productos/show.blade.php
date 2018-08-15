@@ -272,7 +272,7 @@
 							{{--*/ $total = 0; /*--}}
 							@foreach( App\Models\Production\PreCotizacion3::getPreCotizaciones3( $precotizacion2->id ) as $materialp )
 								<tr>
-									<td>{{ $materialp->tercero_nombre }}</td>
+									<td>{{ $materialp->proveedor_nombre }}</td>
 									<td>{{ $materialp->materialp_nombre }}</td>
 									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 									<td>{{ $materialp->precotizacion3_medidas }}</td>
