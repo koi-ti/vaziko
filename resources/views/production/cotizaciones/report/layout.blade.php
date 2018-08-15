@@ -9,7 +9,7 @@
 			<style type="text/css">
 				body {
 					font-size: 7;
-					font-family: firefly, DejaVu Sans, sans-serif;
+					/* font-family: firefly, DejaVu Sans, sans-serif; */
 					font-weight: normal;
 				}
 
