@@ -132,7 +132,7 @@
 
 <!-- Modal search ordenp -->
 <div class="modal fade" id="modal-search-ordenp-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog modal-lg" role="document">
+	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
 		</div>
@@ -504,8 +504,8 @@
                 </div>
             </div>
 			<div class="row">
-                <label for="search_ordenp_estado" class="col-md-1 control-label">Estado</label>
-				<div class="col-md-offset-3 col-md-5">
+                <label for="search_ordenp_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
+				<div class="col-md-5">
 					<select name="searchordenp_ordenp_estado" id="searchordenp_ordenp_estado" class="form-control">
 						<option value="" selected>Todas</option>
 						<option value="A">Abiertas</option>

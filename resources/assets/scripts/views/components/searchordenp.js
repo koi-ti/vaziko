@@ -92,7 +92,16 @@ app || (app = {});
                             return window.moment(data).format('YYYY-MM-DD');
                         }
                     }
-                ]
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( parseInt(data.orden_abierta) ) {
+                        $(row).css( {"color":"#00a65a"} );
+                    }else if ( parseInt(data.orden_anulada) ) {
+                        $(row).css( {"color":"red"} );
+                    }else if ( parseInt(data.orden_culminada) ) {
+                        $(row).css( {"color":"#0073b7"} );
+                    }
+                }
 
 			});
 
