@@ -24,7 +24,7 @@ class MunicipioController extends Controller
 
             if( $request->has('datatables') ) {
                 $query->select('koi_departamento.departamento_codigo', 'municipio_codigo', 'municipio_nombre', 'departamento_nombre', 'koi_departamento.id as departamento_id');
-                return Datatables::of($query->get())->make(true);
+                return Datatables::of($query)->make(true);
             }
 
             $query->select('koi_municipio.id as id', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as text"));

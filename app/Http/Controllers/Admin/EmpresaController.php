@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Models\Base\Empresa, App\Models\Base\Tercero;
 use Log, DB;
-
-use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Municipio;
 
 class EmpresaController extends Controller
 {
@@ -81,7 +79,6 @@ class EmpresaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $empresa = Empresa::findOrFail($id);
             $tercero = Tercero::findOrFail($empresa->empresa_tercero);
             if ($tercero->isValid($data)) {

@@ -135,6 +135,7 @@ Route::group(['middleware' => 'auth'], function()
 	{
 		Route::get('search', ['as' => 'facturas.search', 'uses' => 'Receivable\Factura1Controller@search']);
 		Route::get('exportar/{facturas}', ['as' => 'facturas.exportar', 'uses' => 'Receivable\Factura1Controller@exportar']);
+		Route::get('anular/{facturas}', ['as' => 'facturas.anular', 'uses' => 'Receivable\Factura1Controller@anular']);
 		Route::resource('comentario', 'Receivable\Factura3Controller', ['only' => ['index', 'store']]);
 		Route::resource('facturado', 'Receivable\Factura2Controller', ['only' => ['index', 'store']]);
 		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);

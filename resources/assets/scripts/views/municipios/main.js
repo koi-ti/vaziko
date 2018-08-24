@@ -35,10 +35,10 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'departamento_codigo', name: 'koi_departamento.departamento_codigo'},
-                    { data: 'departamento_nombre', name: 'departamento_nombre'},
-                    { data: 'municipio_codigo', name: 'municipio_codigo' },
-                    { data: 'municipio_nombre', name: 'municipio_nombre'},
-                    { data: 'departamento_id', name: 'departamento_id'}
+                    { data: 'departamento_nombre', name: 'koi_departamento.departamento_nombre'},
+                    { data: 'municipio_codigo', name: 'koi_municipio.municipio_codigo' },
+                    { data: 'municipio_nombre', name: 'koi_municipio.municipio_nombre'},
+                    { data: 'departamento_id', name: 'koi_departamento.departamento_id'}
                 ],
                 columnDefs: [
                     {

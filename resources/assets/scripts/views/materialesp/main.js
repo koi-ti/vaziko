@@ -34,7 +34,7 @@ app || (app = {});
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'materialp_nombre', name: 'materialp_nombre' },
-                    { data: 'tipomaterial_nombre', name: 'tipomaterial_nombre' }
+                    { data: 'tipomaterial_nombre', name: 'koi_tipomaterial.tipomaterial_nombre' }
                 ],
 				buttons: [
 					{

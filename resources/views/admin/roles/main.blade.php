@@ -73,7 +73,7 @@
                     <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' && name != 'admin' ) { %>
                     <div class="row">
                         <div class="form-group col-md-12">
-                            <div class="nav-tabs-custom">
+                            <div class="nav-tabs-custom tab-success">
                                 <ul class="nav nav-tabs">
                                     <li class="active"><a href="#tab_modulos" data-toggle="tab">Permisos</a></li>
                                 </ul>

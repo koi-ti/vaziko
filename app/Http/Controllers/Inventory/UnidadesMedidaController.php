@@ -19,8 +19,7 @@ class UnidadesMedidaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Unidad::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Unidad::query() )->make(true);
         }
         return view('inventory.unidades.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class UnidadesMedidaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $unidad = new Unidad;
             if ($unidad->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class UnidadesMedidaController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Unidad::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $unidad->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class UnidadesMedidaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $unidad = Unidad::findOrFail($id);
             if ($unidad->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class UnidadesMedidaController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    
                     // Forget cache
                     Cache::forget( Unidad::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $unidad->id]);
                 }catch(\Exception $e){
                     DB::rollback();

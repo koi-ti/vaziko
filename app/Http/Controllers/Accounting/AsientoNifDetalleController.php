@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2,App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Treasury\Facturap1, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
-
 use Log, DB;
 
 class AsientoNifDetalleController extends Controller
@@ -212,7 +210,6 @@ class AsientoNifDetalleController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'destroy', $e->getMessage()));

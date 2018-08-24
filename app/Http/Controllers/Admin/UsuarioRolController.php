@@ -6,11 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
+use App\Models\Base\UsuarioRol, App\Models\Base\Tercero, App\Models\Base\Rol;
 use DB, Log, Datatables,Cache;
-use App\Models\Base\UsuarioRol;
-use App\Models\Base\Tercero;
-use App\Models\Base\Rol;
 
 class UsuarioRolController extends Controller
 {
@@ -21,8 +18,7 @@ class UsuarioRolController extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax())
-        {
+        if ( $request->ajax() ) {
             $data = [];
             if($request->has('tercero_id')) {
                 $query = UsuarioRol::query();
@@ -158,7 +154,6 @@ class UsuarioRolController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'UsuarioRolController', 'destroy', $e->getMessage()));

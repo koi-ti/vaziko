@@ -260,7 +260,7 @@
 	<br/>
 	<div class="row">
     	<div class="form-group col-md-12">
-			<div class="nav-tabs-custom">
+			<div class="nav-tabs-custom tab-success">
 				<ul class="nav nav-tabs">
 					<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
 					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>

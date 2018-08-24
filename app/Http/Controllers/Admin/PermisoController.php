@@ -19,8 +19,7 @@ class PermisoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Permiso::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Permiso::query() )->make(true);
         }
         return view('admin.permisos.index', ['empresa' => parent::getPaginacion()]);
     }

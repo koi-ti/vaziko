@@ -22,9 +22,8 @@ class MaterialespController extends Controller
             $query = Materialp::query();
             $query->select('koi_materialp.*', 'tipomaterial_nombre');
             $query->leftJoin('koi_tipomaterial', 'materialp_tipomaterial', '=', 'koi_tipomaterial.id');
-            return Datatables::of($query->get())->make(true);
+            return Datatables::of($query)->make(true);
         }
-
         return view('production.materiales.index', ['empresa' => parent::getPaginacion()]);
     }
 
@@ -48,7 +47,6 @@ class MaterialespController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $material = new Materialp;
             if ($material->isValid($data)) {
                 DB::beginTransaction();
@@ -67,9 +65,9 @@ class MaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Materialp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $material->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -90,10 +88,7 @@ class MaterialespController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $material = Materialp::where('koi_materialp.id', $id)
-                ->select('koi_materialp.*', 'tipomaterial_nombre')
-                ->leftJoin('koi_tipomaterial','materialp_tipomaterial','=','koi_tipomaterial.id')
-                ->first();
+        $material = Materialp::find($id);
         if ($request->ajax()) {
             return response()->json($material);
         }
@@ -123,7 +118,6 @@ class MaterialespController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $material = Materialp::findOrFail($id);
             if ($material->isValid($data)) {
                 DB::beginTransaction();
@@ -142,9 +136,9 @@ class MaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    
                     // Forget cache
                     Cache::forget( Materialp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $material->id]);
                 }catch(\Exception $e){
                     DB::rollback();

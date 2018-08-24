@@ -63,11 +63,21 @@ class PlanCuentasNifController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $plancuentanif = new PlanCuentanif;
             if ($plancuentanif->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    if( $request->has('plancuentasn_centro') ){
+                        // Validar centro costos
+                        $centrocosto = CentroCosto::find($request->plancuentasn_centro);
+                        if(!$centrocosto instanceof CentroCosto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
+                        }
+
+                        $plancuentanif->plancuentasn_centro = $centrocosto->id;
+                    }
+
                     // Cuenta
                     $plancuentanif->fill($data);
                     $plancuentanif->fillBoolean($data);
@@ -79,7 +89,6 @@ class PlanCuentasNifController extends Controller
 
                     //Forget cache
                     Cache::forget( PlanCuentaNif::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -133,11 +142,21 @@ class PlanCuentasNifController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $plancuentanif = PlanCuentaNif::findOrFail($id);
             if ($plancuentanif->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    if( $request->has('plancuentasn_centro') ){
+                        // Validar centro costos
+                        $centrocosto = CentroCosto::find($request->plancuentasn_centro);
+                        if(!$centrocosto instanceof CentroCosto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
+                        }
+
+                        $plancuentanif->plancuentasn_centro = $centrocosto->id;
+                    }
+
                     // Cuenta
                     $plancuentanif->fill($data);
                     $plancuentanif->fillBoolean($data);
@@ -149,7 +168,6 @@ class PlanCuentasNifController extends Controller
 
                     //Forget cache
                     Cache::forget( PlanCuentaNif::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
                 }catch(\Exception $e){
                     DB::rollback();

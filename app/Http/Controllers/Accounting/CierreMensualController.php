@@ -59,9 +59,7 @@ class CierreMensualController extends Controller
             // Creo el objeto para manejar el cierre contable
             $objCierre = new CierreContable($month, $year);
             $cierreContable = $objCierre->generarCierre();
-
             if ($cierreContable == 'OK') {
-
                 // Update date empresa
                 $empresa->empresa_fecha_cierre_contabilidad = $date;
                 $empresa->save();
@@ -71,7 +69,6 @@ class CierreMensualController extends Controller
 
                 // Commit Transaction
                 DB::commit();
-                // DB::rollback();
 
                 //  Enviar mensaje
                 Session::flash('message', "El CIERRE CONTABLE para el mes de $mes_msg  de $year se ha realizado con exito!");

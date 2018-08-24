@@ -19,8 +19,7 @@ class RolController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Rol::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Rol::query() )->make(true);
         }
         return view('admin.roles.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -53,11 +52,11 @@ class RolController extends Controller
                     $rol->fill($data);
                     $rol->save();
 
-                    // Forget cache
-                    Cache::forget( Rol::$key_cache );
                     // Commit Transaction
                     DB::commit();
 
+                    // Forget cache
+                    Cache::forget( Rol::$key_cache );
                     return response()->json(['success' => true, 'id' => $rol->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -80,7 +79,6 @@ class RolController extends Controller
     {
         $rol = Rol::findOrFail($id);
         if ($request->ajax()) {
-
             if(!in_array($rol->name, ['admin'])) {
                 $rol->permissions = Permiso::get()->toArray();
             }
@@ -125,11 +123,12 @@ class RolController extends Controller
                     // rol
                     $rol->fill($data);
                     $rol->save();
+
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Rol::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $rol->id]);
                 }catch(\Exception $e){
                     DB::rollback();

@@ -38,7 +38,7 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'id', name: 'id' },
-                    { data: 'actividadp_nombre', name: 'actividadp_nombre'},
+                    { data: 'actividadp_nombre', name: 'koi_actividadp.actividadp_nombre'},
                     { data: 'subactividadp_nombre', name: 'subactividadp_nombre'},
                     { data: 'subactividadp_activo', name: 'subactividadp_activo' }
                 ],

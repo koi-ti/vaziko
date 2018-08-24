@@ -58,6 +58,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull( Route.route('facturas.index') ),
                     data: function( data ) {
+                        data.factura1_estado = true;
                         data.factura1_numero = _this.$searchfacturaNumero.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
                     }
@@ -77,8 +78,14 @@ app || (app = {});
                         	return '<a href="#" class="a-koi-search-factura-component-table">' + data + '</a>';
                         }
                     }
-                ]
-
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( parseInt(data.factura1_anulado) ) {
+                        $(row).css( {"color":"red"} );
+                    } else {
+                        $(row).css( {"color":"#00a65a"} );
+                    }
+                }
 			});
 
             // Modal show

@@ -32,7 +32,7 @@ app || (app = {});
                 columns: [
                     { data: 'documento_codigo', name: 'documento_codigo' },
                     { data: 'documento_nombre', name: 'documento_nombre' },
-                    { data: 'folder_codigo', name: 'folder_codigo' },
+                    { data: 'folder_codigo', name: 'koi_folder.folder_codigo' },
                     { data: 'documento_actual', name: 'documento_actual' },
                     { data: 'documento_nif', name: 'documento_nif' }
                 ],

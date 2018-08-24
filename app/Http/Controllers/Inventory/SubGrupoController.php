@@ -19,8 +19,7 @@ class SubGrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = SubGrupo::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( SubGrupo::query() )->make(true);
         }
         return view('inventory.subgrupos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class SubGrupoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $subgrupo = new SubGrupo;
             if ($subgrupo->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class SubGrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( SubGrupo::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class SubGrupoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $subgrupo = SubGrupo::findOrFail($id);
             if ($subgrupo->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class SubGrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( SubGrupo::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();

@@ -42,7 +42,6 @@ class TiempopController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $tiempop = new Tiempop;
-
             if ( $tiempop->isValid($data) ) {
                 DB::beginTransaction();
                 try {
@@ -161,7 +160,7 @@ class TiempopController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // 
+        //
     }
 
     /**

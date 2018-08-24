@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento;
-use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Accounting\ReglaAsiento;
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Production\Ordenp2, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Base\Empresa, App\Models\Accounting\ReglaAsiento, App\Models\Accounting\Asiento;
 use App, View, Auth, DB, Log, Datatables;
 
 class Factura1Controller extends Controller
@@ -40,6 +40,11 @@ class Factura1Controller extends Controller
 
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
+
+                    // Estado
+                    if($request->has('factura1_estado')){
+                        $query->where('factura1_anulado', false);
+                    }
 
                     // Numero
                     if($request->has('factura1_numero')){
@@ -263,8 +268,6 @@ class Factura1Controller extends Controller
                     $puntoventa->save();
 
                     // Commit Transaction
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => "OK"]);
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
@@ -391,5 +394,97 @@ class Factura1Controller extends Controller
         $total = round($subtotal) + round($iva) - round($rtfuente) - round($rtica) - round($rtiva);
 
         return response()->json(['success' => true, 'subtotal' => $subtotal, 'iva' => $iva, 'p_iva' => $p_iva,'rtefuente' => $rtfuente, 'rteica' => $rtica, 'rteiva' => $rtiva, 'total' => $total ]);
+    }
+
+    /**
+    *  Method para anular factura
+    */
+    public function anular($id)
+    {
+        // Recuperar factura
+        $factura = Factura1::find($id);
+        if(!$factura instanceof Factura1){
+            return response()->json(['success' => false, 'errors' => 'No es posible recuperar la factura, por favor verifique la información o consulte al administrador.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            // Recuperar detalle de la factura
+            $productos = Factura2::where('factura2_factura1', $factura->id)->get();
+            foreach ($productos as $producto) {
+                // Devolver facturado a ordenp2
+                $ordenp2 = Ordenp2::find($producto->factura2_orden2);
+                if($ordenp2 instanceof Ordenp2){
+                    $ordenp2->orden2_facturado = ($ordenp2->orden2_facturado-$producto->factura2_cantidad);
+                    $ordenp2->save();
+                }
+            }
+
+            // Prepara data asiento
+            $reglaAsiento = ReglaAsiento::createAsiento($factura->id, 'FS', $factura->factura1_tercero, true);
+            if (!$reglaAsiento->success) {
+                DB::rollback();
+                return response()->json(['success'=>false, 'errors'=>$reglaAsiento->error]);
+            }
+
+            // Creo el objeto para manejar el asiento
+            $objAsiento = new AsientoContableDocumento($reglaAsiento->data);
+            if($objAsiento->asiento_error) {
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+            }
+
+            // Preparar asiento
+            $result = $objAsiento->asientoCuentas($reglaAsiento->cuentas);
+            if($result != 'OK'){
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => $result]);
+            }
+
+            // Insertar asiento
+            $result = $objAsiento->insertarAsiento();
+            if($result != 'OK') {
+                DB::rollback();
+                return response()->json(['success' => false, 'errors' => $result]);
+            }
+
+            // AsientoNif
+            if (!empty($reglaAsiento->dataNif)) {
+                // Creo el objeto para manejar el asiento
+                $objAsientoNif = new AsientoNifContableDocumento($reglaAsiento->dataNif);
+                if($objAsientoNif->asientoNif_error) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $objAsiento->asientoNif_error]);
+                }
+
+                // Preparar asiento
+                $result = $objAsientoNif->asientoCuentas($reglaAsiento->cuentas);
+                if($result != 'OK'){
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+
+                // Insertar asiento
+                $result = $objAsientoNif->insertarAsientoNif();
+                if($result != 'OK') {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => $result]);
+                }
+                // Recuperar el Id del asiento y guardar en la factura
+                $factura->factura1_asienton1_anulado = $objAsientoNif->asientoNif->id;
+            }
+
+            // Anular factura
+            $factura->factura1_anulado = true;
+            $factura->factura1_asiento1_anulado = $objAsiento->asiento->id;
+            $factura->save();
+
+            DB::commit();
+            return response()->json(['success' => true, 'msg' => 'Se anulo con exito la factura.']);
+        }catch(\Exception $e){
+            DB::rollback();
+            Log::error($e->getMessage());
+            return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+        }
     }
 }

@@ -19,9 +19,7 @@ class PuntoVentaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = PuntoVenta::query();
-            $query->select('koi_puntoventa.id as id', 'puntoventa_nombre', 'puntoventa_prefijo', 'puntoventa_resolucion_dian', 'puntoventa_numero');
-            return Datatables::of($query)->make(true);
+            return Datatables::of( PuntoVenta::query() )->make(true);
         }
         return view('admin.puntosventa.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -46,7 +44,6 @@ class PuntoVentaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $puntoventa = new PuntoVenta;
             if ($puntoventa->isValid($data)) {
                 DB::beginTransaction();
@@ -57,9 +54,9 @@ class PuntoVentaController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( PuntoVenta::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -110,7 +107,6 @@ class PuntoVentaController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $puntoventa = PuntoVenta::findOrFail($id);
             if ($puntoventa->isValid($data)) {
                 DB::beginTransaction();
@@ -121,9 +117,9 @@ class PuntoVentaController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( PuntoVenta::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
                 }catch(\Exception $e){
                     DB::rollback();

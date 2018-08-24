@@ -69,7 +69,7 @@ class Factura1 extends Model
 
     public static function getFactura($id){
         $query = Factura1::query();
-        $query->select('koi_factura1.*','puntoventa_nombre','puntoventa_prefijo','documento_nombre', 'asiento1_numero','tercero_telefono1', 'tercero_nit', 'tercero_direccion', 'tercero_municipio', 'tercero_telefono1', 'tercero_telefono2', 'tercero_celular',
+        $query->select('koi_factura1.*', 'puntoventa_nombre', 'puntoventa_prefijo', 'documento_nombre', 'aprobado.asiento1_numero as asiento_numero', 'anulado.asiento1_numero as asiento_numero_anulado', 'tercero_telefono1', 'tercero_nit', 'tercero_direccion', 'tercero_municipio', 'tercero_telefono1', 'tercero_telefono2', 'tercero_celular',
                 DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -79,8 +79,9 @@ class Factura1 extends Model
             );
         $query->join('koi_tercero as t', 'factura1_tercero', '=', 't.id');
         $query->join('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
-        $query->leftJoin('koi_asiento1', 'factura1_asiento', '=', 'koi_asiento1.id');
-        $query->leftJoin('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
+        $query->leftJoin('koi_asiento1 as aprobado', 'factura1_asiento', '=', 'aprobado.id');
+        $query->leftJoin('koi_asiento1 as anulado', 'factura1_asiento1_anulado', '=', 'anulado.id');
+        $query->leftJoin('koi_documento', 'aprobado.asiento1_documento', '=', 'koi_documento.id');
         $query->leftJoin('koi_municipio','tercero_municipio','=', 'koi_municipio.id');
         $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
         $query->where('koi_factura1.id',$id);

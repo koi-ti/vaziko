@@ -131,7 +131,7 @@
 
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <div class="nav-tabs-custom">
+                        <div class="nav-tabs-custom tab-success">
                             <ul class="nav nav-tabs">
                                 <li class="active"><a href="#tab_areas" data-toggle="tab">Áreas involucradas</a></li>
                                 <li><a href="#tab_tips" data-toggle="tab">Tips</a></li>

@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Base\Tercero, App\Models\Base\Contacto;
-
 use DB, Log, Datatables;
 
 class ContactoController extends Controller
@@ -27,8 +25,7 @@ class ContactoController extends Controller
                 $query = Contacto::query();
                 $query->select('koi_tcontacto.*');
                 $query->where('tcontacto_tercero', $request->tercero_id);
-                $contacts = $query->get();
-                return response()->json($contacts);
+                return response()->json( $query->get() );
 
             }else{
                 // Search datatables
@@ -80,7 +77,6 @@ class ContactoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $contacto = new Contacto;
             if ($contacto->isValid($data)) {
                 DB::beginTransaction();
@@ -97,13 +93,9 @@ class ContactoController extends Controller
                     $contacto->tcontacto_tercero = $tercero->id;
                     $contacto->save();
 
-
                     // Commit Transaction
                     DB::commit();
-                    return response()->json(['success' => true,
-                        'id' => $contacto->id,
-                        'tcontacto_nombre' => "{$contacto->tcontacto_nombres} {$contacto->tcontacto_apellidos}"
-                    ]);
+                    return response()->json(['success' => true, 'id' => $contacto->id, 'tcontacto_nombre' => "{$contacto->tcontacto_nombres} {$contacto->tcontacto_apellidos}"]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
@@ -148,12 +140,11 @@ class ContactoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $contacto = Contacto::findOrFail($id);
             if ($contacto->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // Documento
+                    // Contacto
                     $contacto->fill($data);
                     $contacto->save();
 

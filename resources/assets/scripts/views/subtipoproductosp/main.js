@@ -39,7 +39,7 @@ app || (app = {});
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'subtipoproductop_nombre', name: 'subtipoproductop_nombre' },
-                    { data: 'tipoproductop_nombre', name: 'tipoproductop_nombre' },
+                    { data: 'tipoproductop_nombre', name: 'koi_tipoproductop.tipoproductop_nombre' },
                     { data: 'subtipoproductop_activo', name: 'subtipoproductop_activo' },
                 ],
 				buttons: [

@@ -24,7 +24,7 @@ class SubtipoProductopController extends Controller
 
              if( $request->has('datatables') ) {
                  $query->select('koi_subtipoproductop.*', 'tipoproductop_nombre');
-                 return Datatables::of($query->get())->make(true);
+                 return Datatables::of($query)->make(true);
              }
 
              if( $request->has('typeproduct') ){

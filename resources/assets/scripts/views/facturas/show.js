@@ -14,6 +14,7 @@ app || (app = {});
         el: '#factura-show',
         events: {
             'click .export-factura': 'exportFactura',
+            'click .ban-factura': 'banFactura'
         },
 
         /**
@@ -64,6 +65,55 @@ app || (app = {});
 
             // Redirect to pdf
             window.open( window.Misc.urlFull( Route.route('facturas.exportar', { facturas: this.model.get('id') })) );
+        },
+
+        /**
+        * Event ban factura
+        */
+        banFactura: function (e) {
+            e.preventDefault();
+            var _this = this;
+
+            var banConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template( ($('#factura-ban-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Anular factura',
+                    onConfirm: function () {
+                        // Anular factura
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('facturas.anular', { facturas: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('facturas.show', { facturas: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            banConfirm.render();
         }
     });
 

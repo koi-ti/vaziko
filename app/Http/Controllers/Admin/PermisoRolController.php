@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Datatables, DB, Log;
-
 use App\Models\Base\Modulo, App\Models\Base\Rol, App\Models\Base\PermisoRol, App\Models\Base\Permiso;
+use Datatables, DB, Log;
 
 class PermisoRolController extends Controller
 {

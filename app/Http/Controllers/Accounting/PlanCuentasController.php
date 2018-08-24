@@ -65,11 +65,21 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $plancuenta = new PlanCuenta;
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    if( $request->has('plancuentas_centro') ){
+                        // Validar centro costos
+                        $centrocosto = CentroCosto::find($request->plancuentas_centro);
+                        if(!$centrocosto instanceof CentroCosto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
+                        }
+
+                        $plancuenta->plancuentas_centro = $centrocosto->id;
+                    }
+
                     // Cuenta
                     $plancuenta->fill($data);
                     $plancuenta->fillBoolean($data);
@@ -91,7 +101,6 @@ class PlanCuentasController extends Controller
                         $plancuenta->plancuentas_equivalente = $nif->id;
                     }
                     $plancuenta->save();
-
 
                     // Commit Transaction
                     DB::commit();
@@ -148,11 +157,21 @@ class PlanCuentasController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $plancuenta = PlanCuenta::findOrFail($id);
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    if( $request->has('plancuentas_centro') ){
+                        // Validar centro costos
+                        $centrocosto = CentroCosto::find($request->plancuentas_centro);
+                        if(!$centrocosto instanceof CentroCosto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
+                        }
+
+                        $plancuenta->plancuentas_centro = $centrocosto->id;
+                    }
+
                     // Cuenta
                     $plancuenta->fill($data);
                     $plancuenta->fillBoolean($data);

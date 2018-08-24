@@ -60,4 +60,12 @@ class Materialp extends Model
             return $collection;
         });
     }
+
+    /**
+     * Get the attributes for the acabadospName.
+     */
+    public function tipomaterial()
+    {
+        return $this->hasOne('App\Models\Production\TipoMaterialp', 'id' , 'materialp_tipomaterial');
+    }
 }

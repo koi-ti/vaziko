@@ -19,9 +19,7 @@ class FolderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Folder::query();
-            $query->select('koi_folder.id as id','folder_codigo', 'folder_nombre');
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Folder::query() )->make(true);
         }
         return view('accounting.folders.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -46,7 +44,6 @@ class FolderController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $folder = new Folder;
             if ($folder->isValid($data)) {
                 DB::beginTransaction();
@@ -107,7 +104,6 @@ class FolderController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $folder = Folder::findOrFail($id);
             if ($folder->isValid($data)) {
                 DB::beginTransaction();

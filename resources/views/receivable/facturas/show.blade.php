@@ -23,18 +23,32 @@
                         <ul class="dropdown-menu">
                             <li role="presentation">
                                 <a role="menuitem" tabindex="-1" href="#" class="export-factura">
-                                    <i class="fa fa-file-pdf-o"></i>Exportar
+                                    <i class="fa fa-file-pdf-o"></i>Exportar factura
                                 </a>
+                                @if( !$factura->factura1_anulado )
+                                    <a role="menuitem" tabindex="-1" href="#" class="ban-factura">
+                                        <i class="fa fa-ban"></i>Anular factura
+                                    </a>
+                                @endif
                             </li>
                         </ul>
                     </div>
                 	<div class="row">
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-1">
+                            <label class="control-label">Estado</label>
+                            @if( $factura->factura1_anulado )
+                                <div><span class="label label-danger">Anulado</span></div>
+                            @else
+                                <div><span class="label label-success">Abierta</span></div>
+                            @endif
+                        </div>
+
+                        <div class="form-group col-md-2">
                             <label class="control-label">Fecha</label>
                             <div>{{ $factura->factura1_fecha }}</div>
                         </div>
 
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-2">
                             <label class="control-label">Vencimiento</label>
                             <div>{{ $factura->factura1_fecha_vencimiento }}</div>
                         </div>
@@ -93,7 +107,7 @@
         		                        <tr>
         		                            <th>Codigo</th>
         		                            <th>Nombre</th>
-        		                            <th>Facturado</th>
+        		                            <th>Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
         		                            <th>V. Unitario</th>
         		                            <th>Total</th>
         		                        </tr>
@@ -141,7 +155,7 @@
         	    	</div>
                     <div class="row">
                         <div class="col-md-6 col-md-offset-3">
-                            <div class="box box-info">
+                            <div class="box box-success">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Detalle de crédito</h3>
                                 </div>
@@ -168,17 +182,36 @@
             </div>
         </div>
 
-        <div class="box box-solid">
+        <div class="box box-success">
             <div class="box-body">
                 <div class="row">
                     <div class="col-md-6 col-sm-6 col-xs-6 text-left">
                         <h4><a href="{{ route('asientos.show', ['asientos' =>  $factura->factura1_asiento ]) }}" target="_blanck" title="Ver Asiento"> Ver asiento contable </a></h4>
                     </div>
                     <div class="col-md-6 col-sm-6 col-xs-6 text-right">
-                        <h4><b>{{ $factura->documento_nombre }} - {{ $factura->asiento1_numero }}</b></h4>
+                        <h4><b>{{ $factura->documento_nombre }} - {{ $factura->asiento_numero }}</b></h4>
                     </div>
                 </div>
             </div>
         </div>
+
+        @if ( $factura->factura1_anulado )
+            <div class="box box-danger">
+                <div class="box-body">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6 col-xs-6 text-left">
+                            <h4><a href="{{ route('asientos.show', ['asientos' =>  $factura->factura1_asiento1_anulado ]) }}" target="_blanck" title="Ver Asiento"> Ver asiento contable anulado</a></h4>
+                        </div>
+                        <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+                            <h4><b>{{ $factura->documento_nombre }} - {{ $factura->asiento_numero_anulado }}</b></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endif
     </section>
+
+    <script type="text/template" id="factura-ban-confirm-tpl">
+        <p>¿Esta seguro que desea anular la factura # <b>{{ $factura->factura1_numero }}</b>?</p>
+    </script>
 @stop

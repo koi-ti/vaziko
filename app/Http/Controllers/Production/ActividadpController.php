@@ -19,8 +19,7 @@ class ActividadpController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = Actividadp::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Actividadp::query() )->make(true);
         }
         return view('production.actividadesp.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -46,7 +45,6 @@ class ActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $actividadp = new Actividadp;
-
             if( $actividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
@@ -60,7 +58,6 @@ class ActividadpController extends Controller
 
                     // Forget cache
                     Cache::forget( Actividadp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $actividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -112,7 +109,6 @@ class ActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $actividadp = Actividadp::findOrFail($id);
-
             if( $actividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
@@ -126,7 +122,6 @@ class ActividadpController extends Controller
 
                     // Forget cache
                     Cache::forget( Actividadp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $actividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();

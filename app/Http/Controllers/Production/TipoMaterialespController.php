@@ -19,8 +19,7 @@ class TipoMaterialespController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = TipoMaterialp::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( TipoMaterialp::query() )->make(true);
         }
         return view('production.tipomaterialesp.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class TipoMaterialespController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tipomaterialp = new TipoMaterialp;
             if ($tipomaterialp->isValid($data)) {
                 DB::beginTransaction();
@@ -60,7 +58,6 @@ class TipoMaterialespController extends Controller
 
                     // Forget cache
                     Cache::forget( TipoMaterialp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -111,7 +108,6 @@ class TipoMaterialespController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tipomaterialp = TipoMaterialp::findOrFail($id);
             if ($tipomaterialp->isValid($data)) {
                 DB::beginTransaction();
@@ -123,9 +119,9 @@ class TipoMaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    
                     // Forget cache
                     Cache::forget( TipoMaterialp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
                 }catch(\Exception $e){
                     DB::rollback();

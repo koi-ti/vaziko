@@ -71,7 +71,14 @@ app || (app = {});
                         targets: 2,
                         width: '15%'
                     },
-                ]
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( parseInt(data.factura1_anulado) ) {
+                        $(row).css( {"color":"red"} );
+                    } else {
+                        $(row).css( {"color":"#00a65a"} );
+                    }
+                }
             });
         },
 

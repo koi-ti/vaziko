@@ -24,7 +24,7 @@
 
         <section class="content">
             <div class="box box-solid" id="spinner-main">
-                <div class="nav-tabs-custom tab-solid tab-whithout-box-shadow">
+                <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>

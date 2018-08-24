@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Inventory\Producto, App\Models\Inventory\Traslado2, App\Models\Inventory\ProdbodeRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\Inventario;
 use App\Models\Base\Sucursal;
 use Log, DB;

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Accounting\Documento;
+use App\Models\Accounting\Documento, App\Models\Accounting\Folder;
 use DB, Log, Datatables;
 
 class DocumentoController extends Controller
@@ -22,7 +22,7 @@ class DocumentoController extends Controller
             $query = Documento::query();
             $query->select('koi_documento.id as id', 'documento_codigo', 'documento_nombre', 'folder_codigo', 'documento_actual', 'documento_nif');
             $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
-            return Datatables::of($query->get())->make(true);
+            return Datatables::of($query)->make(true);
         }
         return view('accounting.documentos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -52,9 +52,17 @@ class DocumentoController extends Controller
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Recuperar folder
+                    $folder = Folder::find($request->documento_folder);
+                    if(!$folder instanceof Folder){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el folder, por favor verifique la información o consulte al administrador.']);
+                    }
+
                     // Documento
                     $documento->fill($data);
                     $documento->fillBoolean($data);
+                    $documento->documento_folder = $folder->id;
                     $documento->save();
 
                     // Commit Transaction
@@ -117,9 +125,17 @@ class DocumentoController extends Controller
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Recuperar folder
+                    $folder = Folder::find($request->documento_folder);
+                    if(!$folder instanceof Folder){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el folder, por favor verifique la información o consulte al administrador.']);
+                    }
+
                     // Documento
                     $documento->fill($data);
                     $documento->fillBoolean($data);
+                    $documento->documento_folder = $folder->id;
                     $documento->save();
 
                     // Commit Transaction

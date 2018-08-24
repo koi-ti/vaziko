@@ -19,8 +19,7 @@ class AreaspController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Areap::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Areap::query() )->make(true);
         }
         return view('production.areas.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class AreaspController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $area = new Areap;
             if ($area->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class AreaspController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Areap::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $area->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class AreaspController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $area = Areap::findOrFail($id);
             if ($area->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class AreaspController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Areap::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $area->id]);
                 }catch(\Exception $e){
                     DB::rollback();

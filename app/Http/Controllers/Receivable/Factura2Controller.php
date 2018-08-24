@@ -19,7 +19,6 @@ class Factura2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
             $detalle = [];
             if($request->has('factura2')) {
                 $query = Factura2::query();

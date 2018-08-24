@@ -24,7 +24,7 @@ class SubActividadpController extends Controller
              $query->join('koi_actividadp', 'subactividadp_actividadp', '=', 'koi_actividadp.id');
 
              if( $request->has('datatables') ) {
-                 return Datatables::of($query->get())->make(true);
+                 return Datatables::of($query)->make(true);
              }
 
              if( $request->has('actividadesp') ){
@@ -58,7 +58,6 @@ class SubActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $subactividadp = new SubActividadp;
-
             if( $subactividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
@@ -80,7 +79,6 @@ class SubActividadpController extends Controller
 
                     // Forget cache
                     Cache::forget( SubActividadp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $subactividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -133,7 +131,6 @@ class SubActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $subactividadp = SubActividadp::findOrFail($id);
-
             if( $subactividadp->isValid($data) ) {
                 DB::beginTransaction();
                 try {
@@ -155,7 +152,6 @@ class SubActividadpController extends Controller
 
                     // Forget cache
                     Cache::forget( SubActividadp::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $subactividadp->id]);
                 }catch(\Exception $e){
                     DB::rollback();

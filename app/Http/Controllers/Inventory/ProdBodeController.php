@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Inventory\Prodbode, App\Models\Inventory\Producto;
 
 class ProdBodeController extends Controller

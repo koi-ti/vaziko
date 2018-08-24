@@ -6,9 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Accounting\ReglaAsiento;
-use App\Models\Accounting\Asiento;
-use App\Models\Receivable\Factura1;
+use App\Models\Accounting\ReglaAsiento, App\Models\Accounting\Asiento, App\Models\Receivable\Factura1;
 use DB;
 
 class ReglaAsientoController extends Controller

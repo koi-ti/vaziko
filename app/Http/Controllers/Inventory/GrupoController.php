@@ -19,8 +19,7 @@ class GrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Grupo::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Grupo::query() )->make(true);
         }
         return view('inventory.grupos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class GrupoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $grupo = new Grupo;
             if ($grupo->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class GrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Grupo::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $grupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class GrupoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $grupo = Grupo::findOrFail($id);
             if ($grupo->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class GrupoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Grupo::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $grupo->id]);
                 }catch(\Exception $e){
                     DB::rollback();

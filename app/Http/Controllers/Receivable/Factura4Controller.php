@@ -6,10 +6,8 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Receivable\Factura4;
 use DB;
-
 
 class Factura4Controller extends Controller
 {
@@ -21,8 +19,6 @@ class Factura4Controller extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $detalle = [];
-
             $query = Factura4::query();
             $query->select('koi_factura4.*', 'factura1_numero', 'factura1_fecha');
             $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
@@ -30,7 +26,6 @@ class Factura4Controller extends Controller
             $query->orderBy('factura4_vencimiento', 'desc');
 
             if ($request->has('tercero_id')) {
-
                 // Pestaña Cartera tercero
                 $query->addSelect('puntoventa_prefijo', DB::raw("DATEDIFF(factura4_vencimiento, NOW() ) as days"));
                 $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
@@ -42,8 +37,7 @@ class Factura4Controller extends Controller
                 $query->where('factura4_factura1', $request->factura1_id);
             }
 
-            $detalle = $query->get();
+            return response()->json( $query->get() );
         }
-        return response()->json($detalle);
     }
 }

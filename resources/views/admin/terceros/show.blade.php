@@ -144,7 +144,7 @@
 			<br/>
 			<div class="row">
 				<div class="form-group col-md-12">
-					<div class="nav-tabs-custom">
+					<div class="nav-tabs-custom tab-success">
 						<ul class="nav nav-tabs">
 							<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
 							<li><a href="#tab_empleados" data-toggle="tab" class="{{ $tercero->tercero_empleado || $tercero->tercero_interno ? '' : 'hide' }}">Empleado</a></li>
@@ -303,7 +303,6 @@
 										</div>
 									</div>
 								</form>
-
 								<br />
 								<div class="row">
 									<div class="form-group col-md-offset-2 col-md-8">
@@ -325,7 +324,7 @@
 
 							{{-- Tab contactos --}}
 							<div class="tab-pane" id="tab_contactos">
-								<div class="box box-success">
+								<div class="box box-solid">
 									<div class="box-body table-responsive no-padding">
 										<table id="browse-contact-list" class="table table-bordered" cellspacing="0" width="100%">
 											<thead>
@@ -346,7 +345,7 @@
 
 							{{-- Tab proveedor --}}
 							<div class="tab-pane" id="tab_proveedor">
-								<div class="box box-success">
+								<div class="box box-solid">
 									<div class="box-body table-responsive no-padding">
 										<table id="browse-facturap-list" class="table table-bordered" cellspacing="0" width="100%">
 											<thead>
@@ -368,7 +367,7 @@
 							</div>
 
 							<div class="tab-pane" id="tab_cartera">
-								<div class="box-body">
+								<div class="box box-solid">
 									<div class="box-body table-responsive">
 										<table id="browse-factura4-list" class="table table-bordered" cellspacing="0" width="100%">
 											<thead>
@@ -459,7 +458,6 @@
 									</div>
 								</div>
 							</div>
-
 						</div>
 					</div>
 				</div>

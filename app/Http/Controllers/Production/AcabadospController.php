@@ -19,8 +19,7 @@ class AcabadospController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Acabadop::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Acabadop::query() )->make(true);
         }
         return view('production.acabados.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class AcabadospController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $acabado = new Acabadop;
             if ($acabado->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class AcabadospController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Acabadop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $acabado->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class AcabadospController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $acabado = Acabadop::findOrFail($id);
             if ($acabado->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class AcabadospController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+                    
                     // Forget cache
                     Cache::forget( Acabadop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $acabado->id]);
                 }catch(\Exception $e){
                     DB::rollback();

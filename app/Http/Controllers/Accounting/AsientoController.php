@@ -76,7 +76,6 @@ class AsientoController extends Controller
             $asientoNif2 = null;
             if ($asiento->isValid($data)) {
                 if ($asiento2->isValid($data)) {
-
                     DB::beginTransaction();
                     try {
                         // Recuperar tercero
@@ -125,7 +124,6 @@ class AsientoController extends Controller
                             }
                         }
                         if ($documento->documento_actual) {
-
                             // Asiento1
                             $asiento->fill($data);
 

@@ -19,8 +19,7 @@ class TipoProductopController extends Controller
     public function index(Request $request)
     {
         if($request->ajax()){
-            $query = TipoProductop::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( TipoProductop::query() )->make(true);
         }
         return view('production.tipoproductosp.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class TipoProductopController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tipoproductop = new TipoProductop;
             if ($tipoproductop->isValid($data)) {
                 DB::beginTransaction();
@@ -60,7 +58,6 @@ class TipoProductopController extends Controller
 
                     // Forget cache
                     Cache::forget( TipoProductop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $tipoproductop->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -111,7 +108,6 @@ class TipoProductopController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $tipoproductop = TipoProductop::findOrFail($id);
             if ($tipoproductop->isValid($data)) {
                 DB::beginTransaction();
@@ -126,7 +122,6 @@ class TipoProductopController extends Controller
 
                     // Forget cache
                     Cache::forget( TipoProductop::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $tipoproductop->id]);
                 }catch(\Exception $e){
                     DB::rollback();

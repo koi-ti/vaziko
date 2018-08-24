@@ -30,7 +30,7 @@ class ReglaAsiento extends Model
         $this->errors = $validator->errors();
         return false;
     }
-    public static function createAsiento($document, $codigo, $beneficiario)
+    public static function createAsiento($document, $codigo, $beneficiario, $anular=false)
     {
         $object = new \stdClass();
         $object->data = [];
@@ -71,6 +71,7 @@ class ReglaAsiento extends Model
                 // Id Documento
                 $asiento1_id_documentos = $factura->id;
                 $numeroDocumento = $factura->factura1_numero;
+
                 // Prepare Data asiento
                 $object->data = [
                     'asiento1_mes' => (int) date('m', strtotime($factura->factura1_fecha)),
@@ -100,6 +101,7 @@ class ReglaAsiento extends Model
                 }
             break;
         }
+
         // Consulto reglas
         $rules_sql ="
             SELECT * FROM koi_regla_asiento WHERE regla_documento = '$documento->documento_codigo'
@@ -115,6 +117,17 @@ class ReglaAsiento extends Model
             foreach ($query_rule as $value) {
                 // Preparo data
                 if ($value->valor != 0) {
+                    //  Prepara para devolucion si es necesario
+                    if ( $anular ){
+                        $naturaleza = ($item->regla_naturaleza == 'C') ? 'D' : 'C';
+                        $credito = ($item->regla_naturaleza == 'C') ? 0 : $value->valor;
+                        $debito = ($item->regla_naturaleza == 'D') ? 0 : $value->valor;
+                    } else {
+                        $naturaleza = $item->regla_naturaleza;
+                        $credito = ($item->regla_naturaleza == 'C') ? $value->valor: 0;
+                        $debito = ($item->regla_naturaleza == 'D') ? $value->valor: 0;
+                    }
+
                     // Prepare detalle asiento
                     $detalle = [];
                     $detalle['Cuenta'] = $item->regla_cuenta;
@@ -123,10 +136,10 @@ class ReglaAsiento extends Model
                     $detalle['CentroCosto'] = $value->centrocosto;
                     $detalle['CentroCosto_Nombre'] = $value->centrocosto_nombre;
                     $detalle['Detalle'] = '';
-                    $detalle['Naturaleza'] = $item->regla_naturaleza;
+                    $detalle['Naturaleza'] = $naturaleza;
                     $detalle['Base'] = $value->base;
-                    $detalle['Credito'] = ($item->regla_naturaleza == 'C') ? $value->valor: 0;
-                    $detalle['Debito'] = ($item->regla_naturaleza == 'D') ? $value->valor: 0;
+                    $detalle['Credito'] = $credito;
+                    $detalle['Debito'] = $debito;
                     $detalle['Orden'] = $value->orden;
                     $object->cuentas[] = $detalle;
                 }

@@ -30,7 +30,7 @@ class PlanCuentaNif extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_centro', 'plancuentasn_naturaleza', 'plancuentasn_tipo', 'plancuentasn_tasa'];
+    protected $fillable = ['plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_naturaleza', 'plancuentasn_tipo', 'plancuentasn_tasa'];
 
     /**
      * The attributes that are mass boolean assignable.

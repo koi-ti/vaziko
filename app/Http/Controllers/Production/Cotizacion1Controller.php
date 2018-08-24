@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8;
 use App, View, Auth, DB, Log, Datatables, Storage;
 
@@ -118,7 +117,6 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $cotizacion = new Cotizacion1;
             if ($cotizacion->isValid($data)) {
                 DB::beginTransaction();
@@ -244,7 +242,6 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $cotizacion = Cotizacion1::findOrFail($id);
             if ($cotizacion->isValid($data)) {
                 DB::beginTransaction();

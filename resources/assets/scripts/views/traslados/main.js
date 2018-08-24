@@ -32,10 +32,10 @@ app || (app = {});
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull( Route.route('traslados.index') ),
                 columns: [
-                    { data: 'traslado1_numero', name: 'traslado1_numero' },
-                    { data: 'sucursa_origen', name: 'sucursa_origen' },
-                    { data: 'sucursa_destino', name: 'sucursa_destino' },
-                    { data: 'traslado1_fecha', name: 'traslado1_fecha' }
+                    { data: 'traslado1_numero', name: 'koi_traslado1.traslado1_numero' },
+                    { data: 'sucursa_origen', name: 'o.sucursal_nombre' },
+                    { data: 'sucursa_destino', name: 'd.sucursal_nombre' },
+                    { data: 'traslado1_fecha', name: 'koi_traslado1.traslado1_fecha' }
                 ],
 				buttons: [
 					{

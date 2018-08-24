@@ -19,8 +19,7 @@ class MaquinaspController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Maquinap::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of( Maquinap::query() )->make(true);
         }
         return view('production.maquinas.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +44,6 @@ class MaquinaspController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $maquina = new Maquinap;
             if ($maquina->isValid($data)) {
                 DB::beginTransaction();
@@ -56,9 +54,9 @@ class MaquinaspController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Maquinap::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $maquina->id]);
                 }catch(\Exception $e){
                     DB::rollback();
@@ -109,7 +107,6 @@ class MaquinaspController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $maquina = Maquinap::findOrFail($id);
             if ($maquina->isValid($data)) {
                 DB::beginTransaction();
@@ -120,9 +117,9 @@ class MaquinaspController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
                     // Forget cache
                     Cache::forget( Maquinap::$key_cache );
-
                     return response()->json(['success' => true, 'id' => $maquina->id]);
                 }catch(\Exception $e){
                     DB::rollback();

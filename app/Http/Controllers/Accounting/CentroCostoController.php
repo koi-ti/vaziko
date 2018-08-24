@@ -57,7 +57,6 @@ class CentroCostoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    // DB::rollback();
                     return response()->json(['success' => true, 'id' => $centrocosto->id]);
                 }catch(\Exception $e){
                     DB::rollback();
