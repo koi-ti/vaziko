@@ -29,7 +29,7 @@ class PreCotizacion2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['precotizacion2_cantidad', 'precotizacion2_ancho', 'precotizacion2_alto', 'precotizacion2_c_ancho', 'precotizacion2_c_alto', 'precotizacion2_3d_ancho', 'precotizacion2_3d_alto', 'precotizacion2_3d_profundidad', 'precotizacion2_nota_tiro', 'precotizacion2_nota_retiro'];
+    protected $fillable = ['precotizacion2_cantidad', 'precotizacion2_observaciones', 'precotizacion2_ancho', 'precotizacion2_alto', 'precotizacion2_c_ancho', 'precotizacion2_c_alto', 'precotizacion2_3d_ancho', 'precotizacion2_3d_alto', 'precotizacion2_3d_profundidad', 'precotizacion2_nota_tiro', 'precotizacion2_nota_retiro'];
 
     public function isValid($data)
     {

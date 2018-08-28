@@ -30,7 +30,7 @@ class DetalleOrdenpController extends Controller
                     if($request->has('search_ordenp')) {
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
                     }
-                    
+
                     if($request->has('search_ordenpestado')) {
                         if($request->search_ordenpestado == 'A') {
                             $query->where('orden_abierta', true);

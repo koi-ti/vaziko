@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion1Controller extends Controller
@@ -347,6 +347,7 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2 = new Cotizacion2;
                     $cotizacion2->cotizacion2_cotizacion = $cotizacion->id;
                     $cotizacion2->cotizacion2_productop = $precotizacion2->precotizacion2_productop;
+                    $cotizacion2->cotizacion2_observaciones = $precotizacion2->precotizacion2_observaciones;
                     $cotizacion2->cotizacion2_cantidad = $precotizacion2->precotizacion2_cantidad;
                     $cotizacion2->cotizacion2_tiro = $precotizacion2->precotizacion2_tiro;
                     $cotizacion2->cotizacion2_retiro = $precotizacion2->precotizacion2_retiro;
@@ -434,6 +435,15 @@ class PreCotizacion1Controller extends Controller
                              // Copy file storege laravel
                              Storage::copy($oldfile, $newfile);
                          }
+                    }
+
+                    // Recuperar Acabados de cotizacion para generar cotizacion
+                    $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($acabados as $precotizacion7) {
+                         $cotizacion5 = new Cotizacion5;
+                         $cotizacion5->cotizacion5_acabadop = $precotizacion7->precotizacion7_acabadop;
+                         $cotizacion5->cotizacion5_cotizacion2 = $cotizacion2->id;
+                         $cotizacion5->save();
                     }
 
                     // Actualizar precio en cotizacion2;
@@ -533,7 +543,6 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion3->save();
                     }
 
-
                     // Imagenes
                     $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
                     foreach ($imagenes as $precotizacion4) {
@@ -568,6 +577,14 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion6 = $precotizacion6->replicate();
                          $newprecotizacion6->precotizacion6_precotizacion2 = $newprecotizacion2->id;
                          $newprecotizacion6->save();
+                    }
+
+                    // Acabados
+                    $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($acabados as $precotizacion7) {
+                         $newprecotizacion7 = $precotizacion7->replicate();
+                         $newprecotizacion7->precotizacion7_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion7->save();
                     }
                 }
                 // Commit Transaction

@@ -47,6 +47,8 @@ class CreatePrecotizacion2Table extends Migration
              $table->double('precotizacion2_3d_alto')->default(0);
              $table->double('precotizacion2_3d_profundidad')->default(0);
 
+             $table->text('precotizacion2_observaciones')->nullable();
+
              $table->foreign('precotizacion2_precotizacion1')->references('id')->on('koi_precotizacion1')->onDelete('restrict');
              $table->foreign('precotizacion2_productop')->references('id')->on('koi_productop')->onDelete('restrict');
          });

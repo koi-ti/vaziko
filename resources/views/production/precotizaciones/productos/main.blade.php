@@ -43,6 +43,12 @@
                             <div class="help-block with-errors"></div>
                         </div>
                     </div>
+                    <div class="row">
+                        <label for="precotizacion2_observaciones" class="col-sm-1 control-label">Observaciones</label>
+                        <div class="form-group col-md-11">
+                            <textarea id="precotizacion2_observaciones" name="precotizacion2_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- precotizacion2_observaciones %></textarea>
+                        </div>
+                    </div>
 
                     @if($producto->productop_abierto || $producto->productop_cerrado)
                         <div class="box box-primary">
@@ -210,6 +216,18 @@
                             </div>
                         </div>
                     @endif
+
+                    {{-- Content acabados --}}
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Acabados de producción</h3>
+                        </div>
+                        <div class="box-body">
+                            <div id="browse-precotizacion-producto-acabados-list">
+                                {{-- render acabados list --}}
+                            </div>
+                        </div>
+                    </div>
                 </form>
 
                 <div class="box box-primary">
@@ -596,6 +614,14 @@
                     <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
                 </div>
             </dialog>
+        </div>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-acabado-item-tpl">
+        <div class="form-group col-md-6">
+            <label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_<%- id %>">
+                <input type="checkbox" id="precotizacion7_acabadop_<%- id %>" name="precotizacion7_acabadop_<%- id %>" value="precotizacion7_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
+            </label>
         </div>
     </script>
 @stop

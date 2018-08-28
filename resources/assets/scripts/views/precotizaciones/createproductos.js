@@ -28,6 +28,9 @@ app || (app = {});
             'ifChanged #precotizacion2_retiro': 'changedRetiro',
         },
         parameters: {
+            data: {
+                precotizacion2_productop: null
+            }
         },
 
         /**
@@ -45,6 +48,7 @@ app || (app = {});
             this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
             this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
             this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
+            this.acabadosProductopPreCotizacionList = new app.AcabadosProductopPreCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -95,6 +99,13 @@ app || (app = {});
         * reference to views
         */
         referenceViews: function () {
+            this.produtop = this.parameters.data.precotizacion2_productop;
+
+            // Model exist
+            if( this.model.id != undefined ) {
+                this.produtop = this.model.get('precotizacion2_productop');
+            }
+
             // Materiales , Precotizacion2
             this.materialesProductopPreCotizacionListView = new app.MaterialesProductopPreCotizacionListView( {
                 collection: this.materialesProductopPreCotizacionList,
@@ -124,6 +135,17 @@ app || (app = {});
                     edit: true,
                     dataFilter: {
                         precotizacion2: this.model.get('id')
+                    }
+               }
+            });
+
+            // Acabados list
+            this.acabadosProductopPreCotizacionListView = new app.AcabadosProductopPreCotizacionListView( {
+                collection: this.acabadosProductopPreCotizacionList,
+                parameters: {
+                    dataFilter: {
+                        precotizacion2: this.model.get('id'),
+                        productop: this.produtop
                     }
                }
             });
@@ -157,9 +179,9 @@ app || (app = {});
 
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                    data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
-                    data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
-                    data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
+                        data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
+                        data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
+                        data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();

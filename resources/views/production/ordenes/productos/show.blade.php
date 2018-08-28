@@ -42,6 +42,13 @@
 					<div class="form-group col-md-1">
 						<div>{{ $ordenp2->orden2_cantidad }}</div>
 					</div>
+				</div>
+
+				<div class="row">
+					<label class="col-sm-1 control-label">Observaciones</label>
+					<div class="form-group col-md-11">
+						<textarea placeholder="Observaciones" class="form-control" rows="2" disabled>{{ $ordenp2->orden2_observaciones }}</textarea>
+					</div>
 				</div><br>
 
 				@if($producto->productop_abierto || $producto->productop_cerrado)
@@ -210,13 +217,6 @@
 						</div>
 					</div>
 				@endif
-
-				<div class="row">
-					<label for="orden2_observaciones" class="col-sm-1 control-label">Detalle</label>
-					<div class="form-group col-sm-12">
-						{{ $ordenp2->orden2_observaciones }}
-					</div>
-				</div><br/>
 
 				<div class="box box-primary">
 					<div class="box-header with-border">

@@ -28,7 +28,7 @@ class Ordenp2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden2_referencia', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_observaciones', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round'];
+    protected $fillable = ['orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round'];
 
     public function isValid($data)
     {
@@ -255,7 +255,7 @@ class Ordenp2 extends BaseModel
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
         $query->whereRaw('orden2_total_valor_unitario <> 0');
-        // $query->where('orden_abierta', true); Nota: se quita para pruebas de asientos 
+        // $query->where('orden_abierta', true); Nota: se quita para pruebas de asientos
         $query->where('koi_ordenproduccion2.id', $id);
         return $query->first();
     }

@@ -71,6 +71,13 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <label for="orden2_observaciones" class="col-sm-1 control-label">Observaciones</label>
+                            <div class="form-group col-md-11">
+                                <textarea id="orden2_observaciones" placeholder="Observaciones" class="form-control" rows="2" name="orden2_observaciones"><%- orden2_observaciones %></textarea>
+                            </div>
+                        </div><br>
+
                         @if($producto->productop_abierto || $producto->productop_cerrado)
                             <div class="box box-primary">
                                 <div class="box-body">
@@ -243,14 +250,6 @@
                             </div>
                         @endif
 
-                        <div class="row">
-                            <label for="orden2_observaciones" class="col-sm-1 control-label">Detalle</label>
-                            <div class="form-group col-sm-10">
-                                <textarea id="orden2_observaciones" name="orden2_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- orden2_observaciones %></textarea>
-                            </div>
-                        </div>
-
-                        <br/>
                         <div class="row">
                             {{-- Content maquinas --}}
                             <div class="col-sm-4">

@@ -43,7 +43,16 @@
 					<div class="form-group col-md-1">
 						<div>{{ $cotizacion2->cotizacion2_cantidad }}</div>
 					</div>
-				</div><br>
+				</div>
+
+				<div class="row">
+					<label class="col-sm-1 control-label">Observaciones</label>
+					<div class="form-group col-md-11">
+						<textarea placeholder="Observaciones" class="form-control" rows="2" disabled>{{ $cotizacion2->cotizacion2_observaciones }}</textarea>
+					</div>
+				</div>
+				<br>
+				
 				@if($producto->productop_abierto || $producto->productop_cerrado)
 					<div class="box box-danger">
 						<div class="box-body">
@@ -210,13 +219,6 @@
 	                    </div>
 	                </div>
 	            @endif
-
-				<div class="row">
-	                <label for="cotizacion2_observaciones" class="col-sm-1 control-label">Detalle</label>
-	                <div class="form-group col-sm-12">
-	                	{{ $cotizacion2->cotizacion2_observaciones }}
-	                </div>
-	            </div><br/>
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
