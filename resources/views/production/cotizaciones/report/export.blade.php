@@ -67,6 +67,7 @@
 			</thead>
 			<tbody>
 				{{--*/ $iva = $ivaunitario = $ivatotal = $totalproducto = $subtotalcotizacion = $ivacotizacion = $totalcotizacion = 0 /*--}}
+				{{--*/ $imagenes = []; /*--}}
 
 				@foreach( $data as $cotizacion2 )
 						{{--*/
@@ -84,6 +85,16 @@
 								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
 								@if( $cotizacion2->tiro || $cotizacion2->retiro )
 									{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }}
+								@endif
+
+								@if ( $cotizacion2->imagenes != [] )
+									<div class="row">
+										<div class="col-md-5">
+											@foreach($cotizacion2->imagenes as $imagen)
+												<img src="{{ $imagen }}" alt="" style="width:150px; height: 100px;">
+											@endforeach
+										</div>
+									</div><br>
 								@endif
 							</td>
 							<td class="border-cell" align="center">{{ $cotizacion2->cotizacion2_cantidad }}</td>

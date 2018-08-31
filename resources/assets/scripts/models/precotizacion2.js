@@ -17,6 +17,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'precotizacion2_cantidad': 1,
+            'precotizacion2_referencia': '',
             'precotizacion2_ancho': 0,
             'precotizacion2_alto': 0,
             'precotizacion2_c_ancho': 0,

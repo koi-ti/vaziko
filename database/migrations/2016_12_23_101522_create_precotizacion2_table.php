@@ -18,6 +18,7 @@ class CreatePrecotizacion2Table extends Migration
              $table->increments('id');
              $table->integer('precotizacion2_precotizacion1')->unsigned();
              $table->integer('precotizacion2_productop')->unsigned();
+             $table->string('precotizacion2_referencia', 200);
              $table->integer('precotizacion2_cantidad')->unsigned();
 
              $table->boolean('precotizacion2_tiro')->default(false);

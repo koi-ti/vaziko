@@ -146,7 +146,8 @@ class Cotizacion2Controller extends Controller
 
                     // Recuperar imagenes y almacenar en storage/app/cotizacines
                     $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
-                    foreach ($images as $image) {
+                    foreach ($images as $key => $image) {
+
                         // Recuperar nombre de archivo
                         $name = str_random(4)."_{$image->getClientOriginalName()}";
 
@@ -154,6 +155,9 @@ class Cotizacion2Controller extends Controller
                         $imagen = new Cotizacion8;
                         $imagen->cotizacion8_archivo = $name;
                         $imagen->cotizacion8_cotizacion2 = $cotizacion2->id;
+                        if($request->has("cotizacion8_imprimir_$key")){
+                            $imagen->cotizacion8_imprimir = true;
+                        }
                         $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
                         $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
@@ -360,6 +364,23 @@ class Cotizacion2Controller extends Controller
                                         $cotizacion6->cotizacion6_tiempo = $newtime;
                                         $cotizacion6->save();
                                     }
+                                }
+                            }
+                        }
+
+                        // imagenes
+                        $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
+                        foreach ($imagenes as $imagen) {
+                            $cotizacion8 = Cotizacion8::find($imagen->id);
+                            if($request->has("cotizacion8_imprimir_$imagen->id")){
+                                if($imagen instanceof Cotizacion8){
+                                    $imagen->cotizacion8_imprimir = true;
+                                    $imagen->save();
+                                }
+                            }else{
+                                if($imagen instanceof Cotizacion8){
+                                    $imagen->cotizacion8_imprimir = false;
+                                    $imagen->save();
                                 }
                             }
                         }

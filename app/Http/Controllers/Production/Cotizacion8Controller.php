@@ -32,6 +32,7 @@ class Cotizacion8Controller extends Controller
                         $object = new \stdClass();
                         $object->uuid = $imagen->id;
                         $object->name = $imagen->cotizacion8_archivo;
+                        $object->imprimir = $imagen->cotizacion8_imprimir;
                         $object->size = Storage::size("cotizaciones/cotizacion_$imagen->cotizacion2_cotizacion/producto_$imagen->cotizacion8_cotizacion2/$imagen->cotizacion8_archivo");
                         $object->thumbnailUrl = url("storage/cotizaciones/cotizacion_$imagen->cotizacion2_cotizacion/producto_$imagen->cotizacion8_cotizacion2/$imagen->cotizacion8_archivo");
                         $data[] = $object;

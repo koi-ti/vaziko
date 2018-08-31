@@ -18,6 +18,7 @@ class CreateCotizacion8Table extends Migration
             $table->increments('id');
             $table->integer('cotizacion8_cotizacion2')->unsigned();
             $table->string('cotizacion8_archivo', 200);
+            $table->boolean('cotizacion8_imprimir')->default(false);
             $table->datetime('cotizacion8_fh_elaboro');
             $table->integer('cotizacion8_usuario_elaboro')->unsigned();
 

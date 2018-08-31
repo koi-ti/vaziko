@@ -458,6 +458,7 @@ class OrdenpController extends Controller
                     $neworden->orden_abierta = true;
                     $neworden->orden_culminada = false;
                 }
+                $neworden->orden_fecha_inicio = date('Y-m-d');
                 $neworden->orden_anulada = false;
                 $neworden->orden_ano = date('Y');
                 $neworden->orden_numero = $numero;

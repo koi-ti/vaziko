@@ -395,8 +395,19 @@ class Cotizacion1Controller extends Controller
             $query->where('cotizacion5_cotizacion2', $cotizacion2->id);
             $acabadosp = $query->first();
 
+            $imagenes = [];
+            $query = Cotizacion8::query();
+            $query->select('cotizacion8_archivo');
+            $query->where('cotizacion8_cotizacion2', $cotizacion2->id);
+            $query->where('cotizacion8_imprimir', true);
+            $cotizacion8 = $query->get();
+            foreach ($cotizacion8 as $imagen) {
+                $imagenes[] = "storage/cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$imagen->cotizacion8_archivo";
+            }
+
             $cotizacion2->materialp_nombre = $materialesp->materialp_nombre;
             $cotizacion2->acabadop_nombre = $acabadosp->acabadop_nombre;
+            $cotizacion2->imagenes = $imagenes;
 
             $data[] = $cotizacion2;
         }
@@ -426,6 +437,7 @@ class Cotizacion1Controller extends Controller
 
                 // Cotizacion
                 $newcotizacion = $cotizacion->replicate();
+                $newcotizacion->cotizacion1_fecha_inicio = date('Y-m-d');
                 $newcotizacion->cotizacion1_abierta = true;
                 $newcotizacion->cotizacion1_anulada = false;
                 $newcotizacion->cotizacion1_ano = date('Y');
@@ -544,7 +556,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_referencia = $cotizacion->cotizacion1_referencia;
                 $orden->orden_numero = $numero;
                 $orden->orden_ano = $cotizacion->cotizacion1_ano;
-                $orden->orden_fecha_inicio = $cotizacion->cotizacion1_fecha_inicio;
+                $orden->orden_fecha_inicio = date('Y-m-d');
                 $orden->orden_contacto = $cotizacion->cotizacion1_contacto;
                 $orden->orden_formapago = $cotizacion->cotizacion1_formapago;
                 $orden->orden_fecha_entrega = date('Y-m-d');

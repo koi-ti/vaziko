@@ -329,7 +329,7 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_referencia = $precotizacion->precotizacion1_referencia;
                 $cotizacion->cotizacion1_numero = $numero;
                 $cotizacion->cotizacion1_ano = $precotizacion->precotizacion1_ano;
-                $cotizacion->cotizacion1_fecha_inicio = $precotizacion->precotizacion1_fecha;
+                $cotizacion->cotizacion1_fecha_inicio = date('Y-m-d');
                 $cotizacion->cotizacion1_contacto = $precotizacion->precotizacion1_contacto;
                 $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                 $cotizacion->cotizacion1_formapago = $precotizacion->tercero_formapago;
@@ -349,6 +349,7 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2->cotizacion2_productop = $precotizacion2->precotizacion2_productop;
                     $cotizacion2->cotizacion2_observaciones = $precotizacion2->precotizacion2_observaciones;
                     $cotizacion2->cotizacion2_cantidad = $precotizacion2->precotizacion2_cantidad;
+                    $cotizacion2->cotizacion2_referencia = $precotizacion2->precotizacion2_referencia;
                     $cotizacion2->cotizacion2_tiro = $precotizacion2->precotizacion2_tiro;
                     $cotizacion2->cotizacion2_retiro = $precotizacion2->precotizacion2_retiro;
                     $cotizacion2->cotizacion2_yellow = $precotizacion2->precotizacion2_yellow;
@@ -519,6 +520,7 @@ class PreCotizacion1Controller extends Controller
 
                 // Precotizacion
                 $newprecotizacion = $precotizacion->replicate();
+                $newprecotizacion->precotizacion1_fecha = date('Y-m-d');
                 $newprecotizacion->precotizacion1_abierta = true;
                 $newprecotizacion->precotizacion1_ano = date('Y');
                 $newprecotizacion->precotizacion1_numero = $numero;

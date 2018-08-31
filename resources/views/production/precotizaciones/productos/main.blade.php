@@ -37,6 +37,13 @@
                         <div class="form-group col-md-8">
                         	{{ $producto->productop_nombre }}
                         </div>
+                    </div>
+                    <div class="row">
+                        <label for="precotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
+                        <div class="form-group col-md-8">
+                            <input id="precotizacion2_referencia" class="form-control input-sm input-toupper" name="precotizacion2_referencia" value="<%- precotizacion2_referencia %>" placeholder="Referencia" type="text" required>
+                            <div class="help-block with-errors"></div>
+                        </div>
                         <label for="precotizacion2_cantidad" class="col-sm-1 control-label">Cantidad</label>
                         <div class="form-group col-md-2">
                             <input id="precotizacion2_cantidad" value="<%- precotizacion2_cantidad %>" class="form-control input-sm event-price" name="precotizacion2_cantidad" type="number" min="1" required>

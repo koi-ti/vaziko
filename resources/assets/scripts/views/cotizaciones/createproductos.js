@@ -34,7 +34,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
-            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
+            _.bindAll(this, 'onSubmitted', 'onSessionRequestComplete');
 
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
@@ -310,7 +310,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-cotizacion',
                 multiple: true,
                 interceptSubmit: true,
                 autoUpload: autoUpload,
@@ -338,7 +338,7 @@ app || (app = {});
                     tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
                 },
                 callbacks: {
-                    onComplete: _this.onCompleteLoadFile,
+                    onSubmitted: _this.onSubmitted,
                     onSessionRequestComplete: _this.onSessionRequestComplete,
                 },
             });
@@ -350,19 +350,31 @@ app || (app = {});
         * @param Strinf name
         * @param Object resp
         */
-        onCompleteLoadFile: function (id, name, resp) {
-            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
-            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
-            this.$uploaderFile.fineUploader('setName', id, resp.name);
+        onSubmitted: function (id, name) {
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
 
-            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
-            previewLink.attr("href", resp.url);
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.qq-imprimir');
+                itemFile.attr('name', 'cotizacion8_imprimir_'+id);
+                itemFile.attr('id', 'cotizacion8_imprimir_'+id);
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
+
+                var imprimir = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.qq-imprimir');
+                    imprimir.attr('name', 'cotizacion8_imprimir_'+value.uuid);
+                    imprimir.attr('id', 'cotizacion8_imprimir_'+value.uuid);
+
+                if( value.imprimir ){
+                    imprimir.iCheck('check');
+                }
+
             }, this);
         },
 

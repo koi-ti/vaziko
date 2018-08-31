@@ -34,13 +34,9 @@
 			</div>
 
 			<div class="row">
-				<label class="control-label col-md-1">Ancho</label>
-				<div class="form-group col-md-2">
-					<div>{{ $precotizacion2->precotizacion2_ancho }}</div>
-				</div>
-				<label class="control-label col-md-1">Alto</label>
-				<div class="form-group col-md-2">
-					<div>{{ $precotizacion2->precotizacion2_alto }}</div>
+				<label class="control-label col-md-1">Referencia</label>
+				<div class="form-group col-md-7">
+					<div>{{ $precotizacion2->precotizacion2_referencia }}</div>
 				</div>
 				<label class="control-label col-md-1">Cantidad</label>
 				<div class="form-group col-md-2">
