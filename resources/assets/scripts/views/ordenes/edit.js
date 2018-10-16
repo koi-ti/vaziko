@@ -34,6 +34,8 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
+            
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
@@ -42,6 +44,7 @@ app || (app = {});
             this.despachopOrdenList = new app.DespachopOrdenList();
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
             this.asientoCuentasList = new app.AsientoCuentasList();
+
             // Tiempop general
             this.tiempopList = new app.TiempopList();
 
@@ -68,10 +71,12 @@ app || (app = {});
             this.$renderChartEmpleado = this.$('#render-chart-empleado');
             this.$renderChartAreasp = this.$('#render-chart-areasp');
             this.$renderChartProductop = this.$('#render-chart-productop');
+            this.$uploaderFile = this.$('#fine-uploader');
 
             // Reference views and ready
             this.referenceViews();
             this.referenceCharts();
+            this.uploadPictures();
             this.ready();
         },
 
@@ -594,6 +599,90 @@ app || (app = {});
 
             this.$('.tiempo-total').text( formatTime(resp.tiempototal) );
             this.$('.orden-codigo').text( resp.orden_codigo );
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                multiple: true,
+                autoUpload: true,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    params: {
+                        ordenp: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                request: {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        ordenp: this.model.get('id')
+                    }
+                },
+                retry: {
+                    maxAutoAttempts: 3,
+                },
+                deleteFile: {
+                    enabled: true,
+                    forceConfirm: true,
+                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        ordenp: this.model.get('id')
+                    }
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                validation: {
+                    itemLimit: 10,
+                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                    allowedExtensions: ['jpeg', 'jpg', 'png']
+                },
+                messages: {
+                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+                },
+                callbacks: {
+                    onComplete: _this.onCompleteLoadFile,
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+        },
+
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
+        onCompleteLoadFile: function (id, name, resp) {
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
+            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
+            this.$uploaderFile.fineUploader('setName', id, resp.name);
+
+            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
+            previewLink.attr("href", resp.url);
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         /**

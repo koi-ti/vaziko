@@ -33,6 +33,7 @@
                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
                                 <li><a href="#tab_tiempospcharts" data-toggle="tab">Gráficas de producción</a></li>
+                                <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
                             @endif
                             <li class="pull-right">
                                 <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
@@ -494,6 +495,10 @@
 
                                 <div class="tab-pane" id="tab_tiempospcharts">
                                     @include('production.ordenes.charts.charts')
+                                </div>
+
+                                <div class="tab-pane" id="tab_imagenes">
+                                    <div id="fine-uploader"></div>
                                 </div>
                             @endif
                         <% } %>

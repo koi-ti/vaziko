@@ -169,6 +169,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
+		Route::resource('imagenes', 'Production\OrdenpImagenesController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function()
 		{
