@@ -225,7 +225,12 @@ app || (app = {});
             })
             .done(function(resp) {
                 window.Misc.removeSpinner( _this.spinner );
-                _this.$inputRenderFormula.val(resp.precio_venta).trigger('change');
+
+                var precio = ''+resp.precio_venta;
+                var valor = precio.split('.');
+                var total = valor.join(',');
+                
+                _this.$inputRenderFormula.val(total).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
             	_this.$inputRenderFormula.val(0);

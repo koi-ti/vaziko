@@ -90,6 +90,8 @@ var app = app || {};
                 removeMaskOnSubmit: true,
                 unmaskAsNumber: true,
             });
+
+            $("[data-currency-decimal]").inputmask({ 'alias' : 'decimal', rightAlign: true, 'groupSeparator': '.','autoGroup': true });
         },
 
         /**

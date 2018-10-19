@@ -52,7 +52,7 @@ class Asiento extends Model
                 $this->errors = 'No es posible definir fecha para el asiento contable';
                 return false;
             }
-            // Validar contra fecha de cierre 
+            // Validar contra fecha de cierre
             if (strtotime($fecha_asiento) <= strtotime($empresa->fecha_cierre) ) {
                 $this->errors = "La fecha que intenta realizar el asiento: $fecha_asiento no esta PERMITIDA. Es menor a la del cierre contable : $empresa->fecha_cierre";
                 return false;
@@ -79,5 +79,13 @@ class Asiento extends Model
     public function setAsiento1DetalleAttribute($detail)
     {
         $this->attributes['asiento1_detalle'] = strtoupper($detail);
+    }
+
+    /**
+    * Traer detalles asiento1.
+    */
+    public function detalle()
+    {
+        return $this->hasMany('App\Models\Accounting\Asiento2', 'asiento2_asiento', 'id');
     }
 }
