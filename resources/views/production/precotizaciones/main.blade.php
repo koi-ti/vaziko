@@ -124,6 +124,12 @@
                         </div>
 
                         <div class="row">
+                            <label for="precotizacion1_suministran" class="col-sm-1 control-label">Suministran</label>
+                            <div class="form-group col-sm-10">
+                                <input id="precotizacion1_suministran" placeholder="Suministran" class="form-control" name="precotizacion1_suministran" type="text" value="<%- precotizacion1_suministran %>" required maxlength="200">
+                            </div>
+                        </div>
+                        <div class="row">
                             <label for="precotizacion1_observaciones" class="col-sm-1 control-label">Detalle</label>
                             <div class="form-group col-sm-10">
                                 <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>

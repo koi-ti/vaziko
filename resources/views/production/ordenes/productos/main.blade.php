@@ -37,26 +37,49 @@
                 </div>
 
                 <div class="box-body">
-                    <form method="POST" accept-charset="UTF-8" id="form-orden-producto" data-toggle="validator">
-                    	<div class="row">
-                            <label class="col-sm-1 control-label">Orden</label>
-                            <div class="form-group col-md-1">
-                            	{{ $orden->orden_codigo }}
+                    <div class="alert alert-info">
+                        <h4><b>Información general</b></h4>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Referencia</label>
+                            <div class="form-group col-md-10">
+                                {{ $orden->orden_referencia }}
                             </div>
-
-                            <label class="col-sm-2 control-label">Código producto</label>
-                            <div class="form-group col-md-1">
-            					{{ $producto->id }}
-            				</div>
                         </div>
 
                         <div class="row">
-                            <label class="col-sm-1 control-label">Producto</label>
-                            <div class="form-group col-md-11">
-                            	{{ $producto->productop_nombre }}
+                            <label class="col-md-2 control-label">Cliente</label>
+                            <div class="form-group col-md-10">
+                                {{ $orden->tercero_nit }} - {{ $orden->tercero_nombre }}
                             </div>
                         </div>
 
+                        <div class="row">
+                            <label class="col-md-2 control-label">Orden</label>
+                            <div class="form-group col-md-10">
+                                {{ $orden->orden_codigo }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-md-2 control-label">Código producto</label>
+                            <div class="form-group col-md-10">
+                                {{ $producto->id }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-md-2 control-label">Producto</label>
+                            <div class="form-group col-md-10">
+                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                    <%- productop_nombre %>
+                                <% }else{ %>
+                                    {{ $producto->productop_nombre }}
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" accept-charset="UTF-8" id="form-orden-producto" data-toggle="validator">
                         <div class="row">
                             <label for="orden2_referencia" class="col-sm-1 control-label">Referencia</label>
                             <div class="form-group col-md-8">
@@ -334,7 +357,7 @@
                             <h3 class="box-title">Imágenes</h3>
                         </div>
                         <div class="box-body table-responsive no-padding">
-                            <div id="fine-uploader"></div>
+                            <div class="fine-uploader"></div>
                         </div>
                     </div>
 
@@ -505,11 +528,19 @@
     </script>
 
     <script type="text/template" id="orden-producto-material-item-tpl">
-        <div class="form-group col-md-12">
+        <div class="form-group <%- (orden4_cantidad && orden4_medidas ) ? 'col-md-7' : 'col-md-12' %>">
             <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>">
                 <input type="checkbox" id="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" name="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" value="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
             </label>
         </div>
+        <% if (orden4_cantidad && orden4_medidas ) { %>
+            <div class="form-group col-md-2 text-center">
+                <div><%- orden4_cantidad %></div>
+            </div>
+            <div class="form-group col-md-3 text-right">
+                <div><%- orden4_medidas %></div>
+            </div>
+        <% } %>
     </script>
 
     <script type="text/template" id="orden-producto-acabado-item-tpl">

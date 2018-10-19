@@ -81,7 +81,7 @@ app || (app = {});
                         _this.$modalComponent.find('.inner-title-modal').html('Tercero');
 
                         _this.model = new app.TerceroModel();
-                        var template = _.template($('#add-tercero-tpl').html());
+                        var template = _.template($('#add-generic-tercero-tpl').html());
                         _this.$modalComponent.find('.content-modal').html( template(_this.model.toJSON()) );
 
                         _this.$formAccounting = _this.$modalComponent.find('#form-accounting');
@@ -194,17 +194,11 @@ app || (app = {});
         * Event Create Post
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
-
                 this.$wraperError.hide().empty();
 
                 e.preventDefault();
                 var data = $.extend({}, this.parameters, window.Misc.formToJson( e.target ));
-
-                if (this.resource == 'tercero') {
-                    data = $.extend({}, data, window.Misc.formToJson( this.$formAccounting ));
-                }
 
                 this.model.save( data, {patch: true} );
             }

@@ -28,7 +28,7 @@ class Cotizacion4 extends Model
 				$join->on('cotizacion4_materialp', '=', 'koi_materialp.id')
 					->where('cotizacion4_cotizacion2', '=', $cotizacion2);
 	        });
-            $query->addSelect('cotizacion4_cantidad', 'cotizacion4_precio', 'koi_cotizacion4.id as cotizacion4_id');
+            $query->addSelect('cotizacion4_cantidad', 'cotizacion4_precio', 'cotizacion4_medidas', 'koi_cotizacion4.id as cotizacion4_id');
 	  	}
 
         $query->where('productop5_productop', $productop);

@@ -16,6 +16,8 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'orden4_id': '',
+            'orden4_cantidad': '',
+            'orden4_medidas': ''
         }
     });
 

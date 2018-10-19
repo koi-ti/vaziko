@@ -33,7 +33,8 @@ app || (app = {});
             'tcontacto_telefono': '',
             'orden_suministran': '',
             'orden_observaciones': '',
-            'orden_terminado': ''
+            'orden_terminado': '',
+            'orden_observaciones_imagen': ''
         }
     });
 

@@ -286,7 +286,16 @@
                         </div>
 
                         <div class="tab-pane" id="tab_imagenes">
-                            <div id="fine-uploader"></div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <textarea name="orden_observaciones_imagen" rows="2" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_imagen }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-md-12">
+                                    <div class="fine-uploader"></div>
+                                </div>
+                            </div>
                         </div>
                     @endif
                	</div>

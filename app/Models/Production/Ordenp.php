@@ -21,7 +21,7 @@ class Ordenp extends Model
      *
      * @var array
      */
-    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado'];
+    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen'];
 
     /**
      * The attributes that are mass nullable fields to null.

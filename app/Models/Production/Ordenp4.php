@@ -28,7 +28,7 @@ class Ordenp4 extends Model
 				$join->on('orden4_materialp', '=', 'koi_materialp.id')
 					->where('orden4_orden2', '=', $ordenp2);
 	        });
-            $query->addSelect('koi_ordenproduccion4.id as orden4_id');
+            $query->addSelect('orden4_cantidad', 'orden4_medidas', 'koi_ordenproduccion4.id as orden4_id');
 	  	}
 
         $query->where('productop5_productop', $productop);

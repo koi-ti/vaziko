@@ -33,6 +33,7 @@ class CreateOrdenproduccionTable extends Migration
             $table->boolean('orden_abierta')->default(true);
             $table->text('orden_observaciones')->nullable();
             $table->text('orden_terminado')->nullable();
+            $table->text('orden_observaciones_imagen')->nullable();
             $table->datetime('orden_fecha_elaboro');
             $table->integer('orden_usuario_elaboro')->unsigned();
             $table->datetime('orden_fecha_anulo')->nullable();

@@ -23,14 +23,41 @@
 	            </div>
 	        </div>
 			<div class="box-body">
-				<div class="row">
-					<label class="control-label col-md-1">Código</label>
-					<div class="form-group col-md-1">
-						<div>{{ $cotizacion->cotizacion_codigo }}</div>
+				<div class="alert alert-danger">
+					<h4><b>Información general</b></h4>
+					<div class="row">
+						<label class="col-md-2 control-label">Referencia</label>
+						<div class="form-group col-md-10">
+							{{ $cotizacion->cotizacion1_referencia }}
+						</div>
 					</div>
-					<label class="control-label col-md-1">Producto</label>
-					<div class="form-group col-md-7">
-						<div>{{ $cotizacion2->productop_nombre }}</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Cliente</label>
+						<div class="form-group col-md-10">
+							{{ $cotizacion->tercero_nit }} - {{ $cotizacion->tercero_nombre }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Cotización</label>
+						<div class="form-group col-md-10">
+							{{ $cotizacion->cotizacion_codigo }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Código producto</label>
+						<div class="form-group col-md-10">
+							{{ $producto->id }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Producto</label>
+						<div class="form-group col-md-10">
+							{{ $cotizacion2->productop_nombre }}
+						</div>
 					</div>
 				</div>
 
@@ -52,7 +79,7 @@
 					</div>
 				</div>
 				<br>
-				
+
 				@if($producto->productop_abierto || $producto->productop_cerrado)
 					<div class="box box-danger">
 						<div class="box-body">
@@ -225,7 +252,7 @@
 						<h3 class="box-title">Imágenes</h3>
 					</div>
 					<div class="box-body table-responsive no-padding">
-						<div id="fine-uploader"></div>
+						<div class="fine-uploader"></div>
 					</div>
 				</div>
 

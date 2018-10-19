@@ -17,17 +17,17 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
+            _.bindAll(this, 'onSessionRequestComplete');
 
-                this.contactsList = new app.ContactsList();
-                this.facturaptList = new app.FacturaptList();
-                this.rolList = new app.RolList();
-                this.detalleFacturaList = new app.DetalleFactura4List();
+            this.contactsList = new app.ContactsList();
+            this.facturaptList = new app.FacturaptList();
+            this.rolList = new app.RolList();
+            this.detalleFacturaList = new app.DetalleFactura4List();
+            this.$uploaderFile = this.$('.fine-uploader');
 
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.uploadPictures();
+            this.referenceViews();
         },
 
         /**
@@ -79,7 +79,49 @@ app || (app = {});
                     }
                 }
             });
-        }
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template',
+                autoUpload: false,
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
+                    params: {
+                        tercero_id: _this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+            
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
     });
 
 })(jQuery, this, this.document);

@@ -81,6 +81,12 @@
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
+                        <label class="control-label">Suministran</label>
+                        <div>{{ $precotizacion->precotizacion1_suministran }}</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
                         <label class="control-label">Detalle</label>
                         <div>{{ $precotizacion->precotizacion1_observaciones }}</div>
                     </div>

@@ -18,6 +18,7 @@ class CreatePrecotizacion1Table extends Migration
              $table->increments('id');
              $table->integer('precotizacion1_cliente')->unsigned();
              $table->integer('precotizacion1_contacto')->unsigned();
+             $table->string('precotizacion1_suministran', 200)->nullable();
              $table->string('precotizacion1_referencia', 100);
              $table->integer('precotizacion1_numero')->default(0);
              $table->string('precotizacion1_ano', 4);

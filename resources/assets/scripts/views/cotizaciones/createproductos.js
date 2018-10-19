@@ -121,7 +121,7 @@ app || (app = {});
             this.$infoareas = this.$('#info-areas');
 
             // Render uploader file
-            this.$uploaderFile = this.$('#fine-uploader');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views
             this.calculateAll();
@@ -310,7 +310,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-cotizacion',
+                template: 'qq-template',
                 multiple: true,
                 interceptSubmit: true,
                 autoUpload: autoUpload,

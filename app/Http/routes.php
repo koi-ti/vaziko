@@ -46,6 +46,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::post('setpassword', ['as' => 'terceros.setpassword', 'uses' => 'Admin\TerceroController@setpassword']);
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
 		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('imagenes', 'Admin\TerceroImagenController', ['only' => ['index', 'store', 'destroy']]);
 	});
 
 	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);

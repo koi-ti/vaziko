@@ -13,37 +13,72 @@
 		</ol>
 	</section>
 	<section class="content">
-		<div class="box box-success">
-			<div class="box-body">
-				<div class="row">
-					<div class="col-md-1">
-						<a class="btn btn-app" href="{{ route('terceros.index') }}" title="Ver terceros">
-							<i class="fa fa-users"></i> Terceros
-						</a>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Terceros</h3>
 					</div>
-					<div class="col-md-1">
-						<a class="btn btn-app" href="{{ route('productos.index') }}" title="Ver productos">
-							<i class="fa fa-wrench"></i> Insumos
-						</a>
+					<div class="icon">
+						<i class="fa fa-users"></i>
 					</div>
-					<div class="col-md-1">
-						<a class="btn btn-app" href="{{ route('ordenes.index') }}" title="Ver ordenes">
-							<i class="fa fa-building-o"></i> Ordenes
-						</a>
-					</div>
+					<a href="{{ route('terceros.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
 				</div>
-
-				<div class="row">
-					<div class="col-md-1">
-						<a class="btn btn-app" href="{{ route('cotizaciones.index') }}" title="Ver cotizacioness">
-							<i class="fa fa-puzzle-piece"></i> Cotizaciones
-						</a>
+			</div>
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Insumos</h3>
 					</div>
-					<div class="col-md-1">
-						<a class="btn btn-app" href="{{ route('tiemposp.index') }}" title="Ver tiempos de producción">
-							<i class="fa fa-clock-o"></i> Tiempos
-						</a>
+					<div class="icon">
+						<i class="fa fa-wrench"></i>
 					</div>
+					<a href="{{ route('productos.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Ordenes</h3>
+					</div>
+					<div class="icon">
+						<i class="fa fa-building-o"></i>
+					</div>
+					<a href="{{ route('ordenes.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Cotizaciones</h3>
+					</div>
+					<div class="icon">
+						<i class="fa fa-puzzle-piece"></i>
+					</div>
+					<a href="{{ route('cotizaciones.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Tiempos</h3>
+					</div>
+					<div class="icon">
+						<i class="fa fa-clock-o"></i>
+					</div>
+					<a href="{{ route('tiemposp.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
 				</div>
 			</div>
 		</div>

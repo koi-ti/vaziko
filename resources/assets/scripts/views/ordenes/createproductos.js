@@ -128,7 +128,7 @@ app || (app = {});
             this.$infoareas = this.$('#info-areas');
 
             // Fine uploader
-            this.$uploaderFile = this.$('#fine-uploader');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views
             this.calculateOrdenp2();
@@ -526,6 +526,8 @@ app || (app = {});
         * @param Object resp
         */
         onCompleteLoadFile: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
             this.$uploaderFile.fineUploader('setUuid', id, resp.id);
             this.$uploaderFile.fineUploader('setName', id, resp.name);
@@ -535,6 +537,8 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

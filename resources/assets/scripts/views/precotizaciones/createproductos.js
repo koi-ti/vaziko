@@ -67,7 +67,7 @@ app || (app = {});
             this.$formmaterialesp = this.$('#form-precotizacion3-producto');
             this.$formimpresiones = this.$('#form-precotizacion5-producto');
             this.$formareasp = this.$('#form-precotizacion6-producto');
-            this.$uploaderFile = this.$('#fine-uploader');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Rerence inputs materialp
             this.$selectinsumos = this.$('#precotizacion3_producto');
@@ -413,6 +413,8 @@ app || (app = {});
         * @param Object resp
         */
         onCompleteLoadFile: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
             this.$uploaderFile.fineUploader('setUuid', id, resp.id);
             this.$uploaderFile.fineUploader('setName', id, resp.name);
@@ -422,6 +424,8 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

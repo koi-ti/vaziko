@@ -20,7 +20,7 @@ app || (app = {});
             _.bindAll(this, 'onSessionRequestComplete');
 
             // Recuperar fineuploader container
-            this.$uploaderFile = this.$('#fine-uploader');
+            this.$uploaderFile = this.$('.fine-uploader');
             this.uploadPictures();
         },
 
@@ -58,6 +58,8 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

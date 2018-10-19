@@ -37,26 +37,49 @@
                 </div>
 
                 <div class="box-body">
-                    <form method="POST" accept-charset="UTF-8" id="form-cotizacion-producto" data-toggle="validator">
-                    	<div class="row">
-                            <label class="col-sm-1 control-label">Cotizacion</label>
-                            <div class="form-group col-md-1">
-                            	{{ $cotizacion->cotizacion_codigo }}
+                    <div class="alert alert-danger">
+                        <h4><b>Información general</b></h4>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Referencia</label>
+                            <div class="form-group col-md-10">
+                                {{ $cotizacion->cotizacion1_referencia }}
                             </div>
-
-                            <label class="col-sm-2 control-label">Código producto</label>
-                            <div class="form-group col-md-1">
-            					{{ $producto->id }}
-            				</div>
                         </div>
 
                         <div class="row">
-                            <label class="col-sm-1 control-label">Producto</label>
+                            <label class="col-md-2 control-label">Cliente</label>
                             <div class="form-group col-md-10">
-                            	{{ $producto->productop_nombre }}
+                                {{ $cotizacion->tercero_nit }} - {{ $cotizacion->tercero_nombre }}
                             </div>
                         </div>
 
+                        <div class="row">
+                            <label class="col-md-2 control-label">Cotización</label>
+                            <div class="form-group col-md-10">
+                                {{ $cotizacion->cotizacion_codigo }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-md-2 control-label">Código producto</label>
+                            <div class="form-group col-md-10">
+                                {{ $producto->id }}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label class="col-md-2 control-label">Producto</label>
+                            <div class="form-group col-md-10">
+                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                    <%- productop_nombre %>
+                                <% }else{ %>
+                                    {{ $producto->productop_nombre }}
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
+
+                    <form method="POST" accept-charset="UTF-8" id="form-cotizacion-producto" data-toggle="validator">
                         <div class="row">
                             <label for="cotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
                             <div class="form-group col-md-8">
@@ -326,7 +349,7 @@
                                 <h3 class="box-title">Imágenes</h3>
                             </div>
                             <div class="box-body table-responsive no-padding">
-                                <div id="fine-uploader"></div>
+                                <div class="fine-uploader"></div>
                             </div>
                         </div>
                     </form>
@@ -510,7 +533,7 @@
                 <div><%- cotizacion4_cantidad %></div>
             </div>
             <div class="form-group col-md-3 text-right">
-                <div><%- window.Misc.currency( cotizacion4_precio ) %></div>
+                <div><%- window.Misc.currency(cotizacion4_precio) %></div>
             </div>
         <% } %>
     </script>
@@ -553,72 +576,5 @@
        <td><%- cotizacion7_texto %></td>
        <td><%- cotizacion7_ancho %></td>
        <td><%- cotizacion7_alto %></td>
-    </script>
-
-    <script type="text/template" id="qq-cotizacion">
-        <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ trans('app.files.drop') }}">
-            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
-                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
-            </div>
-            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
-                <span class="qq-upload-drop-area-text-selector"></span>
-            </div>
-
-            @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']))
-                <div class="buttons">
-                    <div class="qq-upload-button-selector qq-upload-button">
-                        <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
-                    </div>
-                </div>
-            @endif
-            <span class="qq-drop-processing-selector qq-drop-processing">
-                <span>{{ trans('app.files.process') }}</span>
-                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-            </span>
-            <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
-                <li>
-                    <div class="qq-progress-bar-container-selector">
-                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
-                    </div>
-                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
-                    <a class="preview-link" target="_blank">
-                        <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
-                    </a>
-                    <span class="qq-upload-file-selector qq-upload-file"></span>
-                    <span class="qq-upload-size-selector qq-upload-size"></span>
-                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
-                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']))
-                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
-                    <input type="checkbox" class="qq-imprimir"> Imprimir
-                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
-                </li>
-            </ul>
-
-            <dialog class="qq-alert-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">Cerrar</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-confirm-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">No</button>
-                    <button type="button" class="qq-ok-button-selector">Si</button>
-                </div>
-            </dialog>
-
-            <dialog class="qq-prompt-dialog-selector">
-                <div class="qq-dialog-message-selector"></div>
-                <input type="text">
-                <div class="qq-dialog-buttons">
-                    <button type="button" class="qq-cancel-button-selector">{{ trans('app.cancel') }}</button>
-                    <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
-                </div>
-            </dialog>
-        </div>
     </script>
 @stop

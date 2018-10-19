@@ -30,8 +30,9 @@ app || (app = {});
 
             // Reference to fields
             this.$dv = $("#"+$(e.currentTarget).attr("data-field"));
-        	this.$wraperContent = this.$('#tercero-create');
-            if(!this.$wraperContent.length) {
+        	this.$wraperContent = this.$('#spinner-main');
+
+            if( !_.isUndefined($(e.currentTarget).attr("data-modal")) ) {
 	            this.$modalComponent = this.$('#modal-add-resource-component');
 	            this.$wraperContent = this.$modalComponent.find('.modal-body');
    			}

@@ -498,7 +498,16 @@
                                 </div>
 
                                 <div class="tab-pane" id="tab_imagenes">
-                                    <div id="fine-uploader"></div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-12">
+                                            <textarea id="orden_observaciones_imagen" name="orden_observaciones_imagen" class="form-control" placeholder="Observaciones"><%- orden_observaciones_imagen %></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="form-group col-sm-12">
+                                            <div class="fine-uploader"></div>
+                                        </div>
+                                    </div>
                                 </div>
                             @endif
                         <% } %>

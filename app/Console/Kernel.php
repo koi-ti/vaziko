@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\ControlTiemposp::class,
-        Commands\RutinaImagenes::class
+        Commands\RutinaImagenes::class,
+        Commands\SaldosContables::class
     ];
 
     /**

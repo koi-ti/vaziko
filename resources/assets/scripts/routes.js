@@ -305,7 +305,12 @@ app || (app = {});
                 this.createTerceroView.undelegateEvents();
             }
 
-            this.createTerceroView = new app.CreateTerceroView({ model: this.terceroModel });
+            if ( this.editTerceroView instanceof Backbone.View ){
+                this.editTerceroView.stopListening();
+                this.editTerceroView.undelegateEvents();
+            }
+
+            this.editTerceroView = new app.EditTerceroView({ model: this.terceroModel });
             this.terceroModel.fetch();
         },
 

@@ -336,6 +336,7 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_precotizacion = $precotizacion->id;
                 $cotizacion->cotizacion1_anulada = false;
                 $cotizacion->cotizacion1_abierta = true;
+                $cotizacion->cotizacion1_suministran = $precotizacion->precotizacion1_suministran;
                 $cotizacion->cotizacion1_observaciones = $precotizacion->precotizacion1_observaciones;
                 $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
                 $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
@@ -386,6 +387,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                          $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
                          $cotizacion4->cotizacion4_precio = $precotizacion3->precotizacion3_valor_total;
+                         $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
                          $cotizacion4->save();
 
                          $totalmaterial += $precotizacion3->precotizacion3_valor_total;

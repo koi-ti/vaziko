@@ -25,7 +25,8 @@ app || (app = {});
             'tercero_nombre': '',
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',
-            'precotizacion1_observaciones': ''
+            'precotizacion1_observaciones': '',
+            'precotizacion1_suministran': ''
         }
     });
 

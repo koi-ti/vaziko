@@ -21,7 +21,7 @@ class PreCotizacion1 extends Model
      *
      * @var array
      */
-    protected $fillable = ['precotizacion1_referencia', 'precotizacion1_fecha', 'precotizacion1_observaciones'];
+    protected $fillable = ['precotizacion1_referencia', 'precotizacion1_fecha', 'precotizacion1_observaciones', 'precotizacion1_suministran'];
 
     public function isValid($data)
     {
@@ -31,6 +31,7 @@ class PreCotizacion1 extends Model
             'precotizacion1_contacto' => 'required',
             'tcontacto_telefono' => 'required',
   	        'precotizacion1_fecha' => 'required|date_format:Y-m-d',
+            'precotizacion1_suministran' => 'max:200'
         ];
 
         $validator = Validator::make($data, $rules);

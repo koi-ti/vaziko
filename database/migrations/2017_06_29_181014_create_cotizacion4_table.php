@@ -20,6 +20,7 @@ class CreateCotizacion4Table extends Migration
              $table->integer('cotizacion4_materialp')->unsigned();
              $table->double('cotizacion4_cantidad')->default(0);
              $table->double('cotizacion4_precio')->default(0);
+             $table->string('cotizacion4_medidas', 50)->nullable();
 
              $table->foreign('cotizacion4_cotizacion2')->references('id')->on('koi_cotizacion2')->onDelete('restrict');
              $table->foreign('cotizacion4_materialp')->references('id')->on('koi_materialp')->onDelete('restrict');

@@ -41,7 +41,8 @@ app || (app = {});
             'precotizacion2_color12': false,
             'precotizacion2_color22': false,
             'precotizacion2_nota_retiro': '',
-            'precotizacion2_observaciones': ''
+            'precotizacion2_observaciones': '',
+            'productop_nombre': ''
         }
     });
 

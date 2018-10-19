@@ -35,7 +35,7 @@ app || (app = {});
         */
         initialize : function(opts) {
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
-            
+
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
@@ -71,7 +71,10 @@ app || (app = {});
             this.$renderChartEmpleado = this.$('#render-chart-empleado');
             this.$renderChartAreasp = this.$('#render-chart-areasp');
             this.$renderChartProductop = this.$('#render-chart-productop');
-            this.$uploaderFile = this.$('#fine-uploader');
+
+            // Initialize fineuploader && textarea tab imagenes
+            this.$observacionesimagen = this.$('#orden_observaciones_imagen');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views and ready
             this.referenceViews();
@@ -159,6 +162,8 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
+                    data.orden_observaciones_imagen = this.$observacionesimagen.val();
+                    
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -649,7 +654,7 @@ app || (app = {});
                 validation: {
                     itemLimit: 10,
                     sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
-                    allowedExtensions: ['jpeg', 'jpg', 'png']
+                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
                 },
                 messages: {
                     typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
@@ -670,6 +675,8 @@ app || (app = {});
         * @param Object resp
         */
         onCompleteLoadFile: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
             this.$uploaderFile.fineUploader('setUuid', id, resp.id);
             this.$uploaderFile.fineUploader('setName', id, resp.name);
@@ -679,6 +686,8 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

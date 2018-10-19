@@ -38,12 +38,12 @@ app || (app = {});
             this.$renderChartEmpleado = this.$('#render-chart-empleado');
             this.$renderChartAreasp = this.$('#render-chart-areasp');
             this.$renderChartProductop = this.$('#render-chart-productop');
-            this.$uploaderFile = this.$('#fine-uploader');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views && fineuploader container
             this.referenceViews();
             this.referenceCharts()
-            this.uploadPictures();;
+            this.uploadPictures();
         },
 
         /**
@@ -252,6 +252,8 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
+            this.$uploaderFile.find('.btn-imprimir').remove();
+            
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

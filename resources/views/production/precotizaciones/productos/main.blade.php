@@ -20,24 +20,49 @@
     <script type="text/template" id="add-precotizacion-producto-tpl">
         <div class="box box-solid">
             <div class="box-body">
-                <form method="POST" accept-charset="UTF-8" id="form-precotizacion-producto" data-toggle="validator">
-                	<div class="row">
-                        <label class="col-sm-1 control-label">Pre-cotización</label>
-                        <div class="form-group col-md-1">
-                        	{{ $precotizacion->precotizacion_codigo }}
-                        </div>
-
-                        <label class="col-sm-2 control-label">Código producto</label>
-                        <div class="form-group col-md-1">
-        					{{ $producto->id }}
-        				</div>
-                    </div>
+                <div class="alert alert-success">
+                    <h4><b>Información general</b></h4>
                     <div class="row">
-                        <label class="col-sm-1 control-label">Producto</label>
-                        <div class="form-group col-md-8">
-                        	{{ $producto->productop_nombre }}
+                        <label class="col-md-2 control-label">Referencia</label>
+                        <div class="form-group col-md-10">
+                            {{ $precotizacion->precotizacion1_referencia }}
                         </div>
                     </div>
+
+                    <div class="row">
+                        <label class="col-md-2 control-label">Cliente</label>
+                        <div class="form-group col-md-10">
+                            {{ $precotizacion->tercero_nit }} - {{ $precotizacion->tercero_nombre }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-md-2 control-label">Pre-cotización</label>
+                        <div class="form-group col-md-10">
+                            {{ $precotizacion->precotizacion_codigo }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-md-2 control-label">Código producto</label>
+                        <div class="form-group col-md-10">
+                            {{ $producto->id }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label class="col-md-2 control-label">Producto</label>
+                        <div class="form-group col-md-10">
+                            <% if( !_.isUndefined(productop_nombre) && !_.isNull(productop_nombre) && productop_nombre != '') { %>
+                                <%- productop_nombre %>
+                            <% }else{ %>
+                                {{ $producto->productop_nombre }}
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="POST" accept-charset="UTF-8" id="form-precotizacion-producto" data-toggle="validator">
                     <div class="row">
                         <label for="precotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
                         <div class="form-group col-md-8">
@@ -58,7 +83,7 @@
                     </div>
 
                     @if($producto->productop_abierto || $producto->productop_cerrado)
-                        <div class="box box-primary">
+                        <div class="box box-success">
                             <div class="box-body">
                                 @if($producto->productop_abierto)
                                     <div class="row">
@@ -106,7 +131,7 @@
                     @endif
 
                     @if($producto->productop_3d)
-                        <div class="box box-primary">
+                        <div class="box box-success">
                             <div class="box-body">
                                 <div class="row">
                                     <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
@@ -139,7 +164,7 @@
                     @endif
 
                     @if($producto->productop_tiro || $producto->productop_retiro)
-                        <div class="box box-primary">
+                        <div class="box box-success">
                             <div class="box-body">
                                 <div class="row">
                                     <label class="col-sm-offset-2 col-sm-1 control-label"></label>
@@ -225,7 +250,7 @@
                     @endif
 
                     {{-- Content acabados --}}
-                    <div class="box box-primary">
+                    <div class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Acabados de producción</h3>
                         </div>
@@ -237,18 +262,18 @@
                     </div>
                 </form>
 
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">Imágenes</h3>
                     </div>
 
                     <div class="box-body table-responsive no-padding">
-                        <div id="fine-uploader"></div>
+                        <div class="fine-uploader"></div>
                     </div>
                 </div>
 
                 {{-- Content impresiones --}}
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">Impresiones</h3>
                     </div>
@@ -292,7 +317,7 @@
                 </div>
 
                 {{-- Content materialesp --}}
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">Materiales de producción</h3>
                     </div>
@@ -387,7 +412,7 @@
                 </div>
 
                 {{-- Content areasp --}}
-                <div class="box box-primary">
+                <div class="box box-success">
                     <div class="box-header with-border">
                         <h3 class="box-title">Áreas de producción</h3>
                     </div>

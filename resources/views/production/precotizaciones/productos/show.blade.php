@@ -22,14 +22,41 @@
         </div>
 
         <div class="box-body">
-			<div class="row">
-				<label class="control-label col-md-1">Código</label>
-				<div class="form-group col-md-1">
-					<div>{{ $precotizacion->precotizacion_codigo }}</div>
+			<div class="alert alert-success">
+				<h4><b>Información general</b></h4>
+				<div class="row">
+					<label class="col-md-2 control-label">Referencia</label>
+					<div class="form-group col-md-10">
+						{{ $precotizacion->precotizacion1_referencia }}
+					</div>
 				</div>
-				<label class="control-label col-md-1">Producto</label>
-				<div class="form-group col-md-7">
-					<div>{{ $precotizacion2->productop_nombre }}</div>
+
+				<div class="row">
+					<label class="col-md-2 control-label">Cliente</label>
+					<div class="form-group col-md-10">
+						{{ $precotizacion->tercero_nit }} - {{ $precotizacion->tercero_nombre }}
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="col-md-2 control-label">Pre-cotización</label>
+					<div class="form-group col-md-10">
+						{{ $precotizacion->precotizacion_codigo }}
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="col-md-2 control-label">Código producto</label>
+					<div class="form-group col-md-10">
+						{{ $producto->id }}
+					</div>
+				</div>
+
+				<div class="row">
+					<label class="col-md-2 control-label">Producto</label>
+					<div class="form-group col-md-10">
+						{{ $precotizacion2->productop_nombre }}
+					</div>
 				</div>
 			</div>
 
@@ -47,7 +74,7 @@
 			<div class="row">
 				<label class="control-label col-md-1">Observaciones</label>
 				<div class="form-group col-md-11">
-					<textarea class="form-control" rows="2" disabled>{{ $precotizacion2->precotizacion2_observaciones }}</textarea>
+					<textarea class="form-control" rows="2" placeholder="Observaciones..." disabled>{{ $precotizacion2->precotizacion2_observaciones }}</textarea>
 				</div>
 			</div>
 
@@ -241,7 +268,7 @@
                 </div>
 
 				<div class="box-body table-responsive no-padding">
-					<div id="fine-uploader"></div>
+					<div class="fine-uploader"></div>
 				</div>
 			</div>
 

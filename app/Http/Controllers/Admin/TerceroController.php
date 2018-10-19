@@ -139,7 +139,7 @@ class TerceroController extends Controller
     public function edit($id)
     {
         $tercero = Tercero::findOrFail($id);
-        return view('admin.terceros.edit', ['tercero' => $tercero]);
+        return view('admin.terceros.create', ['tercero' => $tercero]);
     }
 
     /**

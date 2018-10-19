@@ -22,14 +22,41 @@
 	            </div>
 	        </div>
 			<div class="box-body">
-				<div class="row">
-					<label class="control-label col-md-1">Código</label>
-					<div class="form-group col-md-1">
-						<div>{{ $orden->orden_codigo }}</div>
+				<div class="alert alert-info">
+					<h4><b>Información general</b></h4>
+					<div class="row">
+						<label class="col-md-2 control-label">Referencia</label>
+						<div class="form-group col-md-10">
+							{{ $orden->orden_referencia }}
+						</div>
 					</div>
-					<label class="control-label col-md-1">Producto</label>
-					<div class="form-group col-md-7">
-						<div>{{ $ordenp2->productop_nombre }}</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Cliente</label>
+						<div class="form-group col-md-10">
+							{{ $orden->tercero_nit }} - {{ $orden->tercero_nombre }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Orden</label>
+						<div class="form-group col-md-10">
+							{{ $orden->orden_codigo }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Código producto</label>
+						<div class="form-group col-md-10">
+							{{ $producto->id }}
+						</div>
+					</div>
+
+					<div class="row">
+						<label class="col-md-2 control-label">Producto</label>
+						<div class="form-group col-md-10">
+							{{ $ordenp2->productop_nombre }}
+						</div>
 					</div>
 				</div>
 
@@ -223,7 +250,7 @@
 						<h3 class="box-title">Imágenes</h3>
 					</div>
 					<div class="box-body table-responsive no-padding">
-						<div id="fine-uploader"></div>
+						<div class="fine-uploader"></div>
 					</div>
 				</div>
 

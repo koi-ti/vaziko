@@ -13,7 +13,6 @@
 
     <section class="content">
         <div id="roles-main">
-
             <div class="box box-success">
                 <div class="box-body">
                     <div class="table-responsive">
