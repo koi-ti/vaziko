@@ -35,5 +35,8 @@ return [
         'drop' => 'Arrastre y suelte los archivos aquí...',
         'retry' => 'Volver a intentar',
         'process' => 'Procesando los archivos...'
-    ]
+    ],
+
+	'see-all' => "Ver todos los mensajes",
+	'have-message' => "Tienes mensajes"
 ];

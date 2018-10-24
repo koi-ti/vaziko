@@ -82,7 +82,7 @@ class Asiento extends Model
     }
 
     /**
-    * Traer detalles asiento1.
+    * Traer detalles del asiento.
     */
     public function detalle()
     {

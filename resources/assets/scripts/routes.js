@@ -21,6 +21,9 @@ app || (app = {});
             'municipios(/)': 'getMunicipiosMain',
             'departamentos(/)': 'getDepartamentosMain',
 
+            // Notificaciones
+            'notificaciones(/)': 'getNotificationsMain',
+
             'actividades(/)': 'getActividadesMain',
             'actividades/create(/)': 'getActividadesCreate',
             'actividades/:actividad/edit(/)': 'getActividadesEdit',
@@ -353,6 +356,16 @@ app || (app = {});
             }
 
             this.mainDepartamentoView = new app.MainDepartamentoView( );
+        },
+
+        // Notifications
+        getNotificationsMain: function () {
+            if ( this.mainNotificationView instanceof Backbone.View ){
+                this.mainNotificationView.stopListening();
+                this.mainNotificationView.undelegateEvents();
+            }
+
+            this.mainNotificationView = new app.MainNotificationView( );
         },
 
         /**

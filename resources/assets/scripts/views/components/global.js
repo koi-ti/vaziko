@@ -15,6 +15,7 @@ app || (app = {});
 		events: {
             'click .sidebar-toggle': 'clickSidebar',
             'click .history-back': 'clickHistoryBack',
+            'click .view-notification': 'clickViewNotification',
             'hidden.bs.modal': 'multiModal'
 		},
 
@@ -40,6 +41,36 @@ app || (app = {});
 
 			window.history.back();
 		},
+
+        clickViewNotification: function(e) {
+            var _this = this;
+                notification = this.$(e.currentTarget).attr('data-notification');
+
+            // Update machine
+            $.ajax({
+                url: window.Misc.urlFull( Route.route('notificaciones.update', {notification: notification}) ),
+                type: 'PUT',
+            })
+            .done(function(resp) {
+                if(!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if( _.isObject( resp.errors ) ) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+
+                    if( !resp.success ) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    location.href = location.href;
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                alertify.error(thrownError);
+            });
+        },
 
 		multiModal: function(){
 			if( $('.modal.in').length > 0){

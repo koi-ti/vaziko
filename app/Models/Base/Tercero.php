@@ -317,4 +317,12 @@ class Tercero extends BaseModel implements AuthenticatableContract,
 
         return false;
     }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\hasMany
+     */
+    public function notifications()
+    {
+        return $this->hasMany('App\Models\Base\Notificacion', 'notificacion_tercero', 'id')->orderby('notificacion_fh', 'desc');
+    }
 }

@@ -81,6 +81,15 @@
                                             @endif
                                         </div>
 									</div>
+                                    @if( $orden->precotizacion_codigo )
+    									<div class="form-group col-md-2">
+    										<label class="control-label">Pre-cotización</label>
+    										<div>
+                                                {{ $orden->precotizacion_codigo }}
+                                            </div>
+    									</div>
+                                    @endif
+                                    
                                     @if( $orden->cotizacion_codigo )
     									<div class="form-group col-md-2">
     										<label class="control-label">Cotización</label>
@@ -89,7 +98,8 @@
                                             </div>
     									</div>
                                     @endif
-									<div class="form-group col-md-7">
+
+									<div class="form-group col-md-5">
 										<label class="control-label">Referencia</label>
 										<div>{{ $orden->orden_referencia }}</div>
 									</div>

@@ -55,6 +55,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
 	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
+	Route::resource('notificaciones', 'Admin\NotificacionController', ['only' => ['index','update']]);
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'roles'], function()
@@ -77,6 +78,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
     Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+    Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
 
 	Route::group(['prefix' => 'plancuentasnif'], function()
 	{
@@ -105,7 +107,7 @@ Route::group(['middleware' => 'auth'], function()
 		});
 
 	});
-	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy']]);
 
 	Route::group(['prefix' => 'asientosnif'], function()
 	{

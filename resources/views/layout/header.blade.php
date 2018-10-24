@@ -14,6 +14,29 @@
         {{-- Navbar Right Menu --}}
         <div class="navbar-custom-menu">
             <ul class="nav navbar-nav">
+                <li class="dropdown messages-menu">
+                    {{--*/ $count = auth()->user()->notifications()->where('notificacion_visto', false)->count() /*--}}
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-envelope-o"></i> {!! ($count > 0) ? '<span class="label label-danger">'. $count .'</span>': '' !!}
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="header">{{ str_plural('Tiene', $count) .' '.$count.' '. str_plural('mensaje', $count) }}</li>
+                        <li>
+                            <ul class="menu">
+                                @foreach( auth()->user()->notifications()->where('notificacion_visto', false)->get() as $notification )
+                                    <li>
+                                        <a href="" class="view-notification" data-notification="{{ $notification->id }}">
+                                            <h4>{{ $notification->notificacion_titulo }} <small><i class="fa fa-clock-o"></i> {{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $notification->notificacion_fh)->diffForHumans() }}</small></h4>
+                                            <p>{{ $notification->notificacion_descripcion }}</p>
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                        <li class="footer"><a href="{{ route('notificaciones.index') }}">{{ trans('notification.view-all') }}</a></li>
+                    </ul>
+                </li>
+
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                          {{-- The user image in the navbar --}}
@@ -32,7 +55,7 @@
                         <li class="user-footer">
                             <div class="pull-right">
                                 <a href="{{ route('auth.logout') }}" class="btn btn-default btn-flat" title="{{ trans('app.logout') }}">
-                                {{ trans('app.logout') }}
+                                    {{ trans('app.logout') }}
                                 </a>
                             </div>
                         </li>

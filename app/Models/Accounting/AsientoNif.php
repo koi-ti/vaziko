@@ -81,4 +81,12 @@ class AsientoNif extends Model
     {
         $this->attributes['asienton1_detalle'] = strtoupper($detail);
     }
+
+    /**
+    * Traer detalles del asienton.
+    */
+    public function detalle()
+    {
+        return $this->hasMany('App\Models\Accounting\AsientoNif2', 'asienton2_asiento', 'id');
+    }
 }

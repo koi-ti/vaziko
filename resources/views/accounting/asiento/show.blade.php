@@ -29,11 +29,18 @@
 						<div>{{ $asiento->asiento1_dia }}</div>
 					</div>
 
-					<div class="col-md-1 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-						<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" target="_blank" class="btn btn-danger btn-sm btn-block">
+					<div class="col-md-1 col-md-offset-7 col-sm-6 col-xs-6 text-right">
+						<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" target="_blank" class="btn btn-default btn-sm btn-block">
 							<i class="fa fa-file-pdf-o"></i>
 						</a>
 					</div>
+					@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'asientos']) )
+						<div class="col-md-1 col-sm-6 col-xs-6 text-right">
+							<a class="btn btn-danger btn-sm btn-block delete-asiento">
+								<i class="fa fa-trash"></i>
+							</a>
+						</div>
+					@endif
 				</div>
 
 				<div class="row">
@@ -122,4 +129,8 @@
 			</div>
 		</div>
 	</section>
+
+	<script type="text/template" id="asiento-delete-confirm-tpl">
+		<p>¿Está seguro que desea eliminar el asiento <b>{{ $asiento->id }}</b>?</p>
+	</script>
 @stop

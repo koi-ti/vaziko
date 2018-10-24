@@ -12,6 +12,9 @@ app || (app = {});
     app.ShowAsientoView = Backbone.View.extend({
 
         el: '#asientos-show',
+        events: {
+            'click .delete-asiento': 'deleteAsiento'
+        },
 
         /**
         * Constructor Method
@@ -41,6 +44,39 @@ app || (app = {});
                     }
                 }
             });
+        },
+
+        deleteAsiento: function(e) {
+            e.preventDefault();
+            var _this = this;
+                model = this.model;
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template( ($('#asiento-delete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Eliminar asiento',
+                    onConfirm: function () {
+                        if ( model instanceof Backbone.Model ) {
+                            model.destroy({
+                                success : function(model, resp) {
+                                    if(!_.isUndefined(resp.success)) {
+                                        window.Misc.removeSpinner( _this.el );
+
+                                        if( !resp.success ) {
+                                            alertify.error(resp.errors);
+                                            return;
+                                        }
+
+                                        window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('asientos.index')));
+                                    }
+                                }
+                            });
+                        }
+                    }
+                }
+            });
+
+            cancelConfirm.render();
         }
     });
 

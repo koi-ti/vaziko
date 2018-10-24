@@ -15,7 +15,9 @@
         "maatwebsite/excel": "~2.1.0",
         "dompdf/dompdf": "~0.6.1",
         "barryvdh/laravel-dompdf": "0.6.*",
-        "codedge/laravel-fpdf": "^1.2"
+        "codedge/laravel-fpdf": "^1.2",
+        "nesbot/carbon": "^1.34",
+        "illuminated/helper-functions": "5.1.*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento;
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\Folder, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto, App\Models\Base\Empresa;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\Folder, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto, App\Models\Base\Empresa, App\Models\Receivable\Factura1, App\Models\Treasury\Facturap;
 use DB, Log, Datatables, Auth, View, App, Fpdf, Excel;
 
 class AsientoController extends Controller
@@ -443,7 +443,42 @@ class AsientoController extends Controller
      */
     public function destroy($id)
     {
-        //
+        // Recuperara asiento
+        $asiento = Asiento::findOrFail($id);
+        if(!$asiento instanceof Asiento){
+            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento.']);
+        }
+
+        // Validar que no tenga facturasp o facturas
+        $facturasp = Facturap::where('facturap1_asiento', $asiento->id)->first();
+        if($facturasp instanceof Facturap){
+            return response()->json(['success' => false, 'errors' => 'No es posible eliminar este asiento porque contiene facturas de proveedor.']);
+        }
+
+        $facturas = Factura1::where('factura1_asiento1_anulado', $asiento->id)->orWhere('factura1_asiento', $asiento->id)->first();
+        if($facturas instanceof Factura1){
+            return response()->json(['success' => false, 'errors' => 'No es posible eliminar este asiento porque contiene facturas.']);
+        }
+
+        DB::beginTransaction();
+        try {
+            // Nif movimiento
+            DB::table('koi_asientonifmovimiento')->join('koi_asienton2', 'movimiento_asienton2', '=', 'koi_asienton2.id')->join('koi_asienton1', 'asienton2_asiento', '=', 'koi_asienton1.id')->where('asienton1_asiento', $asiento->id)->delete();
+            DB::table('koi_asienton2')->join('koi_asienton1', 'asienton2_asiento', '=', 'koi_asienton1.id')->where('asienton1_asiento', $asiento->id)->delete();
+            DB::table('koi_asienton1')->where('asienton1_asiento', $asiento->id)->delete();
+
+            DB::table('koi_asientomovimiento')->join('koi_asiento2', 'movimiento_asiento2', '=', 'koi_asiento2.id')->join('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id')->where('koi_asiento1.id', $asiento->id)->delete();
+            DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->delete();
+            $asiento->delete();
+
+
+            DB::commit();
+            return response()->json(['success' => true, 'msg' => 'Se elimino con exito el asiento.']);
+        } catch (\Exception $e) {
+            DB::rollback();
+            Log::error("destroy - asiento - {$e->getMessage()}");
+            return response()->json(['success' => false, 'errors' => 'Ha ocurrido un error inesperado.']);
+        }
     }
 
     /**
