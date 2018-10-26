@@ -30,12 +30,12 @@
                 <tr>
                     <td>{{ $saldo->cuenta }}</td>
                     <td>{{ $saldo->nombre }}</td>
-                    <td class="right">{{ number_format ($saldo->debitoinicial,2,',' , '.') }}</td>
-                    <td class="right">{{ number_format ($saldo->creditoinicial,2,',' , '.') }}</td>
-                    <td class="right">{{ number_format ($saldo->debitomes,2,',' , '.') }}</td>
-                    <td class="right">{{ number_format ($saldo->creditomes,2,',' , '.') }}</td>
-                    <td class="right"> {{ $sdebito - $scredito > 0 ? number_format ($sdebito,2,',' , '.') : number_format (0,2,',' , '.') }}</td>
-                    <td class="right"> {{ $sdebito - $scredito < 0 ? number_format ($scredito,2,',' , '.') : number_format (0,2,',' , '.') }}</td>
+                    <td class="right">{{ number_format($saldo->debitoinicial, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($saldo->creditoinicial, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($saldo->debitomes, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($saldo->creditomes, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($sdebito, 2, ',', '.') }}</td>
+                    <td class="right">{{ number_format($scredito, 2, ',', '.') }}</td>
                 </tr>
                 {{--*/ $tdebitoinicial += $saldo->debitoinicial; $tcreditoinicial += $saldo->creditoinicial; $tdebitomes += $saldo->debitomes; $tcreditomes += $saldo->creditomes; $tsdebito += $sdebito; $tscredito += $scredito ; /*--}}
             @endforeach

@@ -64,7 +64,7 @@ app || (app = {});
                         return;
                     }
 
-                    location.href = location.href;
+                    window.Misc.redirect( window.Misc.urlFull( Route.route('notificaciones.index') ));
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {

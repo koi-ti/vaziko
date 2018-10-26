@@ -74,16 +74,17 @@ class LibroMayor extends FPDF
         foreach($data as $saldo){
 
             // Inicializo variables para el encabezado de 'NUEVO SALDO'
-            $sdebito = $saldo->debitoinicial + $saldo->debitomes; $scredito = $saldo->creditoinicial + $saldo->creditomes;
+            $sdebito = $saldo->debitoinicial + $saldo->debitomes;
+            $scredito = $saldo->creditoinicial + $saldo->creditomes;
 
             $this->Cell(35, 5, $saldo->cuenta, '', 0, 'R', $fill);
             $this->Cell(70, 5, $saldo->nombre, '', 0, '', $fill);
-            $this->Cell(27, 5, number_format ($saldo->debitoinicial,2,',' , '.'), '', 0, 'R',$fill);
-            $this->Cell(27, 5, number_format ($saldo->creditoinicial,2,',' , '.'), '', 0, 'R',$fill);
-            $this->Cell(27, 5, number_format ($saldo->debitomes,2,',' , '.'), '', 0, 'R', $fill);
-            $this->Cell(27, 5, number_format ($saldo->creditomes,2,',' , '.'), '', 0, 'R', $fill);
-            $this->Cell(27, 5, $sdebito - $scredito > 0 ? number_format ($sdebito,2,',' , '.') : number_format (0,2,',' , '.'), '', 0, 'R', $fill);
-            $this->Cell(27, 5, $sdebito - $scredito < 0 ? number_format ($scredito,2,',' , '.') : number_format (0,2,',' , '.'), '', 0, 'R', $fill);
+            $this->Cell(27, 5, number_format($saldo->debitoinicial, 2, ',', '.'), '', 0, 'R',$fill);
+            $this->Cell(27, 5, number_format($saldo->creditoinicial, 2, ',', '.'), '', 0, 'R',$fill);
+            $this->Cell(27, 5, number_format($saldo->debitomes, 2, ',', '.'), '', 0, 'R', $fill);
+            $this->Cell(27, 5, number_format($saldo->creditomes, 2, ',', '.'), '', 0, 'R', $fill);
+            $this->Cell(27, 5, number_format($sdebito, 2, ',' , '.'), '', 0, 'R', $fill);
+            $this->Cell(27, 5, number_format($scredito, 2, ',' , '.'), '', 0, 'R', $fill);
             $this->Ln();
 
             // Capturando sumatoria
