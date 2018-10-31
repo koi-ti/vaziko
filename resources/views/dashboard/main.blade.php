@@ -18,6 +18,7 @@
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Terceros</h3>
+						<p>&nbsp;</p>
 					</div>
 					<div class="icon">
 						<i class="fa fa-users"></i>
@@ -27,10 +28,15 @@
 					</a>
 				</div>
 			</div>
+		</div>
+
+		<h2 class="page-header">Inventario</h2>
+		<div class="row">
 			<div class="col-sm-3">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Insumos</h3>
+						<p>&nbsp;</p>
 					</div>
 					<div class="icon">
 						<i class="fa fa-wrench"></i>
@@ -40,10 +46,43 @@
 					</a>
 				</div>
 			</div>
+		</div>
+
+		<h2 class="page-header">Producción</h2>
+		<div class="row">
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Pre-cotizaciones</h3>
+						<p>&nbsp;</p>
+					</div>
+					<div class="icon">
+						<i class="fa fa-envelope-open-o"></i>
+					</div>
+					<a href="{{ route('precotizaciones.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
+						<h3>Cotizaciones</h3>
+						<p>&nbsp;</p>
+					</div>
+					<div class="icon">
+						<i class="fa fa-envelope-o"></i>
+					</div>
+					<a href="{{ route('cotizaciones.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
 			<div class="col-sm-3">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Ordenes</h3>
+						<p>&nbsp;</p>
 					</div>
 					<div class="icon">
 						<i class="fa fa-building-o"></i>
@@ -56,22 +95,8 @@
 			<div class="col-sm-3">
 				<div class="small-box bg-green">
 					<div class="inner">
-						<h3>Cotizaciones</h3>
-					</div>
-					<div class="icon">
-						<i class="fa fa-puzzle-piece"></i>
-					</div>
-					<a href="{{ route('cotizaciones.index') }}" class="small-box-footer">
-						Más información <i class="fa fa-arrow-circle-right"></i>
-					</a>
-				</div>
-			</div>
-		</div>
-		<div class="row">
-			<div class="col-sm-3">
-				<div class="small-box bg-green">
-					<div class="inner">
 						<h3>Tiempos</h3>
+						<p>&nbsp;</p>
 					</div>
 					<div class="icon">
 						<i class="fa fa-clock-o"></i>

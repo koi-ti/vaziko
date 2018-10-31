@@ -312,11 +312,19 @@
 							<div class="box-body">
 								@foreach( App\Models\Production\Ordenp4::getOrdenesp4($producto->id, $ordenp2->id) as $material)
 									<div class="row">
-										<div class="form-group col-md-12">
+										<div class="form-group {!! ($material->orden4_cantidad && $material->orden4_medidas) ? 'col-md-7' : 'col-md-12' !!}">
 											<label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_{{ $material->id }}">
 												<input type="checkbox" id="orden4_materialp_{{ $material->id }}" name="orden4_materialp_{{ $material->id }}" value="orden4_materialp_{{ $material->id }}" {{ $material->activo ? 'checked': '' }} disabled> {{ $material->materialp_nombre }}
 											</label>
 										</div>
+										@if( $material->orden4_cantidad && $material->orden4_medidas )
+											<div class="form-group col-md-2">
+												<div>{{ $material->orden4_cantidad }}</div>
+											</div>
+											<div class="form-group col-md-3">
+												<div>{{ $material->orden4_medidas }}</div>
+											</div>
+										@endif
 									</div>
 								@endforeach
 							</div>

@@ -70,10 +70,18 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
+                        width: '15%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
+                            if( full.cotizacion1_precotizacion && full.orden_cotizacion ){
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-success">PRE</span> <span class="label label-danger">COT</span></a>';
+                            }else if( full.cotizacion1_precotizacion ){
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-success">PRE</span></a>';
+                            }else if( full.orden_cotizacion ) {
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-danger">COT</span></a>';
+                            }else{
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
+                            }
                         }
                     },
                     {
