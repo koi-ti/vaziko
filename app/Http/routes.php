@@ -195,6 +195,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
 
 	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
 	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);

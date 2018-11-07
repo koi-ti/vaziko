@@ -18,28 +18,16 @@
             <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
-                    <li class="dropdown pull-right">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Opciones <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li role="presentation">
-                                @if( !$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'cotizaciones']) )
-                                    <a role="menuitem" tabindex="-1" href="#" class="open-cotizacion">
-                                        <i class="fa fa-unlock"></i>Reabrir cotización
-                                    </a>
-                                @endif
-
-                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
-                                    <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
-                                        <i class="fa fa-clone"></i>Clonar cotización
-                                    </a>
-                                @endif
-                                <a role="menuitem" tabindex="-1" href="#" class="export-cotizacion">
-                                    <i class="fa fa-file-pdf-o"></i>Exportar
-                                </a>
-                            </li>
-                        </ul>
+                    <li class="pull-right">
+                        <div class="btn-group" role="group">
+                            @if( !$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'cotizaciones']) )
+                                <a class="btn btn-danger open-cotizacion" title="Reabrir cotización"><i class="fa fa-unlock"></i></a>
+                            @endif
+                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                                <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
+                            @endif
+                            <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                        </div>
                     </li>
                 </ul>
 
@@ -65,7 +53,7 @@
                                     @if( $cotizacion->cotizacion1_precotizacion )
     									<div class="form-group col-md-2">
     										<label>Pre-cotización</label>
-                                            <div>{{ $cotizacion->precotizacion_codigo }}</div>
+                                            <div><a href="{{ route('precotizaciones.show', ['precotizaciones' => $cotizacion->cotizacion1_precotizacion]) }}" title="Ir a precotización">{{ $cotizacion->precotizacion_codigo }}</a></div>
     									</div>
                                     @endif
 									<div class="form-group col-md-7">

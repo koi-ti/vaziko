@@ -33,24 +33,13 @@
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
 
-                    <div class="form-group col-md-offset-5 col-md-2">
-                        <li class="dropdown pull-right">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                Opciones <span class="caret"></span>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li role="presentation">
-                                    <a role="menuitem" tabindex="-1" href="#" class="open-precotizacion">
-                                        <i class="fa fa-unlock"></i>Reabrir pre-cotización
-                                    </a>
-                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
-                                        <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
-                                            <i class="fa fa-envelope-o"></i>Generar cotización
-                                        </a>
-                                    @endif
-                                </li>
-                            </ul>
-                        </li>
+                    <div class="col-md-offset-6 col-md-1">
+                        <div class="btn-group btn-group-justified" role="group">
+                            <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
+                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
+                            @endif
+                        </div>
                     </div>
 				</div>
                 <div class="row">

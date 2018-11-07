@@ -395,16 +395,16 @@
         },
         {
             "name": "illuminated/helper-functions",
-            "version": "5.1.4",
+            "version": "5.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/dmitry-ivanov/laravel-helper-functions.git",
-                "reference": "1e5e39ea5177adf2e5586f043103ab0e20f67ee5"
+                "reference": "8ac14d87dbe8a8d25d953899eb62541ccf1db2e8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/dmitry-ivanov/laravel-helper-functions/zipball/1e5e39ea5177adf2e5586f043103ab0e20f67ee5",
-                "reference": "1e5e39ea5177adf2e5586f043103ab0e20f67ee5",
+                "url": "https://api.github.com/repos/dmitry-ivanov/laravel-helper-functions/zipball/8ac14d87dbe8a8d25d953899eb62541ccf1db2e8",
+                "reference": "8ac14d87dbe8a8d25d953899eb62541ccf1db2e8",
                 "shasum": ""
             },
             "require": {
@@ -415,8 +415,7 @@
                 "symfony/filesystem": "2.7.*",
                 "symfony/finder": "2.7.*",
                 "symfony/process": "2.7.*",
-                "symfony/var-dumper": "2.7.*",
-                "symfony/yaml": "2.7.*"
+                "symfony/var-dumper": "2.7.*"
             },
             "require-dev": {
                 "illuminated/testing-tools": "5.1.*",
@@ -448,7 +447,7 @@
                 "helper",
                 "laravel"
             ],
-            "time": "2018-01-19T10:00:22+00:00"
+            "time": "2017-09-07T10:32:09+00:00"
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -1052,16 +1051,16 @@
         },
         {
             "name": "monolog/monolog",
-            "version": "1.23.0",
+            "version": "1.24.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Seldaek/monolog.git",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4"
+                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
-                "reference": "fd8c787753b3a2ad11bc60c063cff1358a32a3b4",
+                "url": "https://api.github.com/repos/Seldaek/monolog/zipball/bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
+                "reference": "bfc9ebb28f97e7a24c45bdc3f0ff482e47bb0266",
                 "shasum": ""
             },
             "require": {
@@ -1126,7 +1125,7 @@
                 "logging",
                 "psr-3"
             ],
-            "time": "2017-06-19T01:22:40+00:00"
+            "time": "2018-11-05T09:00:11+00:00"
         },
         {
             "name": "mtdowling/cron-expression",
@@ -1701,16 +1700,16 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v2.8.46",
+            "version": "v2.8.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "4cca41ebe83cd5b4bd0c1a9f6bdfaec7103f97fb"
+                "reference": "208aca6c35e332f87c84707dd228d404370c8835"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/4cca41ebe83cd5b4bd0c1a9f6bdfaec7103f97fb",
-                "reference": "4cca41ebe83cd5b4bd0c1a9f6bdfaec7103f97fb",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/208aca6c35e332f87c84707dd228d404370c8835",
+                "reference": "208aca6c35e332f87c84707dd228d404370c8835",
                 "shasum": ""
             },
             "require": {
@@ -1750,7 +1749,7 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
-            "time": "2018-09-08T12:44:02+00:00"
+            "time": "2018-10-02T16:27:16+00:00"
         },
         {
             "name": "symfony/debug",
@@ -1867,16 +1866,16 @@
         },
         {
             "name": "symfony/event-dispatcher",
-            "version": "v2.8.46",
+            "version": "v2.8.47",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/event-dispatcher.git",
-                "reference": "84ae343f39947aa084426ed1138bb96bf94d1f12"
+                "reference": "76494bc38ff38d90d01913d23b5271acd4d78dd3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/84ae343f39947aa084426ed1138bb96bf94d1f12",
-                "reference": "84ae343f39947aa084426ed1138bb96bf94d1f12",
+                "url": "https://api.github.com/repos/symfony/event-dispatcher/zipball/76494bc38ff38d90d01913d23b5271acd4d78dd3",
+                "reference": "76494bc38ff38d90d01913d23b5271acd4d78dd3",
                 "shasum": ""
             },
             "require": {
@@ -1923,7 +1922,7 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
-            "time": "2018-07-26T09:03:18+00:00"
+            "time": "2018-10-20T23:16:31+00:00"
         },
         {
             "name": "symfony/filesystem",
@@ -2636,56 +2635,6 @@
                 "dump"
             ],
             "time": "2018-04-22T05:56:10+00:00"
-        },
-        {
-            "name": "symfony/yaml",
-            "version": "v2.7.49",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/symfony/yaml.git",
-                "reference": "5bbd7e6eb54413d52ae73720ef5edadd37e3fc9e"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/symfony/yaml/zipball/5bbd7e6eb54413d52ae73720ef5edadd37e3fc9e",
-                "reference": "5bbd7e6eb54413d52ae73720ef5edadd37e3fc9e",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.9",
-                "symfony/polyfill-ctype": "~1.8"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.7-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Symfony\\Component\\Yaml\\": ""
-                },
-                "exclude-from-classmap": [
-                    "/Tests/"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Fabien Potencier",
-                    "email": "fabien@symfony.com"
-                },
-                {
-                    "name": "Symfony Community",
-                    "homepage": "https://symfony.com/contributors"
-                }
-            ],
-            "description": "Symfony Yaml Component",
-            "homepage": "https://symfony.com",
-            "time": "2018-05-01T22:30:49+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -4196,6 +4145,61 @@
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
             "time": "2015-06-21T13:59:46+00:00"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v3.3.18",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/yaml.git",
+                "reference": "af615970e265543a26ee712c958404eb9b7ac93d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/yaml/zipball/af615970e265543a26ee712c958404eb9b7ac93d",
+                "reference": "af615970e265543a26ee712c958404eb9b7ac93d",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.5.9|>=7.0.8"
+            },
+            "require-dev": {
+                "symfony/console": "~2.8|~3.0"
+            },
+            "suggest": {
+                "symfony/console": "For validating YAML files using the lint command"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "3.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Symfony\\Component\\Yaml\\": ""
+                },
+                "exclude-from-classmap": [
+                    "/Tests/"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "https://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "https://symfony.com",
+            "time": "2018-01-20T15:04:53+00:00"
         },
         {
             "name": "webmozart/assert",

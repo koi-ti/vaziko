@@ -28,28 +28,15 @@
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                            <li class="dropdown pull-right">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Opciones <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="#" class="close-cotizacion">
-                                            <i class="fa fa-lock"></i>Cerrar cotización
-                                        </a>
-                                        @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
-                                            <a role="menuitem" tabindex="-1" href="#" class="clone-cotizacion">
-                                                <i class="fa fa-clone"></i>Clonar cotización
-                                            </a>
-                                            <a role="menuitem" tabindex="-1" href="#" class="generate-cotizacion">
-                                                <i class="fa fa-sticky-note"></i>Generar orden
-                                            </a>
-                                        @endif
-                                        <a role="menuitem" tabindex="-1" href="#" class="export-cotizacion">
-                                            <i class="fa fa-file-pdf-o"></i>Exportar
-                                        </a>
-                                    </li>
-                                </ul>
+                            <li class="pull-right">
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-danger close-cotizacion" title="Cerrar cotización"><i class="fa fa-lock"></i></a>
+                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                                        <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
+                                        <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
+                                    @endif
+                                    <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                </div>
                             </li>
                         <% } %>
                     </ul>
@@ -69,7 +56,7 @@
                                             <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                                 <label class="col-sm-1 control-label">Pre-cotización</label>
                                                 <div class="form-group col-md-1">
-                                                    <%- precotizacion_codigo %>
+                                                    <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion }) ) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
 

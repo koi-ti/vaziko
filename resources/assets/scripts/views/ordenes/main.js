@@ -74,11 +74,11 @@ app || (app = {});
                         searchable: false,
                         render: function ( data, type, full, row ) {
                             if( full.cotizacion1_precotizacion && full.orden_cotizacion ){
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-success">PRE</span> <span class="label label-danger">COT</span></a>';
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}) )+'" title="Ir a precotización"><span class="label label-success">PRE</span></a> <a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}) )+'" title="Ir a cotización"><span class="label label-danger">COT</span></a>';
                             }else if( full.cotizacion1_precotizacion ){
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-success">PRE</span></a>';
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}) )+'" title="Ir a precotización"><span class="label label-success">PRE</span></a>';
                             }else if( full.orden_cotizacion ) {
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + ' <span class="label label-danger">COT</span></a>';
+                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}) )+'" title="Ir a cotización"><span class="label label-danger">COT</span></a>';
                             }else{
                                 return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
                             }

@@ -40,27 +40,14 @@
                             </div>
 
                             <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                                <div class="form-group col-md-offset-5 col-md-2">
-                                    <li class="dropdown pull-right">
-                                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                            Opciones <span class="caret"></span>
-                                        </a>
-                                        <ul class="dropdown-menu">
-                                            <li role="presentation">
-                                                <a role="menuitem" tabindex="-1" href="#" class="close-precotizacion">
-                                                    <i class="fa fa-lock"></i>Cerrar pre-cotizacion
-                                                </a>
-                                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
-                                                    <a role="menuitem" tabindex="-1" href="#" class="clone-precotizacion">
-                                                        <i class="fa fa-clone"></i>Clonar pre-cotización
-                                                    </a>
-                                                    <a role="menuitem" tabindex="-1" href="#" class="generate-precotizacion">
-                                                        <i class="fa fa-envelope-o"></i>Generar cotización
-                                                    </a>
-                                                @endif
-                                            </li>
-                                        </ul>
-                                    </li>
+                                <div class="col-md-offset-5 col-md-2">
+                                    <div class="btn-group btn-group-justified">
+                                        <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
+                                        @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                            <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
+                                            <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
+                                        @endif
+                                    </div>
                                 </div>
                             <% } %>
                         </div>

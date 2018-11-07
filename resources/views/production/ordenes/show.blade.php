@@ -24,38 +24,18 @@
                         <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
                     @endif
                     <li class="pull-right">
-                        <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
-                            <i class="fa fa-file-pdf-o"></i>
-                        </button>
-                    </li>
-                    <li class="dropdown pull-right">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Opciones <span class="caret"></span>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li role="presentation">
-                                @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
-                                    <a role="menuitem" tabindex="-1" href="#" class="open-ordenp">
-                                        <i class="fa fa-unlock"></i>Reabrir orden
-                                    </a>
-                                @endif
-
-                                @if( $orden->orden_culminada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
-                                    <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
-                                        <i class="fa fa-lock"></i>Cerrar orden
-                                    </a>
-                                @endif
-
-                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
-                                    <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                        <i class="fa fa-clone"></i>Clonar orden
-                                    </a>
-                                @endif
-                                <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
-                                    <i class="fa fa-file-pdf-o"></i>Exportar
-                                </a>
-                            </li>
-                        </ul>
+                        <div class="btn-group" role="group">
+                            <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                            @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                                <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
+                            @endif
+                            @if( $orden->orden_culminada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                                <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
+                            @endif
+                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
+                            @endif
+                        </div>
                     </li>
                 </ul>
 
@@ -85,16 +65,16 @@
     									<div class="form-group col-md-2">
     										<label class="control-label">Pre-cotización</label>
     										<div>
-                                                {{ $orden->precotizacion_codigo }}
+                                                <a href="{{ route('precotizaciones.show', ['precotizaciones' => $orden->cotizacion1_precotizacion]) }}" title="Ir a precotización">{{ $orden->precotizacion_codigo }}</a>
                                             </div>
     									</div>
                                     @endif
-                                    
+
                                     @if( $orden->cotizacion_codigo )
     									<div class="form-group col-md-2">
     										<label class="control-label">Cotización</label>
     										<div>
-                                                {{ $orden->cotizacion_codigo }}
+                                                <a href="{{ route('cotizaciones.show', ['cotizaciones' => $orden->orden_cotizacion]) }}" title="Ir a cotización">{{ $orden->cotizacion_codigo }}</a>
                                             </div>
     									</div>
                                     @endif
