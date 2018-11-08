@@ -45,7 +45,7 @@ app || (app = {});
                 eventLimit: true,
                 eventClick: function(calEvent, jsEvent, view) {
                     _this.$modal.find('.content-modal').html( _this.template( calEvent ) );
-                    _this.$modal.find('.modal-title').text( calEvent.title.trim() );
+                    _this.$modal.find('.modal-title').text( 'Orden de producción # ' + calEvent.title.trim() );
                     _this.$modal.modal('show');
                 }
             });

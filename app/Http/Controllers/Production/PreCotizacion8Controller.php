@@ -6,29 +6,22 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp;
-use DB;
+use App\Models\Production\PreCotizacion8;
 
-class AgendaOrdenespController extends Controller
+class PreCotizacion8Controller extends Controller
 {
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
-    {
-        if( $request->ajax() ){
-            $ordenes = Ordenp::select(DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as title, CONCAT(orden_fecha_entrega,'T',orden_hora_entrega) as start, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"), 'koi_ordenproduccion.id as orden_id', 'orden_referencia', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_cliente', 'tercero_nit')
-                                ->whereBetween('orden_fecha_entrega', [$request->start, $request->end])
-                                ->where('orden_anulada', false)
-                                ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id')
-                                ->get();
-
-            return response()->json($ordenes);
-        }
-        return view('production.agendaordenes.main');
-    }
+     public function index(Request $request)
+     {
+         if ($request->ajax()) {
+             return response()->json( PreCotizacion8::getPreCotizaciones8($request->productop, $request->precotizacion2) );
+         }
+         abort(404);
+     }
 
     /**
      * Show the form for creating a new resource.

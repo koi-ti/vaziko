@@ -223,9 +223,9 @@ class SaldosContables extends Command
     				$saldoscontable->saldoscontables_debito_inicial = $x->debito_inicial + ($y->saldoscontables_debito_mes - $y->saldoscontables_credito_mes);
     				$saldoscontable->saldoscontables_credito_inicial = $x->credito_inicial + ($y->saldoscontables_credito_mes - $y->saldoscontables_debito_mes);
         			$saldoscontable->save();
-
-                    Log::info("$mes2/$ano2 -- $mes/$ano -- ($x->debito_inicial * $x->credito_inicial) -- $objCuenta->plancuentas_cuenta -- [$x->debito_inicial * $x->credito_inicial] -- ($y->saldoscontables_debito_mes * $y->saldoscontables_credito_mes)");
+                    Log::error($saldoscontable);
     			}
+                Log::info("$mes2/$ano2 -- $mes/$ano -- $objCuenta->plancuentas_cuenta -- [$x->debito_inicial * $x->credito_inicial] -- ($y->saldoscontables_debito_mes * $y->saldoscontables_credito_mes)");
 
         		if($mes == $this->currentmonth && $ano == $this->currentyear ) {
         			break;

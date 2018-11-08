@@ -54,7 +54,8 @@ app || (app = {});
                     { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
-                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' }
+                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
+                    { data: 'precotizacion1_terminada', name: 'precotizacion1_terminada' }
                 ],
                 order: [
                     [ 1, 'desc' ], [ 2, 'desc' ]
@@ -77,7 +78,7 @@ app || (app = {});
                         width: '60%',
                     },
                     {
-                        targets: 5,
+                        targets: [5, 6],
                         render: function ( data, type, full, row ) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
@@ -86,6 +87,8 @@ app || (app = {});
                 fnRowCallback: function( row, data ) {
                     if ( parseInt(data.precotizacion1_abierta) ) {
                         $(row).css( {"color":"#00a65a"} );
+                    }else if( parseInt(data.precotizacion1_terminada) ) {
+                        $(row).css( {"color":"#3c8dbc"} );
                     }else{
                         $(row).css( {"color":"black"} );
                     }

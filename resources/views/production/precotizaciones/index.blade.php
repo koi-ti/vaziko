@@ -72,6 +72,7 @@
                                     <th>Tercero</th>
                                     <th nowrap="nowrap">Fecha</th>
                                     <th nowrap="nowrap">Abierta</th>
+                                    <th nowrap="nowrap">Terminada</th>
                                 </tr>
                             </thead>
                         </table>

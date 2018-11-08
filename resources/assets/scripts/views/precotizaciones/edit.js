@@ -18,6 +18,7 @@ app || (app = {});
             'submit #form-precotizaciones': 'onStore',
             'click .close-precotizacion': 'closePreCotizacion',
             'click .clone-precotizacion': 'clonePreCotizacion',
+            'click .finish-precotizacion': 'finishPreCotizacion',
             'click .generate-precotizacion': 'generatePreCotizacion',
         },
         parameters: {
@@ -172,6 +173,56 @@ app || (app = {});
             });
 
             cloneConfirm.render();
+        },
+
+        /**
+        * finish pre-cotizacion
+        */
+        finishPreCotizacion: function (e) {
+            e.preventDefault();
+            var _this = this;
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { precotizacion_codigo: _this.model.get('precotizacion_codigo') },
+                    template: _.template( ($('#precotizacion-terminar-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Terminar pre-cotización',
+                    onConfirm: function () {
+                        // Close orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('precotizaciones.terminar', { precotizaciones: _this.model.get('id') }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.spinner );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.spinner );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull( Route.route('precotizaciones.show', { precotizaciones: _this.model.get('id') })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.spinner );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
         },
 
         /**

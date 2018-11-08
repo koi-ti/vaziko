@@ -22,6 +22,8 @@
                             {{ $precotizacion->precotizacion_codigo }}
                             @if( $precotizacion->precotizacion_abierta )
                                 <span class="label label-success">ABIERTA</span>
+                            @elseif( $precotizacion->precotizacion1_terminada )
+                                <span class="label label-primary">TERMINADA</span>
                             @else
                                 <span class="label label-warning">CERRADA</span>
                             @endif
@@ -33,9 +35,10 @@
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
 
-                    <div class="col-md-offset-6 col-md-1">
+                    <div class="col-md-offset-5 col-md-2">
                         <div class="btn-group btn-group-justified" role="group">
                             <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
+                            <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                             @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
                                 <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                             @endif
@@ -127,5 +130,9 @@
 
     <script type="text/template" id="precotizacion-generate-confirm-tpl">
         <p>¿Está seguro que desea generar la cotización <b>{{ $precotizacion->precotizacion_codigo }} - {{ $precotizacion->precotizacion1_referencia }}</b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-clone-confirm-tpl">
+        <p>¿Está seguro que desea clonar la pre-cotización <b>{{ $precotizacion->precotizacion_codigo }} - {{ $precotizacion->precotizacion1_referencia }}</b>?</p>
     </script>
 @stop
