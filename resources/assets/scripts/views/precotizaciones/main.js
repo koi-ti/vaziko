@@ -55,41 +55,56 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
+                    { data: 'id', name: 'id' },
                     { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
                     { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
                     { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
-                    { data: 'id', name: 'id' },
-                    { data: 'id', name: 'id' },
-                    { data: 'id', name: 'id' },
-                    { data: 'id', name: 'id' }
                 ],
                 order: [
-                    [ 1, 'desc' ], [ 2, 'desc' ]
+                    [ 2, 'desc' ], [ 3, 'desc' ]
                 ],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
+                        width: '7%',
                         render: function ( data, type, full, row ) {
                            return '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.id }) )  +'">' + data + '</a>';
                         },
                     },
                     {
-                        targets: [1, 2],
+                        targets: 1,
+                        orderable: false,
+                        width: '13%',
+                        render: function ( data, type, full, row ) {
+                            const finish = '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            const close = '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            const open = '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
+                            const clone = '<a class="btn btn-success btn-xs clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
+                            const generate = '<a class="btn btn-success btn-xs generate-precotizacion" title="Generar cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';;
+
+                            if ( parseInt( full.precotizacion1_abierta ) ){
+                                return close + ' ' + clone + ' ' + generate + ' ' + finish;
+                            } else {
+                                return open + ' ' + clone + ' ' + generate;
+                            }
+                        }
+                    },
+                    {
+                        targets: [2, 3],
                         visible: false,
                     },
                     {
-                        targets: 3,
+                        targets: 4,
                         width: '60%',
                     },
                     {
-                        targets: 4,
+                        targets: 5,
                         width: '10%',
                     },
                     {
-                        targets: 5,
+                        targets: 6,
                         width: '7%',
                         searchable: false,
                         orderable: false,
@@ -102,51 +117,7 @@ app || (app = {});
                                 return '<span class="label label-danger">CERRADA</span>';
                             }
                         }
-                    },
-                    {
-                        targets: 6,
-                        orderable: false,
-                        width: '3%',
-                        className: "text-center",
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_abierta) && !parseInt(full.precotizacion1_terminada) ){
-                                return '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
-                            }else{
-                                return '';
-                            }
-                        }
-                    },
-                    {
-                        targets: 7,
-                        orderable: false,
-                        width: '3%',
-                        className: "text-center",
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_abierta) ){
-                                return '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
-                            }else{
-                                return '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
-                            }
-                        }
-                    },
-                    {
-                        targets: 8,
-                        orderable: false,
-                        width: '3%',
-                        className: "text-center",
-                        render: function ( data, type, full, row ) {
-                            return '<a class="btn btn-success btn-xs clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
-                        }
-                    },
-                    {
-                        targets: 9,
-                        orderable: false,
-                        width: '3%',
-                        className: "text-center",
-                        render: function ( data, type, full, row ) {
-                            return '<a class="btn btn-success btn-xs generate-precotizacion" title="Generar cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';
-                        }
-                    },
+                    }
                 ],
                 fnRowCallback: function( row, data ) {
                     if ( parseInt(data.precotizacion1_terminada) ) {

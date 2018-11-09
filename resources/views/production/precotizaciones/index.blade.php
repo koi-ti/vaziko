@@ -66,15 +66,12 @@
                         <thead>
                             <tr>
                                 <th>Código</th>
+                                <th>Acciones</th>
                                 <th>Ano</th>
                                 <th>Numero</th>
                                 <th>Tercero</th>
                                 <th nowrap="nowrap">Fecha</th>
                                 <th nowrap="nowrap">Estado</th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
-                                <th></th>
                             </tr>
                         </thead>
                     </table>
