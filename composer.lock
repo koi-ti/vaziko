@@ -449,7 +449,11 @@
                 "helper",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2018-01-19 10:00:22"
+=======
+            "time": "2018-01-19T10:00:22+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "jakub-onderka/php-console-color",
@@ -491,7 +495,11 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+<<<<<<< HEAD
             "time": "2018-09-29 17:23:10"
+=======
+            "time": "2018-09-29T17:23:10+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "jakub-onderka/php-console-highlighter",
@@ -593,7 +601,11 @@
                 "serialize",
                 "tokenizer"
             ],
+<<<<<<< HEAD
             "time": "2018-03-21 22:21:57"
+=======
+            "time": "2018-03-21T22:21:57+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "laravel/framework",
@@ -772,7 +784,11 @@
                     "email": "adam@laravelcollective.com"
                 }
             ],
+<<<<<<< HEAD
             "time": "2017-09-07 18:12:11"
+=======
+            "time": "2017-09-07T18:12:11+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "league/flysystem",
@@ -856,7 +872,11 @@
                 "sftp",
                 "storage"
             ],
+<<<<<<< HEAD
             "time": "2018-10-15 13:53:10"
+=======
+            "time": "2018-10-15T13:53:10+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "league/fractal",
@@ -971,7 +991,11 @@
                 "routes",
                 "routing"
             ],
+<<<<<<< HEAD
             "time": "2018-09-11 00:19:41"
+=======
+            "time": "2018-09-11T00:19:41+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "maatwebsite/excel",
@@ -1049,7 +1073,11 @@
                 "import",
                 "laravel"
             ],
+<<<<<<< HEAD
             "time": "2018-09-04 19:00:09"
+=======
+            "time": "2018-09-04T19:00:09+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "monolog/monolog",
@@ -1325,7 +1353,11 @@
                 "pseudorandom",
                 "random"
             ],
+<<<<<<< HEAD
             "time": "2018-04-04 21:48:54"
+=======
+            "time": "2018-04-04T21:48:54+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "phenx/php-font-lib",
@@ -1637,7 +1669,11 @@
                 "mail",
                 "mailer"
             ],
+<<<<<<< HEAD
             "time": "2018-07-31 09:26:32"
+=======
+            "time": "2018-07-31T09:26:32+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/console",
@@ -1697,7 +1733,11 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-13 15:44:36"
+=======
+            "time": "2018-05-13T15:44:36+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/css-selector",
@@ -1750,7 +1790,11 @@
             ],
             "description": "Symfony CssSelector Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-09-08 12:44:02"
+=======
+            "time": "2018-09-08T12:44:02+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/debug",
@@ -1807,7 +1851,11 @@
             ],
             "description": "Symfony Debug Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-11 17:00:11"
+=======
+            "time": "2018-05-11T17:00:11+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/dom-crawler",
@@ -1863,7 +1911,11 @@
             ],
             "description": "Symfony DomCrawler Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-01 22:30:49"
+=======
+            "time": "2018-05-01T22:30:49+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/event-dispatcher",
@@ -1923,7 +1975,11 @@
             ],
             "description": "Symfony EventDispatcher Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-07-26 09:03:18"
+=======
+            "time": "2018-07-26T09:03:18+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/filesystem",
@@ -2022,7 +2078,11 @@
             ],
             "description": "Symfony Finder Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-14 06:36:14"
+=======
+            "time": "2018-05-14T06:36:14+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/http-foundation",
@@ -2078,7 +2138,11 @@
             ],
             "description": "Symfony HttpFoundation Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-07-31 19:55:31"
+=======
+            "time": "2018-07-31T19:55:31+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/http-kernel",
@@ -2162,11 +2226,15 @@
             ],
             "description": "Symfony HttpKernel Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-08-01 13:56:47"
+=======
+            "time": "2018-08-01T13:56:47+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.9.0",
+            "version": "v1.10.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
@@ -2224,6 +2292,7 @@
         },
         {
             "name": "symfony/polyfill-mbstring",
+<<<<<<< HEAD
             "version": "v1.9.0",
             "source": {
                 "type": "git",
@@ -2234,6 +2303,18 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/d0cd638f4634c16d8df4508e847f14e9e43168b8",
                 "reference": "d0cd638f4634c16d8df4508e847f14e9e43168b8",
+=======
+            "version": "v1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-mbstring.git",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/c79c051f5b3a46be09205c73b80b346e4153e494",
+                "reference": "c79c051f5b3a46be09205c73b80b346e4153e494",
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
                 "shasum": ""
             },
             "require": {
@@ -2279,6 +2360,7 @@
                 "portable",
                 "shim"
             ],
+<<<<<<< HEAD
             "time": "2018-08-06 14:22:27"
         },
         {
@@ -2293,6 +2375,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/7b4fc009172cc0196535b0328bd1226284a28000",
                 "reference": "7b4fc009172cc0196535b0328bd1226284a28000",
+=======
+            "time": "2018-09-21T13:07:52+00:00"
+        },
+        {
+            "name": "symfony/polyfill-php56",
+            "version": "v1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-php56.git",
+                "reference": "ff208829fe1aa48ab9af356992bb7199fed551af"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-php56/zipball/ff208829fe1aa48ab9af356992bb7199fed551af",
+                "reference": "ff208829fe1aa48ab9af356992bb7199fed551af",
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
                 "shasum": ""
             },
             "require": {
@@ -2335,6 +2433,7 @@
                 "portable",
                 "shim"
             ],
+<<<<<<< HEAD
             "time": "2018-08-06 14:22:27"
         },
         {
@@ -2349,6 +2448,22 @@
                 "type": "zip",
                 "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/8e15d04ba3440984d23e7964b2ee1d25c8de1581",
                 "reference": "8e15d04ba3440984d23e7964b2ee1d25c8de1581",
+=======
+            "time": "2018-09-21T06:26:08+00:00"
+        },
+        {
+            "name": "symfony/polyfill-util",
+            "version": "v1.10.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/polyfill-util.git",
+                "reference": "3b58903eae668d348a7126f999b0da0f2f93611c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/polyfill-util/zipball/3b58903eae668d348a7126f999b0da0f2f93611c",
+                "reference": "3b58903eae668d348a7126f999b0da0f2f93611c",
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
                 "shasum": ""
             },
             "require": {
@@ -2387,7 +2502,11 @@
                 "polyfill",
                 "shim"
             ],
+<<<<<<< HEAD
             "time": "2018-08-06 14:22:27"
+=======
+            "time": "2018-09-30T16:36:12+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/process",
@@ -2436,7 +2555,11 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-15 08:20:41"
+=======
+            "time": "2018-05-15T08:20:41+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/routing",
@@ -2573,7 +2696,11 @@
             ],
             "description": "Symfony Translation Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-17 10:34:06"
+=======
+            "time": "2018-05-17T10:34:06+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/var-dumper",
@@ -2635,7 +2762,11 @@
                 "debug",
                 "dump"
             ],
+<<<<<<< HEAD
             "time": "2018-04-22 05:56:10"
+=======
+            "time": "2018-04-22T05:56:10+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "symfony/yaml",
@@ -2685,7 +2816,11 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "https://symfony.com",
+<<<<<<< HEAD
             "time": "2018-05-01 22:30:49"
+=======
+            "time": "2018-05-01T22:30:49+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",
@@ -2842,7 +2977,11 @@
                 "laravel4",
                 "laravel5"
             ],
+<<<<<<< HEAD
             "time": "2018-04-05 15:24:31"
+=======
+            "time": "2018-04-05T15:24:31+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "zizaco/entrust",
@@ -3016,7 +3155,11 @@
                 "faker",
                 "fixtures"
             ],
+<<<<<<< HEAD
             "time": "2018-07-12 10:23:15"
+=======
+            "time": "2018-07-12T10:23:15+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "hamcrest/hamcrest-php",
@@ -3184,22 +3327,22 @@
         },
         {
             "name": "phpdocumentor/reflection-docblock",
-            "version": "3.2.2",
+            "version": "3.3.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/ReflectionDocBlock.git",
-                "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157"
+                "reference": "bf329f6c1aadea3299f08ee804682b7c45b326a2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/4aada1f93c72c35e22fb1383b47fee43b8f1d157",
-                "reference": "4aada1f93c72c35e22fb1383b47fee43b8f1d157",
+                "url": "https://api.github.com/repos/phpDocumentor/ReflectionDocBlock/zipball/bf329f6c1aadea3299f08ee804682b7c45b326a2",
+                "reference": "bf329f6c1aadea3299f08ee804682b7c45b326a2",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.5",
-                "phpdocumentor/reflection-common": "^1.0@dev",
-                "phpdocumentor/type-resolver": "^0.3.0",
+                "php": "^5.6 || ^7.0",
+                "phpdocumentor/reflection-common": "^1.0.0",
+                "phpdocumentor/type-resolver": "^0.4.0",
                 "webmozart/assert": "^1.0"
             },
             "require-dev": {
@@ -3225,20 +3368,24 @@
                 }
             ],
             "description": "With this component, a library can provide support for annotations via DocBlocks or otherwise retrieve information that is embedded in a DocBlock.",
+<<<<<<< HEAD
             "time": "2017-08-08 06:39:58"
+=======
+            "time": "2017-11-10T14:09:06+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "phpdocumentor/type-resolver",
-            "version": "0.3.0",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpDocumentor/TypeResolver.git",
-                "reference": "fb3933512008d8162b3cdf9e18dba9309b7c3773"
+                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/fb3933512008d8162b3cdf9e18dba9309b7c3773",
-                "reference": "fb3933512008d8162b3cdf9e18dba9309b7c3773",
+                "url": "https://api.github.com/repos/phpDocumentor/TypeResolver/zipball/9c977708995954784726e25d0cd1dddf4e65b0f7",
+                "reference": "9c977708995954784726e25d0cd1dddf4e65b0f7",
                 "shasum": ""
             },
             "require": {
@@ -3272,7 +3419,11 @@
                     "email": "me@mikevanriel.com"
                 }
             ],
+<<<<<<< HEAD
             "time": "2017-06-03 08:32:36"
+=======
+            "time": "2017-07-14T14:27:02+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "phpspec/php-diff",
@@ -3447,7 +3598,11 @@
                 "spy",
                 "stub"
             ],
+<<<<<<< HEAD
             "time": "2018-08-05 17:53:17"
+=======
+            "time": "2018-08-05T17:53:17+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4195,7 +4350,11 @@
             ],
             "description": "Library that helps with managing the version number of Git-hosted PHP projects",
             "homepage": "https://github.com/sebastianbergmann/version",
+<<<<<<< HEAD
             "time": "2015-06-21 13:59:46"
+=======
+            "time": "2015-06-21T13:59:46+00:00"
+>>>>>>> ba0f149dd36ec06fbfaae5d87f5e033aee8faf56
         },
         {
             "name": "webmozart/assert",

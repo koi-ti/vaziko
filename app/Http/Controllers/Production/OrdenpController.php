@@ -30,7 +30,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
+            $query->select('koi_ordenproduccion.id', 'orden_cotizacion', 'cotizacion1_precotizacion', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -44,6 +44,8 @@ class OrdenpController extends Controller
                 )
             );
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+            $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
+
             // Permisions
             if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
                 $query->where('orden_abierta', true);
