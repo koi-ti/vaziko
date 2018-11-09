@@ -109,12 +109,10 @@ app || (app = {});
                         width: '3%',
                         className: "text-center",
                         render: function ( data, type, full, row ) {
-                            const open = '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
-                            const close = '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
-                            if( full.precotizacion1_abierta ){
-                                return close;
+                            if( parseInt(full.precotizacion1_abierta) ){
+                                return '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
                             }else{
-                                return open;
+                                return '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
                             }
                         }
                     },
@@ -124,9 +122,8 @@ app || (app = {});
                         width: '3%',
                         className: "text-center",
                         render: function ( data, type, full, row ) {
-                            const finish = '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
-                            if( !full.precotizacion1_terminada ){
-                                return finish;
+                            if( !parseInt(full.precotizacion1_terminada) ){
+                                return '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
                             }else{
                                 return '';
                             }
