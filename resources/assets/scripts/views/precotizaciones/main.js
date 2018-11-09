@@ -122,7 +122,7 @@ app || (app = {});
                         width: '3%',
                         className: "text-center",
                         render: function ( data, type, full, row ) {
-                            if( !parseInt(full.precotizacion1_terminada) ){
+                            if( parseInt(full.precotizacion1_abierta) && !parseInt(full.precotizacion1_terminada) ){
                                 return '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
                             }else{
                                 return '';
