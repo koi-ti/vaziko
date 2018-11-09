@@ -45,8 +45,8 @@
                                         <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
                                             <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
+                                            <a class="btn btn-success finish-precotizacion" title="Terminar pre-cotización"><i class="fa fa-handshake-o"></i></a>
                                             <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
-                                            <a class="btn btn-success finish-precotizacion" title="Terminar cotización"><i class="fa fa-handshake-o"></i></a>
                                         @endif
                                     </div>
                                 </div>
@@ -186,6 +186,10 @@
 
     <script type="text/template" id="precotizacion-productop-delete-confirm-tpl">
         <p>¿Está seguro que desea eliminar el producto <b><%- productop_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizaciones-open-confirm-tpl">
+        <p>¿Está seguro que desea reabrir la pre-cotizacion <b><%- precotizacion_codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="precotizacion-close-confirm-tpl">

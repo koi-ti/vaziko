@@ -20,10 +20,10 @@
 						<label class="control-label">Código</label>
 						<div>
                             {{ $precotizacion->precotizacion_codigo }}
-                            @if( $precotizacion->precotizacion_abierta )
-                                <span class="label label-success">ABIERTA</span>
-                            @elseif( $precotizacion->precotizacion1_terminada )
+                            @if( $precotizacion->precotizacion1_terminada )
                                 <span class="label label-primary">TERMINADA</span>
+                            @elseif( $precotizacion->precotizacion_abierta )
+                                <span class="label label-success">ABIERTA</span>
                             @else
                                 <span class="label label-warning">CERRADA</span>
                             @endif
@@ -38,8 +38,8 @@
                     <div class="col-md-offset-5 col-md-2">
                         <div class="btn-group btn-group-justified" role="group">
                             <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
-                            <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                             @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                                 <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                             @endif
                         </div>

@@ -316,6 +316,10 @@ class PreCotizacion1Controller extends Controller
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
+            }
+
             DB::beginTransaction();
             try {
                 // Pre cotizacion
@@ -347,6 +351,10 @@ class PreCotizacion1Controller extends Controller
             $precotizacion = PreCotizacion1::getPreCotizacion($id);
             if(!$precotizacion instanceof PreCotizacion1){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
             }
 
             // Recuperar empresa
@@ -557,6 +565,13 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+            
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
+            }
 
             DB::beginTransaction();
             try {
