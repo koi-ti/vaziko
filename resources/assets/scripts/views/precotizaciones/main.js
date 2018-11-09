@@ -86,11 +86,11 @@ app || (app = {});
                     },
                     {
                         targets: 4,
-                        width: '7%',
+                        width: '10%',
                     },
                     {
                         targets: 5,
-                        width: '10%',
+                        width: '7%',
                         searchable: false,
                         orderable: false,
                         render: function ( data, type, full, row ) {
@@ -109,10 +109,10 @@ app || (app = {});
                         width: '3%',
                         className: "text-center",
                         render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_abierta) ){
-                                return '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            if( parseInt(full.precotizacion1_abierta) && !parseInt(full.precotizacion1_terminada) ){
+                                return '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
                             }else{
-                                return '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
+                                return '';
                             }
                         }
                     },
@@ -122,10 +122,10 @@ app || (app = {});
                         width: '3%',
                         className: "text-center",
                         render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_abierta) && !parseInt(full.precotizacion1_terminada) ){
-                                return '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            if( parseInt(full.precotizacion1_abierta) ){
+                                return '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
                             }else{
-                                return '';
+                                return '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
                             }
                         }
                     },
