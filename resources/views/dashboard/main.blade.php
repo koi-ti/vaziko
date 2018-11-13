@@ -14,7 +14,7 @@
 	</section>
 	<section class="content">
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Terceros</h3>
@@ -32,7 +32,7 @@
 
 		<h2 class="page-header">Inventario</h2>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Insumos</h3>
@@ -50,7 +50,7 @@
 
 		<h2 class="page-header">Producción</h2>
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Pre-cotizaciones</h3>
@@ -64,7 +64,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Cotizaciones</h3>
@@ -78,7 +78,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Ordenes</h3>
@@ -95,7 +95,7 @@
 		</div>
 
 		<div class="row">
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Agenda</h3>
@@ -109,7 +109,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Tiempos</h3>

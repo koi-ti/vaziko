@@ -577,7 +577,6 @@ class AsientoController extends Controller
                     $cuentas[] = $arCuenta;
                 }
             },false);
-            Log::info($cuentas);
             if($documento->documento_actual){
                 $asiento = new Asiento;
                 $consecutive++;
