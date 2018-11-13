@@ -49,6 +49,7 @@ app || (app = {});
             this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
             this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
             this.acabadosProductopPreCotizacionList = new app.AcabadosProductopPreCotizacionList();
+            this.maquinasProductopPreCotizacionList = new app.MaquinasProductopPreCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -149,6 +150,17 @@ app || (app = {});
                     }
                }
             });
+
+            // Maquinas list
+            this.maquinasProductopPreCotizacionListView = new app.MaquinasProductopPreCotizacionListView( {
+                collection: this.maquinasProductopPreCotizacionList,
+                parameters: {
+                    dataFilter: {
+                        precotizacion2: this.model.get('id'),
+                        productop: this.produtop
+                    }
+               }
+            });
         },
 
         /**
@@ -174,6 +186,7 @@ app || (app = {});
                         data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                         data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
                         data.areasp = this.areasProductopPreCotizacionList.toJSON();
+                        data.maquinas = this.maquinasProductopPreCotizacionList.toJSON();
 
                     this.model.save( data, {silent: true});
 
@@ -182,6 +195,7 @@ app || (app = {});
                         data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
                         data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
                         data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
+                        data.maquinas = JSON.stringify(this.maquinasProductopPreCotizacionList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();

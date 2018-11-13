@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion1Controller extends Controller
@@ -20,7 +20,7 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()){
             $query = PreCotizacion1::query();
-            $query->select('koi_precotizacion1.id', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'precotizacion1_numero', 'precotizacion1_ano', 'precotizacion1_fecha', 'precotizacion1_abierta',
+            $query->select('koi_precotizacion1.id', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'precotizacion1_terminada', 'precotizacion1_numero', 'precotizacion1_ano', 'precotizacion1_fecha', 'precotizacion1_abierta',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -287,11 +287,49 @@ class PreCotizacion1Controller extends Controller
             try {
                 // Orden
                 $precotizacion->precotizacion1_abierta = false;
+                $precotizacion->precotizacion1_terminada = false;
                 $precotizacion->save();
 
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Pre-cotización cerrada con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
+     * Terminar the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function terminar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
+            }
+
+            DB::beginTransaction();
+            try {
+                // Pre cotizacion
+                $precotizacion->precotizacion1_abierta = false;
+                $precotizacion->precotizacion1_terminada = true;
+                $precotizacion->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Pre-cotización termino con exito.']);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());
@@ -313,6 +351,10 @@ class PreCotizacion1Controller extends Controller
             $precotizacion = PreCotizacion1::getPreCotizacion($id);
             if(!$precotizacion instanceof PreCotizacion1){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
             }
 
             // Recuperar empresa
@@ -449,6 +491,15 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion5->save();
                     }
 
+                    // Recuperar Maquinas de cotizacion para generar cotizacion
+                    $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($maquinas as $precotizacion8) {
+                         $cotizacion3 = new Cotizacion3;
+                         $cotizacion3->cotizacion3_maquinap = $precotizacion8->precotizacion8_maquinap;
+                         $cotizacion3->cotizacion3_cotizacion2 = $cotizacion2->id;
+                         $cotizacion3->save();
+                    }
+
                     // Actualizar precio en cotizacion2;
                     $cotizacion2->cotizacion2_precio_formula = $totalmaterial;
                     $cotizacion2->cotizacion2_precio_venta = $totalmaterial;
@@ -489,6 +540,7 @@ class PreCotizacion1Controller extends Controller
             try {
                 // Orden
                 $precotizacion->precotizacion1_abierta = true;
+                $precotizacion->precotizacion1_terminada = false;
                 $precotizacion->save();
 
                 // Commit Transaction
@@ -513,6 +565,13 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+            
+            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
+                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
+            }
 
             DB::beginTransaction();
             try {
@@ -524,6 +583,7 @@ class PreCotizacion1Controller extends Controller
                 $newprecotizacion = $precotizacion->replicate();
                 $newprecotizacion->precotizacion1_fecha = date('Y-m-d');
                 $newprecotizacion->precotizacion1_abierta = true;
+                $newprecotizacion->precotizacion1_terminada = false;
                 $newprecotizacion->precotizacion1_ano = date('Y');
                 $newprecotizacion->precotizacion1_numero = $numero;
                 $newprecotizacion->precotizacion1_usuario_elaboro = Auth::user()->id;
@@ -589,6 +649,14 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion7 = $precotizacion7->replicate();
                          $newprecotizacion7->precotizacion7_precotizacion2 = $newprecotizacion2->id;
                          $newprecotizacion7->save();
+                    }
+
+                    // Maquinas
+                    $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($maquinas as $precotizacion8) {
+                         $newprecotizacion8 = $precotizacion8->replicate();
+                         $newprecotizacion8->precotizacion8_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion8->save();
                     }
                 }
                 // Commit Transaction

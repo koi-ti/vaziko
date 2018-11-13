@@ -195,6 +195,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
+	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
 
 	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
 	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
@@ -216,6 +217,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::group(['prefix' => 'precotizaciones'], function(){
 		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
 		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
+		Route::get('terminar/{precotizaciones}', ['as' => 'precotizaciones.terminar', 'uses' => 'Production\PreCotizacion1Controller@terminar']);
 		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
 		Route::get('clonar/{precotizaciones}', ['as' => 'precotizaciones.clonar', 'uses' => 'Production\PreCotizacion1Controller@clonar']);
 
@@ -226,6 +228,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('acabados', 'Production\PreCotizacion7Controller', ['only' => ['index']]);
+			Route::resource('maquinas', 'Production\PreCotizacion8Controller', ['only' => ['index']]);
 		});
 		Route::resource('productos', 'Production\PreCotizacion2Controller');
 	});

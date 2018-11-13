@@ -20,7 +20,7 @@
                         <i class="fa fa-envelope-o"></i> {!! ($count > 0) ? '<span class="label label-danger">'. $count .'</span>': '' !!}
                     </a>
                     <ul class="dropdown-menu">
-                        <li class="header">{{ str_plural('Tiene', $count) .' '.$count.' '. str_plural('mensaje', $count) }}</li>
+                        <li class="header">Tiene {{ $count.' '. str_plural('mensaje', $count) }}</li>
                         <li>
                             <ul class="menu">
                                 @foreach( auth()->user()->notifications()->where('notificacion_visto', false)->get() as $notification )

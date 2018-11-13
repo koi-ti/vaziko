@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
 use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
@@ -182,6 +182,17 @@ class PreCotizacion2Controller extends Controller
                             $precotizacion7->precotizacion7_precotizacion2 = $precotizacion2->id;
                             $precotizacion7->precotizacion7_acabadop = $acabado->id;
                             $precotizacion7->save();
+                        }
+                    }
+
+                    // Maquinas
+                    $maquinas = PreCotizacion8::getPreCotizaciones8($precotizacion2->precotizacion2_productop, $precotizacion2->id);
+                    foreach ($maquinas as $maquina) {
+                        if($request->has("precotizacion8_maquinap_$maquina->id")) {
+                            $precotizacion8 = new PreCotizacion8;
+                            $precotizacion8->precotizacion8_precotizacion2 = $precotizacion2->id;
+                            $precotizacion8->precotizacion8_maquinap = $maquina->id;
+                            $precotizacion8->save();
                         }
                     }
 
@@ -408,6 +419,24 @@ class PreCotizacion2Controller extends Controller
                             }
                         }
 
+                        // Maquinas
+                        $maquinas = PreCotizacion8::getPreCotizaciones8($precotizacion2->precotizacion2_productop, $precotizacion2->id);
+                        foreach ($maquinas as $maquina) {
+                            $precotizacion8 = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->where('precotizacion8_maquinap', $maquina->id)->first();
+                            if($request->has("precotizacion8_maquinap_$maquina->id")) {
+                                if(!$precotizacion8 instanceof PreCotizacion8) {
+                                    $precotizacion8 = new PreCotizacion8;
+                                    $precotizacion8->precotizacion8_precotizacion2 = $precotizacion2->id;
+                                    $precotizacion8->precotizacion8_maquinap = $maquina->id;
+                                    $precotizacion8->save();
+                                }
+                            }else{
+                                if($precotizacion8 instanceof PreCotizacion8) {
+                                    $precotizacion8->delete();
+                                }
+                            }
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $precotizacion2->id, 'id_precotizacion' => $precotizacion->id]);
@@ -455,6 +484,9 @@ class PreCotizacion2Controller extends Controller
 
                 // Acabados
                 DB::table('koi_precotizacion7')->where('precotizacion7_precotizacion2', $precotizacion2->id)->delete();
+
+                // Maquinas
+                DB::table('koi_precotizacion8')->where('precotizacion8_precotizacion2', $precotizacion2->id)->delete();
 
                 // Eliminar item precotizacion2
                 $precotizacion2->delete();
@@ -542,6 +574,14 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion7 = $precotizacion7->replicate();
                      $newprecotizacion7->precotizacion7_precotizacion2 = $newprecotizacion2->id;
                      $newprecotizacion7->save();
+                }
+
+                // Mquinas
+                $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->get();
+                foreach ($maquinas as $precotizacion8) {
+                     $newprecotizacion8 = $precotizacion8->replicate();
+                     $newprecotizacion8->precotizacion8_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion8->save();
                 }
 
                 // Commit Transaction

@@ -14,6 +14,7 @@ app || (app = {});
         el: '#notification-main',
         events: {
             'click .btn-search': 'search',
+            'click .view-true': 'updateView',
             'click .btn-clear': 'clear',
         },
 
@@ -54,6 +55,36 @@ app || (app = {});
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 window.Misc.removeSpinner( _this.$spinner );
+                alertify.error(thrownError);
+            });
+        },
+
+        updateView: function(e) {
+            var _this = this;
+                notification = this.$(e.currentTarget).attr('data-notification');
+
+            // Update machine
+            $.ajax({
+                url: window.Misc.urlFull( Route.route('notificaciones.update', {notification: notification}) ),
+                type: 'PUT',
+            })
+            .done(function(resp) {
+                if(!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if( _.isObject( resp.errors ) ) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+
+                    if( !resp.success ) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    window.location.href = window.location.href;
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
                 alertify.error(thrownError);
             });
         },

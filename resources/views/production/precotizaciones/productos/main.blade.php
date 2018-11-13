@@ -250,13 +250,29 @@
                     @endif
 
                     {{-- Content acabados --}}
-                    <div class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Acabados de producción</h3>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="box box-success">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Acabados de producción</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div id="browse-precotizacion-producto-acabados-list">
+                                        {{-- render acabados list --}}
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="box-body">
-                            <div id="browse-precotizacion-producto-acabados-list">
-                                {{-- render acabados list --}}
+                        <div class="col-sm-6">
+                            <div class="box box-success">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Maquinas de producción</h3>
+                                </div>
+                                <div class="box-body">
+                                    <div id="browse-precotizacion-producto-maquinas-list">
+                                        {{-- render maquinas list --}}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -653,6 +669,14 @@
         <div class="form-group col-md-6">
             <label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_<%- id %>">
                 <input type="checkbox" id="precotizacion7_acabadop_<%- id %>" name="precotizacion7_acabadop_<%- id %>" value="precotizacion7_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
+            </label>
+        </div>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-maquinas-item-tpl">
+        <div class="form-group col-md-6">
+            <label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_<%- id %>">
+                <input type="checkbox" id="precotizacion8_maquinap_<%- id %>" name="precotizacion8_maquinap_<%- id %>" value="precotizacion8_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
     </script>

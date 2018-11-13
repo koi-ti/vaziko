@@ -36,32 +36,14 @@
                                 <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
                             @endif
                             <li class="pull-right">
-                                <button type="button" class="btn btn-block btn-danger btn-sm export-ordenp">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                </button>
-                            </li>
-                            <li class="dropdown pull-right">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    Opciones <span class="caret"></span>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li role="presentation">
-                                        <a role="menuitem" tabindex="-1" href="#" class="close-ordenp">
-                                            <i class="fa fa-lock"></i>Cerrar orden
-                                        </a>
-                                        @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
-                                            <a role="menuitem" tabindex="-1" href="#" class="complete-ordenp">
-                                                <i class="fa fa-handshake-o"></i>Culminar orden
-                                            </a>
-                                            <a role="menuitem" tabindex="-1" href="#" class="clone-ordenp">
-                                                <i class="fa fa-clone"></i>Clonar orden
-                                            </a>
-                                        @endif
-                                        <a role="menuitem" tabindex="-1" href="#" class="export-ordenp">
-                                            <i class="fa fa-file-pdf-o"></i>Exportar
-                                        </a>
-                                    </li>
-                                </ul>
+                                <div class="btn-group" role="group">
+                                    <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                    <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
+                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                        <a class="btn btn-primary complete-ordenp" title="Culminar orden"><i class="fa fa-handshake-o"></i></a>
+                                        <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
+                                    @endif
+                                </div>
                             </li>
                         <% } %>
                     </ul>
@@ -81,13 +63,13 @@
                                             <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                                 <label class="col-sm-1 control-label">Pre-cotización</label>
                                                 <div class="form-group col-md-1">
-                                                    <%- precotizacion_codigo %>
+                                                    <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion }) ) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
                                             <% if( typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
                                                 <label class="col-sm-1 control-label">Cotización</label>
                                                 <div class="form-group col-md-1">
-                                                    <%- cotizacion_codigo %>
+                                                    <a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: orden_cotizacion }) ) %>" title="Ir a cotización"><%- cotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
 

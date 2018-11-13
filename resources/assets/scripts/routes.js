@@ -103,6 +103,8 @@ app || (app = {});
             'traslados/:traslado(/)': 'getTrasladosShow',
 
             // Produccion
+            'agendaordenes(/)': 'getAgendaOrdenespMain',
+
             'tiemposp(/)': 'getTiempopMain',
 
             // Reporte tiemposp
@@ -1148,10 +1150,19 @@ app || (app = {});
 
         /* ######################### Produccion #########################
         /**
-        * show view main areas produccion
+        * index view tiempop
         */
+        getAgendaOrdenespMain: function () {
+            if ( this.mainAgendaOrdenesView instanceof Backbone.View ){
+                this.mainAgendaOrdenesView.stopListening();
+                this.mainAgendaOrdenesView.undelegateEvents();
+            }
+
+            this.mainAgendaOrdenesView = new app.MainAgendaOrdenesView( );
+        },
+
         /**
-        * show view edit tiempop
+        * index view edit tiempop
         */
         getTiempopMain: function () {
             this.tiempopModel = new app.TiempopModel();

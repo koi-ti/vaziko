@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB;
 
 class Ordenp3 extends Model
