@@ -426,8 +426,9 @@ class SaldosContables extends Command
 					}else{
 						return "No se puede definir la naturaleza de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 					}
+                    
 					$objSaldoContable->save();
-					// Log::info("CUENTA[$saldo->plancuentas_cuenta] | MES[$objSaldoContable->saldoscontables_mes] | AÑO[$objSaldoContable->saldoscontables_ano] | [C_INICIAL($objSaldoContable->saldoscontables_credito_inicial) | D_INICIAL($objSaldoContable->saldoscontables_debito_inicial)] | [M_C($objSaldoContable->saldoscontables_credito_mes) | M_D($objSaldoContable->saldoscontables_debito_mes)]");
+					Log::info("CUENTA[$saldo->plancuentas_cuenta] | MES[$objSaldoContable->saldoscontables_mes] | AÑO[$objSaldoContable->saldoscontables_ano] | [C_INICIAL($objSaldoContable->saldoscontables_credito_inicial) | D_INICIAL($objSaldoContable->saldoscontables_debito_inicial)] | [M_C($objSaldoContable->saldoscontables_credito_mes) | M_D($objSaldoContable->saldoscontables_debito_mes)]");
 		        }
 
 				if($xmes == date('m') && $xano == date('Y')) {

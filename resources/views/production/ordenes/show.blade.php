@@ -26,13 +26,13 @@
                     <li class="pull-right">
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                            @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                            @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
                                 <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
                             @endif
-                            @if( $orden->orden_culminada && Auth::user()->ability('admin', 'opcional1', ['module' => 'ordenes']) )
+                            @if( $orden->orden_culminada && Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
                                 <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
                             @endif
-                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                            @if( Auth::user()->ability('opcional2', 'opcional2', ['module' => 'ordenes']) )
                                 <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
                             @endif
                         </div>
@@ -49,7 +49,6 @@
 										<label class="control-label">Código</label>
 										<div>
                                             {{ $orden->orden_codigo }}
-
                                             @if($orden->orden_anulada)
                                                 <span class="label label-danger">ANULADA</span>
                                             @elseif($orden->orden_abierta)

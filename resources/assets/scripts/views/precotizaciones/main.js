@@ -19,7 +19,7 @@ app || (app = {});
             'click .clone-precotizacion': 'clonePreCotizacion',
             'click .finish-precotizacion': 'finishPreCotizacion',
             'click .open-precotizacion': 'openPreCotizacion',
-            'click .generate-precotizacion': 'generatePreCotizacion',
+            'click .generate-precotizacion': 'generatePreCotizacion'
         },
 
         /**
@@ -55,7 +55,7 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
-                    { data: 'id', name: 'id' },
+                    { data: 'precotizacion_create', name: 'precotizacion_create' },
                     { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
                     { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
@@ -76,19 +76,27 @@ app || (app = {});
                     {
                         targets: 1,
                         orderable: false,
-                        width: '13%',
+                        width: '9%',
+                        className: 'text-center',
                         render: function ( data, type, full, row ) {
-                            const finish = '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
-                            const close = '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
-                            const open = '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
-                            const clone = '<a class="btn btn-success btn-xs clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
-                            const generate = '<a class="btn btn-success btn-xs generate-precotizacion" title="Generar cotización" data-resource="'+ data +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';;
+                            const finish = '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            const close = '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            const open = '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
+                            const clone = '<a class="btn btn-success btn-xs clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
+                            const generate = '<a class="btn btn-success btn-xs generate-precotizacion" title="Generar cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';
+                            var buttons = '';
 
-                            if ( parseInt( full.precotizacion1_abierta ) ){
-                                return close + ' ' + clone + ' ' + generate + ' ' + finish;
-                            } else {
-                                return open + ' ' + clone + ' ' + generate;
+                            if ( parseInt(full.precotizacion_create) ){
+                                buttons += parseInt(full.precotizacion1_abierta) ? close : open;
                             }
+
+                            if ( parseInt(full.precotizacion_opcional) ){
+                                buttons += ' ' + clone + ' ' + generate + ' ';
+
+                                buttons += parseInt(full.precotizacion1_abierta) ? finish : '';
+                            }
+
+                            return buttons ? buttons : ' - ';
                         }
                     },
                     {
@@ -110,7 +118,7 @@ app || (app = {});
                         orderable: false,
                         render: function ( data, type, full, row ) {
                             if( parseInt(full.precotizacion1_terminada) ) {
-                                return '<span class="label label-primary">TERMINADA</span>';
+                                return '<span class="label label-primary">CULMINADA</span>';
                             } else if( parseInt(full.precotizacion1_abierta) ) {
                                 return '<span class="label label-success">ABIERTA</span>';
                             } else {
@@ -153,7 +161,7 @@ app || (app = {});
         */
         closePreCotizacion: function (e) {
             e.preventDefault();
-            var _this = this;
+            var _this = this,
                 model = this.$(e.currentTarget).data();
 
             var cancelConfirm = new window.app.ConfirmWindow({
@@ -289,7 +297,7 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                model = this.$(e.currentTarget).data();
+                model = this.$(e.currentTarget).data(),
                 route =  window.Misc.urlFull( Route.route('precotizaciones.generar', { precotizaciones: model.resource }) ),
                 data = { precotizacion_codigo: model.code, precotizacion_referencia: model.refer };
 

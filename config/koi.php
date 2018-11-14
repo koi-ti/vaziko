@@ -226,4 +226,12 @@ return [
     'template' => [
         'bg' => 'bg-green'
     ],
+
+    'close' => [
+        'state' => [
+            'R' => 'REASIGNAR',
+            'N' => 'NO ACEPTADA',
+            'O' => 'AL ABRIR ORDEN'
+        ]
+    ]
 ];

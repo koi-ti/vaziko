@@ -14,7 +14,11 @@ app || (app = {});
         el: '#ordenes-main',
         events: {
             'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
+            'click .btn-clear': 'clear',
+            'click .close-ordenp': 'closeOrdenp',
+            'click .complete-ordenp': 'completeOrdenp',
+            'click .clone-ordenp': 'cloneOrdenp',
+            'click .open-ordenp': 'openOrdenp'
         },
 
         /**
@@ -54,23 +58,25 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'orden_codigo', name: 'orden_codigo' },
+                    { data: 'orden_create', name: 'orden_create' },
                     { data: 'orden_ano', name: 'orden_ano' },
                     { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'orden_fecha_inicio', name: 'orden_fecha_inicio' },
                     { data: 'orden_fecha_entrega', name: 'orden_fecha_entrega' },
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' }
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'orden_abierta', name: 'orden_abierta' }
                 ],
                 rowReorder: {
                    selector: 'td:nth-child(1)'
                },
                 order: [
-                	[ 1, 'desc' ], [ 2, 'desc' ]
+                	[ 2, 'desc' ], [ 3, 'desc' ]
                 ],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '15%',
+                        width: '13%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
                             if( full.cotizacion1_precotizacion && full.orden_cotizacion ){
@@ -85,24 +91,74 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: [1, 2],
-                        visible: false,
+                        targets: 1,
+                        orderable: false,
+                        width: '8%',
+                        className: 'text-center',
+                        render: function ( data, type, full, row ) {
+                            const close = '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            const open = '<a class="btn btn-info btn-xs open-ordenp" title="Reabrir orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
+                            const clone = '<a class="btn btn-info btn-xs clone-ordenp" title="Clonar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
+                            const complete = '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            var buttons = '';
+
+                            if ( parseInt(full.orden_create) && parseInt(full.orden_opcional) ){
+                                buttons += parseInt(full.orden_abierta) ? close : open;
+                            }
+
+                            if ( parseInt(full.orden_opcional) ){
+                                // Verificar que este alguno de estos activos para continuar agregando botones
+                                if( parseInt(full.orden_anulada) ||  parseInt(full.orden_culminada) || parseInt(full.orden_abierta) ){
+                                    buttons += parseInt(full.orden_abierta) ? ' ' + clone + ' ' + complete : '';
+
+                                    buttons += parseInt(full.orden_culminada) ? ' ' + close : '';
+                                }
+                            }
+
+                            if( parseInt(full.orden_anulada) ){
+                                buttons = '';
+                            }
+
+                            return buttons ? buttons : ' - ';
+                        },
+                    },
+                    {
+                        targets: [2, 3],
+                        visible: false
+                    },
+                    {
+                        targets: [4, 5, 6],
                         width: '10%',
                     },
                     {
-                        targets: [3, 4, 5],
+                        targets: 7,
+                        width: '50%'
+                    },
+                    {
+                        targets: 8,
                         width: '10%',
+                        render: function ( data, type, full, row ) {
+                            if( parseInt(full.orden_anulada) ) {
+                                return '<span class="label label-danger">ANULADA</span>';
+                            } else if( parseInt(full.orden_abierta) ) {
+                                return '<span class="label label-success">ABIERTA</span>';
+                            } else if( parseInt(full.orden_culminada) ) {
+                                return '<span class="label label-info">CULMINADA</span>';
+                            } else if ( !parseInt(full.orden_abierta) ) {
+                                return '<span class="label label-warning">CERRADA</span>';
+                            }
+                        }
                     }
                 ],
-                fnRowCallback: function( row, data ) {
+                fnRowCallback: function( row, data) {
                     if ( parseInt(data.orden_abierta) ) {
-                        $(row).css( {"color":"#00a65a"} );
+                        $(row).css( {"color":"#00A65A"} );
                     }else if ( parseInt(data.orden_anulada) ) {
-                        $(row).css( {"color":"red"} );
+                        $(row).css( {"color":"#DD4B39"} );
                     }else if ( parseInt(data.orden_culminada) ) {
-                        $(row).css( {"color":"#0073b7"} );
+                        $(row).css( {"color":"#0073B7"} );
                     }
-                }
+                },
 			});
         },
 
@@ -124,6 +180,195 @@ app || (app = {});
 
             this.ordersSearchTable.ajax.reload();
         },
+
+        /**
+        * Close ordenp
+        */
+        closeOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                model = this.$(e.currentTarget).data();
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: model.code },
+                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Cerrar orden de producción',
+                    onConfirm: function () {
+                        // Close orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: model.resource }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: model.resource })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
+        },
+
+        /**
+        * Complete ordenp
+        */
+        completeOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                model = this.$(e.currentTarget).data();
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: model.code },
+                    template: _.template( ($('#ordenp-complete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Completar orden de producción',
+                    onConfirm: function () {
+                        // Close orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.completar', { ordenes: model.resource }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: model.resource })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
+        },
+
+        /**
+        * Clone ordenp
+        */
+        cloneOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                model = this.$(e.currentTarget).data(),
+                route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: model.resource }) ),
+                data = { orden_codigo: model.code };
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Clonar orden de producción',
+                    onConfirm: function () {
+                        // Clone orden
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.el,
+                            'callback': (function (_this) {
+                                return function ( resp ) {
+                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            cloneConfirm.render();
+        },
+
+        /**
+        * Open ordenp
+        */
+        openOrdenp: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                model = this.$(e.currentTarget).data();
+
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: { orden_codigo: model.code },
+                    template: _.template( ($('#ordenp-open-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Reabir orden de producción',
+                    onConfirm: function () {
+                        // Open orden
+                        $.ajax({
+                            url: window.Misc.urlFull( Route.route('ordenes.abrir', { ordenes: model.resource }) ),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner( _this.el );
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner( _this.el );
+
+                            if(!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if( _.isObject( resp.errors ) ) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if( !resp.success ) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: model.resource })) );
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner( _this.el );
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+
+            cancelConfirm.render();
+        }
     });
 
 })(jQuery, this, this.document);

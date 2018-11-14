@@ -20,10 +20,10 @@
                     <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
                     <li class="pull-right">
                         <div class="btn-group" role="group">
-                            @if( !$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && Auth::user()->ability('admin', 'opcional1', ['module' => 'cotizaciones']) )
+                            @if( !$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
                                 <a class="btn btn-danger open-cotizacion" title="Reabrir cotización"><i class="fa fa-unlock"></i></a>
                             @endif
-                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                 <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                             @endif
                             <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
@@ -37,7 +37,7 @@
                         <div class="box box-whithout-border">
                             <div class="box-body">
                             	<div class="row">
-									<div class="form-group col-md-2">
+									<div class="form-group col-md-3">
 										<label class="control-label">Código</label>
 										<div>
                                             {{ $cotizacion->cotizacion_codigo }}
@@ -46,7 +46,7 @@
                                             @elseif($cotizacion->cotizacion1_abierta)
                                                 <span class="label label-success">ABIERTA</span>
                                             @else
-                                                <span class="label label-warning">CERRADA</span>
+                                                <span class="label label-warning">CERRADA [{{ config('koi.close.state')[$cotizacion->cotizacion1_estado] }}]</span>
                                             @endif
                                         </div>
 									</div>

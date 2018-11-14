@@ -12,6 +12,15 @@ use App, Auth, DB, Log, Datatables, Storage;
 class PreCotizacion1Controller extends Controller
 {
     /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,crear', ['only' => ['abrir', 'cerrar']]);
+        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'generar', 'clonar']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -41,6 +50,20 @@ class PreCotizacion1Controller extends Controller
                 session(['searchprecotizacion_tercero' => $request->has('precotizacion_tercero_nit') ? $request->precotizacion_tercero_nit : '']);
                 session(['searchprecotizacion_tercero_nombre' => $request->has('precotizacion_tercero_nombre') ? $request->precotizacion_tercero_nombre : '']);
                 session(['searchprecotizacion_estado' => $request->has('precotizacion_estado') ? $request->precotizacion_estado : '']);
+            }
+
+            // Permisions mostrar botones crear [close, open]
+            if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ) {
+                $query->addSelect(DB::raw('TRUE as precotizacion_create'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as precotizacion_create'));
+            }
+
+            // Permisions mostrar botones opcional2 [complete, clone]
+            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) ) {
+                $query->addSelect(DB::raw('TRUE as precotizacion_opcional'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as precotizacion_opcional'));
             }
 
             return Datatables::of($query)
@@ -270,6 +293,39 @@ class PreCotizacion1Controller extends Controller
     }
 
     /**
+     * Abrir the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function abrir(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $precotizacion = PreCotizacion1::findOrFail($id);
+            if(!$precotizacion instanceof PreCotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al administrador.']);
+            }
+
+            DB::beginTransaction();
+            try {
+                // Orden
+                $precotizacion->precotizacion1_abierta = true;
+                $precotizacion->precotizacion1_terminada = false;
+                $precotizacion->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Pre-cotización reabierta con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
      * Cerrar the specified resource.
      *
      * @param  int  $id
@@ -316,10 +372,6 @@ class PreCotizacion1Controller extends Controller
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
-            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
-                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
-            }
-
             DB::beginTransaction();
             try {
                 // Pre cotizacion
@@ -351,10 +403,6 @@ class PreCotizacion1Controller extends Controller
             $precotizacion = PreCotizacion1::getPreCotizacion($id);
             if(!$precotizacion instanceof PreCotizacion1){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
-            }
-
-            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
-                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
             }
 
             // Recuperar empresa
@@ -523,39 +571,6 @@ class PreCotizacion1Controller extends Controller
     }
 
     /**
-     * Abrir the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function abrir(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $precotizacion = PreCotizacion1::findOrFail($id);
-            if(!$precotizacion instanceof PreCotizacion1){
-                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al administrador.']);
-            }
-
-            DB::beginTransaction();
-            try {
-                // Orden
-                $precotizacion->precotizacion1_abierta = true;
-                $precotizacion->precotizacion1_terminada = false;
-                $precotizacion->save();
-
-                // Commit Transaction
-                DB::commit();
-                return response()->json(['success' => true, 'msg' => 'Pre-cotización reabierta con exito.']);
-            }catch(\Exception $e){
-                DB::rollback();
-                Log::error($e->getMessage());
-                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
-            }
-        }
-        abort(403);
-    }
-
-    /**
      * Clonar the specified resource.
      *
      * @param  int  $id
@@ -564,13 +579,11 @@ class PreCotizacion1Controller extends Controller
     public function clonar(Request $request, $id)
     {
         if ($request->ajax()) {
+
+
             $precotizacion = PreCotizacion1::findOrFail($id);
             if(!$precotizacion instanceof PreCotizacion1){
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la pre-cotización, por favor verifique la información o consulte al adminitrador.']);
-            }
-            
-            if( !Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ){
-                return response()->json(['success' => false, 'errors' => 'Señor usuario, no tiene los permisos necesarios para realizar esta acción.']);
             }
 
             DB::beginTransaction();

@@ -38,10 +38,12 @@
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                                    <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
                                     @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
-                                        <a class="btn btn-primary complete-ordenp" title="Culminar orden"><i class="fa fa-handshake-o"></i></a>
+                                        <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
+                                    @endif
+                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                         <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
+                                        <a class="btn btn-primary complete-ordenp" title="Culminar orden"><i class="fa fa-handshake-o"></i></a>
                                     @endif
                                 </div>
                             </li>
@@ -585,6 +587,10 @@
 
     <script type="text/template" id="ordenp-close-confirm-tpl">
         <p>¿Está seguro que desea cerrar la orden de producción <b><%- orden_codigo %></b>?</p>
+    </script>
+
+    <script type="text/template" id="ordenp-open-confirm-tpl">
+        <p>¿Está seguro que desea reabrir la orden de producción <b><%- orden_codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="ordenp-complete-confirm-tpl">

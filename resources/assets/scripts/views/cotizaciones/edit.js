@@ -21,7 +21,7 @@ app || (app = {});
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
             'change #subtypeproductop': 'changeSubtypeProduct',
-            'submit #form-cotizaciones': 'onStore',
+            'submit #form-cotizaciones': 'onStore'
         },
         parameters: {
         },
@@ -181,7 +181,9 @@ app || (app = {});
         closeCotizacion: function (e) {
             e.preventDefault();
 
-            var _this = this;
+            var _this = this,
+                state = this.$(e.currentTarget).data();
+
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo') },
@@ -190,7 +192,8 @@ app || (app = {});
                     onConfirm: function () {
                         // Close cotizacion
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.cerrar', { cotizaciones: _this.model.get('id') }) ),
+                            url: window.Misc.urlFull( Route.route('cotizaciones.cerrar', { cotizaciones: _this.model.get('id')}) ),
+                            data: state,
                             type: 'GET',
                             beforeSend: function() {
                                 window.Misc.setSpinner( _this.spinner );

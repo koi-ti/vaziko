@@ -16,9 +16,9 @@ class OrdenpController extends Controller
     public function __construct()
     {
         $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'clonar']]);
-        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'cerrar']]);
-        $this->middleware('ability:admin,opcional1', ['only' => ['abrir']]);
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'cerrar', 'abrir']]);
+        $this->middleware('ability:admin,opcional2', ['only' => ['completar', 'clonar']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
     }
 
     /**
@@ -46,10 +46,21 @@ class OrdenpController extends Controller
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
 
-            // Permisions
-            if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
-                $query->where('orden_abierta', true);
+            // Permisions mostrar botones crear [close, open]
+            if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) ) {
+                $query->addSelect(DB::raw('TRUE as orden_create'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as orden_create'));
             }
+
+            // Permisions mostrar botones opcional2 [complete, clone]
+            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
+                $query->addSelect(DB::raw('TRUE as orden_opcional'));
+            } else {
+                $query->where('orden_abierta', true);
+                $query->addSelect(DB::raw('FALSE as orden_opcional'));
+            }
+
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
@@ -330,6 +341,35 @@ class OrdenpController extends Controller
     }
 
     /**
+     * Abrir the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function abrir(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden = Ordenp::findOrFail($id);
+            DB::beginTransaction();
+            try {
+                // Orden
+                $orden->orden_abierta = true;
+                $orden->orden_culminada = false;
+                $orden->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
+            }catch(\Exception $e){
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
+    }
+
+    /**
      * Cerrar the specified resource.
      *
      * @param  int  $id
@@ -378,35 +418,6 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Culmino la orden de producción con exito.']);
-            }catch(\Exception $e){
-                DB::rollback();
-                Log::error($e->getMessage());
-                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
-            }
-        }
-        abort(403);
-    }
-
-    /**
-     * Abrir the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function abrir(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $orden = Ordenp::findOrFail($id);
-            DB::beginTransaction();
-            try {
-                // Orden
-                $orden->orden_abierta = true;
-                $orden->orden_culminada = false;
-                $orden->save();
-
-                // Commit Transaction
-                DB::commit();
-                return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error($e->getMessage());
