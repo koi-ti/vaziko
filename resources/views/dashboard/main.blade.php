@@ -53,6 +53,20 @@
 			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
+						<h3>Agenda</h3>
+						<p>&nbsp;</p>
+					</div>
+					<div class="icon">
+						<i class="fa fa-calendar"></i>
+					</div>
+					<a href="{{ route('agendaordenes.index') }}" class="small-box-footer">
+						Más información <i class="fa fa-arrow-circle-right"></i>
+					</a>
+				</div>
+			</div>
+			<div class="col-sm-3">
+				<div class="small-box bg-green">
+					<div class="inner">
 						<h3>Pre-cotizaciones</h3>
 						<p>&nbsp;</p>
 					</div>
@@ -98,6 +112,7 @@
 			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
+<<<<<<< HEAD
 						<h3>Agenda</h3>
 						<p>&nbsp;</p>
 					</div>
@@ -112,6 +127,8 @@
 			<div class="col-sm-4">
 				<div class="small-box bg-green">
 					<div class="inner">
+=======
+>>>>>>> 3119af6bdec7fb46d8e906d8b14b7dc41f1a3dfb
 						<h3>Tiempos</h3>
 						<p>&nbsp;</p>
 					</div>

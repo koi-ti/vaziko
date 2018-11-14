@@ -1,6 +1,10 @@
 {
   "css/app.min.css": "css/app.min-ef6a5b33a9.css",
   "css/vendor.min.css": "css/vendor.min-3e12227236.css",
+<<<<<<< HEAD
   "js/app.min.js": "js/app.min-57f21d416e.js",
+=======
+  "js/app.min.js": "js/app.min-55d105eb85.js",
+>>>>>>> 3119af6bdec7fb46d8e906d8b14b7dc41f1a3dfb
   "js/vendor.min.js": "js/vendor.min-8b85cd76d8.js"
 }

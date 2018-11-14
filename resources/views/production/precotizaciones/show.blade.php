@@ -35,15 +35,19 @@
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
 
-                    <div class="col-md-offset-5 col-md-2">
-                        <div class="btn-group btn-group-justified" role="group">
-                            <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
-                            @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
-                                <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
-                                <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
-                            @endif
+                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                        <div class="col-md-offset-5 col-md-2">
+                            <div class="btn-group btn-group-justified" role="group">
+                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                    <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
+                                @endif
+                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                                    <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
+                                    <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
+                                @endif
+                            </div>
                         </div>
-                    </div>
+                    @endif
 				</div>
                 <div class="row">
                     <div class="form-group col-md-8">

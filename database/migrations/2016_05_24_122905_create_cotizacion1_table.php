@@ -30,6 +30,7 @@ class CreateCotizacion1Table extends Migration
             $table->boolean('cotizacion1_abierta')->default(true);
             $table->text('cotizacion1_observaciones')->nullable();
             $table->text('cotizacion1_terminado')->nullable();
+            $table->varchar('cotizacion1_estado', 1)->nullable()->comment = 'R:REASIGNAR N:NO ACEPTADA O:AL ABRIR ORDEN';
             $table->datetime('cotizacion1_fecha_elaboro');
             $table->integer('cotizacion1_usuario_elaboro')->unsigned();
             $table->datetime('cotizacion1_fecha_anulo')->nullable();

@@ -30,8 +30,17 @@
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-danger close-cotizacion" title="Cerrar cotización"><i class="fa fa-lock"></i></a>
                                     @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                                        <div class="btn-group">
+                                            <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
+                                            <ul class="dropdown-menu pull-right">
+                                                <li><a href="#" class="close-cotizacion" data-state="R">REASIGNAR</a></li>
+                                                 <li><a href="#" class="close-cotizacion" data-state="N">NO ACEPTADA</a></li>
+                                                 <li><a href="#" class="close-cotizacion" data-state="O">AL ABRIR ORDEN</a></li>
+                                            </ul>
+                                        </div>
+                                    @endif
+                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
                                         <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                                         <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
                                     @endif
@@ -291,6 +300,10 @@
             <td class="text-right"><%- window.Misc.currency( cotizacion2_total_valor_unitario ) %></td>
             <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_total ) %></td>
         @endif
+    </script>
+
+    <script type="text/template" id="cotizacion-open-confirm-tpl">
+        <p>¿Está seguro que desea reabrir la cotizacion de producción <b><%- cotizacion_codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="cotizacion-close-confirm-tpl">

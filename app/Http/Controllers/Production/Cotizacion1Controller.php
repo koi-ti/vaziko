@@ -12,6 +12,15 @@ use App, View, Auth, DB, Log, Datatables, Storage;
 class Cotizacion1Controller extends Controller
 {
     /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,crear', ['only' => ['abrir', 'cerrar']]);
+        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -35,9 +44,19 @@ class Cotizacion1Controller extends Controller
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
 
-            // Permisions
-            if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ) {
+            // Permisions mostrar botones crear [close, open]
+            if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) ) {
+                $query->addSelect(DB::raw('TRUE as cotizacion_create'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as cotizacion_create'));
+            }
+
+            // Permisions mostrar botones opcional2 [complete, clone]
+            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ) {
+                $query->addSelect(DB::raw('TRUE as cotizacion_opcional'));
+            } else {
                 $query->where('cotizacion1_abierta', true);
+                $query->addSelect(DB::raw('FALSE as cotizacion_opcional'));
             }
 
             // Persistent data filter
@@ -311,11 +330,17 @@ class Cotizacion1Controller extends Controller
     public function cerrar(Request $request, $id)
     {
         if ($request->ajax()) {
+            if( !in_array($request->state, array_keys(config('koi.close.state'))) ){
+                return response()->json(['success' => false, 'errors' => 'El estado de cerrar no es valido.']);
+            }
+
             $cotizacion = Cotizacion1::findOrFail($id);
             DB::beginTransaction();
             try {
                 // Cotización
+
                 $cotizacion->cotizacion1_abierta = false;
+                $cotizacion->cotizacion1_estado = $request->state;
                 $cotizacion->save();
 
                 // Commit Transaction
@@ -340,6 +365,9 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
+            if(!$cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
 
             // Comprobar que no exita orden de produccion
             $orden = Ordenp::where('orden_cotizacion', $cotizacion->id)->first();
@@ -351,6 +379,7 @@ class Cotizacion1Controller extends Controller
             try {
                 // Cotizacion
                 $cotizacion->cotizacion1_abierta = true;
+                $cotizacion->cotizacion1_estado = '';
                 $cotizacion->save();
 
                 // Commit Transaction
@@ -428,6 +457,9 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
+            if(!$cotizacion instanceof Cotizacion1){
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
 
             DB::beginTransaction();
             try {
@@ -440,6 +472,7 @@ class Cotizacion1Controller extends Controller
                 $newcotizacion->cotizacion1_fecha_inicio = date('Y-m-d');
                 $newcotizacion->cotizacion1_abierta = true;
                 $newcotizacion->cotizacion1_anulada = false;
+                $newcotizacion->cotizacion1_estado = '';
                 $newcotizacion->cotizacion1_ano = date('Y');
                 $newcotizacion->cotizacion1_numero = $numero;
                 $newcotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
@@ -696,6 +729,7 @@ class Cotizacion1Controller extends Controller
 
                 $cotizacion->cotizacion1_abierta = false;
                 $cotizacion->cotizacion1_anulada = false;
+                $cotizacion->cotizacion1_estado = 'O';
                 $cotizacion->save();
 
                 // Commit Transaction

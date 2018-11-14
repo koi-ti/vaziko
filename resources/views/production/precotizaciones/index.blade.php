@@ -12,7 +12,7 @@
     </section>
 
     <section class="content">
-        <div class="box box-success"  id="precotizaciones-main">
+        <div class="box box-success" id="precotizaciones-main">
             <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-tercero-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
                     <div class="form-group">

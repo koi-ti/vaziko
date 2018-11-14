@@ -163,7 +163,7 @@ app || (app = {});
 
                 var data = window.Misc.formToJson( e.target );
                     data.orden_observaciones_imagen = this.$observacionesimagen.val();
-                    
+
                 this.model.save( data, {patch: true, silent: true} );
             }
         },

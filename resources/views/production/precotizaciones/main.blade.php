@@ -42,9 +42,11 @@
                             <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                 <div class="col-md-offset-5 col-md-2">
                                     <div class="btn-group btn-group-justified">
-                                        <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                            <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
                                             <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
+                                        @endif
+                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
                                             <a class="btn btn-success finish-precotizacion" title="Terminar pre-cotización"><i class="fa fa-handshake-o"></i></a>
                                             <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                                         @endif
