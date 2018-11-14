@@ -46,7 +46,11 @@
                                             @elseif($cotizacion->cotizacion1_abierta)
                                                 <span class="label label-success">ABIERTA</span>
                                             @else
-                                                <span class="label label-warning">CERRADA [{{ config('koi.close.state')[$cotizacion->cotizacion1_estado] }}]</span>
+                                                @if ($cotizacion->cotizacion1_estado)
+                                                    <span class="label label-warning">CERRADA [{{ config('koi.close.state')[$cotizacion->cotizacion1_estado] }}]</span>
+                                                @else
+                                                    <span class="label label-warning">CERRADA</span>
+                                                @endif
                                             @endif
                                         </div>
 									</div>
