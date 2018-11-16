@@ -19,6 +19,9 @@ app || (app = {});
             'ifChanged #cotizacion2_retiro': 'changedRetiro',
             'click .submit-cotizacion2': 'submitCotizacion2',
             'change .event-price': 'calculateAll',
+            'click .submit-cotizacion4': 'submitCotizacion4',
+            'submit #form-cotizacion4-producto': 'onStoreCotizacion4',
+            'change #cotizacion4_materialp': 'changeMaterialp',
             'click .submit-cotizacion6': 'submitCotizacion6',
             'change #cotizacion6_areap': 'changeAreap',
             'submit #form-cotizacion-producto': 'onStore',
@@ -95,7 +98,11 @@ app || (app = {});
             this.$inputCyan2 = this.$('#cotizacion2_cyan2');
             this.$inputKey2 = this.$('#cotizacion2_key2');
 
-            // Ordenp6
+            // Cotizacion4 -> materilaesp
+            this.$formmaterialesp = this.$('#form-cotizacion4-producto');
+            this.$selectinsumos = this.$('#cotizacion4_producto');
+
+            // Cotizacion6
             this.$formCotizacion6 = this.$('#form-cotizacion6-producto');
             this.$inputArea = this.$('#cotizacion6_nombre');
             this.$inputTiempo = this.$('#cotizacion6_tiempo');
@@ -119,6 +126,7 @@ app || (app = {});
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
+            this.$infomateriales = this.$('#info-materiales');
 
             // Render uploader file
             this.$uploaderFile = this.$('.fine-uploader');
@@ -153,8 +161,12 @@ app || (app = {});
             // Materiales li, ateCotizacion2st
             this.materialesProductopCotizacionListView = new app.MaterialesProductopCotizacionListView( {
                 collection: this.materialesProductopCotizacionList,
+                model: this.model,
                 parameters: {
-                    dataFilter: dataFilter
+                    edit: true,
+                    dataFilter: {
+                        cotizacion2: this.model.get('id')
+                    }
                }
             });
 
@@ -229,7 +241,7 @@ app || (app = {});
                 var precio = ''+resp.precio_venta;
                 var valor = precio.split('.');
                 var total = valor.join(',');
-                
+
                 _this.$inputRenderFormula.val(total).trigger('change');
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -403,6 +415,7 @@ app || (app = {});
                 */
                 if( this.model.id != undefined ){
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.materialesp = this.materialesProductopCotizacionList.toJSON();
                         data.cotizacion2_volumen = this.$inputVolumen.val();
                         data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
@@ -413,12 +426,12 @@ app || (app = {});
 
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.materialesp = JSON.stringify(this.materialesProductopCotizacionList);
                         data.cotizacion2_volumen = this.$inputVolumen.val();
                         data.cotizacion2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.cotizacion2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
                         data.cotizacion2_round = this.$inputRound.val();
                         data.cotizacion6 = JSON.stringify(this.areasProductopCotizacionList);
-
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
@@ -438,6 +451,58 @@ app || (app = {});
                         contentType: false
                     });
                 }
+            }
+        },
+
+        /**
+        * Event submit productop
+        */
+        submitCotizacion4: function (e) {
+            this.$formmaterialesp.submit();
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreCotizacion4: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.materialesProductopCotizacionList.trigger( 'store' , data );
+            }
+        },
+
+        /**
+        * Event change select materialp
+        */
+        changeMaterialp: function (e) {
+            var _this = this;
+                materialp = this.$(e.currentTarget).val();
+
+            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$selectinsumos.empty().val(0).removeAttr('disabled');
+                    _this.$selectinsumos.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$selectinsumos.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
+                    });
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
             }
         },
 
@@ -497,13 +562,14 @@ app || (app = {});
         * Evento para calcular cotizacion
         **/
         calculateAll: function() {
-            var cantidad = transporte = viaticos = areas = precio = volumen = total = subtotal =  vcomision = 0;
+            var cantidad = transporte = viaticos = materiales = areas = precio = volumen = total = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
             cantidad = parseInt( this.$cantidad.val() );
             tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / cantidad );
             viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad );
-            areas = Math.round( parseFloat( this.areasProductopCotizacionList.totalize()['total'] ) / cantidad );
+            materiales = Math.round( parseFloat( this.materialesProductopCotizacionList.totalize().total ) / cantidad );
+            areas = Math.round( parseFloat( this.areasProductopCotizacionList.totalize().total ) / cantidad );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
             volumen = parseInt( this.$inputVolumen.val() );
 
@@ -512,9 +578,10 @@ app || (app = {});
             this.$infoviaticos.empty().html( window.Misc.currency( viaticos ) );
             this.$infotransporte.empty().html( window.Misc.currency( tranporte ) );
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
+            this.$infomateriales.empty().html( window.Misc.currency( materiales ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotal = precio + tranporte + viaticos + areas;
+            subtotal = precio + tranporte + viaticos + materiales + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
             total = subtotal + vcomision;
 

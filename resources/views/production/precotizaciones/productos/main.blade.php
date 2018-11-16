@@ -666,7 +666,7 @@
     </script>
 
     <script type="text/template" id="precotizacion-producto-acabado-item-tpl">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_<%- id %>">
                 <input type="checkbox" id="precotizacion7_acabadop_<%- id %>" name="precotizacion7_acabadop_<%- id %>" value="precotizacion7_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
             </label>
@@ -674,7 +674,7 @@
     </script>
 
     <script type="text/template" id="precotizacion-producto-maquinas-item-tpl">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_<%- id %>">
                 <input type="checkbox" id="precotizacion8_maquinap_<%- id %>" name="precotizacion8_maquinap_<%- id %>" value="precotizacion8_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>

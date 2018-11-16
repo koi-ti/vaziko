@@ -5,13 +5,13 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-                <th class="center size-7" width="8%">Fecha</th>
-                <th class="center size-7" width="15%">Doc contable</th>
-                <th class="center size-7" width="5%">N° asiento</th>
-                <th class="center size-7" width="7%">Tercero</th>
-                <th class="center size-7" width="23%">Nombre</th>
-                <th class="center size-7" width="15%">Doc origen</th>
-                <th class="center size-7" width="5%">N° origen</th>
+                <th class="center size-7 width-5">Fecha</th>
+                <th class="center size-7 width-15">Doc contable</th>
+                <th class="center size-7 width-5">N° asiento</th>
+                <th class="center size-7 width-10">Tercero</th>
+                <th class="center size-7 width-25">Nombre</th>
+                <th class="center size-7 width-15">Doc origen</th>
+                <th class="center size-7 width-5">N° origen</th>
                 <th class="center size-7">Debito</th>
                 <th class="center size-7">Credito</th>
                 <th class="center size-7">Base</th>

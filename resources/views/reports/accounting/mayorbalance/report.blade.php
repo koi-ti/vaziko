@@ -4,12 +4,12 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-				<th width="15%" class="left">CUENTA</th>
-				<th width="37%" class="left">NOMBRE</th>
-				<th width="12%" class="center">INICIAL</th>
-				<th width="12%" class="center">DEBITO</th>
-				<th width="12%" class="center">CREDITO</th>
-				<th width="12%" class="center">FINAL</th>
+				<th class="left width-15">CUENTA</th>
+				<th class="left width-40">NOMBRE</th>
+				<th class="center width-10">INICIAL</th>
+				<th class="center width-10">DEBITO</th>
+				<th class="center width-10">CREDITO</th>
+				<th class="center width-10">FINAL</th>
 			</tr>
 		</thead>
 		<tbody>

@@ -268,7 +268,7 @@
 
                         <div class="row">
                             {{-- Content maquinas --}}
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="box box-danger">
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Máquinas de producción</h3>
@@ -279,20 +279,8 @@
                                 </div>
                             </div>
 
-                            {{-- Content materiales --}}
-                            <div class="col-sm-4">
-                                <div class="box box-danger">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">Materiales de producción</h3>
-                                    </div>
-                                    <div class="box-body" id="browse-cotizacion-producto-materiales-list">
-                                        {{-- render materiales list --}}
-                                    </div>
-                                </div>
-                            </div>
-
                             {{-- Content acabados --}}
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="box box-danger">
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Acabados de producción</h3>
@@ -376,6 +364,101 @@
                             </div>
                         </div>
                     @endif
+
+                    {{-- Content materialesp --}}
+                    <div class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Materiales de producción</h3>
+                        </div>
+                        <div class="box-body" id="cotizacion4-wrapper-producto">
+                            <form method="POST" accept-charset="UTF-8" id="form-cotizacion4-producto" data-toggle="validator">
+                                <div class="row">
+                                    @foreach( App\Models\Production\Cotizacion4::getMaterials( $producto->id ) as $key => $value )
+                                        <div class="form-group col-md-4">
+                                            <label>{{ $value }}</label>
+                                        </div>
+                                    @endforeach
+                                </div><br>
+                                <div class="row">
+                                    <div class="form-group col-sm-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="cotizacion4_proveedor">
+                                                    <i class="fa fa-user"></i>
+                                                </button>
+                                            </span>
+                                            <input id="cotizacion4_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="cotizacion4_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion4_proveedor_nombre" data-proveedor="true" required>
+                                        </div>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input id="cotizacion4_proveedor_nombre" name="cotizacion4_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="cotizacion4_materialp" id="cotizacion4_materialp" class="form-control select2-default-clear" data-placeholder="Material de producción" required>
+                                            <option value="">Seleccione</option>
+                                            @foreach( App\Models\Production\Cotizacion4::getMaterials( $producto->id ) as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="cotizacion4_producto" id="cotizacion4_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled required>
+                                            <option value="">Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="cotizacion4_cantidad" name="cotizacion4_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" id="cotizacion4_medidas" name="cotizacion4_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="cotizacion4_valor_unitario" name="cotizacion4_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="button" class="btn btn-success btn-sm btn-block submit-cotizacion4">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-cotizacion-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="30%">Proveedor</th>
+                                            <th width="15%">Material</th>
+                                            <th width="15%">Insumo</th>
+                                            <th width="10%">Dimensiones</th>
+                                            <th width="5%">Cantidad</th>
+                                            <th width="10%">Valor unidad</th>
+                                            <th width="10%">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="7"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
 
                     {{-- Content areasp --}}
                     <div class="box box-danger">
@@ -472,6 +555,10 @@
                                                     <td class="text-right"><span id="info-viaticos"></span></td>
                                                 </tr>
                                                 <tr>
+                                                    <th colspan="4">Materiales</th>
+                                                    <td class="text-right"><span id="info-materiales"></span></td>
+                                                </tr>
+                                                <tr>
                                                     <th colspan="4">Áreas</th>
                                                     <td class="text-right"><span id="info-areas"></span></td>
                                                 </tr>
@@ -514,28 +601,77 @@
         </section>
     </script>
 
+    {{-- Templates para materialp --}}
+    <script type="text/template" id="cotizacion-delete-materialp-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el material <b><%- materialp_nombre %> </b>?</p>
+    </script>
+
+    <script type="text/template" id="cotizacion-producto-materialp-item-tpl">
+        <% if( edit ) { %>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-materialp-cotizacion-remove" data-resource="<%- id %>">
+                    <span><i class="fa fa-times"></i></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-materialp-cotizacion-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        <% } %>
+        <td><%- proveedor_nombre %></td>
+        <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- cotizacion4_medidas %></td>
+        <td><%- cotizacion4_cantidad %></td>
+        <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="edit-materialproducto-tpl">
+        <div class="row">
+            <label class="col-sm-2 control-label">Proveedor</label>
+            <div class="form-group col-sm-10">
+                <label class="label-xs"><%- proveedor_nit %> - <%- proveedor_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-2 control-label">Material de producción</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- materialp_nombre %></label>
+            </div>
+
+            <label class="col-sm-2 control-label">Insumo</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- producto_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-1 control-label">Cantidad</label>
+            <div class="form-group col-sm-2">
+                <input type="number" id="cotizacion4_cantidad" name="cotizacion4_cantidad" placeholder="Cantidad" value="<%- cotizacion4_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Medidas</label>
+            <div class="form-group col-sm-4">
+                <input type="text" id="cotizacion4_medidas" name="cotizacion4_medidas" placeholder="Medidas" value="<%- cotizacion4_medidas %>" class="form-control input-xs" maxlength="50" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Valor</label>
+            <div class="form-group col-sm-3">
+                <input id="cotizacion4_valor_unitario" name="cotizacion4_valor_unitario" value="<%- cotizacion4_valor_unitario %>" class="form-control input-sm" type="text" required data-currency>
+            </div>
+        </div>
+    </script>
+
     <script type="text/template" id="cotizacion-producto-maquina-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_<%- id %>">
                 <input type="checkbox" id="cotizacion3_maquinap_<%- id %>" name="cotizacion3_maquinap_<%- id %>" value="cotizacion3_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
-    </script>
-
-    <script type="text/template" id="cotizacion-producto-material-item-tpl">
-        <div class="form-group <%- (cotizacion4_cantidad && cotizacion4_precio ) ? 'col-md-7' : 'col-md-12' %>">
-            <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>">
-                <input type="checkbox" id="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" name="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" value="cotizacion4_materialp_<%- materialp_id %>_<%- cotizacion4_id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
-            </label>
-        </div>
-        <% if (cotizacion4_cantidad && cotizacion4_precio ) { %>
-            <div class="form-group col-md-2 text-center">
-                <div><%- cotizacion4_cantidad %></div>
-            </div>
-            <div class="form-group col-md-3 text-right">
-                <div><%- window.Misc.currency(cotizacion4_precio) %></div>
-            </div>
-        <% } %>
     </script>
 
     <script type="text/template" id="cotizacion-producto-acabado-item-tpl">

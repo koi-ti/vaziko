@@ -2,7 +2,6 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
 use DB, Validator;
 

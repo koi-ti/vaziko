@@ -2,10 +2,10 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 use Validator, DB;
 
-class Ordenp extends Model
+class Ordenp extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -21,14 +21,21 @@ class Ordenp extends Model
      *
      * @var array
      */
-    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen'];
+    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen', 'orden_fecha_recogida1', 'orden_fecha_recogida2'];
+
+    /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['orden_estado_recogida1', 'orden_estado_recogida2'];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['orden_cotizacion', 'orden_formapago'];
+    protected $nullable = ['orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2'];
 
     public function isValid($data)
     {
@@ -42,7 +49,9 @@ class Ordenp extends Model
   	        'orden_fecha_inicio' => 'required|date_format:Y-m-d',
   	        'orden_suministran' => 'max:200',
             'orden_fecha_entrega' => 'required',
-            'orden_hora_entrega' => 'required|date_format:H:m'
+            'orden_hora_entrega' => 'required|date_format:H:m',
+            'orden_fecha_recogida1' => 'date_format:Y-m-d',
+            'orden_fecha_recogida2' => 'date_format:Y-m-d'
         ];
 
         $validator = Validator::make($data, $rules);

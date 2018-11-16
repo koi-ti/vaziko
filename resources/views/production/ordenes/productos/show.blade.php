@@ -245,46 +245,9 @@
 					</div>
 				@endif
 
-				<div class="box box-primary">
-					<div class="box-header with-border">
-						<h3 class="box-title">Imágenes</h3>
-					</div>
-					<div class="box-body table-responsive no-padding">
-						<div class="fine-uploader"></div>
-					</div>
-				</div>
-
-				@if( $orden->cotizacion1_precotizacion )
-					<div class="box box-primary">
-						<div class="box-header with-border">
-							<h3 class="box-title">Impresiones</h3>
-						</div>
-						<div class="box-body table-responsive no-padding">
-							<table id="browse-orden-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th width="70%">Detalle</th>
-										<th width="15%">Ancho</th>
-										<th width="15%">Alto</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach( App\Models\Production\Ordenp7::getOrdenesp7( $ordenp2->id ) as $impresion )
-										<tr>
-											<td class="text-left">{{ $impresion->orden7_texto }}</td>
-											<td class="text-left">{{ $impresion->orden7_ancho }}</td>
-											<td class="text-left">{{ $impresion->orden7_alto }}</td>
-										</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
-				@endif
-
 				<div class="row">
 					{{-- Content maquinas --}}
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title">Máquinas de producción</h3>
@@ -303,36 +266,8 @@
 						</div>
 					</div>
 
-					{{-- Content materiales --}}
-					<div class="col-sm-4">
-						<div class="box box-primary">
-							<div class="box-header with-border">
-								<h3 class="box-title">Materiales de producción</h3>
-							</div>
-							<div class="box-body">
-								@foreach( App\Models\Production\Ordenp4::getOrdenesp4($producto->id, $ordenp2->id) as $material)
-									<div class="row">
-										<div class="form-group {!! ($material->orden4_cantidad && $material->orden4_medidas) ? 'col-md-7' : 'col-md-12' !!}">
-											<label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_{{ $material->id }}">
-												<input type="checkbox" id="orden4_materialp_{{ $material->id }}" name="orden4_materialp_{{ $material->id }}" value="orden4_materialp_{{ $material->id }}" {{ $material->activo ? 'checked': '' }} disabled> {{ $material->materialp_nombre }}
-											</label>
-										</div>
-										@if( $material->orden4_cantidad && $material->orden4_medidas )
-											<div class="form-group col-md-2">
-												<div>{{ $material->orden4_cantidad }}</div>
-											</div>
-											<div class="form-group col-md-3">
-												<div>{{ $material->orden4_medidas }}</div>
-											</div>
-										@endif
-									</div>
-								@endforeach
-							</div>
-						</div>
-					</div>
-
 					{{-- Content acabados --}}
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<div class="box box-primary">
 							<div class="box-header with-border">
 								<h3 class="box-title">Acabados de producción</h3>
@@ -391,6 +326,86 @@
 						</div>
 					</div>
 				@endif
+
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Imágenes</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<div class="fine-uploader"></div>
+					</div>
+				</div>
+
+				@if( $orden->cotizacion1_precotizacion )
+					<div class="box box-primary">
+						<div class="box-header with-border">
+							<h3 class="box-title">Impresiones</h3>
+						</div>
+						<div class="box-body table-responsive no-padding">
+							<table id="browse-orden-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th width="70%">Detalle</th>
+										<th width="15%">Ancho</th>
+										<th width="15%">Alto</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach( App\Models\Production\Ordenp7::getOrdenesp7( $ordenp2->id ) as $impresion )
+										<tr>
+											<td class="text-left">{{ $impresion->orden7_texto }}</td>
+											<td class="text-left">{{ $impresion->orden7_ancho }}</td>
+											<td class="text-left">{{ $impresion->orden7_alto }}</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
+				@endif
+
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Materiales de producción</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-orden-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="30%">Proveedor</th>
+									<th width="15%">Material</th>
+									<th width="15%">Insumo</th>
+									<th width="10%">Dimensiones</th>
+									<th width="5%">Cantidad</th>
+									<th width="12%">Valor unidad</th>
+									<th width="12%">Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $totalmaterialesp = 0; /*--}}
+								@foreach( App\Models\Production\Ordenp4::getOrdenesp4( $ordenp2->id ) as $materialp )
+									<tr>
+										<td>{{ $materialp->proveedor_nombre }}</td>
+										<td>{{ $materialp->materialp_nombre }}</td>
+										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+										<td>{{ $materialp->orden4_medidas }}</td>
+										<td class="text-center">{{ $materialp->orden4_cantidad }}</td>
+										<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
+										<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
+									</tr>
+									{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="5"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
 
 				<div class="box box-primary">
 					<div class="box-header with-border">
@@ -454,6 +469,7 @@
 						{{--*/
 							$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
 							$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
+							$totalmaterialesp = round( $totalmaterialesp / $ordenp2->orden2_cantidad );
 							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
 						/*--}}
 
@@ -477,6 +493,10 @@
 											<tr>
 												<th colspan="4">Viáticos</th>
 												<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
+											</tr>
+											<tr>
+												<th colspan="4">Materiales</th>
+												<td class="text-right"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
 											</tr>
 											<tr>
 												<th colspan="4">Áreas</th>

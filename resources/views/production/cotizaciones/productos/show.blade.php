@@ -247,44 +247,9 @@
 	                </div>
 	            @endif
 
-				<div class="box box-danger">
-					<div class="box-header with-border">
-						<h3 class="box-title">Imágenes</h3>
-					</div>
-					<div class="box-body table-responsive no-padding">
-						<div class="fine-uploader"></div>
-					</div>
-				</div>
-
-				<div class="box box-danger">
-					<div class="box-header with-border">
-						<h3 class="box-title">Impresiones</h3>
-					</div>
-					<div class="box-body table-responsive no-padding">
-						<table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-							<thead>
-								<tr>
-									<th width="70%">Detalle</th>
-									<th width="15%">Ancho</th>
-									<th width="15%">Alto</th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach( App\Models\Production\Cotizacion7::getCotizaciones7( $cotizacion2->id ) as $impresion )
-									<tr>
-										<td class="text-left">{{ $impresion->cotizacion7_texto }}</td>
-										<td class="text-left">{{ $impresion->cotizacion7_ancho }}</td>
-										<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
-									</tr>
-								@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-
 				<div class="row">
 					{{-- Content maquinas --}}
-					<div class="col-sm-4">
+					<div class="col-sm-6">
 						<div class="box box-danger">
 							<div class="box-header with-border">
 								<h3 class="box-title">Máquinas de producción</h3>
@@ -303,36 +268,8 @@
 						</div>
 					</div>
 
-					{{-- Content materiales --}}
-	                <div class="col-sm-4">
-	                    <div class="box box-danger">
-	                        <div class="box-header with-border">
-	                            <h3 class="box-title">Materiales de producción</h3>
-	                        </div>
-	                        <div class="box-body">
-	                            @foreach( App\Models\Production\Cotizacion4::getCotizaciones4($producto->id, $cotizacion2->id) as $material)
-	                                <div class="row">
-										<div class="form-group {!! ($material->cotizacion4_cantidad && $material->cotizacion4_precio) ? 'col-md-7' : 'col-md-12' !!}">
-	                                        <label class="checkbox-inline without-padding white-space-normal" for="cotizacion4_materialp_{{ $material->id }}">
-	                                            <input type="checkbox" id="cotizacion4_materialp_{{ $material->id }}" name="cotizacion4_materialp_{{ $material->id }}" value="cotizacion4_materialp_{{ $material->id }}" {{ $material->activo ? 'checked': '' }} disabled> {{ $material->materialp_nombre }}
-	                                        </label>
-	                                    </div>
-										@if( $material->cotizacion4_cantidad && $material->cotizacion4_precio )
-		                                    <div class="form-group col-md-2">
-												<div>{{ $material->cotizacion4_cantidad }}</div>
-		                                    </div>
-		                                    <div class="form-group col-md-3">
-												<div>{{ number_format($material->cotizacion4_precio,'2',',','.') }}</div>
-		                                    </div>
-										@endif
-	                                </div>
-	                            @endforeach
-	                        </div>
-	                    </div>
-	                </div>
-
 					{{-- Content acabados --}}
-	                <div class="col-sm-4">
+	                <div class="col-sm-6">
 	                    <div class="box box-danger">
 	                        <div class="box-header with-border">
 	                            <h3 class="box-title">Acabados de producción</h3>
@@ -353,47 +290,127 @@
 	        	</div>
 
 				@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-					<div class="box box-danger">
-		                <div class="box-header with-border">
-		                    <h3 class="box-title">Fórmulas</h3>
-		                </div>
-		                <div class="box-body">
-			    			<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-			    				<div class="form-group col-md-6">
-			    					<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
-			    				</div>
-
-								<label class="control-label col-md-1">Precio</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
-								</div>
-			    			</div>
-			    			<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-			    				<div class="form-group col-md-6">
-			    					<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
-			    				</div>
-
-								<label class="control-label col-md-1">Transporte</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
-								</div>
-			    			</div>
-			    			<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-			    				<div class="form-group col-md-6">
-			    					<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
-			    				</div>
-
-								<label class="control-label col-md-1">Viáticos</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
-								</div>
-			    			</div>
-		    			</div>
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Fórmulas</h3>
 					</div>
-	            @endif
+					<div class="box-body">
+						<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+							<div class="form-group col-md-6">
+								<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
+							</div>
+
+							<label class="control-label col-md-1">Precio</label>
+							<div class="form-group col-md-4">
+								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+							</div>
+						</div>
+						<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+							<div class="form-group col-md-6">
+								<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
+							</div>
+
+							<label class="control-label col-md-1">Transporte</label>
+							<div class="form-group col-md-4">
+								<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
+							</div>
+						</div>
+						<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+							<div class="form-group col-md-6">
+								<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
+							</div>
+
+							<label class="control-label col-md-1">Viáticos</label>
+							<div class="form-group col-md-4">
+								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				@endif
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Imágenes</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<div class="fine-uploader"></div>
+					</div>
+				</div>
+
+				@if( $cotizacion->cotizacion1_precotizacion )
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Impresiones</h3>
+						</div>
+						<div class="box-body table-responsive no-padding">
+							<table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+								<thead>
+									<tr>
+										<th width="70%">Detalle</th>
+										<th width="15%">Ancho</th>
+										<th width="15%">Alto</th>
+									</tr>
+								</thead>
+								<tbody>
+									@foreach( App\Models\Production\Cotizacion7::getCotizaciones7( $cotizacion2->id ) as $impresion )
+										<tr>
+											<td class="text-left">{{ $impresion->cotizacion7_texto }}</td>
+											<td class="text-left">{{ $impresion->cotizacion7_ancho }}</td>
+											<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
+										</tr>
+									@endforeach
+								</tbody>
+							</table>
+						</div>
+					</div>
+				@endif
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Materiales de producción</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-cotizacion-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="30%">Proveedor</th>
+									<th width="15%">Material</th>
+									<th width="15%">Insumo</th>
+									<th width="10%">Dimensiones</th>
+									<th width="5%">Cantidad</th>
+									<th width="12%">Valor unidad</th>
+									<th width="12%">Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $totalmaterialesp = 0; /*--}}
+								@foreach( App\Models\Production\Cotizacion4::getCotizaciones4( $cotizacion2->id ) as $materialp )
+									<tr>
+										<td>{{ $materialp->proveedor_nombre }}</td>
+										<td>{{ $materialp->materialp_nombre }}</td>
+										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+										<td>{{ $materialp->cotizacion4_medidas }}</td>
+										<td class="text-center">{{ $materialp->cotizacion4_cantidad }}</td>
+										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
+										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
+									</tr>
+									{{--*/ $totalmaterialesp += $materialp->cotizacion4_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="5"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
@@ -457,7 +474,8 @@
 						{{--*/
 							$transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
 							$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
-							$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap;
+							$totalmaterialesp = round( $totalmaterialesp / $cotizacion2->cotizacion2_cantidad );
+							$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap + $totalmaterialesp;
 						/*--}}
 						<div class="col-sm-6 col-md-offset-3">
 							<div class="box box-danger">
@@ -479,6 +497,10 @@
 											<tr>
 												<th colspan="4">Viáticos</th>
 												<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
+											</tr>
+											<tr>
+												<th colspan="4">Materiales</th>
+												<td class="text-right"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
 											</tr>
 											<tr>
 												<th colspan="4">Áreas</th>

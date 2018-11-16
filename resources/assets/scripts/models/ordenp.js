@@ -34,7 +34,11 @@ app || (app = {});
             'orden_suministran': '',
             'orden_observaciones': '',
             'orden_terminado': '',
-            'orden_observaciones_imagen': ''
+            'orden_observaciones_imagen': '',
+            'orden_fecha_recogida1': '',
+            'orden_fecha_recogida2': '',
+            'orden_estado_recogida1': '',
+            'orden_estado_recogida2': '',
         }
     });
 

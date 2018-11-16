@@ -16,6 +16,7 @@ app || (app = {});
         events: {
             'click .submit-ordenp': 'submitOrdenp',
             'submit #form-ordenes': 'onStore',
+            'ifChanged .change-recogida': 'changeRecogidas'
         },
 
         /**
@@ -44,6 +45,22 @@ app || (app = {});
         },
 
         /**
+        * Event change checks
+        */
+        changeRecogidas: function (e) {
+            var selected = $(e.target).is(':checked'),
+                estado = $(e.target).data('change');
+
+            if( selected ){
+                (estado == 'R1') ? this.$('#orden_fecha_recogida1').removeAttr('disabled') : '';
+                (estado == 'R2') ? this.$('#orden_fecha_recogida2').removeAttr('disabled') : '';
+            }else{
+                (estado == 'R1') ? this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled') : '';
+                (estado == 'R2') ? this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled') : '';
+            }
+        },
+
+        /**
         * Event submit productop
         */
         submitOrdenp: function (e) {
@@ -56,7 +73,7 @@ app || (app = {});
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                
+
                 var data = window.Misc.formToJson( e.target );
                 this.model.save( data, {patch: true, silent: true} );
             }
@@ -84,6 +101,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initICheckPicker == 'function' )
+                window.initComponent.initICheckPicker();
         },
 
         /**

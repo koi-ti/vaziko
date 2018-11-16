@@ -11,8 +11,8 @@
                 <th class="center" colspan="2">Nuevo saldo</th>
             </tr>
 			<tr>
-                <th class="center"width="10%">Cuenta</th>
-                <th class="center" width="25%">Nombre</th>
+                <th class="center width-10">Cuenta</th>
+                <th class="center width-25">Nombre</th>
                 <th class="center">Debito</th>
                 <th class="center">Credito</th>
                 <th class="center">Debito</th>

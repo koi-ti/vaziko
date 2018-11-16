@@ -25,7 +25,8 @@ app || (app = {});
             'change #typeproductop': 'changeTypeProduct',
             'change #subtypeproductop': 'changeSubtypeProduct',
             'submit #form-ordenes': 'onStore',
-            'submit #form-despachosp': 'onStoreDespacho'
+            'submit #form-despachosp': 'onStoreDespacho',
+            'ifChanged .change-recogida': 'changeRecogidas'
         },
         parameters: {
         },
@@ -162,9 +163,27 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
+                    data.orden_fecha_recogida1 = this.$('#orden_fecha_recogida1').val();
+                    data.orden_fecha_recogida2 = this.$('#orden_fecha_recogida2').val(); 
                     data.orden_observaciones_imagen = this.$observacionesimagen.val();
 
                 this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Event change checks
+        */
+        changeRecogidas: function (e) {
+            var selected = $(e.target).is(':checked'),
+                estado = $(e.target).data('change');
+
+            if( selected ){
+                (estado == 'R1') ? this.$('#orden_fecha_recogida1').removeAttr('disabled') : '';
+                (estado == 'R2') ? this.$('#orden_fecha_recogida2').removeAttr('disabled') : '';
+            }else{
+                (estado == 'R1') ? this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled') : '';
+                (estado == 'R2') ? this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled') : '';
             }
         },
 
@@ -716,6 +735,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
+
+            if( typeof window.initComponent.initICheck == 'function' )
+                window.initComponent.initICheck();
         },
 
         /**

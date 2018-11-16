@@ -17,7 +17,7 @@ app || (app = {});
             'click .btn-clear': 'clear',
             'click .close-precotizacion': 'closePreCotizacion',
             'click .clone-precotizacion': 'clonePreCotizacion',
-            'click .finish-precotizacion': 'finishPreCotizacion',
+            'click .complete-precotizacion': 'completePreCotizacion',
             'click .open-precotizacion': 'openPreCotizacion',
             'click .generate-precotizacion': 'generatePreCotizacion'
         },
@@ -76,14 +76,14 @@ app || (app = {});
                     {
                         targets: 1,
                         orderable: false,
-                        width: '9%',
+                        width: '13%',
                         className: 'text-center',
                         render: function ( data, type, full, row ) {
-                            const finish = '<a class="btn btn-success btn-xs finish-precotizacion" title="Terminar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
-                            const close = '<a class="btn btn-success btn-xs close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
-                            const open = '<a class="btn btn-success btn-xs open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
-                            const clone = '<a class="btn btn-success btn-xs clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
-                            const generate = '<a class="btn btn-success btn-xs generate-precotizacion" title="Generar cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';
+                            const complete = '<a class="btn btn-success complete-precotizacion" title="Culminar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            const close = '<a class="btn btn-success close-precotizacion" title="Cerrar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            const open = '<a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
+                            const clone = '<a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
+                            const generate = '<a class="btn btn-success generate-precotizacion" title="Generar cotización" data-resource="'+ full.id +'" data-code="'+ full.precotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-envelope-o"></i></a>';
                             var buttons = '';
 
                             if ( parseInt(full.precotizacion_create) ){
@@ -93,10 +93,11 @@ app || (app = {});
                             if ( parseInt(full.precotizacion_opcional) ){
                                 buttons += ' ' + clone + ' ' + generate + ' ';
 
-                                buttons += parseInt(full.precotizacion1_abierta) ? finish : '';
+                                buttons += parseInt(full.precotizacion1_abierta) ? complete : '';
                             }
 
-                            return buttons ? buttons : ' - ';
+                            buttons = (buttons) ? buttons : '----';
+                            return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
                         }
                     },
                     {
@@ -116,8 +117,9 @@ app || (app = {});
                         width: '7%',
                         searchable: false,
                         orderable: false,
+                        className: 'text-center',
                         render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_terminada) ) {
+                            if( parseInt(full.precotizacion1_culminada) ) {
                                 return '<span class="label label-primary">CULMINADA</span>';
                             } else if( parseInt(full.precotizacion1_abierta) ) {
                                 return '<span class="label label-success">ABIERTA</span>';
@@ -128,7 +130,7 @@ app || (app = {});
                     }
                 ],
                 fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.precotizacion1_terminada) ) {
+                    if ( parseInt(data.precotizacion1_culminada) ) {
                         $(row).css( {"color":"#3C8DBC"} );
                     }else if( parseInt(data.precotizacion1_abierta) ) {
                         $(row).css( {"color":"#00A65A"} );
@@ -241,9 +243,9 @@ app || (app = {});
         },
 
         /**
-        * finish pre-cotizacion
+        * complete pre-cotizacion
         */
-        finishPreCotizacion: function (e) {
+        completePreCotizacion: function (e) {
             e.preventDefault();
             var _this = this,
                 model = this.$(e.currentTarget).data();
@@ -251,7 +253,7 @@ app || (app = {});
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: { precotizacion_codigo: model.code },
-                    template: _.template( ($('#precotizacion-terminar-confirm-tpl').html() || '') ),
+                    template: _.template( ($('#precotizacion-complete-confirm-tpl').html() || '') ),
                     titleConfirm: 'Terminar pre-cotización',
                     onConfirm: function () {
                         // Close orden

@@ -34,9 +34,8 @@
                                         <div class="btn-group">
                                             <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
                                             <ul class="dropdown-menu pull-right">
-                                                <li><a href="#" class="close-cotizacion" data-state="R">REASIGNAR</a></li>
-                                                 <li><a href="#" class="close-cotizacion" data-state="N">NO ACEPTADA</a></li>
-                                                 <li><a href="#" class="close-cotizacion" data-state="O">AL ABRIR ORDEN</a></li>
+                                                <li><a href="#" class="close-cotizacion" data-state="R">RECOTIZAR</a></li>
+                                                <li><a href="#" class="close-cotizacion" data-state="N">NO ACEPTADA</a></li>
                                             </ul>
                                         </div>
                                     @endif
@@ -307,7 +306,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-close-confirm-tpl">
-        <p>¿Está seguro que desea cerrar la cotización <b><%- cotizacion_codigo %></b>?</p>
+        <p>¿Está seguro que desea cerrar <span class="label label-warning"><%- cotizacion_state %></span> la cotización <b><%- cotizacion_codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="cotizacion-clone-confirm-tpl">

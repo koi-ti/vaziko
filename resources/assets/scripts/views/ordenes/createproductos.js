@@ -21,6 +21,9 @@ app || (app = {});
             'submit #form-orden-producto': 'onStore',
             'click .submit-ordenp6': 'submitOrdenp6',
             'submit #form-ordenp6-producto': 'onStoreOrdenp6',
+            'click .submit-orden4': 'submitOrdenp4',
+            'submit #form-orden4-producto': 'onStoreOrdenp4',
+            'change #orden4_materialp': 'changeMaterialp',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
             'click .submit-ordenp7': 'submitOrdenp7',
@@ -101,6 +104,10 @@ app || (app = {});
             this.$inputCyan2 = this.$('#orden2_cyan2');
             this.$inputKey2 = this.$('#orden2_key2');
 
+            // Ordenp -> materilaesp
+            this.$formmaterialesp = this.$('#form-orden4-producto');
+            this.$selectinsumos = this.$('#orden4_producto');
+
             // Ordenp6
             this.$formOrdenp6 = this.$('#form-ordenp6-producto');
             this.$inputArea = this.$('#orden6_nombre');
@@ -126,6 +133,7 @@ app || (app = {});
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
+            this.$infomateriales = this.$('#info-materiales');
 
             // Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
@@ -160,9 +168,13 @@ app || (app = {});
             // Materiales list
             this.materialesProductopListView = new app.MaterialesProductopListView( {
                 collection: this.materialesProductopList,
+                model: this.model,
                 parameters: {
-                    dataFilter: dataFilter
-               }
+                    edit: true,
+                    dataFilter: {
+                        ordenp2: this.model.get('id')
+                    }
+                }
             });
 
             // Materiales list
@@ -297,6 +309,7 @@ app || (app = {});
                 */
                 if( this.model.id != undefined ){
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.materialesp = this.materialesProductopList.toJSON();
                         data.orden2_volumen = this.$inputVolumen.val();
                         data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
@@ -307,6 +320,7 @@ app || (app = {});
 
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                        data.materialesp = JSON.stringify(this.materialesProductopList);
                         data.orden2_volumen = this.$inputVolumen.val();
                         data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
@@ -372,6 +386,57 @@ app || (app = {});
             }
         },
 
+        /**
+        * Event submit productop
+        */
+        submitOrdenp4: function (e) {
+            this.$formmaterialesp.submit();
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreOrdenp4: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.materialesProductopList.trigger( 'store' , data );
+            }
+        },
+
+        /**
+        * Event change select materialp
+        */
+        changeMaterialp: function (e) {
+            var _this = this;
+                materialp = this.$(e.currentTarget).val();
+
+            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
+                $.ajax({
+                    url: window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ),
+                    type: 'GET',
+                    beforeSend: function() {
+                        window.Misc.setSpinner( _this.spinner );
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner( _this.spinner );
+
+                    _this.$selectinsumos.empty().val(0).removeAttr('disabled');
+                    _this.$selectinsumos.append("<option value=></option>");
+                    _.each(resp, function(item){
+                        _this.$selectinsumos.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
+                    });
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.spinner );
+                    alertify.error(thrownError);
+                });
+            }else{
+                this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
+            }
+        },
 
         /**
         *   Event render input value
@@ -410,13 +475,14 @@ app || (app = {});
         *   Event calculate orden2
         **/
         calculateOrdenp2: function () {
-            var cantidad = transporte = viaticos = areas = precio = volumen = total = subtotal =  vcomision = 0;
+            var cantidad = transporte = viaticos = materiales = areas = precio = volumen = total = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
             cantidad = parseInt( this.$cantidad.val() );
             tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / cantidad  );
             viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad  );
-            areas = Math.round( parseFloat( this.areasProductopList.totalize()['total'] ) / cantidad  );
+            materiales = Math.round( parseFloat( this.materialesProductopList.totalize().total ) / cantidad );
+            areas = Math.round( parseFloat( this.areasProductopList.totalize().total ) / cantidad  );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
             volumen = parseInt( this.$inputVolumen.val() );
 
@@ -425,9 +491,10 @@ app || (app = {});
             this.$infoviaticos.empty().html( window.Misc.currency( viaticos ) );
             this.$infotransporte.empty().html( window.Misc.currency( tranporte ) );
             this.$infoareas.empty().html( window.Misc.currency( areas ) );
+            this.$infomateriales.empty().html( window.Misc.currency( materiales ) );
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotal = precio + tranporte + viaticos + areas;
+            subtotal = precio + tranporte + viaticos + materiales + areas;
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
             total = subtotal + vcomision;
 

@@ -39,7 +39,6 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            // listen totalize
             this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
@@ -194,6 +193,9 @@ app || (app = {});
                 this.materialesProductoActionView = new app.MaterialesProductoActionView({
                     model: model,
                     collection: this.collection,
+                    parameters: {
+                        call: 'precotizacion'
+                    }
                 });
 
                 this.materialesProductoActionView.render();

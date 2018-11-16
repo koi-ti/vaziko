@@ -21,7 +21,26 @@ app || (app = {});
         */
         initialize : function(){
 
-        }
+        },
+
+        totalRow: function( ){
+            _.each( this.models, function( model ) {
+                var total = parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
+                model.set('cotizacion4_valor_total', total);
+            });
+        },
+
+        total: function() {
+            return this.reduce(function(sum, model){
+                return sum + parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
+            }, 0);
+        },
+
+        totalize: function () {
+            var total = this.total();
+            this.totalRow();
+            return { total: total }
+        },
    });
 
 })(this, this.document);

@@ -41,7 +41,6 @@ app || (app = {});
             this.$searchordenpOrden = this.$('#searchordenp_ordenp_numero');
             this.$searchordenpTercero = this.$('#searchordenp_tercero');
             this.$searchordenpTerceroNombre = this.$('#searchordenp_tercero_nombre');
-
             this.$ordersSearchTable = this.$modalComponent.find('#koi-search-ordenp-component-table');
             this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
@@ -68,7 +67,8 @@ app || (app = {});
                     { data: 'orden_ano', name: 'orden_ano' },
                     { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'orden_fecha', name: 'orden_fecha' }
+                    { data: 'orden_fecha', name: 'orden_fecha' },
+                    { data: 'orden_abierta', name: 'orden_abierta' }
                 ],
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]
@@ -76,7 +76,6 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
                         	return '<a href="#" class="a-koi-search-ordenp-component-table">' + data + '</a>';
@@ -91,15 +90,31 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                             return window.moment(data).format('YYYY-MM-DD');
                         }
+                    },
+                    {
+                        targets: 5,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function ( data, type, full, row ) {
+                            if( parseInt(full.orden_anulada) ) {
+                                return '<span class="label label-danger">ANULADA</span>';
+                            } else if( parseInt(full.orden_abierta) ) {
+                                return '<span class="label label-success">ABIERTA</span>';
+                            } else if( parseInt(full.orden_culminada) ) {
+                                return '<span class="label label-info">CULMINADA</span>';
+                            } else if ( !parseInt(full.orden_abierta) ) {
+                                return '<span class="label label-warning">CERRADA</span>';
+                            }
+                        }
                     }
                 ],
                 fnRowCallback: function( row, data ) {
                     if ( parseInt(data.orden_abierta) ) {
-                        $(row).css( {"color":"#00a65a"} );
+                        $(row).css( {"color":"#00A65A"} );
                     }else if ( parseInt(data.orden_anulada) ) {
-                        $(row).css( {"color":"red"} );
+                        $(row).css( {"color":"#DD4B39"} );
                     }else if ( parseInt(data.orden_culminada) ) {
-                        $(row).css( {"color":"#0073b7"} );
+                        $(row).css( {"color":"#0073B7"} );
                     }
                 }
 

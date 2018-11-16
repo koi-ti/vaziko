@@ -32,6 +32,7 @@ app || (app = {});
             this.listenTo( this.model, 'request', this.loadSpinner );
 
             // Reference views and ready
+            this.spinner = $('.spinner-main');
             this.referenceViews();
             this.ready();
         },
@@ -43,16 +44,18 @@ app || (app = {});
             var _this = this,
                 actividadesp = this.$(e.currentTarget).val();
 
+                console.log(this.spinner);
+
             if( typeof(actividadesp) !== 'undefined' && !_.isUndefined(actividadesp) && !_.isNull(actividadesp) && actividadesp != '' ){
                 $.ajax({
                     url: window.Misc.urlFull( Route.route('subactividadesp.index', {actividadesp: actividadesp}) ),
                     type: 'GET',
                     beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
+                        window.Misc.setSpinner( _this.spinner );
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
 
                     if(resp.length > 0){
                         _this.$subactividadesp.empty().val(0).attr('required', 'required');
@@ -65,7 +68,7 @@ app || (app = {});
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner( _this.spinner );
                     alertify.error(thrownError);
                 });
             }else{
@@ -81,7 +84,7 @@ app || (app = {});
             this.tiempopListView = new app.TiempopListView( {
                 collection: this.tiempopList,
                 parameters: {
-                    wrapper: this.el,
+                    wrapper: this.spinner,
                     dataFilter: {
                         type: 'tiemposp'
                     }
@@ -120,28 +123,28 @@ app || (app = {});
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
 
+            if( typeof window.initComponent.initClockPicker == 'function' )
+                window.initComponent.initClockPicker();
+
             if( typeof window.initComponent.initToUpper == 'function' )
                 window.initComponent.initToUpper();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();
-
-            if( typeof window.initComponent.initTimePicker == 'function' )
-                window.initComponent.initTimePicker();
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

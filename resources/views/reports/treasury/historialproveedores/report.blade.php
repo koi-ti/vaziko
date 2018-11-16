@@ -4,16 +4,16 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-				<th width="6%">NÚMERO</th>
-				<th width="15%">SUCURSAL</th>
-				<th width="7%">ASIENTO</th>
-				<th width="7%">NIF</th>
-				<th width="5%">CUOTAS</th>
-				<th width="10%">FECHA E</th>
-				<th width="10%">F DOC</th>
-				<th width="10%">F PAGO</th>
-				<th width="15%">DEBITO</th>
-				<th width="15%">CREDITO</th>
+				<th class="width-5">NÚMERO</th>
+				<th class="width-15">SUCURSAL</th>
+				<th class="width-10">ASIENTO</th>
+				<th class="width-10">NIF</th>
+				<th class="width-5">CUOTAS</th>
+				<th class="width-10">FECHA E</th>
+				<th class="width-10">F DOC</th>
+				<th class="width-10">F PAGO</th>
+				<th class="width-15">DEBITO</th>
+				<th class="width-15">CREDITO</th>
 			</tr>
 		</thead>
 		<tbody>

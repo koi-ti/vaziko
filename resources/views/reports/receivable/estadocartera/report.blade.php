@@ -5,12 +5,12 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-                <th class="center size-7" width="20%">Documento</th>
-                <th class="center size-7" width="30%">Fecha</th>
-                <th class="center size-7" width="15%">Detalle</th>
-                <th class="center size-7" width="15%">Vencimiento</th>
-                <th class="center size-7" width="20%">N. días</th>
-                <th class="center size-7" width="20%">Saldo</th>
+                <th class="center size-7 width-20">Documento</th>
+                <th class="center size-7 width-30">Fecha</th>
+                <th class="center size-7 width-15">Detalle</th>
+                <th class="center size-7 width-15">Vencimiento</th>
+                <th class="center size-7 width-20">N. días</th>
+                <th class="center size-7 width-20">Saldo</th>
 			</tr>
 		</thead>
 		<tbody>

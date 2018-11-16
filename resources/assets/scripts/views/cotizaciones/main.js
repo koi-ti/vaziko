@@ -18,7 +18,8 @@ app || (app = {});
             'click .close-cotizacion': 'closeCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
             'click .generate-cotizacion': 'generateCotizacion',
-            'click .open-cotizacion': 'openCotizacion'
+            'click .open-cotizacion': 'openCotizacion',
+            'click .export-cotizacion': 'exportCotizacion',
         },
 
 
@@ -84,14 +85,28 @@ app || (app = {});
                     {
                         targets: 1,
                         orderable: false,
-                        width: '8%',
+                        width: '13%',
                         className: 'text-center',
                         render: function ( data, type, full, row ) {
-                            const close = '<a class="btn btn-danger btn-xs close-cotizacion" title="Cerrar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
+                            const close = '<div class="btn-group btn-group-xs">' +
+                            '<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>' +
+                            '<ul class="dropdown-menu pull-right">' +
+                            '<li><a href="#" class="close-cotizacion" data-state="R" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'">RECOTIZAR</a></li>' +
+                            '<li><a href="#" class="close-cotizacion" data-state="N" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'">NO ACEPTADA</a></li>' +
+                            '</ul></div>';
+
+                            // const close = `<div class="btn-group btn-group-xs">
+                            //     <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
+                            //     <ul class="dropdown-menu pull-right">
+                            //         <li><a href="#" class="close-cotizacion" data-state="R" data-resource="`+ full.id +`" data-code="`+ full.cotizacion_codigo +`">RECOTIZAR</a></li>
+                            //         <li><a href="#" class="close-cotizacion" data-state="N" data-resource="`+ full.id +`" data-code="`+ full.cotizacion_codigo +`">NO ACEPTADA</a></li>
+                            //     </ul>
+                            // </div>`;
                             const open = '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
                             const clone = '<a class="btn btn-danger btn-xs clone-cotizacion" title="Clonar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
                             const generate = '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-sticky-note"></i></a>';
                             var buttons = '';
+                            const exporte = '<a class="btn btn-danger export-cotizacion" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
 
                             if ( parseInt(full.cotizacion_create) ){
                                 buttons += parseInt(full.cotizacion1_abierta) ? close : open;
@@ -103,7 +118,8 @@ app || (app = {});
                                 buttons += parseInt(full.cotizacion1_abierta) ? generate : '';
                             }
 
-                            return buttons ? buttons : ' - ';
+                            buttons += exporte;
+                            return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
                         }
                     },
                     {
@@ -123,6 +139,7 @@ app || (app = {});
                         width: '7%',
                         searchable: false,
                         orderable: false,
+                        className: 'text-center',
                         render: function ( data, type, full, row ) {
                             if( parseInt(full.cotizacion1_anulada) ) {
                                 return '<span class="label label-danger">ANULADA</span>';
@@ -171,11 +188,12 @@ app || (app = {});
         closeCotizacion: function (e) {
             e.preventDefault();
             var _this = this,
-                model = this.$(e.currentTarget).data();
+                model = this.$(e.currentTarget).data(),
+                state = this.$(e.currentTarget).text();
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { cotizacion_codigo: model.code },
+                    dataFilter: { cotizacion_codigo: model.code, cotizacion_state: state },
                     template: _.template( ($('#cotizacion-close-confirm-tpl').html() || '') ),
                     titleConfirm: 'Cerrar cotización',
                     onConfirm: function () {
@@ -183,6 +201,7 @@ app || (app = {});
                         $.ajax({
                             url: window.Misc.urlFull( Route.route('cotizaciones.cerrar', { cotizaciones: model.resource }) ),
                             type: 'GET',
+                            data: {state: model.state},
                             beforeSend: function() {
                                 window.Misc.setSpinner( _this.el );
                             }
@@ -351,6 +370,16 @@ app || (app = {});
                 }
             });
             cancelConfirm.render();
-        }
+        },
+
+        /**
+        * export to PDF
+        */
+        exportCotizacion: function (e) {
+            e.preventDefault();
+
+            // Redirect to pdf
+            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: $(e.currentTarget).data('code') })), '_blank');
+        },
     });
 })(jQuery, this, this.document);

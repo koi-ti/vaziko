@@ -31,6 +31,10 @@ class CreateOrdenproduccionTable extends Migration
             $table->boolean('orden_anulada')->default(false);
             $table->boolean('orden_culminada')->default(false);
             $table->boolean('orden_abierta')->default(true);
+            $table->date('orden_fecha_recogida1');
+            $table->date('orden_fecha_recogida2');
+            $table->boolean('orden_estado_recogida1')->default(true);
+            $table->boolean('orden_estado_recogida2')->default(true);
             $table->text('orden_observaciones')->nullable();
             $table->text('orden_terminado')->nullable();
             $table->text('orden_observaciones_imagen')->nullable();

@@ -252,15 +252,15 @@
 							<h3 class="box-title">Acabados de producción</h3>
 						</div>
 						<div class="box-body">
-							<div class="row">
-								@foreach( App\Models\Production\PreCotizacion7::getPreCotizaciones7($producto->id, $precotizacion2->id) as $acabado)
-								<div class="form-group col-md-6">
-									<label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_{{ $acabado->id }}">
-										<input type="checkbox" id="precotizacion7_acabadop_{{ $acabado->id }}" name="precotizacion7_acabadop_{{ $acabado->id }}" value="precotizacion7_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
-									</label>
+							@foreach( App\Models\Production\PreCotizacion7::getPreCotizaciones7($producto->id, $precotizacion2->id) as $acabado)
+								<div class="row">
+									<div class="form-group col-md-12">
+										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_{{ $acabado->id }}">
+											<input type="checkbox" id="precotizacion7_acabadop_{{ $acabado->id }}" name="precotizacion7_acabadop_{{ $acabado->id }}" value="precotizacion7_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
+										</label>
+									</div>
 								</div>
-								@endforeach
-							</div>
+							@endforeach
 						</div>
 					</div>
 				</div>
@@ -270,15 +270,15 @@
 							<h3 class="box-title">Maquinas de producción</h3>
 						</div>
 						<div class="box-body">
-							<div class="row">
-								@foreach( App\Models\Production\PreCotizacion8::getPreCotizaciones8($producto->id, $precotizacion2->id) as $maquina)
-								<div class="form-group col-md-6">
-									<label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_{{ $maquina->id }}">
-										<input type="checkbox" id="precotizacion8_maquinap_{{ $maquina->id }}" name="precotizacion8_maquinap_{{ $maquina->id }}" value="precotizacion8_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
-									</label>
+							@foreach( App\Models\Production\PreCotizacion8::getPreCotizaciones8($producto->id, $precotizacion2->id) as $maquina)
+								<div class="row">
+									<div class="form-group col-md-12">
+										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_{{ $maquina->id }}">
+											<input type="checkbox" id="precotizacion8_maquinap_{{ $maquina->id }}" name="precotizacion8_maquinap_{{ $maquina->id }}" value="precotizacion8_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
+										</label>
+									</div>
 								</div>
-								@endforeach
-							</div>
+							@endforeach
 						</div>
 					</div>
 				</div>
@@ -295,9 +295,9 @@
 			</div>
 
 			<div class="box box-success">
-          <div class="box-header with-border">
-              <h3 class="box-title">Impresiones</h3>
-          </div>
+				<div class="box-header with-border">
+					<h3 class="box-title">Impresiones</h3>
+				</div>
 				<div class="box-body table-responsive no-padding">
 					<table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
 						<thead>
@@ -322,8 +322,8 @@
 
 			<div class="box box-success">
 				<div class="box-header with-border">
-            <h3 class="box-title">Materiales de producción</h3>
-        </div>
+		            <h3 class="box-title">Materiales de producción</h3>
+		        </div>
 				<div class="box-body table-responsive no-padding">
 					<table id="browse-precotizacion-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
 						<thead>
@@ -369,45 +369,45 @@
 				</div>
 				<div class="box-body">
 					<div class="box-body table-responsive no-padding">
-              <table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
-                  <thead>
-                      <tr>
-                          <th>Área</th>
-                          <th>Nombre</th>
-                          <th>Horas</th>
-                          <th>Valor</th>
-                          <th>Total</th>
-                      </tr>
-                  </thead>
-									<tbody>
-										{{-- variables para calcular las areas --}}
-										{{--*/ $area = $sumareap = $totalareap = 0; /*--}}
-										@foreach( App\Models\Production\PreCotizacion6::getPreCotizaciones6( $precotizacion2->id ) as $areap)
-											{{--*/
-												$tiempo = explode(':', $areap->precotizacion6_tiempo);
-												$area = round( ($tiempo[0] + ($tiempo[1] / 60)) * $areap->precotizacion6_valor );
-												$sumareap += $area;
-												$totalareap = round( $sumareap / $precotizacion2->precotizacion2_cantidad );
-											/*--}}
+						<table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th>Área</th>
+									<th>Nombre</th>
+									<th>Horas</th>
+									<th>Valor</th>
+									<th>Total</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{-- variables para calcular las areas --}}
+								{{--*/ $area = $sumareap = $totalareap = 0; /*--}}
+								@foreach( App\Models\Production\PreCotizacion6::getPreCotizaciones6( $precotizacion2->id ) as $areap)
+									{{--*/
+										$tiempo = explode(':', $areap->precotizacion6_tiempo);
+										$area = round( ($tiempo[0] + ($tiempo[1] / 60)) * $areap->precotizacion6_valor );
+										$sumareap += $area;
+										$totalareap = round( $sumareap / $precotizacion2->precotizacion2_cantidad );
+									/*--}}
 
-											<tr>
-												<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
-				                                <td>{{ $areap->precotizacion6_nombre == '' ? '-': $areap->precotizacion6_nombre }}</td>
-				                                <td class="text-left">{{  $areap->precotizacion6_tiempo }}</td>
-												<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
-				                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
-											</tr>
-										@endforeach
-									</tbody>
-                  <tfoot>
-                      <tr>
-                          <td colspan="3"></td>
-                          <th class="text-right">Total</th>
-                          <th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
-                      </tr>
-                  </tfoot>
-              </table>
-          </div>
+									<tr>
+										<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
+							            <td>{{ $areap->precotizacion6_nombre == '' ? '-': $areap->precotizacion6_nombre }}</td>
+							            <td class="text-left">{{  $areap->precotizacion6_tiempo }}</td>
+										<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
+							            <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+									</tr>
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="3"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+          			</div>
 				</div>
 			</div>
 		</div>

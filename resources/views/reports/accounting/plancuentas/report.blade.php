@@ -4,12 +4,12 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-				<th width="15%" class="left">CUENTA</th>
-				<th width="62%" class="left">NOMBRE</th>
-				<th width="5%" class="center">NV</th>
-				<th width="5%" class="center">C/D</th>
-				<th width="5%" class="center">TER</th>
-				<th width="8%" class="center">TASA</th>
+				<th class="left width-15">CUENTA</th>
+				<th class="left width-60">NOMBRE</th>
+				<th class="center width-5">NV</th>
+				<th class="center width-5">C/D</th>
+				<th class="center width-5">TER</th>
+				<th class="center width-10">TASA</th>
 			</tr>
 		</thead>
 		<tbody>

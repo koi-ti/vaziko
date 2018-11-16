@@ -18,7 +18,7 @@ app || (app = {});
             'submit #form-precotizaciones': 'onStore',
             'click .close-precotizacion': 'closePreCotizacion',
             'click .clone-precotizacion': 'clonePreCotizacion',
-            'click .finish-precotizacion': 'finishPreCotizacion',
+            'click .complete-precotizacion': 'completePreCotizacion',
             'click .generate-precotizacion': 'generatePreCotizacion',
         },
         parameters: {
@@ -176,17 +176,17 @@ app || (app = {});
         },
 
         /**
-        * finish pre-cotizacion
+        * complete pre-cotizacion
         */
-        finishPreCotizacion: function (e) {
+        completePreCotizacion: function (e) {
             e.preventDefault();
             var _this = this;
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: { precotizacion_codigo: _this.model.get('precotizacion_codigo') },
-                    template: _.template( ($('#precotizacion-terminar-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Terminar pre-cotización',
+                    template: _.template( ($('#precotizacion-complete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Culminar pre-cotización',
                     onConfirm: function () {
                         // Close orden
                         $.ajax({

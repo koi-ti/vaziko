@@ -503,6 +503,8 @@ class Cotizacion1Controller extends Controller
                     foreach ($materiales as $cotizacion4) {
                          $newcotizacion4 = $cotizacion4->replicate();
                          $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
                          $newcotizacion4->save();
                     }
 
@@ -668,8 +670,14 @@ class Cotizacion1Controller extends Controller
                          $orden4 = new Ordenp4;
                          $orden4->orden4_materialp = $cotizacion4->cotizacion4_materialp;
                          $orden4->orden4_orden2 = $orden2->id;
+                         $orden4->orden4_producto = $cotizacion4->cotizacion4_producto;
+                         $orden4->orden4_proveedor = $cotizacion4->cotizacion4_proveedor;
                          $orden4->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                          $orden4->orden4_medidas = $cotizacion4->cotizacion4_medidas;
+                         $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
+                         $orden4->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
+                         $orden4->orden4_usuario_elaboro = Auth::user()->id;
+                         $orden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
                          $orden4->save();
                     }
 

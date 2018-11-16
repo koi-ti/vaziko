@@ -38,6 +38,7 @@ elixir(function(mix) {
         paths.libs + 'jquery-ui/themes/base/all.css',
         paths.node + 'fine-uploader/jquery.fine-uploader/fine-uploader-new.css',
         paths.libs + 'fullcalendar/dist/fullcalendar.min.css',
+        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.css',
     ], 'public/css/vendor.min.css');
 
     mix.less('../css/app.less', 'public/css/app.min.css');
@@ -74,7 +75,8 @@ elixir(function(mix) {
         paths.libs + 'alertify.js/dist/js/alertify.js',
         paths.node + 'fine-uploader/jquery.fine-uploader/jquery.fine-uploader.js',
         paths.libs + 'fullcalendar/dist/fullcalendar.min.js',
-        paths.libs + 'fullcalendar/dist/locale/es.js'
+        paths.libs + 'fullcalendar/dist/locale/es.js',
+        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.js'
    	], 'public/js/vendor.min.js')
     .scripts([
         '../scripts/models/*.js',

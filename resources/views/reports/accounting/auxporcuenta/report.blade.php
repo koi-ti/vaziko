@@ -5,10 +5,10 @@
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-                <th class="center size-7" width="10%">Fecha</th>
-                <th class="center size-7" width="15%">Folder</th>
-                <th class="center size-7" width="15%">Doc contable</th>
-                <th class="center size-7" width="30%">Detalle</th>
+                <th class="center size-7 width-10">Fecha</th>
+                <th class="center size-7 width-15">Folder</th>
+                <th class="center size-7 width-15">Doc contable</th>
+                <th class="center size-7 width-30">Detalle</th>
                 <th class="center size-7">Sdo anterior</th>
                 <th class="center size-7">Debito</th>
                 <th class="center size-7">Credito</th>

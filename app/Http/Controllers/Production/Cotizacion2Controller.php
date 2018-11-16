@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use Auth, DB, Log, Datatables, Storage;
 
 class Cotizacion2Controller extends Controller
@@ -64,6 +64,8 @@ class Cotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
+            $data['materialesp'] = json_decode($data['materialesp']);
+
             $cotizacion2 = new Cotizacion2;
             if ($cotizacion2->isValid($data)) {
                 DB::beginTransaction();
@@ -105,16 +107,41 @@ class Cotizacion2Controller extends Controller
                         }
                     }
 
-                    // Materiales
-                    $materiales = Cotizacion4::getCotizaciones4($cotizacion2->cotizacion2_productop, $cotizacion2->id);
-                    foreach ($materiales as $material)
-                    {
-                        if($request->has("cotizacion4_materialp_{$material->materialp_id}_{$material->cotizacion4_id}")) {
-                            $cotizacion4 = new Cotizacion4;
-                            $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
-                            $cotizacion4->cotizacion4_materialp = $material->materialp_id;
-                            $cotizacion4->save();
+                    // Materialesp
+                    $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
+                    foreach ($materiales as $material) {
+                        // Validar tercero y materialp
+                        $tercero = Tercero::where('tercero_nit', $material->cotizacion4_proveedor)->first();
+                        if(!$tercero instanceof Tercero){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                         }
+
+                        $materialp = Materialp::find($material->cotizacion4_materialp);
+                        if(!$materialp instanceof Materialp){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $insumo = Producto::find($material->cotizacion4_producto);
+                        if(!$insumo instanceof Producto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        // Guardar individual porque sale error por ser objeto decodificado
+                        $cotizacion4 = new Cotizacion4;
+                        $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
+                        $cotizacion4->cotizacion4_materialp = $materialp->id;
+                        $cotizacion4->cotizacion4_producto = $insumo->id;
+                        $cotizacion4->cotizacion4_proveedor = $tercero->id;
+                        $cotizacion4->cotizacion4_cantidad = $material->cotizacion4_cantidad;
+                        $cotizacion4->cotizacion4_medidas = $material->cotizacion4_medidas;
+                        $cotizacion4->cotizacion4_valor_unitario = $material->cotizacion4_valor_unitario;
+                        $cotizacion4->cotizacion4_valor_total = $material->cotizacion4_valor_total;
+                        $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                        $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                        $cotizacion4->save();
                     }
 
                     // Acabados
@@ -295,21 +322,52 @@ class Cotizacion2Controller extends Controller
                         }
 
                         // Materiales
-                        $materiales = Cotizacion4::getCotizaciones4($cotizacion2->cotizacion2_productop, $cotizacion2->id);
-                        foreach ($materiales as $material)
-                        {
-                            $cotizacion4 = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->where('cotizacion4_materialp', $material->materialp_id)->where('koi_cotizacion4.id', $material->cotizacion4_id)->first();
-                            if( $request->has("cotizacion4_materialp_{$material->materialp_id}_{$material->cotizacion4_id}") ) {
-                                if(!$cotizacion4 instanceof Cotizacion4) {
-                                    $cotizacion4 = new Cotizacion4;
-                                    $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
-                                    $cotizacion4->cotizacion4_materialp = $material->materialp_id;
-                                    $cotizacion4->save();
+                        $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
+                        foreach ($materiales as $material) {
+                            // Validar que el id sea entero(los temporales tienen letras)
+
+                            if( isset( $material['success']) ){
+                                // Validar tercero y materialp
+                                $tercero = Tercero::where('tercero_nit', $material['cotizacion4_proveedor'])->first();
+                                if(!$tercero instanceof Tercero){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                                 }
-                            }else{
-                                if($cotizacion4 instanceof Cotizacion4) {
-                                    $cotizacion4->delete();
+
+                                $materialp = Materialp::find($material['cotizacion4_materialp']);
+                                if(!$materialp instanceof Materialp){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                                 }
+
+                                $insumo = Producto::find($material['cotizacion4_producto']);
+                                if(!$insumo instanceof Producto){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $newcotizacion4 = new Cotizacion4;
+                                $newcotizacion4->fill($material);
+                                $newcotizacion4->cotizacion4_producto = $insumo->id;
+                                $newcotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
+                                $newcotizacion4->cotizacion4_materialp = $materialp->id;
+                                $newcotizacion4->cotizacion4_proveedor = $tercero->id;
+                                $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                                $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                                $newcotizacion4->save();
+                            }
+
+
+
+                            if( isset($material['change']) ){
+                                // Recuperar material y actuzalizr
+                                $cotizacion4 = Cotizacion4::findOrFail($material['id']);
+                                if(!$cotizacion4 instanceof Cotizacion4){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material, por favor verifique la información o consulte al administrador.']);
+                                }
+                                $cotizacion4->fill($material);
+                                $cotizacion4->save();
                             }
                         }
 
@@ -510,6 +568,8 @@ class Cotizacion2Controller extends Controller
                 foreach ($materiales as $cotizacion4) {
                      $newcotizacion4 = $cotizacion4->replicate();
                      $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
+                     $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                     $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
                      $newcotizacion4->save();
                 }
 

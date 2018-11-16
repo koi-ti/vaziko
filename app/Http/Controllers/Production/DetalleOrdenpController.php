@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use Auth, DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
@@ -94,6 +94,7 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
+            $data['materialesp'] = json_decode($data['materialesp']);
 
             $orden2 = new Ordenp2;
             if ($orden2->isValid($data)) {
@@ -136,16 +137,41 @@ class DetalleOrdenpController extends Controller
                         }
                     }
 
-                    // Materiales
-                    $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
-                    foreach ($materiales as $material)
-                    {
-                        if($request->has("orden4_materialp_{$material->materialp_id}_{$material->orden4_id}")) {
-                            $orden4 = new Ordenp4;
-                            $orden4->orden4_orden2 = $orden2->id;
-                            $orden4->orden4_materialp = $material->materialp_id;
-                            $orden4->save();
+                    // Materialesp
+                    $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
+                    foreach ($materiales as $material) {
+                        // Validar tercero y materialp
+                        $tercero = Tercero::where('tercero_nit', $material->orden4_proveedor)->first();
+                        if(!$tercero instanceof Tercero){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                         }
+
+                        $materialp = Materialp::find($material->orden4_materialp);
+                        if(!$materialp instanceof Materialp){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $insumo = Producto::find($material->orden4_producto);
+                        if(!$insumo instanceof Producto){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        // Guardar individual porque sale error por ser objeto decodificado
+                        $orden4 = new Ordenp4;
+                        $orden4->orden4_orden2 = $orden2->id;
+                        $orden4->orden4_materialp = $materialp->id;
+                        $orden4->orden4_producto = $insumo->id;
+                        $orden4->orden4_proveedor = $tercero->id;
+                        $orden4->orden4_cantidad = $material->orden4_cantidad;
+                        $orden4->orden4_medidas = $material->orden4_medidas;
+                        $orden4->orden4_valor_unitario = $material->orden4_valor_unitario;
+                        $orden4->orden4_valor_total = $material->orden4_valor_total;
+                        $orden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                        $orden4->orden4_usuario_elaboro = Auth::user()->id;
+                        $orden4->save();
                     }
 
                     // Acabados
@@ -337,21 +363,50 @@ class DetalleOrdenpController extends Controller
                         }
 
                         // Materiales
-                        $materiales = Ordenp4::getOrdenesp4($orden2->orden2_productop, $orden2->id);
-                        foreach ($materiales as $material)
-                        {
-                            $orden4 = Ordenp4::where('orden4_orden2', $orden2->id)->where('orden4_materialp', $material->materialp_id)->where('koi_ordenproduccion4.id', $material->orden4_id)->first();
-                            if($request->has("orden4_materialp_{$material->materialp_id}_{$material->orden4_id}")) {
-                                if(!$orden4 instanceof Ordenp4) {
-                                    $orden4 = new Ordenp4;
-                                    $orden4->orden4_orden2 = $orden2->id;
-                                    $orden4->orden4_materialp = $material->materialp_id;
-                                    $orden4->save();
+                        $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
+                        foreach ($materiales as $material) {
+                            // Validar que el id sea entero(los temporales tienen letras)
+
+                            if( isset( $material['success']) ){
+                                // Validar tercero y materialp
+                                $tercero = Tercero::where('tercero_nit', $material['orden4_proveedor'])->first();
+                                if(!$tercero instanceof Tercero){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
                                 }
-                            }else{
-                                if($orden4 instanceof Ordenp4) {
-                                    $orden4->delete();
+
+                                $materialp = Materialp::find($material['orden4_materialp']);
+                                if(!$materialp instanceof Materialp){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                                 }
+
+                                $insumo = Producto::find($material['orden4_producto']);
+                                if(!$insumo instanceof Producto){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $neworden4 = new Ordenp4;
+                                $neworden4->fill($material);
+                                $neworden4->orden4_orden2 = $orden2->id;
+                                $neworden4->orden4_materialp = $materialp->id;
+                                $neworden4->orden4_producto = $insumo->id;
+                                $neworden4->orden4_proveedor = $tercero->id;
+                                $neworden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                                $neworden4->orden4_usuario_elaboro = Auth::user()->id;
+                                $neworden4->save();
+                            }
+
+                            if( isset($material['change']) ){
+                                // Recuperar material y actuzalizr
+                                $orden4 = Ordenp4::findOrFail($material['id']);
+                                if(!$orden4 instanceof Ordenp4){
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material, por favor verifique la información o consulte al administrador.']);
+                                }
+                                $orden4->fill($material);
+                                $orden4->save();
                             }
                         }
 
@@ -539,6 +594,8 @@ class DetalleOrdenpController extends Controller
                 foreach ($materiales as $orden4) {
                      $neworden4 = $orden4->replicate();
                      $neworden4->orden4_orden2 = $neworden2->id;
+                     $neworden4->orden4_usuario_elaboro = Auth::user()->id;
+                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
                      $neworden4->save();
                 }
 

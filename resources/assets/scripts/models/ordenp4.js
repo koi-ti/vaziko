@@ -15,9 +15,14 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'orden4_id': '',
-            'orden4_cantidad': '',
-            'orden4_medidas': ''
+            'materialp_nombre': '',
+            'proveedor_nombre': '',
+            'proveedor_nit': '',
+            'orden4_materialp': '',
+            'orden4_proveedor': '',
+            'orden4_medidas': '',
+            'orden4_valor_unitario': '',
+            'orden4_valor_total': ''
         }
     });
 

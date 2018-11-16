@@ -11,9 +11,8 @@ app || (app = {});
 
     app.MaterialesProductopItemView = Backbone.View.extend({
 
-        tagName: 'div',
-        className : 'row',
-        template: _.template( ($('#orden-producto-material-item-tpl').html() || '') ),
+        tagName: 'tr',
+        template: _.template( ($('#orden-producto-materialp-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },

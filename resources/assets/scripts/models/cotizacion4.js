@@ -15,10 +15,14 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'cotizacion4_id': '',
-            'cotizacion4_cantidad': '',
-            'cotizacion4_precio': '',
-            'cotizacion4_medidas': ''
+            'materialp_nombre': '',
+            'proveedor_nombre': '',
+            'proveedor_nit': '',
+            'cotizacion4_materialp': '',
+            'cotizacion4_proveedor': '',
+            'cotizacion4_medidas': '',
+            'cotizacion4_valor_unitario': '',
+            'cotizacion4_valor_total': ''
         }
     });
 

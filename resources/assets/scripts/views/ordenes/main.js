@@ -93,7 +93,7 @@ app || (app = {});
                     {
                         targets: 1,
                         orderable: false,
-                        width: '8%',
+                        width: '13%',
                         className: 'text-center',
                         render: function ( data, type, full, row ) {
                             const close = '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
@@ -119,7 +119,8 @@ app || (app = {});
                                 buttons = '';
                             }
 
-                            return buttons ? buttons : ' - ';
+                            buttons = (buttons) ? buttons : '----';
+                            return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
                         },
                     },
                     {
@@ -136,7 +137,9 @@ app || (app = {});
                     },
                     {
                         targets: 8,
-                        width: '10%',
+                        width: '7%',
+                        orderable: false,
+                        className: 'text-center',
                         render: function ( data, type, full, row ) {
                             if( parseInt(full.orden_anulada) ) {
                                 return '<span class="label label-danger">ANULADA</span>';

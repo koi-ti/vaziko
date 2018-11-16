@@ -275,7 +275,7 @@
 
                         <div class="row">
                             {{-- Content maquinas --}}
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="box box-primary">
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Máquinas de producción</h3>
@@ -286,20 +286,8 @@
                                 </div>
                             </div>
 
-                            {{-- Content materiales --}}
-                            <div class="col-sm-4">
-                                <div class="box box-primary">
-                                    <div class="box-header with-border">
-                                        <h3 class="box-title">Materiales de producción</h3>
-                                    </div>
-                                    <div class="box-body" id="browse-orden-producto-materiales-list">
-                                        {{-- render materiales list --}}
-                                    </div>
-                                </div>
-                            </div>
-
                             {{-- Content acabados --}}
-                            <div class="col-sm-4">
+                            <div class="col-sm-6">
                                 <div class="box box-primary">
                                     <div class="box-header with-border">
                                         <h3 class="box-title">Acabados de producción</h3>
@@ -358,6 +346,100 @@
                         </div>
                         <div class="box-body table-responsive no-padding">
                             <div class="fine-uploader"></div>
+                        </div>
+                    </div>
+
+                    {{-- Content materialesp --}}
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Materiales de producción</h3>
+                        </div>
+                        <div class="box-body" id="orden4-wrapper-producto">
+                            <form method="POST" accept-charset="UTF-8" id="form-orden4-producto" data-toggle="validator">
+                                <div class="row">
+                                    @foreach( App\Models\Production\Ordenp4::getMaterials( $producto->id ) as $materialp )
+                                        <div class="form-group col-md-4">
+                                            <label>{{ $materialp }}</label>
+                                        </div>
+                                    @endforeach
+                                </div><br>
+                                <div class="row">
+                                    <div class="form-group col-sm-4">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="orden4_proveedor">
+                                                    <i class="fa fa-user"></i>
+                                                </button>
+                                            </span>
+                                            <input id="orden4_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="orden4_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden4_proveedor_nombre" data-proveedor="true" required>
+                                        </div>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input id="orden4_proveedor_nombre" name="orden4_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear" data-placeholder="Material de producción" required>
+                                            <option value="">Seleccione</option>
+                                            @foreach( App\Models\Production\Ordenp4::getMaterials( $producto->id ) as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="orden4_producto" id="orden4_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled required>
+                                            <option value="">Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="orden4_cantidad" name="orden4_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" id="orden4_medidas" name="orden4_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="orden4_valor_unitario" name="orden4_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="button" class="btn btn-success btn-sm btn-block submit-orden4">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-orden-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="30%">Proveedor</th>
+                                            <th width="15%">Material</th>
+                                            <th width="15%">Insumo</th>
+                                            <th width="10%">Dimensiones</th>
+                                            <th width="5%">Cantidad</th>
+                                            <th width="10%">Valor unidad</th>
+                                            <th width="10%">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="7"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
 
@@ -478,6 +560,10 @@
                                                     <td class="text-right"><span id="info-viaticos"></span></td>
                                                 </tr>
                                                 <tr>
+                                                    <th colspan="4">Materiales</th>
+                                                    <td class="text-right"><span id="info-materiales"></span></td>
+                                                </tr>
+                                                <tr>
                                                     <th colspan="4">Áreas</th>
                                                     <td class="text-right"><span id="info-areas"></span></td>
                                                 </tr>
@@ -519,28 +605,77 @@
         </section>
     </script>
 
+    {{-- Templates para materialp --}}
+    <script type="text/template" id="orden-delete-materialp-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el material <b><%- materialp_nombre %> </b>?</p>
+    </script>
+
+    <script type="text/template" id="orden-producto-materialp-item-tpl">
+        <% if( edit ) { %>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-materialp-orden-remove" data-resource="<%- id %>">
+                    <span><i class="fa fa-times"></i></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-materialp-orden-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        <% } %>
+        <td><%- proveedor_nombre %></td>
+        <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- orden4_medidas %></td>
+        <td><%- orden4_cantidad %></td>
+        <td class="text-right"><%- window.Misc.currency( orden4_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( orden4_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="edit-materialproducto-tpl">
+        <div class="row">
+            <label class="col-sm-2 control-label">Proveedor</label>
+            <div class="form-group col-sm-10">
+                <label class="label-xs"><%- proveedor_nit %> - <%- proveedor_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-2 control-label">Material de producción</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- materialp_nombre %></label>
+            </div>
+
+            <label class="col-sm-2 control-label">Insumo</label>
+            <div class="form-group col-sm-4">
+                <label class="label-xs"><%- producto_nombre %></label>
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-1 control-label">Cantidad</label>
+            <div class="form-group col-sm-2">
+                <input type="number" id="orden4_cantidad" name="orden4_cantidad" placeholder="Cantidad" value="<%- orden4_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Medidas</label>
+            <div class="form-group col-sm-4">
+                <input type="text" id="orden4_medidas" name="orden4_medidas" placeholder="Medidas" value="<%- orden4_medidas %>" class="form-control input-xs" maxlength="50" required>
+                <div class="help-block with-errors"></div>
+            </div>
+
+            <label class="col-sm-1 control-label">Valor</label>
+            <div class="form-group col-sm-3">
+                <input id="orden4_valor_unitario" name="orden4_valor_unitario" value="<%- orden4_valor_unitario %>" class="form-control input-sm" type="text" required data-currency>
+            </div>
+        </div>
+    </script>
+
     <script type="text/template" id="orden-producto-maquina-item-tpl">
         <div class="form-group col-md-12">
             <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_<%- id %>">
                 <input type="checkbox" id="orden3_maquinap_<%- id %>" name="orden3_maquinap_<%- id %>" value="orden3_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
             </label>
         </div>
-    </script>
-
-    <script type="text/template" id="orden-producto-material-item-tpl">
-        <div class="form-group <%- (orden4_cantidad && orden4_medidas ) ? 'col-md-7' : 'col-md-12' %>">
-            <label class="checkbox-inline without-padding white-space-normal" for="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>">
-                <input type="checkbox" id="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" name="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" value="orden4_materialp_<%- materialp_id %>_<%- orden4_id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- materialp_nombre %>
-            </label>
-        </div>
-        <% if (orden4_cantidad && orden4_medidas ) { %>
-            <div class="form-group col-md-2 text-center">
-                <div><%- orden4_cantidad %></div>
-            </div>
-            <div class="form-group col-md-3 text-right">
-                <div><%- orden4_medidas %></div>
-            </div>
-        <% } %>
     </script>
 
     <script type="text/template" id="orden-producto-acabado-item-tpl">

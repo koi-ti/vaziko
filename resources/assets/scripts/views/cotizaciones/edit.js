@@ -182,11 +182,12 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                state = this.$(e.currentTarget).data();
+                state = this.$(e.currentTarget).data(),
+                name_state = this.$(e.currentTarget).text();
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo') },
+                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo'), cotizacion_state: name_state },
                     template: _.template( ($('#cotizacion-close-confirm-tpl').html() || '') ),
                     titleConfirm: 'Cerrar cotización',
                     onConfirm: function () {

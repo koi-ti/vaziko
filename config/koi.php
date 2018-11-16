@@ -229,7 +229,7 @@ return [
 
     'close' => [
         'state' => [
-            'R' => 'REASIGNAR',
+            'R' => 'RECOTIZAR',
             'N' => 'NO ACEPTADA',
             'O' => 'AL ABRIR ORDEN'
         ]

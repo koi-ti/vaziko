@@ -20,8 +20,8 @@
 						<label class="control-label">Código</label>
 						<div>
                             {{ $precotizacion->precotizacion_codigo }}
-                            @if( $precotizacion->precotizacion1_terminada )
-                                <span class="label label-primary">TERMINADA</span>
+                            @if( $precotizacion->precotizacion1_culminada )
+                                <span class="label label-primary">CULMINADA</span>
                             @elseif( $precotizacion->precotizacion_abierta )
                                 <span class="label label-success">ABIERTA</span>
                             @else

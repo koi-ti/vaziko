@@ -89,9 +89,21 @@ app || (app = {});
                     this.model.set('change', true);
                 }
 
-                this.model.set('precotizacion3_cantidad', data.precotizacion3_cantidad);
-                this.model.set('precotizacion3_medidas', data.precotizacion3_medidas);
-                this.model.set('precotizacion3_valor_unitario', data.precotizacion3_valor_unitario);
+                if( this.parameters.call == 'precotizacion' ){
+                    this.model.set('precotizacion3_cantidad', data.precotizacion3_cantidad);
+                    this.model.set('precotizacion3_medidas', data.precotizacion3_medidas);
+                    this.model.set('precotizacion3_valor_unitario', data.precotizacion3_valor_unitario);
+
+                }else if( this.parameters.call == 'cotizacion' ){
+                    this.model.set('cotizacion4_cantidad', data.cotizacion4_cantidad);
+                    this.model.set('cotizacion4_medidas', data.cotizacion4_medidas);
+                    this.model.set('cotizacion4_valor_unitario', data.cotizacion4_valor_unitario);
+
+                }else if( this.parameters.call == 'orden' ){
+                    this.model.set('orden4_cantidad', data.orden4_cantidad);
+                    this.model.set('orden4_medidas', data.orden4_medidas);
+                    this.model.set('orden4_valor_unitario', data.orden4_valor_unitario);
+                }
 
                 this.collection.trigger('reset');
                 this.$modal.modal('hide');

@@ -4,7 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
-use Auth, DB, Validator;
+use Auth, DB, Validator, Carbon\Carbon;
 
 class Tiempop extends BaseModel
 {
@@ -36,14 +36,15 @@ class Tiempop extends BaseModel
         $rules = [
             'tiempop_areap' => 'required|integer',
             'tiempop_actividadp' => 'required|integer',
-            'tiempop_fecha' => 'required|date_format:Y-m-d',
-            'tiempop_hora_inicio' => 'required|date_format:H:m',
-            'tiempop_hora_fin' => 'required|date_format:H:m',
+            'tiempop_fecha' => 'required|date_format:Y-m-d'
         ];
 
         // Validar que hora final no sea menor o igual a la inicial
+        $data['tiempop_hora_inicio'] = Carbon::parse("{$data['tiempop_hora_inicio']}:00")->toTimeString();
+        $data['tiempop_hora_fin'] = Carbon::parse("{$data['tiempop_hora_fin']}:00")->toTimeString();
+
         if( $data['tiempop_hora_fin'] <= $data['tiempop_hora_inicio'] ){
-            $this->errors = 'La hora final no puede ser menor o igual a la incial, por favor consulte al administrador.';
+            $this->errors = 'La hora de inicio no puede ser mayor o igual a la final.';
             return false;
         }
 

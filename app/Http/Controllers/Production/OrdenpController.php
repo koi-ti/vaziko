@@ -180,6 +180,7 @@ class OrdenpController extends Controller
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
                     // Orden de produccion
                     $orden->fill($data);
+                    $orden->fillBoolean($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_ano = date('Y');
                     $orden->orden_numero = $numero;
@@ -280,9 +281,11 @@ class OrdenpController extends Controller
                     }
                     // Orden
                     $orden->fill($data);
+                    $orden->fillBoolean($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_contacto = $contacto->id;
                     $orden->save();
+                    
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id, 'orden_iva' => $orden->orden_iva]);

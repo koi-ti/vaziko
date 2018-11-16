@@ -14,7 +14,7 @@
     </section>
 
    	<section class="content">
-	    <div class="box box-success" id="tiempop-main">
+	    <div id="tiempop-main" class="box box-success spinner-main">
 		 	{!! Form::open(['id' => 'form-tiempop', 'data-toggle' => 'validator']) !!}
                 <div class="box-body">
                     <div class="row">
@@ -26,7 +26,7 @@
                                         <i class="fa fa-building-o"></i>
                                     </button>
                                 </span>
-                                <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-estado="AT" data-name="tiempop_ordenp_beneficiario">
+                                <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-name="tiempop_ordenp_beneficiario">
                             </div>
                         </div>
                         <div class="col-md-5">
@@ -75,25 +75,21 @@
                         </div>
                         <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
                         <div class="form-group col-md-2">
-                            <div class="bootstrap-timepicker">
-                                <div class="input-group">
-                                    <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" class="form-control input-sm timepicker" required>
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
-                                    </div>
-                                </div>
+                            <div class="input-group clockpicker">
+                                <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" class="form-control" value="{{ date('H:i') }}" required>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
                         <div class="form-group col-md-2">
-                            <div class="bootstrap-timepicker">
-                                <div class="input-group">
-                                    <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control input-sm timepicker" required>
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-clock-o"></i>
-                                    </div>
-                                </div>
+                            <div class="input-group clockpicker">
+                                <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control" value="{{ date('H:i') }}" required>
+                                <span class="input-group-addon">
+                                    <span class="glyphicon glyphicon-time"></span>
+                                </span>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
@@ -110,34 +106,32 @@
         			</div>
                 @endif
             {!! Form::close() !!}
+        </div>
+
+        <div class="box box-success spinner-main">
+            <div class="box-header with-border">
+                <h3 class="box-title">Información adicional del sr(a) <b>{{ Auth::user()->getUsername() }}</b></h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+                    </button>
+                </div>
+            </div>
 
             <div class="box-body">
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Información adicional del sr(a) <b>{{ Auth::user()->getUsername() }}</b></h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="box-body table-responsive no-padding">
-                        <table id="browse-tiemposp-global-list" class="table table-bordered" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th width="2%">#</th>
-                                    <th width="20%">Orden</th>
-                                    <th width="20%">Actividad</th>
-                                    <th width="20%">Subactividad</th>
-                                    <th width="20%">Área</th>
-                                    <th width="8%">Fecha</th>
-                                    <th width="5%">H. inicio</th>
-                                    <th width="5%">H. fin</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
-                </div>
+                <table id="browse-tiemposp-global-list" class="table table-bordered table-responsive no-padding" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th width="2%">#</th>
+                            <th width="20%">Orden</th>
+                            <th width="20%">Actividad</th>
+                            <th width="20%">Subactividad</th>
+                            <th width="20%">Área</th>
+                            <th width="8%">Fecha</th>
+                            <th width="5%">H. inicio</th>
+                            <th width="5%">H. fin</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
 		</div>
 	</section>
@@ -190,31 +184,26 @@
     			<div class="help-block with-errors"></div>
     		</div>
 
-    		<label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
-    		<div class="form-group col-md-3">
-    			<div class="bootstrap-timepicker">
-    				<div class="input-group">
-    					<input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" placeholder="Inicio" value="<%- tiempop_hora_inicio %>" class="form-control input-sm timepicker" required>
-    					<div class="input-group-addon">
-    						<i class="fa fa-clock-o"></i>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="help-block with-errors"></div>
-    		</div>
-
-    		<label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
-    		<div class="form-group col-md-3">
-    			<div class="bootstrap-timepicker">
-    				<div class="input-group">
-    					<input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" value="<%- tiempop_hora_fin %>" class="form-control input-sm timepicker" required>
-    					<div class="input-group-addon">
-    						<i class="fa fa-clock-o"></i>
-    					</div>
-    				</div>
-    			</div>
-    			<div class="help-block with-errors"></div>
-    		</div>
+            <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
+            <div class="form-group col-md-2">
+                <div class="input-group clockpicker">
+                    <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" class="form-control" value="<%- moment(tiempop_hora_inicio, 'H:mm:ss').format('H:mm') %>" required>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
+            <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
+            <div class="form-group col-md-2">
+                <div class="input-group clockpicker">
+                    <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control" value="<%- moment(tiempop_hora_fin, 'H:mm:ss').format('H:mm') %>" required>
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+                <div class="help-block with-errors"></div>
+            </div>
     	</div>
     </script>
 @stop

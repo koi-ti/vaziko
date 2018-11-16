@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Tiempop, App\Models\Production\Actividadp, App\Models\Production\SubActividadp, App\Models\Production\Ordenp, App\Models\Production\Areap;
-use DB, Log, Auth;
+use DB, Log, Auth, Carbon\Carbon;
 
 class DetalleTiempospController extends Controller
 {
@@ -101,13 +101,16 @@ class DetalleTiempospController extends Controller
                         return response()->json(['success' => false, 'errors' => 'El tiempo que esta intentando editar no corresponde al tercero, por favor verifique la información o consulte al administrador.']);
                     }
 
+                    $convertinitialtime = Carbon::parse("$request->tiempop_hora_inicio:00")->toTimeString();
+                    $convertendtime = Carbon::parse("$request->tiempop_hora_fin:00")->toTimeString();
+
                     // Validar rango hora inicio
                     $query = Tiempop::query();
                     $query->where('tiempop_tercero', Auth::user()->id);
                     $query->where('tiempop_fecha', $request->tiempop_fecha);
-                    $query->where(function ($query) use ($request, $tiempop){
-                        $query->where('tiempop_hora_inicio', '<=', $request->tiempop_hora_inicio);
-                        $query->where('tiempop_hora_fin', '>', $request->tiempop_hora_inicio);
+                    $query->where(function ($query) use ($convertinitialtime, $convertendtime, $tiempop){
+                        $query->where('tiempop_hora_inicio', '<=', $convertinitialtime);
+                        $query->where('tiempop_hora_fin', '>', $convertendtime);
                         $query->where('koi_tiempop.id', '!=', $tiempop->id);
                     });
                     $rango = $query->get();
@@ -116,8 +119,8 @@ class DetalleTiempospController extends Controller
                         return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede interferir con otras ya registradas, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    if( $request->tiempop_hora_fin <= $request->tiempop_hora_inicio ){
-                        return response()->json(['success' => false, 'errors' => 'La hora final no puede ser menor o igual a la incial, por favor verifique la información o consulte al administrador.']);
+                    if( $convertendtime <= $convertinitialtime ){
+                        return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede ser mayor o igual a la final.']);
                     }
 
                     // Recuperar ordenp

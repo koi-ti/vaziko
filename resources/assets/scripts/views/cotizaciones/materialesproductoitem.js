@@ -11,9 +11,8 @@ app || (app = {});
 
     app.MaterialesProductopCotizacionItemView = Backbone.View.extend({
 
-        tagName: 'div',
-        className : 'row',
-        template: _.template( ($('#cotizacion-producto-material-item-tpl').html() || '') ),
+        tagName: 'tr',
+        template: _.template( ($('#cotizacion-producto-materialp-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },

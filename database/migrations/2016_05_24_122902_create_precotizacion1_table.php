@@ -24,7 +24,7 @@ class CreatePrecotizacion1Table extends Migration
              $table->string('precotizacion1_ano', 4);
              $table->date('precotizacion1_fecha');
              $table->boolean('precotizacion1_abierta')->default(false);
-             $table->boolean('precotizacion1_terminada')->default(false);
+             $table->boolean('precotizacion1_culminada')->default(false);
              $table->string('precotizacion1_observaciones');
              $table->datetime('precotizacion1_fh_elaboro');
              $table->integer('precotizacion1_usuario_elaboro')->unsigned();

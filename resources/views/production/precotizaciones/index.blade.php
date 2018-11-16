@@ -27,6 +27,7 @@
                                 <option value="" selected>Todas</option>
                                 <option value="A" {{ session('searchprecotizacion_estado') == 'A' ? 'selected': '' }}>Abiertas</option>
                                 <option value="C" {{ session('searchprecotizacion_estado') == 'C' ? 'selected': '' }}>Cerradas</option>
+                                <option value="T" {{ session('searchprecotizacion_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
                             </select>
                         </div>
 

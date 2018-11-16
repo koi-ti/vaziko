@@ -21,7 +21,26 @@ app || (app = {});
         */
         initialize : function(){
 
-        }
+        },
+
+        totalRow: function( ){
+            _.each( this.models, function( model ) {
+                var total = parseFloat( model.get('orden4_valor_unitario') ) * model.get('orden4_cantidad');
+                model.set('orden4_valor_total', total);
+            });
+        },
+
+        total: function() {
+            return this.reduce(function(sum, model){
+                return sum + parseFloat( model.get('orden4_valor_unitario') ) * model.get('orden4_cantidad');
+            }, 0);
+        },
+
+        totalize: function () {
+            var total = this.total();
+            this.totalRow();
+            return { total: total }
+        },
    });
 
 })(this, this.document);

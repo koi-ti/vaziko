@@ -128,6 +128,7 @@ class PreCotizacion3Controller extends Controller
                 // Recuperar precotizacion3
                 $precotizacion3 = PreCotizacion3::find( $id );
                 if(!$precotizacion3 instanceof PreCotizacion3){
+                    DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el item a eliminar, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 

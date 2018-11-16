@@ -18,12 +18,20 @@ class CreateOrdenproduccion4Table extends Migration
             $table->increments('id');
             $table->integer('orden4_orden2')->unsigned();
             $table->integer('orden4_materialp')->unsigned();
+            $table->integer('orden4_producto')->unsigned()->nullable();
+            $table->integer('orden4_proveedor')->unsigned();
             $table->double('orden4_cantidad')->default(0);
-            $table->double('orden4_precio')->default(0);
             $table->string('orden4_medidas', 50)->nullable();
+            $table->double('orden4_valor_unitario')->default(0);
+            $table->double('orden4_valor_total')->default(0);
+            $table->datetime('orden4_fh_elaboro');
+            $table->integer('orden4_usuario_elaboro')->unsigned();
 
             $table->foreign('orden4_orden2')->references('id')->on('koi_ordenproduccion2')->onDelete('restrict');
             $table->foreign('orden4_materialp')->references('id')->on('koi_materialp')->onDelete('restrict');
+            $table->foreign('orden4_producto')->references('id')->on('koi_producto')->onDelete('restrict');
+            $table->foreign('orden4_proveedor')->references('id')->on('koi_tercero')->onDelete('restrict');
+            $table->foreign('orden4_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
     }
 

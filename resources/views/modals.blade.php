@@ -468,7 +468,8 @@
 			                	<th>Ano</th>
 				                <th>Numero</th>
 			                	<th width="70%">Tercero</th>
-			                	<th width="20%">Fecha</th>
+			                	<th width="10%">Fecha</th>
+			                	<th width="10%">Estado</th>
 				            </tr>
 				        </thead>
 		            </table>

@@ -122,7 +122,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var _this = this;
-                    data = window.Misc.formToJson( e.target );
+                var data = window.Misc.formToJson( e.target );
                     data.type = this.parameters.dataFilter.type;
 
                 this.model.save( data, {patch: true, silent: true} );
@@ -140,8 +140,8 @@ app || (app = {});
             if( typeof window.initComponent.initDatePicker == 'function' )
                 window.initComponent.initDatePicker();
 
-            if( typeof window.initComponent.initTimePicker == 'function' )
-                window.initComponent.initTimePicker();
+            if( typeof window.initComponent.initClockPicker == 'function' )
+                window.initComponent.initClockPicker();
 
             if( typeof window.initComponent.initSelect2 == 'function' )
                 window.initComponent.initSelect2();

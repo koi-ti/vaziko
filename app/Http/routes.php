@@ -179,7 +179,7 @@ Route::group(['middleware' => 'auth'], function()
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
 			Route::get('search', ['as' => 'ordenes.productos.search', 'uses' => 'Production\DetalleOrdenpController@search']);
 			Route::resource('maquinas', 'Production\DetalleMaquinasController', ['only' => ['index']]);
-			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
 			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\DetalleImpresionesController', ['only' => ['index']]);
@@ -247,7 +247,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::group(['prefix' => 'productos'], function(){
 			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
 			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
-			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
 			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('impresiones', 'Production\Cotizacion7Controller', ['only' => ['index']]);

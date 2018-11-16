@@ -41,6 +41,7 @@ var app = app || {};
             this.initToUpper();
             this.initSpinner();
             this.initDatePicker();
+            this.initClockPicker();
             this.initTimePicker();
         },
 
@@ -231,6 +232,18 @@ var app = app || {};
                 autoclose: true,
                 language: 'es',
                 format: 'yyyy-mm-dd'
+            });
+        },
+
+        /**
+        * Init Timepicker
+        */
+        initClockPicker: function () {
+
+            $(".clockpicker").clockpicker({
+                autoclose: true,
+                placement: 'bottom',
+                align: 'top'
             });
         },
 
