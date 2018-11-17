@@ -54,6 +54,7 @@ class AuxiliarContableController extends Controller
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
             $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
             $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
+            $query->orderBy('cuenta', 'asc');
 
             // Prepare data
             $auxcontable = $query->get();

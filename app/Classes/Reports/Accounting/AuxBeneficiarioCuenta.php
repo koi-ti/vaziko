@@ -89,8 +89,8 @@ class AuxBeneficiarioCuenta extends FPDF
             $this->Cell(45,5,$item->folder_nombre,'',0,'',$fill);
             $this->Cell(50,5,$item->documento_nombre,'',0,'',$fill);
             $this->Cell(90,5,utf8_decode($item->asiento2_detalle),'',0,'',$fill);
-            $this->Cell(30,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(30,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(30,5,$item->debito,'',0,'R',$fill);
+            $this->Cell(30,5,$item->credito,'',0,'R',$fill);
 
             // Obtener saldo
             $this->Cell(30,5,$this->getSaldo($item->debito, $item->credito),'',0,'R',$fill);
@@ -115,18 +115,19 @@ class AuxBeneficiarioCuenta extends FPDF
 
     function getSaldo($debito, $credito)
     {
-        $saldo = number_format ($debito - $credito,2,',' , '.');
+        $saldo = $debito - $credito;
         if ($debito < $credito)
-            $saldo = number_format ($credito - $debito,2,',' , '.'). ' CR';
+            $saldo = ($credito - $debito).' CR';
         return $saldo;
     }
+
     function totalTercero($tercero, $tdebito, $tcredito)
     {
         list($nit, $nombre) = explode('-', $tercero);
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(200,5,'TOTAL '. utf8_decode($nombre),0,0,'R');
-        $this->Cell(30,5,number_format ($tdebito,2,',' , '.'),0,0,'R');
-        $this->Cell(30,5,number_format ($tcredito,2,',' , '.'),0,0,'R');
+        $this->Cell(30,5,$tdebito,0,0,'R');
+        $this->Cell(30,5,$tcredito,0,0,'R');
 
         // Obtener saldo
         $this->Cell(30,5,$this->getSaldo($tdebito, $tcredito),'',0,'R');
@@ -136,8 +137,8 @@ class AuxBeneficiarioCuenta extends FPDF
     {
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(200,5,'TOTALES',0,0,'R');
-        $this->Cell(30,5,number_format ($debito,2,',' , '.'),0,0,'R');
-        $this->Cell(30,5,number_format ($credito,2,',' , '.'),0,0,'R');
+        $this->Cell(30,5,$debito,0,0,'R');
+        $this->Cell(30,5,$credito,0,0,'R');
 
         // Obtener saldo
         $this->Cell(30,5,$this->getSaldo($debito, $credito),'',0,'R');

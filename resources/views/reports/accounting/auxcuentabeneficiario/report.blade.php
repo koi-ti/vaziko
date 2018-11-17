@@ -15,49 +15,52 @@
 			</tr>
 		</thead>
 		<tbody>
-			{{--*/  $tercero = '' ; $debito = $credito = $tdebito = $tcredito = 0; /*--}}
+			{{--*/
+				$tercero = '' ;
+				$debito = $credito = $tdebito = $tcredito = 0;
+			/*--}}
 			<tr>
-				<td colspan="7">{{$subtitle}}</td>
+				<td colspan="7">{{ $subtitle }}</td>
 			</tr>
 			@foreach($auxcontable as $key => $item)
 				@if($tercero != $item->tercero_nit)
 					@if($key > 0)
 						{{--*/ list($nit, $nombre) = explode('-', $nombre); /*--}}
 						<tr>
-							<th colspan="4">TOTAL {{$nombre}}</th>
-							<th>{{number_format ($tdebito,2,',' , '.')}}</th>
-							<th>{{number_format ($tcredito,2,',' , '.')}}</th>
+							<th colspan="4">TOTAL {{ $nombre }}</th>
+							<th>{{ $tdebito }}</th>
+							<th>{{ $tcredito }}</th>
 
 							<!-- Obtener saldo -->
-							{{--*/ $saldo = number_format ($tdebito - $tcredito,2,',' , '.') /*--}}
+							{{--*/ $saldo = $tdebito - $tcredito /*--}}
 							@if ($tdebito < $tcredito)
-								{{--*/ $saldo = number_format ($tcredito - $tdebito,2,',' , '.'). ' CR' /*--}}
+								{{--*/ $saldo = ($tcredito - $tdebito).' CR' /*--}}
 							@endif
 
-							<th>{{$saldo}}</th>
+							<th>{{ $saldo }}</th>
 							{{--*/ $tdebito = $tcredito = 0; /*--}}
 						</tr>
 					@endif
 					{{--*/ $nombre = "$item->tercero_nit - $item->tercero_nombre"; /*--}}
 					<tr>
-						<td colspan="7">{{$nombre}}</td>
+						<td colspan="7">{{ $nombre }}</td>
 					</tr>
 				@endif
 				<tr>
-					<td>{{$item->date}}</td>
-					<td>{{$item->folder_nombre}}</td>
-					<td>{{$item->documento_nombre}}</td>
-					<td>{{$item->asiento2_detalle}}</td>
-					<td>{{number_format ($item->debito,2,',' , '.')}}</td>
-					<td>{{number_format ($item->credito,2,',' , '.')}}</td>
+					<td>{{ $item->date }}</td>
+					<td>{{ $item->folder_nombre }}</td>
+					<td>{{ $item->documento_nombre }}</td>
+					<td>{{ $item->asiento2_detalle }}</td>
+					<td>{{ $item->debito }}</td>
+					<td>{{ $item->credito }}</td>
 
 					<!-- Obtener saldo -->
-					{{--*/ $saldo = number_format ($item->debito - $item->credito,2,',' , '.') /*--}}
+					{{--*/ $saldo = $item->debito - $item->credito /*--}}
 					@if ($item->debito < $item->credito)
-						{{--*/ $saldo = number_format ($item->credito - $item->debito,2,',' , '.'). ' CR' /*--}}
+						{{--*/ $saldo = ($item->credito - $item->debito).' CR' /*--}}
 					@endif
 
-					<td>{{$saldo}}</td>
+					<td>{{ $saldo }}</td>
 				</tr>
 				{{--*/
 					$tercero = $item->tercero_nit;
@@ -69,14 +72,14 @@
 				@if ($key == $auxcontable->count()-1)
 					{{--*/ list($nit, $nombre) = explode('-', $nombre); /*--}}
 					<tr>
-						<th colspan="4">TOTAL {{$nombre}}</th>
-						<th>{{number_format ($tdebito,2,',' , '.')}}</th>
-						<th>{{number_format ($tcredito,2,',' , '.')}}</th>
+						<th colspan="4">TOTAL {{ $nombre }}</th>
+						<th>{{ $tdebito }}</th>
+						<th>{{ $tcredito }}</th>
 
 						<!-- Obtener saldo -->
-						{{--*/ $saldo = number_format ($tdebito - $tcredito,2,',' , '.') /*--}}
+						{{--*/ $saldo = $tdebito - $tcredito /*--}}
 						@if ($tdebito < $tcredito)
-							{{--*/ $saldo = number_format ($tcredito - $tdebito,2,',' , '.'). ' CR' /*--}}
+							{{--*/ $saldo = ($tcredito - $tdebito).' CR' /*--}}
 						@endif
 
 						<th>{{ $saldo }}</th>
@@ -86,14 +89,15 @@
 			@endforeach
 			<tr>
 				<th colspan="4">TOTALES</th>
-				<th>{{number_format ($debito,2,',' , '.')}}</th>
-				<th>{{number_format ($credito,2,',' , '.')}}</th>
+				<th>{{ $debito }}</th>
+				<th>{{ $credito }}</th>
+
 				<!-- Obtener saldo -->
-				{{--*/ $saldo = number_format ($debito - $credito,2,',' , '.') /*--}}
+				{{--*/ $saldo = $debito - $credito /*--}}
 				@if ($debito < $credito)
-					{{--*/ $saldo = number_format ($credito - $debito,2,',' , '.'). ' CR' /*--}}
+					{{--*/ $saldo = ($credito - $debito).' CR' /*--}}
 				@endif
-				<th>{{$saldo}}</th>
+				<th>{{ $saldo }}</th>
 			</tr>
 		</tbody>
 	</table>

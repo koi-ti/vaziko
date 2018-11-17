@@ -19,21 +19,21 @@
 			{{--*/ $debito = $credito = 0; /*--}}
 
 			<tr>
-				<th colspan="4">{{$subtitle}}</th>
-				<th>{{number_format ($saldo->inicial,2,',' , '.')}}</th>
-				<th>{{number_format ($saldo->debitomes,2,',' , '.')}}</th>
-				<th>{{number_format ($saldo->creditomes,2,',' , '.')}}</th>
-				<th>{{number_format ($saldo->final,2,',' , '.')}}</th>
+				<th colspan="4">{{ $subtitle }}</th>
+				<th>{{ $saldo->inicial }}</th>
+				<th>{{ $saldo->debitomes }}</th>
+				<th>{{ $saldo->creditomes }}</th>
+				<th>{{ $saldo->final }}</th>
 			</tr>
 			@foreach($auxcontable as $key => $item)
 				<tr>
-					<td>{{$item->date}}</td>
-					<td>{{$item->folder_codigo}}</td>
-					<td>{{$item->documento_nombre}}</td>
-					<td>{{utf8_decode($item->asiento2_detalle)}}</td>
+					<td>{{ $item->date }}</td>
+					<td>{{ $item->folder_codigo }}</td>
+					<td>{{ $item->documento_nombre }}</td>
+					<td>{{ utf8_decode($item->asiento2_detalle) }}</td>
 					<td></td>
-					<td>{{number_format ($item->debito,2,',' , '.')}}</td>
-					<td>{{number_format ($item->credito,2,',' , '.')}}</td>
+					<td>{{ $item->debito }}</td>
+					<td>{{ $item->credito }}</td>
 
 					<!--  Obtener saldo -->
 					@if ($item->debito < $item->credito)
@@ -42,7 +42,7 @@
 						{{--*/ $saldo->inicial -= $item->debito - $item->credito; /*--}}
 					@endif
 
-					<td>{{number_format ($saldo->inicial,2,',' , '.')}}</td>
+					<td>{{ $saldo->inicial }}</td>
 				</tr>
 				{{--*/
 					$nombre = "$item->tercero_nit - $item->tercero_nombre";
@@ -50,16 +50,16 @@
 					$credito += $item->credito;
 				/*--}}
 				<tr>
-					<td colspan="8">{{$nombre}}</td>
+					<td colspan="8">{{ $nombre }}</td>
 				</tr>
 			@endforeach
 		</tbody>
 		<tfoot>
 			<tr>
 				<th colspan="5">TOTALES</th>
-				<th>{{number_format ($debito,2,',' , '.')}}</th>
-				<th>{{number_format ($credito,2,',' , '.')}}</th>
-				<th>{{number_format ($saldo->inicial,2,',' , '.')}}</th>
+				<th>{{ $debito }}</th>
+				<th>{{ $credito }}</th>
+				<th>{{ $saldo->inicial }}</th>
 			</tr>
 		</tfoot>
 	</table>

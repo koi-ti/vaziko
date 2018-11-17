@@ -70,10 +70,10 @@ class AuxPorCuenta extends FPDF
         $this->SetFillColor(247,247,247);
         $debito = $credito = 0;
         $this->Cell(170,5,"$this->subtitle",0,0,'R');
-        $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),'',0,'R');
-        $this->Cell(30,5,number_format ($this->saldo->debitomes,2,',' , '.'),'',0,'R');
-        $this->Cell(30,5,number_format ($this->saldo->creditomes,2,',' , '.'),'',0,'R');
-        $this->Cell(30,5,number_format ($this->saldo->final,2,',' , '.'),'',0,'R');
+        $this->Cell(30,5,$this->saldo->inicial,'',0,'R');
+        $this->Cell(30,5,$this->saldo->debitomes,'',0,'R');
+        $this->Cell(30,5,$this->saldo->creditomes,'',0,'R');
+        $this->Cell(30,5,$this->saldo->final,'',0,'R');
         $this->Ln(5);
 
         foreach($data as $key => $item){
@@ -85,11 +85,11 @@ class AuxPorCuenta extends FPDF
             $this->Cell(50,5,$item->documento_nombre,'',0,'',$fill);
             $this->Cell(90,5,utf8_decode($item->asiento2_detalle),'',0,'',$fill);
             $this->Cell(30,5,'','',0,'R',$fill);
-            $this->Cell(30,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(30,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(30,5,$item->debito,'',0,'R',$fill);
+            $this->Cell(30,5,$item->credito,'',0,'R',$fill);
             // Obtener saldo
             $this->getSaldo($item->debito, $item->credito);
-            $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(30,5,$this->saldo->inicial,'',0,'R',$fill);
             $this->Ln();
 
             $nombre = "$item->tercero_nit - $item->tercero_nombre";
@@ -117,8 +117,8 @@ class AuxPorCuenta extends FPDF
     {
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(200,5,'TOTALES',0,0,'R');
-        $this->Cell(30,5,number_format ($debito,2,',' , '.'),0,0,'R');
-        $this->Cell(30,5,number_format ($credito,2,',' , '.'),0,0,'R');
-        $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),0,0,'R');
+        $this->Cell(30,5,$debito,0,0,'R');
+        $this->Cell(30,5,$credito,0,0,'R');
+        $this->Cell(30,5,$this->saldo->inicial,0,0,'R');
     }
 }

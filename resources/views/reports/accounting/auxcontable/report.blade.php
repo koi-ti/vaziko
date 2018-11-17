@@ -34,9 +34,9 @@
 					<td class="size-6">{{$item->tercero_nombre}}</td>
 					<td class="center">-</td>
 					<td class="center">-</td>
-					<td class="size-6">{{ number_format ($item->debito,2,',' , '.') }}</td>
-					<td class="size-6">{{ number_format ($item->credito,2,',' , '.') }}</td>
-					<td class="size-6">{{ number_format ($item->base,2,',' , '.') }}</td>
+					<td class="size-6">{{ $item->debito }}</td>
+					<td class="size-6">{{ $item->credito }}</td>
+					<td class="size-6">{{ $item->base }}</td>
 				</tr>
 				{{--*/ $cuenta = $item->cuenta /*--}}
 			@endforeach

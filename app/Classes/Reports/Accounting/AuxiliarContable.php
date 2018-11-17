@@ -78,9 +78,9 @@ class AuxiliarContable extends FPDF
             $this->Cell(75,5,utf8_decode($item->tercero_nombre),'',0,'',$fill);
             $this->Cell(20,5,'-','',0,'C',$fill);
             $this->Cell(15,5,'-','',0,'C',$fill);
-            $this->Cell(25,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(25,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
-            $this->Cell(25,5,number_format ($item->base,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(25,5, $item->debito,'',0,'R',$fill);
+            $this->Cell(25,5, $item->credito,'',0,'R',$fill);
+            $this->Cell(25,5, $item->base,'',0,'R',$fill);
             $this->Ln();
             $cuenta = $item->cuenta;
         }
