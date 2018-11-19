@@ -662,8 +662,8 @@ class DetalleOrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('orden2_id')) {
-            $ordenp2 = Ordenp2::getDetail($request->orden2_id);
+        if($request->has('ordenp2')) {
+            $ordenp2 = Ordenp2::getDetail($request->ordenp2);
             if($ordenp2 instanceof Ordenp2) {
                 return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
             }

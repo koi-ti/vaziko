@@ -142,7 +142,7 @@ app || (app = {});
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
 
-			var orden2_id = this.$inputContent.val();
+			var ordenp2 = this.$inputContent.val();
 
             // Validate tercero
             var tercero = this.$inputContent.attr("data-tercero");
@@ -154,12 +154,14 @@ app || (app = {});
             // Before eval clear data
             this.$inputName.val('');
 
-			if(!_.isUndefined(orden2_id) && !_.isNull(orden2_id) && orden2_id != '') {
+			if(!_.isUndefined(ordenp2) && !_.isNull(ordenp2) && ordenp2 != '') {
 				// Get Orden
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.productos.search')),
 	                type: 'GET',
-	                data: { orden2_id: orden2_id },
+	                data: {
+                        ordenp2: ordenp2
+                    },
 	                beforeSend: function() {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner( _this.$wraperConten );

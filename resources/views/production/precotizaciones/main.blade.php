@@ -34,14 +34,14 @@
                                 </div>
                             <% } %>
 
-                            <label for="precotizacion1_fecha" class="col-md-1 control-label">Fecha</label>
-                            <div class="form-group col-md-2">
+                            <label for="precotizacion1_fecha" class="col-xs-12 col-md-1 control-label">Fecha</label>
+                            <div class="form-group col-xs-12 col-md-2">
                                 <input type="text" id="precotizacion1_fecha" name="precotizacion1_fecha" placeholder="Fecha" class="form-control input-sm datepicker" value="<%- precotizacion1_fecha %>" required>
                             </div>
 
                             <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                                <div class="col-md-offset-5 col-md-2">
-                                    <div class="btn-group btn-group-justified">
+                                <div class="col-md-offset-5 col-xs-12 col-md-2">
+                                    <div class="btn-group btn-group-justified btn-group-sm">
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
                                             <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
                                             <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
@@ -55,15 +55,15 @@
                             <% } %>
                         </div>
                         <div class="row">
-                            <label for="precotizacion1_referencia" class="col-sm-1 control-label">Referencia</label>
-                            <div class="form-group col-md-10">
+                            <label for="precotizacion1_referencia" class="col-xs-12 col-sm-1 control-label">Referencia</label>
+                            <div class="form-group col-xs-12 col-md-10">
                                 <input id="precotizacion1_referencia" value="<%- precotizacion1_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="precotizacion1_referencia" type="text" maxlength="100" required>
                             </div>
                         </div>
 
                         <div class="row">
-                            <label for="precotizacion1_cliente" class="col-sm-1 control-label">Cliente</label>
-                            <div class="form-group col-sm-3">
+                            <label for="precotizacion1_cliente" class="col-xs-12 col-sm-1 control-label">Cliente</label>
+                            <div class="form-group col-xs-12 col-sm-3">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-btn">
                                         <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="precotizacion1_cliente">
@@ -84,7 +84,7 @@
                         </div>
 
                         <div class="row">
-                            <label for="tcontacto_nombre" class="col-sm-1 control-label">Contacto</label>
+                            <label for="tcontacto_nombre" class="col-xs-12 col-sm-1 control-label">Contacto</label>
                             <div class="form-group col-sm-5 col-xs-10">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-btn">
@@ -96,14 +96,15 @@
                                     <input id="tcontacto_nombre" placeholder="Contacto" class="form-control" name="tcontacto_nombre" type="text" value="<%- tcontacto_nombre %>" readonly required>
                                 </div>
                             </div>
+
                             <div class="col-sm-1 col-xs-2">
                                 <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="precotizacion1_contacto" data-name="tcontacto_nombre" data-tercero="<%- precotizacion1_cliente %>" data-phone="tcontacto_telefono">
                                     <i class="fa fa-plus"></i>
                                 </button>
                             </div>
 
-                            <label for="tcontacto_telefono" class="col-sm-1 control-label">Teléfono</label>
-                            <div class="form-group col-md-3">
+                            <label for="tcontacto_telefono" class="col-xs-12 col-sm-1 control-label">Teléfono</label>
+                            <div class="form-group col-xs-12 col-md-3">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-phone"></i>
@@ -114,14 +115,14 @@
                         </div>
 
                         <div class="row">
-                            <label for="precotizacion1_suministran" class="col-sm-1 control-label">Suministran</label>
-                            <div class="form-group col-sm-10">
+                            <label for="precotizacion1_suministran" class="col-xs-12 col-sm-1 control-label">Suministran</label>
+                            <div class="form-group col-xs-12 col-sm-10">
                                 <input id="precotizacion1_suministran" placeholder="Suministran" class="form-control" name="precotizacion1_suministran" type="text" value="<%- precotizacion1_suministran %>" required maxlength="200">
                             </div>
                         </div>
                         <div class="row">
-                            <label for="precotizacion1_observaciones" class="col-sm-1 control-label">Detalle</label>
-                            <div class="form-group col-sm-10">
+                            <label for="precotizacion1_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
+                            <div class="form-group col-xs-12 col-sm-10">
                                 <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>
                             </div>
                         </div>

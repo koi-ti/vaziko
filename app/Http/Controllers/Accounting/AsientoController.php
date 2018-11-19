@@ -30,10 +30,16 @@ class AsientoController extends Controller
                 session(['search_tercero' => $request->has('asiento_tercero_nit') ? $request->asiento_tercero_nit : '']);
                 session(['search_tercero_nombre' => $request->has('asiento_tercero_nombre') ? $request->asiento_tercero_nombre : '']);
                 session(['search_documento' => $request->has('asiento_documento') ? $request->asiento_documento : '']);
+                session(['search_numero' => $request->has('asiento_numero') ? $request->asiento_numero : '']);
             }
 
             return Datatables::of($query)
                 ->filter(function($query) use ($request){
+                    // Tercero nit
+                    if($request->has('asiento_numero')) {
+                        $query->where('asiento1_numero', $request->asiento_numero);
+                    }
+
                     // Tercero nit
                     if($request->has('asiento_tercero_nit')) {
                         $query->where('tercero_nit', $request->asiento_tercero_nit);

@@ -7,17 +7,15 @@ use Auth;
 
 class EstadoCartera extends FPDF
 {
-
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +29,8 @@ class EstadoCartera extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +40,7 @@ class EstadoCartera extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(35,5,'DOCUMENTO',1);
         $this->Cell(30,5,'FECHA',1);
@@ -54,8 +51,7 @@ class EstadoCartera extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $tercero = '' ;
@@ -92,8 +88,8 @@ class EstadoCartera extends FPDF
         }
         $this->Output('d',sprintf('%s_%s_%s.pdf', 'estado_cartera', date('Y_m_d'), date('H_m_s')));
     }
-    function totalSaldo($tsaldo)
-    {
+
+    function totalSaldo($tsaldo) {
         $this->SetFont('Arial', 'B', 8);
         $this->Cell(240,5,'Total',0,0,'R');
         $this->Cell(30,5,number_format ($tsaldo,2,',' , '.'),0,0,'R');

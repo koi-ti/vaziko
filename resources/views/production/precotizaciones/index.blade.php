@@ -48,13 +48,13 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-2 col-xs-4">
+                        <div class="col-md-offset-3 col-xs-12 col-sm-3 col-md-3">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
-                        <div class="col-md-2 col-xs-4">
+                        <div class="col-md-2 col-xs-12 col-sm-3 col-md-3">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
-                        <div class="col-md-2 col-xs-4">
+                        <div class="col-md-2 col-xs-12 col-sm-3 col-md-3">
                             <a href="{{ route('precotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
                                 <i class="fa fa-plus"></i> Nueva pre-cotización
                             </a>

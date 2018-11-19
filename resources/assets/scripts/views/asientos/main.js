@@ -29,6 +29,7 @@ app || (app = {});
             // References
             this.$searchTercero = this.$('#search_tercero');
             this.$searchTerceroName = this.$('#search_tercero_nombre');
+            this.$searchNumero = this.$('#search_numero');
             this.$searchReferencia = this.$('#search_referencia');
             this.$searchDocumento = this.$('#search_documento');
 
@@ -43,6 +44,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('asientos.index') ),
                     data: function( data ) {
                         data.persistent = true;
+                        data.asiento_numero = _this.$searchNumero.val();
                         data.asiento_tercero_nit = _this.$searchTercero.val();
                         data.asiento_tercero_nombre = _this.$searchTerceroName.val();
                         data.asiento_documento = _this.$searchDocumento.val();
@@ -115,6 +117,7 @@ app || (app = {});
             this.$searchTercero.val('');
             this.$searchTerceroName.val('');
             this.$searchReferencia.val('');
+            this.$searchNumero.val('');
             this.$searchDocumento.val('').trigger('change');
 
             this.asientosSearchTable.ajax.reload();

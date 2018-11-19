@@ -10,8 +10,7 @@ class TiempoProduccion extends FPDF_CellFit
     private $title;
     private $data;
 
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->title = $title;
 
         $this->SetMargins(5,5,5);
@@ -21,8 +20,7 @@ class TiempoProduccion extends FPDF_CellFit
         $this->table( $data );
     }
 
-    function Header()
-    {
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
         $this->SetFont('Arial','B',13);
@@ -36,15 +34,13 @@ class TiempoProduccion extends FPDF_CellFit
         $this->Ln(10);
     }
 
-    function Footer()
-    {
+    function Footer() {
         $this->SetY(-10);
         $this->SetFont('Arial','I',8);
         $this->Cell(0,10, utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'C');
     }
 
-    function table( $tiempos )
-    {
+    function table( $tiempos ) {
         foreach ($tiempos as $funcionario) {
             $this->SetFont('Arial','B',8);
             $this->Cell(0, 5, $funcionario->tercero->tercero_nombre, 0, 0,'C');
