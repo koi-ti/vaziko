@@ -8,16 +8,15 @@ use Auth;
 class MayorBalance extends FPDF
 {
 
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +30,8 @@ class MayorBalance extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +41,7 @@ class MayorBalance extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',9);
 
         $this->Cell(40,4,'Cuenta',1);
@@ -55,13 +53,12 @@ class MayorBalance extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $this->SetFont('Arial', '', 8);
 
-         $sdebito = $scredito = $tfinal = $tinicio = 0;
+        $sdebito = $scredito = $tfinal = $tinicio = 0;
         foreach($data as $saldo){
 
             $this->Cell(40,4,$saldo->plancuentas_cuenta,'',0,'',$fill);

@@ -95,13 +95,6 @@ app || (app = {});
                             '<li><a href="#" class="close-cotizacion" data-state="N" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'">NO ACEPTADA</a></li>' +
                             '</ul></div>';
 
-                            // const close = `<div class="btn-group btn-group-xs">
-                            //     <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
-                            //     <ul class="dropdown-menu pull-right">
-                            //         <li><a href="#" class="close-cotizacion" data-state="R" data-resource="`+ full.id +`" data-code="`+ full.cotizacion_codigo +`">RECOTIZAR</a></li>
-                            //         <li><a href="#" class="close-cotizacion" data-state="N" data-resource="`+ full.id +`" data-code="`+ full.cotizacion_codigo +`">NO ACEPTADA</a></li>
-                            //     </ul>
-                            // </div>`;
                             const open = '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
                             const clone = '<a class="btn btn-danger btn-xs clone-cotizacion" title="Clonar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
                             const generate = '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-sticky-note"></i></a>';

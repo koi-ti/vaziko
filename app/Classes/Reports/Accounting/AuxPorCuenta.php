@@ -10,8 +10,8 @@ class AuxPorCuenta extends FPDF
     private $title;
     private $subtitle;
     private $saldo;
-    function buldReport($data, $saldo, $title, $subtitle)
-    {
+
+    function buldReport($data, $saldo, $title, $subtitle) {
         $this->title = $title;
         $this->subtitle = $subtitle;
         $this->saldo = $saldo;
@@ -22,8 +22,8 @@ class AuxPorCuenta extends FPDF
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -39,8 +39,8 @@ class AuxPorCuenta extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -50,8 +50,7 @@ class AuxPorCuenta extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(15,5,'Fecha',1);
         $this->Cell(15,5,'Folder',1);
@@ -64,20 +63,17 @@ class AuxPorCuenta extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $debito = $credito = 0;
         $this->Cell(170,5,"$this->subtitle",0,0,'R');
-        $this->Cell(30,5,$this->saldo->inicial,'',0,'R');
-        $this->Cell(30,5,$this->saldo->debitomes,'',0,'R');
-        $this->Cell(30,5,$this->saldo->creditomes,'',0,'R');
-        $this->Cell(30,5,$this->saldo->final,'',0,'R');
+        $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),'',0,'R');
+        $this->Cell(30,5,number_format ($this->saldo->debitomes,2,',' , '.'),'',0,'R');
+        $this->Cell(30,5,number_format ($this->saldo->creditomes,2,',' , '.'),'',0,'R');
+        $this->Cell(30,5,number_format ($this->saldo->final,2,',' , '.'),'',0,'R');
         $this->Ln(5);
-
         foreach($data as $key => $item){
-
             $this->SetFont('Arial', '', 7);
             $fill = !$fill;
             $this->Cell(15,5,$item->date,'',0,'',$fill);
@@ -85,11 +81,11 @@ class AuxPorCuenta extends FPDF
             $this->Cell(50,5,$item->documento_nombre,'',0,'',$fill);
             $this->Cell(90,5,utf8_decode($item->asiento2_detalle),'',0,'',$fill);
             $this->Cell(30,5,'','',0,'R',$fill);
-            $this->Cell(30,5,$item->debito,'',0,'R',$fill);
-            $this->Cell(30,5,$item->credito,'',0,'R',$fill);
+            $this->Cell(30,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(30,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
             // Obtener saldo
             $this->getSaldo($item->debito, $item->credito);
-            $this->Cell(30,5,$this->saldo->inicial,'',0,'R',$fill);
+            $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),'',0,'R',$fill);
             $this->Ln();
 
             $nombre = "$item->tercero_nit - $item->tercero_nombre";
@@ -104,8 +100,7 @@ class AuxPorCuenta extends FPDF
         $this->Output(sprintf('%s_%s_%s.pdf', 'libroporcuenta', date('Y_m_d'), date('H_m_s')),'d');
     }
 
-    function getSaldo($debito, $credito)
-    {
+    function getSaldo($debito, $credito) {
         if ($debito < $credito){
             $this->saldo->inicial -= $credito - $debito;
         }else {
@@ -113,12 +108,11 @@ class AuxPorCuenta extends FPDF
         }
     }
 
-    function totally($debito, $credito)
-    {
+    function totally($debito, $credito) {
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(200,5,'TOTALES',0,0,'R');
-        $this->Cell(30,5,$debito,0,0,'R');
-        $this->Cell(30,5,$credito,0,0,'R');
-        $this->Cell(30,5,$this->saldo->inicial,0,0,'R');
+        $this->Cell(30,5,number_format ($debito,2,',' , '.'),0,0,'R');
+        $this->Cell(30,5,number_format ($credito,2,',' , '.'),0,0,'R');
+        $this->Cell(30,5,number_format ($this->saldo->inicial,2,',' , '.'),0,0,'R');
     }
 }

@@ -1,10 +1,10 @@
 @extends('reports.layout', ['type' => $type, 'title' => $title])
 
 @section('content')
-
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
+                <th class="center size-7 width-5"></th>
                 <th class="center size-7 width-5">Fecha</th>
                 <th class="center size-7 width-15">Doc contable</th>
                 <th class="center size-7 width-5">N° asiento</th>
@@ -18,20 +18,19 @@
 			</tr>
 		</thead>
 		<tbody>
-
 			{{--*/ $cuenta = '' /*--}}
 			@foreach($auxcontable as $item)
-				@if($cuenta != $item->cuenta)
-					<tr class="brtable">
-						<td colspan="10" class="center size-7 bold">{{ $item->cuenta }} - {{$item->plancuentas_nombre}}</td>
-					</tr>
-				@endif
 				<tr>
-					<td class="size-6">{{$item->date}}</td>
-					<td class="size-6">{{$item->documento_nombre}}</td>
-					<td class="size-6">{{$item->asiento1_numero}}</td>
-					<td class="size-6">{{$item->tercero_nit}}</td>
-					<td class="size-6">{{$item->tercero_nombre}}</td>
+					@if($cuenta != $item->cuenta)
+						<td class="size-6">{{ $item->cuenta }}</td>
+					@else
+						<td></td>
+					@endif
+					<td class="size-6">{{ $item->date }}</td>
+					<td class="size-6">{{ $item->documento_nombre }}</td>
+					<td class="size-6">{{ $item->asiento1_numero }}</td>
+					<td class="size-6">{{ $item->tercero_nit }}</td>
+					<td class="size-6">{{ $item->tercero_nombre }}</td>
 					<td class="center">-</td>
 					<td class="center">-</td>
 					<td class="size-6">{{ $item->debito }}</td>

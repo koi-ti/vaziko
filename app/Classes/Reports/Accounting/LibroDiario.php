@@ -7,17 +7,15 @@ use Auth;
 
 class LibroDiario extends FPDF
 {
-
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(10,10,10);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +29,8 @@ class LibroDiario extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +40,7 @@ class LibroDiario extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(40,5,'Cuenta',1);
         $this->Cell(90,5,'Nombre',1);
@@ -52,8 +49,7 @@ class LibroDiario extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         foreach ($data as $key => $asientos) {
@@ -61,7 +57,6 @@ class LibroDiario extends FPDF
             $this->SetFont('Arial','B',8);
             $this->Cell(100,5,$key,0,0,'');
             $this->Ln();
-
             foreach ($asientos as $asiento) {
                 $this->SetFont('Arial', '', 7);
                 // dd($asiento);

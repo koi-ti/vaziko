@@ -254,11 +254,11 @@
                         <div class="col-sm-6">
                             <div class="box box-success">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Acabados de producción</h3>
+                                    <h3 class="box-title">Maquinas de producción</h3>
                                 </div>
                                 <div class="box-body">
-                                    <div id="browse-precotizacion-producto-acabados-list">
-                                        {{-- render acabados list --}}
+                                    <div id="browse-precotizacion-producto-maquinas-list">
+                                        {{-- render maquinas list --}}
                                     </div>
                                 </div>
                             </div>
@@ -266,11 +266,11 @@
                         <div class="col-sm-6">
                             <div class="box box-success">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Maquinas de producción</h3>
+                                    <h3 class="box-title">Acabados de producción</h3>
                                 </div>
                                 <div class="box-body">
-                                    <div id="browse-precotizacion-producto-maquinas-list">
-                                        {{-- render maquinas list --}}
+                                    <div id="browse-precotizacion-producto-acabados-list">
+                                        {{-- render acabados list --}}
                                     </div>
                                 </div>
                             </div>

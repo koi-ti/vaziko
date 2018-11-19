@@ -7,17 +7,15 @@ use Auth;
 
 class PlanCuentas extends FPDF
 {
-
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +29,8 @@ class PlanCuentas extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +40,7 @@ class PlanCuentas extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(35,5,'CUENTA',1);
         $this->Cell(90,5,'NOMBRE',1);
@@ -54,13 +51,11 @@ class PlanCuentas extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $this->SetFont('Arial', '', 8);
-        foreach($data as $cuenta)
-        {
+        foreach($data as $cuenta) {
             $fill = !$fill;
             $this->Cell(35,5,$cuenta->plancuentas_cuenta,'',0,'R',$fill);
             $this->Cell(90,5,utf8_decode($cuenta->plancuentas_nombre),'',0,'',$fill);

@@ -249,14 +249,14 @@
 				<div class="col-sm-6">
 					<div class="box box-success">
 						<div class="box-header with-border">
-							<h3 class="box-title">Acabados de producción</h3>
+							<h3 class="box-title">Maquinas de producción</h3>
 						</div>
 						<div class="box-body">
-							@foreach( App\Models\Production\PreCotizacion7::getPreCotizaciones7($producto->id, $precotizacion2->id) as $acabado)
+							@foreach( App\Models\Production\PreCotizacion8::getPreCotizaciones8($producto->id, $precotizacion2->id) as $maquina)
 								<div class="row">
 									<div class="form-group col-md-12">
-										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_{{ $acabado->id }}">
-											<input type="checkbox" id="precotizacion7_acabadop_{{ $acabado->id }}" name="precotizacion7_acabadop_{{ $acabado->id }}" value="precotizacion7_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
+										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_{{ $maquina->id }}">
+											<input type="checkbox" id="precotizacion8_maquinap_{{ $maquina->id }}" name="precotizacion8_maquinap_{{ $maquina->id }}" value="precotizacion8_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
 										</label>
 									</div>
 								</div>
@@ -267,14 +267,14 @@
 				<div class="col-sm-6">
 					<div class="box box-success">
 						<div class="box-header with-border">
-							<h3 class="box-title">Maquinas de producción</h3>
+							<h3 class="box-title">Acabados de producción</h3>
 						</div>
 						<div class="box-body">
-							@foreach( App\Models\Production\PreCotizacion8::getPreCotizaciones8($producto->id, $precotizacion2->id) as $maquina)
+							@foreach( App\Models\Production\PreCotizacion7::getPreCotizaciones7($producto->id, $precotizacion2->id) as $acabado)
 								<div class="row">
 									<div class="form-group col-md-12">
-										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_{{ $maquina->id }}">
-											<input type="checkbox" id="precotizacion8_maquinap_{{ $maquina->id }}" name="precotizacion8_maquinap_{{ $maquina->id }}" value="precotizacion8_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }} disabled> {{ $maquina->maquinap_nombre }}
+										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_{{ $acabado->id }}">
+											<input type="checkbox" id="precotizacion7_acabadop_{{ $acabado->id }}" name="precotizacion7_acabadop_{{ $acabado->id }}" value="precotizacion7_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }} disabled> {{ $acabado->acabadop_nombre }}
 										</label>
 									</div>
 								</div>

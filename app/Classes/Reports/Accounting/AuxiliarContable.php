@@ -8,16 +8,15 @@ use Auth;
 class AuxiliarContable extends FPDF
 {
 
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(2,2,2);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +30,8 @@ class AuxiliarContable extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +41,7 @@ class AuxiliarContable extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(15,5,'Fecha',1);
         $this->Cell(50,5,'Doc contable',1);
@@ -58,8 +56,7 @@ class AuxiliarContable extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $cuenta = '' ;
@@ -78,9 +75,9 @@ class AuxiliarContable extends FPDF
             $this->Cell(75,5,utf8_decode($item->tercero_nombre),'',0,'',$fill);
             $this->Cell(20,5,'-','',0,'C',$fill);
             $this->Cell(15,5,'-','',0,'C',$fill);
-            $this->Cell(25,5, $item->debito,'',0,'R',$fill);
-            $this->Cell(25,5, $item->credito,'',0,'R',$fill);
-            $this->Cell(25,5, $item->base,'',0,'R',$fill);
+            $this->Cell(25,5,number_format ($item->debito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(25,5,number_format ($item->credito,2,',' , '.'),'',0,'R',$fill);
+            $this->Cell(25,5,number_format ($item->base,2,',' , '.'),'',0,'R',$fill);
             $this->Ln();
             $cuenta = $item->cuenta;
         }

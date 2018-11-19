@@ -7,17 +7,15 @@ use Auth;
 
 class LibroMayor extends FPDF
 {
-
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +29,8 @@ class LibroMayor extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +40,7 @@ class LibroMayor extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
 
         $this->Cell(105,5,'',1);
@@ -63,8 +60,7 @@ class LibroMayor extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $this->SetFont('Arial','',7);
@@ -72,7 +68,6 @@ class LibroMayor extends FPDF
         // Inicializo variables de 'TOTALES'
         $tdebitoinicial = $tcreditoinicial = $tdebitomes = $tcreditomes = $tsdebito = $tscredito = 0;
         foreach($data as $saldo){
-
             // Inicializo variables para el encabezado de 'NUEVO SALDO'
             $sdebito = $saldo->debitoinicial + $saldo->debitomes;
             $scredito = $saldo->creditoinicial + $saldo->creditomes;

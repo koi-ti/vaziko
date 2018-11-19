@@ -8,16 +8,15 @@ use Auth;
 class RelacionImpuestos extends FPDF
 {
 
-    function buldReport($data, $title)
-    {
+    function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
         $this->AliasNbPages();
         $this->AddPage();
         $this->bodyTable($data);
     }
-    function Header()
-    {
+
+    function Header() {
         $empresa = Empresa::getEmpresa();
         $this->SetXY(0,10);
 		$this->SetFont('Arial','B',13);
@@ -31,8 +30,8 @@ class RelacionImpuestos extends FPDF
         $this->Ln(5);
         $this->headerTable();
     }
-    function Footer()
-    {
+
+    function Footer() {
         $user = utf8_decode(Auth::user()->username);
         $date = date('Y-m-d H:m:s');
 
@@ -42,8 +41,7 @@ class RelacionImpuestos extends FPDF
         $this->Cell(0,10,"Usuario: $user - Fecha: $date",0,0,'R');
     }
 
-    function headerTable()
-    {
+    function headerTable() {
         $this->SetFont('Arial','B',8);
         $this->Cell(20,5,'NIT',1);
         $this->Cell(95,5,'NOMBRE',1);
@@ -54,8 +52,7 @@ class RelacionImpuestos extends FPDF
         $this->Ln();
     }
 
-    function bodyTable($data)
-    {
+    function bodyTable($data) {
         $fill = false;
         $this->SetFillColor(247,247,247);
         $this->SetFont('Arial', '', 8);
@@ -99,8 +96,7 @@ class RelacionImpuestos extends FPDF
         $this->Output('d',sprintf('%s_%s_%s.pdf', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')));
     }
 
-    function totalAccount($tbase, $tdebito, $tcredito)
-    {
+    function totalAccount($tbase, $tdebito, $tcredito) {
         $this->SetFont('Arial', 'B', 7);
         $this->Cell(115,5,'Total',0,0,'R');
         $this->Cell(20,5,number_format ($tbase,2,',' , '.'),0,0,'');
@@ -108,8 +104,8 @@ class RelacionImpuestos extends FPDF
         $this->Cell(20,5,number_format ($tcredito,2,',' , '.'),0,0,'');
         $this->Ln();
     }
-    function totalNaturaleza($debito, $credito)
-    {
+
+    function totalNaturaleza($debito, $credito) {
         $total = number_format ($debito - $credito,2,',' , '.');
         if ($debito < $credito)
             $total = number_format ($credito - $debito,2,',' , '.'). ' CR';
