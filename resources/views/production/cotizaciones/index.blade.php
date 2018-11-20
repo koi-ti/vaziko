@@ -64,13 +64,13 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-2 col-xs-4">
+                        <div class="col-md-offset-3 col-md-2 col-xs-12">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
-                        <div class="col-md-2 col-xs-4">
+                        <div class="col-md-2 col-xs-12">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
-                        <div class="col-md-2 col-xs-4">
+                        <div class="col-md-2 col-xs-12">
                             <a href="{{ route('cotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
                                 <i class="fa fa-plus"></i> Nueva cotización
                             </a>

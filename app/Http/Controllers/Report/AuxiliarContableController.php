@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Reports\Accounting\AuxiliarContable;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
-use View, App, Excel, DB;
+use View, App, Excel, DB, Carbon\Carbon;
 
 class AuxiliarContableController extends Controller
 {
@@ -22,12 +22,10 @@ class AuxiliarContableController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
+            // // Prepare dates
+            $fechaI = Carbon::createFromFormat('Y-m-d', $request->filter_fecha_inicial)->toDateString();
+            $fechaF = Carbon::createFromFormat('Y-m-d', $request->filter_fecha_final)->toDateString();
 
-            // Prepare dates
-            list($año, $mes, $dia) = (explode('-',$request->filter_fecha_inicial));
-            list($añoF, $mesF, $diaF) = (explode('-',$request->filter_fecha_final));
-            $fechaI = sprintf('%s-%s-%s', intval($año), intval($mes), intval($dia));
-            $fechaF = sprintf('%s-%s-%s', intval($añoF), intval($mesF), intval($diaF));
 
             // Query
             $query = Asiento2::query();
@@ -36,16 +34,17 @@ class AuxiliarContableController extends Controller
             $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
             $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
             $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) >= '$fechaI'");
-            $query->whereRaw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) <= '$fechaF'");
+            $query->whereBetween(DB::raw("CAST(CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) AS DATE)"), [$fechaI, $fechaF]);
 
             // Filters
             if ($request->has('filter_cuenta_inicio')) {
                 $query->whereRaw("plancuentas_cuenta >= '$request->filter_cuenta_inicio'");
             }
+
             if ($request->has('filter_cuenta_fin')) {
                 $query->whereRaw("plancuentas_cuenta <= '$request->filter_cuenta_fin'");
             }
+
             if ($request->has('filter_tercero')) {
                 $query->where('tercero_nit', $request->filter_tercero);
             }
@@ -58,7 +57,7 @@ class AuxiliarContableController extends Controller
 
             // Prepare data
             $auxcontable = $query->get();
-            $title = "Auxiliar contable desde $request->filter_fecha_inicial hasta $request->filter_fecha_final";
+            $title = "Auxiliar contable desde $fechaI hasta $fechaF";
             $type = $request->type;
 
             switch ($type) {
