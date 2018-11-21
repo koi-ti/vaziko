@@ -60,7 +60,7 @@ class Cotizacion4 extends BaseModel
             AS proveedor_nombre"));
         $query->join('koi_materialp', 'cotizacion4_materialp', '=', 'koi_materialp.id');
         $query->leftJoin('koi_producto', 'cotizacion4_producto', '=', 'koi_producto.id');
-        $query->join('koi_tercero', 'cotizacion4_proveedor', '=', 'koi_tercero.id');
+        $query->leftjoin('koi_tercero', 'cotizacion4_proveedor', '=', 'koi_tercero.id');
         $query->where('cotizacion4_cotizacion2', $cotizacion2);
         $query->orderBy('materialp_nombre', 'asc');
         return $query->get();
