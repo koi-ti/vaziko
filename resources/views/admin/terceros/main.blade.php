@@ -23,7 +23,7 @@
         </section>
 
         <section class="content">
-            <div class="box box-success" id="spinner-main">
+            <div class="box box-success spinner-main">
                 <div class="box-body">
                     <form method="POST" accept-charset="UTF-8" id="form-tercero" data-toggle="validator">
                 		<div class="row">
@@ -206,7 +206,7 @@
                 </div>
             </div>
 
-            <div class="box box-solid">
+            <div class="box box-solid spinner-main">
     			<div class="nav-tabs-custom tab-success">
     				<ul class="nav nav-tabs">
     					<li class="active"><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>

@@ -230,7 +230,22 @@
 
 						<!-- table table-bordered table-striped -->
 						<div class="box-body table-responsive no-padding">
-							<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+							<table id="browse-detalle-asiento-list" class="table table-bordered" cellspacing="0" width="100%">
+								<tr>
+									<td colspan="5"></td>
+									<th class="text-left">Total</th>
+									<td class="text-right total-debitos">0</td>
+									<td class="text-right total-creditos">0</td>
+									<td></td>
+								</tr>
+								<tr>
+									<th colspan="5"></th>
+									<th class="text-left">Diferencia</th>
+									<td colspan="2" class="text-right">
+										<small class="label bg-red total-diferencia">0</small>
+									</td>
+									<td></td>
+								</tr>
 					            <tr>
 					                <th></th>
 					                <th>Cuenta</th>
@@ -246,15 +261,15 @@
 									<tr>
 										<td colspan="5"></td>
 										<th class="text-left">Total</th>
-										<td class="text-right" id="total-debitos">0</td>
-										<td class="text-right" id="total-creditos">0</td>
+										<td class="text-right total-debitos">0</td>
+										<td class="text-right total-creditos">0</td>
 										<td></td>
 									</tr>
 									<tr>
-										<td colspan="5"></td>
+										<th colspan="5"></th>
 										<th class="text-left">Diferencia</th>
 										<td colspan="2" class="text-right">
-											<small class="label pull-right bg-red" id="total-diferencia">0</small>
+											<small class="label bg-red total-diferencia">0</small>
 										</td>
 										<td></td>
 									</tr>

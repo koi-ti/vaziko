@@ -49,20 +49,27 @@ class BalancePruebaController extends Controller
 
                 // Prepare sql
                 $sql =
-                    "SELECT plancuentas_nombre as descripcion, plancuentas_cuenta as p_cuenta, CONCAT(plancuentas_nivel1,plancuentas_nivel2) as grupo, plancuentas_nivel3 as cuenta, plancuentas_nivel4 as subcuenta, plancuentas_nivel5 as auxiliar, plancuentas_nivel6 as subauxiliar, plancuentas_naturaleza as naturaleza,
-                        (select saldoscontables_debito_inicial from koi_saldoscontables where saldoscontables_mes = $xmes2 and saldoscontables_ano = $xano2 and saldoscontables_cuenta = koi_plancuentas.id) as debitoinicial,
-                        (select saldoscontables_credito_inicial from koi_saldoscontables where saldoscontables_mes = $xmes2 and saldoscontables_ano = $xano2 and saldoscontables_cuenta = koi_plancuentas.id) as creditoinicial,
+                    "SELECT
+                        plancuentas_nombre as descripcion,
+                        plancuentas_cuenta as p_cuenta,
+                        CONCAT(plancuentas_nivel1,plancuentas_nivel2) as grupo,
+                        plancuentas_nivel3 as cuenta,
+                        plancuentas_nivel4 as subcuenta,
+                        plancuentas_nivel5 as auxiliar,
+                        plancuentas_nivel6 as subauxiliar,
+                        plancuentas_naturaleza as naturaleza,
+                        (select (CASE when plancuentas_naturaleza = 'D' THEN (saldoscontables_debito_inicial-saldoscontables_credito_inicial) ELSE (saldoscontables_credito_inicial-saldoscontables_debito_inicial) END) FROM koi_saldoscontables WHERE saldoscontables_mes = $xmes2 AND saldoscontables_ano = $xano2 AND saldoscontables_cuenta = koi_plancuentas.id) AS saldoinicial,
                         (select saldoscontables_debito_mes from koi_saldoscontables where saldoscontables_mes = $xmes and saldoscontables_ano = $xano and saldoscontables_cuenta = koi_plancuentas.id) as debitomes,
                         (select saldoscontables_credito_mes from koi_saldoscontables where saldoscontables_mes = $xmes and saldoscontables_ano = $xano and saldoscontables_cuenta = koi_plancuentas.id) as creditomes,
                         (select saldoscontables_mes from koi_saldoscontables where saldoscontables_mes = $xmes and saldoscontables_ano = $xano and saldoscontables_cuenta = koi_plancuentas.id) as saldo_mes,
                         (select saldoscontables_ano from koi_saldoscontables where saldoscontables_mes = $xmes and saldoscontables_ano = $xano and saldoscontables_cuenta = koi_plancuentas.id) as saldo_ano
                     FROM koi_plancuentas
                     WHERE koi_plancuentas.id IN (
-                        select s.saldoscontables_cuenta from koi_saldoscontables as s where s.saldoscontables_mes = $xmes and s.saldoscontables_ano = $xano
+                            select s.saldoscontables_cuenta from koi_saldoscontables as s where s.saldoscontables_mes = $xmes and s.saldoscontables_ano = $xano
                         union
-                        select s.saldoscontables_cuenta from koi_saldoscontables as s where s.saldoscontables_mes = $xmes2 and s.saldoscontables_ano = $xano2
+                            select s.saldoscontables_cuenta from koi_saldoscontables as s where s.saldoscontables_mes = $xmes2 and s.saldoscontables_ano = $xano2
                     )
-                    order by p_cuenta";
+                    ORDER BY plancuentas_cuenta ASC";
 
                 //  Transaction querie
                 $saldos[] = DB::select($sql);

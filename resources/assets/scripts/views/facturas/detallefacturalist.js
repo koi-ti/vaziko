@@ -92,9 +92,12 @@ app || (app = {});
             // Settear el valor al modelo
             var resource = $(e.currentTarget).attr("data-resource");
             var model = this.collection.get(resource);
+
             model.set({ "factura2_cantidad": selector.val() }, {silent: true});
+
             this.impuestos.subtotal = this.collection.totalize().subtotal;
             this.impuestos.tercero = model.get('tercero');
+            
             this.calculateImpuestos();
         },
 

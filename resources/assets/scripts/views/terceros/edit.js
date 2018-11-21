@@ -71,7 +71,7 @@ app || (app = {});
             this.$wrapperCoordinador = this.$('#wrapper-coordinador');
 
             this.$uploaderFile = this.$('.fine-uploader');
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
 
             // Reference views
             this.referenceViews();
@@ -295,7 +295,7 @@ app || (app = {});
 
         onSessionRequestComplete: function (id, name, resp) {
             this.$uploaderFile.find('.btn-imprimir').remove();
-            
+
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);

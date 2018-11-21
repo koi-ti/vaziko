@@ -21,8 +21,7 @@
 			@foreach($saldos as $saldo)
 				@if( strlen($saldo->p_cuenta) > 1 )
 					{{--*/
-						$currentbalance = ($saldo->naturaleza == 'D') ? ($saldo->debitoinicial-$saldo->creditoinicial) : ($saldo->creditoinicial-$saldo->debitoinicial);
-						$newbalance = ($saldo->naturaleza == 'D') ? (($saldo->debitomes-$saldo->creditomes)+$currentbalance) : (($saldo->creditomes-$saldo->debitomes)+$currentbalance);
+						$newbalance = ($saldo->naturaleza == 'D') ? ($saldo->saldoinicial+($saldo->debitomes-$saldo->creditomes)) : ($saldo->saldoinicial+($saldo->creditomes-$saldo->debitomes));
 					/*--}}
 					<tr>
 						<td class="size-6">{{ $saldo->grupo }}</td>
@@ -32,7 +31,7 @@
 						<td class="size-6">{{ $saldo->subauxiliar }}</td>
 						<td class="size-6">{{ $saldo->descripcion }}</td>
 						<td class="size-6">{!! $saldo->saldo_mes."/".$saldo->saldo_ano !!}</td>
-						<td class="size-6">{{ $currentbalance }}</td>
+						<td class="size-6">{{ $saldo->saldoinicial }}</td>
 						<td class="size-6">{{ $saldo->debitomes }}</td>
 						<td class="size-6">{{ $saldo->creditomes }}</td>
 						<td class="size-6">{{ $newbalance }}</td>

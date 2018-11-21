@@ -25,7 +25,7 @@
                                 <a role="menuitem" tabindex="-1" href="#" class="export-factura">
                                     <i class="fa fa-file-pdf-o"></i>Exportar factura
                                 </a>
-                                @if( !$factura->factura1_anulado )
+                                @if( !$factura->factura1_anulado && Carbon\Carbon::createFromFormat('Y-m-d', $factura->factura1_fecha)->month == Carbon\Carbon::now()->month )
                                     <a role="menuitem" tabindex="-1" href="#" class="ban-factura">
                                         <i class="fa fa-ban"></i>Anular factura
                                     </a>
@@ -71,7 +71,6 @@
                             <div>{{ $factura->puntoventa_prefijo }} - {{ $factura->puntoventa_nombre }}</div>
                         </div>
                 	</div>
-
                 	<div class="row">
                         <div class="form-group col-md-3">
                             <label class="control-label">Subtotal</label>
@@ -90,7 +89,6 @@
                             <div>$ {{ number_format($factura->factura1_total, '2', ',', '.') }}</div>
                         </div>
                 	</div>
-
                     <div class="box-footer with-border">
             	        <div class="row">
             	            <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6 text-left">
@@ -105,11 +103,11 @@
         		                <table id="browse-detalle-factura-list" class="table table-bordered" cellspacing="0">
         		                    <thead>
         		                        <tr>
-        		                            <th>Codigo</th>
-        		                            <th>Nombre</th>
-        		                            <th>Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
-        		                            <th>V. Unitario</th>
-        		                            <th>Total</th>
+        		                            <th width="10%">Codigo</th>
+        		                            <th width="45%">Nombre</th>
+        		                            <th width="15%">Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
+        		                            <th width="15%">V. Unitario</th>
+        		                            <th width="15%">Total</th>
         		                        </tr>
         		                    </thead>
         		                    <tbody>
@@ -194,21 +192,6 @@
                 </div>
             </div>
         </div>
-
-        @if ( $factura->factura1_anulado )
-            <div class="box box-danger">
-                <div class="box-body">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-6 col-xs-6 text-left">
-                            <h4><a href="{{ route('asientos.show', ['asientos' =>  $factura->factura1_asiento1_anulado ]) }}" target="_blanck" title="Ver Asiento"> Ver asiento contable anulado</a></h4>
-                        </div>
-                        <div class="col-md-6 col-sm-6 col-xs-6 text-right">
-                            <h4><b>{{ $factura->documento_nombre }} - {{ $factura->asiento_numero_anulado }}</b></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        @endif
     </section>
 
     <script type="text/template" id="factura-ban-confirm-tpl">

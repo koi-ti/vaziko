@@ -18,6 +18,8 @@ class CreateFactura2Table extends Migration
             $table->increments('id');
             $table->integer('factura2_factura1')->unsigned();
             $table->integer('factura2_orden2')->unsigned();
+            $table->string('factura2_producto_nombre', 200);
+            $table->double('factura2_producto_valor_unitario')->default(0);
             $table->integer('factura2_cantidad')->default(0);
 
             $table->foreign('factura2_factura1')->references('id')->on('koi_factura1')->onDelete('restrict');

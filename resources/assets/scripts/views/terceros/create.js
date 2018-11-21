@@ -34,7 +34,7 @@ app || (app = {});
                 attributes.edit = false;
             this.$el.html( this.template(attributes) );
 
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
             this.$form = this.$('#form-tercero');
             this.$formAccounting = this.$('#form-accounting');
 
@@ -48,7 +48,7 @@ app || (app = {});
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
-                
+
                 var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ));
                 this.model.save( data, {patch: true, silent: true} );
             }

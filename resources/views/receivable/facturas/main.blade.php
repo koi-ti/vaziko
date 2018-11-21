@@ -160,10 +160,10 @@
     </section>
 
     <script type="text/template" id="add-factura-item-tpl">
-        <td><%- orden2_id %></td>
-        <td><%- productop_nombre %></td>
+        <td><%- factura2_orden2 %></td>
+        <td><%- factura2_producto_nombre %></td>
         <td class="text-center"><%- factura2_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( factura2_producto_valor_unitario ) %></td>
         <td class="text-right" id="subtotal_<%- id %>">0</td>
     </script>
 
@@ -173,15 +173,13 @@
                 <span><i class="fa fa-times"></i></span>
             </a>
         </td>
-        <td><%- id %></td>
-        <td><%- productop_nombre %></td>
+        <td><%- factura2_orden2 %></td>
+        <td><%- factura2_producto_nombre %></td>
         <td><%- orden_codigo %></td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
-        <td>
-            <input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" data-resource="<%- id %>" class="form-control input-sm change-cantidad" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required>
-        </td>
-        <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
+        <td><input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" data-resource="<%- id %>" class="form-control input-sm change-cantidad" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required></td>
+        <td class="text-right"><%- window.Misc.currency( factura2_producto_valor_unitario ) %></td>
     </script>
 
     <script type="text/template" id="add-detalle-factura-tpl">

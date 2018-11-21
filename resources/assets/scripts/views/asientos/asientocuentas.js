@@ -30,9 +30,9 @@ app || (app = {});
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
-            this.$debitos = this.$('#total-debitos');
-            this.$creditos = this.$('#total-creditos');
-            this.$diferencia = this.$('#total-diferencia');
+            this.$debitos = this.$('.total-debitos');
+            this.$creditos = this.$('.total-creditos');
+            this.$diferencia = this.$('.total-diferencia');
 
             //Init Attributes
             this.confCollection = { reset: true, data: {} };

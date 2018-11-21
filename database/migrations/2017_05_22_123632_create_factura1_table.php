@@ -37,9 +37,9 @@ class CreateFactura1Table extends Migration
             $table->double('factura1_reteiva')->default(0);
 
             $table->boolean('factura1_anulado')->default(false);
-            $table->integer('factura1_asiento1_anulado')->unsigned()->nullable();
-            $table->integer('factura1_asienton1_anulado')->unsigned()->nullable();
 
+            $table->integer('factura1_usuario_anulo')->unsigned();
+            $table->dateTime('factura1_fh_anulo');
             $table->integer('factura1_usuario_elaboro')->unsigned();
             $table->dateTime('factura1_fh_elaboro');
 
@@ -47,8 +47,7 @@ class CreateFactura1Table extends Migration
             $table->foreign('factura1_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('factura1_asiento')->references('id')->on('koi_asiento1')->onDelete('restrict');
             $table->foreign('factura1_asienton1')->references('id')->on('koi_asienton1')->onDelete('restrict');
-            $table->foreign('factura1_asiento1_anulado')->references('id')->on('koi_asiento1')->onDelete('restrict');
-            $table->foreign('factura1_asienton1_anulado')->references('id')->on('koi_asienton1')->onDelete('restrict');
+            $table->foreign('factura1_usuario_anulo')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('factura1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
 
             $table->unique(['factura1_numero', 'factura1_prefijo']);

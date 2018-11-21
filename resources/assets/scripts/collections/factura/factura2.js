@@ -51,13 +51,13 @@ app || (app = {});
 
         subtotal: function(){
             return this.reduce(function(sum, model) {
-                return sum + (parseInt(model.get('factura2_cantidad')) * parseFloat(model.get('orden2_total_valor_unitario')))
+                return sum + (parseInt(model.get('factura2_cantidad')) * parseFloat(model.get('factura2_producto_valor_unitario')))
             }, 0);
         },
 
         renderSubtotal: function(){
             _.each(this.models, function(item){
-                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('orden2_total_valor_unitario'));
+                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('factura2_producto_valor_unitario'));
                 $('#subtotal_'+item.get('id') ).html( window.Misc.currency(total) );
             });
         },

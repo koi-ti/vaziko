@@ -318,4 +318,5 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('rbalancecomparativo', 'Report\BalanceComparativoController', ['only' => ['index']]);
 	Route::resource('rbalanceprueba', 'Report\BalancePruebaController', ['only' => ['index']]);
 	Route::resource('restadoresultado', 'Report\EstadoResultadoController', ['only' => ['index']]);
+	Route::resource('rcarteraedades', 'Report\CarteraEdadesController', ['only' => ['index']]);
 });

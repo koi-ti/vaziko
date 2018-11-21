@@ -62,7 +62,7 @@
     </li>
 
     {{-- Cartera --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['facturas', 'restadocartera']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['facturas', 'rcarteraedades', 'restadocartera']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-suitcase"></i> <span>Cartera</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -81,11 +81,14 @@
             </li>
 
             {{-- Reportes cartera --}}
-            <li class="{{ in_array(Request::segment(1), ['restadocartera']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rcarteraedades', 'restadocartera']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    {{--<li class="{{ Request::segment(1) == 'rcarteraedades' ? 'active' : '' }}">
+                        <a href="{{ route('rcarteraedades.index') }}"><i class="fa fa-circle-o"></i> Cartera edades</a>
+                    </li>--}}
                     <li class="{{ Request::segment(1) == 'restadocartera' ? 'active' : '' }}">
                         <a href="{{ route('restadocartera.index') }}"><i class="fa fa-circle-o"></i> Estado de cartera</a>
                     </li>

@@ -461,7 +461,7 @@ class AsientoController extends Controller
             return response()->json(['success' => false, 'errors' => 'No es posible eliminar este asiento porque contiene facturas de proveedor.']);
         }
 
-        $facturas = Factura1::where('factura1_asiento1_anulado', $asiento->id)->orWhere('factura1_asiento', $asiento->id)->first();
+        $facturas = Factura1::where('factura1_asiento', $asiento->id)->first();
         if($facturas instanceof Factura1){
             return response()->json(['success' => false, 'errors' => 'No es posible eliminar este asiento porque contiene facturas.']);
         }

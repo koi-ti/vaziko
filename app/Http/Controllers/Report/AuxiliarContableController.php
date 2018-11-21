@@ -26,7 +26,6 @@ class AuxiliarContableController extends Controller
             $fechaI = Carbon::createFromFormat('Y-m-d', $request->filter_fecha_inicial)->toDateString();
             $fechaF = Carbon::createFromFormat('Y-m-d', $request->filter_fecha_final)->toDateString();
 
-
             // Query
             $query = Asiento2::query();
             $query->select('asiento2_debito as debito', 'asiento2_credito as credito', 'asiento2_base as base', 'asiento1_numero', DB::raw("CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) as date"),'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"), 'documento_nombre', 'plancuentas_cuenta as cuenta', 'plancuentas_nombre');
