@@ -60,7 +60,7 @@ class Ordenp4 extends BaseModel
             AS proveedor_nombre"));
         $query->join('koi_materialp', 'orden4_materialp', '=', 'koi_materialp.id');
         $query->leftJoin('koi_producto', 'orden4_producto', '=', 'koi_producto.id');
-        $query->join('koi_tercero', 'orden4_proveedor', '=', 'koi_tercero.id');
+        $query->leftJoin('koi_tercero', 'orden4_proveedor', '=', 'koi_tercero.id');
         $query->where('orden4_orden2', $ordenp2);
         $query->orderBy('materialp_nombre', 'asc');
         return $query->get();
