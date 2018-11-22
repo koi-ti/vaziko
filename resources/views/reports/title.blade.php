@@ -1,4 +1,4 @@
-@if($type == 'pdf')
+@if( isset($type) && $type == 'pdf' )
 	<table class="tbtitle">
 		<thead>
 			<tr><td class="company">{{ $empresa->tercero_razonsocial }}</td></tr>
