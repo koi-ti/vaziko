@@ -26,6 +26,22 @@
 	<script type="text/template" id="add-info-event-tpl">
 		<div class="row">
 			<div class="col-sm-4">
+				<label class="control-label">Estado</label>
+                <% if ( orden_anulada ) { %>
+                    <div><span class="label label-danger">ANULADA</span></div>
+
+                <% }else if( orden_culminada ) { %>
+                    <div><span class="label bg-blue">CULMINADO</span></div>
+
+                <% }else if( orden_abierta ) { %>
+                    <div><span class="label label-success">ABIERTA</span></div>
+
+                <% }else{ %>
+                    <div><span class="label label-warning">CERRADA</span></div>
+
+                <% } %>
+	        </div>
+			<div class="col-sm-4">
 				<label class="control-label">F. Entrega</label>
 				<div><%- orden_fecha_entrega %></div>
 	        </div>
