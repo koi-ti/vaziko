@@ -25,7 +25,8 @@
                                 <a role="menuitem" tabindex="-1" href="#" class="export-factura">
                                     <i class="fa fa-file-pdf-o"></i>Exportar factura
                                 </a>
-                                @if( !$factura->factura1_anulado && Carbon\Carbon::createFromFormat('Y-m-d', $factura->factura1_fecha)->month == Carbon\Carbon::now()->month )
+                                {{-- !$factura->factura1_anulado && Carbon\Carbon::createFromFormat('Y-m-d', $factura->factura1_fecha)->month == Carbon\Carbon::now()->month--}}
+                                @if( !$factura->factura1_anulado )
                                     <a role="menuitem" tabindex="-1" href="#" class="ban-factura">
                                         <i class="fa fa-ban"></i>Anular factura
                                     </a>

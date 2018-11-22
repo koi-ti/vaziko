@@ -369,10 +369,10 @@ class Factura1Controller extends Controller
             return response()->json(['success' => false, 'errors' => 'No es posible recuperar la factura, por favor verifique la información o consulte al administrador.']);
         }
 
-        // Validar que el mes a anular sea igual al actual
-        if( Carbon::createFromFormat('Y-m-d', $factura->factura1_fecha)->month != Carbon::now()->month ){
-            return response()->json(['success' => false, 'errors' => 'No es posible anular factura, por favor verifique la información o consulte al administrador.']);
-        }
+        // // Validar que el mes a anular sea igual al actual
+        // if( Carbon::createFromFormat('Y-m-d', $factura->factura1_fecha)->month != Carbon::now()->month ){
+        //     return response()->json(['success' => false, 'errors' => 'No es posible anular factura, por favor verifique la información o consulte al administrador.']);
+        // }
 
         DB::beginTransaction();
         try {
