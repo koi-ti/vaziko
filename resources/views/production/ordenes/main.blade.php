@@ -57,43 +57,43 @@
                                     <form method="POST" accept-charset="UTF-8" id="form-ordenes" data-toggle="validator">
                                         <div class="row">
                                             <% if( typeof(orden_codigo) !== 'undefined' && !_.isUndefined(orden_codigo) && !_.isNull(orden_codigo) && orden_codigo != '') { %>
-                                                <label class="col-sm-1 control-label">Código</label>
-                                                <div class="form-group col-md-1">
+                                                <label class="col-xs-12 col-sm-1 control-label">Código</label>
+                                                <div class="form-group col-xs-12 col-md-1">
                                                     <%- orden_codigo %>
                                                 </div>
                                             <% } %>
                                             <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
-                                                <label class="col-sm-1 control-label">Pre-cotización</label>
-                                                <div class="form-group col-md-1">
+                                                <label class="col-xs-12 col-sm-1 control-label">Pre-cotización</label>
+                                                <div class="form-group col-xs-12 col-md-1">
                                                     <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion }) ) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
                                             <% if( typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
-                                                <label class="col-sm-1 control-label">Cotización</label>
-                                                <div class="form-group col-md-1">
+                                                <label class="col-xs-12 col-sm-1 control-label">Cotización</label>
+                                                <div class="form-group col-xs-12 col-md-1">
                                                     <a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: orden_cotizacion }) ) %>" title="Ir a cotización"><%- cotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
 
-                                            <label for="orden_referencia" class="col-sm-1 control-label">Referencia</label>
-                                            <div class="form-group col-md-5">
+                                            <label for="orden_referencia" class="col-xs-12 col-sm-1 control-label">Referencia</label>
+                                            <div class="form-group col-xs-12 col-md-5">
                                                 <input id="orden_referencia" value="<%- orden_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden_referencia" type="text" maxlength="200" required>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_fecha_inicio" class="col-sm-1 control-label">F. Inicio</label>
-                                            <div class="form-group col-md-2">
+                                            <label for="orden_fecha_inicio" class="col-xs-12 col-sm-1 control-label">F. Inicio</label>
+                                            <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_fecha_inicio" name="orden_fecha_inicio" placeholder="Fecha inicio" class="form-control input-sm datepicker" value="<%- orden_fecha_inicio %>" required>
                                             </div>
 
-                                            <label for="orden_fecha_entrega" class="col-sm-1 control-label">F. Entrega</label>
-                                            <div class="form-group col-md-2">
+                                            <label for="orden_fecha_entrega" class="col-xs-12 col-sm-1 control-label">F. Entrega</label>
+                                            <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_fecha_entrega" name="orden_fecha_entrega" placeholder="Fecha entrega" class="form-control input-sm datepicker" value="<%- orden_fecha_entrega %>" required>
                                             </div>
 
-                                            <label for="orden_hora_entrega" class="col-sm-1 control-label">H. Entrega</label>
-                                            <div class="form-group col-md-2">
+                                            <label for="orden_hora_entrega" class="col-xs-12 col-sm-1 control-label">H. Entrega</label>
+                                            <div class="form-group col-xs-12 col-md-2">
                                                 <div class="bootstrap-timepicker">
                                                     <div class="input-group">
                                                         <input type="text" id="orden_hora_entrega" name="orden_hora_entrega" placeholder="Fecha entrega" class="form-control input-sm timepicker" value="<%- orden_hora_entrega %>" required>
@@ -106,8 +106,8 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_cliente" class="col-sm-1 control-label">Cliente</label>
-                                            <div class="form-group col-sm-3">
+                                            <label for="orden_cliente" class="col-xs-12 col-sm-1 control-label">Cliente</label>
+                                            <div class="form-group col-xs-12 col-sm-3">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-btn">
                                                         <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="orden_cliente">
@@ -128,7 +128,7 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="tcontacto_nombre" class="col-sm-1 control-label">Contacto</label>
+                                            <label for="tcontacto_nombre" class="col-xs-12 col-sm-1 control-label">Contacto</label>
                                             <div class="form-group col-sm-5 col-xs-10">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-btn">
@@ -146,8 +146,8 @@
                                                 </button>
                                             </div>
 
-                                            <label for="tcontacto_telefono" class="col-sm-1 control-label">Teléfono</label>
-                                            <div class="form-group col-md-3">
+                                            <label for="tcontacto_telefono" class="col-xs-12 col-sm-1 control-label">Teléfono</label>
+                                            <div class="form-group col-xs-12 col-md-3">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
                                                         <i class="fa fa-phone"></i>
@@ -158,17 +158,17 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_suministran" class="col-sm-1 control-label">Suministran</label>
-                                            <div class="form-group col-sm-6">
+                                            <label for="orden_suministran" class="col-xs-12 col-sm-1 control-label">Suministran</label>
+                                            <div class="form-group col-xs-12 col-sm-6">
                                                 <input id="orden_suministran" placeholder="Suministran" class="form-control" name="orden_suministran" type="text" value="<%- orden_suministran %>" required maxlength="200">
                                             </div>
-                                            <label for="orden_formapago" class="col-sm-1 control-label">Forma pago</label>
-                                            <div class="form-group col-md-2">
+                                            <label for="orden_formapago" class="col-xs-12 col-sm-1 control-label">Forma pago</label>
+                                            <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_formapago" name="orden_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- orden_formapago %>" maxlength="30" required readonly>
                                             </div>
                                             <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
-                                                <label for="orden_iva" class="col-sm-1 control-label">Iva</label>
-                                                <div class="form-group col-sm-1">
+                                                <label for="orden_iva" class="col-xs-12 col-sm-1 control-label">Iva</label>
+                                                <div class="form-group col-xs-12 col-sm-1">
                                                     <select name="orden_iva" id="orden_iva" class="form-control" required>
                                                         @foreach( config('koi.contabilidad.iva') as $key => $value)
                                                         <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
@@ -179,22 +179,22 @@
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_observaciones" class="col-sm-1 control-label">Detalle</label>
-                                            <div class="form-group col-sm-11">
+                                            <label for="orden_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
+                                            <div class="form-group col-xs-12 col-sm-11">
                                                 <textarea id="orden_observaciones" name="orden_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- orden_observaciones %></textarea>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_terminado" class="col-sm-1 control-label">Terminado</label>
-                                            <div class="form-group col-sm-11">
+                                            <label for="orden_terminado" class="col-xs-12 col-sm-1 control-label">Terminado</label>
+                                            <div class="form-group col-xs-12 col-sm-11">
                                                 <textarea id="orden_terminado" name="orden_terminado" class="form-control" rows="2" placeholder="Terminado"><%- orden_terminado %></textarea>
                                             </div>
                                         </div>
 
                                         <div class="row">
-                                            <label for="orden_fecha_inicio" class="col-sm-1 control-label">F. Recogida #1</label>
-                                            <div class="form-group col-md-3">
+                                            <label for="orden_fecha_inicio" class="col-xs-12 col-sm-1 control-label">F. Recogida #1</label>
+                                            <div class="form-group col-xs-12 col-md-3">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon">
                                                         <input type="checkbox" id="orden_estado_recogida1" class="change-recogida" data-change="R1" name="orden_estado_recogida1" value="orden_estado_recogida1"  <%- parseInt(orden_estado_recogida1) ? 'checked': ''%>>
@@ -202,7 +202,7 @@
                                                     <input type="text" id="orden_fecha_recogida1" name="orden_fecha_recogida1" placeholder="Fecha recogida" class="form-control input-sm datepicker" value="<%- orden_fecha_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-2" <%- !parseInt(orden_estado_recogida1) ? 'hidden' : '' %>>
+                                            <div class="form-group col-xs-12 col-md-2" <%- !parseInt(orden_estado_recogida1) ? 'hidden' : '' %>>
                                                 <div class="input-group input-group-sm clockpicker">
                                                     <input type="text" id="orden_hora_recogida1" name="orden_hora_recogida1" class="form-control" value="<%- orden_hora_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
                                                     <span class="input-group-addon">
@@ -212,8 +212,8 @@
                                                 <div class="help-block with-errors"></div>
                                             </div>
 
-                                            <label for="orden_fecha_inicio" class="col-sm-1 control-label">F. Recogida #2</label>
-                                            <div class="form-group col-md-3">
+                                            <label for="orden_fecha_inicio" class="col-xs-12 col-sm-1 control-label">F. Recogida #2</label>
+                                            <div class="form-group col-xs-12 col-md-3">
                                                 <div class="input-group input-group-sm">
                                                     <span class="input-group-addon">
                                                         <input type="checkbox" id="orden_estado_recogida2" class="change-recogida" data-change="R2" name="orden_estado_recogida2" value="orden_estado_recogida2"  <%- parseInt(orden_estado_recogida2) ? 'checked': ''%>>
@@ -221,7 +221,7 @@
                                                     <input type="text" id="orden_fecha_recogida2" name="orden_fecha_recogida2" placeholder="Fecha recogida" class="form-control input-sm datepicker" value="<%- orden_fecha_recogida2 %>" <%- parseInt(orden_estado_recogida2) ? '' : 'disabled' %>>
                                                 </div>
                                             </div>
-                                            <div class="form-group col-md-2" <%- !parseInt(orden_estado_recogida2) ? 'hidden' : '' %>>
+                                            <div class="form-group col-xs-12 col-md-2" <%- !parseInt(orden_estado_recogida2) ? 'hidden' : '' %>>
                                                 <div class="input-group input-group-sm clockpicker">
                                                     <input type="text" id="orden_hora_recogida2" name="orden_hora_recogida2" class="form-control" value="<%- orden_hora_recogida2 %>" <%- !parseInt(orden_estado_recogida2) ? 'disabled' : '' %>>
                                                     <span class="input-group-addon">
