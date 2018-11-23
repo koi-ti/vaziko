@@ -39,14 +39,35 @@
                         </div>
 
                         <div class="form-group">
-							<label for="search_documento" class="col-md-offset-3 col-md-1 control-label">Documento</label>
+							<label for="search_documento" class="col-md-1 control-label">Documento</label>
 							<div class="col-md-4">
 								<select name="search_documento" id="search_documento" class="form-control select2-default-clear">
 									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
-									<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
+										<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
+
+							<label for="search_fecha_asiento" class="col-md-1 control-label">Fecha asiento</label>
+							<div class="col-md-2">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="text" id="search_fecha_asiento" name="search_fecha_asiento" placeholder="Fecha asiento" value="{{ session('search_fecha_asiento') }}" class="form-control input-sm datepicker">
+								</div>
+							</div>
+
+							<label for="search_fecha_elaboro" class="col-md-1 control-label">Fecha elaboro</label>
+							<div class="col-md-2">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="text" id="search_fecha_elaboro" name="search_fecha_elaboro" placeholder="Fecha elaboro" value="{{ session('search_fecha_elaboro') }}" class="form-control input-sm datepicker">
+								</div>
+							</div>
+
 							<div class="col-md-1">
 								<a href="#" class="btn btn-default btn-sm btn-import-modal"><i class="fa fa-upload"></i> Importar</a>
 							</div>

@@ -214,7 +214,8 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: model.resource })) );
+                                alertify.success(resp.msg);
+                                _this.cotizacionesSearchTable.ajax.reload();
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {

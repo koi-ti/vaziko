@@ -21,7 +21,7 @@ class Ordenp extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen', 'orden_fecha_recogida1', 'orden_fecha_recogida2'];
+    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'];
 
     /**
      * The attributes that are mass boolean assignable.
@@ -35,7 +35,7 @@ class Ordenp extends BaseModel
      *
      * @var array
      */
-    protected $nullable = ['orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2'];
+    protected $nullable = ['orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'];
 
     public function isValid($data)
     {
@@ -56,6 +56,16 @@ class Ordenp extends BaseModel
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
+            if( isset($data['orden_estado_recogida1']) && ($data['orden_fecha_recogida1'] == '' || $data['orden_hora_recogida1'] == '') ) {
+                $this->errors = "La fecha y/o hora de recogida #1 esta incorrecta.";
+                return false;
+            }
+
+            if( isset($data['orden_estado_recogida2']) && ($data['orden_fecha_recogida2'] == '' || $data['orden_hora_recogida2'] == '') ) {
+                $this->errors = "La fecha y/o hora de recogida #2 esta incorrecta.";
+                return false;
+            }
+
             return true;
         }
         $this->errors = $validator->errors();

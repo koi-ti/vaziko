@@ -202,6 +202,15 @@
                                                     <input type="text" id="orden_fecha_recogida1" name="orden_fecha_recogida1" placeholder="Fecha recogida" class="form-control input-sm datepicker" value="<%- orden_fecha_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
                                                 </div>
                                             </div>
+                                            <div class="form-group col-md-2" <%- !parseInt(orden_estado_recogida1) ? 'hidden' : '' %>>
+                                                <div class="input-group input-group-sm clockpicker">
+                                                    <input type="text" id="orden_hora_recogida1" name="orden_hora_recogida1" class="form-control" value="<%- orden_hora_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                                <div class="help-block with-errors"></div>
+                                            </div>
 
                                             <label for="orden_fecha_inicio" class="col-sm-1 control-label">F. Recogida #2</label>
                                             <div class="form-group col-md-3">
@@ -211,6 +220,15 @@
                                                     </span>
                                                     <input type="text" id="orden_fecha_recogida2" name="orden_fecha_recogida2" placeholder="Fecha recogida" class="form-control input-sm datepicker" value="<%- orden_fecha_recogida2 %>" <%- parseInt(orden_estado_recogida2) ? '' : 'disabled' %>>
                                                 </div>
+                                            </div>
+                                            <div class="form-group col-md-2" <%- !parseInt(orden_estado_recogida2) ? 'hidden' : '' %>>
+                                                <div class="input-group input-group-sm clockpicker">
+                                                    <input type="text" id="orden_hora_recogida2" name="orden_hora_recogida2" class="form-control" value="<%- orden_hora_recogida2 %>" <%- !parseInt(orden_estado_recogida2) ? 'disabled' : '' %>>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
+                                                </div>
+                                                <div class="help-block with-errors"></div>
                                             </div>
                                         </div>
                                     </form>

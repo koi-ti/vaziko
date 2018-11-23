@@ -195,7 +195,8 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('precotizaciones.show', { precotizaciones: model.resource })) );
+                                alertify.success(resp.msg);
+                                _this.precotizacionesSearchTable.ajax.reload();
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {

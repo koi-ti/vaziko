@@ -164,7 +164,9 @@ app || (app = {});
 
                 var data = window.Misc.formToJson( e.target );
                     data.orden_fecha_recogida1 = this.$('#orden_fecha_recogida1').val();
-                    data.orden_fecha_recogida2 = this.$('#orden_fecha_recogida2').val(); 
+                    data.orden_fecha_recogida2 = this.$('#orden_fecha_recogida2').val();
+                    data.orden_hora_recogida1 = this.$('#orden_hora_recogida1').val();
+                    data.orden_hora_recogida2 = this.$('#orden_hora_recogida2').val();
                     data.orden_observaciones_imagen = this.$observacionesimagen.val();
 
                 this.model.save( data, {patch: true, silent: true} );
@@ -178,13 +180,30 @@ app || (app = {});
             var selected = $(e.target).is(':checked'),
                 estado = $(e.target).data('change');
 
-            if( selected ){
-                (estado == 'R1') ? this.$('#orden_fecha_recogida1').removeAttr('disabled') : '';
-                (estado == 'R2') ? this.$('#orden_fecha_recogida2').removeAttr('disabled') : '';
-            }else{
-                (estado == 'R1') ? this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled') : '';
-                (estado == 'R2') ? this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled') : '';
-            }
+                if( selected ){
+                    if(estado == 'R1') {
+                        this.$('#orden_fecha_recogida1').removeAttr('disabled');
+                        this.$('#orden_hora_recogida1').parent().parent().removeAttr('hidden');
+                        this.$('#orden_hora_recogida1').removeAttr('disabled');
+                    }
+
+                    if(estado == 'R2') {
+                        this.$('#orden_fecha_recogida2').removeAttr('disabled');
+                        this.$('#orden_hora_recogida2').parent().parent().removeAttr('hidden');
+                        this.$('#orden_hora_recogida2').removeAttr('disabled');
+                    }
+                }else{
+                    if(estado == 'R1') {
+                        this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled');
+                        this.$('#orden_hora_recogida1').parent().parent().attr('hidden', 'hidden');
+                        this.$('#orden_hora_recogida1').val('').attr('disabled', 'disabled');
+                    }
+                    if(estado == 'R2') {
+                        this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled');
+                        this.$('#orden_hora_recogida2').parent().parent().attr('hidden', 'hidden');
+                        this.$('#orden_hora_recogida2').val('').attr('disabled', 'disabled');
+                    }
+                }
         },
 
         /**
@@ -738,6 +757,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initICheck == 'function' )
                 window.initComponent.initICheck();
+
+            if( typeof window.initComponent.initClockPicker == 'function' )
+                window.initComponent.initClockPicker();
         },
 
         /**

@@ -31,6 +31,8 @@ class AsientoController extends Controller
                 session(['search_tercero_nombre' => $request->has('asiento_tercero_nombre') ? $request->asiento_tercero_nombre : '']);
                 session(['search_documento' => $request->has('asiento_documento') ? $request->asiento_documento : '']);
                 session(['search_numero' => $request->has('asiento_numero') ? $request->asiento_numero : '']);
+                session(['search_fecha_asiento' => $request->has('asiento_fecha_asiento') ? $request->asiento_fecha_asiento : '']);
+                session(['search_fecha_elaboro' => $request->has('asiento_fecha_elaboro') ? $request->asiento_fecha_elaboro : '']);
             }
 
             return Datatables::of($query)
@@ -48,6 +50,16 @@ class AsientoController extends Controller
                     // Documento
                     if($request->has('asiento_documento')) {
                         $query->where('asiento1_documento', $request->asiento_documento);
+                    }
+
+                    // Fecha asiento
+                    if($request->has('asiento_fecha_asiento')) {
+                        $query->where(DB::raw("CAST(CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) AS DATE)"), $request->asiento_fecha_asiento);
+                    }
+
+                    // Fecha elaboro
+                    if($request->has('asiento_fecha_elaboro')) {
+                        $query->where(DB::raw("SUBSTRING_INDEX(asiento1_fecha_elaboro, ' ', 1)"), $request->asiento_fecha_elaboro);
                     }
                 })
                 ->make(true);

@@ -32,6 +32,8 @@ app || (app = {});
             this.$searchNumero = this.$('#search_numero');
             this.$searchReferencia = this.$('#search_referencia');
             this.$searchDocumento = this.$('#search_documento');
+            this.$searchFechaAsiento = this.$('#search_fecha_asiento');
+            this.$searchFechaElaboro = this.$('#search_fecha_elaboro');
 
             this.asientosSearchTable = this.$asientosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -48,6 +50,8 @@ app || (app = {});
                         data.asiento_tercero_nit = _this.$searchTercero.val();
                         data.asiento_tercero_nombre = _this.$searchTerceroName.val();
                         data.asiento_documento = _this.$searchDocumento.val();
+                        data.asiento_fecha_asiento = _this.$searchFechaAsiento.val();
+                        data.asiento_fecha_elaboro = _this.$searchFechaElaboro.val();
                     }
                 },
                 columns: [
@@ -119,6 +123,8 @@ app || (app = {});
             this.$searchReferencia.val('');
             this.$searchNumero.val('');
             this.$searchDocumento.val('').trigger('change');
+            this.$searchFechaAsiento.val('').trigger('change');
+            this.$searchFechaElaboro.val('');
 
             this.asientosSearchTable.ajax.reload();
         },

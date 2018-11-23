@@ -26,11 +26,14 @@ class CreatePrecotizacion1Table extends Migration
              $table->boolean('precotizacion1_abierta')->default(false);
              $table->boolean('precotizacion1_culminada')->default(false);
              $table->string('precotizacion1_observaciones');
+             $table->datetime('precotizacion1_fh_culminada')->nullable();
+             $table->integer('precotizacion1_usuario_culminada')->nullable()->unsigned();
              $table->datetime('precotizacion1_fh_elaboro');
              $table->integer('precotizacion1_usuario_elaboro')->unsigned();
 
              $table->foreign('precotizacion1_cliente')->references('id')->on('koi_tercero')->onDelete('restrict');
              $table->foreign('precotizacion1_contacto')->references('id')->on('koi_tcontacto')->onDelete('restrict');
+             $table->foreign('precotizacion1_usuario_culminada')->references('id')->on('koi_tercero')->onDelete('restrict');
              $table->foreign('precotizacion1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
          });
      }

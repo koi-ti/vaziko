@@ -155,9 +155,17 @@
 										<div>{!! $orden->orden_fecha_recogida1 ?: '-' !!}</div>
 									</div>
 									<div class="form-group col-md-3">
+										<label class="control-label">H. Recogida #1</label>
+                                        <div>{!! $orden->orden_hora_recogida1 ?: '-' !!}</div>
+									</div>
+									<div class="form-group col-md-3">
 										<label class="control-label">F. Recogida #2</label>
 										<div>{!! $orden->orden_fecha_recogida2 ?: '-' !!}</div>
 									</div>
+                                    <div class="form-group col-md-3">
+                                        <label class="control-label">H. Recogida #2</label>
+                                        <div>{!! $orden->orden_hora_recogida2 ?: '-' !!}</div>
+                                    </div>
 								</div>
 
 								<div class="row">

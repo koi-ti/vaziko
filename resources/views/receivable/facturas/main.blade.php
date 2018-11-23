@@ -48,13 +48,23 @@
                         <div class="row">
                             <label for="factura1_fecha" class="col-md-1 control-label">Fecha</label>
                             <div class="form-group col-md-2">
-                                <input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker"  value="<%- factura1_fecha %>" required>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="factura1_fecha" name="factura1_fecha" placeholder="Fecha" class="form-control input-sm datepicker"  value="<%- factura1_fecha %>" required>
+                                </div>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <label for="factura1_fecha_vencimiento" class="col-md-1 control-label">Vencimiento</label>
                             <div class="form-group col-md-2">
-                                <input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" value="<%- factura1_fecha_vencimiento %>" required>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="factura1_fecha_vencimiento" name="factura1_fecha_vencimiento" placeholder="Vencimiento" class="form-control input-sm datepicker" value="<%- factura1_fecha_vencimiento %>" required>
+                                </div>
                                 <div class="help-block with-errors"></div>
                             </div>
 

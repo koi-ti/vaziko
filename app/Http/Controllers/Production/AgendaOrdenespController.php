@@ -19,9 +19,19 @@ class AgendaOrdenespController extends Controller
     public function index(Request $request)
     {
         if( $request->ajax() ){
-            $ordenes = Ordenp::select(DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as title, CONCAT(orden_fecha_entrega,'T',orden_hora_entrega) as start, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre"), 'koi_ordenproduccion.id as orden_id', 'orden_referencia', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_cliente', 'tercero_nit', 'orden_abierta', 'orden_anulada', 'orden_culminada')
+            $recogida1 = Ordenp::select(DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as title, CONCAT(orden_fecha_recogida1,'T',orden_hora_recogida1) as start, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre, 'R1' as type"), 'koi_ordenproduccion.id as orden_id', 'orden_referencia', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_cliente', 'tercero_nit', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_fecha_recogida1', 'orden_hora_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida2')
+                                ->whereBetween('orden_fecha_recogida1', [$request->start, $request->end])
+                                ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+
+            $recogida2 = Ordenp::select(DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as title, CONCAT(orden_fecha_recogida2,'T',orden_hora_recogida2) as start, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre, 'R2' as type"), 'koi_ordenproduccion.id as orden_id', 'orden_referencia', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_cliente', 'tercero_nit', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_fecha_recogida1', 'orden_hora_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida2')
+                                ->whereBetween('orden_fecha_recogida2', [$request->start, $request->end])
+                                ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+
+            $ordenes = Ordenp::select(DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as title, CONCAT(orden_fecha_entrega,'T',orden_hora_entrega) as start, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) ELSE tercero_razonsocial END) as tercero_nombre, 'OR' as type"), 'koi_ordenproduccion.id as orden_id', 'orden_referencia', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_cliente', 'tercero_nit', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_fecha_recogida1', 'orden_hora_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida2')
                                 ->whereBetween('orden_fecha_entrega', [$request->start, $request->end])
                                 ->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id')
+                                ->union($recogida1)
+                                ->union($recogida2)
                                 ->get();
 
             return response()->json($ordenes);

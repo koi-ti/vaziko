@@ -52,11 +52,28 @@ app || (app = {});
                 estado = $(e.target).data('change');
 
             if( selected ){
-                (estado == 'R1') ? this.$('#orden_fecha_recogida1').removeAttr('disabled') : '';
-                (estado == 'R2') ? this.$('#orden_fecha_recogida2').removeAttr('disabled') : '';
+                if(estado == 'R1') {
+                    this.$('#orden_fecha_recogida1').removeAttr('disabled');
+                    this.$('#orden_hora_recogida1').parent().parent().removeAttr('hidden');
+                    this.$('#orden_hora_recogida1').removeAttr('disabled');
+                }
+
+                if(estado == 'R2') {
+                    this.$('#orden_fecha_recogida2').removeAttr('disabled');
+                    this.$('#orden_hora_recogida2').parent().parent().removeAttr('hidden');
+                    this.$('#orden_hora_recogida2').removeAttr('disabled');
+                }
             }else{
-                (estado == 'R1') ? this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled') : '';
-                (estado == 'R2') ? this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled') : '';
+                if(estado == 'R1') {
+                    this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled');
+                    this.$('#orden_hora_recogida1').parent().parent().attr('hidden', 'hidden');
+                    this.$('#orden_hora_recogida1').val('').attr('disabled', 'disabled');
+                }
+                if(estado == 'R2') {
+                    this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled');
+                    this.$('#orden_hora_recogida2').parent().parent().attr('hidden', 'hidden');
+                    this.$('#orden_hora_recogida2').val('').attr('disabled', 'disabled');
+                }
             }
         },
 
@@ -104,6 +121,9 @@ app || (app = {});
 
             if( typeof window.initComponent.initICheckPicker == 'function' )
                 window.initComponent.initICheckPicker();
+
+            if( typeof window.initComponent.initClockPicker == 'function' )
+                window.initComponent.initClockPicker();
         },
 
         /**

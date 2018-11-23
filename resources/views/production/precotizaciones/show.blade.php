@@ -100,6 +100,20 @@
                         <label class="control-label">Fecha elaboro</label>
                         <div>{{ $precotizacion->precotizacion1_fh_elaboro }}</div>
                     </div>
+
+                    @if ( $precotizacion->precotizacion1_usuario_culminada )
+                        <div class="form-group col-md-2">
+                            <label class="control-label">Usuario culmino</label>
+                            <div>
+                                <a href="{{ route('terceros.show', ['terceros' =>  $precotizacion->precotizacion1_usuario_culminada ]) }}" title="Ver tercero">
+                                    {{ $precotizacion->username_culminada }}</a>
+                            </div>
+                        </div>
+                        <div class="form-group col-md-2">
+                            <label class="control-label">Fecha culmino</label>
+                            <div>{{ $precotizacion->precotizacion1_fh_culminada }}</div>
+                        </div>
+                    @endif
                 </div>
 
                 <div class="row">

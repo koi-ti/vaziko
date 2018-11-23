@@ -49,10 +49,11 @@ app || (app = {});
                     _this.$modal.modal('show');
                 },
                 eventAfterRender: function(event, element, view) {
+                    console.log(event);
                     if ( parseInt(event.orden_culminada ) ){
                         element.addClass('fc-draggable');
-                        element.css('background-color', '#00C0EF');
-                        element.css('border-color', '#00C0EF');
+                        element.css('background-color', '#0073B7');
+                        element.css('border-color', '#0073B7');
 
                     }else if( parseInt(event.orden_anulada ) ){
                         element.addClass('fc-draggable');
@@ -68,6 +69,13 @@ app || (app = {});
                         element.addClass('fc-draggable');
                         element.css('background-color', '#F39C12');
                         element.css('border-color', '#F39C12');
+
+                    }
+
+                    if( event.type == 'R1' || event.type == 'R2') {
+                        element.addClass('fc-draggable');
+                        element.css('background-color', 'black');
+                        element.css('border-color', 'black');
 
                     }
                 }
