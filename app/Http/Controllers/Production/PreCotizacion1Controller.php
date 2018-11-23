@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
-use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
+use App, Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion1Controller extends Controller
 {
@@ -387,7 +387,7 @@ class PreCotizacion1Controller extends Controller
                 // Pre cotizacion
                 $precotizacion->precotizacion1_abierta = false;
                 $precotizacion->precotizacion1_culminada = true;
-                $precotizacion->precotizacion1_fh_culminada = Carbon::now();
+                $precotizacion->precotizacion1_fh_culminada = date('Y-m-d H:m:s');
                 $precotizacion->precotizacion1_usuario_culminada = Auth::user()->id;
                 $precotizacion->save();
 
