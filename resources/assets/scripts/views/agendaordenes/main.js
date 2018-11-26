@@ -53,29 +53,29 @@ app || (app = {});
                     if ( parseInt(event.orden_culminada ) ){
                         element.addClass('fc-draggable');
                         element.css('background-color', '#0073B7');
-                        element.css('border-color', '#0073B7');
+                        element.css('border-color', 'white');
 
                     }else if( parseInt(event.orden_anulada ) ){
                         element.addClass('fc-draggable');
                         element.css('background-color', '#DD4B39');
-                        element.css('border-color', '#DD4B39');
+                        element.css('border-color', 'white');
 
                     }else if( parseInt(event.orden_abierta) ){
                         element.addClass('fc-draggable');
                         element.css('background-color', '#00A65A');
-                        element.css('border-color', '#00A65A');
+                        element.css('border-color', 'white');
 
                     } else {
                         element.addClass('fc-draggable');
                         element.css('background-color', '#F39C12');
-                        element.css('border-color', '#F39C12');
+                        element.css('border-color', 'white');
 
                     }
 
                     if( event.type == 'R1' || event.type == 'R2') {
                         element.addClass('fc-draggable');
                         element.css('background-color', 'black');
-                        element.css('border-color', 'black');
+                        element.css('border-color', 'white');
 
                     }
                 }

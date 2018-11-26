@@ -484,7 +484,7 @@
 		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-		<h4 class="inner-title-modal modal-title">Buscador de ordenes</h4>
+		<h4 class="inner-title-modal modal-title">Buscador productos de ordenes</h4>
 	</div>
 	{!! Form::open(['id' => 'form-koi-search-ordenp2-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 		<div class="modal-body">

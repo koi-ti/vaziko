@@ -20,6 +20,6 @@
     <script type="text/template" id="facturap-item-list-tpl">
         <td><%- facturap2_cuota %></td>
         <td><%- facturap2_vencimiento %></td>
-        <td><%- facturap2_saldo %></td>
+        <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
     </script>
 @stop

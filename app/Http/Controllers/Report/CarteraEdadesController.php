@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Classes\Reports\Receivable\CarteraEdades;
 use App\Models\Receivable\Factura4, App\Models\Base\Tercero;
 use Validator, Excel, DB;
 
@@ -21,7 +22,6 @@ class CarteraEdadesController extends Controller
         if( $request->has('type') ){
             $validator = Validator::make($request->all(), [
                 'filter_fecha' => 'required',
-                'filter_tercero' => 'required'
             ]);
 
             // Validar que sean requeridos
@@ -49,90 +49,34 @@ class CarteraEdadesController extends Controller
                 $query->where('factura1_tercero', $tercero->id);
             }
             $query->orderBy('tercero_nit', 'asc');
-            $query->orderBy('factura4_vencimiento', 'asc');
+            $query->orderBy('factura1_numero', 'asc');
             $data = $query->get();
 
             // Prepare data
             $title = "Reporte cartera por edades";
             $type = $request->type;
 
+            $headerdays = ['MORA > 360', 'MORA >180 Y <= 360', 'MORA > 90 Y <= 180', 'MORA > 60 Y <= 90', 'MORA > 30 Y <= 60', 'MORA > 0 Y <= 30', 'DE 0 A 30', 'DE 31 A 60', 'DE 61 A 90', 'DE 91 A 180', 'DE 181 A 360', '> 360'];
+
             // Generate file
             switch ($type) {
+                case 'pdf':
+                    $pdf = new CarteraEdades('L', 'mm', 'A3');
+                    $pdf->buldReport($data, $title);
+                break;
+
                 case 'xls':
-                    Excel::create(sprintf('%s_%s', 'cartera_edades', date('Y_m_d H_m_s')), function($excel) use($data, $title, $type) {
-                        $excel->sheet('Excel', function($sheet) use($data, $title, $type) {
-                            $sheet->loadView('reports.receivable.carteraedades.report', compact('data', 'title', 'type'));
+                    Excel::create(sprintf('%s_%s', 'cartera_edades', date('Y_m_d H_m_s')), function($excel) use($data, $title, $type, $headerdays) {
+                        $excel->sheet('Excel', function($sheet) use($data, $title, $type, $headerdays) {
+                            $sheet->loadView('reports.receivable.carteraedades.report', compact('data', 'title', 'type', 'headerdays'));
+                            $sheet->setWidth(array('A' => 15, 'B' => 50, 'C' => 10, 'D' => 15, 'E' => 10, 'F' => 20, 'G' => 20, 'H' => 20, 'I' => 20, 'J' => 20, 'K' => 20, 'L' => 20, 'M' => 20, 'N' => 20, 'O' => 20, 'P' => 20, 'Q' => 20, 'R' => 20));
+                            $sheet->setFontFamily('Liberation Serif');
+                            $sheet->setFontSize(11);
                         });
                     })->download('xls');
                 break;
             }
         }
         return view('reports.receivable.carteraedades.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

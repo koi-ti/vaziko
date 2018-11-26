@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
-use App, Auth, DB, Log, Datatables, Storage;
+use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion1Controller extends Controller
 {
@@ -29,7 +29,7 @@ class PreCotizacion1Controller extends Controller
     {
         if ($request->ajax()){
             $query = PreCotizacion1::query();
-            $query->select('koi_precotizacion1.id', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'precotizacion1_culminada', 'precotizacion1_numero', 'precotizacion1_ano', 'precotizacion1_fecha', 'precotizacion1_abierta',
+            $query->select('koi_precotizacion1.id', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'precotizacion1_fh_elaboro', 'precotizacion1_fh_culminada', 'precotizacion1_culminada', 'precotizacion1_numero', 'precotizacion1_ano', 'precotizacion1_fecha', 'precotizacion1_abierta',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -67,6 +67,15 @@ class PreCotizacion1Controller extends Controller
             }
 
             return Datatables::of($query)
+                ->editColumn('precotizacion1_fh_culminada', function ($q) {
+                    if ( $q->precotizacion1_fh_culminada ){
+                        $fechaelaboro = new \DateTime($q->precotizacion1_fh_elaboro);
+                        $fechaculmino = new \DateTime($q->precotizacion1_fh_culminada);
+                        return $fechaculmino->diff($fechaelaboro)->format('%d(d) %H(h) %I(m)');
+                    }else{
+                        return "-";
+                    }
+                })
                 ->filter(function($query) use($request) {
                     // Cotizacion codigo
                     if($request->has('precotizacion_numero')) {

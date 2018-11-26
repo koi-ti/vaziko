@@ -34,15 +34,15 @@ class FacturapController extends Controller
             if($request->has('persistent') && $request->persistent) {
                 session(['searchfacturap_tercero' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
                 session(['searchfacturap_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
-                session(['searchfacturap_referencia' => $request->has('referencia') ? $request->referencia : '']);
+                session(['searchfacturap_facturap' => $request->has('facturap') ? $request->facturap : '']);
                 session(['searchfacturap_fecha' => $request->has('facturap_fecha') ? $request->facturap_fecha : '']);
             }
 
             return Datatables::of($query)
                 ->filter(function ($query) use ($request){
                     // Referencia
-                    if($request->has('referencia')){
-                        $query->whereRaw("facturap1_factura LIKE '%{$request->referencia}%'");
+                    if($request->has('facturap')){
+                        $query->whereRaw("facturap1_factura LIKE '%{$request->facturap}%'");
                     }
 
                     // Fecha

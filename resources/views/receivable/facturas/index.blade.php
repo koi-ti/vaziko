@@ -61,6 +61,7 @@
                             <th >Prefijo</th>
                             <th >Nit</th>
                             <th >Cliente</th>
+                            <th >Valor</th>
                         </tr>
                     </thead>
                 </table>

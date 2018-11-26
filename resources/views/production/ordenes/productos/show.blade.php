@@ -470,6 +470,7 @@
 							$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
 							$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
 							$totalmaterialesp = round( $totalmaterialesp / $ordenp2->orden2_cantidad );
+							$totalmaterialesp += round( $totalmaterialesp*$ordenp2->orden2_margen_materialp / 100 );
 							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
 						/*--}}
 
@@ -495,8 +496,10 @@
 												<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
 											</tr>
 											<tr>
-												<th colspan="4">Materiales</th>
-												<td class="text-right"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
+												<th>Materiales</th>
+												<td class="text-right">{{ $ordenp2->orden2_margen_materialp }}</td>
+												<th class="text-left">%</th>
+												<td class="text-right" colspan="2"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
 											</tr>
 											<tr>
 												<th colspan="4">Áreas</th>

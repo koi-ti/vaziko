@@ -159,6 +159,7 @@ class DetalleAsientoController extends Controller
 
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento2->id,
+                        'asiento1_numero' => $asiento->asiento1_numero,
                         'asiento2_cuenta' => $objCuenta->id,
                         'plancuentas_cuenta' => $objCuenta->plancuentas_cuenta,
                         'plancuentas_nombre' => $objCuenta->plancuentas_nombre,

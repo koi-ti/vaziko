@@ -60,6 +60,7 @@ app || (app = {});
                     { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
+                    { data: 'precotizacion1_fh_culminada', name: 'precotizacion1_fh_culminada' },
                     { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
                 ],
                 order: [
@@ -114,6 +115,12 @@ app || (app = {});
                     },
                     {
                         targets: 6,
+                        width: '10%',
+                        searchable: false,
+                        orderable: false,
+                    },
+                    {
+                        targets: 7,
                         width: '7%',
                         searchable: false,
                         orderable: false,

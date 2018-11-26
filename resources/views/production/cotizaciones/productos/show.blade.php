@@ -290,46 +290,46 @@
 	        	</div>
 
 				@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-				<div class="box box-danger">
-					<div class="box-header with-border">
-						<h3 class="box-title">Fórmulas</h3>
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Fórmulas</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<label class="control-label col-md-1">Fórmula</label>
+								<div class="form-group col-md-6">
+									<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
+								</div>
+
+								<label class="control-label col-md-1">Precio</label>
+								<div class="form-group col-md-4">
+									<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+								</div>
+							</div>
+							<div class="row">
+								<label class="control-label col-md-1">Fórmula</label>
+								<div class="form-group col-md-6">
+									<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
+								</div>
+
+								<label class="control-label col-md-1">Transporte</label>
+								<div class="form-group col-md-4">
+									<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
+								</div>
+							</div>
+							<div class="row">
+								<label class="control-label col-md-1">Fórmula</label>
+								<div class="form-group col-md-6">
+									<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
+								</div>
+
+								<label class="control-label col-md-1">Viáticos</label>
+								<div class="form-group col-md-4">
+									<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
+								</div>
+							</div>
+						</div>
 					</div>
-					<div class="box-body">
-						<div class="row">
-							<label class="control-label col-md-1">Fórmula</label>
-							<div class="form-group col-md-6">
-								<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
-							</div>
-
-							<label class="control-label col-md-1">Precio</label>
-							<div class="form-group col-md-4">
-								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
-							</div>
-						</div>
-						<div class="row">
-							<label class="control-label col-md-1">Fórmula</label>
-							<div class="form-group col-md-6">
-								<div>{{ $cotizacion2->cotizacion2_transporte_formula }}</div>
-							</div>
-
-							<label class="control-label col-md-1">Transporte</label>
-							<div class="form-group col-md-4">
-								<div>{{ number_format($cotizacion2->cotizacion2_transporte, 2, ',', '.') }}</div>
-							</div>
-						</div>
-						<div class="row">
-							<label class="control-label col-md-1">Fórmula</label>
-							<div class="form-group col-md-6">
-								<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
-							</div>
-
-							<label class="control-label col-md-1">Viáticos</label>
-							<div class="form-group col-md-4">
-								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
-							</div>
-						</div>
-					</div>
-				</div>
 				@endif
 
 				<div class="box box-danger">
@@ -475,6 +475,7 @@
 							$transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
 							$viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
 							$totalmaterialesp = round( $totalmaterialesp / $cotizacion2->cotizacion2_cantidad );
+							$totalmaterialesp += round( $totalmaterialesp*$cotizacion2->cotizacion2_margen_materialp / 100 );
 							$subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap + $totalmaterialesp;
 						/*--}}
 						<div class="col-sm-6 col-md-offset-3">
@@ -499,8 +500,10 @@
 												<td class="text-right"><span>{{ number_format($viaticos, 2, ',', '.')}}</span></td>
 											</tr>
 											<tr>
-												<th colspan="4">Materiales</th>
-												<td class="text-right"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
+												<th>Materiales</th>
+												<td class="text-right">{{ $cotizacion2->cotizacion2_margen_materialp }}</td>
+												<th class="text-left">%</th>
+												<td class="text-right" colspan="2"><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></td>
 											</tr>
 											<tr>
 												<th colspan="4">Áreas</th>

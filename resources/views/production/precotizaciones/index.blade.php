@@ -72,6 +72,7 @@
                                 <th>Numero</th>
                                 <th>Tercero</th>
                                 <th nowrap="nowrap">Fecha</th>
+                                <th nowrap="nowrap">Tiempo culmino</th>
                                 <th nowrap="nowrap">Estado</th>
                             </tr>
                         </thead>

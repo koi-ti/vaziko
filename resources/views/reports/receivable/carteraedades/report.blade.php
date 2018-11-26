@@ -1,61 +1,90 @@
 @extends('reports.layout', ['type' => $type, 'title' => $title])
 
 @section('content')
-
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
-                <th class="center size-7 width-20">Prefijo</th>
-                <th class="center size-7 width-20">Número</th>
-                <th class="center size-7 width-30">Cuota</th>
-                <th class="center size-7 width-15">Documento</th>
-                <th class="center size-7 width-15">Cliente</th>
-                <th class="center size-7 width-20">MORA > 360</th>
-                <th class="center size-7 width-20">MORA > 180 Y <= 360</th>
-                <th class="center size-7 width-20">MORA > 90 Y <= 180</th>
-                <th class="center size-7 width-20">MORA > 60 Y <= 90</th>
-                <th class="center size-7 width-20">MORA > 30 Y <= 60</th>
-                <th class="center size-7 width-20">MORA > 0 Y <= 30</th>
-                <th class="center size-7 width-20">DE 0 A 30</th>
-                <th class="center size-7 width-20">DE 31 A 60</th>
-                <th class="center size-7 width-20">DE 61 A 90</th>
-                <th class="center size-7 width-20">DE 91 A 180</th>
-                <th class="center size-7 width-20">DE 181 A 360</th>
-                <th class="center size-7 width-20">> 360</th>
+				<th class="center size-7" colspan="2">CLIENTE</th>
+                <th class="center size-7 width-5">PREFIJO</th>
+                <th class="center size-7 width-10">NÚMERO</th>
+                <th class="center size-7 width-5">CUOTA</th>
+				@foreach( $headerdays as $header )
+					<th class="center size-7 width-20">{{ $header }}</th>
+				@endforeach
+				<th class="center size-7 width-20">TOTAL</th>
 			</tr>
 		</thead>
 		<tbody>
-            {{--*/ $tercero = ''; $tsaldo = 0; /*--}}
+			{{--*/ $menor360 = $menor180 = $menor90 = $menor60 = $menor30 = $menor0 = $mayor0 = $mayor31 = $mayor61 = $mayor91 = $mayor181 = $mayor360 = $totalfinal = 0 /*--}}
             @foreach($data as $key => $item)
-                @if($tercero != $item->tercero_nit)
-                    @if ($key > 0) {
-                        <tr>
-                            <td colspan="5">Total</td>
-                            <td>{{ number_format ($tsaldo,2,',' , '.') }}</td>
-                        </tr>
-                        {{--*/ $tsaldo = 0; /*--}}
-                    @endif
-                    <tr>
-                        <td colspan="6">{{ $item->tercero_nit }} {{ $item->tercero_nombre }} {{ $item->tercero_telefono1 }} |{{ $item->tercero_direccion}} | {{ $item->municipio_nombre }} </td>
-                    </tr>
-                @endif
-                <tr>
-                    <td>{{ $item->factura1_numero }} -  {{ $item->factura1_prefijo }}</td>
-                    <td>{{ $item->factura1_fecha }}</td>
-                    <td></td>
-                    <td>{{ $item->factura4_vencimiento }}</td>
-                    <td>{{ $item->days }}</td>
-                    <td>{{ number_format ($item->factura4_saldo,2,',' , '.') }}</td>
+				{{--*/ $total = 0; /*--}}
+				<tr>
+					<td>{{ $item->tercero_nit }}</td>
+					<td>{{ $item->tercero_nombre }}</td>
+					<td>{{ $item->factura1_prefijo }}</td>
+					<td>{{ $item->factura1_numero }}</td>
+					<td>{{ $item->factura4_cuota }}</td>
+					<td>{{ $item->days < -360 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days >= -360 && $item->days <= -180 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days >= -180 && $item->days <= -90 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days >= -90 && $item->days <= -60 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days >= -60 && $item->days <= -30 ? $item->factura4_saldo : '0' }}</td>
+					<td>{{ $item->days >= -30 && $item->days <= 0 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 0 && $item->days <= 30 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 31 && $item->days <= 60 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 61 && $item->days <= 90 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 91 && $item->days <= 180 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 181 && $item->days <= 360 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $item->days > 360 ? $item->factura4_saldo : '0' }}</td>
+                    <td>{{ $total += $item->factura4_saldo }}</td>
                 </tr>
-                @if ( $key == $data->count()-1) {
-                    <tr>
-                        <td colspan="5" class="text-rigth">Total</td>
-                        <td>{{ number_format ($tsaldo,2,',' , '.') }}</td>
-                    </tr>
-                    {{--*/ $tsaldo = 0; /*--}}
-                @endif
-                {{--*/ $tercero = $item->tercero_nit ; $tsaldo += $item->factura4_saldo/*--}}
+				{{--*/
+					if( $item->days < -360 )
+						$menor360 += $item->factura4_saldo;
+					else if( $item->days >= -360 && $item->days <= -180 )
+						$menor180 += $item->factura4_saldo;
+					else if( $item->days >= -180 && $item->days <= -90 )
+						$menor90 += $item->factura4_saldo;
+					else if( $item->days >= -90 && $item->days <= -60 )
+						$menor60 += $item->factura4_saldo;
+					else if( $item->days >= -60 && $item->days <= -30 )
+						$menor30 += $item->factura4_saldo;
+					else if( $item->days >= -30 && $item->days <= 0 )
+						$menor0 += $item->factura4_saldo;
+					else if( $item->days > 0 && $item->days <= 30 )
+						$mayor0 += $item->factura4_saldo;
+					else if( $item->days > 31 && $item->days <= 60 )
+						$mayor31 += $item->factura4_saldo;
+					else if( $item->days > 61 && $item->days <= 90 )
+						$mayor61 += $item->factura4_saldo;
+					else if( $item->days > 91 && $item->days <= 180 )
+						$mayor91 += $item->factura4_saldo;
+					else if( $item->days > 181 && $item->days <= 360 )
+						$mayor181 += $item->factura4_saldo;
+					else if( $item->days > 360 )
+						$mayor360 += $item->factura4_saldo;
+
+					$totalfinal += $total;
+				/*--}}
             @endforeach
 		</tbody>
+		<tfoot>
+			<tr>
+				<th colspan="5" class="text-left">TOTAL</th>
+				<th>{{ $menor360 }}</th>
+				<th>{{ $menor180 }}</th>
+				<th>{{ $menor90 }}</th>
+				<th>{{ $menor60 }}</th>
+				<th>{{ $menor30 }}</th>
+				<th>{{ $menor0 }}</th>
+				<th>{{ $mayor0 }}</th>
+				<th>{{ $mayor31 }}</th>
+				<th>{{ $mayor61 }}</th>
+				<th>{{ $mayor91 }}</th>
+				<th>{{ $mayor181 }}</th>
+				<th>{{ $mayor360 }}</th>
+				<th>{{ $totalfinal }}</th>
+			</tr>
+		</tfoot>
 	</table>
 @stop

@@ -555,8 +555,10 @@
                                                     <td class="text-right"><span id="info-viaticos"></span></td>
                                                 </tr>
                                                 <tr>
-                                                    <th colspan="4">Materiales</th>
-                                                    <td class="text-right"><span id="info-materiales"></span></td>
+                                                    <th>Materiales</th>
+                                                    <td class="text-right"><input id="cotizacion2_margen_materialp" name="cotizacion2_margen_materialp" class="form-control input-sm event-price" value="<%- cotizacion2_margen_materialp %>" type="number" min="0" max="100" step="0.1"></td>
+                                                    <th class="text-left">%</th>
+                                                    <td colspan="2" class="text-right"><span id="info-materiales"></span></td>
                                                 </tr>
                                                 <tr>
                                                     <th colspan="4">Áreas</th>

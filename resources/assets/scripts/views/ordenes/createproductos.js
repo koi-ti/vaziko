@@ -135,6 +135,8 @@ app || (app = {});
             this.$infoareas = this.$('#info-areas');
             this.$infomateriales = this.$('#info-materiales');
 
+            this.$inputMargen = this.$('#orden2_margen_materialp');
+
             // Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
 
@@ -310,6 +312,7 @@ app || (app = {});
                 if( this.model.id != undefined ){
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = this.materialesProductopList.toJSON();
+                        data.orden2_margen_materialp = this.$inputMargen.val();
                         data.orden2_volumen = this.$inputVolumen.val();
                         data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
@@ -321,6 +324,7 @@ app || (app = {});
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = JSON.stringify(this.materialesProductopList);
+                        data.orden2_margen_materialp = this.$inputMargen.val();
                         data.orden2_volumen = this.$inputVolumen.val();
                         data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
                         data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
@@ -475,7 +479,7 @@ app || (app = {});
         *   Event calculate orden2
         **/
         calculateOrdenp2: function () {
-            var cantidad = transporte = viaticos = materiales = areas = precio = volumen = total = subtotal =  vcomision = 0;
+            var cantidad = transporte = viaticos = materiales = areas = precio = volumen = total = margen = subtotal =  vcomision = 0;
 
             // Igualar variables y quitar el inputmask
             cantidad = parseInt( this.$cantidad.val() );
@@ -485,6 +489,12 @@ app || (app = {});
             areas = Math.round( parseFloat( this.areasProductopList.totalize().total ) / cantidad  );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
             volumen = parseInt( this.$inputVolumen.val() );
+
+            // Calcular que no pase de 100% y no se undefinde
+            margen = parseFloat( this.$inputMargen.val() );
+            if( margen > 0 && margen <= 100 && !_.isUndefined(margen) && !_.isNaN(margen) ) {
+                materiales += (materiales*margen)/100;
+            }
 
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( precio ) );

@@ -105,22 +105,34 @@
 
 				<div class="box-body table-responsive">
 					<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-			            <tr>
-			                <th>Cuenta</th>
-			                <th>Nombre</th>
-			                <th>Beneficiario</th>
-			                <th>Centro Costo</th>
-			                <th>Base</th>
-			                <th>Débito</th>
-			                <th>Crédito</th>
-			                <th></th>
-			            </tr>
+						<thead>
+							<tr>
+								<td colspan="4"></td>
+								<th class="text-left">Total</th>
+								<td class="text-right total-debitos">0</td>
+								<td class="text-right total-creditos">0</td>
+								<td></td>
+							</tr>
+							<tr>
+								<th>Cuenta</th>
+								<th>Nombre</th>
+								<th>Beneficiario</th>
+								<th>Centro Costo</th>
+								<th>Base</th>
+								<th>Débito</th>
+								<th>Crédito</th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+
+						</tbody>
 			            <tfoot>
 							<tr>
 								<td colspan="4"></td>
 								<th class="text-left">Total</th>
-								<td class="text-right" id="total-debitos">0</td>
-								<td class="text-right" id="total-creditos">0</td>
+								<td class="text-right total-debitos">0</td>
+								<td class="text-right total-creditos">0</td>
 								<td></td>
 							</tr>
 						</tfoot>

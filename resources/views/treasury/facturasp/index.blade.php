@@ -25,14 +25,19 @@
                             <input id="searchfacturap_tercero_nombre" name="searchfacturap_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly value="{{ session('searchfacturap_tercero_nombre') }}">
                         </div>
 
-                        <label for="searchfacturap_referencia" class="col-sm-1 control-label">Referencia</label>
+                        <label for="searchfacturap_facturap" class="col-sm-1 control-label">Factura</label>
                         <div class="col-sm-2">
-                            <input id="searchfacturap_referencia" placeholder="Referencia" class="form-control input-sm" name="searchfacturap_referencia" type="text" maxlength="15" value="{{ session('searchfacturap_referencia') }}">
+                            <input id="searchfacturap_facturap" placeholder="Factura proveedor" class="form-control input-sm" name="searchfacturap_facturap" type="text" maxlength="15" value="{{ session('searchfacturap_facturap') }}">
                         </div>
 
                         <label for="searchfacturap_fecha" class="col-sm-1 control-label">Fecha</label>
                         <div class="col-sm-2">
-                            <input id="searchfacturap_fecha" placeholder="Fecha" class="form-control input-sm datepicker" name="searchfacturap_fecha" type="text" value="{{ session('searchfacturap_fecha') }}">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <span><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <input id="searchfacturap_fecha" placeholder="Fecha" class="form-control input-sm datepicker" name="searchfacturap_fecha" type="text" value="{{ session('searchfacturap_fecha') }}">
+                            </div>
                         </div>
                     </div>
 

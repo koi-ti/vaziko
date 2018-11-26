@@ -28,7 +28,7 @@ app || (app = {});
             var paginacion = this.$facturaspSearchTable.data('paginacion');
 
             // References
-            this.$searchfacturapReferencia = this.$('#searchfacturap_referencia');
+            this.$searchfacturapFacturap = this.$('#searchfacturap_facturap');
             this.$searchfacturapFecha = this.$('#searchfacturap_fecha');
             this.$searchfacturapTercero = this.$('#searchfacturap_tercero');
             this.$searchfacturapTerceroNombre = this.$('#searchfacturap_tercero_nombre');
@@ -44,7 +44,7 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('facturap.index') ),
                     data: function( data ) {
                         data.persistent = true;
-                        data.referencia = _this.$searchfacturapReferencia.val();
+                        data.facturap = _this.$searchfacturapFacturap.val();
                         data.facturap_fecha = _this.$searchfacturapFecha.val();
                         data.tercero_nit = _this.$searchfacturapTercero.val();
                         data.tercero_nombre = _this.$searchfacturapTerceroNombre.val();
@@ -78,7 +78,7 @@ app || (app = {});
         clear: function(e) {
             e.preventDefault();
 
-            this.$searchfacturapReferencia.val('');
+            this.$searchfacturapFacturap.val('');
             this.$searchfacturapFecha.val('');
             this.$searchfacturapTercero.val('');
             this.$searchfacturapTerceroNombre.val('');

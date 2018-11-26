@@ -22,7 +22,6 @@ app || (app = {});
         initialize : function() {
             // Model exist
             if( this.model.id != undefined ) {
-
                 this.asientoCuentasList = new app.AsientoCuentasList();
 
                 // Reference views
