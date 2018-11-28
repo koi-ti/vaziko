@@ -20,9 +20,9 @@
                     </div>
                     <div class="box-body">
                         <div class="external-event bg-green" style="cursor: initial;">Abierta</div>
-                        <div class="external-event bg-yellow" style="cursor: initial;">Cerrada</div>
-                        <div class="external-event bg-blue" style="cursor: initial;">Culminada</div>
-                        <div class="external-event bg-black" style="cursor: initial;">Recogida</div>
+                        <div class="external-event bg-black" style="cursor: initial;">Cerrada</div>
+                        <div class="external-event bg-gray" style="cursor: initial;">Culminada</div>
+                        <div class="external-event bg-primary" style="cursor: initial;">Recogida</div>
                     </div>
                 </div>
             </div>
@@ -90,8 +90,12 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<label class="control-label">Orden</label>
-                <div><a href="<%- window.Misc.urlFull( Route.route('ordenes.show', {ordenes: orden_id}) ) %>" title="Ir a orden"><b><%- title %></b></a> - <%- orden_referencia %></div>
-	        </div>
+                <div>
+                    <a href="<%- window.Misc.urlFull( Route.route('ordenes.show', {ordenes: orden_id}) ) %>" title="Ir a orden"><b><%- title %></b></a> - <%- orden_referencia %>
+                    <br>
+                    <a href="<%- window.Misc.urlFull( Route.route('tiemposp.index', {ordenp: title}) ) %>" class="btn btn-primary btn-sm" title="Agregar tiempo">Agregar tiempo de producción</a></div>
+               </div>
+           </div>
 		</div>
 		<div class="row">
 			<div class="col-sm-12">

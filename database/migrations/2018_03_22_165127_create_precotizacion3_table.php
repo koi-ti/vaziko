@@ -19,7 +19,6 @@ class CreatePrecotizacion3Table extends Migration
              $table->integer('precotizacion3_precotizacion2')->unsigned();
              $table->integer('precotizacion3_materialp')->unsigned();
              $table->integer('precotizacion3_producto')->unsigned()->nullable();
-             $table->integer('precotizacion3_proveedor')->unsigned();
              $table->double('precotizacion3_cantidad')->default(0);
              $table->string('precotizacion3_medidas', 50);
              $table->double('precotizacion3_valor_unitario')->default(0);
@@ -30,7 +29,6 @@ class CreatePrecotizacion3Table extends Migration
              $table->foreign('precotizacion3_precotizacion2')->references('id')->on('koi_precotizacion2')->onDelete('restrict');
              $table->foreign('precotizacion3_materialp')->references('id')->on('koi_materialp')->onDelete('restrict');
              $table->foreign('precotizacion3_producto')->references('id')->on('koi_producto')->onDelete('restrict');
-             $table->foreign('precotizacion3_proveedor')->references('id')->on('koi_tercero')->onDelete('restrict');
              $table->foreign('precotizacion3_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
          });
      }

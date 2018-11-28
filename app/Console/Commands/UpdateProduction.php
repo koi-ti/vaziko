@@ -70,7 +70,6 @@ class UpdateProduction extends Command
                             $materialp->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
                             $materialp->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
                             $materialp->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
-                            $materialp->cotizacion4_proveedor = $precotizacion3->precotizacion3_proveedor;
                             $materialp->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
                             $materialp->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
                             $materialp->cotizacion4_fh_elaboro = $precotizacion3->precotizacion3_fh_elaboro;
@@ -111,7 +110,6 @@ class UpdateProduction extends Command
                             $materialp->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                             $materialp->orden4_medidas = $cotizacion4->cotizacion4_medidas;
                             $materialp->orden4_producto = $cotizacion4->cotizacion4_producto;
-                            $materialp->orden4_proveedor = $cotizacion4->cotizacion4_proveedor;
                             $materialp->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                             $materialp->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
                             $materialp->orden4_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;

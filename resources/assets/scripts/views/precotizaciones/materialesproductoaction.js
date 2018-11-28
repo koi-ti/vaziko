@@ -43,7 +43,7 @@ app || (app = {});
         runAction: function() {
             var attributes = this.model.toJSON();
 
-            this.$modal.find('.modal-title').text('Materiales de producción - Editar ('+attributes.proveedor_nombre+')');
+            this.$modal.find('.modal-title').text('Materiales de producción - Editar ('+attributes.materialp_nombre+')');
             this.$modal.find('.content-modal').empty().html( this.template( attributes ) );
 
             // Hide errors && Open modal

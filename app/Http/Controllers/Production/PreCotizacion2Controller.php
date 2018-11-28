@@ -97,13 +97,6 @@ class PreCotizacion2Controller extends Controller
                     // Materialesp
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
-                        // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material->precotizacion3_proveedor)->first();
-                        if(!$tercero instanceof Tercero){
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                        }
-
                         $materialp = Materialp::find($material->precotizacion3_materialp);
                         if(!$materialp instanceof Materialp){
                             DB::rollback();
@@ -125,7 +118,6 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion3->precotizacion3_producto = $insumo->id;
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
-                        $precotizacion3->precotizacion3_proveedor = $tercero->id;
                         $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                         $precotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                         $precotizacion3->save();
@@ -310,13 +302,6 @@ class PreCotizacion2Controller extends Controller
                             // Validar que el id sea entero(los temporales tienen letras)
 
                             if( isset( $material['success']) ){
-                                // Validar tercero y materialp
-                                $tercero = Tercero::where('tercero_nit', $material['precotizacion3_proveedor'])->first();
-                                if(!$tercero instanceof Tercero){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                                }
-
                                 $materialp = Materialp::find($material['precotizacion3_materialp']);
                                 if(!$materialp instanceof Materialp){
                                     DB::rollback();
@@ -334,7 +319,6 @@ class PreCotizacion2Controller extends Controller
                                 $newprecotizacion3->precotizacion3_producto = $insumo->id;
                                 $newprecotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $newprecotizacion3->precotizacion3_materialp = $materialp->id;
-                                $newprecotizacion3->precotizacion3_proveedor = $tercero->id;
                                 $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
                                 $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                                 $newprecotizacion3->save();

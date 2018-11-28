@@ -497,7 +497,6 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
                          $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                          $cotizacion4->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
-                         $cotizacion4->cotizacion4_proveedor = $precotizacion3->precotizacion3_proveedor;
                          $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
                          $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
                          $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;

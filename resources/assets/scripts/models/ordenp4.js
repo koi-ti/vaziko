@@ -16,10 +16,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'materialp_nombre': '',
-            'proveedor_nombre': '',
-            'proveedor_nit': '',
             'orden4_materialp': '',
-            'orden4_proveedor': '',
             'orden4_medidas': '',
             'orden4_valor_unitario': '',
             'orden4_valor_total': ''

@@ -118,7 +118,7 @@ class ProductoController extends Controller
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
-                    // Recuperar numero cotizacion
+                    // Recuperar numero producto
                     $numero = DB::table('koi_producto')->max('producto_codigo');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
@@ -175,6 +175,10 @@ class ProductoController extends Controller
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
+        // Redireccionar si es hijo
+        if($producto->id != $producto->producto_referencia){
+            return redirect()->route('productos.show', ['producto' => $producto]);
+        }
         return view('inventory.productos.edit', ['producto' => $producto, 'codigo' => $producto->producto_codigo]);
     }
 

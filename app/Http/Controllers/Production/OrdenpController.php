@@ -285,7 +285,7 @@ class OrdenpController extends Controller
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_contacto = $contacto->id;
                     $orden->save();
-                    
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id, 'orden_iva' => $orden->orden_iva]);
@@ -320,14 +320,12 @@ class OrdenpController extends Controller
     {
         if($request->has('orden_codigo')) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id',
-                DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT((CASE WHEN tercero_persona = 'N'
+                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
-            );
+                        ) ELSE tercero_razonsocial END),
+                ' (', orden_referencia ,')'
+                ) AS tercero_nombre"));
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
             if($request->has('orden_estado')){

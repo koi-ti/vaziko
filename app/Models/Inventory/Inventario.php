@@ -3,10 +3,8 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
-use Auth;
-
 use App\Models\Base\Sucursal;
+use Auth;
 
 class Inventario extends Model
 {
@@ -27,20 +25,29 @@ class Inventario extends Model
             return "No es posible recuperar sucursal movimiento inventario, por favor verifique la información o consulte al administrador.";
         }
 
-        $inventario = new Inventario;
-        $inventario->inventario_producto = $producto->id;
-        $inventario->inventario_sucursal = $sucursal->id;
-        $inventario->inventario_documento = $documento;
-        $inventario->inventario_unidad_entrada = $uentrada;
-        if($uentrada > 0) {
-            $inventario->inventario_unidad_saldo = $uentrada;
+        if ($documento == 'DAS') {
+            $inventario = self::where('inventario_sucursal', $sucursal->id)->where('inventario_producto', $producto->producto_codigo)->where('inventario_documento', 'AS')->first();
+            if($inventario instanceof self){
+                $inventario->inventario_unidad_entrada -= $uentrada;
+                $inventario->inventario_unidad_salida -= $usalida;
+                ($uentrada > 0) ? $inventario->inventario_unidad_saldo -= $uentrada : '';
+                $inventario->save();
+            }
+
+        } else {
+            $inventario = new Inventario;
+            $inventario->inventario_producto = $producto->id;
+            $inventario->inventario_sucursal = $sucursal->id;
+            $inventario->inventario_documento = $documento;
+            $inventario->inventario_unidad_entrada = $uentrada;
+            ($uentrada > 0) ? $inventario->inventario_unidad_saldo = $uentrada : '';
+            $inventario->inventario_unidad_salida = $usalida;
+            $inventario->inventario_costo = $costo;
+            $inventario->inventario_costo_promedio = $costopromedio;
+            $inventario->inventario_usuario_elaboro = Auth::user()->id;
+            $inventario->inventario_fecha_elaboro = date('Y-m-d H:m:s');
+            $inventario->save();
         }
-        $inventario->inventario_unidad_salida = $usalida;
-        $inventario->inventario_costo = $costo;
-        $inventario->inventario_costo_promedio = $costopromedio;
-        $inventario->inventario_usuario_elaboro = Auth::user()->id;
-        $inventario->inventario_fecha_elaboro = date('Y-m-d H:m:s');
-        $inventario->save();
 
         return $inventario;
     }

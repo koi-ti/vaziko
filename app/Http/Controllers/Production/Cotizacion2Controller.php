@@ -110,13 +110,6 @@ class Cotizacion2Controller extends Controller
                     // Materialesp
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
-                        // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material->cotizacion4_proveedor)->first();
-                        if(!$tercero instanceof Tercero){
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                        }
-
                         $materialp = Materialp::find($material->cotizacion4_materialp);
                         if(!$materialp instanceof Materialp){
                             DB::rollback();
@@ -134,7 +127,6 @@ class Cotizacion2Controller extends Controller
                         $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                         $cotizacion4->cotizacion4_materialp = $materialp->id;
                         $cotizacion4->cotizacion4_producto = $insumo->id;
-                        $cotizacion4->cotizacion4_proveedor = $tercero->id;
                         $cotizacion4->cotizacion4_cantidad = $material->cotizacion4_cantidad;
                         $cotizacion4->cotizacion4_medidas = $material->cotizacion4_medidas;
                         $cotizacion4->cotizacion4_valor_unitario = $material->cotizacion4_valor_unitario;
@@ -327,13 +319,6 @@ class Cotizacion2Controller extends Controller
                             // Validar que el id sea entero(los temporales tienen letras)
 
                             if( isset( $material['success']) ){
-                                // Validar tercero y materialp
-                                $tercero = Tercero::where('tercero_nit', $material['cotizacion4_proveedor'])->first();
-                                if(!$tercero instanceof Tercero){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                                }
-
                                 $materialp = Materialp::find($material['cotizacion4_materialp']);
                                 if(!$materialp instanceof Materialp){
                                     DB::rollback();
@@ -351,7 +336,6 @@ class Cotizacion2Controller extends Controller
                                 $newcotizacion4->cotizacion4_producto = $insumo->id;
                                 $newcotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                                 $newcotizacion4->cotizacion4_materialp = $materialp->id;
-                                $newcotizacion4->cotizacion4_proveedor = $tercero->id;
                                 $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
                                 $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
                                 $newcotizacion4->save();

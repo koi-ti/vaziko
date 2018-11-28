@@ -391,6 +391,13 @@ class Factura1Controller extends Controller
             // Recuperar y actualizar factura 4 detalle de la factura
             $facturas4 = Factura4::where('factura4_factura1', $factura->id)->get();
             foreach ($facturas4 as $factura4) {
+
+                // Validar que los valores sean iguales para anular la factura
+                if($factura4->factura4_valor != $factura4->factura4_saldo){
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible anular la factura, porque ya tiene movimientos.']);
+                }
+
                 $factura4->factura4_saldo = 0;
                 $factura4->save();
             }
@@ -443,7 +450,9 @@ class Factura1Controller extends Controller
             $factura->factura1_fh_anulo = date('Y-m-d H:i:s');
             $factura->save();
 
-            DB::commit();
+            DB::rollback();
+            return response()->json(['success' => false, 'errors' => '!OK BITCHESS']);
+            // DB::commit();
             return response()->json(['success' => true, 'msg' => 'Se anulo con exito la factura.']);
         }catch(\Exception $e){
             DB::rollback();

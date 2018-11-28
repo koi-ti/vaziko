@@ -328,10 +328,9 @@
 					<table id="browse-precotizacion-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
 						<thead>
 							<tr>
-								<th width="30%">Proveedor</th>
-								<th width="15%">Material</th>
-								<th width="15%">Insumo</th>
-								<th width="10%">Dimensiones</th>
+								<th width="25%">Material</th>
+								<th width="25%">Insumo</th>
+								<th width="15%">Dimensiones</th>
 								<th width="5%">Cantidad</th>
 								<th width="12%">Valor unidad</th>
 								<th width="12%">Valor</th>
@@ -341,7 +340,6 @@
 							{{--*/ $total = 0; /*--}}
 							@foreach( App\Models\Production\PreCotizacion3::getPreCotizaciones3( $precotizacion2->id ) as $materialp )
 								<tr>
-									<td>{{ $materialp->proveedor_nombre }}</td>
 									<td>{{ $materialp->materialp_nombre }}</td>
 									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 									<td>{{ $materialp->precotizacion3_medidas }}</td>
@@ -354,7 +352,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="5"></td>
+								<td colspan="4"></td>
 								<th class="text-right">Total</th>
 								<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
 							</tr>

@@ -672,7 +672,6 @@ class Cotizacion1Controller extends Controller
                          $orden4->orden4_materialp = $cotizacion4->cotizacion4_materialp;
                          $orden4->orden4_orden2 = $orden2->id;
                          $orden4->orden4_producto = $cotizacion4->cotizacion4_producto;
-                         $orden4->orden4_proveedor = $cotizacion4->cotizacion4_proveedor;
                          $orden4->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                          $orden4->orden4_medidas = $cotizacion4->cotizacion4_medidas;
                          $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;

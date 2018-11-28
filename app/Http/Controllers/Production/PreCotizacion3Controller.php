@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\PreCotizacion3, App\Models\Inventory\Producto;
+use App\Models\Production\Materialp, App\Models\Production\PreCotizacion3, App\Models\Inventory\Producto;
 use DB, Log;
 
 class PreCotizacion3Controller extends Controller
@@ -52,12 +52,6 @@ class PreCotizacion3Controller extends Controller
             $precotizacion3 = new PreCotizacion3;
             if ( $precotizacion3->isValid($data) ) {
                 try {
-                    // Validar tercero y materialp
-                    $proveedor = Tercero::where('tercero_nit', $request->precotizacion3_proveedor)->first();
-                    if(!$proveedor instanceof Tercero){
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                    }
-
                     $materialp = Materialp::find($request->precotizacion3_materialp);
                     if(!$materialp instanceof Materialp){
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
@@ -69,7 +63,7 @@ class PreCotizacion3Controller extends Controller
                     }
 
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'proveedor_nombre' => $request->precotizacion3_proveedor_nombre, 'proveedor_nit' => $proveedor->tercero_nit, 'producto_nombre' => $insumo->producto_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'materialp_nombre' => $materialp->materialp_nombre, 'producto_nombre' => $insumo->producto_nombre]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

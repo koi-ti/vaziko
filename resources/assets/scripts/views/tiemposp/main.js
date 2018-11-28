@@ -21,7 +21,11 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize : function(opts) {
+            // Initialize
+            if( opts !== undefined && _.isObject(opts.parameters) )
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
             // collection && Attributes
             this.tiempopList = new app.TiempopList();
             this.$form = this.$('#form-tiempop');
@@ -33,6 +37,11 @@ app || (app = {});
 
             // Reference views and ready
             this.spinner = $('.spinner-main');
+
+            if ( this.parameters.data.ordenp ){
+                $('#tiempop_ordenp').val(this.parameters.data.ordenp).trigger('change');
+            }
+
             this.referenceViews();
             this.ready();
         },
@@ -43,8 +52,6 @@ app || (app = {});
         changeActividadp: function(e) {
             var _this = this,
                 actividadesp = this.$(e.currentTarget).val();
-
-                console.log(this.spinner);
 
             if( typeof(actividadesp) !== 'undefined' && !_.isUndefined(actividadesp) && !_.isNull(actividadesp) && actividadesp != '' ){
                 $.ajax({

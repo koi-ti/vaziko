@@ -84,8 +84,13 @@ class Producto extends BaseModel
             return "Ya existe un producto con este número de serie {$producto->producto_codigo}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
+        // Recuperar numero producto
+        $numero = DB::table('koi_producto')->max('producto_codigo');
+        $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
         $producto = $this->replicate();
-        $producto->producto_codigo = $serie;
+        $producto->producto_nombre = $serie;
+        $producto->producto_codigo = $numero;
         $producto->save();
 
         return $producto;

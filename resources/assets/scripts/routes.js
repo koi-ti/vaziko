@@ -105,7 +105,7 @@ app || (app = {});
             // Produccion
             'agendaordenes(/)': 'getAgendaOrdenespMain',
 
-            'tiemposp(/)': 'getTiempopMain',
+            'tiemposp(/)(?*queryString)': 'getTiempopMain',
 
             // Reporte tiemposp
             'rtiemposp(/)': 'getReporteTiempospMain',
@@ -1164,7 +1164,8 @@ app || (app = {});
         /**
         * index view edit tiempop
         */
-        getTiempopMain: function () {
+        getTiempopMain: function (queryString) {
+            var queries = this.parseQueryString(queryString);
             this.tiempopModel = new app.TiempopModel();
 
             if ( this.mainTiempopView instanceof Backbone.View ){
@@ -1172,7 +1173,14 @@ app || (app = {});
                 this.mainTiempopView.undelegateEvents();
             }
 
-            this.mainTiempopView = new app.MainTiempopView({ model: this.tiempopModel });
+            this.mainTiempopView = new app.MainTiempopView({
+                model: this.tiempopModel,
+                parameters: {
+                    data : {
+                        ordenp: queries.ordenp,
+                    }
+                }
+            });
         },
 
         getReporteTiempospMain: function () {

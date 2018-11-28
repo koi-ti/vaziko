@@ -123,7 +123,7 @@
 
             <div class="box-footer">
                 <div class="row">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                    <div class="col-md-2 {{ $producto->id == $producto->producto_referencia ? 'col-md-offset-4' : 'col-md-offset-5'}} col-sm-6 col-xs-6 text-left">
                         <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                     </div>
                     <div class="col-md-2 col-sm-6 col-xs-6 text-right">

@@ -140,13 +140,6 @@ class DetalleOrdenpController extends Controller
                     // Materialesp
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
-                        // Validar tercero y materialp
-                        $tercero = Tercero::where('tercero_nit', $material->orden4_proveedor)->first();
-                        if(!$tercero instanceof Tercero){
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                        }
-
                         $materialp = Materialp::find($material->orden4_materialp);
                         if(!$materialp instanceof Materialp){
                             DB::rollback();
@@ -164,7 +157,6 @@ class DetalleOrdenpController extends Controller
                         $orden4->orden4_orden2 = $orden2->id;
                         $orden4->orden4_materialp = $materialp->id;
                         $orden4->orden4_producto = $insumo->id;
-                        $orden4->orden4_proveedor = $tercero->id;
                         $orden4->orden4_cantidad = $material->orden4_cantidad;
                         $orden4->orden4_medidas = $material->orden4_medidas;
                         $orden4->orden4_valor_unitario = $material->orden4_valor_unitario;
@@ -368,13 +360,6 @@ class DetalleOrdenpController extends Controller
                             // Validar que el id sea entero(los temporales tienen letras)
 
                             if( isset( $material['success']) ){
-                                // Validar tercero y materialp
-                                $tercero = Tercero::where('tercero_nit', $material['orden4_proveedor'])->first();
-                                if(!$tercero instanceof Tercero){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el proveedor, por favor verifique la información o consulte al administrador.']);
-                                }
-
                                 $materialp = Materialp::find($material['orden4_materialp']);
                                 if(!$materialp instanceof Materialp){
                                     DB::rollback();
@@ -392,7 +377,6 @@ class DetalleOrdenpController extends Controller
                                 $neworden4->orden4_orden2 = $orden2->id;
                                 $neworden4->orden4_materialp = $materialp->id;
                                 $neworden4->orden4_producto = $insumo->id;
-                                $neworden4->orden4_proveedor = $tercero->id;
                                 $neworden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
                                 $neworden4->orden4_usuario_elaboro = Auth::user()->id;
                                 $neworden4->save();

@@ -52,7 +52,7 @@ app || (app = {});
                     console.log(event);
                     if ( parseInt(event.orden_culminada ) ){
                         element.addClass('fc-draggable');
-                        element.css('background-color', '#0073B7');
+                        element.css('background-color', 'gray');
                         element.css('border-color', 'white');
 
                     }else if( parseInt(event.orden_anulada ) ){
@@ -67,14 +67,14 @@ app || (app = {});
 
                     } else {
                         element.addClass('fc-draggable');
-                        element.css('background-color', '#F39C12');
+                        element.css('background-color', 'black');
                         element.css('border-color', 'white');
 
                     }
 
                     if( event.type == 'R1' || event.type == 'R2') {
                         element.addClass('fc-draggable');
-                        element.css('background-color', 'black');
+                        element.css('background-color', '#337AB7');
                         element.css('border-color', 'white');
 
                     }

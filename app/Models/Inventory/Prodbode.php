@@ -61,6 +61,18 @@ class Prodbode extends Model
 		        $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
 			break;
 
+            // Delete
+            case 'D':
+                $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
+                $prodbode->save();
+
+                if( $prodbode->prodbode_cantidad <= 0 ){
+                    $prodbode->delete();
+                }
+
+                return "OK";
+            break;
+
     		default:
     			return "No es posible recuperar tipo movimiento prodbode, por favor verifique la información o consulte al administrador.";
 			break;

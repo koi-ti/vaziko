@@ -34,13 +34,13 @@
 							<i class="fa fa-file-pdf-o"></i>
 						</a>
 					</div>
-					@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'asientos']) )
+					<!-- @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'asientos']) )
 						<div class="col-md-1 col-sm-6 col-xs-6 text-right">
 							<a class="btn btn-danger btn-sm btn-block delete-asiento">
 								<i class="fa fa-trash"></i>
 							</a>
 						</div>
-					@endif
+					@endif -->
 				</div>
 
 				<div class="row">

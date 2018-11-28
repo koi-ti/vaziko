@@ -94,14 +94,13 @@
 
                                             <label for="orden_hora_entrega" class="col-xs-12 col-sm-1 control-label">H. Entrega</label>
                                             <div class="form-group col-xs-12 col-md-2">
-                                                <div class="bootstrap-timepicker">
-                                                    <div class="input-group">
-                                                        <input type="text" id="orden_hora_entrega" name="orden_hora_entrega" placeholder="Fecha entrega" class="form-control input-sm timepicker" value="<%- orden_hora_entrega %>" required>
-                                                        <div class="input-group-addon">
-                                                            <i class="fa fa-clock-o"></i>
-                                                        </div>
-                                                    </div>
+                                                <div class="input-group input-group-sm clockpicker">
+                                                    <input type="text" id="orden_hora_entrega" name="orden_hora_entrega" placeholder="Fecha entrega" class="form-control input-sm timepicker" value="<%- orden_hora_entrega %>" required>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-time"></span>
+                                                    </span>
                                                 </div>
+                                                <div class="help-block with-errors"></div>
                                             </div>
                                         </div>
 
@@ -204,7 +203,7 @@
                                             </div>
                                             <div class="form-group col-xs-12 col-md-2" <%- !parseInt(orden_estado_recogida1) ? 'hidden' : '' %>>
                                                 <div class="input-group input-group-sm clockpicker">
-                                                    <input type="text" id="orden_hora_recogida1" name="orden_hora_recogida1" class="form-control" value="<%- orden_hora_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
+                                                    <input type="text" id="orden_hora_recogida1" name="orden_hora_recogida1 timepicker" class="form-control" value="<%- orden_hora_recogida1 %>" <%- parseInt(orden_estado_recogida1) ? '' : 'disabled' %>>
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-time"></span>
                                                     </span>
@@ -223,7 +222,7 @@
                                             </div>
                                             <div class="form-group col-xs-12 col-md-2" <%- !parseInt(orden_estado_recogida2) ? 'hidden' : '' %>>
                                                 <div class="input-group input-group-sm clockpicker">
-                                                    <input type="text" id="orden_hora_recogida2" name="orden_hora_recogida2" class="form-control" value="<%- orden_hora_recogida2 %>" <%- !parseInt(orden_estado_recogida2) ? 'disabled' : '' %>>
+                                                    <input type="text" id="orden_hora_recogida2" name="orden_hora_recogida2" class="form-control timepicker" value="<%- orden_hora_recogida2 %>" <%- !parseInt(orden_estado_recogida2) ? 'disabled' : '' %>>
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-time"></span>
                                                     </span>

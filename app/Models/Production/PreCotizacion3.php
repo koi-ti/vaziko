@@ -33,7 +33,6 @@ class PreCotizacion3 extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'precotizacion3_proveedor' => 'required',
             'precotizacion3_materialp' => 'required',
             'precotizacion3_producto' => 'required',
             'precotizacion3_cantidad' => 'required|min:1',
@@ -52,15 +51,9 @@ class PreCotizacion3 extends BaseModel
     public static function getPreCotizaciones3($precotizacion2 = null)
     {
         $query = PreCotizacion3::query();
-        $query->select('koi_precotizacion3.*', 'materialp_nombre', 'producto_nombre', 'tercero_nit as proveedor_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
-            THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                    (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                )
-            ELSE tercero_razonsocial END)
-            AS proveedor_nombre"));
+        $query->select('koi_precotizacion3.*', 'materialp_nombre', 'producto_nombre');
         $query->join('koi_materialp', 'precotizacion3_materialp', '=', 'koi_materialp.id');
         $query->leftJoin('koi_producto', 'precotizacion3_producto', '=', 'koi_producto.id');
-        $query->join('koi_tercero', 'precotizacion3_proveedor', '=', 'koi_tercero.id');
         $query->where('precotizacion3_precotizacion2', $precotizacion2);
         $query->orderBy('materialp_nombre', 'asc');
         return $query->get();

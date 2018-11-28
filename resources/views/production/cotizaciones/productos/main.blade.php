@@ -380,23 +380,6 @@
                                     @endforeach
                                 </div><br>
                                 <div class="row">
-                                    <div class="form-group col-sm-4">
-                                        <div class="input-group input-group-sm">
-                                            <span class="input-group-btn">
-                                                <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="cotizacion4_proveedor">
-                                                    <i class="fa fa-user"></i>
-                                                </button>
-                                            </span>
-                                            <input id="cotizacion4_proveedor" placeholder="Proveedor" class="form-control tercero-koi-component" name="cotizacion4_proveedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion4_proveedor_nombre" data-proveedor="true" required>
-                                        </div>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="col-sm-8">
-                                        <input id="cotizacion4_proveedor_nombre" name="cotizacion4_proveedor_nombre" placeholder="Nombre proveedor" class="form-control input-sm" type="text" maxlength="15" readonly required>
-                                    </div>
-                                </div>
-
-                                <div class="row">
                                     <div class="form-group col-sm-6">
                                         <select name="cotizacion4_materialp" id="cotizacion4_materialp" class="form-control select2-default-clear" data-placeholder="Material de producción" required>
                                             <option value="">Seleccione</option>
@@ -439,18 +422,17 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2"></th>
-                                            <th width="30%">Proveedor</th>
-                                            <th width="15%">Material</th>
-                                            <th width="15%">Insumo</th>
+                                            <th width="25%">Material</th>
+                                            <th width="25%">Insumo</th>
                                             <th width="10%">Dimensiones</th>
                                             <th width="5%">Cantidad</th>
-                                            <th width="10%">Valor unidad</th>
-                                            <th width="10%">Valor</th>
+                                            <th width="15%">Valor unidad</th>
+                                            <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="7"></td>
+                                            <td colspan="6"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -621,7 +603,6 @@
                 </a>
             </td>
         <% } %>
-        <td><%- proveedor_nombre %></td>
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- cotizacion4_medidas %></td>
@@ -632,19 +613,13 @@
 
     <script type="text/template" id="edit-materialproducto-tpl">
         <div class="row">
-            <label class="col-sm-2 control-label">Proveedor</label>
-            <div class="form-group col-sm-10">
-                <label class="label-xs"><%- proveedor_nit %> - <%- proveedor_nombre %></label>
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-sm-2 control-label">Material de producción</label>
+            <label class="col-sm-1 control-label">Material</label>
             <div class="form-group col-sm-4">
                 <label class="label-xs"><%- materialp_nombre %></label>
             </div>
 
-            <label class="col-sm-2 control-label">Insumo</label>
-            <div class="form-group col-sm-4">
+            <label class="col-sm-1 control-label">Insumo</label>
+            <div class="form-group col-sm-6">
                 <label class="label-xs"><%- producto_nombre %></label>
             </div>
         </div>
