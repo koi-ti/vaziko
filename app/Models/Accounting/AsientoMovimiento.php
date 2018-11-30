@@ -150,7 +150,8 @@ class AsientoMovimiento extends Model
                 }
 
                 if($data['Naturaleza'] == 'C') {
-                    $this->movimiento_item = $data['Item'];
+                    $this->movimiento_serie = $data['Serie'];
+                }
 
                 $this->movimiento_valor = $data['Valor'];
                 $this->movimiento_sucursal = $data['Sucursal'];

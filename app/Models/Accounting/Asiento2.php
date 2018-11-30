@@ -516,8 +516,7 @@ class Asiento2 extends Model
             return $response;
         }
 
-        if($objCuenta->plancuentas_tipo == 'P')
-        {
+        if($objCuenta->plancuentas_tipo == 'P') {
             // Preparar movimiento Facturap
             $datamov = [];
             $datamov['Tipo'] = 'FP';
@@ -534,7 +533,7 @@ class Asiento2 extends Model
                 }
             }
 
-            if($facturap instanceof Facturap) {
+            if ($facturap instanceof Facturap) {
                 // En caso de existir factura se afectan cuotas
                 $cuotas = Facturap2::where('facturap2_factura', $facturap->id)->get();
                 if($cuotas->count() <= 0) {
@@ -555,24 +554,22 @@ class Asiento2 extends Model
                 }
 
                 // Insertar movimientos
-                foreach ($cuotas as $cuota)
-                {
-                    if($request->has("movimiento_valor_{$cuota->id}"))
-                    {
+                foreach ($cuotas as $cuota) {
+                    if ($request->has("movimiento_valor_{$cuota->id}")) {
                         $datamov['Cuotas'] = $cuota->id;
                         $datamov['Valor'] = $request->get("movimiento_valor_{$cuota->id}");
                         $datamov['Nuevo'] = false;
 
                         $movimiento = new AsientoMovimiento;
                         $result = $movimiento->store($this, $datamov);
-                        if(!$result->success) {
+                        if (!$result->success) {
                             $response->error = $result->error;
                             return $response;
                         }
                     }
                 }
 
-            }else{
+            } else {
                 // En caso no existir factura se crea
                 $datamov['Nuevo'] = true;
                 $datamov['Valor'] = $request->asiento2_valor;
@@ -590,13 +587,13 @@ class Asiento2 extends Model
                 }
             }
 
-        }elseif ($objCuenta->plancuentas_tipo == 'I') {
-
+        } elseif ($objCuenta->plancuentas_tipo == 'I') {
             // Validar producto
             $producto = null;
             if($request->has('producto_codigo')) {
                 $producto = Producto::where('producto_codigo', $request->producto_codigo)->first();
             }
+
             if(!$producto instanceof Producto) {
                 $response->error = "No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.";
                 return $response;
@@ -604,11 +601,21 @@ class Asiento2 extends Model
 
             // Preparar movimiento padre
             $datamov = [];
+
             $datamov['Tipo'] = 'IP';
             $datamov['Naturaleza'] = $request->asiento2_naturaleza;
             $datamov['Sucursal'] = $request->movimiento_sucursal;
-            $datamov['Producto'] = $producto->id;
             $datamov['Valor'] = $request->movimiento_cantidad;
+
+            if ($request->asiento2_naturaleza == 'C' && ($producto->producto_serie == true && $request->movimiento_cantidad == 1)) {
+                $datamov['Producto'] = $producto->producto_referencia;
+                $datamov['Serie'] = $producto->producto_codigo;
+
+            } else {
+                $datamov['Producto'] = $producto->id;
+                $datamov['Serie'] = NULL;
+
+            }
 
             $movimiento = new AsientoMovimiento;
             $result = $movimiento->store($this, $datamov);
@@ -893,10 +900,31 @@ class Asiento2 extends Model
 
         // Validar movimientos (Maneja serie o Producto metrado)
         if ($producto->producto_metrado == true || $producto->producto_serie == true) {
-            dd($this->asiento2_naturaleza);
-            $movchildren = $movements->where('movimiento_tipo', 'IH');
-            if($movchildren->count() != $movfather->movimiento_valor) {
-                return "No es posible recuperar movimientos detalle de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
+            // Credito
+            if ( $this->asiento2_naturaleza == 'C' && ($movfather->movimiento_tipo == 'IP' && $movfather->movimiento_producto && $movfather->movimiento_serie) ) {
+                // Salida
+                $costo = $this->asiento2_debito / $movfather->movimiento_valor;
+                $costopromedio = $producto->costopromedio($costo, $movfather->movimiento_valor);
+
+                // Actualizar prodbode
+                // Devolver SalidaSerie
+                $result = Prodbode::actualizar($producto, $movfather->movimiento_sucursal, 'SS', $movfather->movimiento_valor, $movfather);
+                if($result != 'OK') {
+                    return $result;
+                }
+
+                // Insertar movimientos inventario
+                $inventario = Inventario::movimiento($producto, $movfather->movimiento_sucursal, 'AS', $movfather->movimiento_valor, 0, $costo, $costopromedio, $movfather);
+                if(!$inventario instanceof Inventario) {
+                    return $inventario;
+                }
+
+            } else {
+                $movchildren = $movements->where('movimiento_tipo', 'IH');
+                if($movchildren->count() != $movfather->movimiento_valor) {
+                    return "No es posible recuperar movimientos detalle de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
+                }
+
             }
         }
 
@@ -1184,8 +1212,6 @@ class Asiento2 extends Model
                     if(!is_numeric($costo)) {
                         return $costo;
                     }
-
-                    dd($costo);
 
                     if($costo != $this->asiento2_credito){
                         return "No es posible realizar salida de inventario para el producto {$producto->producto_codigo}, el costo de la salida a cambiado, por favor verifique la información del asiento o consulte al administrador.";

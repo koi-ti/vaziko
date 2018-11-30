@@ -27,7 +27,7 @@ class Prodbode extends Model
         return $query->first();
     }
 
-    public static function actualizar(Producto $producto, $sucursal, $tipo, $unidades)
+    public static function actualizar(Producto $producto, $sucursal, $tipo, $unidades, $movfather = null)
     {
         // Validar producto
         $sucursal = Sucursal::find($sucursal);
@@ -61,17 +61,35 @@ class Prodbode extends Model
 		        $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
 			break;
 
-            // Delete
-            case 'D':
-                $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
-                $prodbode->save();
+			case 'SS':
+                // Validar disponibles
+                if ($unidades <= $prodbode->prodbode_cantidad) {
+                    $prodbode->prodbode_cantidad -= $unidades;
 
-                if( $prodbode->prodbode_cantidad <= 0 ){
-                    $prodbode->delete();
+                    $child = Prodbode::where('prodbode_producto', $movfather->movimiento_serie, 'prodbode_sucursal', $sucursal->id)->first();
+                    if ($child instanceof Prodbode){
+                        $child->prodbode_cantidad -= $unidades;
+                        $child->save();
+                    }
+
+                    Log::info('as');
+
+                } else {
+                    return "No existen suficientes unidades para salida producto {$producto->producto_codigo}, disponibles {$prodbode->prodbode_cantidad}, salida $unidades, por favor verifique la información o consulte al administrador.";
                 }
+			break;
 
-                return "OK";
-            break;
+            // // Delete
+            // case 'D':
+            //     $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
+            //     $prodbode->save();
+            //
+            //     if( $prodbode->prodbode_cantidad <= 0 ){
+            //         $prodbode->delete();
+            //     }
+            //
+            //     return "OK";
+            // break;
 
     		default:
     			return "No es posible recuperar tipo movimiento prodbode, por favor verifique la información o consulte al administrador.";

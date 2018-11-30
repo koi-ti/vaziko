@@ -538,7 +538,6 @@ class DetalleAsientoController extends Controller
                             'movimiento_valor' => $item->movimiento_valor
                         ];
                     }
-
                     if( $item->movimiento_tipo == 'IH'){
                         $data['childrens'][] = [
                             'movimiento_serie' => $item->movimiento_serie,

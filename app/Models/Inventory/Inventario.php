@@ -17,8 +17,9 @@ class Inventario extends Model
 
     public $timestamps = false;
 
-    public static function movimiento(Producto $producto, $sucursal, $documento, $uentrada = 0, $usalida = 0, $costo = 0, $costopromedio = 0)
+    public static function movimiento(Producto $producto, $sucursal, $documento, $uentrada = 0, $usalida = 0, $costo = 0, $costopromedio = 0, $movfather = null)
     {
+        \Log::info($movfather);
         // Validar producto
         $sucursal = Sucursal::find($sucursal);
         if(!$sucursal instanceof Sucursal) {
@@ -35,6 +36,7 @@ class Inventario extends Model
             }
 
         } else {
+
             $inventario = new Inventario;
             $inventario->inventario_producto = $producto->id;
             $inventario->inventario_sucursal = $sucursal->id;
