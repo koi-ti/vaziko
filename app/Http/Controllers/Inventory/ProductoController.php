@@ -21,7 +21,7 @@ class ProductoController extends Controller
         if ($request->ajax()) {
 
             $query = Producto::query();
-            $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre');
+            $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre', 'producto_unidades', 'producto_serie', 'producto_metrado');
 
             if( $request->has('datatables') ) {
                 // Persistent data filter
@@ -43,8 +43,23 @@ class ProductoController extends Controller
                     if($request->has('producto_nombre')) {
                         $query->whereRaw("producto_nombre LIKE '%{$request->producto_nombre}%'");
                     }
-                })
-                ->make(true);
+
+                    // Nombre
+                    if($request->has('asiento') && $request->asiento == true) {
+
+                        if ($request->has('naturaleza')) {
+                            if ($request->naturaleza == 'D') {
+                                $query->where(function($query){
+                                    $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo = producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
+                                });
+                            } else {
+                                $query->where(function($query){
+                                    $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo <> producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
+                                });
+                            }
+                        }
+                    }
+                })->make(true);
             }
 
             if( $request->has('materialp') ){

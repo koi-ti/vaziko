@@ -56,12 +56,12 @@ class Ordenp extends BaseModel
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-            if( isset($data['orden_estado_recogida1']) && ($data['orden_fecha_recogida1'] == '' || $data['orden_hora_recogida1'] == '') ) {
+            if( isset($data['orden_estado_recogida1']) && $data['orden_estado_recogida1'] == true && ($data['orden_fecha_recogida1'] == '' || $data['orden_hora_recogida1'] == '') ) {
                 $this->errors = "La fecha y/o hora de recogida #1 esta incorrecta.";
                 return false;
             }
 
-            if( isset($data['orden_estado_recogida2']) && ($data['orden_fecha_recogida2'] == '' || $data['orden_hora_recogida2'] == '') ) {
+            if( isset($data['orden_estado_recogida2']) && $data['orden_estado_recogida2'] == true && ($data['orden_fecha_recogida2'] == '' || $data['orden_hora_recogida2'] == '') ) {
                 $this->errors = "La fecha y/o hora de recogida #2 esta incorrecta.";
                 return false;
             }

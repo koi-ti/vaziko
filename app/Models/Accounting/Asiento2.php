@@ -366,6 +366,7 @@ class Asiento2 extends Model
         if($request->has('producto_codigo')) {
             $producto = Producto::where('producto_codigo', $request->producto_codigo)->first();
         }
+
         if(!$producto instanceof Producto) {
             $response->errors = "No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.";
             return $response;
@@ -477,6 +478,7 @@ class Asiento2 extends Model
                     $response->errors = $costo;
                     return $response;
                 }
+                $response->asiento2_valor = $costo;
             }
         }elseif($producto->producto_unidades == true) {
             // Producto normal
@@ -844,8 +846,7 @@ class Asiento2 extends Model
         // Valor
         $costo = 0;
         // Actualizar prodbode producto padre (Maneja unidades o Producto metrado)
-        if($producto->producto_unidades == true || ($producto->producto_unidades == true && $producto->producto_metrado == true))
-        {
+        if ($producto->producto_unidades == true || ($producto->producto_unidades == true && $producto->producto_metrado == true)) {
             if($this->asiento2_naturaleza == 'D') {
                 // Entrada
                 $costo = $this->asiento2_debito / $movfather->movimiento_valor;
@@ -862,28 +863,28 @@ class Asiento2 extends Model
                 if(!$inventario instanceof Inventario) {
                     return $inventario;
                 }
-            }else{
+            } else {
                 // Registrar salida padre productos no metrados
-                if(!$producto->producto_metrado)
-                {
+                if (!$producto->producto_metrado) {
                     // Validando valor del costo salida
                     $costo = Inventario::primerasEnSalir($producto, $movfather->movimiento_sucursal, $movfather->movimiento_valor, true);
-                    if(!is_numeric($costo)) {
+                    if (!is_numeric($costo)) {
                         return $costo;
                     }
-                    if($costo != $this->asiento2_credito){
+
+                    if ($costo != $this->asiento2_credito) {
                         return "No es posible realizar salida de inventario para el producto {$producto->producto_codigo}, el costo de la salida a cambiado, por favor verifique la información del asiento o consulte al administrador.";
                     }
 
                     // Actualizar prodbode
                     $result = Prodbode::actualizar($producto, $movfather->movimiento_sucursal, 'S', $movfather->movimiento_valor);
-                    if($result != 'OK') {
+                    if ($result != 'OK') {
                         return $result;
                     }
 
                     // Insertar movimientos inventario
                     $inventario = Inventario::movimiento($producto, $movfather->movimiento_sucursal, 'AS', 0, $movfather->movimiento_valor, $costo, 0);
-                    if(!$inventario instanceof Inventario) {
+                    if (!$inventario instanceof Inventario) {
                         return $inventario;
                     }
                 }
@@ -892,6 +893,7 @@ class Asiento2 extends Model
 
         // Validar movimientos (Maneja serie o Producto metrado)
         if ($producto->producto_metrado == true || $producto->producto_serie == true) {
+            dd($this->asiento2_naturaleza);
             $movchildren = $movements->where('movimiento_tipo', 'IH');
             if($movchildren->count() != $movfather->movimiento_valor) {
                 return "No es posible recuperar movimientos detalle de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
@@ -922,7 +924,7 @@ class Asiento2 extends Model
                     }
                 }
             // Credito
-            }else{
+            } else {
                 // Calcular rollos terminados para registrar unidades de salida
                 $usalida = 0;
                 foreach ($movchildren as $children) {

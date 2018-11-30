@@ -149,6 +149,9 @@ class AsientoMovimiento extends Model
                     return "Producto es obligatoria.";
                 }
 
+                if($data['Naturaleza'] == 'C') {
+                    $this->movimiento_item = $data['Item'];
+
                 $this->movimiento_valor = $data['Valor'];
                 $this->movimiento_sucursal = $data['Sucursal'];
                 $this->movimiento_producto = $data['Producto'];

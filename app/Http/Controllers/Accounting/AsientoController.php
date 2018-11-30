@@ -496,7 +496,7 @@ class AsientoController extends Controller
 
 
             DB::rollback();
-            // return response()->json(['success' => false, 'errors' => '!OK BITCHESS']);
+            return response()->json(['success' => false, 'errors' => '!OK']);
 
             // DB::commit();
             // return response()->json(['success' => true, 'msg' => 'Se elimino con exito el asiento.']);

@@ -584,6 +584,7 @@
 				            <tr>
 				                <th>Código</th>
 			                	<th>Nombre</th>
+			                	<th>Maneja</th>
 				            </tr>
 				        </thead>
 		            </table>

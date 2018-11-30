@@ -142,8 +142,8 @@
                             <div class="box-body">
                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.create') ) %>">
                                     <div class="row">
-                                        <label for="productop" class="control-label col-sm-1 col-md-offset-2">Producto</label>
-                                        <div class="form-group col-sm-6 col-xs-11">
+                                        <label for="productop" class="control-label col-xs-12 col-sm-1 col-sm-offset-2">Producto</label>
+                                        <div class="form-group col-sm-6 col-xs-12">
                                             <div class="input-group input-group-sm">
                                                 <span class="input-group-btn">
                                                     <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
@@ -156,7 +156,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group col-sm-1">
+                                        <div class="form-group col-sm-1 col-xs-12">
                                             <button type="submit" class="btn btn-success btn-sm btn-block">
                                                 <i class="fa fa-plus"></i>
                                             </button>

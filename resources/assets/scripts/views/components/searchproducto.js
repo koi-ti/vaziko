@@ -44,6 +44,8 @@ app || (app = {});
             this.$productosSearchTable = this.$modalComponent.find('#koi-search-producto-component-table');
 			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
 			this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+			this.asiento = this.$inputContent.attr("data-asiento");
+			this.naturaleza = this.$inputContent.attr("data-naturaleza");
 
 			this.productosSearchTable = this.$productosSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -55,13 +57,16 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('productos.index') ),
                     data: function( data ) {
                         data.datatables = true;
+                        data.asiento = _this.asiento;
+                        data.naturaleza = _this.naturaleza;
                         data.producto_codigo = _this.$searchCodigo.val();
                         data.producto_nombre = _this.$searchNombre.val();
                     }
                 },
                 columns: [
                     { data: 'producto_codigo', name: 'producto_codigo' },
-                    { data: 'producto_nombre', name: 'producto_nombre' }
+                    { data: 'producto_nombre', name: 'producto_nombre' },
+                    { data: 'producto_unidades', name: 'producto_unidades' }
                 ],
                 columnDefs: [
 					{
@@ -71,7 +76,22 @@ app || (app = {});
 						render: function ( data, type, full, row ) {
 							return '<a href="#" class="a-koi-search-producto-component-table">' + data + '</a>';
 						}
-					}
+					},
+                    {
+                        targets: 2,
+                        searchable: false,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function ( data, type, full, row ) {
+                            if( parseInt( parseInt(full.producto_unidades) && parseInt(full.producto_serie) ) ) {
+                                return '<span class="label label-success">SERIE</span>';
+                            } else if( parseInt(full.producto_unidades) && parseInt(full.producto_metrado) ) {
+                                return '<span class="label label-success">METRADO</span>';
+                            } else {
+                                return '<span class="label label-success">UNIDADES</span>';
+                            }
+                        }
+                    }
                 ]
 			});
 
@@ -85,7 +105,7 @@ app || (app = {});
 
 	        var data = this.productosSearchTable.row( $(e.currentTarget).parents('tr') ).data();
 
-			this.$inputContent.val( data.producto_codigo );
+			this.$inputContent.val( data.producto_codigo ).trigger('change');
 			this.$inputName.val( data.producto_nombre );
 
 			this.$modalComponent.modal('hide');

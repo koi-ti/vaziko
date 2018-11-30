@@ -374,6 +374,7 @@
 		</div>
     </div>
 </script>
+
 <script type="text/template" id="add-folder-tpl">
     <div class="row">
 		<div class="form-group col-md-2">
@@ -481,6 +482,7 @@
         </div>
     </td>
 </script>
+
 <script type="text/template" id="itemrollo-tpl">
     <td class="text-center"><%- prodboderollo_item %></td>
     <td class="text-right"><%- prodboderollo_metros %></td>
@@ -1102,27 +1104,30 @@
         </div>
     </div>
 
-    <div class="box box-success">
-        <div class="box-body">
-            <div class="box-header with-border">
-                  <h3 class="box-title"><b>Información adicional</b></h3>
-            </div>
+    <% if ( typeof(childrens) !== 'undefined' ) { %>
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="box-header with-border">
+                      <h3 class="box-title"><b>Información adicional</b></h3>
+                </div>
 
-            <div class="box-body table-responsive no-padding">
-                <table id="browse-showinfo-asiento-list" class="table table-bordered" cellspacing="0">
-                    <tr>
-                        <th class="text-center">Item</th>
-                        <th class="text-center"><%- !_.isNull( childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
-                    </tr>
-                    <% _.each(childrens, function( children ){ %>
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-showinfo-asiento-list" class="table table-bordered" cellspacing="0">
                         <tr>
-                            <td class="text-center"><%- children.movimiento_item %></td>
-                            <td class="text-center"><%- !_.isNull(children.movimiento_serie) ? children.movimiento_serie : children.movimiento_valor %></td>
+                            <th class="text-center">Item</th>
+                            <th class="text-center"><%- !_.isNull( childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
                         </tr>
-                    <% }); %>
-                </table>
+
+                            <% _.each(childrens, function( children ){ %>
+                                <tr>
+                                    <td class="text-center"><%- children.movimiento_item %></td>
+                                    <td class="text-center"><%- !_.isNull(children.movimiento_serie) ? children.movimiento_serie : children.movimiento_valor %></td>
+                                </tr>
+                            <% }); %>
+                    </table>
+                </div>
             </div>
-        </div>
+        <% } %>
     </div>
 </script>
 {{-- fin template general asiento detalle --}}

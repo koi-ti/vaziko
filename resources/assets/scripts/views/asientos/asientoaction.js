@@ -327,6 +327,7 @@ app || (app = {});
 
             // Hide errors
             this.$wraperErrorIn.hide().empty();
+            this.$inputInUnidades.hide();
 
             // Open modal
             this.$modalIn.modal('show');
@@ -522,15 +523,12 @@ app || (app = {});
         evaluateProductoInventario: function(e) {
             var _this = this,
                 producto = this.$inputInProducto.val(),
-                sucursal = this.$inputInSucursal.val(),
-                unidades = this.$inputInUnidades.val();
+                sucursal = this.$inputInSucursal.val();
 
             // Empty wrapper detail
             this.$wraperDetailIn.empty();
 
-            if(producto && sucursal && unidades)
-            {
-                // Search producto
+            if (producto && sucursal) {
                 $.ajax({
                     url: window.Misc.urlFull( Route.route('productos.search') ),
                     type: 'GET',
@@ -540,17 +538,21 @@ app || (app = {});
                         window.Misc.setSpinner( _this.$wraperFormIn );
                     }
                 })
-                .done(function(resp) {
+                .done(function(resp){
                     window.Misc.removeSpinner( _this.$wraperFormIn );
+                    if (resp.success){
+                        // Show input unidades
+                        _this.$inputInUnidades.show();
+                        unidades = _this.$inputInUnidades.val();
 
-                    if(resp.success) {
+                        // Si no maneja unidades
                         if( !parseInt(resp.producto_unidades) ) {
                             // Unidades
                             _this.$wraperErrorIn.empty().append( 'No es posible realizar movimientos para productos que no manejan unidades' );
                             _this.$wraperErrorIn.show();
                             return;
 
-                        }else if( parseInt(resp.producto_metrado) ){
+                        } else if( parseInt(resp.producto_metrado) ) {
                             // Metrado
                             if(_this.parameters.data.asiento2_naturaleza == 'D') {
                                 // Items rollo view
@@ -570,9 +572,10 @@ app || (app = {});
                                 // Get item rollo list
                                 _this.itemRolloINList.fetch({ reset: true, data: { producto: resp.id, sucursal: sucursal } });
                             }
-                        }else if( parseInt(resp.producto_serie) ){
+
+                        } else if( parseInt(resp.producto_serie) ) {
                             // Series
-                            if(_this.parameters.data.asiento2_naturaleza == 'D') {
+                            if (_this.parameters.data.asiento2_naturaleza == 'D') {
                                 // Items series view
                                 _this.$wraperDetailIn.html( _this.templateAddSeries( ) );
                                 _this.$wraperSeries = _this.$('#browse-series-list');
@@ -581,6 +584,8 @@ app || (app = {});
                                 for (; item <= unidades; item++) {
                                     _this.addOneSerieInventario( new app.ProductoModel({ id: item }) )
                                 }
+                            } else {
+                                _this.$inputInUnidades.val(1).hide();
 
                             }
                         }
@@ -612,11 +617,12 @@ app || (app = {});
                             if(resp.success) {
                                 // Set action success
                                 _this.setSuccessAction('inventario', _this.parameters.actions);
-
                                 if( !_this.isLastAction('inventario') ){
                                     // Close modal
                                     _this.$modalIn.modal('hide');
                                 }
+
+                                console.log(resp);
 
                                 // Inventario modifica valor item asiento por el valor del costo del movimiento
                                 if(!_.isUndefined(resp.asiento2_valor) && !_.isNull(resp.asiento2_valor) && resp.asiento2_valor != _this.parameters.data.asiento2_valor) {
