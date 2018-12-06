@@ -450,9 +450,9 @@ class Factura1Controller extends Controller
             $factura->factura1_fh_anulo = date('Y-m-d H:i:s');
             $factura->save();
 
-            DB::rollback();
-            return response()->json(['success' => false, 'errors' => '!OK BITCHESS']);
-            // DB::commit();
+            // DB::rollback();
+            // return response()->json(['success' => false, 'errors' => '!OK BITCHESS']);
+            DB::commit();
             return response()->json(['success' => true, 'msg' => 'Se anulo con exito la factura.']);
         }catch(\Exception $e){
             DB::rollback();
