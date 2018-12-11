@@ -39,6 +39,9 @@ class CreateOrdenproduccion2Table extends Migration
             $table->integer('orden2_round')->default(0);
             $table->double('orden2_vtotal')->default(0);
 
+            $table->double('orden2_margen_materialp')->default(0);
+            $table->integer('orden2_round_materialp')->default(0);
+
             $table->boolean('orden2_yellow')->default(false);
             $table->boolean('orden2_magenta')->default(false);
             $table->boolean('orden2_cyan')->default(false);

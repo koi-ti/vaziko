@@ -520,73 +520,92 @@
                         </div>
                     </div>
 
-                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                        <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="box box-primary">
-                                    <div class="box-header">
-                                        <h3 class="box-title">Información adicional</h3>
+                </div>
+            </div>
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div class="box box-primary">
+                            <div class="box-body">
+                                <div class="list-group">
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Precio</b></div>
+                                            <div class="col-md-10 text-right"><b><span id="info-precio"></span></b></div>
+                                        </div>
                                     </div>
-                                    <div class="box-body no-padding">
-                                        <table class="table table-condensed">
-                                            <tbody>
-                                                <tr>
-                                                    <th  colspan="4">Precio</th>
-                                                    <td class="text-right"><span id="info-precio"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">Transporte</th>
-                                                    <td class="text-right"><span id="info-transporte"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">Viáticos</th>
-                                                    <td class="text-right"><span id="info-viaticos"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Materiales</th>
-                                                    <td class="text-right"><input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm event-price" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1"></td>
-                                                    <th class="text-left">%</th>
-                                                    <td colspan="2" class="text-right"><span id="info-materiales"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">Áreas</th>
-                                                    <td class="text-right"><span id="info-areas"></span></td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">Subtotal</th>
-                                                    <td class="text-right"><input id="subtotal-price" class="form-control input-sm" data-currency disabled></td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Volumen</th>
-                                                    <td class="form-group">
-                                                        <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="100">
-                                                        <div class="help-block with-errors"></div>
-                                                    </td>
-                                                    <th>Redondear</th>
-                                                    <td class="form-group">
-                                                        <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
-                                                        <div class="help-block with-errors"></div>
-                                                    </td>
-                                                    <td><input id="orden2_vtotal" name="orden2_vtotal" class="form-control input-sm" type="text" value="<%- orden2_vtotal %>" data-currency disabled></td>
-                                                </tr>
-                                                <tr>
-                                                    <th colspan="4">Total</th>
-                                                    <td><input id="total-price" class="form-control input-sm" data-currency disabled></td>
-                                                </tr>
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <th colspan="5"><small>Los campos de transporte, viáticos y áreas se dividirán por la cantidad ingresada.</small></th>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Transporte</b></div>
+                                            <div class="col-md-10 text-right"><b><span id="info-transporte"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Viáticos</b></div>
+                                            <div class="col-md-10 text-right"><b><span id="info-viaticos"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Materiales</b></div>
+                                            <div class="col-md-2">
+                                                <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm event-price" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-md-1">%</div>
+                                            <div class="col-md-2"><b>Redondear</b></div>
+                                            <div class="col-md-2">
+                                                <input id="orden2_round_materialp" name="orden2_round_materialp" class="form-control input-sm event-price" value="<%- orden2_round_materialp %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                            </div>
+                                            <div class="col-md-3 text-right"><b><span id="info-materiales"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Áreas</b></div>
+                                            <div class="col-md-10 text-right"><b><span id="info-areas"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
+                                            <div class="col-md-8"><b>Subtotal</b></div>
+                                            <div class="col-md-4 text-right">
+                                                <span class="pull-right badge bg-red" id="subtotal-price"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
+                                            <div class="col-md-2"><b>Volumen</b></div>
+                                            <div class="col-md-2">
+                                                <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="99">
+                                            </div>
+                                            <div class="col-md-2"><b>Redondear</b></div>
+                                            <div class="col-md-2">
+                                                <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                            </div>
+                                            <div class="col-md-4 text-right">
+                                                <span class="pull-right badge bg-red" id="orden2_vtotal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
+                                            <div class="col-md-8"><b>Total</b></div>
+                                            <div class="col-md-4 text-right">
+                                                <span class="pull-right badge bg-red" id="total-price"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="box-footer">
+                                <p><b>Los campos de transporte, viáticos, materiales y áreas se dividirán por la cantidad ingresada.</b></p>
+                            </div>
                         </div>
-                    @endif
+                    </div>
                 </div>
-            </div>
+            @endif
         </section>
     </script>
 

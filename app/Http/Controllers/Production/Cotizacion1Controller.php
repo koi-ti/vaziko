@@ -627,6 +627,8 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_round = $cotizacion2->cotizacion2_round;
                     $orden2->orden2_margen_materialp = $cotizacion2->cotizacion2_margen_materialp;
                     $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
+                    $orden2->orden2_round_materialp = $cotizacion2->cotizacion2_round_materialp;
+                    $orden2->orden2_margen_materialp = $cotizacion2->cotizacion2_margen_materialp;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;
                     $orden2->orden2_tiro = $cotizacion2->cotizacion2_tiro;

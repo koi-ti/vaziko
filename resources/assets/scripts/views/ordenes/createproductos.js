@@ -135,7 +135,13 @@ app || (app = {});
             this.$infoareas = this.$('#info-areas');
             this.$infomateriales = this.$('#info-materiales');
 
+            // Variables globales
+            this.valueVolumen = 0;
+            this.valueTotal = 0;
+            this.range = ['-2','-1','0','1','2'];
+
             this.$inputMargen = this.$('#orden2_margen_materialp');
+            this.$inputRoundMargen = this.$('#orden2_round_materialp');
 
             // Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
@@ -312,11 +318,12 @@ app || (app = {});
                 if( this.model.id != undefined ){
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = this.materialesProductopList.toJSON();
-                        data.orden2_margen_materialp = this.$inputMargen.val();
                         data.orden2_volumen = this.$inputVolumen.val();
-                        data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
-                        data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                        data.orden2_margen_materialp = this.$inputMargen.val();
+                        data.orden2_vtotal = this.valueVolumen;
+                        data.orden2_total_valor_unitario = this.valueTotal;
                         data.orden2_round = this.$inputRound.val();
+                        data.orden2_round_materialp = this.$inputRoundMargen.val();
                         data.ordenp6 = this.areasProductopList.toJSON();
 
                     this.model.save( data, {silent: true} );
@@ -324,11 +331,12 @@ app || (app = {});
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = JSON.stringify(this.materialesProductopList);
-                        data.orden2_margen_materialp = this.$inputMargen.val();
                         data.orden2_volumen = this.$inputVolumen.val();
-                        data.orden2_vtotal = this.$inputVcomision.inputmask('unmaskedvalue');
-                        data.orden2_total_valor_unitario = this.$total.inputmask('unmaskedvalue');
+                        data.orden2_margen_materialp = this.$inputMargen.val();
+                        data.orden2_vtotal = this.valueVolumen;
+                        data.orden2_total_valor_unitario = this.valueTotal;
                         data.orden2_round = this.$inputRound.val();
+                        data.orden2_round_materialp = this.$inputRoundMargen.val();
                         data.ordenp6 = JSON.stringify(this.areasProductopList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
@@ -496,6 +504,15 @@ app || (app = {});
                 materiales += (materiales*margen)/100;
             }
 
+            roundmaterialp = this.$inputRoundMargen.val();
+            if (this.range.indexOf(roundmaterialp) != -1) {
+                // Calcular round decimales
+                var exp = Math.pow(10, roundmaterialp);
+                materiales = Math.round(materiales*exp)/exp;
+            } else {
+                this.$inputRoundMargen.val(0);
+            }
+
             // Cuadros de informacion
             this.$infoprecio.empty().html( window.Misc.currency( precio ) );
             this.$infoviaticos.empty().html( window.Misc.currency( viaticos ) );
@@ -509,17 +526,20 @@ app || (app = {});
             total = subtotal + vcomision;
 
             round = this.$inputRound.val();
-            if( round <= 2 || round >= -2){
+            if (this.range.indexOf(roundmaterialp) != -1) {
                 // Calcular round decimales
                 var exp = Math.pow(10, round);
                 total = Math.round(total*exp)/exp;
-            }else{
-                return;
+            } else {
+                this.$inputRound.val(0);
             }
 
-            this.$subtotal.val( subtotal );
-            this.$inputVcomision.val( vcomision );
-            this.$total.val( total );
+            this.valueVolumen = vcomision;
+            this.valueTotal = total;
+
+            this.$subtotal.html( "$ "+window.Misc.currency(subtotal) );
+            this.$inputVcomision.html( "$ "+window.Misc.currency(vcomision) );
+            this.$total.html( "$ "+window.Misc.currency(total) );
         },
 
         /**

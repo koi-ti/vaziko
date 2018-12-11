@@ -26,6 +26,7 @@ app || (app = {});
             'cotizacion2_viaticos': 0,
             'cotizacion2_volumen': 0,
             'cotizacion2_round': 0,
+            'cotizacion2_round_materialp': 0,
             'cotizacion2_margen_materialp': 0,
             'cotizacion2_vtotal': 0,
             'cotizacion2_observaciones': '',
