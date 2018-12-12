@@ -24,6 +24,9 @@ class Cotizacion4Controller extends Controller
                 $detalle = Cotizacion4::getCotizaciones4( $request->cotizacion2 );
                 return response()->json( $detalle );
             }
+            if ($request->has('insumo')) {
+                $detalle = Cotizacion4::select('cotizacion4_valor_unitario as valor')->where('cotizacion4_producto', $request->insumo)->orderBy('id', 'desc')->first();
+            }
             return response()->json($detalle);
         }
         abort(404);

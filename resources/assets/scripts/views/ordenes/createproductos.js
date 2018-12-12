@@ -24,6 +24,7 @@ app || (app = {});
             'click .submit-orden4': 'submitOrdenp4',
             'submit #form-orden4-producto': 'onStoreOrdenp4',
             'change #orden4_materialp': 'changeMaterialp',
+            'change #orden4_producto': 'changeInsumo',
             'change #orden6_areap': 'changeAreap',
             'change .event-price': 'calculateOrdenp2',
             'click .submit-ordenp7': 'submitOrdenp7',
@@ -447,6 +448,20 @@ app || (app = {});
                 });
             }else{
                 this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
+            }
+        },
+
+        /**
+        * Event change select materialp
+        */
+        changeInsumo: function (e) {
+            var _this = this;
+                insumo = this.$(e.currentTarget).val();
+
+            if (typeof(insumo) !== 'undefined' && !_.isUndefined(insumo) && !_.isNull(insumo) && insumo != '') {
+                $.get(window.Misc.urlFull( Route.route('ordenes.productos.materiales.index', {insumo: insumo})), function (resp) {
+                    _this.$('#orden4_valor_unitario').val(resp.valor);
+                });
             }
         },
 

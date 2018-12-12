@@ -24,6 +24,9 @@ class DetalleMaterialesController extends Controller
                 $detalle = Ordenp4::getOrdenesp4( $request->ordenp2 );
                 return response()->json( $detalle );
             }
+            if ($request->has('insumo')) {
+                $detalle = Ordenp4::select('orden4_valor_unitario as valor')->where('orden4_producto', $request->insumo)->orderBy('id', 'desc')->first();
+            }
             return response()->json($detalle);
         }
         abort(404);
