@@ -1088,6 +1088,7 @@ app || (app = {});
             }
 
             this.showProductoView = new app.ShowProductoView({ model: this.productoModel });
+            this.showProductoView.render();
         },
         /**
         * show view edit producto

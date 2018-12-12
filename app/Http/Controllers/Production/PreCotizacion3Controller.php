@@ -20,9 +20,12 @@ class PreCotizacion3Controller extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
-            if( $request->has('precotizacion2') ){
+            if ($request->has('precotizacion2')) {
                 $detalle = PreCotizacion3::getPreCotizaciones3( $request->precotizacion2 );
                 return response()->json( $detalle );
+            }
+            if ($request->has('insumo')) {
+                $detalle = PreCotizacion3::select('precotizacion3_valor_unitario as valor')->where('precotizacion3_producto', $request->insumo)->orderBy('id', 'desc')->first();
             }
             return response()->json($detalle);
         }

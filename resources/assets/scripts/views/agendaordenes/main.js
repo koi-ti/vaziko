@@ -49,21 +49,25 @@ app || (app = {});
                     _this.$modal.modal('show');
                 },
                 eventAfterRender: function(event, element, view) {
-                    console.log(event);
+
                     if ( parseInt(event.orden_culminada ) ){
                         element.addClass('fc-draggable');
                         element.css('background-color', 'gray');
                         element.css('border-color', 'white');
 
-                    }else if( parseInt(event.orden_anulada ) ){
-                        element.addClass('fc-draggable');
-                        element.css('background-color', '#DD4B39');
-                        element.css('border-color', 'white');
-
                     }else if( parseInt(event.orden_abierta) ){
-                        element.addClass('fc-draggable');
-                        element.css('background-color', '#00A65A');
-                        element.css('border-color', 'white');
+
+                        if (event.orden_fecha_entrega+' '+event.orden_hora_entrega < moment().format('YYYY-MM-DD H:m:s')) {
+                            element.addClass('fc-draggable');
+                            element.css('background-color', '#DD4B39');
+                            element.css('border-color', 'white');
+
+                        } else {
+                            element.addClass('fc-draggable');
+                            element.css('background-color', '#00A65A');
+                            element.css('border-color', 'white');
+
+                        }
 
                     } else {
                         element.addClass('fc-draggable');
@@ -78,7 +82,7 @@ app || (app = {});
                         element.css('border-color', 'white');
 
                     }
-                }
+                },
             });
         }
     });

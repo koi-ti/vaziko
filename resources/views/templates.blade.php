@@ -553,7 +553,7 @@
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>
-			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="15" required>
+			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="30" required>
             <div class="help-block with-errors"></div>
 		</div>
 

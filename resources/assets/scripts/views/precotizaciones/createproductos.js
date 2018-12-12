@@ -19,6 +19,7 @@ app || (app = {});
             'click .submit-precotizacion3': 'submitPreCotizacion3',
             'submit #form-precotizacion3-producto': 'onStorePreCotizacion3',
             'change #precotizacion3_materialp': 'changeMaterialp',
+            'change #precotizacion3_producto': 'changeInsumo',
             'click .submit-precotizacion5': 'submitPreCotizacion5',
             'submit #form-precotizacion5-producto': 'onStorePreCotizacion5',
             'change #precotizacion6_areap': 'changeAreap',
@@ -267,6 +268,20 @@ app || (app = {});
                 });
             }else{
                 this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
+            }
+        },
+        
+        /**
+        * Event change select materialp
+        */
+        changeInsumo: function (e) {
+            var _this = this;
+                insumo = this.$(e.currentTarget).val();
+
+            if (typeof(insumo) !== 'undefined' && !_.isUndefined(insumo) && !_.isNull(insumo) && insumo != '') {
+                $.get(window.Misc.urlFull( Route.route('precotizaciones.productos.materiales.index', {insumo: insumo})), function (resp) {
+                    _this.$('#precotizacion3_valor_unitario').val(resp.valor);
+                });
             }
         },
 

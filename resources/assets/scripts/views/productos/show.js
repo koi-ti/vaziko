@@ -30,6 +30,9 @@ app || (app = {});
             // Collection
             this.itemRolloINList = new app.ItemRolloINList();
             this.prodbodeList = new app.ProdBodeList();
+            this.productoHistoryList = new app.ProductoHistoryList();
+
+            this.referenceViews();
         },
 
         /**
@@ -49,7 +52,7 @@ app || (app = {});
                 this.$modalGeneric.modal('show');
                 this.$modalGeneric.find('.content-modal').empty().html(this.templateItemsRollo( ) );
                 this.$modalGeneric.find('.modal-title').text( 'Productos metrados' );
-                
+
                 this.referenceViews();
             }
 
@@ -84,6 +87,16 @@ app || (app = {});
                     dataFilter: {
                         'producto_id': this.model.get('id'),
                         'sucursal': this.sucursal,
+                    }
+                }
+            });
+
+            // Detalle item rollo list
+            this.productoHistoryListView = new app.ProductoHistoryListView({
+                collection: this.productoHistoryList,
+                parameters: {
+                    dataFilter: {
+                        producto_id: this.model.get('id'),
                     }
                 }
             });

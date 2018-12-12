@@ -23,6 +23,7 @@
                         <div class="external-event bg-black" style="cursor: initial;">Cerrada</div>
                         <div class="external-event bg-gray" style="cursor: initial;">Culminada</div>
                         <div class="external-event bg-primary" style="cursor: initial;">Recogida</div>
+                        <div class="external-event bg-red" style="cursor: initial;">Incumplida</div>
                     </div>
                 </div>
             </div>
