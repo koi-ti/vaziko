@@ -57,7 +57,7 @@ app || (app = {});
 
                     }else if( parseInt(event.orden_abierta) ){
 
-                        if (event.orden_fecha_entrega+' '+event.orden_hora_entrega < moment().format('YYYY-MM-DD H:m:s')) {
+                        if (event.orden_fecha_entrega+' '+event.orden_hora_entrega < moment().format('YYYY-MM-DD HH:mm:ss')) {
                             element.addClass('fc-draggable');
                             element.css('background-color', '#DD4B39');
                             element.css('border-color', 'white');
