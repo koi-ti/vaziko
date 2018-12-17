@@ -57,7 +57,6 @@ class OrdenpController extends Controller
             if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
                 $query->addSelect(DB::raw('TRUE as orden_opcional'));
             } else {
-                $query->where('orden_abierta', true);
                 $query->addSelect(DB::raw('FALSE as orden_opcional'));
             }
 

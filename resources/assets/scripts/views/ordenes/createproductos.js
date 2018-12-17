@@ -139,10 +139,9 @@ app || (app = {});
             // Variables globales
             this.valueVolumen = 0;
             this.valueTotal = 0;
-            this.range = ['-2','-1','0','1','2'];
+            this.range = [-3, -2, -1, 0, 1, 2, 3];
 
             this.$inputMargen = this.$('#orden2_margen_materialp');
-            this.$inputRoundMargen = this.$('#orden2_round_materialp');
 
             // Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
@@ -324,7 +323,6 @@ app || (app = {});
                         data.orden2_vtotal = this.valueVolumen;
                         data.orden2_total_valor_unitario = this.valueTotal;
                         data.orden2_round = this.$inputRound.val();
-                        data.orden2_round_materialp = this.$inputRoundMargen.val();
                         data.ordenp6 = this.areasProductopList.toJSON();
 
                     this.model.save( data, {silent: true} );
@@ -337,7 +335,6 @@ app || (app = {});
                         data.orden2_vtotal = this.valueVolumen;
                         data.orden2_total_valor_unitario = this.valueTotal;
                         data.orden2_round = this.$inputRound.val();
-                        data.orden2_round_materialp = this.$inputRoundMargen.val();
                         data.ordenp6 = JSON.stringify(this.areasProductopList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
@@ -513,19 +510,14 @@ app || (app = {});
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
             volumen = parseInt( this.$inputVolumen.val() );
 
-            // Calcular que no pase de 100% y no se undefinde
-            margen = parseFloat( this.$inputMargen.val() );
-            if( margen > 0 && margen <= 100 && !_.isUndefined(margen) && !_.isNaN(margen) ) {
-                materiales += (materiales*margen)/100;
+            if (this.$inputMargen.val() >= 100) {
+                this.$inputMargen.val(99);
             }
-
-            roundmaterialp = this.$inputRoundMargen.val();
-            if (this.range.indexOf(roundmaterialp) != -1) {
-                // Calcular round decimales
-                var exp = Math.pow(10, roundmaterialp);
-                materiales = Math.round(materiales*exp)/exp;
-            } else {
-                this.$inputRoundMargen.val(0);
+            // Calcular que no pase de 100% y no se undefinde
+            margen = this.$inputMargen.val();
+            if( margen > 0 && margen <= 99 && !_.isUndefined(margen) && !_.isNaN(margen) ) {
+                // materiales += (materiales*margen)/100;
+                materiales = materiales/((100-margen)/100);
             }
 
             // Cuadros de informacion
@@ -540,8 +532,8 @@ app || (app = {});
             vcomision = ( subtotal / ((100 - volumen ) / 100) ) * ( 1 - ((( 100 - volumen ) / 100 )));
             total = subtotal + vcomision;
 
-            round = this.$inputRound.val();
-            if (this.range.indexOf(roundmaterialp) != -1) {
+            round = parseInt(this.$inputRound.val());
+            if (this.range.indexOf(round) != -1) {
                 // Calcular round decimales
                 var exp = Math.pow(10, round);
                 total = Math.round(total*exp)/exp;

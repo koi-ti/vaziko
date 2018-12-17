@@ -553,11 +553,7 @@
                                                 <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm event-price" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-md-1">%</div>
-                                            <div class="col-md-2"><b>Redondear</b></div>
-                                            <div class="col-md-2">
-                                                <input id="orden2_round_materialp" name="orden2_round_materialp" class="form-control input-sm event-price" value="<%- orden2_round_materialp %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
-                                            </div>
-                                            <div class="col-md-3 text-right"><b><span id="info-materiales"></span></b></div>
+                                            <div class="col-md-7 text-right"><b><span id="info-materiales"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -582,7 +578,7 @@
                                             </div>
                                             <div class="col-md-2"><b>Redondear</b></div>
                                             <div class="col-md-2">
-                                                <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-2" max="2" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                                <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-3" max="3" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
                                             </div>
                                             <div class="col-md-4 text-right">
                                                 <span class="pull-right badge bg-red" id="orden2_vtotal"></span>

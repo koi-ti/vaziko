@@ -40,7 +40,6 @@ class CreateCotizacion2Table extends Migration
             $table->double('cotizacion2_vtotal')->default(0);
 
             $table->double('cotizacion2_margen_materialp')->default(0);
-            $table->integer('cotizacion2_round_materialp')->default(0);
 
             $table->boolean('cotizacion2_yellow')->default(false);
             $table->boolean('cotizacion2_magenta')->default(false);

@@ -19,11 +19,12 @@
                         <h4 class="box-title">Ordenes</h4>
                     </div>
                     <div class="box-body">
-                        <div class="external-event bg-green" style="cursor: initial;">Abierta</div>
-                        <div class="external-event bg-black" style="cursor: initial;">Cerrada</div>
-                        <div class="external-event bg-gray" style="cursor: initial;">Culminada</div>
-                        <div class="external-event bg-primary" style="cursor: initial;">Recogida</div>
-                        <div class="external-event bg-red" style="cursor: initial;">Incumplida</div>
+                        <div class="external-event bg-green">Abierta</div>
+                        <div class="external-event bg-black">Cerrada</div>
+                        <div class="external-event bg-gray">Culminada</div>
+                        <div class="external-event bg-race">Remisión</div>
+                        <div class="external-event bg-primary">Recogida</div>
+                        <div class="external-event bg-red">Incumplida</div>
                     </div>
                 </div>
             </div>

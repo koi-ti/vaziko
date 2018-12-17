@@ -28,7 +28,7 @@ class Ordenp2 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp', 'orden2_round_materialp'];
+    protected $fillable = ['orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp'];
 
     public function isValid($data)
     {
@@ -37,7 +37,7 @@ class Ordenp2 extends BaseModel
             'orden2_cantidad' => 'required|min:1|integer',
             'orden2_precio_venta' => 'required',
             'orden2_ancho' => 'numeric|min:0',
-            'orden2_round' => 'required|min:-2|max:2|numeric',
+            'orden2_round' => 'required|min:-3|max:3|numeric',
             'orden2_volumen' => 'min:0|max:100|integer',
             'orden2_margen_materialp' => 'min:0|max:100|numeric',
         ];

@@ -231,7 +231,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <th colspan="3" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
+                                    <th colspan="3" class="text-center">NO EXISTE HISTORIAL DEL PRODUCTO</th>
                                 </tr>
                             </tbody>
                         </table>

@@ -477,9 +477,7 @@
 			                    $transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
 			                    $viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
 			                    $totalmaterialesp = round( $totalmaterialesp / $cotizacion2->cotizacion2_cantidad );
-			                    $totalmaterialesp += $totalmaterialesp*$cotizacion2->cotizacion2_margen_materialp / 100;
-								$exp = pow(10, $cotizacion2->cotizacion2_round_materialp);
-								$totalmaterialesp = round($totalmaterialesp*$exp)/$exp;
+			                    $totalmaterialesp = $totalmaterialesp/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 			                    $subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap + $totalmaterialesp;
 			                /*--}}
 
@@ -508,9 +506,7 @@
 											<div class="col-md-2"><b>Materiales</b></div>
 											<div class="col-md-2">{{ $cotizacion2->cotizacion2_margen_materialp }}</div>
 											<div class="col-md-1">%</div>
-											<div class="col-md-2"><b>Redondear</b></div>
-											<div class="col-md-2">{{ $cotizacion2->cotizacion2_round_materialp }}</div>
-											<div class="col-md-3 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
+											<div class="col-md-7 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
