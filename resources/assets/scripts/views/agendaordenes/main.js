@@ -77,12 +77,10 @@ app || (app = {});
                     }
 
                     if (event.type == 'RR') {
-                        if (event.saldo > 0) {
-                            element.addClass('fc-draggable');
-                            element.addClass('bg-race');
-                            element.css('border-color', 'white');
-                            element.css('color', '#9667C5');
-                        }
+                        element.addClass('fc-draggable');
+                        element.addClass('bg-race');
+                        element.css('border-color', 'white');
+                        element.css('color', '#9667C5');
                     }
 
                     if( event.type == 'R1' || event.type == 'R2') {
