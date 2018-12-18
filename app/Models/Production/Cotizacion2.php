@@ -35,7 +35,7 @@ class Cotizacion2 extends BaseModel
         $rules = [
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
-            'cotizacion2_round' => 'required|min:-3|max:0|numeric',
+            'cotizacion2_round' => 'required|min:-3|max:3|numeric',
             'cotizacion2_precio_venta' => 'required',
             'cotizacion2_ancho' => 'numeric|min:0',
             'cotizacion2_volumen' => 'min:0|max:100|integer',
