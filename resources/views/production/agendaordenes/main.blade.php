@@ -21,8 +21,8 @@
                     <div class="box-body">
                         <div class="external-event bg-green">Abierta</div>
                         <div class="external-event bg-black">Cerrada</div>
-                        <div class="external-event bg-gray">Culminada</div>
-                        <div class="external-event bg-race">Remisión</div>
+                        <div class="external-event bg-gray">Facturada</div>
+                        <div class="external-event bg-race">Remisionada</div>
                         <div class="external-event bg-primary">Recogida</div>
                         <div class="external-event bg-red">Incumplida</div>
                     </div>
@@ -77,7 +77,8 @@
                     <label class="control-label">H. Recogida #1</label>
                     <div><%- orden_hora_recogida1 %></div>
                 </div>
-            <% } else if ( type == 'R2' ) { %>
+            <% } %>
+            <% if ( type == 'R2' ) { %>
                 <div class="col-sm-3">
                     <label class="control-label">F. Recogida #2</label>
                     <div><%- orden_fecha_recogida2 %></div>
