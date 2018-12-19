@@ -304,6 +304,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
 	});
 	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
+	Route::resource('rresumentiemposp', 'Report\ResumenTiempopController', ['only' => ['index']]);
 
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);

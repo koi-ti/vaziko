@@ -239,7 +239,7 @@
     </li>
 
     {{-- Produccion --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['agendaordenes', 'ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp', 'rtiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['agendaordenes', 'ordenes', 'productosp', 'precotizaciones', 'cotizaciones', 'tiemposp', 'rtiemposp', 'rresumentiemposp', 'actividadesp', 'subactividadesp', 'areasp', 'acabadosp', 'maquinasp', 'materialesp', 'tipomaterialesp', 'tipoproductosp', 'subtipoproductosp']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-cogs"></i> <span>Producción</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -273,13 +273,16 @@
             </li>
 
             {{-- Reportes produccion --}}
-            <li class="{{ in_array(Request::segment(1), ['rtiemposp']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rtiemposp', 'rresumentiemposp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
                     <li class="{{ Request::segment(1) == 'rtiemposp' ? 'active' : '' }}">
                         <a href="{{ route('rtiemposp.index') }}"><i class="fa fa-circle-o"></i> Tiempos</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rresumentiemposp' ? 'active' : '' }}">
+                        <a href="{{ route('rresumentiemposp.index') }}"><i class="fa fa-circle-o"></i> Resumen tiempos</a>
                     </li>
                 </ul>
             </li>

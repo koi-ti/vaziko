@@ -79,8 +79,9 @@ app || (app = {});
                     if (event.type == 'RR') {
                         element.addClass('fc-draggable');
                         element.addClass('bg-race');
-                        element.css('border-color', 'white');
-                        element.css('color', '#9667C5');
+                        element.css('border-color', 'black');
+                        element.css('color', 'black');
+                        element.css('font-weight', 'bold');
                     }
 
                     if( event.type == 'R1' || event.type == 'R2') {

@@ -43,7 +43,7 @@ class TiempoProduccion extends FPDF_CellFit
     function table( $tiempos ) {
         foreach ($tiempos as $funcionario) {
             $this->SetFont('Arial','B',8);
-            $this->Cell(0, 5, $funcionario->tercero->tercero_nombre, 0, 0,'C');
+            $this->Cell(0, 5, utf8_decode($funcionario->tercero->tercero_nombre), 0, 0,'C');
             $this->Ln();
             $this->Cell(0,5,"NIT: ".$funcionario->tercero->tercero_nit,0,0,'C');
             $this->Ln();
