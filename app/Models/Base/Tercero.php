@@ -180,6 +180,23 @@ class Tercero extends BaseModel implements AuthenticatableContract,
         });
     }
 
+    public static function getTechnical($funcionarios = [])
+    {
+        $query = self::query();
+        $query->select('id', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
+                THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                        (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                    )
+                ELSE tercero_razonsocial END)
+            AS tercero_nombre"));
+        $query->where('tercero_activo', true);
+        if (!empty($funcionarios[0])) {
+            $query->whereIn('tercero_nit', $funcionarios);
+        }
+        $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
+        return $query->get();
+    }
+
     public function setTerceroNombre1Attribute($name)
     {
         $this->attributes['tercero_nombre1'] = strtoupper($name);

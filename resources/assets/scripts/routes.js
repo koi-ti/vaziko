@@ -109,6 +109,7 @@ app || (app = {});
 
             // Reporte tiemposp
             'rtiemposp(/)': 'getReporteTiempospMain',
+            'rresumentiemposp(/)': 'getReporteResumenTiempospMain',
 
             'areasp(/)': 'getAreaspMain',
             'areasp/create(/)': 'getAreaspCreate',
@@ -1191,6 +1192,15 @@ app || (app = {});
             }
 
             this.mainReporteTiempospView = new app.MainReporteTiempospView();
+        },
+
+        getReporteResumenTiempospMain: function () {
+            if ( this.mainReporteResumenTiempospView instanceof Backbone.View ){
+                this.mainReporteResumenTiempospView.stopListening();
+                this.mainReporteResumenTiempospView.undelegateEvents();
+            }
+
+            this.mainReporteResumenTiempospView = new app.MainReporteResumenTiempospView();
         },
 
         getAreaspMain: function () {

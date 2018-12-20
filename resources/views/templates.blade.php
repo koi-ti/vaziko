@@ -1206,3 +1206,28 @@
         </dialog>
     </div>
 </script>
+
+<script type="text/template" id="add-filter-funcionario-list">
+    <div class="row" id="row_<%- posactual %>">
+        <label for="filter_funcionario" class="col-sm-1 col-md-offset-1 control-label">Funcionario #<%- posactual %></label>
+        <div class="form-group col-sm-3">
+            <div class="input-group input-group-sm">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="filter_funcionario_<%- posactual %>">
+                        <i class="fa fa-user"></i>
+                    </button>
+                </span>
+                <input id="filter_funcionario_<%- posactual %>" placeholder="Funcionario" class="form-control tercero-koi-component" name="filter_funcionario[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="filter_funcionario_nombre_<%- posactual %>" required>
+            </div>
+            <div class="help-block with-errors"></div>
+        </div>
+        <div class="col-sm-5 col-xs-10">
+            <input id="filter_funcionario_nombre_<%- posactual %>" name="filter_funcionario_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly required>
+        </div>
+        <div class="col-sm-1 col-xs-2 text-left">
+            <a class="btn btn-danger btn-flat btn-sm funcionario-remove" data-resource="<%- posactual %>">
+                <span><i class="fa fa-times"></i></span>
+            </a>
+        </div>
+    </div>
+</script>

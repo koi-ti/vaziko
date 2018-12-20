@@ -57,6 +57,7 @@ class TerceroController extends Controller
 
                     // funcionario = tiemposp
                     if($request->has('tercero_tiempop')){
+                        $query->where('tercero_activo', true);
                         $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
                     }
 

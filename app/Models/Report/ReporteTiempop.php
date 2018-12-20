@@ -12,15 +12,14 @@ class ReporteTiempop extends Model
     public function isValid($data)
     {
         $rules = [
-            'fecha_inicial' => 'required',
-            'fecha_final' => 'required',
-            'tiempop_tercero' => 'required',
+            'filter_fecha_inicial' => 'required',
+            'filter_fecha_final' => 'required',
         ];
         $validator = Validator::make($data, $rules);
 
         if ($validator->passes()) {
             // Validar fecha inicial no puede ser mayor a la final
-            if( $data['fecha_final'] < $data['fecha_inicial'] ){
+            if( $data['filter_fecha_final'] < $data['filter_fecha_inicial'] ){
                 $this->errors = "La fecha de inicio no puede ser mayor a la fecha final.";
                 return false;
             }

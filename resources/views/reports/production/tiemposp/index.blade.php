@@ -30,42 +30,42 @@
 
 					<div class="row">
                         <div class="form-group col-md-2 col-md-offset-4">
-                            <label for="fecha_inicial" class="control-label">Fecha de inicio</label>
+                            <label for="filter_fecha_inicial" class="control-label">Fecha de inicio</label>
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" id="fecha_inicial" name="fecha_inicial" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
+                                <input type="text" id="filter_fecha_inicial" name="filter_fecha_inicial" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="form-group col-md-2">
-                            <label for="fecha_final" class="control-label">Fecha de fin</label>
+                            <label for="filter_fecha_final" class="control-label">Fecha de fin</label>
                             <div class="input-group">
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type="text" id="fecha_final" name="fecha_final" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
+                                <input type="text" id="filter_fecha_final" name="filter_fecha_final" placeholder="Fecha inicio" class="form-control input-sm datepicker" required>
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
 					</div>
 
                     <div class="row">
-                        <label for="tiempop_tercero" class="col-sm-1 col-md-offset-1 control-label">Funcionario</label>
+                        <label for="filter_funcionario" class="col-sm-1 col-md-offset-1 control-label">Funcionario</label>
                         <div class="form-group col-sm-3">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tiempop_tercero">
+                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="filter_funcionario">
                                         <i class="fa fa-user"></i>
                                     </button>
                                 </span>
-                                <input id="tiempop_tercero" placeholder="Funcionario" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre" required>
+                                <input id="filter_funcionario" placeholder="Funcionario" class="form-control tercero-koi-component" name="filter_funcionario[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="filter_funcionario_nombre">
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-sm-5 col-xs-10">
-                            <input id="tiempop_tercero_nombre" name="tiempop_tercero_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly required>
+                            <input id="filter_funcionario_nombre" name="filter_funcionario_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly>
                         </div>
                         <div class="col-sm-1 col-xs-2">
                             <a class="btn btn-success btn-flat btn-sm add-funcionario">
@@ -73,6 +73,7 @@
                             </a>
                         </div>
                     </div>
+
                     <div id="render-funcionarios"></div>
 
 					<div class="row">
@@ -93,31 +94,6 @@
 
         <div id="render-chart"></div>
 	</section>
-
-    <script type="text/template" id="add-funcionario-list">
-        <div class="row" id="row_<%- posactual %>">
-            <label for="tiempop_tercero" class="col-sm-1 col-md-offset-1 control-label">Funcionario #<%- posactual %></label>
-            <div class="form-group col-sm-3">
-                <div class="input-group input-group-sm">
-                    <span class="input-group-btn">
-                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tiempop_tercero_<%- posactual %>">
-                            <i class="fa fa-user"></i>
-                        </button>
-                    </span>
-                    <input id="tiempop_tercero_<%- posactual %>" placeholder="Funcionario" class="form-control tercero-koi-component" name="tiempop_tercero[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="tiempop_tercero_nombre_<%- posactual %>" required>
-                </div>
-                <div class="help-block with-errors"></div>
-            </div>
-            <div class="col-sm-5 col-xs-10">
-                <input id="tiempop_tercero_nombre_<%- posactual %>" name="tiempop_tercero_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly required>
-            </div>
-            <div class="col-sm-1 col-xs-2 text-left">
-                <a class="btn btn-danger btn-flat btn-sm funcionario-remove" data-resource="<%- posactual %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </div>
-        </div>
-    </script>
 
     <script type="text/template" id="add-rtiempop-charts">
         <div class="box box-success">

@@ -20,9 +20,7 @@ class ResumenTiempopController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
-            $data = $request->all();
-
-            $validator = Validator::make($data, [
+            $validator = Validator::make($request->all(), [
                 'filter_fecha_inicial' => 'required',
                 'filter_fecha_final' => 'required',
             ]);
@@ -41,40 +39,40 @@ class ResumenTiempopController extends Controller
                     ->withInput();
             }
 
-            if ( !empty($request->filter_funcionario_nombre) ) {
-                $tercero = Tercero::where('tercero_nit', $request->filter_funcionario)->first();
-                if (!$tercero instanceof Tercero) {
-                    return redirect('/rresumentiemposp')
-                        ->withErrors('No es posible recuperar el funcionario.')
-                        ->withInput();
-                }
-            }
+            // Recuperar terceros
+            $data = [];
+            $funcionarios = Tercero::getTechnical($request->filter_funcionario);
+            foreach ($funcionarios as $funcionario) {
+                $object = new \stdclass();
+                $object->tercero_nombre = $funcionario->tercero_nombre;
+                $object->tercero_nit = $funcionario->tercero_nit;
 
-            $query = Tiempop::query();
-            $query->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as time, COUNT(*) as ordenes, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"), 'tiempop_actividadp', 'tiempop_subactividadp', 'tiempop_hora_inicio', 'tiempop_hora_fin', 'tercero_nit', 'actividadp_nombre', 'subactividadp_nombre');
-            $query->whereNull('tiempop_ordenp');
-            $query->whereBetween('tiempop_fecha', [$request->filter_fecha_inicial, $request->filter_fecha_final]);
-            $query->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id');
-            $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
-            $query->leftjoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
-            if (!empty($request->filter_funcionario_nombre)) {
-                $query->where('tiempop_tercero', $tercero->id);
-            }
-            $query->groupBy('tiempop_actividadp', 'tiempop_subactividadp');
-            $sinordenes = $query->get();
+                $query = Tiempop::query();
+                $query->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as time, COUNT(*) as ordenes, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"), 'tiempop_actividadp', 'tiempop_subactividadp', 'tiempop_hora_inicio', 'tiempop_hora_fin', 'tercero_nit', 'actividadp_nombre', 'subactividadp_nombre');
+                $query->whereNull('tiempop_ordenp');
+                $query->whereBetween('tiempop_fecha', [$request->filter_fecha_inicial, $request->filter_fecha_final]);
+                $query->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id');
+                $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
+                $query->leftjoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
+                $query->where('tiempop_tercero', $funcionario->id);
+                $query->groupBy('tiempop_actividadp', 'tiempop_subactividadp');
+                $sinordenes = $query->get();
 
-            $query = Tiempop::query();
-            $query->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as time, COUNT(*) as ordenes, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"), 'tiempop_actividadp', 'tiempop_subactividadp', 'tiempop_hora_inicio', 'tiempop_hora_fin', 'tercero_nit', 'actividadp_nombre', 'subactividadp_nombre');
-            $query->whereNotNull('tiempop_ordenp');
-            $query->whereBetween('tiempop_fecha', [$request->filter_fecha_inicial, $request->filter_fecha_final]);
-            $query->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id');
-            $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
-            $query->leftjoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
-            if (!empty($request->filter_funcionario_nombre)) {
-                $query->where('tiempop_tercero', $tercero->id);
+                $query = Tiempop::query();
+                $query->select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as time, COUNT(*) as ordenes, (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"), 'tiempop_actividadp', 'tiempop_subactividadp', 'tiempop_hora_inicio', 'tiempop_hora_fin', 'tercero_nit', 'actividadp_nombre', 'subactividadp_nombre');
+                $query->whereNotNull('tiempop_ordenp');
+                $query->whereBetween('tiempop_fecha', [$request->filter_fecha_inicial, $request->filter_fecha_final]);
+                $query->join('koi_tercero', 'tiempop_tercero', '=', 'koi_tercero.id');
+                $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
+                $query->leftjoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
+                $query->where('tiempop_tercero', $funcionario->id);
+                $query->groupBy('tiempop_actividadp', 'tiempop_subactividadp');
+                $conordenes = $query->get();
+
+                $object->sinordenes = $sinordenes->toArray();
+                $object->conordenes = $conordenes->toArray();
+                $data[] = $object;
             }
-            $query->groupBy('tiempop_actividadp', 'tiempop_subactividadp');
-            $conordenes = $query->get();
 
             // Preparar datos reporte
             $title = utf8_decode("Resumen tiempos de producción de $request->filter_fecha_inicial a $request->filter_fecha_final");
@@ -84,7 +82,7 @@ class ResumenTiempopController extends Controller
             switch ($type) {
                 case 'pdf':
                     $pdf = new ResumenTiempoProduccion('L', 'mm', 'A4');
-                    $pdf->buldReport($sinordenes, $conordenes, $title);
+                    $pdf->buldReport($data, $title);
                 break;
             }
         }

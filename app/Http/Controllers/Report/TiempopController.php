@@ -37,24 +37,22 @@ class TiempopController extends Controller
                 $chart = new \stdClass();
                 $chart->labels = [];
                 $chart->data = [];
-                foreach ($request->tiempop_tercero as $rtercero) {
+
+                $funcionarios = Tercero::getTechnical(explode(',', $request->filter_funcionario[0]));
+                foreach ($funcionarios as $funcionario) {
                     $object = new \stdClass();
 
                     $query = Tercero::query();
                     $query->select('koi_tercero.id', DB::raw("CONCAT(tercero_nombre1,' ',tercero_apellido1) AS tercero_nombre"));
-                    $query->where('tercero_nit', $rtercero);
+                    $query->where('tercero_nit', $funcionario->tercero_nit);
                     $tercero = $query->first();
-
-                    if(!$tercero instanceof Tercero){
-                        return response()->json(['success' => false, 'errors' => "No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador."]);
-                    }
 
                     // Recuperar tiempos del tercero
                     $query = Tiempop::query();
                     $query->select( DB::raw("SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total") );
                     $query->where('tiempop_tercero', $tercero->id);
-                    $query->where('tiempop_fecha', '>=', $request->fecha_inicial);
-                    $query->where('tiempop_fecha', '<=', $request->fecha_final);
+                    $query->where('tiempop_fecha', '>=', $request->filter_fecha_inicial);
+                    $query->where('tiempop_fecha', '<=', $request->filter_fecha_final);
                     $tiempop = $query->first();
 
                     // Convertir segundos a horas
@@ -82,10 +80,9 @@ class TiempopController extends Controller
     {
         if($request->has('type')){
             $data = $request->all();
-
             $validator = Validator::make($data, [
-                'fecha_inicial' => 'required',
-                'fecha_final' => 'required',
+                'filter_fecha_inicial' => 'required',
+                'filter_fecha_final' => 'required',
             ]);
 
             // Validar que sean requeridos
@@ -96,72 +93,46 @@ class TiempopController extends Controller
             }
 
             // Validar fecha inicial no puede ser mayor a la final
-            if($request->fecha_final < $request->fecha_inicial ){
+            if($request->filter_fecha_final < $request->filter_fecha_inicial ){
                 return redirect('/rtiemposp')
                     ->withErrors('La fecha final no puede ser menor a la inicial.')
                     ->withInput();
             }
 
-            // Recuperar terceros
-            if( count($request->tiempop_tercero) <= 0 ){
-                return redirect('/rtiemposp')
-                    ->withErrors('Por favor agregue un funcionario para generar el reporte.')
-                    ->withInput();
-            }
-
-            $tiempos = [];
-            foreach ( explode(',', $request->tiempop_tercero[0]) as $rtercero) {
+            $data = [];
+            $funcionarios = Tercero::getTechnical(explode(',', $request->filter_funcionario[0]));
+            foreach ( $funcionarios as $funcionario) {
                 $object = new \stdClass();
-
-                $query = Tercero::query();
-                $query->select('koi_tercero.id', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, ( CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) )ELSE tercero_razonsocial END) AS tercero_nombre"));
-                $query->where('tercero_nit', $rtercero);
-                $tercero = $query->first();
-
-                if(!$tercero instanceof Tercero){
-                    return redirect('/rtiemposp')
-                    ->withErrors("No es posible recuperar el funcionario $tercero->tercero_nombre, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
-                }
-                $object->tercero = $tercero;
+                $object->tercero = $funcionario;
 
                 // Recuperar tiempos del tercero
                 $query = Tiempop::query();
-                $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
-                CONCAT(
-                    (CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                    (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                    )
-                    ELSE tercero_razonsocial
-                    END),
-                    ' (', orden_referencia ,')'
-                    ) AS tercero_nombre"
-                ));
+                $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw(" CONCAT(
+                    (CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END) ) ELSE tercero_razonsocial END),' (', orden_referencia ,')' ) AS tercero_nombre" ));
                 $query->leftJoin('koi_ordenproduccion', 'tiempop_ordenp', '=', 'koi_ordenproduccion.id');
                 $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
                 $query->leftJoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
                 $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
                 $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
-                $query->where('tiempop_tercero', $tercero->id);
-                $query->where('tiempop_fecha', '>=', $request->fecha_inicial);
-                $query->where('tiempop_fecha', '<=', $request->fecha_final);
+                $query->where('tiempop_tercero', $funcionario->id);
+                $query->where('tiempop_fecha', '>=', $request->filter_fecha_inicial);
+                $query->where('tiempop_fecha', '<=', $request->filter_fecha_final);
                 $query->orderBy('tiempop_fecha', 'asc');
                 $tiemposp = $query->get();
 
                 $object->tiemposp = $tiemposp;
-                $tiempos[] = $object;
+                $data[] = $object;
             }
 
             // Preparar datos reporte
-            $title = utf8_decode("Tiempos de producción de $request->fecha_inicial a $request->fecha_final");
+            $title = utf8_decode("Tiempos de producción de $request->filter_fecha_inicial a $request->filter_fecha_final");
             $type = $request->type;
 
             // Generate file
             switch ($type) {
                 case 'pdf':
                     $pdf = new TiempoProduccion('L', 'mm', 'A4');
-                    $pdf->buldReport($tiempos, $title);
+                    $pdf->buldReport($data, $title);
                 break;
             }
         }

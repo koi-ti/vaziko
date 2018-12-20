@@ -12,7 +12,7 @@ app || (app = {});
     app.MainReporteTiempospView = Backbone.View.extend({
 
         el: '#rtiemposp-main',
-        template: _.template( ($('#add-funcionario-list').html() || '') ),
+        template: _.template( ($('#add-filter-funcionario-list').html() || '') ),
         templateCharts: _.template( ($('#add-rtiempop-charts').html() || '') ),
         events: {
             'click .add-funcionario': 'addFuncionario',

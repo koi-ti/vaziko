@@ -10,14 +10,14 @@ class ResumenTiempoProduccion extends FPDF_CellFit
     private $title;
     private $data;
 
-    function buldReport($sin, $con, $title) {
+    function buldReport($data, $title) {
         $this->title = $title;
 
         $this->SetMargins(5,5,5);
         $this->SetTitle($this->title, true);
         $this->AliasNbPages();
         $this->AddPage();
-        $this->table( $sin, $con );
+        $this->table( $data );
     }
 
     function Header() {
@@ -40,85 +40,79 @@ class ResumenTiempoProduccion extends FPDF_CellFit
         $this->Cell(0,10, utf8_decode('Página ').$this->PageNo().' de {nb}',0,0,'C');
     }
 
-    function table( $sin, $con ) {
-        $this->SetFont('Arial','B',8);
-        $this->Cell(282,5,utf8_decode('SIN ORDENES DE PRODUCCIÓN'),1, 0, 'C');
-        $this->Ln();
-        $this->Cell(90,5,'FUNCIONARIO',1);
-        $this->Cell(32,5,'NIT',1);
-        $this->Cell(60,5,'ACTIVIDAD',1);
-        $this->Cell(60,5,'SUBACTIVIDAD',1);
-        $this->Cell(40,5,'TIEMPO (H.M)',1);
-        $this->Ln();
+    function table( $data ) {
 
-        $fill = false;
-        $whitouttiempo = $totalsegundos = 0;
-        foreach ($sin as $funcionario) {
-            $horas = floor($funcionario->time / 3600);
-            $minutos = floor(($funcionario->time - ($horas * 3600)) / 60);
-
-            $this->SetFont('Arial','',7);
-            $this->CellFitScale(90, 5,utf8_decode($funcionario->tercero_nombre), 'LR', 0, 'L');
-            $this->Cell(32,5,$funcionario->tercero_nit,'LR', 0, 'L');
-            $this->CellFitScale(60,5,utf8_decode($funcionario->actividadp_nombre), 'LR', 0, 'L', $fill);
-            $this->CellFitScale(60,5,isset($funcionario->subactividadp_nombre) ? utf8_decode($funcionario->subactividadp_nombre) : '-', 'LR', 0, 'L', $fill);
-            $this->Cell(40,5,"$horas.$minutos", 'LR', 0, 'C', $fill);
+        $a = 0;
+        foreach ($data as $funcionario) {
+            $this->SetFont('Arial','B',8);
+            $this->Cell(287, 5, utf8_decode("$funcionario->tercero_nombre - $funcionario->tercero_nit"), 1, 0, 'C');
             $this->Ln();
 
-            $totalsegundos += $funcionario->time;
-        }
-
-        $thoras = floor($totalsegundos / 3600);
-        $tminutos = floor(($totalsegundos - ($thoras * 3600)) / 60);
-
-        $this->SetFont('Arial','B',8);
-        $this->Cell(242,5,utf8_decode(''),'TR', 0, 'C');
-        $this->Cell(40,5,"$thoras.$tminutos",1, 0, 'C');
-        $this->Ln();
-
-        // Línea de cierre
-        $this->Cell(282,0,'','T');
-        $this->Ln(20);
-
-        $this->SetFont('Arial','B',8);
-        $this->Cell(282,5,utf8_decode('CON ORDENES DE PRODUCCIÓN'),1, 0, 'C');
-        $this->Ln();
-
-        $this->Cell(90,5,'FUNCIONARIO',1);
-        $this->Cell(32,5,'NIT',1);
-        $this->Cell(60,5,'ACTIVIDAD',1);
-        $this->Cell(60,5,'SUBACTIVIDAD',1);
-        $this->Cell(20,5,'TIEMPO (H.M)',1);
-        $this->Cell(20,5,'# ORDENES',1);
-        $this->Ln();
-
-        $fill = false;
-        $whittiempo = $whitordenes = $totalsegundos = 0;
-        foreach ($con as $funcionario) {
-            $horas = floor($funcionario->time / 3600);
-            $minutos = floor(($funcionario->time - ($horas * 3600)) / 60);
-
-            $this->SetFont('Arial','',7);
-            $this->CellFitScale(90, 5,utf8_decode($funcionario->tercero_nombre), 'LR', 0, 'L');
-            $this->Cell(32,5,$funcionario->tercero_nit,'LR', 0, 'L');
-            $this->CellFitScale(60,5,utf8_decode($funcionario->actividadp_nombre), 'LR', 0, 'L', $fill);
-            $this->CellFitScale(60,5,isset($funcionario->subactividadp_nombre) ? utf8_decode($funcionario->subactividadp_nombre) : '-', 'LR', 0, 'L', $fill);
-            $this->Cell(20,5,"$horas.$minutos", 'LR', 0, 'C', $fill);
-            $this->Cell(20,5,$funcionario->ordenes, 'LR', 0, 'C', $fill);
+            $this->Cell(112, 5, utf8_decode('SIN ORDEN DE PRODUCCIÓN'), 1, 0, 'C');
+            $this->Cell(25, 5, '', 0, 0, 'C');
+            $this->Cell(150, 5, utf8_decode('CON ORDEN DE PRODUCCIÓN'), 1, 0, 'C');
             $this->Ln();
 
-            $totalsegundos += $funcionario->time;
-            $whitordenes += $funcionario->ordenes;
+            $this->Cell(43,5, 'ACTIVIDAD', 1);
+            $this->Cell(43,5, 'SUBACTIVIDAD', 1);
+            $this->Cell(26,5, 'TIEMPO (H.M)', 1, 0, 'C');
+            $this->Cell(25,5, '', 0, 0, 'C');
+            $this->Cell(50,5, 'ACTIVIDAD', 1);
+            $this->Cell(50,5, 'SUBACTIVIDAD', 1);
+            $this->Cell(25,5, 'TIEMPO (H.M)', 1, 0, 'C');
+            $this->Cell(25,5, '# ORDENES', 1, 0, 'C');
+            $this->Ln();
+
+            $totalsegundos = 0;
+            foreach ($funcionario->sinordenes as $sinorden) {
+                $horas = floor($sinorden['time'] / 3600);
+                $minutos = abs(floor(($sinorden['time'] - ($horas * 3600)) / 60));
+
+                $this->SetFont('Arial', '', 7);
+                $this->CellFitScale(43, 5, utf8_decode($sinorden['actividadp_nombre']), 1);
+                $this->CellFitScale(43, 5, isset($sinorden['subactividadp_nombre']) ? utf8_decode($sinorden['subactividadp_nombre']) : '-', 1);
+                $this->Cell(26, 5, "$horas.$minutos", 1, 0, 'C');
+                $this->Ln();
+
+                $totalsegundos += $sinorden['time'];
+                $horas = $minutos = 0;
+                $a += 5;
+            }
+            $horas = floor($totalsegundos / 3500);
+            $minutos = abs(floor(($totalsegundos - ($horas * 3600)) / 60));
+            $this->Cell(86, 5, '', 'TR', 0, 'C');
+            $this->Cell(26, 5, "$horas.$minutos", 1, 0, 'C');
+
+            $this->SetXY(142, $this->GetY()-$a);
+            $totalsegundos = $totalordenes = $horas = $minutos = 0;
+            foreach ($funcionario->conordenes as $conorden) {
+                $horas = floor($conorden['time'] / 3600);
+                $minutos = abs(floor(($conorden['time'] - ($horas * 3600)) / 60));
+
+                $this->SetX(142);
+                $this->SetFont('Arial','',7);
+                $this->CellFitScale(50,5, utf8_decode($conorden['actividadp_nombre']), 1);
+                $this->CellFitScale(50,5, isset($conorden['subactividadp_nombre']) ? utf8_decode($conorden['subactividadp_nombre']) : '-', 1);
+                $this->Cell(25,5, "$horas.$minutos", 1, 0, 'C');
+                $this->Cell(25,5, $conorden['ordenes'], 1, 0, 'C');
+                $this->Ln();
+
+                $totalsegundos += $conorden['time'];
+                $totalordenes += $conorden['ordenes'];
+            }
+            $horas = $minutos = 0;
+            $horas = floor($totalsegundos / 3600);
+            $minutos = abs(floor(($totalsegundos - ($horas * 3600)) / 60));
+
+            $this->SetX(142);
+            $this->Cell(100, 5, '', 'TR', 0, 'C');
+            $this->Cell(25, 5, "$horas.$minutos", 1, 0, 'C');
+            $this->Cell(25, 5, $totalordenes, 1, 0, 'C');
+
+            $this->SetXY(142, $this->GetY()+$a);
+            $this->Ln(10);
+            $a = 0;
         }
-
-        $thoras = floor($totalsegundos / 3600);
-        $tminutos = floor(($totalsegundos - ($thoras * 3600)) / 60);
-
-        $this->SetFont('Arial','B',8);
-        $this->Cell(242,5,utf8_decode(''),'TR', 0, 'C');
-        $this->Cell(20,5,"$thoras.$tminutos",1, 0, 'C');
-        $this->Cell(20,5,$whitordenes,1, 0, 'C');
-        $this->Ln();
 
         $this->Output(sprintf('%s_%s.pdf', 'resumen_tiempos_de_producción', date('Y_m_d H_m_s')),'I', true);
         exit;

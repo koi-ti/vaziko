@@ -14,7 +14,7 @@
     </section>
 
    	<section class="content">
-	    <div class="box box-success" id="rtiemposp-main">
+	    <div class="box box-success" id="rresumentiemposp-main">
 	    	<form id="form-rresumentiemposp" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
@@ -50,14 +50,21 @@
                                         <i class="fa fa-user"></i>
                                     </button>
                                 </span>
-                                <input id="filter_funcionario" placeholder="Funcionario" class="form-control tercero-koi-component" name="filter_funcionario" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="filter_funcionario_nombre">
+                                <input id="filter_funcionario" placeholder="Funcionario" class="form-control tercero-koi-component" name="filter_funcionario[]" type="text" maxlength="15" data-wrapper="spinner-main" data-tiempop="true" data-name="filter_funcionario_nombre">
                             </div>
                             <div class="help-block with-errors"></div>
                         </div>
                         <div class="col-sm-5 col-xs-10">
-                            <input id="filter_funcionario_nombre" name="filter_funcionario_nombre" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly>
+                            <input id="filter_funcionario_nombre" name="filter_funcionario_nombre[]" placeholder="Nombre funcionario" class="form-control input-sm" type="text" maxlength="15" readonly>
+                        </div>
+                        <div class="col-sm-1 col-xs-2">
+                            <a class="btn btn-success btn-flat btn-sm add-funcionario">
+                                <i class="fa fa-plus"></i>
+                            </a>
                         </div>
                     </div>
+
+                    <div id="render-funcionarios"></div>
 
 					<div class="row">
 						<div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
