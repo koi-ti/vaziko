@@ -55,7 +55,7 @@ app || (app = {});
                         element.css('background-color', 'gray');
                         element.css('border-color', 'white');
 
-                    }else if( parseInt(event.orden_abierta) ){
+                    }else if( parseInt(event.orden_abierta) && event.type == 'OR'){
 
                         if (event.orden_fecha_entrega+' '+event.orden_hora_entrega < moment().format('YYYY-MM-DD HH:mm:ss')) {
                             element.addClass('fc-draggable');
@@ -76,7 +76,7 @@ app || (app = {});
 
                     }
 
-                    if (event.type == 'RR') {
+                    if (event.type == 'RR' && parseInt(event.orden_abierta)) {
                         element.addClass('fc-draggable');
                         element.addClass('bg-race');
                         element.css('border-color', 'black');
