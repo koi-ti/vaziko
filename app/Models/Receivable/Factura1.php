@@ -136,7 +136,7 @@ class Factura1 extends Model
             $subtotalobase['Detalle'] = '';
             $subtotalobase['Naturaleza'] = 'C';
             $subtotalobase['Base'] = '';
-            $subtotalobase['Credito'] = $totalF2;
+            $subtotalobase['Credito'] = round($totalF2);
             $subtotalobase['Debito'] = '';
             $subtotalobase['Orden'] = $ordenp->id;
             $object->cuentas[] = $subtotalobase;
@@ -236,7 +236,7 @@ class Factura1 extends Model
         $clientenacionales['Naturaleza'] = 'D';
         $clientenacionales['Base'] = '';
         $clientenacionales['Credito'] = '';
-        $clientenacionales['Debito'] = $this->factura1_total;
+        $clientenacionales['Debito'] = round($this->factura1_total);
         $clientenacionales['Orden'] = '';
         $object->cuentas[] = $clientenacionales;
 
