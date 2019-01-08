@@ -439,7 +439,7 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_cliente = $precotizacion->precotizacion1_cliente;
                 $cotizacion->cotizacion1_referencia = $precotizacion->precotizacion1_referencia;
                 $cotizacion->cotizacion1_numero = $numero;
-                $cotizacion->cotizacion1_ano = $precotizacion->precotizacion1_ano;
+                $cotizacion->cotizacion1_ano = date('Y');
                 $cotizacion->cotizacion1_fecha_inicio = date('Y-m-d');
                 $cotizacion->cotizacion1_contacto = $precotizacion->precotizacion1_contacto;
                 $cotizacion->cotizacion1_iva = $empresa->empresa_iva;

@@ -590,7 +590,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_cliente = $cotizacion->cotizacion1_cliente;
                 $orden->orden_referencia = $cotizacion->cotizacion1_referencia;
                 $orden->orden_numero = $numero;
-                $orden->orden_ano = $cotizacion->cotizacion1_ano;
+                $orden->orden_ano = date('Y');
                 $orden->orden_fecha_inicio = date('Y-m-d');
                 $orden->orden_contacto = $cotizacion->cotizacion1_contacto;
                 $orden->orden_formapago = $cotizacion->cotizacion1_formapago;
