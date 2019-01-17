@@ -27,10 +27,10 @@
             <div class="box box-success" id="spinner-main">
                 <div class="box-header with-border">
                     <div class="row">
-                        <div class="col-md-2 col-sm-6 col-xs-6 text-left">
+                        <div class="col-sm-2 col-sm-6 col-xs-6 text-left">
                             <a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                         </div>
-                        <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
+                        <div class="col-sm-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
                             <button type="button" class="btn btn-primary btn-sm btn-block submit-ordenp2">{{ trans('app.save') }}</button>
                         </div>
                     </div>
@@ -40,36 +40,36 @@
                     <div class="alert alert-info">
                         <h4><b>Información general</b></h4>
                         <div class="row">
-                            <label class="col-md-2 control-label">Referencia</label>
-                            <div class="form-group col-md-10">
+                            <label class="col-sm-2 control-label">Referencia</label>
+                            <div class="form-group col-sm-10">
                                 {{ $orden->orden_referencia }}
                             </div>
                         </div>
 
                         <div class="row">
-                            <label class="col-md-2 control-label">Cliente</label>
-                            <div class="form-group col-md-10">
+                            <label class="col-sm-2 control-label">Cliente</label>
+                            <div class="form-group col-sm-10">
                                 {{ $orden->tercero_nit }} - {{ $orden->tercero_nombre }}
                             </div>
                         </div>
 
                         <div class="row">
-                            <label class="col-md-2 control-label">Orden</label>
-                            <div class="form-group col-md-10">
+                            <label class="col-sm-2 control-label">Orden</label>
+                            <div class="form-group col-sm-10">
                                 {{ $orden->orden_codigo }}
                             </div>
                         </div>
 
                         <div class="row">
-                            <label class="col-md-2 control-label">Código producto</label>
-                            <div class="form-group col-md-10">
+                            <label class="col-sm-2 control-label">Código producto</label>
+                            <div class="form-group col-sm-10">
                                 {{ $producto->id }}
                             </div>
                         </div>
 
                         <div class="row">
-                            <label class="col-md-2 control-label">Producto</label>
-                            <div class="form-group col-md-10">
+                            <label class="col-sm-2 control-label">Producto</label>
+                            <div class="form-group col-sm-10">
                                 <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <%- productop_nombre %>
                                 <% }else{ %>
@@ -88,7 +88,7 @@
                             </div>
 
                             <label for="orden2_cantidad" class="col-sm-1 control-label">Cantidad</label>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-sm-2">
                                 <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm event-price" name="orden2_cantidad" type="number" min="1" required>
                                 <div class="help-block with-errors"></div>
                             </div>
@@ -106,44 +106,44 @@
                                 <div class="box-body">
                                     @if($producto->productop_abierto)
                                         <div class="row">
-                                            <label class="col-sm-offset-1 col-sm-1 control-label">Abierto</label>
-                                            <label for="orden2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                            <div class="form-group col-md-3">
-                                                <div class="col-md-9">
+                                            <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
+                                            <label for="orden2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                                            <div class="form-group col-xs-10 col-sm-3">
+                                                <div class="col-xs-10 col-sm-9">
                                                     <input id="orden2_ancho" value="<%- orden2_ancho %>" class="form-control input-sm" name="orden2_ancho" type="number" min="0" step="0.01" required>
                                                 </div>
-                                                <div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
+                                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m1_sigla }}</div>
                                             </div>
 
-                                            <label for="orden2_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                            <div class="form-group col-md-3">
-                                                <div class="col-md-9">
+                                            <label for="orden2_alto" class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                                            <div class="form-group col-xs-10 col-sm-3">
+                                                <div class="col-xs-10 col-sm-9">
                                                     <input id="orden2_alto" value="<%- orden2_alto %>" class="form-control input-sm" name="orden2_alto" type="number" min="0" step="0.01" required>
                                                 </div>
-                                                <div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
+                                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m2_sigla }}</div>
                                             </div>
                                         </div>
                                     @endif
 
                                     @if($producto->productop_cerrado)
                                         <div class="row">
-                                            <label class="col-sm-offset-1 col-sm-1 control-label">Cerrado</label>
-                                            <label for="orden2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                            <div class="form-group col-md-3">
-                                                <div class="col-md-9">
+                                            <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
+                                            <label for="orden2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                                            <div class="form-group col-xs-10 col-sm-3">
+                                                <div class="col-xs-10 col-sm-9">
                                                     <input id="orden2_c_ancho" value="<%- orden2_c_ancho %>" class="form-control input-sm" name="orden2_c_ancho" type="number" min="0" step="0.01" required>
                                                     <div class="help-block with-errors"></div>
                                                 </div>
-                                                <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
+                                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m3_sigla }}</div>
                                             </div>
 
-                                            <label for="orden2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                            <div class="form-group col-md-3">
-                                                <div class="col-md-9">
+                                            <label for="orden2_c_alto" class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                                            <div class="form-group col-xs-10 col-sm-3">
+                                                <div class="col-xs-10 col-sm-9">
                                                     <input id="orden2_c_alto" value="<%- orden2_c_alto %>" class="form-control input-sm" name="orden2_c_alto" type="number" min="0" step="0.01" required>
                                                     <div class="help-block with-errors"></div>
                                                 </div>
-                                                <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
+                                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m4_sigla }}</div>
                                             </div>
                                         </div>
                                     @endif
@@ -155,32 +155,32 @@
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
-                                        <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
-                                        <label for="orden2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                        <div class="form-group col-md-2">
-                                            <div class="col-md-9">
+                                        <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">3D</label>
+                                        <label for="orden2_3d_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                                        <div class="form-group col-xs-10 col-sm-2">
+                                            <div class="col-xs-10 col-sm-9">
                                                 <input id="orden2_3d_ancho" value="<%- orden2_3d_ancho %>" class="form-control input-sm" name="orden2_3d_ancho" type="number" min="0" step="0.01" required>
                                                 <div class="help-block with-errors"></div>
                                             </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
+                                            <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m5_sigla }}</div>
                                         </div>
 
-                                        <label for="orden2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                        <div class="form-group col-md-2">
-                                            <div class="col-md-9">
+                                        <label for="orden2_3d_alto" class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                                        <div class="form-group col-xs-10 col-sm-2">
+                                            <div class="col-xs-10 col-sm-9">
                                                 <input id="orden2_3d_alto" value="<%- orden2_3d_alto %>" class="form-control input-sm" name="orden2_3d_alto" type="number" min="0" step="0.01" required>
                                                 <div class="help-block with-errors"></div>
                                             </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
+                                            <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m6_sigla }}</div>
                                         </div>
 
-                                        <label for="orden2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
-                                        <div class="form-group col-md-2">
-                                            <div class="col-md-9">
+                                        <label for="orden2_3d_profundidad" class="col-xs-2 col-sm-1 control-label text-right">Profundidad</label>
+                                        <div class="form-group col-xs-10 col-sm-2">
+                                            <div class="col-xs-10 col-sm-9">
                                                 <input id="orden2_3d_profundidad" value="<%- orden2_3d_profundidad %>" class="form-control input-sm" name="orden2_3d_profundidad" type="number" min="0" step="0.01" required>
                                                 <div class="help-block with-errors"></div>
                                             </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
+                                            <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m7_sigla }}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -191,68 +191,46 @@
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
-                                        <label class="col-sm-offset-2 col-sm-1 control-label"></label>
-                                        <label class="col-sm-1 control-label">C</label>
-                                        <label class="col-sm-1 control-label">M</label>
-                                        <label class="col-sm-1 control-label">Y</label>
-                                        <label class="col-sm-1 control-label">K</label>
-                                        <label class="col-sm-1 control-label">P1</label>
-                                        <label class="col-sm-1 control-label">P2</label>
+                                        <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center"></th>
+                                                        <th class="text-center">C</th>
+                                                        <th class="text-center">M</th>
+                                                        <th class="text-center">Y</th>
+                                                        <th class="text-center">K</th>
+                                                        <th class="text-center">P1</th>
+                                                        <th class="text-center">P2</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if($producto->productop_tiro)
+                                                        <tr>
+                                                            <th class="text-center">T <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- parseInt(orden2_tiro) ? 'checked': ''%>></th>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- parseInt(orden2_magenta) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- parseInt(orden2_cyan) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- parseInt(orden2_key) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- parseInt(orden2_color1) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- parseInt(orden2_color2) ? 'checked': ''%>></td>
+                                                        </tr>
+                                                    @endif
+                                                    @if($producto->productop_retiro)
+                                                        <tr>
+                                                            <th class="text-center">R <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- parseInt(orden2_retiro) ? 'checked': ''%>></th>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- parseInt(orden2_magenta2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- parseInt(orden2_cyan2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- parseInt(orden2_key2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- parseInt(orden2_color12) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- parseInt(orden2_color22) ? 'checked': ''%>></td>
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-
-                                    @if($producto->productop_tiro)
-                                        <div class="row">
-                                            <div class="col-sm-offset-2 col-md-1">
-                                                <label for="orden2_tiro" class="control-label">T</label>
-                                                <input type="checkbox" id="orden2_tiro" name="orden2_tiro" value="orden2_tiro" <%- parseInt(orden2_tiro) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- parseInt(orden2_magenta) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- parseInt(orden2_cyan) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_key" name="orden2_key" value="orden2_key" <%- parseInt(orden2_key) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_color1" name="orden2_color1" value="orden2_color1" <%- parseInt(orden2_color1) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- parseInt(orden2_color2) ? 'checked': ''%>>
-                                            </div>
-                                        </div>
-                                    @endif
-
-                                    @if($producto->productop_retiro)
-                                        <div class="row">
-                                            <div class="col-sm-offset-2 col-md-1">
-                                                <label for="orden2_retiro" class="control-label">R</label>
-                                                <input type="checkbox" id="orden2_retiro" name="orden2_retiro" value="orden2_retiro" <%- parseInt(orden2_retiro) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- parseInt(orden2_magenta2) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- parseInt(orden2_cyan2) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_key2" name="orden2_key2" value="orden2_key2" <%- parseInt(orden2_key2) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_color12" name="orden2_color12" value="orden2_color12" <%- parseInt(orden2_color12) ? 'checked': ''%>>
-                                            </div>
-                                            <div class="col-md-1">
-                                                <input type="checkbox" id="orden2_color22" name="orden2_color22" value="orden2_color22" <%- parseInt(orden2_color22) ? 'checked': ''%>>
-                                            </div>
-                                        </div>
-                                    @endif
 
                                     <div class="row">
                                         @if($producto->productop_tiro)
@@ -497,19 +475,19 @@
                                     <thead>
                                         <tr>
                                             <th></th>
-                                            <th>Área</th>
-                                            <th>Nombre</th>
-                                            <th colspan="2" class="text-center">Tiempo</th>
+                                            <th width="30%">Área</th>
+                                            <th width="30%">Nombre</th>
+                                            <th width="20%" class="text-center">Tiempo</th>
                                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                <th>Valor</th>
-                                                <th>Total</th>
+                                                <th width="10%">Valor</th>
+                                                <th width="10%">Total</th>
                                             @endif
                                         </tr>
                                     </thead>
                                     @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                         <tfoot>
                                             <tr>
-                                                <td colspan="5"></td>
+                                                <td colspan="4"></td>
                                                 <th class="text-right">Total</th>
                                                 <th class="text-right" id="total">0</th>
                                             </tr>
@@ -519,7 +497,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
@@ -530,65 +507,64 @@
                                 <div class="list-group">
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Precio</b></div>
-                                            <div class="col-md-10 text-right"><b><span id="info-precio"></span></b></div>
+                                            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-precio"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Transporte</b></div>
-                                            <div class="col-md-10 text-right"><b><span id="info-transporte"></span></b></div>
+                                            <div class="col-xs-2 col-sm-2"><b>Transporte</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-transporte"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Viáticos</b></div>
-                                            <div class="col-md-10 text-right"><b><span id="info-viaticos"></span></b></div>
+                                            <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-viaticos"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Materiales</b></div>
-                                            <div class="col-md-2">
+                                            <div class="col-xs-4 col-sm-4"><b>Materiales <small>(%)</small></b></div>
+                                            <div class="col-xs-3 col-sm-2">
                                                 <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm event-price" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
                                             </div>
-                                            <div class="col-md-1">%</div>
-                                            <div class="col-md-7 text-right"><b><span id="info-materiales"></span></b></div>
+                                            <div class="col-xs-5 col-sm-6 text-right"><b><span id="info-materiales"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Áreas</b></div>
-                                            <div class="col-md-10 text-right"><b><span id="info-areas"></span></b></div>
+                                            <div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-areas"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
-                                            <div class="col-md-8"><b>Subtotal</b></div>
-                                            <div class="col-md-4 text-right">
+                                            <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right">
                                                 <span class="pull-right badge bg-red" id="subtotal-price"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
-                                            <div class="col-md-2"><b>Volumen</b></div>
-                                            <div class="col-md-2">
+                                            <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>
+                                            <div class="col-xs-3 col-sm-2">
                                                 <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm event-price" value="<%- orden2_volumen %>" type="number" min="0" max="99">
                                             </div>
-                                            <div class="col-md-2"><b>Redondear</b></div>
-                                            <div class="col-md-2">
+                                            <div class="col-xs-3 col-sm-2"><b>Redondear</b></div>
+                                            <div class="col-xs-3 col-sm-2">
                                                 <input id="orden2_round" name="orden2_round" class="form-control input-sm event-price" value="<%- orden2_round %>" type="number" min="-3" max="3" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
                                             </div>
-                                            <div class="col-md-4 text-right">
+                                            <div class="col-xs-12 col-sm-4 text-right">
                                                 <span class="pull-right badge bg-red" id="orden2_vtotal"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
-                                            <div class="col-md-8"><b>Total</b></div>
-                                            <div class="col-md-4 text-right">
+                                            <div class="col-xs-2 col-sm-2"><b>Total</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right">
                                                 <span class="pull-right badge bg-red" id="total-price"></span>
                                             </div>
                                         </div>
@@ -693,11 +669,15 @@
        <% } %>
        <td><%- areap_nombre %></td>
        <td><%- orden6_nombre %></td>
-       <td class="form-group col-sm-1">
-           <input type="number" id="orden6_horas" name="orden6_horas" placeholder="Hora" value="<%- orden6_horas %>" class="form-control input-xs change-time" data-type="hs" min="0" step="1" max="9999" required>
-       </td>
-       <td class="form-group col-sm-2">
-           <input type="number" id="orden6_minutos" name="orden6_minutos" placeholder="Minutos" value="<%- orden6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
+       <td>
+           <div class="row">
+               <div class="col-xs-12 col-sm-6">
+                   <input type="number" id="orden6_horas" name="orden6_horas" placeholder="Hora" value="<%- orden6_horas %>" class="form-control input-xs change-time" data-type="hs" min="0" step="1" max="9999" required>
+               </div>
+               <div class="col-xs-12 col-sm-6">
+                   <input type="number" id="orden6_minutos" name="orden6_minutos" placeholder="Minutos" value="<%- orden6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
+               </div>
+           </div>
        </td>
        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
            <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>

@@ -85,42 +85,42 @@
 						<div class="box-body">
 							@if($producto->productop_abierto)
 								<div class="row">
-									<label class="col-sm-offset-1 col-sm-1 control-label">Abierto</label>
-									<label for="cotizacion2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-									<div class="form-group col-md-3">
-										<div class="col-md-9">
+									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
+									<label for="cotizacion2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+									<div class="form-group col-xs-10 col-sm-3">
+										<div class="col-xs-10 col-sm-9">
 											{{ $cotizacion2->cotizacion2_ancho }}
 										</div>
-										<div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
+										<div class="col-xs-2 col-sm-3 text-left">{{ $producto->m1_sigla }}</div>
 									</div>
 
-									<label for="cotizacion2_alto" class="col-sm-1 control-label text-right">Alto</label>
-									<div class="form-group col-md-3">
-										<div class="col-md-9">
+									<label for="cotizacion2_alto" class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+									<div class="form-group col-xs-10 col-sm-3">
+										<div class="col-xs-10 col-sm-9">
 											{{ $cotizacion2->cotizacion2_alto }}
 										</div>
-										<div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
+										<div class="col-xs-2 col-sm-3 text-left">{{ $producto->m2_sigla }}</div>
 									</div>
 								</div>
 							@endif
 
 							@if($producto->productop_cerrado)
 								<div class="row">
-									<label class="col-sm-offset-1 col-sm-1 control-label">Cerrado</label>
-									<label for="cotizacion2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-									<div class="form-group col-md-3">
-										<div class="col-md-9">
+									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
+									<label for="cotizacion2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+									<div class="form-group col-xs-10 col-sm-3">
+										<div class="col-xs-10 col-sm-9">
 											{{ $cotizacion2->cotizacion2_c_ancho }}
 										</div>
-										<div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
+										<div class="col-xs-2 col-sm-3 text-left">{{ $producto->m3_sigla }}</div>
 									</div>
 
-									<label for="cotizacion2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
-									<div class="form-group col-md-3">
-										<div class="col-md-9">
+									<label for="cotizacion2_c_alto" class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+									<div class="form-group col-xs-10 col-sm-3">
+										<div class="col-xs-10 col-sm-9">
 											{{ $cotizacion2->cotizacion2_c_alto }}
 										</div>
-										<div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
+										<div class="col-xs-2 col-sm-3 text-left">{{ $producto->m4_sigla }}</div>
 									</div>
 								</div>
 							@endif
@@ -132,29 +132,29 @@
 	                <div class="box box-danger">
 	                    <div class="box-body">
 	                        <div class="row">
-	                            <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
-	                            <label for="cotizacion2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-	                            <div class="form-group col-md-2">
-	                                <div class="col-md-9">
+	                            <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">3D</label>
+	                            <label for="cotizacion2_3d_ancho" class="col-xs-3 col-sm-1 control-label text-left">Ancho</label>
+	                            <div class="form-group col-xs-9 col-sm-2">
+	                                <div class="col-xs-10 col-sm-9">
 	                                	{{ $cotizacion2->cotizacion2_3d_ancho }}
 	                                </div>
-	                                <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
+	                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m5_sigla }}</div>
 	                            </div>
 
-	                            <label for="cotizacion2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
-	                            <div class="form-group col-md-2">
-	                                <div class="col-md-9">
+	                            <label for="cotizacion2_3d_alto" class="col-xs-3 col-sm-1 control-label text-left">Alto</label>
+	                            <div class="form-group col-xs-9 col-sm-2">
+	                                <div class="col-xs-10 col-sm-9">
 	                                	{{ $cotizacion2->cotizacion2_3d_alto }}
 	                                </div>
-	                                <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
+	                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m6_sigla }}</div>
 	                            </div>
 
-	                            <label for="cotizacion2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
-	                            <div class="form-group col-md-2">
-	                                <div class="col-md-9">
+	                            <label for="cotizacion2_3d_profundidad" class="col-xs-3 col-sm-1 control-label text-left">Profundidad</label>
+	                            <div class="form-group col-xs-9 col-sm-2">
+	                                <div class="col-xs-10 col-sm-9">
 	                                	{{ $cotizacion2->cotizacion2_3d_profundidad }}
 	                                </div>
-	                                <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
+	                                <div class="col-xs-2 col-sm-3 text-left">{{ $producto->m7_sigla }}</div>
 	                            </div>
 	                        </div>
 	                    </div>
@@ -164,69 +164,47 @@
 				@if($producto->productop_tiro || $producto->productop_retiro)
 	                <div class="box box-danger">
 	                    <div class="box-body">
-	                        <div class="row">
-	                            <label class="col-sm-offset-2 col-sm-1 col-xs-offset-2 col-xs-1 control-label"></label>
-	                            <label class="col-sm-1 col-xs-1 control-label">C</label>
-	                            <label class="col-sm-1 col-xs-1 control-label">M</label>
-	                            <label class="col-sm-1 col-xs-1 control-label">Y</label>
-	                            <label class="col-sm-1 col-xs-1 control-label">K</label>
-	                            <label class="col-sm-1 col-xs-1 control-label">P1</label>
-	                            <label class="col-sm-1 col-xs-1 control-label">P2</label>
-	                        </div>
-
-	                        @if($producto->productop_tiro)
-	                            <div class="row">
-	                                <div class="col-sm-offset-2 col-md-1 col-xs-3">
-	                                    <label for="cotizacion2_tiro" class="control-label">T</label>
-	                                    <input type="checkbox" disabled id="cotizacion2_tiro" name="cotizacion2_tiro" value="cotizacion2_tiro" {{ $cotizacion2->cotizacion2_tiro ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_yellow" name="cotizacion2_yellow" value="cotizacion2_yellow" {{ $cotizacion2->cotizacion2_yellow ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_magenta" name="cotizacion2_magenta" value="cotizacion2_magenta" {{ $cotizacion2->cotizacion2_magenta ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_cyan" name="cotizacion2_cyan" value="cotizacion2_cyan" {{ $cotizacion2->cotizacion2_cyan ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_key" name="cotizacion2_key" value="cotizacion2_key" {{ $cotizacion2->cotizacion2_key ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_color1" name="cotizacion2_color1" value="cotizacion2_color1" {{ $cotizacion2->cotizacion2_color1 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_color2" name="cotizacion2_color2" value="cotizacion2_color2" {{ $cotizacion2->cotizacion2_color2 ? 'checked': '' }}>
-	                                </div>
-	                            </div>
-	                        @endif
-
-	                        @if($producto->productop_retiro)
-	                            <div class="row">
-	                                <div class="col-sm-offset-2 col-md-1 col-xs-3">
-	                                    <label for="cotizacion2_retiro" class="control-label">R</label>
-	                                    <input type="checkbox" disabled id="cotizacion2_retiro" name="cotizacion2_retiro" value="cotizacion2_retiro" {{ $cotizacion2->cotizacion2_retiro ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_yellow2" name="cotizacion2_yellow2" value="cotizacion2_yellow2" {{ $cotizacion2->cotizacion2_yellow2 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_magenta2" name="cotizacion2_magenta2" value="cotizacion2_magenta2" {{ $cotizacion2->cotizacion2_magenta2 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_cyan2" name="cotizacion2_cyan2" value="cotizacion2_cyan2" {{ $cotizacion2->cotizacion2_cyan2 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_key2" name="cotizacion2_key2" value="cotizacion2_key2" {{ $cotizacion2->cotizacion2_key2 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_color12" name="cotizacion2_color12" value="cotizacion2_color12" {{ $cotizacion2->cotizacion2_color12 ? 'checked': '' }}>
-	                                </div>
-	                                <div class="col-md-1 col-xs-1">
-	                                    <input type="checkbox" disabled id="cotizacion2_color22" name="cotizacion2_color22" value="cotizacion2_color22" {{ $cotizacion2->cotizacion2_color22 ? 'checked': '' }}>
-	                                </div>
-	                            </div>
-	                        @endif
+							<div class="row">
+								<div class="col-sm-6 col-sm-offset-3 col-xs-12">
+									<table class="table">
+										<thead>
+											<tr>
+												<th class="text-center"></th>
+												<th class="text-center">C</th>
+												<th class="text-center">M</th>
+												<th class="text-center">Y</th>
+												<th class="text-center">K</th>
+												<th class="text-center">P1</th>
+												<th class="text-center">P2</th>
+											</tr>
+										</thead>
+										<tbody>
+											@if($producto->productop_tiro)
+												<tr>
+													<th class="text-center">T <input type="checkbox" disabled {{ $cotizacion2->cotizacion2_tiro ? 'checked': '' }}></th>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_yellow ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_magenta ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_cyan ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_key ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_color1 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_color2 ? 'checked': '' }}></td>
+												</tr>
+											@endif
+											@if($producto->productop_retiro)
+												<tr>
+													<th class="text-center">R <input type="checkbox" disabled {{ $cotizacion2->cotizacion2_retiro ? 'checked': '' }}></th>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_yellow2 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_magenta2 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_cyan2 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_key2 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_color12 ? 'checked': '' }}></td>
+													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_color22 ? 'checked': '' }}></td>
+												</tr>
+											@endif
+										</tbody>
+									</table>
+								</div>
+							</div>
 
 	                        <div class="row">
 	                            @if($producto->productop_tiro)
@@ -421,7 +399,7 @@
 		                            <tr>
 		                                <th>Área</th>
 		                                <th>Nombre</th>
-		                                <th>Horas</th>
+		                                <th>Tiempo</th>
 										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
 			                                <th>Valor</th>
 			                                <th>Total</th>
@@ -485,59 +463,58 @@
 								<div class="list-group">
 								    <div class="list-group-item list-group-item-info">
 								        <div class="row">
-								            <div class="col-md-2"><b>Precio</b></div>
-								            <div class="col-md-10 text-right"><b>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</b></div>
+								            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+								            <div class="col-xs-10 col-sm-10 text-right"><b>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</b></div>
 								        </div>
 								    </div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
-											<div class="col-md-2"><b>Transporte</b></div>
-											<div class="col-md-10 text-right"><b>{{ number_format($transporte, 2, ',', '.') }}</b></div>
+											<div class="col-xs-2 col-sm-2"><b>Transporte</b></div>
+											<div class="col-xs-10 col-sm-10 text-right"><b>{{ number_format($transporte, 2, ',', '.') }}</b></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
-											<div class="col-md-2"><b>Viáticos</b></div>
-											<div class="col-md-10 text-right"><b>{{ number_format($viaticos, 2, ',', '.')}}</b></div>
+											<div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+											<div class="col-xs-10 col-sm-10 text-right"><b>{{ number_format($viaticos, 2, ',', '.')}}</b></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
-											<div class="col-md-2"><b>Materiales</b></div>
-											<div class="col-md-2">{{ $cotizacion2->cotizacion2_margen_materialp }}</div>
-											<div class="col-md-1">%</div>
-											<div class="col-md-7 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-5 col-sm-4"><b>Materiales <small>(%)</small></b></div>
+											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_margen_materialp }}</div>
+											<div class="col-xs-5 col-sm-6 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
-											<div class="col-md-2"><b>Áreas</b></div>
-											<div class="col-md-10 text-right"><b><span>{{ number_format($totalareap, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
+											<div class="col-xs-10 col-sm-10 text-right"><b><span>{{ number_format($totalareap, 2, ',', '.') }}</span></b></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-success">
 										<div class="row">
-											<div class="col-md-8"><b>Subtotal</b></div>
-											<div class="col-md-4 text-right">
+											<div class="col-xs-2 col-sm-8"><b>Subtotal</b></div>
+											<div class="col-xs-10 col-sm-4 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($subtotal, 2, ',', '.') }}</span>
 											</div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-success">
 										<div class="row">
-											<div class="col-md-2"><b>Volumen</b></div>
-											<div class="col-md-2">{{ $cotizacion2->cotizacion2_volumen }}</div>
-											<div class="col-md-2"><b>Redondear</b></div>
-											<div class="col-md-2">{{ $cotizacion2->cotizacion2_round }}</div>
-											<div class="col-md-4 text-right">
+											<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
+											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_volumen }}</div>
+											<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
+											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_round }}</div>
+											<div class="col-xs-12 col-sm-4 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span>
 											</div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-success">
 										<div class="row">
-											<div class="col-md-8"><b>Total</b></div>
-											<div class="col-md-4 text-right">
+											<div class="col-xs-2 col-sm-8"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-4 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span>
 											</div>
 										</div>
