@@ -441,10 +441,12 @@ class Cotizacion1Controller extends Controller
             $data[] = $cotizacion2;
         }
 
+        $export = str_slug("$cotizacion->tercero_nombre $cotizacion->cotizacion1_referencia", '_');
+
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'data' ,'title'))->render());
-        return $pdf->stream("cotización_{$cotizacion->cotizacion_codigo}.pdf");
+        return $pdf->stream("cotización_$export.pdf");
     }
 
     /**

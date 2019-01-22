@@ -49,6 +49,7 @@ class PreCotizacion1Controller extends Controller
                 session(['searchprecotizacion_numero' => $request->has('precotizacion_numero') ? $request->precotizacion_numero : '']);
                 session(['searchprecotizacion_tercero' => $request->has('precotizacion_tercero_nit') ? $request->precotizacion_tercero_nit : '']);
                 session(['searchprecotizacion_tercero_nombre' => $request->has('precotizacion_tercero_nombre') ? $request->precotizacion_tercero_nombre : '']);
+                session(['searchprecotizacion_referencia' => $request->has('precotizacion_referencia') ? $request->precotizacion_referencia : '']);
                 session(['searchprecotizacion_estado' => $request->has('precotizacion_estado') ? $request->precotizacion_estado : '']);
             }
 
@@ -80,6 +81,11 @@ class PreCotizacion1Controller extends Controller
                     // Cotizacion codigo
                     if($request->has('precotizacion_numero')) {
                         $query->whereRaw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) LIKE '%{$request->precotizacion_numero}%'");
+                    }
+
+                    // Cotizacion codigo
+                    if($request->has('precotizacion_referencia')) {
+                        $query->whereRaw("precotizacion1_referencia LIKE '%{$request->precotizacion_referencia}%'");
                     }
 
                     // Tercero nit
@@ -580,8 +586,6 @@ class PreCotizacion1Controller extends Controller
 
                 $precotizacion->precotizacion1_abierta = false;
                 $precotizacion->precotizacion1_culminada = false;
-                $precotizacion->precotizacion1_fh_culminada = NULL;
-                $precotizacion->precotizacion1_usuario_culminada = NULL;
                 $precotizacion->save();
 
                 // Commit Transaction

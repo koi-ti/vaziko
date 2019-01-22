@@ -33,6 +33,7 @@ app || (app = {});
             this.$searchprecotizacionNumero = this.$('#searchprecotizacion_numero');
             this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
             this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
+            this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
             this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
             var paginacion = this.$precotizacionesSearchTable.data('paginacion');
 
@@ -50,6 +51,7 @@ app || (app = {});
                         data.precotizacion_numero = _this.$searchprecotizacionNumero.val();
                         data.precotizacion_tercero_nit = _this.$searchprecotizacionTercero.val();
                         data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
+                        data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
                         data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
                     }
                 },
@@ -160,6 +162,7 @@ app || (app = {});
             this.$searchprecotizacionNumero.val('');
             this.$searchprecotizacionTercero.val('');
             this.$searchprecotizacionTerceroName.val('');
+            this.$searchprecotizacionReferencia.val('');
             this.$searchprecotizacionEstado.val('');
 
             this.precotizacionesSearchTable.ajax.reload();

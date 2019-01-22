@@ -48,6 +48,13 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="searchprecotizacion_referencia" class="col-sm-1 control-label">Referencia</label>
+                        <div class="col-sm-11">
+                            <input id="searchprecotizacion_referencia" name="searchprecotizacion_referencia" placeholder="Referencia" class="form-control input-sm" type="text" value="{{ session('searchprecotizacion_referencia') }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <div class="col-md-offset-3 col-xs-12 col-sm-3 col-md-2">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
