@@ -450,6 +450,7 @@
 							$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
 							$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
 							$totalmaterialesp = round( $totalmaterialesp / $ordenp2->orden2_cantidad );
+							$prevtotalmaterialesp = $totalmaterialesp;
 							$totalmaterialesp = $totalmaterialesp/((100-$ordenp2->orden2_margen_materialp)/100);
 							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
 						/*--}}
@@ -476,9 +477,11 @@
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
-										<div class="col-xs-3 col-sm-4"><b>Materiales <small>(%)</small></b></div>
-										<div class="col-xs-3 col-sm-2">{{ $ordenp2->orden2_margen_materialp }}</div>
-										<div class="col-xs-6 col-sm-6 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
+										<div class="col-xs-6 col-sm-2 text-left"><b>Materiales</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_materialp }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">

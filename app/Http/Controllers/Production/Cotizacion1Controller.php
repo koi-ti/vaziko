@@ -441,7 +441,7 @@ class Cotizacion1Controller extends Controller
             $data[] = $cotizacion2;
         }
 
-        $export = str_slug("$cotizacion->tercero_nombre $cotizacion->cotizacion1_referencia", '_');
+        $export = str_slug("$cotizacion->cotizacion_codigo $cotizacion->tercero_nombre $cotizacion->cotizacion1_referencia", '_');
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');

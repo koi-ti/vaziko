@@ -134,6 +134,7 @@ app || (app = {});
             this.$infoviaticos = this.$('#info-viaticos');
             this.$infotransporte = this.$('#info-transporte');
             this.$infoareas = this.$('#info-areas');
+            this.$prevmateriales = this.$('#info-prev-materiales');
             this.$infomateriales = this.$('#info-materiales');
 
             // Variables globales
@@ -506,6 +507,7 @@ app || (app = {});
             tranporte = Math.round( parseFloat( this.$transporte.inputmask('unmaskedvalue') ) / cantidad  );
             viaticos = Math.round( parseFloat( this.$viaticos.inputmask('unmaskedvalue') ) / cantidad  );
             materiales = Math.round( parseFloat( this.materialesProductopList.totalize().total ) / cantidad );
+            prevmateriales = materiales;
             areas = Math.round( parseFloat( this.areasProductopList.totalize().total ) / cantidad  );
             precio = parseFloat( this.$precio.inputmask('unmaskedvalue') );
             volumen = parseInt( this.$inputVolumen.val() );
@@ -521,11 +523,12 @@ app || (app = {});
             }
 
             // Cuadros de informacion
-            this.$infoprecio.empty().html( window.Misc.currency( precio ) );
-            this.$infoviaticos.empty().html( window.Misc.currency( viaticos ) );
-            this.$infotransporte.empty().html( window.Misc.currency( tranporte ) );
-            this.$infoareas.empty().html( window.Misc.currency( areas ) );
-            this.$infomateriales.empty().html( window.Misc.currency( materiales ) );
+            this.$infoprecio.empty().html(window.Misc.currency(precio));
+            this.$infoviaticos.empty().html(window.Misc.currency(viaticos));
+            this.$infotransporte.empty().html(window.Misc.currency(tranporte));
+            this.$infoareas.empty().html(window.Misc.currency(areas));
+            this.$prevmateriales.empty().html(window.Misc.currency(prevmateriales));
+            this.$infomateriales.empty().html(window.Misc.currency(materiales ));
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + tranporte + viaticos + materiales + areas;
