@@ -25,7 +25,6 @@ use App\Models\Base\Empresa;
 
     public function getPaginacion()
     {
-        $empresa = Empresa::getEmpresa();
-        return $empresa;
+        return Empresa::getEmpresa();
     }
 }

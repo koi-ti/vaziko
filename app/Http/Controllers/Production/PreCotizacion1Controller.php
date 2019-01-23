@@ -70,9 +70,7 @@ class PreCotizacion1Controller extends Controller
             return Datatables::of($query)
                 ->editColumn('precotizacion1_fh_culminada', function ($q) {
                     if ( $q->precotizacion1_fh_culminada ){
-                        $fechaelaboro = new \DateTime($q->precotizacion1_fh_elaboro);
-                        $fechaculmino = new \DateTime($q->precotizacion1_fh_culminada);
-                        return $fechaculmino->diff($fechaelaboro)->format('%d(d) %H(h) %I(m)');
+                        return Carbon::parse($q->precotizacion1_fh_culminada)->diffForHumans($q->precotizacion1_fh_elaboro);
                     }else{
                         return "-";
                     }
@@ -402,7 +400,7 @@ class PreCotizacion1Controller extends Controller
                 // Pre cotizacion
                 $precotizacion->precotizacion1_abierta = false;
                 $precotizacion->precotizacion1_culminada = true;
-                $precotizacion->precotizacion1_fh_culminada = date('Y-m-d H:m:s');
+                $precotizacion->precotizacion1_fh_culminada = Carbon::now();
                 $precotizacion->precotizacion1_usuario_culminada = Auth::user()->id;
                 $precotizacion->save();
 
