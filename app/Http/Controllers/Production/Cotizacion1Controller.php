@@ -184,7 +184,7 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_contacto = $contacto->id;
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
                     $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
-                    $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
+                    $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                     $cotizacion->save();
 
                     // Commit Transaction
@@ -478,7 +478,7 @@ class Cotizacion1Controller extends Controller
                 $newcotizacion->cotizacion1_ano = date('Y');
                 $newcotizacion->cotizacion1_numero = $numero;
                 $newcotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
-                $newcotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
+                $newcotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                 $newcotizacion->save();
 
                 // Cotizacion2
@@ -489,7 +489,7 @@ class Cotizacion1Controller extends Controller
                     $newcotizacion2->cotizacion2_saldo = $newcotizacion2->cotizacion2_cantidad;
                     $newcotizacion2->cotizacion2_entregado = 0;
                     $newcotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
-                    $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:m:s');
+                    $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');
                     $newcotizacion2->save();
 
                     // Maquinas
@@ -506,7 +506,7 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion4 = $cotizacion4->replicate();
                          $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                          $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
-                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                          $newcotizacion4->save();
                     }
 
@@ -540,7 +540,7 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion8 = $cotizacion8->replicate();
                          $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
                          $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
-                         $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                         $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                          $newcotizacion8->save();
 
                          // Recuperar imagen y copiar
@@ -597,7 +597,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_contacto = $cotizacion->cotizacion1_contacto;
                 $orden->orden_formapago = $cotizacion->cotizacion1_formapago;
                 $orden->orden_fecha_entrega = date('Y-m-d');
-                $orden->orden_hora_entrega = date('H:m:s');
+                $orden->orden_hora_entrega = date('H:i:s');
                 $orden->orden_cotizacion = $cotizacion->id;
                 $orden->orden_iva = $cotizacion->cotizacion1_iva;
                 $orden->orden_suministran = $cotizacion->cotizacion1_suministran;
@@ -605,7 +605,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_observaciones = $cotizacion->cotizacion1_observaciones;
                 $orden->orden_terminado = $cotizacion->cotizacion1_terminado;
                 $orden->orden_usuario_elaboro = Auth::user()->id;
-                $orden->orden_fecha_elaboro = date('Y-m-d H:m:s');
+                $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                 $orden->save();
 
                 // Recuperar Productop de cotizacion para generar orden
@@ -680,7 +680,7 @@ class Cotizacion1Controller extends Controller
                          $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                          $orden4->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
                          $orden4->orden4_usuario_elaboro = Auth::user()->id;
-                         $orden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                         $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                          $orden4->save();
                     }
 
@@ -722,7 +722,7 @@ class Cotizacion1Controller extends Controller
                         $orden8 = new Ordenp8;
                         $orden8->orden8_orden2 = $orden2->id;
                         $orden8->orden8_archivo = $cotizacion8->cotizacion8_archivo;
-                        $orden8->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                        $orden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                         $orden8->orden8_usuario_elaboro = Auth::user()->id;
                         $orden8->save();
 

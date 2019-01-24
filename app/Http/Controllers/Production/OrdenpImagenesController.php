@@ -87,7 +87,7 @@ class OrdenpImagenesController extends Controller
                     $imagen = new OrdenpImagen;
                     $imagen->ordenimagen_archivo = $name;
                     $imagen->ordenimagen_orden = $orden->id;
-                    $imagen->ordenimagen_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->ordenimagen_fh_elaboro = date('Y-m-d H:i:s');
                     $imagen->ordenimagen_usuario_elaboro = Auth::user()->id;
                     $imagen->save();
 

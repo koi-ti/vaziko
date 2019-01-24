@@ -749,7 +749,7 @@ class AsientoNif2 extends Model
                 $facturap->facturap1_periodicidad = $movefp->movimiento_periodicidad;
                 $facturap->facturap1_observaciones = $movefp->movimiento_observaciones;
                 $facturap->facturap1_usuario_elaboro = Auth::user()->id;
-                $facturap->facturap1_fecha_elaboro = date('Y-m-d H:m:s');
+                $facturap->facturap1_fecha_elaboro = date('Y-m-d H:i:s');
                 $facturap->save();
 
                 // Facturap2 (Cuotas)

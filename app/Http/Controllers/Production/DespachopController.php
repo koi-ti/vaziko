@@ -111,7 +111,7 @@ class DespachopController extends Controller
                     $despacho->despachop1_orden = $orden->id;
                     $despacho->despachop1_contacto = $contacto->id;
                     $despacho->despachop1_usuario_elaboro = Auth::user()->id;
-                    $despacho->despachop1_fecha_elaboro = date('Y-m-d H:m:s');
+                    $despacho->despachop1_fecha_elaboro = date('Y-m-d H:i:s');
                     $despacho->save();
 
                     // Recuperar items pendientes
@@ -223,7 +223,7 @@ class DespachopController extends Controller
                 // Anular despachop1
                 $despacho->despachop1_anulado = true;
                 $despacho->despachop1_usuario_anulo = Auth::user()->id;
-                $despacho->despachop1_fecha_anulo = date('Y-m-d H:m:s');
+                $despacho->despachop1_fecha_anulo = date('Y-m-d H:i:s');
                 $despacho->save();
 
                 // Anular despachop2

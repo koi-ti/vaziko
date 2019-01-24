@@ -55,7 +55,7 @@ class LibroDiarioController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'libro_diario_', date('Y_m_d'), date('H_m_s')), function($excel) use($asiento, $title, $type) {
+                    Excel::create(sprintf('%s_%s', 'libro_diario_', date('Y_m_d H_i_s')), function($excel) use($asiento, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($asiento, $title,$type) {
                             $sheet->loadView('reports.accounting.librodiario.report', compact('asiento', 'title', 'type'));
                         });

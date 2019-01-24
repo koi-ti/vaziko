@@ -47,7 +47,7 @@ class Inventario extends Model
             $inventario->inventario_costo = $costo;
             $inventario->inventario_costo_promedio = $costopromedio;
             $inventario->inventario_usuario_elaboro = Auth::user()->id;
-            $inventario->inventario_fecha_elaboro = date('Y-m-d H:m:s');
+            $inventario->inventario_fecha_elaboro = date('Y-m-d H:i:s');
             $inventario->save();
         }
 

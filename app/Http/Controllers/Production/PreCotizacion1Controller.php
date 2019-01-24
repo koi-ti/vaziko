@@ -177,7 +177,7 @@ class PreCotizacion1Controller extends Controller
                     $precotizacion->precotizacion1_numero = $numero;
                     $precotizacion->precotizacion1_contacto = $contacto->id;
                     $precotizacion->precotizacion1_abierta = true;
-                    $precotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:m:s');
+                    $precotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:i:s');
                     $precotizacion->precotizacion1_usuario_elaboro = Auth::user()->id;
                     $precotizacion->save();
 
@@ -400,7 +400,7 @@ class PreCotizacion1Controller extends Controller
                 // Pre cotizacion
                 $precotizacion->precotizacion1_abierta = false;
                 $precotizacion->precotizacion1_culminada = true;
-                $precotizacion->precotizacion1_fh_culminada = Carbon::now();
+                $precotizacion->precotizacion1_fh_culminada = date('Y-m-d H:i:s');
                 $precotizacion->precotizacion1_usuario_culminada = Auth::user()->id;
                 $precotizacion->save();
 
@@ -454,7 +454,7 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_suministran = $precotizacion->precotizacion1_suministran;
                 $cotizacion->cotizacion1_observaciones = $precotizacion->precotizacion1_observaciones;
                 $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
-                $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:m:s');
+                $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                 $cotizacion->save();
 
                 // Recuperar Productop de cotizacion para generar precotizacion
@@ -505,7 +505,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
                          $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
                          $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
-                         $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                         $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                          $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
                          $cotizacion4->save();
 
@@ -544,7 +544,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion8 = new Cotizacion8;
                          $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
                          $cotizacion8->cotizacion8_archivo = $precotizacion4->precotizacion4_archivo;
-                         $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                         $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                          $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
                          $cotizacion8->save();
 
@@ -628,7 +628,7 @@ class PreCotizacion1Controller extends Controller
                 $newprecotizacion->precotizacion1_ano = date('Y');
                 $newprecotizacion->precotizacion1_numero = $numero;
                 $newprecotizacion->precotizacion1_usuario_elaboro = Auth::user()->id;
-                $newprecotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:m:s');
+                $newprecotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:i:s');
                 $newprecotizacion->save();
 
                 // PreCotizacion2
@@ -643,7 +643,7 @@ class PreCotizacion1Controller extends Controller
                     foreach ($proveedores as $precotizacion3) {
                          $newprecotizacion3 = $precotizacion3->replicate();
                          $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
+                         $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
                          $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                          $newprecotizacion3->save();
                     }
@@ -654,7 +654,7 @@ class PreCotizacion1Controller extends Controller
                         $newprecotizacion4 = $precotizacion4->replicate();
                         $newprecotizacion4->precotizacion4_precotizacion2 = $newprecotizacion2->id;
                         $newprecotizacion4->precotizacion4_usuario_elaboro = Auth::user()->id;
-                        $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                        $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $newprecotizacion4->save();
 
                         // Recuperar imagen y copiar

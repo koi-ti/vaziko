@@ -115,7 +115,7 @@ class Factura1Controller extends Controller
                     $factura->factura1_prefijo = $puntoventa->puntoventa_prefijo;
                     $factura->factura1_porcentaje_iva = $empresa->empresa_iva;
                     $factura->factura1_usuario_elaboro = Auth::user()->id;
-                    $factura->factura1_fh_elaboro = date('Y-m-d H:m:s');
+                    $factura->factura1_fh_elaboro = date('Y-m-d H:i:s');
                     $factura->save();
 
                     // Detalle de la factura (ordenesp2)
@@ -310,7 +310,7 @@ class Factura1Controller extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML( View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render() );
-        return $pdf->stream( sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_m_s')) );
+        return $pdf->stream( sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_i_s')) );
     }
     /**
      * Export pdf the specified resource.

@@ -33,7 +33,7 @@ class MayorBalance extends FPDF
 
     function Footer() {
         $user = utf8_decode(Auth::user()->username);
-        $date = date('Y-m-d H:m:s');
+        $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
@@ -86,6 +86,6 @@ class MayorBalance extends FPDF
             }
         }
 
-        $this->Output(sprintf('%s_%s_%s.pdf', 'mayor_y_balance', date('Y_m_d'), date('H_m_s')),'d');
+        $this->Output(sprintf('%s_%s.pdf', 'mayor_y_balance', date('Y_m_d H_i_s')),'d');
     }
 }

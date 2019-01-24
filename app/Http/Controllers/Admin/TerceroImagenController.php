@@ -77,7 +77,7 @@ class TerceroImagenController extends Controller
                     $imagen = new TerceroImagen;
                     $imagen->terceroimagen_archivo = $name;
                     $imagen->terceroimagen_tercero = $tercero->id;
-                    $imagen->terceroimagen_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->terceroimagen_fh_elaboro = date('Y-m-d H:i:s');
                     $imagen->terceroimagen_usuario_elaboro = Auth::user()->id;
                     $imagen->save();
 

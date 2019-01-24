@@ -186,7 +186,7 @@ class OrdenpController extends Controller
                     $orden->orden_contacto = $contacto->id;
                     $orden->orden_iva = $empresa->empresa_iva;
                     $orden->orden_usuario_elaboro = Auth::user()->id;
-                    $orden->orden_fecha_elaboro = date('Y-m-d H:m:s');
+                    $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                     $orden->save();
                     // Commit Transaction
                     DB::commit();
@@ -444,7 +444,7 @@ class OrdenpController extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle' ,'title'))->render());
-        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'ordenp', $orden->id, date('Y_m_d'), date('H_m_s')));
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'ordenp', $orden->id, date('Y_m_d'), date('H_i_s')));
     }
 
     /**
@@ -476,7 +476,7 @@ class OrdenpController extends Controller
                 $neworden->orden_ano = date('Y');
                 $neworden->orden_numero = $numero;
                 $neworden->orden_usuario_elaboro = Auth::user()->id;
-                $neworden->orden_fecha_elaboro = date('Y-m-d H:m:s');
+                $neworden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                 $neworden->save();
 
                 // Orden2
@@ -487,7 +487,7 @@ class OrdenpController extends Controller
                     $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
                     $neworden2->orden2_entregado = 0;
                     $neworden2->orden2_usuario_elaboro = Auth::user()->id;
-                    $neworden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
+                    $neworden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
                     $neworden2->save();
 
                     // Maquinas
@@ -536,7 +536,7 @@ class OrdenpController extends Controller
                          $neworden8 = $orden8->replicate();
                          $neworden8->orden8_orden2 = $neworden2->id;
                          $neworden8->orden8_usuario_elaboro = Auth::user()->id;
-                         $neworden8->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                         $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                          $neworden8->save();
 
                          // Recuperar imagen y copiar

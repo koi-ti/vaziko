@@ -32,7 +32,7 @@ class EstadoCartera extends FPDF
 
     function Footer() {
         $user = utf8_decode(Auth::user()->username);
-        $date = date('Y-m-d H:m:s');
+        $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
@@ -86,7 +86,7 @@ class EstadoCartera extends FPDF
                 $tsaldo = 0;
             }
         }
-        $this->Output('d',sprintf('%s_%s_%s.pdf', 'estado_cartera', date('Y_m_d'), date('H_m_s')));
+        $this->Output('d',sprintf('%s_%s.pdf', 'estado_cartera', date('Y_m_d H_i_s')));
     }
 
     function totalSaldo($tsaldo) {

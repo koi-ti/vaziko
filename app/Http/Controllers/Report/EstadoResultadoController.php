@@ -56,7 +56,7 @@ class EstadoResultadoController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create( sprintf('%s_%s', 'reporte_estado_resuelto', date('Y_m_d H_m_s') ), function($excel) use ($title, $type, $saldos){
+                    Excel::create( sprintf('%s_%s', 'reporte_estado_resuelto', date('Y_m_d H_i_s') ), function($excel) use ($title, $type, $saldos){
                         $excel->sheet('Excel', function($sheet) use ($title, $type, $saldos){
                             $sheet->loadView('reports.accounting.estadoresultado.report', compact('title', 'type', 'saldos'));
                             $sheet->setWidth(array('A' => 15, 'B' => 60, 'C' => 25, 'D' => 25, 'E' => 25, 'F' => 25, 'G' => 25));

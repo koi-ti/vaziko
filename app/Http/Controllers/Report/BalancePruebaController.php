@@ -96,7 +96,7 @@ class BalancePruebaController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create( sprintf('%s_%s', 'reporte_balance_prueba', date('Y_m_d H_m_s') ), function($excel) use ($title, $type, $saldos){
+                    Excel::create( sprintf('%s_%s', 'reporte_balance_prueba', date('Y_m_d H_i_s') ), function($excel) use ($title, $type, $saldos){
                         $excel->sheet('Excel', function($sheet) use ($title, $type, $saldos){
                             $sheet->loadView('reports.accounting.balanceprueba.report', compact('title', 'type', 'saldos'));
                             $sheet->setWidth(array('A' => 15, 'B' => 15, 'C' => 15, 'D' => 15, 'E' => 15, 'F' => 60, 'G' => 20, 'H' => 20, 'I' => 20, 'J' => 20, 'K' => 20));

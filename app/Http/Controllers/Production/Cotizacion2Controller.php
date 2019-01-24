@@ -92,7 +92,7 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_saldo = $cotizacion2->cotizacion2_cantidad;
                     $cotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
-                    $cotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:m:s');
+                    $cotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');
                     $cotizacion2->save();
 
                     // Maquinas
@@ -131,7 +131,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion4->cotizacion4_medidas = $material->cotizacion4_medidas;
                         $cotizacion4->cotizacion4_valor_unitario = $material->cotizacion4_valor_unitario;
                         $cotizacion4->cotizacion4_valor_total = $material->cotizacion4_valor_total;
-                        $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                        $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
                         $cotizacion4->save();
                     }
@@ -177,7 +177,7 @@ class Cotizacion2Controller extends Controller
                         if($request->has("cotizacion8_imprimir_$key")){
                             $imagen->cotizacion8_imprimir = true;
                         }
-                        $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                         $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
 
@@ -336,7 +336,7 @@ class Cotizacion2Controller extends Controller
                                 $newcotizacion4->cotizacion4_producto = $insumo->id;
                                 $newcotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                                 $newcotizacion4->cotizacion4_materialp = $materialp->id;
-                                $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                                $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                                 $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
                                 $newcotizacion4->save();
                             }
@@ -536,7 +536,7 @@ class Cotizacion2Controller extends Controller
                 $newcotizacion2->cotizacion2_saldo = $newcotizacion2->cotizacion2_cantidad;
                 $newcotizacion2->cotizacion2_entregado = 0;
                 $newcotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
-                $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:m:s');
+                $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');
                 $newcotizacion2->save();
 
                 // Maquinas
@@ -553,7 +553,7 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion4 = $cotizacion4->replicate();
                      $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
-                     $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                     $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                      $newcotizacion4->save();
                 }
 
@@ -587,7 +587,7 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion8 = $cotizacion8->replicate();
                      $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
                      $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
-                     $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                     $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                      $newcotizacion8->save();
 
                      // Recuperar imagen y copiar

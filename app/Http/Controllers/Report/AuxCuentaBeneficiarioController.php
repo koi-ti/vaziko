@@ -88,7 +88,7 @@ class AuxCuentaBeneficiarioController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'auxcuentabeneficiario', date('Y_m_d'), date('H_m_s')), function($excel) use($auxcontable, $title, $subtitle, $subtitleTercero, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'auxcuentabeneficiario', date('Y_m_d'), date('H_i_s')), function($excel) use($auxcontable, $title, $subtitle, $subtitleTercero, $type) {
                         $excel->sheet('Excel', function($sheet) use($auxcontable, $title, $subtitle, $subtitleTercero, $type) {
                             $sheet->loadView('reports.accounting.auxcuentabeneficiario.report', compact('auxcontable', 'title', 'subtitle', 'subtitleTercero', 'type'));
                         });

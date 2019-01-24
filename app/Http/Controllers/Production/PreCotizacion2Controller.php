@@ -118,7 +118,7 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion3->precotizacion3_producto = $insumo->id;
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
-                        $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
+                        $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
                         $precotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                         $precotizacion3->save();
                     }
@@ -159,7 +159,7 @@ class PreCotizacion2Controller extends Controller
                         $imagen = new PreCotizacion4;
                         $imagen->precotizacion4_archivo = $name;
                         $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
-                        $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
 
@@ -319,7 +319,7 @@ class PreCotizacion2Controller extends Controller
                                 $newprecotizacion3->precotizacion3_producto = $insumo->id;
                                 $newprecotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $newprecotizacion3->precotizacion3_materialp = $materialp->id;
-                                $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
+                                $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
                                 $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
                                 $newprecotizacion3->save();
                             }
@@ -512,7 +512,7 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion3 = $precotizacion3->replicate();
                      $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
                      $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
-                     $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:m:s');
+                     $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
                      $newprecotizacion3->save();
                 }
 
@@ -522,7 +522,7 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion4 = $precotizacion4->replicate();
                      $newprecotizacion4->precotizacion4_precotizacion2 = $newprecotizacion2->id;
                      $newprecotizacion4->precotizacion4_usuario_elaboro = Auth::user()->id;
-                     $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                     $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                      $newprecotizacion4->save();
 
                      // Recuperar imagen y copy

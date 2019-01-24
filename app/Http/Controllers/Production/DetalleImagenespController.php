@@ -85,7 +85,7 @@ class DetalleImagenespController extends Controller
                     $imagen = new Ordenp8;
                     $imagen->orden8_archivo = $name;
                     $imagen->orden8_orden2 = $orden2->id;
-                    $imagen->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->orden8_fh_elaboro = date('Y-m-d H:i:s');
                     $imagen->orden8_usuario_elaboro = Auth::user()->id;
                     $imagen->save();
 

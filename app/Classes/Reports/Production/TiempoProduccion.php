@@ -81,7 +81,7 @@ class TiempoProduccion extends FPDF_CellFit
             $this->Ln(5);
         }
 
-        $this->Output(sprintf('%s_%s_%s.pdf', 'tiempos_de_producción', date('Y_m_d'), date('H_m_s')),'I', true);
+        $this->Output(sprintf('%s_%s.pdf', 'tiempos_de_producción', date('Y_m_d H_i_s')),'I', true);
         exit;
     }
 }

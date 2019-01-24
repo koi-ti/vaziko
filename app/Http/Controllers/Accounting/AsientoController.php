@@ -153,7 +153,7 @@ class AsientoController extends Controller
                             $asiento->asiento1_beneficiario = $tercero->id;
                             $asiento->asiento1_preguardado = true;
                             $asiento->asiento1_usuario_elaboro = Auth::user()->id;
-                            $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
+                            $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
                             $asiento->save();
 
                             // Asiento2
@@ -197,7 +197,7 @@ class AsientoController extends Controller
                             $asientoNif->asienton1_preguardado = true;
                             $asientoNif->asienton1_beneficiario = $tercero->id;
                             $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
-                            $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:m:s');
+                            $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 
                             // Consecutivo
                             if($documento->documento_tipo_consecutivo == 'A'){
@@ -528,7 +528,7 @@ class AsientoController extends Controller
 
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('accounting.asiento.export',  compact('asiento', 'detalle' ,'title'))->render());
-        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_m_s')));
+        return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'asiento', $asiento->id, date('Y_m_d'), date('H_i_s')));
     }
 
     /**
@@ -621,7 +621,7 @@ class AsientoController extends Controller
                 $asiento->asiento1_beneficiario = $tercero->id;
                 $asiento->asiento1_preguardado = false;
                 $asiento->asiento1_usuario_elaboro = Auth::user()->id;
-                $asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
+                $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
 
                 // Creo el objeto para manejar el asiento
                 $asiento->asiento1_beneficiario = $tercero->tercero_nit;
@@ -659,7 +659,7 @@ class AsientoController extends Controller
                 $asientoNif->asienton1_beneficiario = $tercero->id;
                 $asientoNif->asienton1_preguardado = false;
                 $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
-                $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:m:s');
+                $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 
                 foreach ($cuentas as $value) {
                     // Recupero plancuenta

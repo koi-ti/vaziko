@@ -60,7 +60,7 @@ class CarteraEdades extends FPDF
 
     function Footer() {
         $user = utf8_decode(Auth::user()->username);
-        $date = date('Y-m-d H:m:s');
+        $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
@@ -145,7 +145,7 @@ class CarteraEdades extends FPDF
         $this->Cell(20,5, number_format($totalfinalvencer, 2, ',', '.'),1,0,'L',1);
         $this->Ln();
 
-        $this->Output('d',sprintf('%s_%s_%s.pdf', 'estado_cartera', date('Y_m_d'), date('H_m_s')));
+        $this->Output('d',sprintf('%s_%s.pdf', 'estado_cartera', date('Y_m_d H_i_s')));
     }
 
     function totalSaldo($tsaldo) {

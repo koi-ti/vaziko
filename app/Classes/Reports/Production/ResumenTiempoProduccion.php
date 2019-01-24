@@ -114,7 +114,7 @@ class ResumenTiempoProduccion extends FPDF_CellFit
             $a = 0;
         }
 
-        $this->Output(sprintf('%s_%s.pdf', 'resumen_tiempos_de_producción', date('Y_m_d H_m_s')),'I', true);
+        $this->Output(sprintf('%s_%s.pdf', 'resumen_tiempos_de_producción', date('Y_m_d H_i_s')),'I', true);
         exit;
     }
 }

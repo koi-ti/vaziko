@@ -6,10 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use App\Classes\Reports\Accounting\AuxiliarContable;
-use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
-use App\Models\Base\Tercero;
+use App\Classes\Reports\Accounting\AuxiliarContable, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Base\Tercero;
 use View, App, Excel, DB, Carbon\Carbon;
 
 class AuxiliarContableController extends Controller
@@ -61,7 +58,7 @@ class AuxiliarContableController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'auxcontable', date('Y_m_d'), date('H_m_s')), function($excel) use($auxcontable, $title, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'auxcontable', date('Y_m_d'), date('H_i_s')), function($excel) use($auxcontable, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($auxcontable, $title, $type) {
                             $sheet->loadView('reports.accounting.auxcontable.report', compact('auxcontable', 'title', 'type'));
                         });

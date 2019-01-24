@@ -172,7 +172,7 @@ class AsientoContableDocumento {
 		$this->asiento->asiento1_preguardado = false;
 		$this->asiento->asiento1_beneficiario = $this->beneficiario->id;
 		$this->asiento->asiento1_usuario_elaboro = Auth::user()->id;
-		$this->asiento->asiento1_fecha_elaboro = date('Y-m-d H:m:s');
+		$this->asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
 		$this->asiento->save();
 
 		foreach ($this->asiento_cuentas as $cuenta)

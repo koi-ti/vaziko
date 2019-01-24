@@ -66,7 +66,7 @@ class CarteraEdadesController extends Controller
                 break;
 
                 case 'xls':
-                    Excel::create(sprintf('%s_%s', 'cartera_edades', date('Y_m_d H_m_s')), function($excel) use($data, $title, $type, $headerdays) {
+                    Excel::create(sprintf('%s_%s', 'cartera_edades', date('Y_m_d H_i_s')), function($excel) use($data, $title, $type, $headerdays) {
                         $excel->sheet('Excel', function($sheet) use($data, $title, $type, $headerdays) {
                             $sheet->loadView('reports.receivable.carteraedades.report', compact('data', 'title', 'type', 'headerdays'));
                             $sheet->setWidth(array('A' => 15, 'B' => 50, 'C' => 10, 'D' => 15, 'E' => 10, 'F' => 20, 'G' => 20, 'H' => 20, 'I' => 20, 'J' => 20, 'K' => 20, 'L' => 20, 'M' => 20, 'N' => 20, 'O' => 20, 'P' => 20, 'Q' => 20, 'R' => 20));

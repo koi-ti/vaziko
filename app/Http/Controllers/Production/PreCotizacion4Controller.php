@@ -86,7 +86,7 @@ class PreCotizacion4Controller extends Controller
                     $imagen = new PreCotizacion4;
                     $imagen->precotizacion4_archivo = $name;
                     $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
-                    $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                     $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
                     $imagen->save();
 

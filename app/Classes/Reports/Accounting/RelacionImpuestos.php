@@ -33,7 +33,7 @@ class RelacionImpuestos extends FPDF
 
     function Footer() {
         $user = utf8_decode(Auth::user()->username);
-        $date = date('Y-m-d H:m:s');
+        $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
@@ -93,7 +93,7 @@ class RelacionImpuestos extends FPDF
             }
         }
         $this->totalNaturaleza($debito, $credito);
-        $this->Output('d',sprintf('%s_%s_%s.pdf', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')));
+        $this->Output('d',sprintf('%s_%s.pdf', 'relacion_impuestos', date('Y_m_d H_i_s')));
     }
 
     function totalAccount($tbase, $tdebito, $tcredito) {

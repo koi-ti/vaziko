@@ -122,7 +122,7 @@ class DetalleOrdenpController extends Controller
                     $orden2->orden2_cantidad = $request->orden2_cantidad;
                     $orden2->orden2_saldo = $orden2->orden2_cantidad;
                     $orden2->orden2_usuario_elaboro = Auth::user()->id;
-                    $orden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
+                    $orden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
                     $orden2->save();
 
                     // Maquinas
@@ -161,7 +161,7 @@ class DetalleOrdenpController extends Controller
                         $orden4->orden4_medidas = $material->orden4_medidas;
                         $orden4->orden4_valor_unitario = $material->orden4_valor_unitario;
                         $orden4->orden4_valor_total = $material->orden4_valor_total;
-                        $orden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                        $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                         $orden4->orden4_usuario_elaboro = Auth::user()->id;
                         $orden4->save();
                     }
@@ -206,7 +206,7 @@ class DetalleOrdenpController extends Controller
                         $imagen = new Ordenp8;
                         $imagen->orden8_archivo = $name;
                         $imagen->orden8_orden2 = $orden2->id;
-                        $imagen->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                        $imagen->orden8_fh_elaboro = date('Y-m-d H:i:s');
                         $imagen->orden8_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
                     }
@@ -377,7 +377,7 @@ class DetalleOrdenpController extends Controller
                                 $neworden4->orden4_orden2 = $orden2->id;
                                 $neworden4->orden4_materialp = $materialp->id;
                                 $neworden4->orden4_producto = $insumo->id;
-                                $neworden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                                $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                                 $neworden4->orden4_usuario_elaboro = Auth::user()->id;
                                 $neworden4->save();
                             }
@@ -562,7 +562,7 @@ class DetalleOrdenpController extends Controller
                 $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
                 $neworden2->orden2_entregado = 0;
                 $neworden2->orden2_usuario_elaboro = Auth::user()->id;
-                $neworden2->orden2_fecha_elaboro = date('Y-m-d H:m:s');
+                $neworden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
                 $neworden2->save();
 
                 // Maquinas
@@ -579,7 +579,7 @@ class DetalleOrdenpController extends Controller
                      $neworden4 = $orden4->replicate();
                      $neworden4->orden4_orden2 = $neworden2->id;
                      $neworden4->orden4_usuario_elaboro = Auth::user()->id;
-                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:m:s');
+                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                      $neworden4->save();
                 }
 
@@ -613,7 +613,7 @@ class DetalleOrdenpController extends Controller
                      $neworden8 = $orden8->replicate();
                      $neworden8->orden8_orden2 = $neworden2->id;
                      $neworden8->orden8_usuario_elaboro = Auth::user()->id;
-                     $neworden8->orden8_fh_elaboro = date('Y-m-d H:m:s');
+                     $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                      $neworden8->save();
 
                      // Recuperar imagen y copiar

@@ -105,7 +105,7 @@ class ProductopController extends Controller
                     $producto->productop_tipoproductop = $typeproduct->id;
                     $producto->productop_subtipoproductop = $subtypeproduct->id;
                     $producto->productop_usuario_elaboro = Auth::user()->id;
-                    $producto->productop_fecha_elaboro = date('Y-m-d H:m:s');
+                    $producto->productop_fecha_elaboro = date('Y-m-d H:i:s');
                     $producto->save();
 
                     // Commit Transaction
@@ -260,7 +260,7 @@ class ProductopController extends Controller
                 $newproductop = $productop->replicate();
                 $newproductop->productop_nombre = sprintf('%s - %s', $newproductop->productop_nombre, 'COPIA');
                 $newproductop->productop_usuario_elaboro = Auth::user()->id;
-                $newproductop->productop_fecha_elaboro = date('Y-m-d H:m:s');
+                $newproductop->productop_fecha_elaboro = date('Y-m-d H:i:s');
                 $newproductop->save();
 
                 // Productop2

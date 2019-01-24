@@ -86,7 +86,7 @@ class Cotizacion8Controller extends Controller
                     $imagen = new Cotizacion8;
                     $imagen->cotizacion8_archivo = $name;
                     $imagen->cotizacion8_cotizacion2 = $cotizacion2->id;
-                    $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:m:s');
+                    $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                     $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
                     $imagen->save();
 

@@ -44,7 +44,7 @@ class HistorialProveedorController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'historyProveider', date('Y_m_d'), date('H_m_s')), function($excel) use($historyProveider, $title, $type) {
+                    Excel::create(sprintf('%s_%s', 'historyProveider', date('Y_m_d H_i_s')), function($excel) use($historyProveider, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($historyProveider, $title, $type) {
                             $sheet->loadView('reports.treasury.historialproveedores.report', compact('historyProveider', 'title', 'type'));
                         });
@@ -55,7 +55,7 @@ class HistorialProveedorController extends Controller
                     $pdf = App::make('dompdf.wrapper');
                     $pdf->loadHTML(View::make('reports.treasury.historialproveedores.report',  compact('historyProveider', 'title', 'type'))->render());
                     $pdf->setPaper('letter', 'landscape')->setWarnings(false);
-                    return $pdf->stream(sprintf('%s_%s_%s.pdf', 'historyProveider', date('Y_m_d'), date('H_m_s')));
+                    return $pdf->stream(sprintf('%s_%s.pdf', 'historyProveider', date('Y_m_d H_i_s')));
                 break;
             }
         }

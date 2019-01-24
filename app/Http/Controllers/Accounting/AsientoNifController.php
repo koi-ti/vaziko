@@ -199,6 +199,6 @@ class AsientoNifController extends Controller
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('accounting.asientonif.export',  compact('asientoNif', 'detalle' ,'title'))->render());
-        return $pdf->download(sprintf('%s_%s_%s_%s.pdf', 'asientoNif', $asientoNif->id, date('Y_m_d'), date('H_m_s')));
+        return $pdf->download(sprintf('%s_%s_%s_%s.pdf', 'asientoNif', $asientoNif->id, date('Y_m_d'), date('H_i_s')));
     }
 }

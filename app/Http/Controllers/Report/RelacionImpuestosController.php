@@ -56,7 +56,7 @@ class RelacionImpuestosController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'relacion_impuestos', date('Y_m_d'), date('H_m_s')), function($excel) use($data, $title, $type) {
+                    Excel::create(sprintf('%s_%s', 'relacion_impuestos', date('Y_m_d H_i_s')), function($excel) use($data, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($data, $title, $type) {
                             $sheet->loadView('reports.accounting.impuestos.report', compact('data', 'title', 'type'));
                         });

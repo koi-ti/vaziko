@@ -112,7 +112,7 @@ class TiempopController extends Controller
                     $tiempop->tiempop_actividadp = $actividadp->id;
                     $tiempop->tiempop_areap = $areap->id;
                     $tiempop->tiempop_tercero = Auth::user()->id;
-                    $tiempop->tiempop_fh_elaboro = date('Y-m-d H:m:s');
+                    $tiempop->tiempop_fh_elaboro = date('Y-m-d H:i:s');
                     $tiempop->save();
 
                     // Commit Transaction

@@ -170,7 +170,7 @@ class AsientoNifContableDocumento {
 		$this->asientoNif->asienton1_preguardado = false;
 		$this->asientoNif->asienton1_beneficiario = $this->beneficiario->id;
 		$this->asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
-		$this->asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:m:s');
+		$this->asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 		$this->asientoNif->save();
 
 		foreach ($this->asientoNif_cuentas as $cuenta)

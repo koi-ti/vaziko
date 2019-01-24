@@ -73,7 +73,7 @@ class TrasladosController extends Controller
                     $traslado->fill($data);
                     $traslado->traslado1_numero = $consecutivo;
                     $traslado->traslado1_usuario_elaboro = Auth::user()->id;
-                    $traslado->traslado1_fecha_elaboro = date('Y-m-d H:m:s');
+                    $traslado->traslado1_fecha_elaboro = date('Y-m-d H:i:s');
                     $traslado->save();
 
                     // Traslado2

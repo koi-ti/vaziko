@@ -118,7 +118,7 @@ class NotificacionController extends Controller
             try{
                 // Update Notificacion
                 $notification->notificacion_visto = true;
-                $notification->notificacion_fh_visto = date('Y-m-d H:m:s');
+                $notification->notificacion_fh_visto = date('Y-m-d H:i:s');
                 $notification->save();
 
                 // Commit

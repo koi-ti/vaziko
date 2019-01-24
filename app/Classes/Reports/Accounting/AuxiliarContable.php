@@ -33,7 +33,7 @@ class AuxiliarContable extends FPDF
 
     function Footer() {
         $user = utf8_decode(Auth::user()->username);
-        $date = date('Y-m-d H:m:s');
+        $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);
         $this->SetFont('Arial','I',8);
@@ -81,6 +81,6 @@ class AuxiliarContable extends FPDF
             $this->Ln();
             $cuenta = $item->cuenta;
         }
-        $this->Output(sprintf('%s_%s_%s.pdf', 'auxcontable', date('Y_m_d'), date('H_m_s')),'d');
+        $this->Output(sprintf('%s_%s.pdf', 'auxcontable', date('Y_m_d H_i_s')),'d');
     }
 }

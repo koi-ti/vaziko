@@ -99,7 +99,7 @@ class LibroMayorController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'libromayor', date('Y_m_d'), date('H_m_s')), function($excel) use($saldos, $title, $type) {
+                    Excel::create(sprintf('%s_%s', 'libromayor', date('Y_m_d H_i_s')), function($excel) use($saldos, $title, $type) {
                         $excel->sheet('Excel', function($sheet) use($saldos, $title, $type) {
                             $sheet->loadView('reports.accounting.libromayor.report', compact('saldos', 'title', 'type'));
                         });

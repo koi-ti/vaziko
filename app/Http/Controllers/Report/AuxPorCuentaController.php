@@ -139,7 +139,7 @@ class AuxPorCuentaController extends Controller
 
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s', 'libroporcuenta', date('Y_m_d'), date('H_m_s')), function($excel) use($auxcontable, $saldo, $title, $subtitle, $type) {
+                    Excel::create(sprintf('%s_%s_%s', 'libroporcuenta', date('Y_m_d'), date('H_i_s')), function($excel) use($auxcontable, $saldo, $title, $subtitle, $type) {
                         $excel->sheet('Excel', function($sheet) use($auxcontable,$saldo, $title, $subtitle,$type) {
                             $sheet->loadView('reports.accounting.auxporcuenta.report', compact('auxcontable', 'saldo','title', 'subtitle','type'));
                         });
