@@ -48,13 +48,13 @@ class Ordenp9 extends BaseModel
         return false;
     }
 
-    public static function getOrdenesp9($ordenp2 = null)
+    public static function getOrdenesp9($orden2 = null)
     {
         $query = self::query();
-        $query->select('koi_ordenproduccion9.*', 'materialp_nombre', 'producto_nombre');
+        $query->select('koi_ordenproduccion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
         $query->join('koi_materialp', 'orden9_materialp', '=', 'koi_materialp.id');
         $query->leftJoin('koi_producto', 'orden9_producto', '=', 'koi_producto.id');
-        $query->where('orden9_orden2', $ordenp2);
+        $query->where('orden9_orden2', $orden2);
         $query->orderBy('materialp_nombre', 'asc');
         return $query->get();
     }

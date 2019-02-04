@@ -1,5 +1,5 @@
 /**
-* Class AreasProductopListView  of Backbone Router
+* Class AreasProductopOrdenListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,11 +9,13 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AreasProductopListView = Backbone.View.extend({
+    app.AreasProductopOrdenListView = Backbone.View.extend({
 
         el: '#browse-orden-producto-areas-list',
         events: {
-            'click .item-producto-areas-remove': 'removeOne',
+            'click .item-producto-areap-orden-remove': 'removeOne',
+            'click .item-producto-areap-orden-edit': 'editOne',
+            'click .item-producto-areap-orden-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -25,8 +27,7 @@ app || (app = {});
         */
         initialize : function(opts){
 
-            // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            // extendsorden-delete-areap-confirm-tpl _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
@@ -39,15 +40,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            // Trigger on
-            this.on('totalize', this.totalize, this);
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
+            if (this.parameters.dataFilter.orden2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -55,8 +49,7 @@ app || (app = {});
         * @param Object ordenp6Model Model instance
         */
         addOne: function (ordenp6Model) {
-            var view = new app.AreasProductopItemView({
-                collection: this.collection,
+            var view = new app.AreasProductopItemOrdenView({
                 model: ordenp6Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -81,7 +74,7 @@ app || (app = {});
         * store
         * @param form element
         */
-        storeOne: function ( data ) {
+        storeOne: function (data, form) {
             var _this = this;
 
             // Validar carrito temporal
@@ -112,6 +105,7 @@ app || (app = {});
                         }
 
                         // Add model in collection
+                        window.Misc.clearForm(form);
                         _this.collection.add(model);
                         _this.totalize();
                     }
@@ -130,74 +124,88 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource),
+                _this = this;
 
-            if( _.isUndefined(this.parameters.dataFilter.orden2) ){
-                if ( model instanceof Backbone.Model ) {
-                    model.view.remove();
-                    this.collection.remove(model);
-                    this.totalize();
-                }
-            }else{
-                var reg = /[A-Za-z]/;
-                if( !reg.test(resource) ){
-                    this.areaDelete(model);
-                }else{
-                    if ( model instanceof Backbone.Model ) {
-                        model.view.remove();
-                        this.collection.remove(model);
-                        this.totalize();
+            if ( model instanceof Backbone.Model ) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { orden6_nombre: model.get('orden6_nombre'), orden6_areap: model.get('areap_nombre')},
+                        template: _.template( ($('#orden-delete-areap-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar área de producción',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.totalize();
+                        }
                     }
-                }
+                });
+
+                cancelConfirm.render();
             }
         },
 
         /**
-        * modal confirm delete area
+        * Event edit item
         */
-        areaDelete: function( model ) {
-            var _this = this;
+        editOne: function(e){
+            e.preventDefault();
 
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var view = new app.AreasProductopItemOrdenView({
+                model: model,
                 parameters: {
-                    dataFilter: { orden6_nombre: model.get('orden6_nombre'), orden6_areap: model.get('areap_nombre')},
-                    template: _.template( ($('#orden-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar área',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                        _this.totalize();
-                                    }
-                                }
-                            });
-                        }
-                    }
+                    action: 'edit',
                 }
             });
+            model.view.$el.replaceWith( view.render().el );
+        },
 
-            cancelConfirm.render();
+        /**
+        * Event success edit item
+        */
+        successEdit: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var hour = this.$('#orden6_horas_' + model.get('id')).val();
+                minute = this.$('#orden6_minutos_' + model.get('id')).val();
+
+            if (hour < 0 || _.isNaN(parseInt(hour)) ) {
+                alertify.error('El campo de horas no es valido.');
+                return;
+            }
+
+            if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute)) ) {
+                alertify.error('El campo de minutos no es valido.');
+                return;
+            }
+
+            var attributes = {};
+            if (model.get('orden6_horas') != parseInt(hour))
+                attributes.orden6_horas = parseInt(hour);
+
+            if (model.get('orden6_minutos') != parseInt(minute))
+                attributes.orden6_minutos = parseInt(minute)
+
+            model.set(attributes, {silent: true});
+            this.collection.trigger('reset');
         },
 
         /**
         *Render totales the collection
         */
         totalize: function(){
-            // Llamar funcion de calculateOrdenp2 del modelo Ordnep2
-            this.parameters.model.trigger('calculateOrdenp2');
-
             var data = this.collection.totalize();
+
             if(this.$total.length) {
                 this.$total.empty().html( window.Misc.currency( data.total ) );
+
+                this.model.trigger('totalize');
             }
         },
 
@@ -213,21 +221,6 @@ app || (app = {});
         */
         responseServer: function ( target, resp, opts ) {
             window.Misc.removeSpinner( this.parameters.wrapper );
-
-            if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.clearForm( $('#form-ordenp6-producto') );
-            }
         },
    });
 

@@ -1,5 +1,5 @@
 /**
-* Class AreasProductopItemView  of Backbone Router
+* Class AreasProductopItemOrdenView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,14 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AreasProductopItemView = Backbone.View.extend({
+    app.AreasProductopItemOrdenView = Backbone.View.extend({
 
         tagName: 'tr',
-        className: 'form-group',
         template: _.template( ($('#orden-producto-areas-item-tpl').html() || '') ),
-        events: {
-            'change .change-time': 'changeTime'
-        },
         parameters: {
             edit: false
         },
@@ -29,6 +25,10 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
+            if (this.parameters.action == 'edit') {
+                this.template = _.template( ($('#orden-producto-areas-edit-item-tpl').html() || '') );
+            }
+
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
         },
@@ -37,38 +37,11 @@ app || (app = {});
         * Render View Element
         */
         render: function(){
-
             var attributes = this.model.toJSON();
                 attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
             return this;
-        },
-
-        changeTime: function(e) {
-            var selector = this.$(e.currentTarget);
-
-            // rules && validate
-            var min = selector.attr('min');
-            var max = selector.attr('max');
-            if( selector.val() < parseInt(min) || selector.val() > parseInt(max) || _.isEmpty( selector.val() ) ){
-                selector.parent().addClass('has-error');
-                return;
-            }else{
-                selector.parent().removeClass('has-error');
-            }
-
-            if ( selector.data('type') == 'hs' ){
-                this.model.set({
-                    'orden6_horas': selector.val(),
-                });
-            }else if( selector.data('type') == 'ms' ){
-                this.model.set({
-                    'orden6_minutos': selector.val()
-                });
-            }
-
-            this.collection.trigger('reset');
-        },
+        }
     });
 
 })(jQuery, this, this.document);

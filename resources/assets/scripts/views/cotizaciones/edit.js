@@ -46,7 +46,6 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
                 attributes.edit = true;
             this.$el.html( this.template(attributes) );
@@ -98,6 +97,9 @@ app || (app = {});
             }
         },
 
+        /**
+        * Event change type
+        */
         changeTypeProduct: function(e) {
             var _this = this;
                 typeproduct = this.$(e.currentTarget).val();
@@ -131,6 +133,9 @@ app || (app = {});
             }
         },
 
+        /**
+        * Event change subtupe
+        */
         changeSubtypeProduct: function(e) {
             var _this = this;
                 subtypeproduct = this.$(e.currentTarget).val();

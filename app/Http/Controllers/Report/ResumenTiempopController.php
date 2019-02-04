@@ -38,7 +38,7 @@ class ResumenTiempopController extends Controller
                     ->withErrors('La fecha final no puede ser menor a la inicial.')
                     ->withInput();
             }
-            
+
             // Recuperar terceros
             $data = [];
             $funcionarios = Tercero::getTechnical($request->filter_funcionario);

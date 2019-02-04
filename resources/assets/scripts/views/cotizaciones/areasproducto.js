@@ -13,7 +13,9 @@ app || (app = {});
 
         el: '#browse-cotizacion-producto-areas-list',
         events: {
-            'click .item-producto-areas-remove': 'removeOne',
+            'click .item-producto-areap-cotizacion-remove': 'removeOne',
+            'click .item-producto-areap-cotizacion-edit': 'editOne',
+            'click .item-producto-areap-cotizacion-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -24,7 +26,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
@@ -36,13 +37,11 @@ app || (app = {});
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
             this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
 
-            // Trigger on
-            this.on('totalize', this.totalize, this);
-
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+            if (this.parameters.dataFilter.cotizacion2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -51,7 +50,6 @@ app || (app = {});
         */
         addOne: function ( cotizacion6Model ) {
             var view = new app.AreasProductopCotizacionItemView({
-                collection: this.collection,
                 model: cotizacion6Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -76,7 +74,7 @@ app || (app = {});
         * store
         * @param form element
         */
-        storeOne: function ( data ) {
+        storeOne: function (data, form) {
             var _this = this;
 
             // Validar carrito temporal
@@ -95,7 +93,6 @@ app || (app = {});
                 success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
-
                         var text = resp.success ? '' : resp.errors;
                         if( _.isObject( resp.errors ) ) {
                             text = window.Misc.parseErrors(resp.errors);
@@ -107,6 +104,7 @@ app || (app = {});
                         }
 
                         // Add model in collection
+                        window.Misc.clearForm(form);
                         _this.collection.add(model);
                         _this.totalize();
                     }
@@ -125,62 +123,76 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource),
+                _this = this;
 
-            if( _.isUndefined(this.parameters.dataFilter.cotizacion2) ){
-                if ( model instanceof Backbone.Model ) {
-                    model.view.remove();
-                    this.collection.remove(model);
-                    this.totalize();
-                }
-            }else{
-                var reg = /[A-Za-z]/;
-                if( !reg.test(resource) ){
-                    this.areaDelete(model);
-                }else{
-                    if ( model instanceof Backbone.Model ) {
-                        model.view.remove();
-                        this.collection.remove(model);
-                        this.totalize();
+            if ( model instanceof Backbone.Model ) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { cotizacion6_nombre: model.get('cotizacion6_nombre'), cotizacion6_areap: model.get('areap_nombre')},
+                        template: _.template( ($('#cotizacion-delete-areap-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar área',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.totalize();
+                        }
                     }
-                }
+                });
+
+                cancelConfirm.render();
             }
         },
 
         /**
-        * modal confirm delete area
+        * Event edit item
         */
-        areaDelete: function(model, cotizacion2) {
-            var _this = this;
+        editOne: function(e){
+            e.preventDefault();
 
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var view = new app.AreasProductopCotizacionItemView({
+                model: model,
                 parameters: {
-                    dataFilter: { cotizacion6_nombre: model.get('cotizacion6_nombre'), cotizacion6_areap: model.get('areap_nombre')},
-                    template: _.template( ($('#cotizacion-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar área',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                        _this.totalize();
-                                    }
-                                }
-                            });
-                        }
-                    }
+                    action: 'edit',
                 }
             });
+            model.view.$el.replaceWith( view.render().el );
+        },
 
-            cancelConfirm.render();
+        /**
+        * Event success edit item
+        */
+        successEdit: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var hour = this.$('#cotizacion6_horas_' + model.get('id')).val();
+                minute = this.$('#cotizacion6_minutos_' + model.get('id')).val();
+
+            if (hour < 0 || _.isNaN(parseInt(hour)) ) {
+                alertify.error('El campo de horas no es valido.');
+                return;
+            }
+
+            if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute)) ) {
+                alertify.error('El campo de minutos no es valido.');
+                return;
+            }
+
+            var attributes = {};
+            if (model.get('cotizacion6_horas') != parseInt(hour))
+                attributes.cotizacion6_horas = parseInt(hour);
+
+            if (model.get('cotizacion6_minutos') != parseInt(minute))
+                attributes.cotizacion6_minutos = parseInt(minute)
+
+            model.set(attributes, {silent: true});
+            this.collection.trigger('reset');
         },
 
         /**
@@ -190,11 +202,10 @@ app || (app = {});
             // Totalize collection
             var data = this.collection.totalize();
 
-            // Llamar funcion de calculate del modelo createProducto(cotizacion)
-            this.model.trigger('calculateAll');
-
             if( this.$total.length ){
                 this.$total.empty().html( window.Misc.currency( data.total ) );
+
+                this.model.trigger('totalize');
             }
         },
 
@@ -210,21 +221,6 @@ app || (app = {});
         */
         responseServer: function ( target, resp, opts ) {
             window.Misc.removeSpinner( this.parameters.wrapper );
-
-            if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if( !resp.success ) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.clearForm( $('#form-cotizacion6-producto') );
-            }
         },
    });
 

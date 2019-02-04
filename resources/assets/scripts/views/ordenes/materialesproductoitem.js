@@ -1,5 +1,5 @@
 /**
-* Class MaterialesProductopItemView  of Backbone Router
+* Class MaterialesProductopItemOrdenView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,7 +9,7 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MaterialesProductopItemView = Backbone.View.extend({
+    app.MaterialesProductopItemOrdenView = Backbone.View.extend({
 
         tagName: 'tr',
         template: _.template( ($('#orden-producto-materialp-item-tpl').html() || '') ),
@@ -24,6 +24,10 @@ app || (app = {});
 	        // Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            if (this.parameters.action == 'edit') {
+                this.template = _.template( ($('#orden-producto-materialp-edit-item-tpl').html() || '') );
+            }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );

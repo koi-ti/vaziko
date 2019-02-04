@@ -36,7 +36,7 @@
                     <label class="control-label">Código</label>
                     <div>{{ $producto->producto_codigo }}</div>
                 </div>
-                <div class="form-group col-md-3">
+                <div class="form-group col-md-4">
                     <label class="control-label">Código proveedor</label>
                     <div>{{ $producto->producto_codigoori }}</div>
                 </div>
@@ -230,9 +230,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th colspan="3" class="text-center">NO EXISTE HISTORIAL DEL PRODUCTO</th>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -256,17 +253,5 @@
                 </div>
             </div>
         </div>
-    </script>
-
-    <script type="text/template" id="producto-history-item-list-tpl">
-        <% if (type == 'PRE') { %>
-            <td><span class="label label-success">PRECOTIZACIÓN</span></td>
-        <% } else if (type == 'COT') { %>
-            <td><span class="label label-danger">COTIZACIÓN</span></td>
-        <% } else { %>
-            <td><span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
-        <% } %>
-        <td><%- moment(fecha).format('YYYY-MM-DD') %></td>
-        <td class="text-right"><%- window.Misc.currency(valor) %></td>
     </script>
 @stop

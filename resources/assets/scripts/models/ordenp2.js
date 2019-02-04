@@ -26,6 +26,7 @@ app || (app = {});
             'orden2_round': 0,
             'orden2_volumen': 0,
             'orden2_margen_materialp': 30,
+            'orden2_margen_empaque': 30,
             'orden2_vtotal': 0,
             'orden2_observaciones': '',
             'orden2_ancho': 0,

@@ -9,7 +9,7 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AreasProductopList = Backbone.Collection.extend({
+    app.AreasProductopOrdenList = Backbone.Collection.extend({
 
         url: function() {
             return window.Misc.urlFull( Route.route('ordenes.productos.areas.index') );
@@ -20,6 +20,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(){
+
         },
 
         validar: function( data ) {
@@ -43,6 +44,17 @@ app || (app = {});
 
             error.success = true;
             return error;
+        },
+
+        convertirMinutos: function ( model ){
+            var tiempo = model.get('orden6_tiempo').split(':'),
+                horas = parseInt( tiempo[0] ),
+                minutos = parseInt( tiempo[1] );
+
+            // Regla de 3 para convertir min a horas
+            var total = horas + (minutos / 60);
+
+            return parseFloat( total );
         },
 
         /**
@@ -78,21 +90,10 @@ app || (app = {});
             });
         },
 
-        convertirMinutos: function ( model ){
-            var tiempo = model.get('orden6_tiempo').split(':'),
-                horas = parseInt( tiempo[0] ),
-                minutos = parseInt( tiempo[1] );
-
-            // Regla de 3 para convertir min a horas
-            var total = horas + (minutos / 60);
-
-            return parseFloat( total );
-        },
-
         totalize: function(  ) {
             var total = this.total();
                 this.totalAreap();
-            return { 'total': Math.round( total ) }
+            return { total: Math.round( total ) }
         },
    });
 

@@ -390,6 +390,47 @@
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
+						<h3 class="box-title">Empaques de producción</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-cotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="25%">Empaque</th>
+									<th width="25%">Insumo</th>
+									<th width="15%">Dimensiones</th>
+									<th width="5%">Cantidad</th>
+									<th width="15%">Valor unidad</th>
+									<th width="15%">Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $totalempaques = 0; /*--}}
+								@foreach( App\Models\Production\Cotizacion9::getCotizaciones9( $cotizacion2->id ) as $empaque )
+									<tr>
+										<td>{{ $empaque->empaque_nombre }}</td>
+										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
+										<td>{{ $empaque->cotizacion9_medidas }}</td>
+										<td class="text-center">{{ $empaque->cotizacion9_cantidad }}</td>
+										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
+										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
+									</tr>
+									{{--*/ $totalempaques += $empaque->cotizacion9_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="4"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
 						<h3 class="box-title">Áreas de producción</h3>
 					</div>
 					<div class="box-body">
@@ -454,10 +495,13 @@
 			                {{--*/
 			                    $transporte = round( $cotizacion2->cotizacion2_transporte / $cotizacion2->cotizacion2_cantidad );
 			                    $viaticos = round( $cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad );
-			                    $totalmaterialesp = round( $totalmaterialesp / $cotizacion2->cotizacion2_cantidad );
+								$totalmaterialesp = round( $totalmaterialesp / $cotizacion2->cotizacion2_cantidad );
 			                    $prevtotalmaterialesp = $totalmaterialesp;
 			                    $totalmaterialesp = $totalmaterialesp/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-			                    $subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalareap + $totalmaterialesp;
+								$totalempaques = round( $totalempaques / $cotizacion2->cotizacion2_cantidad );
+								$prevtotalempaques = $totalempaques;
+								$totalempaques = $totalempaques/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
+			                    $subtotal = $cotizacion2->cotizacion2_precio_venta + $transporte + $viaticos + $totalmaterialesp + $totalempaques + $totalareap;
 			                /*--}}
 
 							<div class="box-body">
@@ -491,6 +535,15 @@
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
+											<div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
+											<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+											<div class="col-xs-4 col-sm-2 text-right">{{ $cotizacion2->cotizacion2_margen_empaque }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
+										</div>
+									</div>
+									<div class="list-group-item list-group-item-info">
+										<div class="row">
 											<div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
 											<div class="col-xs-10 col-sm-10 text-right"><b><span>{{ number_format($totalareap, 2, ',', '.') }}</span></b></div>
 										</div>
@@ -507,16 +560,16 @@
 										<div class="row">
 											<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
 											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_volumen }}</div>
-											<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
-											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_round }}</div>
-											<div class="col-xs-12 col-sm-4 text-right">
+											<div class="col-xs-12 col-sm-8 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span>
 											</div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-success">
 										<div class="row">
-											<div class="col-xs-2 col-sm-8"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
+											<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_round }}</div>
+											<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
 											<div class="col-xs-10 col-sm-4 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span>
 											</div>

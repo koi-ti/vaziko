@@ -1,5 +1,5 @@
 /**
-* Class AcabadosProductopListView  of Backbone Router
+* Class ProductoHistoryListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,13 +9,12 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AcabadosProductopListView = Backbone.View.extend({
+    app.ProductoHistoryListView = Backbone.View.extend({
 
-        el: '#browse-orden-producto-acabados-list',
-        events: {
-        },
+        el: '#browse-history-producto-list',
         parameters: {
         	wrapper: null,
+            edit: false,
             dataFilter: {}
         },
 
@@ -34,26 +33,25 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+            this.collection.fetch({ data: this.parameters.dataFilter, reset: true});
         },
 
         /*
         * Render View Element
         */
         render: function() {
-
         },
 
         /**
         * Render view contact by model
-        * @param Object ordenp5Model Model instance
+        * @param Object productoHistoryModel Model instance
         */
-        addOne: function (ordenp5Model) {
-            var view = new app.AcabadosProductopItemView({
-                model: ordenp5Model
+        addOne: function (productoHistoryModel) {
+            var view = new app.ProductoHistoryView({
+                model: productoHistoryModel,
             });
-            ordenp5Model.view = view;
-            this.$el.append( view.render().el );
+            productoHistoryModel.view = view;
+            this.$el.prepend( view.render().el );
         },
 
         /**
@@ -61,6 +59,9 @@ app || (app = {});
         */
         addAll: function () {
             this.$el.find('tbody').html('');
+            if (!this.collection.length) {
+                this.$el.append( $('<tr>').append( $('<th>').addClass('text-center').attr('colspan', 3).append('NO EXISTE HISTORIAL DEL PRODUCTO') ) );
+            }
             this.collection.forEach( this.addOne, this );
         },
 
@@ -68,26 +69,15 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.$el );
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            this.ready();
-
-            window.Misc.removeSpinner( this.$el );
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
-        },
+            window.Misc.removeSpinner( this.parameters.wrapper );
+        }
    });
 
 })(jQuery, this, this.document);

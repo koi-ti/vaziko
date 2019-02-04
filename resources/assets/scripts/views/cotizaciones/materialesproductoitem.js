@@ -25,6 +25,10 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
+            if (this.parameters.action == 'edit') {
+                this.template = _.template( ($('#cotizacion-producto-materialp-edit-item-tpl').html() || '') );
+            }
+
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
         },

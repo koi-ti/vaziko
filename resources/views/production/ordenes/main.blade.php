@@ -247,26 +247,26 @@
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
-                                                        <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2">Tipo </label>
-                                                        <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
+                                                        <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2 hidden-xs">Tipo </label>
+                                                        <div class="form-group col-sm-3 col-xs-12">
+                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear" data-placeholder="Tipo">
                                                                 @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                     <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
 
-                                                        <label for="subtypeproductop" class="control-label col-sm-1">Subtipo </label>
-                                                        <div class="form-group col-sm-3 col-xs-11">
-                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" disabled>
+                                                        <label for="subtypeproductop" class="control-label col-sm-1 hidden-xs">Subtipo </label>
+                                                        <div class="form-group col-sm-3 col-xs-12">
+                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" disabled data-placeholder="Subtipo">
                                                                 <option value=""></option>
                                                             </select>
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
-                                                        <label for="productop" class="control-label col-sm-1 col-md-offset-2">Producto</label>
-                                                        <div class="form-group col-sm-6 col-xs-11">
+                                                        <label for="productop" class="control-label col-sm-1 col-md-offset-2 hidden-xs">Producto</label>
+                                                        <div class="form-group col-xs-12 col-sm-6">
                                                             <div class="input-group input-group-sm">
                                                                 <span class="input-group-btn">
                                                                     <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
@@ -274,12 +274,12 @@
                                                                     </button>
                                                                 </span>
                                                                 <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
-                                                                <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required></select>
+                                                                <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required data-placeholder="Producto"></select>
                                                             </div>
                                                         </div>
 
-                                                        <div class="form-group col-sm-1">
-                                                            <button type="submit" class="btn btn-success btn-sm btn-block">
+                                                        <div class="form-group col-xs-12 col-sm-1">
+                                                            <button type="submit" class="btn btn-primary btn-sm btn-block">
                                                                 <i class="fa fa-plus"></i>
                                                             </button>
                                                         </div>

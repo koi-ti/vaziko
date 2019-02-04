@@ -1,5 +1,5 @@
 /**
-* Class MaterialesProductopCotizacionListView  of Backbone Router
+* Class EmpaquesProductopPreCotizacionListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,13 +9,13 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MaterialesProductopCotizacionListView = Backbone.View.extend({
+    app.EmpaquesProductopPreCotizacionListView = Backbone.View.extend({
 
-        el: '#browse-cotizacion-producto-materiales-list',
+        el: '#browse-precotizacion-producto-empaques-list',
         events: {
-            'click .item-producto-materialp-cotizacion-remove': 'removeOne',
-            'click .item-producto-materialp-cotizacion-edit': 'editOne',
-            'click .item-producto-materialp-cotizacion-success': 'successEdit'
+            'click .item-producto-empaque-precotizacion-remove': 'removeOne',
+            'click .item-producto-empaque-precotizacion-edit': 'editOne',
+            'click .item-producto-empaque-precotizacion-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -34,29 +34,38 @@ app || (app = {});
             this.$total = this.$('#total');
 
             // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne);
-            this.listenTo( this.collection, 'reset', this.addAll);
-            this.listenTo( this.collection, 'store', this.storeOne);
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
             this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'store', this.storeOne);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            if (this.parameters.dataFilter.cotizacion2)
+            if (this.parameters.dataFilter.precotizacion2)
                 this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function() {
+
         },
 
         /**
         * Render view contact by model
-        * @param Object cotizacion4Model Model instance
+        * @param Object precotizacion9Model Model instance
         */
-        addOne: function (cotizacion4Model) {
-            var view = new app.MaterialesProductopCotizacionItemView({
-                model: cotizacion4Model,
+        addOne: function (precotizacion9Model) {
+            var view = new app.EmpaquesProductopPreCotizacionItemView({
+                model: precotizacion9Model,
                 parameters: {
                     edit: this.parameters.edit
                 }
             });
-            cotizacion4Model.view = view;
+            precotizacion9Model.view = view;
             this.$el.append( view.render().el );
+
+            this.totalize();
         },
 
         /**
@@ -65,9 +74,6 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
-
-            // Totalize
-            this.totalize();
         },
 
         /**
@@ -81,8 +87,8 @@ app || (app = {});
             window.Misc.setSpinner( this.parameters.wrapper );
 
             // Add model in collection
-            var cotizacion4Model = new app.Cotizacion4Model();
-            cotizacion4Model.save(data, {
+            var precotizacion9Model = new app.PreCotizacion9Model();
+            precotizacion9Model.save(data, {
                 success : function(model, resp) {
                     if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
@@ -99,7 +105,6 @@ app || (app = {});
                         // Add model in collection
                         window.Misc.clearForm(form);
                         _this.collection.add(model);
-                        _this.totalize();
                     }
                 },
                 error : function(model, error) {
@@ -123,8 +128,8 @@ app || (app = {});
                 var cancelConfirm = new window.app.ConfirmWindow({
                     parameters: {
                         dataFilter: { materialp_nombre: model.get('materialp_nombre')},
-                        template: _.template( ($('#cotizacion-delete-materialp-confirm-tpl').html() || '') ),
-                        titleConfirm: 'Eliminar material de producción',
+                        template: _.template( ($('#precotizacion-delete-empaque-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar empaque de producción',
                         onConfirm: function () {
                             model.view.remove();
                             _this.collection.remove(model);
@@ -146,7 +151,7 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var view = new app.MaterialesProductopCotizacionItemView({
+            var view = new app.EmpaquesProductopPreCotizacionItemView({
                 model: model,
                 parameters: {
                     action: 'edit',
@@ -165,26 +170,16 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var medidas = this.$('#cotizacion4_medidas_' + model.get('id')).val();
-                cantidad = this.$('#cotizacion4_cantidad_' + model.get('id')).val();
-                valor = this.$('#cotizacion4_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+            var dimensiones = this.$('#precotizacion9_medidas_' + model.get('id')).val();
+                cantidad = this.$('#precotizacion9_cantidad_' + model.get('id')).val();
+                valor = this.$('#precotizacion9_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-            if (!medidas.length || !cantidad.length || !valor) {
+            if (!dimensiones.length || !cantidad.length || !valor) {
                 alertify.error('Ningun campo puede ir vacio.');
                 return;
             }
 
-            var attributes = {};
-            if (model.get('cotizacion4_medidas') != medidas)
-                attributes.cotizacion4_medidas = medidas;
-
-            if (model.get('cotizacion4_cantidad') != cantidad)
-                attributes.cotizacion4_cantidad = cantidad;
-
-            if (model.get('cotizacion4_valor_unitario') != valor)
-                attributes.cotizacion4_valor_unitario = valor;
-
-            model.set(attributes, {silent: true});
+            model.set({'precotizacion9_medidas': dimensiones, 'precotizacion9_cantidad': cantidad, 'precotizacion9_valor_unitario': valor});
             this.collection.trigger('reset');
         },
 
@@ -197,15 +192,13 @@ app || (app = {});
         },
 
         /**
-        *Render totales the collection
+        * Render totales the collection
         */
         totalize: function(){
             var data = this.collection.totalize();
 
             if(this.$total.length) {
                 this.$total.empty().html( window.Misc.currency( data.total ) );
-
-                this.model.trigger('totalize');
             }
         },
 
@@ -213,15 +206,15 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.$el );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-        }
+            window.Misc.removeSpinner( this.$el );
+        },
    });
 
 })(jQuery, this, this.document);

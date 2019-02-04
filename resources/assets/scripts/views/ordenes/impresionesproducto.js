@@ -31,14 +31,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            if (this.parameters.dataFilter.orden2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -51,7 +45,6 @@ app || (app = {});
             });
             ordenp7Model.view = view;
             this.$el.append( view.render().el );
-
         },
 
         /**

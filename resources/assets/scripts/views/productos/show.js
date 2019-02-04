@@ -72,8 +72,8 @@ app || (app = {});
                 collection: this.prodbodeList,
                 parameters: {
                     dataFilter: {
-                        'producto_id': this.model.get('id'),
-                        'call': this.call
+                        producto_id: this.model.get('id'),
+                        call: this.call
                     }
                 }
             });
@@ -85,8 +85,8 @@ app || (app = {});
                     choose: false,
                     show: true,
                     dataFilter: {
-                        'producto_id': this.model.get('id'),
-                        'sucursal': this.sucursal,
+                        producto_id: this.model.get('id'),
+                        sucursal: this.sucursal,
                     }
                 }
             });
@@ -97,6 +97,7 @@ app || (app = {});
                 parameters: {
                     dataFilter: {
                         producto_id: this.model.get('id'),
+                        call: 'materialp'
                     }
                 }
             });

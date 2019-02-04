@@ -3,485 +3,570 @@
 @section('title') Pre-cotizaciones @stop
 
 @section('content')
-    <section class="content-header">
-        <h1>
-            Pre-cotizaciones <small>Administración de pre-cotizaciones</small>
-        </h1>
-        <ol class="breadcrumb">
-            <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
-            @yield('breadcrumb')
-        </ol>
-    </section>
-
-    <section class="content">
-        @yield ('module')
-    </section>
+    @yield ('module')
 
     <script type="text/template" id="add-precotizacion-producto-tpl">
-        <div class="box box-solid">
-            <div class="box-body">
-                <div class="alert alert-success">
-                    <h4><b>Información general</b></h4>
-                    <div class="row">
-                        <label class="col-md-2 control-label">Referencia</label>
-                        <div class="form-group col-md-10">
-                            {{ $precotizacion->precotizacion1_referencia }}
-                        </div>
-                    </div>
+        <section class="content-header">
+            <h1>
+                Pre-cotizaciones <small>Administración de pre-cotizaciones</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
+                <li><a href="{{ route('precotizaciones.index') }}">Pre-cotización</a></li>
+                <li><a href="{{ route('precotizaciones.edit', ['precotizacion' => $precotizacion->id]) }}">{{ $precotizacion->precotizacion_codigo }}</a></li>
+                <li class="active">Producto</li>
+                <% if (!edit) { %>
+                    <li class="active">Nuevo</li>
+                <% } else { %>
+                    <li class="active">Editar</li>
+                <% } %>
+            </ol>
+        </section>
 
+        <section class="content">
+            <div class="box box-success spinner-main">
+        		<div class="box-header with-border">
                     <div class="row">
-                        <label class="col-md-2 control-label">Cliente</label>
-                        <div class="form-group col-md-10">
-                            {{ $precotizacion->tercero_nit }} - {{ $precotizacion->tercero_nombre }}
+                        <div class="col-md-2 col-sm-6 col-xs-6 text-left">
+                            <a href="{{ route('precotizaciones.edit', ['precotizacion' => $precotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                         </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-md-2 control-label">Pre-cotización</label>
-                        <div class="form-group col-md-10">
-                            {{ $precotizacion->precotizacion_codigo }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-md-2 control-label">Código producto</label>
-                        <div class="form-group col-md-10">
-                            {{ $producto->id }}
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label class="col-md-2 control-label">Producto</label>
-                        <div class="form-group col-md-10">
-                            <% if( !_.isUndefined(productop_nombre) && !_.isNull(productop_nombre) && productop_nombre != '') { %>
-                                <%- productop_nombre %>
-                            <% }else{ %>
-                                {{ $producto->productop_nombre }}
-                            <% } %>
+                        <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
+                            <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion2">{{ trans('app.save') }}</button>
                         </div>
                     </div>
                 </div>
 
-                <form method="POST" accept-charset="UTF-8" id="form-precotizacion-producto" data-toggle="validator">
-                    <div class="row">
-                        <label for="precotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
-                        <div class="form-group col-md-8">
-                            <input id="precotizacion2_referencia" class="form-control input-sm input-toupper" name="precotizacion2_referencia" value="<%- precotizacion2_referencia %>" placeholder="Referencia" type="text" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <label for="precotizacion2_cantidad" class="col-sm-1 control-label">Cantidad</label>
-                        <div class="form-group col-md-2">
-                            <input id="precotizacion2_cantidad" value="<%- precotizacion2_cantidad %>" class="form-control input-sm event-price" name="precotizacion2_cantidad" type="number" min="1" required>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <label for="precotizacion2_observaciones" class="col-sm-1 control-label">Observaciones</label>
-                        <div class="form-group col-md-11">
-                            <textarea id="precotizacion2_observaciones" name="precotizacion2_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- precotizacion2_observaciones %></textarea>
-                        </div>
-                    </div>
-
-                    @if($producto->productop_abierto || $producto->productop_cerrado)
-                        <div class="box box-success">
-                            <div class="box-body">
-                                @if($producto->productop_abierto)
-                                    <div class="row">
-                                        <label class="col-sm-offset-1 col-sm-1 control-label">Abierto</label>
-                                        <label for="precotizacion2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                        <div class="form-group col-md-3">
-                                            <div class="col-md-9">
-                                                <input id="precotizacion2_ancho" value="<%- precotizacion2_ancho %>" class="form-control input-sm" name="precotizacion2_ancho" type="number" min="0" step="0.01" required>
-                                            </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
-                                        </div>
-
-                                        <label for="precotizacion2_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                        <div class="form-group col-md-3">
-                                            <div class="col-md-9">
-                                                <input id="precotizacion2_alto" value="<%- precotizacion2_alto %>" class="form-control input-sm" name="precotizacion2_alto" type="number" min="0" step="0.01" required>
-                                            </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
-                                        </div>
-                                    </div>
-                                @endif
-
-                                @if($producto->productop_cerrado)
-                                    <div class="row">
-                                        <label class="col-sm-offset-1 col-sm-1 control-label">Cerrado</label>
-                                        <label for="precotizacion2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                        <div class="form-group col-md-3">
-                                            <div class="col-md-9">
-                                                <input id="precotizacion2_c_ancho" value="<%- precotizacion2_c_ancho %>" class="form-control input-sm" name="precotizacion2_c_ancho" type="number" min="0" step="0.01" required>
-                                            </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
-                                        </div>
-
-                                        <label for="precotizacion2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                        <div class="form-group col-md-3">
-                                            <div class="col-md-9">
-                                                <input id="precotizacion2_c_alto" value="<%- precotizacion2_c_alto %>" class="form-control input-sm" name="precotizacion2_c_alto" type="number" min="0" step="0.01" required>
-                                            </div>
-                                            <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
-                                        </div>
-                                    </div>
-                                @endif
+                <div class="box-body">
+                    <div class="alert alert-success">
+                        <h4><b>Información general</b></h4>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Referencia</label>
+                            <div class="form-group col-md-10">
+                                {{ $precotizacion->precotizacion1_referencia }}
                             </div>
                         </div>
-                    @endif
 
-                    @if($producto->productop_3d)
-                        <div class="box box-success">
-                            <div class="box-body">
-                                <div class="row">
-                                    <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
-                                    <label for="precotizacion2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
-                                    <div class="form-group col-md-2">
-                                        <div class="col-md-9">
-                                            <input id="precotizacion2_3d_ancho" value="<%- precotizacion2_3d_ancho %>" class="form-control input-sm" name="precotizacion2_3d_ancho" type="number" min="0" step="0.01" required>
-                                        </div>
-                                        <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
-                                    </div>
-
-                                    <label for="precotizacion2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
-                                    <div class="form-group col-md-2">
-                                        <div class="col-md-9">
-                                            <input id="precotizacion2_3d_alto" value="<%- precotizacion2_3d_alto %>" class="form-control input-sm" name="precotizacion2_3d_alto" type="number" min="0" step="0.01" required>
-                                        </div>
-                                        <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
-                                    </div>
-
-                                    <label for="precotizacion2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
-                                    <div class="form-group col-md-2">
-                                        <div class="col-md-9">
-                                            <input id="precotizacion2_3d_profundidad" value="<%- precotizacion2_3d_profundidad %>" class="form-control input-sm" name="precotizacion2_3d_profundidad" type="number" min="0" step="0.01" required>
-                                        </div>
-                                        <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
-                                    </div>
-                                </div>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Cliente</label>
+                            <div class="form-group col-md-10">
+                                {{ $precotizacion->tercero_nit }} - {{ $precotizacion->tercero_nombre }}
                             </div>
                         </div>
-                    @endif
 
-                    @if($producto->productop_tiro || $producto->productop_retiro)
-                        <div class="box box-success">
-                            <div class="box-body">
-                                <div class="row">
-                                    <label class="col-sm-offset-2 col-sm-1 control-label"></label>
-                                    <label class="col-sm-1 control-label">C</label>
-                                    <label class="col-sm-1 control-label">M</label>
-                                    <label class="col-sm-1 control-label">Y</label>
-                                    <label class="col-sm-1 control-label">K</label>
-                                    <label class="col-sm-1 control-label">P1</label>
-                                    <label class="col-sm-1 control-label">P2</label>
-                                </div>
+                        <div class="row">
+                            <label class="col-md-2 control-label">Pre-cotización</label>
+                            <div class="form-group col-md-10">
+                                {{ $precotizacion->precotizacion_codigo }}
+                            </div>
+                        </div>
 
-                                @if($producto->productop_tiro)
-                                    <div class="row">
-                                        <div class="col-sm-offset-2 col-md-1">
-                                            <label for="precotizacion2_tiro" class="control-label">T</label>
-                                            <input type="checkbox" id="precotizacion2_tiro" name="precotizacion2_tiro" value="precotizacion2_tiro" <%- parseInt(precotizacion2_tiro) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_yellow" name="precotizacion2_yellow" value="precotizacion2_yellow" <%- parseInt(precotizacion2_yellow) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_magenta" name="precotizacion2_magenta" value="precotizacion2_magenta" <%- parseInt(precotizacion2_magenta) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_cyan" name="precotizacion2_cyan" value="precotizacion2_cyan" <%- parseInt(precotizacion2_cyan) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_key" name="precotizacion2_key" value="precotizacion2_key" <%- parseInt(precotizacion2_key) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_color1" name="precotizacion2_color1" value="precotizacion2_color1" <%- parseInt(precotizacion2_color1) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_color2" name="precotizacion2_color2" value="precotizacion2_color2" <%- parseInt(precotizacion2_color2) ? 'checked': ''%>>
-                                        </div>
-                                    </div>
-                                @endif
+                        <div class="row">
+                            <label class="col-md-2 control-label">Código producto</label>
+                            <div class="form-group col-md-10">
+                                {{ $producto->id }}
+                            </div>
+                        </div>
 
-                                @if($producto->productop_retiro)
-                                    <div class="row">
-                                        <div class="col-sm-offset-2 col-md-1">
-                                            <label for="precotizacion2_retiro" class="control-label">R</label>
-                                            <input type="checkbox" id="precotizacion2_retiro" name="precotizacion2_retiro" value="precotizacion2_retiro" <%- parseInt(precotizacion2_retiro) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_yellow2" name="precotizacion2_yellow2" value="precotizacion2_yellow2" <%- parseInt(precotizacion2_yellow2) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_magenta2" name="precotizacion2_magenta2" value="precotizacion2_magenta2" <%- parseInt(precotizacion2_magenta2) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_cyan2" name="precotizacion2_cyan2" value="precotizacion2_cyan2" <%- parseInt(precotizacion2_cyan2) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_key2" name="precotizacion2_key2" value="precotizacion2_key2" <%- parseInt(precotizacion2_key2) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_color12" name="precotizacion2_color12" value="precotizacion2_color12" <%- parseInt(precotizacion2_color12) ? 'checked': ''%>>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <input type="checkbox" id="precotizacion2_color22" name="precotizacion2_color22" value="precotizacion2_color22" <%- parseInt(precotizacion2_color22) ? 'checked': ''%>>
-                                        </div>
-                                    </div>
-                                @endif
+                        <div class="row">
+                            <label class="col-md-2 control-label">Producto</label>
+                            <div class="form-group col-md-10">
+                                <% if( !_.isUndefined(productop_nombre) && !_.isNull(productop_nombre) && productop_nombre != '') { %>
+                                    <%- productop_nombre %>
+                                <% }else{ %>
+                                    {{ $producto->productop_nombre }}
+                                <% } %>
+                            </div>
+                        </div>
+                    </div>
 
-                                <div class="row">
-                                    @if($producto->productop_tiro)
-                                        <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
-                                            <label for="precotizacion2_nota_tiro" class="control-label">Nota tiro</label>
-                                            <textarea id="precotizacion2_nota_tiro" name="precotizacion2_nota_tiro" class="form-control" rows="2" placeholder="Nota tiro"><%- precotizacion2_nota_tiro %></textarea>
+                    <form method="POST" accept-charset="UTF-8" id="form-precotizacion-producto" data-toggle="validator">
+                        <div class="row">
+                            <label for="precotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
+                            <div class="form-group col-md-8">
+                                <input id="precotizacion2_referencia" class="form-control input-sm input-toupper" name="precotizacion2_referencia" value="<%- precotizacion2_referencia %>" placeholder="Referencia" type="text" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <label for="precotizacion2_cantidad" class="col-sm-1 control-label">Cantidad</label>
+                            <div class="form-group col-md-2">
+                                <input id="precotizacion2_cantidad" value="<%- precotizacion2_cantidad %>" class="form-control input-sm event-price" name="precotizacion2_cantidad" type="number" min="1" required>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="precotizacion2_observaciones" class="col-sm-1 control-label">Observaciones</label>
+                            <div class="form-group col-md-11">
+                                <textarea id="precotizacion2_observaciones" name="precotizacion2_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- precotizacion2_observaciones %></textarea>
+                            </div>
+                        </div>
+
+                        @if($producto->productop_abierto || $producto->productop_cerrado)
+                            <div class="box box-success">
+                                <div class="box-body">
+                                    @if($producto->productop_abierto)
+                                        <div class="row">
+                                            <label class="col-sm-offset-1 col-sm-1 control-label">Abierto</label>
+                                            <label for="precotizacion2_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+                                            <div class="form-group col-md-3">
+                                                <div class="col-md-9">
+                                                    <input id="precotizacion2_ancho" value="<%- precotizacion2_ancho %>" class="form-control input-sm" name="precotizacion2_ancho" type="number" min="0" step="0.01" required>
+                                                </div>
+                                                <div class="col-md-3 text-left">{{ $producto->m1_sigla }}</div>
+                                            </div>
+
+                                            <label for="precotizacion2_alto" class="col-sm-1 control-label text-right">Alto</label>
+                                            <div class="form-group col-md-3">
+                                                <div class="col-md-9">
+                                                    <input id="precotizacion2_alto" value="<%- precotizacion2_alto %>" class="form-control input-sm" name="precotizacion2_alto" type="number" min="0" step="0.01" required>
+                                                </div>
+                                                <div class="col-md-3 text-left">{{ $producto->m2_sigla }}</div>
+                                            </div>
                                         </div>
                                     @endif
 
-                                    @if($producto->productop_retiro)
-                                        <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
-                                            <label for="precotizacion2_nota_retiro" class="control-label">Nota retiro</label>
-                                            <textarea id="precotizacion2_nota_retiro" name="precotizacion2_nota_retiro" class="form-control" rows="2" placeholder="Nota retiro"><%- precotizacion2_nota_retiro %></textarea>
+                                    @if($producto->productop_cerrado)
+                                        <div class="row">
+                                            <label class="col-sm-offset-1 col-sm-1 control-label">Cerrado</label>
+                                            <label for="precotizacion2_c_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+                                            <div class="form-group col-md-3">
+                                                <div class="col-md-9">
+                                                    <input id="precotizacion2_c_ancho" value="<%- precotizacion2_c_ancho %>" class="form-control input-sm" name="precotizacion2_c_ancho" type="number" min="0" step="0.01" required>
+                                                </div>
+                                                <div class="col-md-3 text-left">{{ $producto->m3_sigla }}</div>
+                                            </div>
+
+                                            <label for="precotizacion2_c_alto" class="col-sm-1 control-label text-right">Alto</label>
+                                            <div class="form-group col-md-3">
+                                                <div class="col-md-9">
+                                                    <input id="precotizacion2_c_alto" value="<%- precotizacion2_c_alto %>" class="form-control input-sm" name="precotizacion2_c_alto" type="number" min="0" step="0.01" required>
+                                                </div>
+                                                <div class="col-md-3 text-left">{{ $producto->m4_sigla }}</div>
+                                            </div>
                                         </div>
                                     @endif
                                 </div>
                             </div>
-                        </div>
-                    @endif
+                        @endif
 
-                    {{-- Content acabados --}}
-                    <div class="row">
-                        <div class="col-sm-6">
+                        @if($producto->productop_3d)
                             <div class="box box-success">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Maquinas de producción</h3>
-                                </div>
                                 <div class="box-body">
-                                    <div id="browse-precotizacion-producto-maquinas-list">
-                                        {{-- render maquinas list --}}
+                                    <div class="row">
+                                        <label class="col-sm-offset-1 col-sm-1 control-label">3D</label>
+                                        <label for="precotizacion2_3d_ancho" class="col-sm-1 control-label text-right">Ancho</label>
+                                        <div class="form-group col-md-2">
+                                            <div class="col-md-9">
+                                                <input id="precotizacion2_3d_ancho" value="<%- precotizacion2_3d_ancho %>" class="form-control input-sm" name="precotizacion2_3d_ancho" type="number" min="0" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-3 text-left">{{ $producto->m5_sigla }}</div>
+                                        </div>
+
+                                        <label for="precotizacion2_3d_alto" class="col-sm-1 control-label text-right">Alto</label>
+                                        <div class="form-group col-md-2">
+                                            <div class="col-md-9">
+                                                <input id="precotizacion2_3d_alto" value="<%- precotizacion2_3d_alto %>" class="form-control input-sm" name="precotizacion2_3d_alto" type="number" min="0" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-3 text-left">{{ $producto->m6_sigla }}</div>
+                                        </div>
+
+                                        <label for="precotizacion2_3d_profundidad" class="col-sm-1 control-label text-right">Profundidad</label>
+                                        <div class="form-group col-md-2">
+                                            <div class="col-md-9">
+                                                <input id="precotizacion2_3d_profundidad" value="<%- precotizacion2_3d_profundidad %>" class="form-control input-sm" name="precotizacion2_3d_profundidad" type="number" min="0" step="0.01" required>
+                                            </div>
+                                            <div class="col-md-3 text-left">{{ $producto->m7_sigla }}</div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
+                        @endif
+
+                        @if($producto->productop_tiro || $producto->productop_retiro)
                             <div class="box box-success">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Acabados de producción</h3>
-                                </div>
                                 <div class="box-body">
-                                    <div id="browse-precotizacion-producto-acabados-list">
-                                        {{-- render acabados list --}}
+                                    <div class="row">
+                                        <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th class="text-center"></th>
+                                                        <th class="text-center">C</th>
+                                                        <th class="text-center">M</th>
+                                                        <th class="text-center">Y</th>
+                                                        <th class="text-center">K</th>
+                                                        <th class="text-center">P1</th>
+                                                        <th class="text-center">P2</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if($producto->productop_tiro)
+                                                        <tr>
+                                                            <th class="text-center">T <input type="checkbox" id="precotizacion2_tiro" name="precotizacion2_tiro" class="check-type" value="precotizacion2_tiro" <%- parseInt(precotizacion2_tiro) ? 'checked': ''%>></th>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_yellow" name="precotizacion2_yellow" value="precotizacion2_yellow" <%- parseInt(precotizacion2_yellow) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_magenta" name="precotizacion2_magenta" value="precotizacion2_magenta" <%- parseInt(precotizacion2_magenta) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_cyan" name="precotizacion2_cyan" value="precotizacion2_cyan" <%- parseInt(precotizacion2_cyan) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_key" name="precotizacion2_key" value="precotizacion2_key" <%- parseInt(precotizacion2_key) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_color1" name="precotizacion2_color1" value="precotizacion2_color1" <%- parseInt(precotizacion2_color1) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_color2" name="precotizacion2_color2" value="precotizacion2_color2" <%- parseInt(precotizacion2_color2) ? 'checked': ''%>></td>
+                                                        </tr>
+                                                    @endif
+                                                    @if($producto->productop_retiro)
+                                                        <tr>
+                                                            <th class="text-center">R <input type="checkbox" id="precotizacion2_retiro" name="precotizacion2_retiro" class="check-type" value="precotizacion2_retiro" <%- parseInt(precotizacion2_retiro) ? 'checked': ''%>></th>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_yellow2" name="precotizacion2_yellow2" value="precotizacion2_yellow2" <%- parseInt(precotizacion2_yellow2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_magenta2" name="precotizacion2_magenta2" value="precotizacion2_magenta2" <%- parseInt(precotizacion2_magenta2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_cyan2" name="precotizacion2_cyan2" value="precotizacion2_cyan2" <%- parseInt(precotizacion2_cyan2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_key2" name="precotizacion2_key2" value="precotizacion2_key2" <%- parseInt(precotizacion2_key2) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_color12" name="precotizacion2_color12" value="precotizacion2_color12" <%- parseInt(precotizacion2_color12) ? 'checked': ''%>></td>
+                                                            <td class="text-center"><input type="checkbox" id="precotizacion2_color22" name="precotizacion2_color22" value="precotizacion2_color22" <%- parseInt(precotizacion2_color22) ? 'checked': ''%>></td>
+                                                        </tr>
+                                                    @endif
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        @if($producto->productop_tiro)
+                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                                <label for="precotizacion2_nota_tiro" class="control-label">Nota tiro</label>
+                                                <textarea id="precotizacion2_nota_tiro" name="precotizacion2_nota_tiro" class="form-control" rows="2" placeholder="Nota tiro"><%- precotizacion2_nota_tiro %></textarea>
+                                            </div>
+                                        @endif
+
+                                        @if($producto->productop_retiro)
+                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                                <label for="precotizacion2_nota_retiro" class="control-label">Nota retiro</label>
+                                                <textarea id="precotizacion2_nota_retiro" name="precotizacion2_nota_retiro" class="form-control" rows="2" placeholder="Nota retiro"><%- precotizacion2_nota_retiro %></textarea>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+                        {{-- Content produccion --}}
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="box box-success">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Maquinas de producción</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        @foreach( App\Models\Production\PreCotizacion8::getPreCotizaciones8($producto->id, isset($precotizacion2) ? $precotizacion2->id : null ) as $maquina)
+                                            <div class="row">
+                                                <div class="form-group col-md-12">
+                                                    <label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_{{ $maquina->id }}">
+                                                        <input type="checkbox" id="precotizacion8_maquinap_{{ $maquina->id }}" name="precotizacion8_maquinap_{{ $maquina->id }}" value="precotizacion8_maquinap_{{ $maquina->id }}" {{ $maquina->activo ? 'checked': '' }}> {{ $maquina->maquinap_nombre }}
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="box box-success">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Acabados de producción</h3>
+                                    </div>
+                                    <div class="box-body">
+                                        @foreach( App\Models\Production\PreCotizacion7::getPreCotizaciones7($producto->id, isset($precotizacion2) ? $precotizacion2->id : null ) as $acabado)
+            								<div class="row">
+            									<div class="form-group col-md-12">
+            										<label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_{{ $acabado->id }}">
+            											<input type="checkbox" id="precotizacion7_acabadop_{{ $acabado->id }}" name="precotizacion7_acabadop_{{ $acabado->id }}" value="precotizacion7_acabadop_{{ $acabado->id }}" {{ $acabado->activo ? 'checked': '' }}> {{ $acabado->acabadop_nombre }}
+            										</label>
+            									</div>
+            								</div>
+            							@endforeach
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
 
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Imágenes</h3>
-                    </div>
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Imágenes</h3>
+                        </div>
 
-                    <div class="box-body table-responsive no-padding">
-                        <div class="fine-uploader"></div>
-                    </div>
-                </div>
-
-                {{-- Content impresiones --}}
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Impresiones</h3>
-                    </div>
-                    <div class="box-body" id="precotizacion5-wrapper-producto">
-                        <form method="POST" accept-charset="UTF-8" id="form-precotizacion5-producto" data-toggle="validator">
-                            <div class="row">
-                                <div class="form-group col-sm-7">
-                                    <input type="text" id="precotizacion5_texto" name="precotizacion5_texto" placeholder="Detalle" class="form-control input-xs" maxlength="150" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-2">
-                                  <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
-                                  <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-2">
-                                    <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-1">
-                                    <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion5">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <!-- table table-bordered table-striped -->
                         <div class="box-body table-responsive no-padding">
-                            <table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th width="6%"></th>
-                                        <th width="70%">Detalle</th>
-                                        <th width="12%">Ancho</th>
-                                        <th width="12%">Alto</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                            <div class="fine-uploader"></div>
                         </div>
                     </div>
-                </div>
 
-                {{-- Content materialesp --}}
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Materiales de producción</h3>
-                    </div>
-                    <div class="box-body" id="precotizacion3-wrapper-producto">
-                        <form method="POST" accept-charset="UTF-8" id="form-precotizacion3-producto" data-toggle="validator">
-                            <div class="row">
-                                @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
-                                    <div class="form-group col-md-4">
-                                        <label>{{ $value }}</label>
+                    {{-- Content impresiones --}}
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Impresiones</h3>
+                        </div>
+                        <div class="box-body" id="precotizacion5-wrapper-producto">
+                            <form method="POST" accept-charset="UTF-8" id="form-impresion-producto" data-toggle="validator">
+                                <div class="row">
+                                    <div class="form-group col-sm-7">
+                                        <input type="text" id="precotizacion5_texto" name="precotizacion5_texto" placeholder="Detalle" class="form-control input-xs" maxlength="150" required>
+                                        <div class="help-block with-errors"></div>
                                     </div>
-                                @endforeach
-                            </div><br>
-                            <div class="row">
-                                <div class="form-group col-sm-6">
-                                    <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear" data-placeholder="Material de producción" required>
-                                        <option value="">Seleccione</option>
-                                        @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                    <div class="help-block with-errors"></div>
+                                    <div class="form-group col-sm-2">
+                                      <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
+                                      <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div class="form-group col-sm-6">
-                                    <select name="precotizacion3_producto" id="precotizacion3_producto" class="form-control select2-default-clear" data-placeholder="Insumo" disabled required>
-                                        <option value="">Seleccione</option>
-                                    </select>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-sm-2">
-                                    <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-6">
-                                    <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-3">
-                                    <input id="precotizacion3_valor_unitario" name="precotizacion3_valor_unitario" class="form-control input-sm" type="text" required data-currency>
-                                </div>
-                                <div class="form-group col-sm-1">
-                                    <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion3">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
 
-                        <!-- table table-bordered table-striped -->
-                        <div class="box-body table-responsive no-padding">
-                            <table id="browse-precotizacion-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th colspan="2"></th>
-                                        <th width="25%">Material</th>
-                                        <th width="25%">Insumo</th>
-                                        <th width="15%">Dimensiones</th>
-                                        <th width="5%">Cantidad</th>
-                                        <th width="15%">Valor unidad</th>
-                                        <th width="15%">Valor</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="6"></td>
-                                        <th class="text-right">Total</th>
-                                        <th class="text-right" id="total">0</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="6%"></th>
+                                            <th width="70%">Detalle</th>
+                                            <th width="12%">Ancho</th>
+                                            <th width="12%">Alto</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Content materialesp --}}
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Materiales de producción</h3>
+                        </div>
+                        <div class="box-body" id="precotizacion3-wrapper-producto">
+                            <form method="POST" accept-charset="UTF-8" id="form-materialp-producto" data-toggle="validator">
+                                <div class="row">
+                                    @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
+                                        <div class="form-group col-md-4">
+                                            <label>{{ $value }}</label>
+                                        </div>
+                                    @endforeach
+                                </div><br>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="precotizacion3_producto" required>
+                                            <option value hidden selected>Seleccione</option>
+                                            @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion3_producto" id="precotizacion3_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-historial="historial_precotizacion3" data-valor="precotizacion3_valor_unitario" disabled required>
+                                            <option value hidden selected>Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="precotizacion3_valor_unitario" name="precotizacion3_valor_unitario" class="form-control input-sm" type="text" data-currency required>
+                                        <div class="help-block pull-right"><a id="historial_precotizacion3" class="historial-insumo cursor-pointer"></a></div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-precotizacion-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="25%">Material</th>
+                                            <th width="25%">Insumo</th>
+                                            <th width="15%">Dimensiones</th>
+                                            <th width="10%">Cantidad</th>
+                                            <th width="15%">Valor unidad</th>
+                                            <th width="15%">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Content empaques --}}
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Empaques de producción</h3>
+                        </div>
+                        <div class="box-body" id="precotizacion9-wrapper-producto">
+                            <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion9_materialp" id="precotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="precotizacion9_producto" required>
+                                            <option value hidden selected>Seleccione</option>
+                                            @foreach( App\Models\Production\PreCotizacion9::getPackaging( $producto->id ) as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion9_producto" id="precotizacion9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-placeholder="Insumo" data-historial="historial_precotizacion9" data-valor="precotizacion9_valor_unitario" disabled required>
+                                            <option value hidden selected>Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="precotizacion9_cantidad" name="precotizacion9_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <input type="text" id="precotizacion9_medidas" name="precotizacion9_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="precotizacion9_valor_unitario" name="precotizacion9_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                        <div class="help-block pull-right"><a id="historial_precotizacion9" class="historial-insumo cursor-pointer"></a></div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-precotizacion-producto-empaques-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="25%">Empaque</th>
+                                            <th width="25%">Insumo</th>
+                                            <th width="15%">Dimensiones</th>
+                                            <th width="10%">Cantidad</th>
+                                            <th width="15%">Valor unidad</th>
+                                            <th width="15%">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Content areasp --}}
+                    <div class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Áreas de producción</h3>
+                        </div>
+                        <div class="box-body">
+                            <form method="POST" accept-charset="UTF-8" id="form-areap-producto" data-toggle="validator">
+                                <div class="row">
+                                    <div class="form-group col-sm-5 col-md-offset-1">
+                                        <select name="precotizacion6_areap" id="precotizacion6_areap-producto" class="form-control select2-default-clear">
+                                            <option value="" selected>Seleccione</option>
+                                            @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group col-sm-5">
+                                        <input id="precotizacion6_nombre" name="precotizacion6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-sm-2 col-md-offset-2">
+                                        <input type="number" id="precotizacion6_horas" name="precotizacion6_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="precotizacion6_minutos" name="precotizacion6_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="00" step="01" max="59" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="precotizacion6_valor" name="precotizacion6_valor" class="form-control input-sm" type="text" data-currency required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>Área</th>
+                                            <th>Nombre</th>
+                                            <th colspan="2" class="text-center">Tiempo</th>
+                                            <th>Valor</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-                {{-- Content areasp --}}
-                <div class="box box-success">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Áreas de producción</h3>
-                    </div>
-                    <div class="box-body">
-                        <form method="POST" accept-charset="UTF-8" id="form-precotizacion6-producto" data-toggle="validator">
-                            <div class="row">
-                                <div class="form-group col-sm-5 col-md-offset-1">
-                                    <select name="precotizacion6_areap" id="precotizacion6_areap" class="form-control select2-default-clear">
-                                        <option value="" selected>Seleccione</option>
-                                        @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
-                                            <option value="{{ $key }}">{{ $value }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-
-                                <div class="form-group col-sm-5">
-                                    <input id="precotizacion6_nombre" name="precotizacion6_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="20">
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="form-group col-sm-2 col-md-offset-2">
-                                    <input type="number" id="precotizacion6_horas" name="precotizacion6_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-2">
-                                    <input type="number" id="precotizacion6_minutos" name="precotizacion6_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="00" step="01" max="59" required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-3">
-                                    <input id="precotizacion6_valor" name="precotizacion6_valor" class="form-control input-sm" type="text" data-currency required>
-                                    <div class="help-block with-errors"></div>
-                                </div>
-                                <div class="form-group col-sm-1">
-                                    <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion6">
-                                        <i class="fa fa-plus"></i>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-
-                        <!-- table table-bordered table-striped -->
-                        <div class="box-body table-responsive no-padding">
-                            <table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th></th>
-                                        <th>Área</th>
-                                        <th>Nombre</th>
-                                        <th colspan="2" class="text-center">Tiempo</th>
-                                        <th>Valor</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="5"></td>
-                                        <th class="text-right">Total</th>
-                                        <th class="text-right" id="total">0</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        	</div>
+        </section>
     </script>
 
     <script type="text/template" id="precotizacion-delete-materialp-confirm-tpl">
         <p>¿Está seguro que desea eliminar el material <b><%- materialp_nombre %> </b>?</p>
+    </script>
+
+    <script type="text/template" id="precotizacion-delete-empaque-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el empaque <b><%- materialp_nombre %> </b>?</p>
     </script>
 
     <script type="text/template" id="precotizacion-delete-impresion-confirm-tpl">
@@ -511,6 +596,67 @@
         <td><%- precotizacion3_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-materialp-edit-item-tpl">
+        <td class="text-center" colspan="2">
+            <a class="btn btn-success btn-xs item-producto-materialp-precotizacion-success" data-resource="<%- id %>">
+                <span><i class="fa fa-check"></i></span>
+            </a>
+        </td>
+        <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td>
+            <input type="text" id="precotizacion3_medidas_<%- id %>" name="precotizacion3_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs" maxlength="50" required>
+        </td>
+        <td>
+            <input type="number" id="precotizacion3_cantidad_<%- id %>" name="precotizacion3_cantidad_<%- id %>" placeholder="Cantidad" value="<%- precotizacion3_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+        </td>
+        <td class="text-right">
+            <input id="precotizacion3_valor_unitario_<%- id %>" name="precotizacion3_valor_unitario_<%- id %>" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" required>
+        </td>
+        <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-empaque-item-tpl">
+        <% if( edit ) { %>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-empaque-precotizacion-remove" data-resource="<%- id %>">
+                    <span><i class="fa fa-times"></i></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-empaque-precotizacion-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        <% } %>
+        <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- precotizacion9_medidas %></td>
+        <td><%- precotizacion9_cantidad %></td>
+        <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-empaque-edit-item-tpl">
+        <td class="text-center" colspan="2">
+            <a class="btn btn-success btn-xs item-producto-empaque-precotizacion-success" data-resource="<%- id %>">
+                <span><i class="fa fa-check"></i></span>
+            </a>
+        </td>
+        <td><%- materialp_nombre %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td>
+            <input type="text" id="precotizacion9_medidas_<%- id %>" name="precotizacion9_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion9_medidas %>" class="form-control input-xs" maxlength="50" required>
+        </td>
+        <td>
+            <input type="number" id="precotizacion9_cantidad_<%- id %>" name="precotizacion9_cantidad_<%- id %>" placeholder="Cantidad" value="<%- precotizacion9_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+        </td>
+        <td class="text-right">
+            <input id="precotizacion9_valor_unitario_<%- id %>" name="precotizacion9_valor_unitario_<%- id %>" value="<%- precotizacion9_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
+        </td>
+        <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_total ) %></td>
     </script>
 
     <script type="text/template" id="precotizacion-producto-impresion-item-tpl">
@@ -544,38 +690,6 @@
        </td>
        <td class="text-right"><%- window.Misc.currency( precotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
-    </script>
-
-    <script type="text/template" id="edit-materialproducto-tpl">
-        <div class="row">
-            <label class="col-sm-1">Material</label>
-            <div class="form-group col-sm-4">
-                <small><b><%- materialp_nombre %></b></small>
-            </div>
-
-            <label class="col-sm-1">Insumo</label>
-            <div class="form-group col-sm-6">
-                <small><b><%- producto_nombre %></b></small>
-            </div>
-        </div>
-        <div class="row">
-            <label class="col-sm-1">Cantidad</label>
-            <div class="form-group col-sm-2">
-                <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" value="<%- precotizacion3_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
-                <div class="help-block with-errors"></div>
-            </div>
-
-            <label class="col-sm-1 control-label">Medidas</label>
-            <div class="form-group col-sm-4">
-                <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs" maxlength="50" required>
-                <div class="help-block with-errors"></div>
-            </div>
-
-            <label class="col-sm-1 control-label">Valor</label>
-            <div class="form-group col-sm-3">
-                <input id="precotizacion3_valor_unitario" name="precotizacion3_valor_unitario" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" required data-currency>
-            </div>
-        </div>
     </script>
 
     <script type="text/template" id="qq-template-precotizacion">
@@ -637,22 +751,6 @@
                     <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
                 </div>
             </dialog>
-        </div>
-    </script>
-
-    <script type="text/template" id="precotizacion-producto-acabado-item-tpl">
-        <div class="form-group col-md-12">
-            <label class="checkbox-inline without-padding white-space-normal" for="precotizacion7_acabadop_<%- id %>">
-                <input type="checkbox" id="precotizacion7_acabadop_<%- id %>" name="precotizacion7_acabadop_<%- id %>" value="precotizacion7_acabadop_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- acabadop_nombre %>
-            </label>
-        </div>
-    </script>
-
-    <script type="text/template" id="precotizacion-producto-maquinas-item-tpl">
-        <div class="form-group col-md-12">
-            <label class="checkbox-inline without-padding white-space-normal" for="precotizacion8_maquinap_<%- id %>">
-                <input type="checkbox" id="precotizacion8_maquinap_<%- id %>" name="precotizacion8_maquinap_<%- id %>" value="precotizacion8_maquinap_<%- id %>" <%- parseInt(activo) ? 'checked': ''%>> <%- maquinap_nombre %>
-            </label>
         </div>
     </script>
 @stop

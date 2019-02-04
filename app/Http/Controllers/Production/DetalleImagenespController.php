@@ -19,11 +19,11 @@ class DetalleImagenespController extends Controller
     public function index(Request $request)
     {
         if( $request->ajax() ){
-            if( $request->has('ordenp2') ){
+            if( $request->has('orden2') ){
                 $query = Ordenp8::query();
                 $query->select('koi_ordenproduccion8.*', 'orden2_orden');
                 $query->join('koi_ordenproduccion2', 'orden8_orden2', '=', 'koi_ordenproduccion2.id');
-                $query->where('orden8_orden2', $request->ordenp2);
+                $query->where('orden8_orden2', $request->orden2);
                 $imagenes = $query->get();
 
                 $data = [];
@@ -63,7 +63,7 @@ class DetalleImagenespController extends Controller
     {
         if ($request->ajax()) {
             // Recuperar orden
-            $orden2 = Ordenp2::find($request->ordenp2);
+            $orden2 = Ordenp2::find($request->orden2);
             if(!$orden2 instanceof Ordenp2){
                 abort(404);
             }
@@ -153,7 +153,7 @@ class DetalleImagenespController extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la orden de producción, por favor verifique la información o consulte al administrador.']);
                 }
 
-                $orden2 = Ordenp2::find($request->ordenp2);
+                $orden2 = Ordenp2::find($request->orden2);
                 if(!$orden2 instanceof Ordenp2){
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden de producción, por favor verifique la información o consulte al administrador.']);

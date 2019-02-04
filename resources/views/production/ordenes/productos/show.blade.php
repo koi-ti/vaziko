@@ -385,6 +385,47 @@
 
 				<div class="box box-primary">
 					<div class="box-header with-border">
+						<h3 class="box-title">Empaques de producción</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-orden-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="20%">Empaque</th>
+									<th width="20%">Insumo</th>
+									<th width="10%">Dimensiones</th>
+									<th width="5%">Cantidad</th>
+									<th width="15%">Valor unidad</th>
+									<th width="15%">Valor</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $totalempaques = 0; /*--}}
+								@foreach( App\Models\Production\Ordenp9::getOrdenesp9( $ordenp2->id ) as $empaque )
+									<tr>
+										<td>{{ $empaque->empaque_nombre }}</td>
+										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
+										<td>{{ $empaque->orden9_medidas }}</td>
+										<td class="text-center">{{ $empaque->orden9_cantidad }}</td>
+										<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
+										<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
+									</tr>
+									{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							<tfoot>
+								<tr>
+									<td colspan="4"></td>
+									<th class="text-right">Total</th>
+									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
+								</tr>
+							</tfoot>
+						</table>
+					</div>
+				</div>
+
+				<div class="box box-primary">
+					<div class="box-header with-border">
 						<h3 class="box-title">Áreas de producción</h3>
 					</div>
 					<div class="box-body">
@@ -452,7 +493,10 @@
 							$totalmaterialesp = round( $totalmaterialesp / $ordenp2->orden2_cantidad );
 							$prevtotalmaterialesp = $totalmaterialesp;
 							$totalmaterialesp = $totalmaterialesp/((100-$ordenp2->orden2_margen_materialp)/100);
-							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalareap;
+							$totalempaques = round( $totalempaques / $ordenp2->orden2_cantidad );
+							$prevtotalempaques = $totalempaques;
+							$totalempaques = $totalempaques/((100-$ordenp2->orden2_margen_empaque)/100);
+							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalmaterialesp + $totalempaques + $totalareap;
 						/*--}}
 
 						<div class="box-body">
@@ -486,6 +530,15 @@
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
+										<div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_empaque }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
+									</div>
+								</div>
+								<div class="list-group-item list-group-item-info">
+									<div class="row">
 										<div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
 										<div class="col-xs-10 col-sm-10 text-right"><b><span>{{ number_format($totalareap, 2, ',', '.') }}</span></b></div>
 									</div>
@@ -502,17 +555,17 @@
 									<div class="row">
 										<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
 										<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_volumen }}</div>
-										<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
-										<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_round }}</div>
-										<div class="col-xs-12 col-sm-4 text-right">
+										<div class="col-xs-12 col-sm-8 text-right">
 											<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_vtotal, 2, ',', '.') }}</span>
 										</div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-success">
 									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Total</b></div>
-										<div class="col-xs-10 col-sm-10 text-right">
+										<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
+										<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_round }}</div>
+										<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
+										<div class="col-xs-10 col-sm-4 text-right">
 											<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_total_valor_unitario, 2, ',', '.') }}</span>
 										</div>
 									</div>

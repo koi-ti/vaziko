@@ -1,5 +1,5 @@
 /**
-* Class MaterialesProductopListView  of Backbone Router
+* Class MaterialesProductopOrdenListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,12 +9,13 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MaterialesProductopListView = Backbone.View.extend({
+    app.MaterialesProductopOrdenListView = Backbone.View.extend({
 
         el: '#browse-orden-producto-materiales-list',
         events: {
             'click .item-producto-materialp-orden-remove': 'removeOne',
-            'click .item-producto-materialp-orden-edit': 'editOne'
+            'click .item-producto-materialp-orden-edit': 'editOne',
+            'click .item-producto-materialp-orden-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -25,7 +26,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
@@ -40,17 +40,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            // Trigger on
-            this.on('totalize', this.totalize, this);
-
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            if (this.parameters.dataFilter.orden2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -58,7 +49,7 @@ app || (app = {});
         * @param Object ordenp4Model Model instance
         */
         addOne: function (ordenp4Model) {
-            var view = new app.MaterialesProductopItemView({
+            var view = new app.MaterialesProductopItemOrdenView({
                 model: ordenp4Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -82,7 +73,7 @@ app || (app = {});
         * store
         * @param form element
         */
-        storeOne: function ( data ) {
+        storeOne: function (data, form) {
             var _this = this;
 
             // Set Spinner
@@ -90,31 +81,31 @@ app || (app = {});
 
             // Add model in collection
             var ordenp4Model = new app.Ordenp4Model();
-                ordenp4Model.save(data, {
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            var text = resp.success ? '' : resp.errors;
-                            if( _.isObject( resp.errors ) ) {
-                                text = window.Misc.parseErrors(resp.errors);
-                            }
-
-                            if( !resp.success ) {
-                                alertify.error(text);
-                                return;
-                            }
-
-                            // Add model in collection
-                            _this.collection.add(model);
-                            _this.totalize();
-                            window.Misc.clearForm( $('#form-orden4-producto') );
-                        }
-                    },
-                    error : function(model, error) {
+            ordenp4Model.save(data, {
+                success : function(model, resp) {
+                    if(!_.isUndefined(resp.success)) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
-                        alertify.error(error.statusText)
+                        var text = resp.success ? '' : resp.errors;
+                        if( _.isObject( resp.errors ) ) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
+
+                        if( !resp.success ) {
+                            alertify.error(text);
+                            return;
+                        }
+
+                        // Add model in collection
+                        window.Misc.clearForm(form);
+                        _this.collection.add(model);
+                        _this.totalize();
                     }
-                });
+                },
+                error : function(model, error) {
+                    window.Misc.removeSpinner( _this.parameters.wrapper );
+                    alertify.error(error.statusText)
+                }
+            });
         },
 
         /**
@@ -124,87 +115,84 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource),
+                _this = this;
 
-            if( _.isUndefined(this.parameters.dataFilter.ordenp2) ){
-                if ( model instanceof Backbone.Model ) {
-                    model.view.remove();
-                    this.collection.remove(model);
-                    this.totalize();
-                }
-            }else{
-                var reg = /[A-Za-z]/;
-                if( !reg.test(resource) ){
-                    this.confirmDelete( model );
-                }else{
-                    if ( model instanceof Backbone.Model ) {
-                        model.view.remove();
-                        this.collection.remove(model);
-                        this.totalize();
+            if ( model instanceof Backbone.Model ) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { materialp_nombre: model.get('materialp_nombre')},
+                        template: _.template( ($('#orden-delete-materialp-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar material de producción',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.totalize();
+                        }
                     }
-                }
+                });
+
+                cancelConfirm.render();
             }
         },
 
         /**
-        * modal confirm delete area
+        * Event edit item
         */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { materialp_nombre: model.get('materialp_nombre')},
-                    template: _.template( ($('#orden-delete-materialp-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar material de producción',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.el );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                        _this.totalize();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-
-            cancelConfirm.render();
-        },
-
         editOne: function(e){
             e.preventDefault();
 
-            // Open materialesProductoActionView
-            if ( this.materialesProductoActionView instanceof Backbone.View ){
-                this.materialesProductoActionView.stopListening();
-                this.materialesProductoActionView.undelegateEvents();
-            }
-
-            var resource = this.$(e.currentTarget).attr("data-resource"),
+            var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if( model instanceof Backbone.Model ){
-                this.materialesProductoActionView = new app.MaterialesProductoActionView({
-                    model: model,
-                    collection: this.collection,
-                    parameters: {
-                        call: 'orden'
-                    }
-                });
+            var view = new app.MaterialesProductopItemOrdenView({
+                model: model,
+                parameters: {
+                    action: 'edit',
+                }
+            });
+            model.view.$el.replaceWith( view.render().el );
+            this.ready();
+        },
 
-                this.materialesProductoActionView.render();
+        /**
+        * Event success edit item
+        */
+        successEdit: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var medidas = this.$('#orden4_medidas_' + model.get('id')).val();
+                cantidad = this.$('#orden4_cantidad_' + model.get('id')).val();
+                valor = this.$('#orden4_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+
+            if (!medidas.length || !cantidad.length || !valor) {
+                alertify.error('Ningun campo puede ir vacio.');
+                return;
             }
+
+            var attributes = {};
+            if (model.get('orden4_medidas') != medidas)
+                attributes.orden4_medidas = medidas;
+
+            if (model.get('orden4_cantidad') != cantidad)
+                attributes.orden4_cantidad = cantidad;
+
+            if (model.get('orden4_valor_unitario') != valor)
+                attributes.orden4_valor_unitario = valor;
+
+            model.set(attributes, {silent: true});
+            this.collection.trigger('reset');
+        },
+
+        /**
+        * Event success edit item
+        */
+        ready: function () {
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
         },
 
         /**
@@ -213,11 +201,10 @@ app || (app = {});
         totalize: function(){
             var data = this.collection.totalize();
 
-            // Llamar funcion de calculate del modelo createProducto(orden)
-            this.model.trigger('calculateOrdenp2');
-
-            if( this.$total.length ) {
+            if(this.$total.length) {
                 this.$total.empty().html( window.Misc.currency( data.total ) );
+
+                this.model.trigger('totalize');
             }
         },
 
@@ -225,14 +212,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.$el );
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.$el );
+            window.Misc.removeSpinner( this.parameters.wrapper );
         }
    });
 

@@ -31,7 +31,8 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+            if (this.parameters.dataFilter.cotizacion2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /*

@@ -16,8 +16,7 @@
 | Routes Auth
 |--------------------------------------------------------------------------
 */
-Route::group(['prefix' => 'auth'], function()
-{
+Route::group(['prefix' => 'auth'], function() {
 	Route::post('login', ['as' => 'auth.login', 'uses' => 'Auth\AuthController@postLogin']);
 	Route::get('logout', ['as' => 'auth.logout', 'uses' => 'Auth\AuthController@getLogout']);
 	Route::get('integrate', ['as' => 'auth.integrate', 'uses' => 'Auth\AuthController@integrate']);
@@ -29,16 +28,14 @@ Route::get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin'])
 | Secure Routes Application
 |--------------------------------------------------------------------------
 */
-Route::group(['middleware' => 'auth'], function()
-{
+Route::group(['middleware' => 'auth'], function() {
 	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
 	/*
 	|-------------------------
 	| Admin Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'terceros'], function()
-	{
+	Route::group(['prefix' => 'terceros'], function() {
 		Route::get('dv', ['as' => 'terceros.dv', 'uses' => 'Admin\TerceroController@dv']);
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('search', ['as' => 'terceros.search', 'uses' => 'Admin\TerceroController@search']);
@@ -58,8 +55,7 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('notificaciones', 'Admin\NotificacionController', ['only' => ['index','update']]);
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
-	Route::group(['prefix' => 'roles'], function()
-	{
+	Route::group(['prefix' => 'roles'], function() {
 		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'update', 'destroy']]);
 	});
 
@@ -72,70 +68,65 @@ Route::group(['middleware' => 'auth'], function()
 	| Accounting Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'plancuentas'], function()
-	{
+	Route::group(['prefix' => 'plancuentas'], function() {
 		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
+
     Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
     Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
 
-	Route::group(['prefix' => 'plancuentasnif'], function()
-	{
+	Route::group(['prefix' => 'plancuentasnif'], function() {
 		Route::get('nivel', ['as' => 'plancuentasnif.nivel', 'uses' => 'Accounting\PlanCuentasNifController@nivel']);
 		Route::get('search', ['as' => 'plancuentasnif.search', 'uses' => 'Accounting\PlanCuentasNifController@search']);
 	});
+
     Route::resource('plancuentasnif', 'Accounting\PlanCuentasNifController', ['except' => ['destroy']]);
 
-	Route::group(['prefix' => 'documentos'], function()
-	{
+	Route::group(['prefix' => 'documentos'], function() {
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
 	});
+
 	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
 
-	Route::group(['prefix' => 'asientos'], function()
-	{
+	Route::group(['prefix' => 'asientos'], function() {
 		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
 		Route::get('exportar/{asientos}', ['as' => 'asientos.exportar', 'uses' => 'Accounting\AsientoController@exportar']);
 		Route::post('import',['as' =>'asientos.import','uses'=>'Accounting\AsientoController@import'] );
 
-		Route::group(['prefix' => 'detalle'], function()
-		{
+		Route::group(['prefix' => 'detalle'], function() {
 			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
 			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
 			Route::get('movimientos', ['as' => 'asientos.detalle.movimientos', 'uses' => 'Accounting\DetalleAsientoController@movimientos']);
 		});
 
 	});
+
 	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy']]);
 
-	Route::group(['prefix' => 'asientosnif'], function()
-	{
+	Route::group(['prefix' => 'asientosnif'], function() {
 		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
 		Route::get('exportar/{asientosnif}', ['as' => 'asientosnif.exportar', 'uses' => 'Accounting\AsientoNifController@exportar']);
 
-		Route::group(['prefix' => 'detalle'], function()
-		{
+		Route::group(['prefix' => 'detalle'], function() {
 			Route::post('evaluate', ['as' => 'asientosnif.detalle.evaluate', 'uses' => 'Accounting\AsientoNifDetalleController@evaluate']);
 			Route::post('validate', ['as' => 'asientosnif.detalle.validate', 'uses' => 'Accounting\AsientoNifDetalleController@validation']);
 			Route::get('movimientos', ['as' => 'asientosnif.detalle.movimientos', 'uses' => 'Accounting\AsientoNifDetalleController@movimientos']);
 		});
 	});
+
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
 	Route::resource('reglasasientos', 'Accounting\ReglaAsientoController', ['only' => ['index', 'store']]);
 	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
    	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);
-
 
    	/*
    	|-------------------
    	| Receivable
    	|-------------------
    	*/
-	Route::group(['prefix' => 'facturas'], function()
-	{
+	Route::group(['prefix' => 'facturas'], function() {
 		Route::get('search', ['as' => 'facturas.search', 'uses' => 'Receivable\Factura1Controller@search']);
 		Route::get('exportar/{facturas}', ['as' => 'facturas.exportar', 'uses' => 'Receivable\Factura1Controller@exportar']);
 		Route::get('anular/{facturas}', ['as' => 'facturas.anular', 'uses' => 'Receivable\Factura1Controller@anular']);
@@ -144,17 +135,19 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);
 		Route::get('impuestos', ['as' => 'facturas.impuestos', 'uses' => 'Receivable\Factura1Controller@impuestos']);
 	});
+
 	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show','create','store']]);
+
    	/*
 	|-------------------------
 	| Supplier invoice Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'facturap'], function()
-	{
+	Route::group(['prefix' => 'facturap'], function() {
 		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Treasury\FacturapController@search']);
 		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
+
 	Route::resource('facturap', 'Treasury\FacturapController', ['only' => ['index','show']]);
 
 	/*
@@ -162,8 +155,48 @@ Route::group(['middleware' => 'auth'], function()
 	| Production Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'ordenes'], function()
-	{
+	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
+
+	Route::group(['prefix' => 'precotizaciones'], function(){
+		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
+		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
+		Route::get('terminar/{precotizaciones}', ['as' => 'precotizaciones.terminar', 'uses' => 'Production\PreCotizacion1Controller@terminar']);
+		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
+		Route::get('clonar/{precotizaciones}', ['as' => 'precotizaciones.clonar', 'uses' => 'Production\PreCotizacion1Controller@clonar']);
+
+		Route::group(['prefix' => 'productos'], function(){
+			Route::get('clonar/{productos}', ['as' => 'precotizaciones.productos.clonar', 'uses' => 'Production\PreCotizacion2Controller@clonar']);
+			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store']]);
+			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store']]);
+			Route::resource('empaques', 'Production\PreCotizacion9Controller', ['only' => ['index', 'store']]);
+			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store']]);
+		});
+		Route::resource('productos', 'Production\PreCotizacion2Controller');
+	});
+	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'cotizaciones'], function(){
+		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
+		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
+		Route::get('cerrar/{cotizaciones}', ['as' => 'cotizaciones.cerrar', 'uses' => 'Production\Cotizacion1Controller@cerrar']);
+		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
+		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
+		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
+
+		Route::group(['prefix' => 'productos'], function(){
+			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
+			Route::resource('imagenes', 'Production\Cotizacion8Controller', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\Cotizacion7Controller', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index', 'store']]);
+			Route::resource('empaques', 'Production\Cotizacion9Controller', ['only' => ['index', 'store']]);
+			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store']]);
+		});
+		Route::resource('productos', 'Production\Cotizacion2Controller');
+	});
+	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
+
+	Route::group(['prefix' => 'ordenes'], function() {
 		Route::get('search', ['as' => 'ordenes.search', 'uses' => 'Production\OrdenpController@search']);
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
@@ -174,31 +207,26 @@ Route::group(['middleware' => 'auth'], function()
 		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
 		Route::resource('imagenes', 'Production\OrdenpImagenesController', ['only' => ['index', 'store', 'destroy']]);
 
-		Route::group(['prefix' => 'productos'], function()
-		{
+		Route::group(['prefix' => 'productos'], function() {
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
 			Route::get('search', ['as' => 'ordenes.productos.search', 'uses' => 'Production\DetalleOrdenpController@search']);
-			Route::resource('maquinas', 'Production\DetalleMaquinasController', ['only' => ['index']]);
-			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('acabados', 'Production\DetalleAcabadosController', ['only' => ['index']]);
-			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('impresiones', 'Production\DetalleImpresionesController', ['only' => ['index']]);
 			Route::resource('imagenes', 'Production\DetalleImagenespController', ['only' => ['index', 'store', 'destroy']]);
+			Route::resource('impresiones', 'Production\DetalleImpresionesController', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index', 'store']]);
+			Route::resource('empaques', 'Production\DetalleEmpaquesController', ['only' => ['index', 'store']]);
+			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store']]);
 		});
+
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 
-		Route::group(['prefix' => 'despachos'], function()
-		{
+		Route::group(['prefix' => 'despachos'], function() {
 			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);
 			Route::get('pendientes', ['as' => 'ordenes.despachos.pendientes', 'uses' => 'Production\DespachopController@pendientes']);
 		});
+
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
-	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
-
-	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
-	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'tiemposp'], function() {
 		Route::resource('detalle', 'Production\DetalleTiempospController', ['only' => ['index', 'update']]);
@@ -213,50 +241,8 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('tipomaterialesp', 'Production\TipoMaterialespController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
 	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'precotizaciones'], function(){
-		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
-		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
-		Route::get('terminar/{precotizaciones}', ['as' => 'precotizaciones.terminar', 'uses' => 'Production\PreCotizacion1Controller@terminar']);
-		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
-		Route::get('clonar/{precotizaciones}', ['as' => 'precotizaciones.clonar', 'uses' => 'Production\PreCotizacion1Controller@clonar']);
-
-		Route::group(['prefix' => 'productos'], function(){
-			Route::get('clonar/{productos}', ['as' => 'precotizaciones.productos.clonar', 'uses' => 'Production\PreCotizacion2Controller@clonar']);
-			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('acabados', 'Production\PreCotizacion7Controller', ['only' => ['index']]);
-			Route::resource('maquinas', 'Production\PreCotizacion8Controller', ['only' => ['index']]);
-		});
-		Route::resource('productos', 'Production\PreCotizacion2Controller');
-	});
-	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'cotizaciones'], function(){
-		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
-		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
-		Route::get('cerrar/{cotizaciones}', ['as' => 'cotizaciones.cerrar', 'uses' => 'Production\Cotizacion1Controller@cerrar']);
-		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
-		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
-		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
-
-		Route::get('productos/formula', ['as' => 'cotizaciones.productos.formula', 'uses' => 'Production\Cotizacion2Controller@formula']);
-
-		Route::group(['prefix' => 'productos'], function(){
-			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
-			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
-			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
-			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('impresiones', 'Production\Cotizacion7Controller', ['only' => ['index']]);
-			Route::resource('imagenes', 'Production\Cotizacion8Controller', ['only' => ['index', 'store', 'destroy']]);
-		});
-		Route::resource('productos', 'Production\Cotizacion2Controller');
-	});
-	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
-
+	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
+	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'productosp'], function(){
 		Route::get('search', ['as' => 'productosp.search', 'uses' => 'Production\ProductopController@search']);
@@ -267,6 +253,7 @@ Route::group(['middleware' => 'auth'], function()
 		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
 	});
+
 	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*
@@ -278,20 +265,20 @@ Route::group(['middleware' => 'auth'], function()
 	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
 	Route::resource('unidades', 'Inventory\UnidadesMedidaController', ['except' => ['destroy']]);
 
-	Route::group(['prefix' => 'traslados'], function()
-	{
+	Route::group(['prefix' => 'traslados'], function() {
 		Route::resource('detalle', 'Inventory\DetalleTrasladoController', ['only' => ['index', 'store']]);
 	});
+
    	Route::resource('traslados', 'Inventory\TrasladosController', ['only'=>['index', 'create', 'store', 'show']]);
 
-	Route::group(['prefix' => 'productos'], function()
-	{
+	Route::group(['prefix' => 'productos'], function() {
 		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
 		Route::post('evaluate',['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate'] );
 		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
 		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
 		Route::resource('history', 'Inventory\ProductoHistoryController', ['only' => ['index']]);
 	});
+
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 
    	/*
@@ -299,13 +286,13 @@ Route::group(['middleware' => 'auth'], function()
 	| Reports Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'rtiemposp'], function(){
+	Route::group(['prefix' => 'rtiemposp'], function() {
 		Route::get('charts', ['as' => 'rtiemposp.charts', 'uses' => 'Report\TiempopController@charts']);
 		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
 	});
+
 	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rresumentiemposp', 'Report\ResumenTiempopController', ['only' => ['index']]);
-
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
    	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
 	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);

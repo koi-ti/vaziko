@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use Auth, DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
@@ -20,7 +20,6 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
-
             if( $request->has('datatables') ) {
                 $query = Ordenp2::getDetails();
 
@@ -94,7 +93,10 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
+
             $data['materialesp'] = json_decode($data['materialesp']);
+            $data['empaques'] = json_decode($data['empaques']);
+            $data['areasp'] = json_decode($data['areasp']);
 
             $orden2 = new Ordenp2;
             if ($orden2->isValid($data)) {
@@ -102,14 +104,14 @@ class DetalleOrdenpController extends Controller
                 try {
                     // Validar producto
                     $producto = Productop::find($request->orden2_productop);
-                    if(!$producto instanceof Productop) {
+                    if (!$producto instanceof Productop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar orden
                     $orden = Ordenp::find($request->orden2_orden);
-                    if(!$orden instanceof Ordenp) {
+                    if (!$orden instanceof Ordenp) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden, por favor verifique la información o consulte al administrador.']);
                     }
@@ -127,9 +129,8 @@ class DetalleOrdenpController extends Controller
 
                     // Maquinas
                     $maquinas = Ordenp3::getOrdenesp3($orden2->orden2_productop, $orden2->id);
-                    foreach ($maquinas as $maquina)
-                    {
-                        if($request->has("orden3_maquinap_$maquina->id")) {
+                    foreach ($maquinas as $maquina) {
+                        if ($request->has("orden3_maquinap_$maquina->id")) {
                             $orden3 = new Ordenp3;
                             $orden3->orden3_orden2 = $orden2->id;
                             $orden3->orden3_maquinap = $maquina->id;
@@ -137,7 +138,42 @@ class DetalleOrdenpController extends Controller
                         }
                     }
 
+                    // Acabados
+                    $acabados = Ordenp5::getOrdenesp5($orden2->orden2_productop, $orden2->id);
+                    foreach ($acabados as $acabado) {
+                        if ($request->has("orden5_acabadop_$acabado->id")) {
+                            $orden5 = new Ordenp5;
+                            $orden5->orden5_orden2 = $orden2->id;
+                            $orden5->orden5_acabadop = $acabado->id;
+                            $orden5->save();
+                        }
+                    }
+
+                    // Recuperar imagenes y almacenar en storage/app/cotizacines
+                    $files = [];
+                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    foreach ($images as $key => $image) {
+                        // Recovery name
+                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+
+                        // Insertar imagen
+                        $imagen = new Ordenp8;
+                        $imagen->orden8_archivo = $name;
+                        $imagen->orden8_orden2 = $orden2->id;
+                        $imagen->orden8_fh_elaboro = date('Y-m-d H:i:s');
+                        $imagen->orden8_usuario_elaboro = Auth::user()->id;
+                        $imagen->save();
+
+                        // Crear objecto para mantener la imagen para guardar cuando se complete la transaccion, de lo contrario guardara la imagen asi no se complete la transaccion
+                        $object = new \stdClass();
+                        $object->route = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$name";
+                        $object->file = file_get_contents($image->getRealPath());
+
+                        $files[] = $object;
+                    }
+
                     // Materialesp
+                    $totalmaterialesp = $totalempaques = $totalareasp = 0;
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         $materialp = Materialp::find($material->orden4_materialp);
@@ -164,51 +200,81 @@ class DetalleOrdenpController extends Controller
                         $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                         $orden4->orden4_usuario_elaboro = Auth::user()->id;
                         $orden4->save();
+
+                        $totalmaterialesp += $orden4->orden4_valor_total;
                     }
 
-                    // Acabados
-                    $acabados = Ordenp5::getOrdenesp5($orden2->orden2_productop, $orden2->id);
-                    foreach ($acabados as $acabado)
-                    {
-                        if($request->has("orden5_acabadop_$acabado->id")) {
-                            $orden5 = new Ordenp5;
-                            $orden5->orden5_orden2 = $orden2->id;
-                            $orden5->orden5_acabadop = $acabado->id;
-                            $orden5->save();
+                    // Empaques
+                    $empaques = isset($data['empaques']) ? $data['empaques'] : null;
+                    foreach ($empaques as $empaque) {
+                        $materialp = Materialp::find($empaque->orden9_materialp);
+                        if (!$materialp instanceof Materialp) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
                         }
+
+                        $insumo = Producto::find($empaque->orden9_producto);
+                        if (!$insumo instanceof Producto) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        // Guardar individual porque sale error por ser objeto decodificado
+                        $orden9 = new Ordenp9;
+                        $orden9->orden9_orden2 = $orden2->id;
+                        $orden9->orden9_materialp = $materialp->id;
+                        $orden9->orden9_producto = $insumo->id;
+                        $orden9->orden9_cantidad = $empaque->orden9_cantidad;
+                        $orden9->orden9_medidas = $empaque->orden9_medidas;
+                        $orden9->orden9_valor_unitario = $empaque->orden9_valor_unitario;
+                        $orden9->orden9_valor_total = $empaque->orden9_valor_total;
+                        $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+                        $orden9->orden9_usuario_elaboro = Auth::user()->id;
+                        $orden9->save();
+
+                        $totalempaques += $orden9->orden9_valor_total;
                     }
 
                     // Areap
-                    $areasp = isset($data['ordenp6']) ? json_decode( $data['ordenp6'] ) : null;
-                    foreach ($areasp as $areap)
-                    {
-                        $newtime = "$areap->orden6_horas:$areap->orden6_minutos";
-
+                    $areasp = isset($data['areasp']) ? $data['areasp'] : null;
+                    foreach ($areasp as $areap) {
                         $orden6 = new Ordenp6;
                         $orden6->orden6_valor = $areap->orden6_valor;
-                        (!empty($areap->orden6_areap)) ? $orden6->orden6_areap = $areap->orden6_areap : $orden6->orden6_nombre = $areap->orden6_nombre;
+                        if (!empty($areap->orden6_areap)) {
+                            $orden6->orden6_areap = $areap->orden6_areap;
+                        } else {
+                            $orden6->orden6_nombre = $areap->orden6_nombre;
+                        }
+                        $orden6->orden6_tiempo = "{$areap->orden6_horas}:{$areap->orden6_minutos}";
                         $orden6->orden6_orden2 = $orden2->id;
-                        $orden6->orden6_tiempo = $newtime;
                         $orden6->save();
+
+                        $tiempo = intval($areap->orden6_horas) + (intval($areap->orden6_minutos) / 60);
+                        $totalareasp += $orden6->orden6_valor * $tiempo;
                     }
 
+                    // Operacion para calcular el total del producto
+                    $precio = $orden2->orden2_precio_venta;
+                    $transporte = round($orden2->orden2_transporte/$orden2->orden2_cantidad);
+                    $viaticos = round($orden2->orden2_viaticos/$orden2->orden2_cantidad);
+                    $materiales = ($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
+                    $empaques = ($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
+                    $areas = round($totalareasp/$orden2->orden2_cantidad);
 
+                    $subtotal = $precio + $transporte + $viaticos + $materiales + $empaques + $areas;
+                    $comision = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
+                    $total = round(($subtotal+$comision), $orden2->orden2_round);
 
-                    // Recuperar imagenes y almacenar en storage/app/cotizacines
-                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
-                    foreach ($images as $image) {
-                        // Recuperar nombre de archivo
-                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+                    // Actualizar valores
+                    $orden2->orden2_vtotal = $comision;
+                    $orden2->orden2_total_valor_unitario = $total;
+                    $orden2->save();
 
-                        Storage::put("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$name", file_get_contents($image->getRealPath()));
-
-                        // Insertar imagen
-                        $imagen = new Ordenp8;
-                        $imagen->orden8_archivo = $name;
-                        $imagen->orden8_orden2 = $orden2->id;
-                        $imagen->orden8_fh_elaboro = date('Y-m-d H:i:s');
-                        $imagen->orden8_usuario_elaboro = Auth::user()->id;
-                        $imagen->save();
+                    // Guardar imagenes si todo sale bien
+                    if (count($files)) {
+                        foreach ($files as $file) {
+                            Storage::put($file->route, $file->file);
+                        }
                     }
 
                     // Commit Transaction
@@ -248,7 +314,6 @@ class DetalleOrdenpController extends Controller
         if(!$orden instanceof Ordenp) {
             abort(404);
         }
-
 
         // Recuperar producto
         $producto = Productop::getProduct($ordenp2->orden2_productop);
@@ -310,8 +375,8 @@ class DetalleOrdenpController extends Controller
 
             // Recuperar orden
             $orden = Ordenp::findOrFail($orden2->orden2_orden);
-            if($orden->orden_abierta)
-            {
+            if($orden->orden_abierta) {
+
                 if ($orden2->isValid($data)) {
                     DB::beginTransaction();
                     try {
@@ -323,7 +388,7 @@ class DetalleOrdenpController extends Controller
                         $query->where('despachop1_anulado', false);
                         $despacho = $query->first();
 
-                        if($request->orden2_cantidad < $despacho->despachadas) {
+                        if ($request->orden2_cantidad < $despacho->despachadas) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => "No es posible actualizar unidades, cantidad mínima despachos ($despacho->despachadas), por favor verifique la información del asiento o consulte al administrador."]);
                         }
@@ -337,116 +402,164 @@ class DetalleOrdenpController extends Controller
 
                         // Maquinas
                         $maquinas = Ordenp3::getOrdenesp3($orden2->orden2_productop, $orden2->id);
-                        foreach ($maquinas as $maquina)
-                        {
+                        foreach ($maquinas as $maquina) {
                             $orden3 = Ordenp3::where('orden3_orden2', $orden2->id)->where('orden3_maquinap', $maquina->id)->first();
-                            if($request->has("orden3_maquinap_$maquina->id")) {
-                                if(!$orden3 instanceof Ordenp3) {
+                            if ($request->has("orden3_maquinap_$maquina->id")) {
+                                if (!$orden3 instanceof Ordenp3) {
                                     $orden3 = new Ordenp3;
                                     $orden3->orden3_orden2 = $orden2->id;
                                     $orden3->orden3_maquinap = $maquina->id;
                                     $orden3->save();
                                 }
-                            }else{
-                                if($orden3 instanceof Ordenp3) {
+                            } else {
+                                if ($orden3 instanceof Ordenp3) {
                                     $orden3->delete();
                                 }
                             }
                         }
 
-                        // Materiales
-                        $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
-                        foreach ($materiales as $material) {
-                            // Validar que el id sea entero(los temporales tienen letras)
-
-                            if( isset( $material['success']) ){
-                                $materialp = Materialp::find($material['orden4_materialp']);
-                                if(!$materialp instanceof Materialp){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
-                                }
-
-                                $insumo = Producto::find($material['orden4_producto']);
-                                if(!$insumo instanceof Producto){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
-                                }
-
-                                $neworden4 = new Ordenp4;
-                                $neworden4->fill($material);
-                                $neworden4->orden4_orden2 = $orden2->id;
-                                $neworden4->orden4_materialp = $materialp->id;
-                                $neworden4->orden4_producto = $insumo->id;
-                                $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
-                                $neworden4->orden4_usuario_elaboro = Auth::user()->id;
-                                $neworden4->save();
-                            }
-
-                            if( isset($material['change']) ){
-                                // Recuperar material y actuzalizr
-                                $orden4 = Ordenp4::findOrFail($material['id']);
-                                if(!$orden4 instanceof Ordenp4){
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material, por favor verifique la información o consulte al administrador.']);
-                                }
-                                $orden4->fill($material);
-                                $orden4->save();
-                            }
-                        }
-
                         // Acabados
                         $acabados = Ordenp5::getOrdenesp5($orden2->orden2_productop, $orden2->id);
-                        foreach ($acabados as $acabado)
-                        {
+                        foreach ($acabados as $acabado) {
                             $orden5 = Ordenp5::where('orden5_orden2', $orden2->id)->where('orden5_acabadop', $acabado->id)->first();
-                            if($request->has("orden5_acabadop_$acabado->id")) {
-                                if(!$orden5 instanceof Ordenp5) {
+                            if ($request->has("orden5_acabadop_$acabado->id")) {
+                                if (!$orden5 instanceof Ordenp5) {
                                     $orden5 = new Ordenp5;
                                     $orden5->orden5_orden2 = $orden2->id;
                                     $orden5->orden5_acabadop = $acabado->id;
                                     $orden5->save();
                                 }
-                            }else{
-                                if($orden5 instanceof Ordenp5) {
+                            } else {
+                                if ($orden5 instanceof Ordenp5) {
                                     $orden5->delete();
                                 }
                             }
                         }
 
-                        // Areas
-                        $areasp = isset($data['ordenp6']) ? $data['ordenp6'] : null;
-                        foreach($areasp as $areap) {
-                            if( isset($areap['success']) ){
-                                $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+                        // Materiales
+                        $keys = [];
+                        $totalmaterialesp = $totalempaques = $totalareasp = 0;
+                        $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
+                        foreach ($materiales as $material) {
+                            $orden4 = Ordenp4::find( is_numeric($material['id']) ? $material['id'] : null);
+                            if (!$orden4 instanceof Ordenp4) {
+                                $materialp = Materialp::find($material['orden4_materialp']);
+                                if (!$materialp instanceof Materialp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
+                                }
 
+                                $insumo = Producto::find($material['orden4_producto']);
+                                if (!$insumo instanceof Producto) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $orden4 = new Ordenp4;
+                                $orden4->fill($material);
+                                $orden4->orden4_producto = $insumo->id;
+                                $orden4->orden4_orden2 = $orden2->id;
+                                $orden4->orden4_materialp = $materialp->id;
+                                $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
+                                $orden4->orden4_usuario_elaboro = Auth::user()->id;
+                                $orden4->save();
+                            } else {
+                                $orden4->fill($material);
+                                $orden4->save();
+                            }
+
+                            // asociar id a un array para validar
+                            $keys[] = $orden4->id;
+                            $totalmaterialesp += $orden4->orden4_valor_total;
+                        }
+
+                        // Remover registros que no existan
+                        $deletemateriales = Ordenp4::whereNotIn('id', $keys)->where('orden4_orden2', $orden2->id)->delete();
+
+                        // Empaques
+                        $keys = [];
+                        $empaques = isset($data['empaques']) ? $data['empaques'] : [];
+                        foreach ($empaques as $empaque) {
+                            $orden9 = Ordenp9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
+                            if (!$orden9 instanceof Ordenp9) {
+                                $materialp = Materialp::find($empaque['orden9_materialp']);
+                                if (!$materialp instanceof Materialp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $insumo = Producto::find($empaque['orden9_producto']);
+                                if (!$insumo instanceof Producto) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $orden9 = new Ordenp9;
+                                $orden9->fill($empaque);
+                                $orden9->orden9_producto = $insumo->id;
+                                $orden9->orden9_orden2 = $orden2->id;
+                                $orden9->orden9_materialp = $materialp->id;
+                                $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+                                $orden9->orden9_usuario_elaboro = Auth::user()->id;
+                                $orden9->save();
+                            } else {
+                                $orden9->fill($empaque);
+                                $orden9->save();
+                            }
+
+                            // asociar id a un array para validar
+                            $keys[] = $orden9->id;
+                            $totalempaques += $orden9->orden9_valor_total;
+                        }
+
+                        // Remover registros que no existan
+                        $deleteempaques = Ordenp9::whereNotIn('id', $keys)->where('orden9_orden2', $orden2->id)->delete();
+
+                        // Areasp
+                        $keys = [];
+                        $areasp = isset($data['areasp']) ? $data['areasp'] : [];
+                        foreach ($areasp as $areap) {
+                            $orden6 = Ordenp6::find( is_numeric($areap['id']) ? $areap['id'] : null);
+                            if (!$orden6 instanceof Ordenp6) {
                                 $orden6 = new Ordenp6;
                                 $orden6->fill($areap);
-                                ( !empty($areap['orden6_areap']) ) ? $orden6->orden6_areap = $areap['orden6_areap'] : $orden6->orden6_nombre = $areap['orden6_nombre'];
+                                if (!empty($areap['orden6_areap'])) {
+                                    $orden6->orden6_areap = $areap['orden6_areap'];
+                                } else {
+                                    $orden6->orden6_nombre = $areap['orden6_nombre'];
+                                }
+                                $orden6->orden6_tiempo = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
                                 $orden6->orden6_orden2 = $orden2->id;
-                                $orden6->orden6_tiempo = $newtime;
                                 $orden6->save();
-                            }else{
-                                if( !empty($areap['orden6_areap']) ){
-                                    $area = Areap::find( $areap['orden6_areap'] );
-                                    if(!$area instanceof Areap){
-                                        DB::rollback();
-                                        return response()->json(['success' => false, 'errors' => 'No es posible actualizar las áreas de producción, por favor consulte al administrador.']);
-                                    }
-
-                                    $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_areap', $area->id)->first();
-                                }else{
-                                    $orden6 = Ordenp6::where('orden6_orden2', $orden2->id)->where('orden6_nombre', $areap['orden6_nombre'])->first();
-                                }
-                                $newtime = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
-                                if( $orden6 instanceof Ordenp6 ) {
-                                    if($newtime != $areap['orden6_tiempo']){
-                                        $orden6->fill($areap);
-                                        $orden6->orden6_tiempo = $newtime;
-                                        $orden6->save();
-                                    }
-                                }
+                            } else {
+                                $orden6->orden6_tiempo = "{$areap['orden6_horas']}:{$areap['orden6_minutos']}";
+                                $orden6->save();
                             }
+
+                            $keys[] = $orden6->id;
+                            $tiempo = intval($areap['orden6_horas']) + (intval($areap['orden6_minutos']) / 60);
+                            $totalareasp += $orden6->orden6_valor * $tiempo;
                         }
+
+                        // Remover registros que no existan
+                        $deleteareasp = Ordenp6::whereNotIn('id', $keys)->where('orden6_orden2', $orden2->id)->delete();
+
+                        // Operacion para recalcular el total del producto
+                        $precio = $orden2->orden2_precio_venta;
+                        $transporte = round($orden2->orden2_transporte/$orden2->orden2_cantidad);
+                        $viaticos = round($orden2->orden2_viaticos/$orden2->orden2_cantidad);
+                        $materiales = ($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
+                        $empaques = ($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
+                        $areas = round($totalareasp/$orden2->orden2_cantidad);
+
+                        $subtotal = $precio + $transporte + $viaticos + $materiales + $empaques + $areas;
+                        $volumen = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
+                        $total = round(($subtotal+$volumen), $orden2->orden2_round);
+
+                        // Actualizar valores
+                        $orden2->orden2_vtotal = $volumen;
+                        $orden2->orden2_total_valor_unitario = $total;
+                        $orden2->save();
 
                         // Commit Transaction
                         DB::commit();
@@ -506,6 +619,9 @@ class DetalleOrdenpController extends Controller
                 // Imagenes
                 DB::table('koi_ordenproduccion8')->where('orden8_orden2', $orden2->id)->delete();
 
+                // Empaques
+                DB::table('koi_ordenproduccion9')->where('orden9_orden2', $orden2->id)->delete();
+
                 // Eliminar item orden2
                 $orden2->delete();
 
@@ -522,28 +638,6 @@ class DetalleOrdenpController extends Controller
             }
         }
         abort(403);
-    }
-
-    /**
-     * Eval formula.
-     */
-    public function formula(Request $request)
-    {
-        // sanitize input and replace
-        $equation = str_replace("t", "+", $request->equation);
-        $equation = str_replace("n", "(", $equation);
-        $equation = str_replace("m", ")", $equation);
-        $equation = preg_replace("/[^0-9+\-.*\/()%]/", '', $equation);
-
-        if( trim($equation) != '' && $request->has('equation') )
-        {
-            $valor = Ordenp2::calcString($equation);
-            if(!is_numeric($valor)){
-                return response()->json(['precio_venta' => 0]);
-            }
-            return response()->json(['precio_venta' => $valor]);
-        }
-        return response()->json(['precio_venta' => 0]);
     }
 
     /**
@@ -573,30 +667,12 @@ class DetalleOrdenpController extends Controller
                      $neworden3->save();
                 }
 
-                // Materiales
-                $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
-                foreach ($materiales as $orden4) {
-                     $neworden4 = $orden4->replicate();
-                     $neworden4->orden4_orden2 = $neworden2->id;
-                     $neworden4->orden4_usuario_elaboro = Auth::user()->id;
-                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
-                     $neworden4->save();
-                }
-
                 // Acabados
                 $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
                 foreach ($acabados as $orden5) {
                      $neworden5 = $orden5->replicate();
                      $neworden5->orden5_orden2 = $neworden2->id;
                      $neworden5->save();
-                }
-
-                // Areasp
-                $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
-                foreach ($areasp as $orden6) {
-                     $neworden6 = $orden6->replicate();
-                     $neworden6->orden6_orden2 = $neworden2->id;
-                     $neworden6->save();
                 }
 
                 // Impŕesiones
@@ -608,6 +684,7 @@ class DetalleOrdenpController extends Controller
                 }
 
                 // Imagenes
+                $files = [];
                 $images = Ordenp8::where('orden8_orden2', $orden2->id)->get();
                 foreach ($images as $orden8) {
                      $neworden8 = $orden8->replicate();
@@ -616,15 +693,48 @@ class DetalleOrdenpController extends Controller
                      $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                      $neworden8->save();
 
-                     // Recuperar imagen y copiar
                      if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                         $object = new \stdClass();
+                         $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
+                         $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
 
-                         $oldfile = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
-                         $newfile = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
-
-                         // Copy file storege laravel
-                         Storage::copy($oldfile, $newfile);
+                         $files[] = $object;
                      }
+                }
+
+                // Materiales
+                $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
+                foreach ($materiales as $orden4) {
+                     $neworden4 = $orden4->replicate();
+                     $neworden4->orden4_orden2 = $neworden2->id;
+                     $neworden4->orden4_usuario_elaboro = Auth::user()->id;
+                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
+                     $neworden4->save();
+                }
+
+                // Empaques
+                $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
+                foreach ($empaques as $orden9) {
+                     $neworden9 = $orden9->replicate();
+                     $neworden9->orden9_orden2 = $neworden2->id;
+                     $neworden9->orden9_usuario_elaboro = Auth::user()->id;
+                     $neworden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+                     $neworden9->save();
+                }
+
+                // Areasp
+                $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
+                foreach ($areasp as $orden6) {
+                     $neworden6 = $orden6->replicate();
+                     $neworden6->orden6_orden2 = $neworden2->id;
+                     $neworden6->save();
+                }
+
+                // Guardar imagenes si todo sale bien
+                if (count($files)) {
+                    foreach ($files as $file) {
+                        Storage::copy($file->copy, $file->paste);
+                    }
                 }
 
                 // Commit Transaction

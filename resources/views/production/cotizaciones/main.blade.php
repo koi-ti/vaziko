@@ -161,7 +161,7 @@
                             <a href="{{ route('cotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
                         </div>
                         <div class="col-md-2 col-sm-6 col-xs-6">
-                            <button type="button" class="btn btn-primary btn-sm btn-block submit-cotizacion">{{ trans('app.save') }}</button>
+                            <button type="button" class="btn btn-danger btn-sm btn-block submit-cotizacion">{{ trans('app.save') }}</button>
                         </div>
                     </div>
                 </div>
@@ -203,7 +203,7 @@
                                         </div>
 
                                         <div class="form-group col-xs-12 col-sm-2 col-md-1">
-                                            <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <button type="submit" class="btn btn-danger btn-sm btn-block">
                                                 <i class="fa fa-plus"></i>
                                             </button>
                                         </div>

@@ -16,17 +16,14 @@ app || (app = {});
         events: {
             'click .submit-precotizacion2': 'submitForm',
             'submit #form-precotizacion-producto': 'onStore',
-            'click .submit-precotizacion3': 'submitPreCotizacion3',
-            'submit #form-precotizacion3-producto': 'onStorePreCotizacion3',
-            'change #precotizacion3_materialp': 'changeMaterialp',
-            'change #precotizacion3_producto': 'changeInsumo',
-            'click .submit-precotizacion5': 'submitPreCotizacion5',
-            'submit #form-precotizacion5-producto': 'onStorePreCotizacion5',
+            'ifChanged .check-type': 'checkType',
+            'submit #form-impresion-producto': 'onStoreImpresion',
+            'submit #form-materialp-producto': 'onStoreMaterialp',
+            'submit #form-empaque-producto': 'onStoreEmpaquep',
+            'submit #form-areap-producto': 'onStoreAreap',
+            'change .change-materialp': 'changeMaterialp',
+            'change .change-insumo': 'changeInsumo',
             'change #precotizacion6_areap': 'changeAreap',
-            'click .submit-precotizacion6': 'submitPreCotizacion6',
-            'submit #form-precotizacion6-producto': 'onStorePreCotizacion6',
-            'ifChanged #precotizacion2_tiro': 'changedTiro',
-            'ifChanged #precotizacion2_retiro': 'changedRetiro',
         },
         parameters: {
             data: {
@@ -38,24 +35,23 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts) {
-            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
-
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
-            // Attributes
-            this.$wraperForm = this.$('#render-form-precotizacion-producto');
-            this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
+            // reference collections
             this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
+            this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
+            this.empaquesProductopPreCotizacionList = new app.EmpaquesProductopPreCotizacionList();
             this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
-            this.acabadosProductopPreCotizacionList = new app.AcabadosProductopPreCotizacionList();
-            this.maquinasProductopPreCotizacionList = new app.MaquinasProductopPreCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
+
+            // bind fineuploader
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
         },
 
         /*
@@ -63,21 +59,18 @@ app || (app = {});
         */
         render: function() {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+                attributes.edit = this.model.get('id') ? 1 : 0;
+            this.$el.html( this.template(attributes) );
 
+            // reference forms
             this.$form = this.$('#form-precotizacion-producto');
-            this.$formmaterialesp = this.$('#form-precotizacion3-producto');
-            this.$formimpresiones = this.$('#form-precotizacion5-producto');
-            this.$formareasp = this.$('#form-precotizacion6-producto');
+            this.$formimpresion = this.$('#form-impresion-producto');
+            this.$formmaterialp = this.$('#form-materialp-producto');
+            this.$formempaque = this.$('#form-empaque-producto');
+            this.$formareap = this.$('#form-areap-producto');
+
+            // reference uplaoadfile
             this.$uploaderFile = this.$('.fine-uploader');
-
-            // Rerence inputs materialp
-            this.$selectinsumos = this.$('#precotizacion3_producto');
-
-            // Rerence inputs areasp
-            this.$inputArea = this.$('#precotizacion6_nombre');
-            this.$inputTiempo = this.$('#precotizacion6_tiempo');
-            this.$inputValor = this.$('#precotizacion6_valor');
 
             // Tiro
             this.$inputYellow = this.$('#precotizacion2_yellow');
@@ -91,77 +84,15 @@ app || (app = {});
             this.$inputCyan2 = this.$('#precotizacion2_cyan2');
             this.$inputKey2 = this.$('#precotizacion2_key2');
 
-            // Reference views
+            // Rerence inputs areasp
+            this.$inputArea = this.$('#precotizacion6_nombre');
+            this.$inputValor = this.$('#precotizacion6_valor');
+
+            // Render spinner
+            this.spinner = this.$('.spinner-main');
             this.referenceViews();
             this.uploadPictures();
             this.ready();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            this.produtop = this.parameters.data.precotizacion2_productop;
-
-            // Model exist
-            if( this.model.id != undefined ) {
-                this.produtop = this.model.get('precotizacion2_productop');
-            }
-
-            // Materiales , Precotizacion2
-            this.materialesProductopPreCotizacionListView = new app.MaterialesProductopPreCotizacionListView( {
-                collection: this.materialesProductopPreCotizacionList,
-                parameters: {
-                    edit: true,
-                    dataFilter: {
-                        precotizacion2: this.model.get('id')
-                    }
-               }
-            });
-
-            this.impresionesProductopPreCotizacionListView = new app.ImpresionesProductopPreCotizacionListView( {
-                collection: this.impresionesProductopPreCotizacionList,
-                parameters: {
-                    edit: true,
-                    dataFilter: {
-                        precotizacion2: this.model.get('id')
-                    }
-               }
-            });
-
-            // Areasp list
-            this.areasProductopPreCotizacionListView = new app.AreasProductopPreCotizacionListView( {
-                collection: this.areasProductopPreCotizacionList,
-                model: this.model,
-                parameters: {
-                    edit: true,
-                    dataFilter: {
-                        precotizacion2: this.model.get('id')
-                    }
-               }
-            });
-
-            // Acabados list
-            this.acabadosProductopPreCotizacionListView = new app.AcabadosProductopPreCotizacionListView( {
-                collection: this.acabadosProductopPreCotizacionList,
-                parameters: {
-                    dataFilter: {
-                        precotizacion2: this.model.get('id'),
-                        productop: this.produtop
-                    }
-               }
-            });
-
-            // Maquinas list
-            this.maquinasProductopPreCotizacionListView = new app.MaquinasProductopPreCotizacionListView( {
-                collection: this.maquinasProductopPreCotizacionList,
-                parameters: {
-                    dataFilter: {
-                        precotizacion2: this.model.get('id'),
-                        productop: this.produtop
-                    }
-               }
-            });
         },
 
         /**
@@ -183,20 +114,21 @@ app || (app = {});
                 * El metodo put no es compatible con formData
                 */
                 if( this.model.id != undefined ){
+
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                        data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                         data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
+                        data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
+                        data.empaques = this.empaquesProductopPreCotizacionList.toJSON();
                         data.areasp = this.areasProductopPreCotizacionList.toJSON();
-                        data.maquinas = this.maquinasProductopPreCotizacionList.toJSON();
 
-                    this.model.save( data, {silent: true});
+                    this.model.save( data, {path: true, silent: true});
 
-                }else{
+                } else {
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                        data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
                         data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
+                        data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
+                        data.empaques = JSON.stringify(this.empaquesProductopPreCotizacionList);
                         data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
-                        data.maquinas = JSON.stringify(this.maquinasProductopPreCotizacionList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
@@ -220,140 +152,216 @@ app || (app = {});
         },
 
         /**
-        * Event submit productop
+        * Event change check tiro \\ retiro
         */
-        submitPreCotizacion3: function (e) {
-            this.$formmaterialesp.submit();
+        checkType: function (e) {
+            var selected = this.$(e.currentTarget).is(':checked');
+                type = this.$(e.currentTarget).val();
+
+            if (type == 'precotizacion2_tiro') {
+                this.$inputYellow.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputMagenta.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputCyan.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputKey.iCheck(selected ? 'check' : 'uncheck');
+            } else {
+                this.$inputYellow2.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputMagenta2.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputCyan2.iCheck(selected ? 'check' : 'uncheck');
+                this.$inputKey2.iCheck(selected ? 'check' : 'uncheck');
+            }
         },
 
         /**
         * Event Create
         */
-        onStorePreCotizacion3: function (e) {
+        onStoreImpresion: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.materialesProductopPreCotizacionList.trigger( 'store' , data );
+                this.impresionesProductopPreCotizacionList.trigger('store', data, this.$formimpresion);
             }
         },
 
         /**
-        * Event change select materialp
+        * Event Create
+        */
+        onStoreMaterialp: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.materialesProductopPreCotizacionList.trigger('store', data, this.$formmaterialp);
+            }
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreEmpaquep: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.empaquesProductopPreCotizacionList.trigger('store', data, this.$formempaque);
+            }
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreAreap: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopPreCotizacionList.trigger('store', data, this.$formareap);
+            }
+        },
+
+        /**
+        * Event change materialp
         */
         changeMaterialp: function (e) {
             var _this = this;
                 materialp = this.$(e.currentTarget).val();
 
-            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
-                $.ajax({
-                    url: window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ),
-                    type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
-                    }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.el );
+            // Reference
+            this.$selectinsumo = this.$('#' + this.$(e.currentTarget).data('field'));
+            this.$inputinsumo = this.$('#' + this.$selectinsumo.data('valor'));
+            this.$historialinsumo = this.$('#' + this.$selectinsumo.data('historial'));
 
-                    _this.$selectinsumos.empty().val(0).removeAttr('disabled');
-                    _this.$selectinsumos.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$selectinsumos.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
-                    });
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
-                    alertify.error(thrownError);
+            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
+                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ), function (resp){
+                    if (resp.length) {
+                        _this.$selectinsumo.empty().val(0).removeAttr('disabled');
+                        _this.$selectinsumo.append("<option value=></option>");
+                        _.each(resp, function(item){
+                            _this.$selectinsumo.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
+                        });
+                    } else {
+                        _this.$selectinsumo.empty().val(0).prop('disabled', true);
+                        _this.$inputinsumo.val(0);
+                        _this.$historialinsumo.empty();
+                    }
                 });
-            }else{
-                this.$selectinsumos.empty().val(0).attr('disabled', 'disabled');
+            } else {
+                this.$selectinsumo.empty().val(0).prop('disabled', true);
+                this.$inputinsumo.val(0);
+                this.$historialinsumo.empty();
             }
         },
-        
+
         /**
-        * Event change select materialp
+        * Event change insumo
         */
         changeInsumo: function (e) {
             var _this = this;
                 insumo = this.$(e.currentTarget).val();
+                call = this.$(e.currentTarget).data('historial').split('_')[1];
+                url = '';
 
-            if (typeof(insumo) !== 'undefined' && !_.isUndefined(insumo) && !_.isNull(insumo) && insumo != '') {
-                $.get(window.Misc.urlFull( Route.route('precotizaciones.productos.materiales.index', {insumo: insumo})), function (resp) {
-                    _this.$('#precotizacion3_valor_unitario').val(resp.valor);
-                });
-            }
-        },
+            // Reference
+            this.$selectinsumo = this.$(e.currentTarget);
+            this.$inputinsumo = this.$('#' + this.$selectinsumo.data('valor'));
+            this.$historialinsumo = this.$('#' + this.$selectinsumo.data('historial'));
 
-        /**
-        * Event submit productop
-        */
-        submitPreCotizacion5: function (e) {
-            this.$formimpresiones.submit();
-        },
+            if (insumo) {
+                if (call == 'precotizacion3') {
+                    url = window.Misc.urlFull( Route.route('precotizaciones.productos.materiales.index', {insumo: insumo}));
+                    call = 'materialp';
+                } else {
+                    url = window.Misc.urlFull( Route.route('precotizaciones.productos.empaques.index', {insumo: insumo}));
+                    call = 'empaque';
+                }
 
-        /**
-        * Event Create
-        */
-        onStorePreCotizacion5: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.impresionesProductopPreCotizacionList.trigger('store' , data);
-            }
-        },
-
-        /**
-        * Event submit productop
-        */
-        submitPreCotizacion6: function (e) {
-            this.$formareasp.submit();
-        },
-
-        /**
-        * Event Create
-        */
-        onStorePreCotizacion6: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.areasProductopPreCotizacionList.trigger('store' , data);
-            }
-        },
-
-        /**
-        *   Event render input value
-        **/
-        changeAreap: function(e){
-            var _this = this;
-                id = this.$(e.currentTarget).val();
-
-            if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '' ){
-                $.ajax({
-                    url: window.Misc.urlFull( Route.route('areasp.show', {areasp: id}) ),
-                    type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                $.get(url, function (resp) {
+                    if (resp) {
+                        _this.$inputinsumo.val(resp.valor);
+                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo") ).attr('data-resource', insumo).attr('data-call', call);
                     }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-
-                    _this.$inputArea.val('').attr('readonly', true);
-                    _this.$inputTiempo.val('');
-                    _this.$inputValor.val( resp.areap_valor );
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
-                    alertify.error(thrownError);
                 });
-            }else{
+            } else {
+                this.$inputinsumo.val(0);
+                this.$historialinsumo.empty();
+            }
+        },
+
+        /**
+        * Event change areap
+        */
+        changeAreap: function (e) {
+            var _this = this;
+                areap = this.$(e.currentTarget).val();
+
+            // Reference
+            if( typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '' ){
+                $.get(window.Misc.urlFull( Route.route('areasp.show', {areasp: areap}) ), function (resp){
+                    if (resp) {
+                        _this.$inputArea.val('').attr('readonly', true);
+                        _this.$inputValor.val(resp.areap_valor);
+                    }
+                });
+            } else {
                 this.$inputArea.val('').attr('readonly', false);
-                this.$inputTiempo.val('');
                 this.$inputValor.val('');
             }
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            this.produtop = this.parameters.data.precotizacion2_productop;
+
+            // Model exist
+            if( this.model.id != undefined ) {
+                this.produtop = this.model.get('precotizacion2_productop');
+            }
+
+            // Impresiones
+            this.impresionesProductopPreCotizacionListView = new app.ImpresionesProductopPreCotizacionListView( {
+                collection: this.impresionesProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
+
+            // Materiales
+            this.materialesProductopPreCotizacionListView = new app.MaterialesProductopPreCotizacionListView( {
+                collection: this.materialesProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
+
+            // Empaques
+            this.empaquesProductopPreCotizacionListView = new app.EmpaquesProductopPreCotizacionListView( {
+                collection: this.empaquesProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
+
+            // Areasp
+            this.areasProductopPreCotizacionListView = new app.AreasProductopPreCotizacionListView( {
+                collection: this.areasProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+               }
+            });
         },
 
         /**
@@ -361,77 +369,77 @@ app || (app = {});
         */
         uploadPictures: function(e) {
             var _this = this,
-                autoUpload = false;
-                session = {};
-                deleteFile = {};
-                request = {};
+               autoUpload = false;
+               session = {};
+               deleteFile = {};
+               request = {};
 
             // Model exists
             if( this.model.id != undefined ){
-                var session = {
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                    params: {
-                        precotizacion2: this.model.get('id'),
-                    },
-                    refreshOnRequest: false
-                }
+               var session = {
+                   endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                   params: {
+                       precotizacion2: this.model.get('id'),
+                   },
+                   refreshOnRequest: false
+               }
 
-                var deleteFile = {
-                    enabled: true,
-                    forceConfirm: true,
-                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                    params: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        precotizacion2: this.model.get('id')
-                    }
-                }
+               var deleteFile = {
+                   enabled: true,
+                   forceConfirm: true,
+                   confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                   endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                   params: {
+                       _token: $('meta[name="csrf-token"]').attr('content'),
+                       precotizacion2: this.model.get('id')
+                   }
+               }
 
-                var request = {
-                    inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                    params: {
-                        '_token': $('meta[name="csrf-token"]').attr('content'),
-                        precotizacion2: this.model.get('id')
-                    }
-                }
+               var request = {
+                   inputName: 'file',
+                   endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                   params: {
+                       '_token': $('meta[name="csrf-token"]').attr('content'),
+                       precotizacion2: this.model.get('id')
+                   }
+               }
 
-                var autoUpload = true;
+               var autoUpload = true;
             }
 
             this.$uploaderFile.fineUploader({
-                debug: false,
-                template: 'qq-template-precotizacion',
-                multiple: true,
-                interceptSubmit: true,
-                autoUpload: autoUpload,
-                omitDefaultParams: true,
-                session: session,
-                request: request,
-                retry: {
-                    maxAutoAttempts: 3,
-                },
-                deleteFile: deleteFile,
-                thumbnails: {
-                    placeholders: {
-                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                    }
-                },
-                validation: {
-                    itemLimit: 10,
-                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
-                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
-                },
-                messages: {
-                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
-                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
-                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
-                },
-                callbacks: {
-                    onComplete: _this.onCompleteLoadFile,
-                    onSessionRequestComplete: _this.onSessionRequestComplete,
-                },
+               debug: false,
+               template: 'qq-template-precotizacion',
+               multiple: true,
+               interceptSubmit: true,
+               autoUpload: autoUpload,
+               omitDefaultParams: true,
+               session: session,
+               request: request,
+               retry: {
+                   maxAutoAttempts: 3,
+               },
+               deleteFile: deleteFile,
+               thumbnails: {
+                   placeholders: {
+                       notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                       waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                   }
+               },
+               validation: {
+                   itemLimit: 10,
+                   sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                   allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
+               },
+               messages: {
+                   typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                   sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                   tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+               },
+               callbacks: {
+                   onComplete: _this.onCompleteLoadFile,
+                   onSessionRequestComplete: _this.onSessionRequestComplete,
+               },
             });
         },
 
@@ -452,6 +460,12 @@ app || (app = {});
             previewLink.attr("href", resp.url);
         },
 
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
         onSessionRequestComplete: function (id, name, resp) {
             this.$uploaderFile.find('.btn-imprimir').remove();
 
@@ -459,36 +473,6 @@ app || (app = {});
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);
             }, this);
-        },
-
-        changedTiro: function(e) {
-            var selected = $(e.target).is(':checked');
-            if( selected ){
-                this.$inputYellow.iCheck('check');
-                this.$inputMagenta.iCheck('check');
-                this.$inputCyan.iCheck('check');
-                this.$inputKey.iCheck('check');
-            }else{
-                this.$inputYellow.iCheck('uncheck');
-                this.$inputMagenta.iCheck('uncheck');
-                this.$inputCyan.iCheck('uncheck');
-                this.$inputKey.iCheck('uncheck');
-            }
-        },
-
-        changedRetiro: function(e) {
-            var selected = $(e.target).is(':checked');
-            if( selected ){
-                this.$inputYellow2.iCheck('check');
-                this.$inputMagenta2.iCheck('check');
-                this.$inputCyan2.iCheck('check');
-                this.$inputKey2.iCheck('check');
-            }else{
-                this.$inputYellow2.iCheck('uncheck');
-                this.$inputMagenta2.iCheck('uncheck');
-                this.$inputCyan2.iCheck('uncheck');
-                this.$inputKey2.iCheck('uncheck');
-            }
         },
 
         /**
@@ -516,14 +500,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner( this.spinner );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+            window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;

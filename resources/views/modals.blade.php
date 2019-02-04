@@ -174,6 +174,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- Modal import file -->
 <div class="modal fade" id="modal-import-file-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-md" role="document">
@@ -198,6 +199,7 @@
 		</div>
 	</div>
 </div>
+
 <!-- Modal search -->
 <div class="modal fade" id="modal-search-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-lg" role="document">
@@ -249,6 +251,41 @@
 		</div>
 	</div>
 </div>
+
+<!-- Modal historial insumo -->
+<div class="modal fade" id="modal-historial-resource-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-md" role="document">
+		<div class="modal-content" id="content-edit-resource-component">
+			<div class="modal-header small-box {{ config('koi.template.bg') }}">
+				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				<h4 class="inner-title-modal modal-title"></h4>
+			</div>
+			<div class="modal-body">
+				<div class="content-modal">
+					<div class=" table-responsive">
+						<table id="browse-history-producto-list" class="table table-striped table-condensed" cellspacing="0">
+							<thead>
+								<tr>
+									<th width="30%"></th>
+									<th width="30%">Fecha</th>
+									<th width="40%">Costo</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cancelar</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {{-- templates --}}
 <script type="text/template" id="koi-address-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
@@ -1249,3 +1286,15 @@
 		</div>
 	</div>
 </div>
+
+<script type="text/template" id="producto-history-item-list-tpl">
+	<% if (type == 'PRE') { %>
+		<td><span class="label label-success">PRECOTIZACIÓN</span></td>
+	<% } else if (type == 'COT') { %>
+		<td><span class="label label-danger">COTIZACIÓN</span></td>
+	<% } else { %>
+		<td><span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
+	<% } %>
+	<td><%- moment(fecha).format('YYYY-MM-DD') %></td>
+	<td class="text-right"><%- window.Misc.currency(valor) %></td>
+</script>

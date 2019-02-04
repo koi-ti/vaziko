@@ -133,7 +133,7 @@
                             <a href="{{ route('precotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
                         </div>
                         <div class="col-md-2 col-sm-6 col-xs-6">
-                            <button type="button" class="btn btn-primary btn-sm btn-block submit-precotizacion">{{ trans('app.save') }}</button>
+                            <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion">{{ trans('app.save') }}</button>
                         </div>
                     </div><br>
 

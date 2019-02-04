@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, Auth, DB, Log, Datatables, Storage;
 
 class OrdenpController extends Controller
@@ -480,6 +480,7 @@ class OrdenpController extends Controller
                 $neworden->save();
 
                 // Orden2
+                $files = [];
                 $productos = Ordenp2::where('orden2_orden', $orden->id)->orderBy('id', 'asc')->get();
                 foreach ($productos as $orden2) {
                     $neworden2 = $orden2->replicate();
@@ -498,6 +499,41 @@ class OrdenpController extends Controller
                          $neworden3->save();
                     }
 
+                    // Acabados
+                    $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
+                    foreach ($acabados as $orden5) {
+                        $neworden5 = $orden5->replicate();
+                        $neworden5->orden5_orden2 = $neworden2->id;
+                        $neworden5->save();
+                    }
+
+                    // Impresiones
+                    $impresiones = Ordenp7::where('orden7_orden2', $orden2->id)->get();
+                    foreach ($impresiones as $orden7) {
+                        $neworden7 = $orden7->replicate();
+                        $neworden7->orden7_orden2 = $neworden2->id;
+                        $neworden7->save();
+                    }
+
+                    // Imagenes
+                    $imagenes = Ordenp8::where('orden8_orden2', $orden2->id)->get();
+                    foreach ($imagenes as $orden8) {
+                        $neworden8 = $orden8->replicate();
+                        $neworden8->orden8_orden2 = $neworden2->id;
+                        $neworden8->orden8_usuario_elaboro = Auth::user()->id;
+                        $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
+                        $neworden8->save();
+
+                        // Recuperar imagen y copiar
+                        if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                            $object = new \stdClass();
+                            $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
+                            $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
+
+                            $files[] = $object;
+                        }
+                    }
+
                     // Materiales
                     $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
                     foreach ($materiales as $orden4) {
@@ -506,12 +542,12 @@ class OrdenpController extends Controller
                          $neworden4->save();
                     }
 
-                    // Acabados
-                    $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
-                    foreach ($acabados as $orden5) {
-                         $neworden5 = $orden5->replicate();
-                         $neworden5->orden5_orden2 = $neworden2->id;
-                         $neworden5->save();
+                    // Enmpaques
+                    $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
+                    foreach ($empaques as $orden9) {
+                         $neworden9 = $orden9->replicate();
+                         $neworden9->orden9_orden2 = $neworden2->id;
+                         $neworden9->save();
                     }
 
                     // Areasp
@@ -521,35 +557,15 @@ class OrdenpController extends Controller
                          $neworden6->orden6_orden2 = $neworden2->id;
                          $neworden6->save();
                     }
+                }
 
-                    // Impresiones
-                    $impresiones = Ordenp7::where('orden7_orden2', $orden2->id)->get();
-                    foreach ($impresiones as $orden7) {
-                         $neworden7 = $orden7->replicate();
-                         $neworden7->orden7_orden2 = $neworden2->id;
-                         $neworden7->save();
-                    }
-
-                    // Imagenes
-                    $imagenes = Ordenp8::where('orden8_orden2', $orden2->id)->get();
-                    foreach ($imagenes as $orden8) {
-                         $neworden8 = $orden8->replicate();
-                         $neworden8->orden8_orden2 = $neworden2->id;
-                         $neworden8->orden8_usuario_elaboro = Auth::user()->id;
-                         $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
-                         $neworden8->save();
-
-                         // Recuperar imagen y copiar
-                         if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
-
-                             $oldfile = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
-                             $newfile = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
-
-                             // Copy file storege laravel
-                             Storage::copy($oldfile, $newfile);
-                         }
+                // Si todo esta bien
+                if (count($files)) {
+                    foreach ($files as $file) {
+                        Storage::copy($file->copy, $file->paste);
                     }
                 }
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden clonada con exito.']);

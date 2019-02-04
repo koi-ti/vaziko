@@ -31,16 +31,6 @@ class PreCotizacion5Controller extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -65,69 +55,4 @@ class PreCotizacion5Controller extends Controller
         }
         abort(403);
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-     public function destroy(Request $request, $id)
-     {
-         if ($request->ajax()) {
-             DB::beginTransaction();
-             try {
-                 // Recuperar precotizacion5
-                 $precotizacion5 = PreCotizacion5::find( $id );
-                 if(!$precotizacion5 instanceof PreCotizacion5){
-                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el item a eliminar, por favor verifique la información o consulte al administrador.']);
-                 }
-
-                 // Eliminar item precotizacion5
-                 $precotizacion5->delete();
-
-                 DB::commit();
-                 return response()->json(['success' => true]);
-             }catch(\Exception $e){
-                 DB::rollback();
-                 Log::error(sprintf('%s -> %s: %s', 'PreCotizacion5Controller', 'destroy', $e->getMessage()));
-                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
-             }
-         }
-         abort(403);
-     }
 }

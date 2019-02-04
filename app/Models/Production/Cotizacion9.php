@@ -51,7 +51,7 @@ class Cotizacion9 extends BaseModel
     public static function getCotizaciones9($cotizacion2 = null)
     {
         $query = self::query();
-        $query->select('koi_cotizacion9.*', 'materialp_nombre', 'producto_nombre');
+        $query->select('koi_cotizacion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
         $query->join('koi_materialp', 'cotizacion9_materialp', '=', 'koi_materialp.id');
         $query->leftJoin('koi_producto', 'cotizacion9_producto', '=', 'koi_producto.id');
         $query->where('cotizacion9_cotizacion2', $cotizacion2);

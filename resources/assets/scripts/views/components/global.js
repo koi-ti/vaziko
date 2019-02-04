@@ -16,7 +16,8 @@ app || (app = {});
             'click .sidebar-toggle': 'clickSidebar',
             'click .history-back': 'clickHistoryBack',
             'click .view-notification': 'clickViewNotification',
-            'hidden.bs.modal': 'multiModal'
+            'click .historial-insumo': 'clickHistorialInsumo',
+            'hidden.bs.modal': 'multiModal',
 		},
 
         /**
@@ -70,6 +71,36 @@ app || (app = {});
             .fail(function(jqXHR, ajaxOptions, thrownError) {
                 alertify.error(thrownError);
             });
+        },
+
+        clickHistorialInsumo: function (e) {
+            e.preventDefault();
+            var insumo = this.$(e.currentTarget).attr('data-resource');
+                call = this.$(e.currentTarget).attr('data-call');
+                title = '';
+
+            if (insumo) {
+                if (call == 'materialp') {
+                    title = 'Materiales de producción';
+                } else {
+                    title = 'Empaques de producción';
+                }
+
+                this.$modal = $('#modal-historial-resource-component');
+                this.$modal.find('.modal-title').text('Historial del insumo ('+ title +')');
+                this.$modal.modal('show');
+
+                // Detalle item rollo list
+                this.productoHistoryListView = new app.ProductoHistoryListView({
+                    collection: new app.ProductoHistoryList(),
+                    parameters: {
+                        dataFilter: {
+                            producto_id: insumo,
+                            call: call
+                        }
+                    }
+                });
+            }
         },
 
 		multiModal: function(){

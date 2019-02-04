@@ -23,7 +23,7 @@ app || (app = {});
 
         },
 
-        totalRow: function( ){
+        totalMaterialp: function( ){
             _.each( this.models, function( model ) {
                 var total = parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
                 model.set('cotizacion4_valor_total', total);
@@ -38,7 +38,7 @@ app || (app = {});
 
         totalize: function () {
             var total = this.total();
-            this.totalRow();
+            this.totalMaterialp();
             return { total: total }
         },
    });

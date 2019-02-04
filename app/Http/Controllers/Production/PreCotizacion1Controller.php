@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion1Controller extends Controller
@@ -493,72 +493,6 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2->cotizacion2_fecha_elaboro = $cotizacion->cotizacion1_fecha_elaboro;
                     $cotizacion2->save();
 
-                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
-                    $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
-                    $totalmaterial = $totalareasp = 0;
-                    foreach ($materiales as $precotizacion3) {
-                         $cotizacion4 = new Cotizacion4;
-                         $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
-                         $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
-                         $cotizacion4->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
-                         $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
-                         $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
-                         $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
-                         $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
-                         $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
-                         $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
-                         $cotizacion4->save();
-
-                         $totalmaterial += $precotizacion3->precotizacion3_valor_total / $cotizacion2->cotizacion2_cantidad;
-                    }
-
-                    // Recuperar Areasp de cotizacion para generar precotizacion
-                    $areasp = PreCotizacion6::select('koi_precotizacion6.*', DB::raw("((SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) / 60) + SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1)) * precotizacion6_valor as total_areap"))->where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($areasp as $precotizacion6) {
-                         $cotizacion6 = new Cotizacion6;
-                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
-                         $cotizacion6->cotizacion6_areap = $precotizacion6->precotizacion6_areap;
-                         $cotizacion6->cotizacion6_nombre = $precotizacion6->precotizacion6_nombre;
-                         $cotizacion6->cotizacion6_tiempo = $precotizacion6->precotizacion6_tiempo;
-                         $cotizacion6->cotizacion6_valor = $precotizacion6->precotizacion6_valor;
-                         $cotizacion6->save();
-
-                         // Convertir minutos a horas y sumar horas
-                         $totalareasp += round($precotizacion6->total_areap) / $cotizacion2->cotizacion2_cantidad;
-                    }
-
-                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
-                    $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($impresiones as $precotizacion5) {
-                         $cotizacion7 = new Cotizacion7;
-                         $cotizacion7->cotizacion7_cotizacion2 = $cotizacion2->id;
-                         $cotizacion7->cotizacion7_texto = $precotizacion5->precotizacion5_texto;
-                         $cotizacion7->cotizacion7_ancho = $precotizacion5->precotizacion5_ancho;
-                         $cotizacion7->cotizacion7_alto = $precotizacion5->precotizacion5_alto;
-                         $cotizacion7->save();
-                    }
-
-                    // Recuperar Imagenes de pre-cotizacion para generar cotizacion
-                    $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($imagenes as $precotizacion4) {
-                         $cotizacion8 = new Cotizacion8;
-                         $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
-                         $cotizacion8->cotizacion8_archivo = $precotizacion4->precotizacion4_archivo;
-                         $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
-                         $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
-                         $cotizacion8->save();
-
-                         // Recuperar imagen y copiar
-                         if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
-
-                             $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";
-                             $newfile = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion8->cotizacion8_cotizacion2}/{$cotizacion8->cotizacion8_archivo}";
-
-                             // Copy file storege laravel
-                             Storage::copy($oldfile, $newfile);
-                         }
-                    }
-
                     // Recuperar Acabados de cotizacion para generar cotizacion
                     $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $precotizacion2->id)->get();
                     foreach ($acabados as $precotizacion7) {
@@ -577,8 +511,92 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion3->save();
                     }
 
+                    // Recuperar Imagenes de pre-cotizacion para generar cotizacion
+                    $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($imagenes as $precotizacion4) {
+                        $cotizacion8 = new Cotizacion8;
+                        $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
+                        $cotizacion8->cotizacion8_archivo = $precotizacion4->precotizacion4_archivo;
+                        $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
+                        $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                        $cotizacion8->save();
+
+                        // Recuperar imagen y copiar
+                        if( Storage::has("pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}") ) {
+
+                            $oldfile = "pre-cotizaciones/precotizacion_{$precotizacion2->precotizacion2_precotizacion1}/producto_{$precotizacion4->precotizacion4_precotizacion2}/{$precotizacion4->precotizacion4_archivo}";
+                            $newfile = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion8->cotizacion8_cotizacion2}/{$cotizacion8->cotizacion8_archivo}";
+
+                            // Copy file storege laravel
+                            Storage::copy($oldfile, $newfile);
+                        }
+                    }
+
+                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
+                    $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($impresiones as $precotizacion5) {
+                         $cotizacion7 = new Cotizacion7;
+                         $cotizacion7->cotizacion7_cotizacion2 = $cotizacion2->id;
+                         $cotizacion7->cotizacion7_texto = $precotizacion5->precotizacion5_texto;
+                         $cotizacion7->cotizacion7_ancho = $precotizacion5->precotizacion5_ancho;
+                         $cotizacion7->cotizacion7_alto = $precotizacion5->precotizacion5_alto;
+                         $cotizacion7->save();
+                    }
+
+                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
+                    $totalmaterialesp = $totalempaques = $totalareasp = 0;
+                    $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($materiales as $precotizacion3) {
+                         $cotizacion4 = new Cotizacion4;
+                         $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
+                         $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
+                         $cotizacion4->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
+                         $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
+                         $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
+                         $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
+                         $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
+                         $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
+                         $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                         $cotizacion4->save();
+
+                         $totalmaterialesp += $precotizacion3->precotizacion3_valor_total / $cotizacion2->cotizacion2_cantidad;
+                    }
+
+                    // Recuperar Empaques de pre-cotizacion para generar cotizacion
+                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($empaques as $precotizacion9) {
+                         $cotizacion9 = new Cotizacion9;
+                         $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
+                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
+                         $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
+                         $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;
+                         $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
+                         $cotizacion9->cotizacion9_valor_unitario = $precotizacion9->precotizacion9_valor_unitario;
+                         $cotizacion9->cotizacion9_valor_total = $precotizacion9->precotizacion9_valor_total;
+                         $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
+                         $cotizacion9->cotizacion9_usuario_elaboro = Auth::user()->id;
+                         $cotizacion9->save();
+
+                         $totalempaques += $precotizacion9->precotizacion9_valor_total / $cotizacion2->cotizacion2_cantidad;
+                    }
+
+                    // Recuperar Areasp de cotizacion para generar precotizacion
+                    $areasp = PreCotizacion6::select('koi_precotizacion6.*', DB::raw("((SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) / 60) + SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1)) * precotizacion6_valor as total_areap"))->where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($areasp as $precotizacion6) {
+                         $cotizacion6 = new Cotizacion6;
+                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
+                         $cotizacion6->cotizacion6_areap = $precotizacion6->precotizacion6_areap;
+                         $cotizacion6->cotizacion6_nombre = $precotizacion6->precotizacion6_nombre;
+                         $cotizacion6->cotizacion6_tiempo = $precotizacion6->precotizacion6_tiempo;
+                         $cotizacion6->cotizacion6_valor = $precotizacion6->precotizacion6_valor;
+                         $cotizacion6->save();
+
+                         // Convertir minutos a horas y sumar horas
+                         $totalareasp += round($precotizacion6->total_areap) / $cotizacion2->cotizacion2_cantidad;
+                    }
+
                     // Actualizar precio en cotizacion2;
-                    $cotizacion2->cotizacion2_total_valor_unitario = round($totalmaterial) + round($totalareasp);
+                    $cotizacion2->cotizacion2_total_valor_unitario = round($totalmaterialesp) + round($totalempaques) + round($totalareasp);
                     $cotizacion2->save();
                 }
 
@@ -638,14 +656,20 @@ class PreCotizacion1Controller extends Controller
                     $newprecotizacion2->precotizacion2_precotizacion1 = $newprecotizacion->id;
                     $newprecotizacion2->save();
 
-                    // Proveedores
-                    $proveedores = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($proveedores as $precotizacion3) {
-                         $newprecotizacion3 = $precotizacion3->replicate();
-                         $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
-                         $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
-                         $newprecotizacion3->save();
+                    // Acabados
+                    $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($acabados as $precotizacion7) {
+                        $newprecotizacion7 = $precotizacion7->replicate();
+                        $newprecotizacion7->precotizacion7_precotizacion2 = $newprecotizacion2->id;
+                        $newprecotizacion7->save();
+                    }
+
+                    // Maquinas
+                    $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($maquinas as $precotizacion8) {
+                        $newprecotizacion8 = $precotizacion8->replicate();
+                        $newprecotizacion8->precotizacion8_precotizacion2 = $newprecotizacion2->id;
+                        $newprecotizacion8->save();
                     }
 
                     // Imagenes
@@ -671,9 +695,29 @@ class PreCotizacion1Controller extends Controller
                     // Impresiones
                     $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
                     foreach ($impresiones as $precotizacion5) {
-                         $newprecotizacion5 = $precotizacion5->replicate();
-                         $newprecotizacion5->precotizacion5_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion5->save();
+                        $newprecotizacion5 = $precotizacion5->replicate();
+                        $newprecotizacion5->precotizacion5_precotizacion2 = $newprecotizacion2->id;
+                        $newprecotizacion5->save();
+                    }
+
+                    // Materialep
+                    $materaliesp = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($materaliesp as $precotizacion3) {
+                         $newprecotizacion3 = $precotizacion3->replicate();
+                         $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
+                         $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                         $newprecotizacion3->save();
+                    }
+
+                    // Empaques
+                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($empaques as $precotizacion9) {
+                         $newprecotizacion9 = $precotizacion9->replicate();
+                         $newprecotizacion9->precotizacion9_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
+                         $newprecotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
+                         $newprecotizacion9->save();
                     }
 
                     // Areasp
@@ -684,21 +728,6 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion6->save();
                     }
 
-                    // Acabados
-                    $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($acabados as $precotizacion7) {
-                         $newprecotizacion7 = $precotizacion7->replicate();
-                         $newprecotizacion7->precotizacion7_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion7->save();
-                    }
-
-                    // Maquinas
-                    $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($maquinas as $precotizacion8) {
-                         $newprecotizacion8 = $precotizacion8->replicate();
-                         $newprecotizacion8->precotizacion8_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion8->save();
-                    }
                 }
                 // Commit Transaction
                 DB::commit();

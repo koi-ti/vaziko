@@ -14,7 +14,8 @@ app || (app = {});
         el: '#browse-precotizacion-producto-materiales-list',
         events: {
             'click .item-producto-materialp-precotizacion-remove': 'removeOne',
-            'click .item-producto-materialp-precotizacion-edit': 'editOne'
+            'click .item-producto-materialp-precotizacion-edit': 'editOne',
+            'click .item-producto-materialp-precotizacion-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -39,7 +40,8 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+            if (this.parameters.dataFilter.precotizacion2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /*
@@ -78,7 +80,7 @@ app || (app = {});
         * store
         * @param form element
         */
-        storeOne: function ( data ) {
+        storeOne: function (data, form) {
             var _this = this;
 
             // Set Spinner
@@ -101,8 +103,8 @@ app || (app = {});
                         }
 
                         // Add model in collection
+                        window.Misc.clearForm(form);
                         _this.collection.add(model);
-                        window.Misc.clearForm( $('#form-precotizacion3-producto') );
                     }
                 },
                 error : function(model, error) {
@@ -119,87 +121,74 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource),
+                _this = this;
 
-            if( _.isUndefined(this.parameters.dataFilter.precotizacion2) ){
-                if ( model instanceof Backbone.Model ) {
-                    model.view.remove();
-                    this.collection.remove(model);
-                    this.totalize();
-                }
-            }else{
-                var reg = /[A-Za-z]/;
-                if( !reg.test(resource) ){
-                    this.confirmDelete( model );
-                }else{
-                    if ( model instanceof Backbone.Model ) {
-                        model.view.remove();
-                        this.collection.remove(model);
-                        this.totalize();
+            if ( model instanceof Backbone.Model ) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { materialp_nombre: model.get('materialp_nombre')},
+                        template: _.template( ($('#precotizacion-delete-materialp-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar material de producción',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.totalize();
+                        }
                     }
-                }
+                });
+
+                cancelConfirm.render();
             }
         },
 
         /**
-        * modal confirm delete area
+        * Event edit item
         */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { materialp_nombre: model.get('materialp_nombre')},
-                    template: _.template( ($('#precotizacion-delete-materialp-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar material de producción',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.el );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                        _this.totalize();
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-            });
-
-            cancelConfirm.render();
-        },
-
         editOne: function(e){
             e.preventDefault();
 
-            // Open materialesProductoActionView
-            if ( this.materialesProductoActionView instanceof Backbone.View ){
-                this.materialesProductoActionView.stopListening();
-                this.materialesProductoActionView.undelegateEvents();
-            }
-
-            var resource = this.$(e.currentTarget).attr("data-resource"),
+            var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if( model instanceof Backbone.Model ){
-                this.materialesProductoActionView = new app.MaterialesProductoActionView({
-                    model: model,
-                    collection: this.collection,
-                    parameters: {
-                        call: 'precotizacion'
-                    }
-                });
+            var view = new app.MaterialesProductopPreCotizacionItemView({
+                model: model,
+                parameters: {
+                    action: 'edit',
+                }
+            });
+            model.view.$el.replaceWith( view.render().el );
+            this.ready();
+        },
 
-                this.materialesProductoActionView.render();
+        /**
+        * Event success edit item
+        */
+        successEdit: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var dimensiones = this.$('#precotizacion3_medidas_' + model.get('id')).val();
+                cantidad = this.$('#precotizacion3_cantidad_' + model.get('id')).val();
+                valor = this.$('#precotizacion3_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+
+            if (!dimensiones.length || !cantidad.length || !valor) {
+                alertify.error('Ningun campo puede ir vacio.');
+                return;
             }
+
+            model.set({'precotizacion3_medidas': dimensiones, 'precotizacion3_cantidad': cantidad, 'precotizacion3_valor_unitario': valor});
+            this.collection.trigger('reset');
+        },
+
+        /**
+        * Event success edit item
+        */
+        ready: function () {
+            if( typeof window.initComponent.initInputMask == 'function' )
+                window.initComponent.initInputMask();
         },
 
         /**

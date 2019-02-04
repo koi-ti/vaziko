@@ -29,16 +29,6 @@ class PreCotizacion6Controller extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -84,80 +74,6 @@ class PreCotizacion6Controller extends Controller
                 }
             }
             return response()->json(['success' => false, 'errors' => $precotizacion6->errors]);
-        }
-        abort(403);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            DB::beginTransaction();
-            try {
-                $precotizacion6 = PreCotizacion6::find($id);
-                if(!$precotizacion6 instanceof PreCotizacion6){
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información o consulte al administrador.']);
-                }
-
-                // Recuperar precotizacion2
-                $precotizacion2 = PreCotizacion2::find( $precotizacion6->precotizacion6_precotizacion2 );
-                if(!$precotizacion2 instanceof PreCotizacion2){
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
-                }
-
-                if($precotizacion6->precotizacion6_precotizacion2 != $precotizacion2->id){
-                    return response()->json(['success' => false, 'errors' => 'El item no corresponde a esa pre-cotización, por favor verifique la información o consulte al administrador.']);
-                }
-
-                // Eliminar item productop4
-                $precotizacion6->delete();
-
-                DB::commit();
-                return response()->json(['success' => true]);
-            }catch(\Exception $e){
-                DB::rollback();
-                Log::error(sprintf('%s -> %s: %s', 'PreCotizacion6Controller', 'destroy', $e->getMessage()));
-                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
-            }
         }
         abort(403);
     }

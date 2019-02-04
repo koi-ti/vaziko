@@ -1,5 +1,5 @@
 /**
-* Class AcabadosProductopPreCotizacionItemView  of Backbone Router
+* Class EmpaquesProductopPreCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,9 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AcabadosProductopPreCotizacionItemView = Backbone.View.extend({
+    app.EmpaquesProductopPreCotizacionItemView = Backbone.View.extend({
 
-        template: _.template( ($('#precotizacion-producto-acabado-item-tpl').html() || '') ),
+        tagName: 'tr',
+        template: _.template( ($('#precotizacion-producto-empaque-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },
@@ -23,6 +24,10 @@ app || (app = {});
 	        // Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            if (this.parameters.action == 'edit') {
+                this.template = _.template( ($('#precotizacion-producto-empaque-edit-item-tpl').html() || '') );
+            }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );

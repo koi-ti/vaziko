@@ -553,7 +553,7 @@
 
 		<div class="form-group col-md-3">
 			<label for="producto_codigoori" class="control-label">Código proveedor</label>
-			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="30" required>
+			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="50" required>
             <div class="help-block with-errors"></div>
 		</div>
 
@@ -1147,7 +1147,7 @@
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
 
-        @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', ['module' => 'ordenes']) )
+        @if (Auth::user()->hasRole('admin'))
             <div class="buttons">
                 <div class="qq-upload-button-selector qq-upload-button">
                     <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -1171,10 +1171,10 @@
                 <span class="qq-upload-size-selector qq-upload-size"></span>
                 <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                 <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', ['module' => 'ordenes']) )
+                @if (Auth::user()->hasRole('admin'))
                     <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                 @endif
-                @if(Auth::user()->ability('admin', ['module' => 'cotizaciones']))
+                @if (Auth::user()->hasRole('admin'))
                     <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
                 @endif
                 <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>

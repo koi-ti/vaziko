@@ -1,5 +1,5 @@
 /**
-* Class AcabadosProductopItemView  of Backbone Router
+* Class EmpaquesProductopCotizacionItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,11 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.AcabadosProductopItemView = Backbone.View.extend({
+    app.EmpaquesProductopCotizacionItemView = Backbone.View.extend({
 
-        tagName: 'div',
-        className : 'row',
-        template: _.template( ($('#orden-producto-acabado-item-tpl').html() || '') ),
+        tagName: 'tr',
+        template: _.template( ($('#cotizacion-producto-empaque-item-tpl').html() || '') ),
         parameters: {
             edit: false
         },
@@ -25,6 +24,10 @@ app || (app = {});
 	        // Extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            if (this.parameters.action == 'edit') {
+                this.template = _.template( ($('#cotizacion-producto-empaque-edit-item-tpl').html() || '') );
+            }
 
             // Events Listener
             this.listenTo( this.model, 'change', this.render );
@@ -38,7 +41,7 @@ app || (app = {});
                 attributes.edit = this.parameters.edit;
             this.$el.html( this.template(attributes) );
             return this;
-        },
+        }
     });
 
 })(jQuery, this, this.document);

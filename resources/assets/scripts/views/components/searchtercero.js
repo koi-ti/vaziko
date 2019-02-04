@@ -152,6 +152,7 @@ app || (app = {});
             this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
             this.$inputTiempop = this.$inputContent.data("tiempop");
             this.$inputProveedor = this.$inputContent.data("proveedor");
+            this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
 
             if(this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
@@ -201,6 +202,9 @@ app || (app = {});
                         }
                         if(_this.$inputOrden.length > 0) {
                             _this.$inputOrden.attr('data-tercero', resp.id);
+                        }
+                        if(_this.$inputFormapago.length > 0 || _.isNull(resp.tercero_formapago ) ) {
+                            _this.$inputFormapago.val( resp.tercero_formapago  );
                         }
                     }
 	            })

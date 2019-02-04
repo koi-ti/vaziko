@@ -81,7 +81,7 @@ app || (app = {});
         totalize: function(  ) {
             var total = this.total();
                 this.totalAreap();
-            return { 'total': Math.round( total ) }
+            return { total: Math.round( total ) }
         },
    });
 

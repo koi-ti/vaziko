@@ -35,7 +35,8 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+            if (this.parameters.dataFilter.precotizacion2)
+                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /*
@@ -58,7 +59,6 @@ app || (app = {});
             });
             precotizacion5Model.view = view;
             this.$el.append( view.render().el );
-
         },
 
         /**
@@ -73,7 +73,7 @@ app || (app = {});
         * store
         * @param form element
         */
-        storeOne: function ( data ) {
+        storeOne: function (data, form) {
             var _this = this;
 
             // Set Spinner
@@ -96,8 +96,8 @@ app || (app = {});
                         }
 
                         // Add model in collection
+                        window.Misc.clearForm(form);
                         _this.collection.add(model);
-                        window.Misc.clearForm( $('#form-precotizacion5-producto') );
                     }
                 },
                 error : function(model, error) {
@@ -114,59 +114,24 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource),
+                _this = this;
 
-            if( _.isUndefined(this.parameters.dataFilter.precotizacion2) ){
-                if ( model instanceof Backbone.Model ) {
-                    model.view.remove();
-                    this.collection.remove(model);
-                }
-            }else{
-                var reg = /[A-Za-z]/;
-                if( !reg.test(resource) ){
-                    this.confirmDelete( model );
-                }else{
-                    if ( model instanceof Backbone.Model ) {
-                        model.view.remove();
-                        this.collection.remove(model);
-                    }
-                }
-            }
-        },
-
-        /**
-        * modal confirm delete area
-        */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { precotizacion5_texto: model.get('precotizacion5_texto')},
-                    template: _.template( ($('#precotizacion-delete-impresion-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar detalle de impresión',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.el );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                    }
-                                }
-                            });
+            if ( model instanceof Backbone.Model ) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { precotizacion5_texto: model.get('precotizacion5_texto')},
+                        template: _.template( ($('#precotizacion-delete-impresion-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar detalle de impresión',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
                         }
                     }
-                }
-            });
+                });
 
-            cancelConfirm.render();
+                cancelConfirm.render();
+            }
         },
 
         /**
