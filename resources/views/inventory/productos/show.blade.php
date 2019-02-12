@@ -108,6 +108,13 @@
                         <div>{{ $producto->producto_largo }}</div>
                     </div>
                 @endif
+
+                <div class="form-group col-md-2">
+                    <label class="control-label">¿Empaque?</label>
+                    <div>
+                        <input type="checkbox" id="producto_empaque" name="producto_empaque" value="producto_empaque" disabled {{ $producto->producto_empaque ? 'checked': '' }}>
+                    </div>
+                </div>
             </div>
 
             <div class="row">

@@ -36,6 +36,7 @@ var app = app || {};
             this.initICheck();
             this.initAlertify();
             this.initInputMask();
+            this.initInputFormula();
             this.initSelect2();
             this.initSelectFile();
             this.initToUpper();
@@ -90,6 +91,25 @@ var app = app || {};
                 prefix: '',
                 removeMaskOnSubmit: true,
                 unmaskAsNumber: true,
+            });
+        },
+
+        /**
+        * Init initInputFormula
+        */
+        initInputFormula: function () {
+            $('.input-formula').change(function() {
+                var reg = /[0-9/\+/\-/\*/\/\/\./\(/\)]/,
+                    dato = $(this).val(),
+                    valor = '';
+
+                for (var i = 0; i <= dato.length - 1; i++) {
+                    if( reg.test( dato.charAt(i) ) ){
+                        valor += dato.charAt(i);
+                    }
+                }
+
+                $(this).val( valor );
             });
         },
 

@@ -14,6 +14,8 @@ app || (app = {});
         el: '#browse-precotizacion-producto-areas-list',
         events: {
             'click .item-producto-areasp-precotizacion-remove': 'removeOne',
+            'click .item-producto-areasp-precotizacion-edit': 'editOne',
+            'click .item-producto-areasp-precotizacion-success': 'successEdit'
         },
         parameters: {
         	wrapper: null,
@@ -49,7 +51,6 @@ app || (app = {});
         */
         addOne: function ( precotizacion6Model ) {
             var view = new app.AreasProductopPreCotizacionItemView({
-                collection: this.collection,
                 model: precotizacion6Model,
                 parameters: {
                     edit: this.parameters.edit
@@ -143,6 +144,57 @@ app || (app = {});
 
                 cancelConfirm.render();
             }
+        },
+
+        /**
+        * Event edit item
+        */
+        editOne: function(e){
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var view = new app.AreasProductopPreCotizacionItemView({
+                model: model,
+                parameters: {
+                    action: 'edit',
+                }
+            });
+            model.view.$el.replaceWith( view.render().el );
+        },
+
+        /**
+        * Event success edit item
+        */
+        successEdit: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            var hour = this.$('#precotizacion6_horas_' + model.get('id')).val();
+                minute = this.$('#precotizacion6_minutos_' + model.get('id')).val();
+
+            if (hour < 0 || _.isNaN(parseInt(hour)) ) {
+                alertify.error('El campo de horas no es valido.');
+                return;
+            }
+
+            if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute)) ) {
+                alertify.error('El campo de minutos no es valido.');
+                return;
+            }
+
+            var attributes = {};
+            if (model.get('precotizacion6_horas') != parseInt(hour))
+                attributes.precotizacion6_horas = parseInt(hour);
+
+            if (model.get('precotizacion6_minutos') != parseInt(minute))
+                attributes.precotizacion6_minutos = parseInt(minute)
+
+            model.set(attributes, {silent: true});
+            this.collection.trigger('reset');
         },
 
         /**

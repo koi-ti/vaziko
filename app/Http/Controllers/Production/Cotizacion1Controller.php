@@ -727,7 +727,6 @@ class Cotizacion1Controller extends Controller
                          $orden4->orden4_materialp = $cotizacion4->cotizacion4_materialp;
                          $orden4->orden4_orden2 = $orden2->id;
                          $orden4->orden4_producto = $cotizacion4->cotizacion4_producto;
-                         $orden4->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                          $orden4->orden4_medidas = $cotizacion4->cotizacion4_medidas;
                          $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                          $orden4->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
@@ -743,7 +742,6 @@ class Cotizacion1Controller extends Controller
                          $orden9->orden9_materialp = $cotizacion9->cotizacion9_materialp;
                          $orden9->orden9_orden2 = $orden2->id;
                          $orden9->orden9_producto = $cotizacion9->cotizacion9_producto;
-                         $orden9->orden9_cantidad = $cotizacion9->cotizacion9_cantidad;
                          $orden9->orden9_medidas = $cotizacion9->cotizacion9_medidas;
                          $orden9->orden9_valor_unitario = $cotizacion9->cotizacion9_valor_unitario;
                          $orden9->orden9_valor_total = $cotizacion9->cotizacion9_valor_total;

@@ -551,7 +551,6 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_materialp = $precotizacion3->precotizacion3_materialp;
                          $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                          $cotizacion4->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
-                         $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
                          $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
                          $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
                          $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
@@ -569,7 +568,6 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
                          $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                          $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
-                         $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;
                          $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
                          $cotizacion9->cotizacion9_valor_unitario = $precotizacion9->precotizacion9_valor_unitario;
                          $cotizacion9->cotizacion9_valor_total = $precotizacion9->precotizacion9_valor_total;

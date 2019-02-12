@@ -19,7 +19,6 @@ class CreateCotizacion4Table extends Migration
              $table->integer('cotizacion4_cotizacion2')->unsigned();
              $table->integer('cotizacion4_materialp')->unsigned();
              $table->integer('cotizacion4_producto')->unsigned()->nullable();
-             $table->double('cotizacion4_cantidad')->default(0);
              $table->string('cotizacion4_medidas', 50)->nullable();
              $table->double('cotizacion4_valor_unitario')->default(0);
              $table->double('cotizacion4_valor_total')->default(0);

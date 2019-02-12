@@ -30,6 +30,7 @@ app || (app = {});
             'producto_unidades': true,
             'producto_serie': false,
             'producto_metrado': false,
+            'producto_empaque': false,
             'producto_ancho': 0,
             'producto_largo': 0
         }

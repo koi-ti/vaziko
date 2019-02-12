@@ -97,10 +97,28 @@
         },
 
         /**
+         *  Validate formula format
+         */
+        validarMedida: function (medida) {
+            var reg = /[0-9/\+/\-/\*/\/\/\./\(/\)]/,
+                medida = medida,
+                formula = 1;
+
+            try {
+                if (reg.test(medida)) {
+                    formula = eval(medida);
+                }
+            } catch (e) {
+                formula = 1;
+            }
+
+            return formula;
+        },
+
+        /**
         * validate the urls
         */
         isUrl : function( str ){
-
             // var patt = /^(http[s]?:\/\/(www\.)?|ftp:\/\/(www\.)?|www\.){1}([0-9A-Za-z-\.@:%_\+~#=]+)+\.[a-zA-Z]{2,3}(\/([^\n\r\s])*)?(\?([^\n\r\s])*)?/i;
             var patt = /^(http[s]?:\/\/(www\.)?|ftp:\/\/(www\.)?|www\.){1}([0-9A-Za-z-\.@:%_\+~#=]+)+(\/(.)*)?(\?(.)*)?/i;
 
@@ -416,6 +434,7 @@
                 alertify.error(thrownError);
             });
         },
+
         /**
         *Evaluate action Inventory
         */

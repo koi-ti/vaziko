@@ -166,7 +166,6 @@ class PreCotizacion2Controller extends Controller
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $precotizacion3 = new PreCotizacion3;
-                        $precotizacion3->precotizacion3_cantidad = $material->precotizacion3_cantidad;
                         $precotizacion3->precotizacion3_medidas = $material->precotizacion3_medidas;
                         $precotizacion3->precotizacion3_valor_unitario = $material->precotizacion3_valor_unitario;
                         $precotizacion3->precotizacion3_valor_total = $material->precotizacion3_valor_total;
@@ -195,7 +194,6 @@ class PreCotizacion2Controller extends Controller
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $precotizacion9 = new PreCotizacion9;
-                        $precotizacion9->precotizacion9_cantidad = $empaque->precotizacion9_cantidad;
                         $precotizacion9->precotizacion9_medidas = $empaque->precotizacion9_medidas;
                         $precotizacion9->precotizacion9_valor_unitario = $empaque->precotizacion9_valor_unitario;
                         $precotizacion9->precotizacion9_valor_total = $empaque->precotizacion9_valor_total;

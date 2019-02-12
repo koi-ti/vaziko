@@ -64,8 +64,6 @@ app || (app = {});
             });
             precotizacion3Model.view = view;
             this.$el.append( view.render().el );
-
-            this.totalize();
         },
 
         /**
@@ -74,6 +72,8 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
+
+            this.totalize();
         },
 
         /**
@@ -105,6 +105,7 @@ app || (app = {});
                         // Add model in collection
                         window.Misc.clearForm(form);
                         _this.collection.add(model);
+                        _this.totalize();
                     }
                 },
                 error : function(model, error) {
@@ -151,14 +152,17 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var view = new app.MaterialesProductopPreCotizacionItemView({
-                model: model,
-                parameters: {
-                    action: 'edit',
-                }
-            });
-            model.view.$el.replaceWith( view.render().el );
-            this.ready();
+            if ( model instanceof Backbone.Model ) {
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                var view = new app.MaterialesProductopPreCotizacionItemView({
+                    model: model,
+                    parameters: {
+                        action: 'edit',
+                    }
+                });
+                model.view.$el.replaceWith( view.render().el );
+                this.ready();
+            }
         },
 
         /**
@@ -170,17 +174,26 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var dimensiones = this.$('#precotizacion3_medidas_' + model.get('id')).val();
-                cantidad = this.$('#precotizacion3_cantidad_' + model.get('id')).val();
-                valor = this.$('#precotizacion3_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+            if ( model instanceof Backbone.Model ) {
+                var medidas = this.$('#precotizacion3_medidas_' + model.get('id')).val(),
+                    valor = this.$('#precotizacion3_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-            if (!dimensiones.length || !cantidad.length || !valor) {
-                alertify.error('Ningun campo puede ir vacio.');
-                return;
+                if (!medidas.length || !valor) {
+                    alertify.error('Ningun campo puede ir vacio.');
+                    return;
+                }
+
+                var attributes = {};
+                if (model.get('precotizacion3_medidas') != medidas)
+                    attributes.precotizacion3_medidas = medidas;
+
+                if (model.get('precotizacion3_valor_unitario') != valor)
+                    attributes.precotizacion3_valor_unitario = valor;
+
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                model.set(attributes, {silent: true});
+                this.collection.trigger('reset');
             }
-
-            model.set({'precotizacion3_medidas': dimensiones, 'precotizacion3_cantidad': cantidad, 'precotizacion3_valor_unitario': valor});
-            this.collection.trigger('reset');
         },
 
         /**
@@ -189,6 +202,9 @@ app || (app = {});
         ready: function () {
             if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();
+
+            if( typeof window.initComponent.initInputFormula == 'function' )
+                window.initComponent.initInputFormula();
         },
 
         /**
@@ -206,14 +222,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.$el );
+            window.Misc.setSpinner( this.parameters.wrapper );
         },
 
         /**
         * response of the server
         */
         responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.$el );
+            window.Misc.removeSpinner( this.parameters.wrapper );
         },
    });
 

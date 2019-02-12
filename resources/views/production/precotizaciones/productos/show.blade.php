@@ -337,10 +337,9 @@
 							<tr>
 								<th width="25%">Material</th>
 								<th width="25%">Insumo</th>
-								<th width="15%">Dimensiones</th>
-								<th width="5%">Cantidad</th>
-								<th width="12%">Valor unidad</th>
-								<th width="12%">Valor</th>
+								<th width="20%">Dimensiones</th>
+								<th width="15%">Valor unidad</th>
+								<th width="15%">Valor</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -350,7 +349,6 @@
 									<td>{{ $materialp->materialp_nombre }}</td>
 									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 									<td>{{ $materialp->precotizacion3_medidas }}</td>
-									<td class="text-center">{{ $materialp->precotizacion3_cantidad }}</td>
 									<td class="text-right">{{ number_format($materialp->precotizacion3_valor_unitario, 2, ',', '.') }}</td>
 									<td class="text-right">{{ number_format($materialp->precotizacion3_valor_total, 2, ',', '.') }}</td>
 								</tr>
@@ -359,48 +357,7 @@
 						</tbody>
 						<tfoot>
 							<tr>
-								<td colspan="4"></td>
-								<th class="text-right">Total</th>
-								<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
-							</tr>
-						</tfoot>
-					</table>
-				</div>
-			</div>
-
-			<div class="box box-success">
-				<div class="box-header with-border">
-		            <h3 class="box-title">Empaques de producción</h3>
-		        </div>
-				<div class="box-body table-responsive no-padding">
-					<table id="browse-precotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
-						<thead>
-							<tr>
-								<th width="25%">Empaque</th>
-								<th width="25%">Insumo</th>
-								<th width="15%">Dimensiones</th>
-								<th width="5%">Cantidad</th>
-								<th width="12%">Valor unidad</th>
-								<th width="12%">Valor</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{--*/ $total = 0; /*--}}
-							@foreach( App\Models\Production\PreCotizacion9::getPreCotizaciones9( $precotizacion2->id ) as $materialp )
-								<tr>
-									<td>{{ $materialp->materialp_nombre }}</td>
-									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
-									<td>{{ $materialp->precotizacion9_medidas }}</td>
-									<td class="text-center">{{ $materialp->precotizacion9_cantidad }}</td>
-									<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
-									<td class="text-right">{{ number_format($materialp->precotizacion9_valor_total, 2, ',', '.') }}</td>
-								</tr>
-								{{--*/ $total += $materialp->precotizacion9_valor_total; /*--}}
-							@endforeach
-						</tbody>
-						<tfoot>
-							<tr>
-								<td colspan="4"></td>
+								<td colspan="3"></td>
 								<th class="text-right">Total</th>
 								<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
 							</tr>
@@ -454,6 +411,45 @@
 							</tfoot>
 						</table>
           			</div>
+				</div>
+			</div>
+
+			<div class="box box-success">
+				<div class="box-header with-border">
+		            <h3 class="box-title">Empaques de producción</h3>
+		        </div>
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-precotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
+						<thead>
+							<tr>
+								<th width="25%">Empaque</th>
+								<th width="25%">Insumo</th>
+								<th width="20%">Dimensiones</th>
+								<th width="15%">Valor unidad</th>
+								<th width="15%">Valor</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{--*/ $total = 0; /*--}}
+							@foreach( App\Models\Production\PreCotizacion9::getPreCotizaciones9( $precotizacion2->id ) as $materialp )
+								<tr>
+									<td>{{ $materialp->materialp_nombre }}</td>
+									<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+									<td>{{ $materialp->precotizacion9_medidas }}</td>
+									<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
+									<td class="text-right">{{ number_format($materialp->precotizacion9_valor_total, 2, ',', '.') }}</td>
+								</tr>
+								{{--*/ $total += $materialp->precotizacion9_valor_total; /*--}}
+							@endforeach
+						</tbody>
+						<tfoot>
+							<tr>
+								<td colspan="3"></td>
+								<th class="text-right">Total</th>
+								<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
+							</tr>
+						</tfoot>
+					</table>
 				</div>
 			</div>
 		</div>

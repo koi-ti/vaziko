@@ -17,6 +17,7 @@ app || (app = {});
             'click .history-back': 'clickHistoryBack',
             'click .view-notification': 'clickViewNotification',
             'click .historial-insumo': 'clickHistorialInsumo',
+            'change .calculate-formula': 'calculateFormula',
             'hidden.bs.modal': 'multiModal',
 		},
 
@@ -101,6 +102,13 @@ app || (app = {});
                     }
                 });
             }
+        },
+
+        calculateFormula: function (e) {
+            var formula = this.$(e.currentTarget).val(),
+                response = this.$(e.currentTarget).data('response');
+
+            this.$('#' + response).val( eval(formula) ).trigger('change');
         },
 
 		multiModal: function(){

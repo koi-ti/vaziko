@@ -26,8 +26,8 @@ app || (app = {});
         * Constructor Method
         */
         initialize : function(opts){
-
-            // extendsorden-delete-areap-confirm-tpl _.isObject(opts.parameters) )
+            // extends parameters
+            if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
@@ -154,13 +154,15 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var view = new app.AreasProductopItemOrdenView({
-                model: model,
-                parameters: {
-                    action: 'edit',
-                }
-            });
-            model.view.$el.replaceWith( view.render().el );
+            if ( model instanceof Backbone.Model ) {
+                var view = new app.AreasProductopItemOrdenView({
+                    model: model,
+                    parameters: {
+                        action: 'edit',
+                    }
+                });
+                model.view.$el.replaceWith( view.render().el );
+            }
         },
 
         /**
@@ -172,28 +174,30 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var hour = this.$('#orden6_horas_' + model.get('id')).val();
-                minute = this.$('#orden6_minutos_' + model.get('id')).val();
+            if ( model instanceof Backbone.Model ) {
+                var hour = this.$('#orden6_horas_' + model.get('id')).val();
+                    minute = this.$('#orden6_minutos_' + model.get('id')).val();
 
-            if (hour < 0 || _.isNaN(parseInt(hour)) ) {
-                alertify.error('El campo de horas no es valido.');
-                return;
+                if (hour < 0 || _.isNaN(parseInt(hour)) ) {
+                    alertify.error('El campo de horas no es valido.');
+                    return;
+                }
+
+                if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute)) ) {
+                    alertify.error('El campo de minutos no es valido.');
+                    return;
+                }
+
+                var attributes = {};
+                if (model.get('orden6_horas') != parseInt(hour))
+                    attributes.orden6_horas = parseInt(hour);
+
+                if (model.get('orden6_minutos') != parseInt(minute))
+                    attributes.orden6_minutos = parseInt(minute)
+
+                model.set(attributes, {silent: true});
+                this.collection.trigger('reset');
             }
-
-            if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute)) ) {
-                alertify.error('El campo de minutos no es valido.');
-                return;
-            }
-
-            var attributes = {};
-            if (model.get('orden6_horas') != parseInt(hour))
-                attributes.orden6_horas = parseInt(hour);
-
-            if (model.get('orden6_minutos') != parseInt(minute))
-                attributes.orden6_minutos = parseInt(minute)
-
-            model.set(attributes, {silent: true});
-            this.collection.trigger('reset');
         },
 
         /**

@@ -30,7 +30,7 @@ class Producto extends BaseModel
      *
      * @var array
      */
-    protected $boolean = ['producto_serie', 'producto_metrado', 'producto_unidades'];
+    protected $boolean = ['producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque'];
 
     /**
      * The attributes that are mass nullable fields to null.
@@ -47,17 +47,15 @@ class Producto extends BaseModel
             'producto_grupo' => 'required',
             'producto_subgrupo' => 'required',
             'producto_ancho' => 'required_if:producto_metrado,true|numeric',
-            'producto_largo' => 'required_if:producto_metrado,true|numeric',
+            'producto_largo' => 'required_if:producto_metrado,true|numeric'
         ];
 
         $validator = Validator::make($data, $rules);
-        if ($validator->passes())
-        {
-            if(isset($data['producto_serie']) && $data['producto_serie'] == 'producto_serie' && isset($data['producto_metrado']) && $data['producto_metrado'] == 'producto_metrado') {
+        if ($validator->passes()) {
+            if (isset($data['producto_serie']) && $data['producto_serie'] == 'producto_serie' && isset($data['producto_metrado']) && $data['producto_metrado'] == 'producto_metrado') {
                 $this->errors = 'Producto no puede ser metrado y manejar serie al mismo tiempo, por favor verifique la información del asiento o consulte al administrador.';
                 return false;
             }
-
             return true;
         }
         $this->errors = $validator->errors();
@@ -80,7 +78,7 @@ class Producto extends BaseModel
     public function serie($serie)
     {
         $producto = Producto::where('producto_codigo', $serie)->first();
-        if($producto instanceof Producto) {
+        if ($producto instanceof Producto) {
             return "Ya existe un producto con este número de serie {$producto->producto_codigo}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
@@ -98,21 +96,18 @@ class Producto extends BaseModel
 
     public function costopromedio($costo = 0, $cantidad = 0, $update = true)
     {
-        $suma = DB::table('koi_prodbode')
-            ->where('prodbode_producto', $this->id)
-            ->sum('prodbode_cantidad');
+        $suma = DB::table('koi_prodbode')->where('prodbode_producto', $this->id)->sum('prodbode_cantidad');
 
         $totalp1 = $suma * $this->producto_costo;
         $totalp2 = $costo * $cantidad;
         $totalp3 = $cantidad + $suma;
         $costopromedio = ( $totalp1 + $totalp2 ) / $totalp3;
 
-        if($update) {
+        if ($update) {
             // Actualizar producto costo
             $this->producto_costo = $costopromedio;
             $this->save();
         }
-
         return $costopromedio;
     }
 
@@ -126,7 +121,7 @@ class Producto extends BaseModel
                 ->groupBy('prodboderollo_sucursal')
                 ->orderBy('sucursal_nombre', 'asc')
                 ->where('prodboderollo_saldo', '>', 0);
-        }else{
+        } else {
             return $this->hasMany('App\Models\Inventory\Prodbode', 'prodbode_producto', 'id')
                 ->select('koi_prodbode.*','sucursal_nombre', DB::raw('SUM(prodbode_cantidad) AS disponible'),'prodbode_reservada')
                 ->join('koi_sucursal','prodbode_sucursal','=','koi_sucursal.id')

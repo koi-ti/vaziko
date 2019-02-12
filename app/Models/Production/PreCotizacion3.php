@@ -21,7 +21,7 @@ class PreCotizacion3 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['precotizacion3_cantidad', 'precotizacion3_medidas', 'precotizacion3_valor_unitario', 'precotizacion3_valor_total'];
+    protected $fillable = ['precotizacion3_medidas', 'precotizacion3_valor_unitario', 'precotizacion3_valor_total'];
 
     /**
      * The attributes that are mass nullable.
@@ -35,7 +35,6 @@ class PreCotizacion3 extends BaseModel
         $rules = [
             'precotizacion3_materialp' => 'required',
             'precotizacion3_producto' => 'required',
-            'precotizacion3_cantidad' => 'required|min:1',
             'precotizacion3_medidas' => 'required',
             'precotizacion3_valor_unitario' => 'required',
         ];

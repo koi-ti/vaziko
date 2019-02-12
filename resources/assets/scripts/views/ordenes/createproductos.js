@@ -314,32 +314,35 @@ app || (app = {});
         * Event change materialp
         */
         changeMaterialp: function (e) {
-            var _this = this;
-                materialp = this.$(e.currentTarget).val();
+            var materialp = this.$(e.currentTarget).val(),
+                _this = this;
 
             // Reference
-            this.$selectinsumo = this.$('#' + this.$(e.currentTarget).data('field'));
-            this.$inputinsumo = this.$('#' + this.$selectinsumo.data('valor'));
-            this.$historialinsumo = this.$('#' + this.$selectinsumo.data('historial'));
+            this.$referenceselected = this.$('#' + this.$(e.currentTarget).data('field'));
+            this.$referencewrapper = this.$('#' + this.$(e.currentTarget).data('wrapper'));
+            this.$selectedinput = this.$('#' + this.$referenceselected.data('valor'));
+            this.$selectedhistorial = this.$('#' + this.$referenceselected.data('historial'));
 
             if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
+                window.Misc.setSpinner( this.$referencewrapper );
                 $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ), function (resp){
                     if (resp.length) {
-                        _this.$selectinsumo.empty().val(0).removeAttr('disabled');
-                        _this.$selectinsumo.append("<option value=></option>");
+                        _this.$referenceselected.empty().val(0).removeAttr('disabled');
+                        _this.$referenceselected.append("<option value=></option>");
                         _.each(resp, function(item){
-                            _this.$selectinsumo.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
+                            _this.$referenceselected.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
                         });
                     } else {
-                        _this.$selectinsumo.empty().val(0).prop('disabled', true);
-                        _this.$inputinsumo.val(0);
-                        _this.$historialinsumo.empty();
+                        _this.$referenceselected.empty().val(0).prop('disabled', true);
+                        _this.$selectedinput.val(0);
+                        _this.$selectedhistorial.empty();
                     }
+                    window.Misc.removeSpinner( _this.$referencewrapper );
                 });
             } else {
-                this.$selectinsumo.empty().val(0).prop('disabled', true);
-                this.$inputinsumo.val(0);
-                this.$historialinsumo.empty();
+                this.$referenceselected.empty().val(0).prop('disabled', true);
+                this.$selectedinput.val(0);
+                this.$selectedhistorial.empty();
             }
         },
 

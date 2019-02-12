@@ -654,6 +654,10 @@
             <input type="number" id="producto_largo" name="producto_largo" value="<%- producto_largo %>" placeholder="Ancho" step="0.01" class="form-control input-sm" <%- !parseInt(producto_metrado) ? 'readonly': ''%> required>
             <div class="help-block with-errors"></div>
 		</div>
+        <div class="form-group col-md-2 col-xs-4">
+            <label for="producto_empaque" class="control-label">¿Empaque?</label>
+            <div><input type="checkbox" id="producto_empaque" name="producto_empaque" value="producto_empaque" <%- parseInt(producto_empaque) ? 'checked': ''%>></div>
+        </div>
 	</div>
 </script>
 

@@ -25,14 +25,14 @@ app || (app = {});
 
         totalEmpaque: function( ){
             _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('orden9_valor_unitario') ) * model.get('orden9_cantidad');
+                var total = parseFloat( model.get('orden9_valor_unitario') ) * window.Misc.validarMedida(model.get('orden9_medidas'));
                 model.set('orden9_valor_total', total);
             });
         },
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('orden9_valor_unitario') ) * model.get('orden9_cantidad');
+                return sum + parseFloat( model.get('orden9_valor_unitario') ) * window.Misc.validarMedida(model.get('orden9_medidas'));
             }, 0);
         },
 

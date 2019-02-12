@@ -286,6 +286,7 @@
                         </div>
                     </form>
 
+                    {{-- Content imagenes --}}
                     <div class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Imágenes</h3>
@@ -297,11 +298,11 @@
                     </div>
 
                     {{-- Content impresiones --}}
-                    <div class="box box-success">
+                    <div  id="impresiones-wrapper-producto" class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Impresiones</h3>
                         </div>
-                        <div class="box-body" id="precotizacion5-wrapper-producto">
+                        <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-impresion-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-7">
@@ -341,11 +342,11 @@
                     </div>
 
                     {{-- Content materialesp --}}
-                    <div class="box box-success">
+                    <div id="materialesp-wrapper-producto" class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Materiales de producción</h3>
                         </div>
-                        <div class="box-body" id="precotizacion3-wrapper-producto">
+                        <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-materialp-producto" data-toggle="validator">
                                 <div class="row">
                                     @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
@@ -356,7 +357,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="precotizacion3_producto" required>
+                                        <select name="precotizacion3_materialp" id="precotizacion3_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="precotizacion3_producto" data-wrapper="materialesp-wrapper-producto" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach( App\Models\Production\PreCotizacion3::getMaterials( $producto->id ) as $key => $value )
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -372,12 +373,12 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-sm-2">
-                                        <input type="number" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
+                                    <div class="form-group col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion3_medidas_text" maxlength="50" required>
+                                            <span class="input-group-addon">=</span>
+                                            <input type="text" id="precotizacion3_medidas_text" class="form-control text-right" disabled>
+                                        </div>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-3">
@@ -400,86 +401,14 @@
                                             <th colspan="2"></th>
                                             <th width="25%">Material</th>
                                             <th width="25%">Insumo</th>
-                                            <th width="15%">Dimensiones</th>
-                                            <th width="10%">Cantidad</th>
+                                            <th width="25%">Dimensiones</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="6"></td>
-                                            <th class="text-right">Total</th>
-                                            <th class="text-right" id="total">0</th>
-                                        </tr>
-                                    </tfoot>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    {{-- Content empaques --}}
-                    <div class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Empaques de producción</h3>
-                        </div>
-                        <div class="box-body" id="precotizacion9-wrapper-producto">
-                            <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
-                                <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <select name="precotizacion9_materialp" id="precotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="precotizacion9_producto" required>
-                                            <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\PreCotizacion9::getPackaging( $producto->id ) as $key => $value )
-                                                <option value="{{ $key }}">{{ $value }}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <select name="precotizacion9_producto" id="precotizacion9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-placeholder="Insumo" data-historial="historial_precotizacion9" data-valor="precotizacion9_valor_unitario" disabled required>
-                                            <option value hidden selected>Seleccione</option>
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-sm-2">
-                                        <input type="number" id="precotizacion9_cantidad" name="precotizacion9_cantidad" placeholder="Cantidad" class="form-control input-xs" min="0" step="0.01" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <input type="text" id="precotizacion9_medidas" name="precotizacion9_medidas" placeholder="Medidas" class="form-control input-xs" maxlength="50" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-3">
-                                        <input id="precotizacion9_valor_unitario" name="precotizacion9_valor_unitario" class="form-control input-sm" type="text" required data-currency>
-                                        <div class="help-block pull-right"><a id="historial_precotizacion9" class="historial-insumo cursor-pointer"></a></div>
-                                    </div>
-                                    <div class="form-group col-sm-1">
-                                        <button type="submit" class="btn btn-success btn-sm btn-block">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- table table-bordered table-striped -->
-                            <div class="box-body table-responsive no-padding">
-                                <table id="browse-precotizacion-producto-empaques-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th colspan="2"></th>
-                                            <th width="25%">Empaque</th>
-                                            <th width="25%">Insumo</th>
-                                            <th width="15%">Dimensiones</th>
-                                            <th width="10%">Cantidad</th>
-                                            <th width="15%">Valor unidad</th>
-                                            <th width="15%">Valor</th>
-                                        </tr>
-                                    </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <td colspan="6"></td>
+                                            <td colspan="5"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -490,7 +419,7 @@
                     </div>
 
                     {{-- Content areasp --}}
-                    <div class="box box-success">
+                    <div id="areasp-wrapper-producto" class="box box-success">
                         <div class="box-header with-border">
                             <h3 class="box-title">Áreas de producción</h3>
                         </div>
@@ -498,8 +427,8 @@
                             <form method="POST" accept-charset="UTF-8" id="form-areap-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-5 col-md-offset-1">
-                                        <select name="precotizacion6_areap" id="precotizacion6_areap-producto" class="form-control select2-default-clear">
-                                            <option value="" selected>Seleccione</option>
+                                        <select id="precotizacion6_areap" name="precotizacion6_areap" class="form-control select2-default-clear">
+                                            <option value hidden selected>Seleccione</option>
                                             @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
@@ -537,12 +466,82 @@
                                 <table id="browse-precotizacion-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th colspan="2" width="5%"></th>
                                             <th>Área</th>
                                             <th>Nombre</th>
-                                            <th colspan="2" class="text-center">Tiempo</th>
-                                            <th>Valor</th>
-                                            <th>Total</th>
+                                            <th width="10%">Tiempo</th>
+                                            <th width="15%">Valor</th>
+                                            <th width="15%">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- Content empaques --}}
+                    <div id="empaques-wrapper-producto" class="box box-success">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Empaques de producción</h3>
+                        </div>
+                        <div class="box-body">
+                            <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion9_materialp" id="precotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="precotizacion9_producto" data-wrapper="empaques-wrapper-producto" required>
+                                            <option value hidden selected>Seleccione</option>
+                                            @foreach( App\Models\Production\PreCotizacion9::getPackaging( $producto->id ) as $key => $value )
+                                            <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="precotizacion9_producto" id="precotizacion9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-placeholder="Insumo" data-historial="historial_precotizacion9" data-valor="precotizacion9_valor_unitario" disabled required>
+                                            <option value hidden selected>Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" id="precotizacion9_medidas" name="precotizacion9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion9_medidas_text" maxlength="50" required>
+                                            <span class="input-group-addon">=</span>
+                                            <input type="text" id="precotizacion9_medidas_text" class="form-control text-right" disabled>
+                                        </div>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="precotizacion9_valor_unitario" name="precotizacion9_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                        <div class="help-block pull-right"><a id="historial_precotizacion9" class="historial-insumo cursor-pointer"></a></div>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-success btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-precotizacion-producto-empaques-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="25%">Empaque</th>
+                                            <th width="25%">Insumo</th>
+                                            <th width="25%">Dimensiones</th>
+                                            <th width="15%">Valor unidad</th>
+                                            <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
@@ -593,7 +592,6 @@
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion3_medidas %></td>
-        <td><%- precotizacion3_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_total ) %></td>
     </script>
@@ -604,18 +602,13 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td>
-            <input type="text" id="precotizacion3_medidas_<%- id %>" name="precotizacion3_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs" maxlength="50" required>
+        <td colspan="2">
+            <input type="text" id="precotizacion3_medidas_<%- id %>" name="precotizacion3_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs input-formula" maxlength="50" required>
         </td>
-        <td>
-            <input type="number" id="precotizacion3_cantidad_<%- id %>" name="precotizacion3_cantidad_<%- id %>" placeholder="Cantidad" value="<%- precotizacion3_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
+        <td colspan="2" class="text-right">
+            <input id="precotizacion3_valor_unitario_<%- id %>" name="precotizacion3_valor_unitario_<%- id %>" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
-        <td class="text-right">
-            <input id="precotizacion3_valor_unitario_<%- id %>" name="precotizacion3_valor_unitario_<%- id %>" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" required>
-        </td>
-        <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_total ) %></td>
     </script>
 
     <script type="text/template" id="precotizacion-producto-empaque-item-tpl">
@@ -634,7 +627,6 @@
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion9_medidas %></td>
-        <td><%- precotizacion9_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_total ) %></td>
     </script>
@@ -645,18 +637,13 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td>
+        <td colspan="2">
             <input type="text" id="precotizacion9_medidas_<%- id %>" name="precotizacion9_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion9_medidas %>" class="form-control input-xs" maxlength="50" required>
         </td>
-        <td>
-            <input type="number" id="precotizacion9_cantidad_<%- id %>" name="precotizacion9_cantidad_<%- id %>" placeholder="Cantidad" value="<%- precotizacion9_cantidad %>" class="form-control input-xs" min="0" step="0.01" required>
-        </td>
-        <td class="text-right">
+        <td colspan="2" class="text-right">
             <input id="precotizacion9_valor_unitario_<%- id %>" name="precotizacion9_valor_unitario_<%- id %>" value="<%- precotizacion9_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
-        <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_total ) %></td>
     </script>
 
     <script type="text/template" id="precotizacion-producto-impresion-item-tpl">
@@ -679,17 +666,32 @@
                    <span><i class="fa fa-times"></i></span>
                </a>
            </td>
+           <td class="text-center">
+               <a class="btn btn-default btn-xs item-producto-areasp-precotizacion-edit" data-resource="<%- id %>">
+                   <span><i class="fa fa-pencil-square-o"></i></span>
+               </a>
+           </td>
        <% } %>
-       <td><%- areap_nombre %></td>
-       <td><%- precotizacion6_nombre %></td>
-       <td class="form-group col-sm-1">
-           <input type="number" id="precotizacion6_horas" name="precotizacion6_horas" placeholder="Hora" value="<%- precotizacion6_horas %>" class="form-control input-xs change-time" data-type="hs" min="0" step="1" max="9999" required>
-       </td>
-       <td class="form-group col-sm-2">
-           <input type="number" id="precotizacion6_minutos" name="precotizacion6_minutos" placeholder="Minutos" value="<%- precotizacion6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
-       </td>
+       <td><%- areap_nombre ? areap_nombre : '-' %></td>
+       <td><%- precotizacion6_nombre ? precotizacion6_nombre : '-' %></td>
+       <td><%- precotizacion6_horas %>:<%- precotizacion6_minutos %></td>
        <td class="text-right"><%- window.Misc.currency( precotizacion6_valor ) %></td>
        <td class="text-right"><%- window.Misc.currency( total ) %></td>
+    </script>
+
+    <script type="text/template" id="precotizacion-producto-areasp-edit-item-tpl">
+       <td colspan="2" class="text-center">
+           <a class="btn btn-success btn-xs item-producto-areasp-precotizacion-success" data-resource="<%- id %>">
+               <span><i class="fa fa-check"></i></span>
+           </a>
+       </td>
+       <td><%- areap_nombre ? areap_nombre : precotizacion6_nombre %></td>
+       <td colspan="2">
+           <input type="number" id="precotizacion6_horas_<%- id %>" name="precotizacion6_horas_<%- id %>" placeholder="Hora" value="<%- precotizacion6_horas %>" class="form-control input-xs change-time" data-type="hs" min="0" step="1" max="9999" required>
+       </td>
+       <td colspan="2">
+           <input type="number" id="precotizacion6_minutos_<%- id %>" name="precotizacion6_minutos_<%- id %>" placeholder="Minutos" value="<%- precotizacion6_minutos %>" class="form-control input-xs change-time" data-type="ms" min="00" step="01" max="59" required>
+       </td>
     </script>
 
     <script type="text/template" id="qq-template-precotizacion">

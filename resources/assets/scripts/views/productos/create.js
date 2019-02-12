@@ -134,7 +134,7 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('productos.show', { productos: resp.id})) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('productos.index')));
             }
         }
     });

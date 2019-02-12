@@ -145,14 +145,17 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var view = new app.EmpaquesProductopOrdenItemView({
-                model: model,
-                parameters: {
-                    action: 'edit',
-                }
-            });
-            model.view.$el.replaceWith( view.render().el );
-            this.ready();
+            if ( model instanceof Backbone.Model ) {
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                var view = new app.EmpaquesProductopOrdenItemView({
+                    model: model,
+                    parameters: {
+                        action: 'edit',
+                    }
+                });
+                model.view.$el.replaceWith( view.render().el );
+                this.ready();
+            }
         },
 
         /**
@@ -164,27 +167,26 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            var medidas = this.$('#orden9_medidas_' + model.get('id')).val();
-                cantidad = this.$('#orden9_cantidad_' + model.get('id')).val();
-                valor = this.$('#orden9_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+            if ( model instanceof Backbone.Model ) {
+                var medidas = this.$('#orden9_medidas_' + model.get('id')).val();
+                    valor = this.$('#orden9_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-            if (!medidas.length || !cantidad.length || !valor) {
-                alertify.error('Ningun campo puede ir vacio.');
-                return;
+                if (!medidas.length || !valor) {
+                    alertify.error('Ningun campo puede ir vacio.');
+                    return;
+                }
+
+                var attributes = {};
+                if (model.get('orden9_medidas') != medidas)
+                    attributes.orden9_medidas = medidas;
+
+                if (model.get('orden9_valor_unitario') != valor)
+                    attributes.orden9_valor_unitario = valor;
+
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                model.set(attributes, {silent: true});
+                this.collection.trigger('reset');
             }
-
-            var attributes = {};
-            if (model.get('orden9_medidas') != medidas)
-                attributes.orden9_medidas = medidas;
-
-            if (model.get('orden9_cantidad') != cantidad)
-                attributes.orden9_cantidad = cantidad;
-
-            if (model.get('orden9_valor_unitario') != valor)
-                attributes.orden9_valor_unitario = valor;
-
-            model.set(attributes, {silent: true});
-            this.collection.trigger('reset');
         },
 
         /**

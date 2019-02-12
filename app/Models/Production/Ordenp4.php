@@ -21,7 +21,7 @@ class Ordenp4 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden4_cantidad', 'orden4_medidas', 'orden4_valor_unitario', 'orden4_valor_total'];
+    protected $fillable = ['orden4_medidas', 'orden4_valor_unitario', 'orden4_valor_total'];
 
     /**
      * The attributes that are mass nullable.
@@ -35,7 +35,6 @@ class Ordenp4 extends BaseModel
         $rules = [
             'orden4_materialp' => 'required',
             'orden4_producto' => 'required',
-            'orden4_cantidad' => 'required|min:1',
             'orden4_medidas' => 'required',
             'orden4_valor_unitario' => 'required',
         ];

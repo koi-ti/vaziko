@@ -193,7 +193,6 @@ class DetalleOrdenpController extends Controller
                         $orden4->orden4_orden2 = $orden2->id;
                         $orden4->orden4_materialp = $materialp->id;
                         $orden4->orden4_producto = $insumo->id;
-                        $orden4->orden4_cantidad = $material->orden4_cantidad;
                         $orden4->orden4_medidas = $material->orden4_medidas;
                         $orden4->orden4_valor_unitario = $material->orden4_valor_unitario;
                         $orden4->orden4_valor_total = $material->orden4_valor_total;
@@ -224,7 +223,6 @@ class DetalleOrdenpController extends Controller
                         $orden9->orden9_orden2 = $orden2->id;
                         $orden9->orden9_materialp = $materialp->id;
                         $orden9->orden9_producto = $insumo->id;
-                        $orden9->orden9_cantidad = $empaque->orden9_cantidad;
                         $orden9->orden9_medidas = $empaque->orden9_medidas;
                         $orden9->orden9_valor_unitario = $empaque->orden9_valor_unitario;
                         $orden9->orden9_valor_total = $empaque->orden9_valor_total;

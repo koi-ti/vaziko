@@ -21,7 +21,7 @@ class PreCotizacion9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['precotizacion9_cantidad', 'precotizacion9_medidas', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'];
+    protected $fillable = ['precotizacion9_medidas', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'];
 
     /**
      * The attributes that are mass nullable.
@@ -35,7 +35,6 @@ class PreCotizacion9 extends BaseModel
         $rules = [
             'precotizacion9_materialp' => 'required',
             'precotizacion9_producto' => 'required',
-            'precotizacion9_cantidad' => 'required|min:1',
             'precotizacion9_medidas' => 'required',
             'precotizacion9_valor_unitario' => 'required',
         ];
@@ -60,7 +59,7 @@ class PreCotizacion9 extends BaseModel
     }
 
     /**
-    *  Select empaques dependiendo del productop
+    *  Select materiales dependiendo del productop
     **/
     public static function getPackaging($productop = null)
     {

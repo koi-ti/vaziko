@@ -21,7 +21,7 @@ class Cotizacion4 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion4_cantidad', 'cotizacion4_medidas', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'];
+    protected $fillable = ['cotizacion4_medidas', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'];
 
     /**
      * The attributes that are mass nullable.
@@ -35,7 +35,6 @@ class Cotizacion4 extends BaseModel
         $rules = [
             'cotizacion4_materialp' => 'required',
             'cotizacion4_producto' => 'required',
-            'cotizacion4_cantidad' => 'required|min:1',
             'cotizacion4_medidas' => 'required',
             'cotizacion4_valor_unitario' => 'required',
         ];
