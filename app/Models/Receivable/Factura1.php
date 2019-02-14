@@ -143,9 +143,9 @@ class Factura1 extends Model
         }
 
         $object->data = [
-            'asiento1_mes' => (Int) date('m'),
-            'asiento1_ano' => (Int) date('Y'),
-            'asiento1_dia' => (Int) date('d'),
+            'asiento1_mes' => (Int) date('m', strtotime($this->factura1_fecha)),
+            'asiento1_ano' => (Int) date('Y', strtotime($this->factura1_fecha)),
+            'asiento1_dia' => (Int) date('d', strtotime($this->factura1_fecha)),
             'asiento1_numero' => $documento->documento_consecutivo + 1,
             'asiento1_folder' => $documento->documento_folder,
             'asiento1_documento' => $documento->id,
@@ -157,9 +157,9 @@ class Factura1 extends Model
         // Prepare Data nif
         if ($documento->documento_nif) {
             $object->dataNif = [
-                'asienton1_mes' => (Int) date('m'),
-                'asienton1_ano' => (Int) date('Y'),
-                'asienton1_dia' => (Int) date('d'),
+                'asienton1_mes' => (Int) date('m', strtotime($this->factura1_fecha)),
+                'asienton1_ano' => (Int) date('Y', strtotime($this->factura1_fecha)),
+                'asienton1_dia' => (Int) date('d', strtotime($this->factura1_fecha)),
                 'asienton1_numero' => $documento->documento_consecutivo + 1,
                 'asienton1_folder' => $documento->documento_folder,
                 'asienton1_documento' => $documento->id,

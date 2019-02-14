@@ -39,11 +39,11 @@ class AsientoNif extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-            // Validar mes || año en curso
-            if ( $data['asienton1_ano'] == date('Y') && (date('n') < $data['asienton1_mes'])) {
-                $this->errors = "La fecha no puede ser mayor al mes en curso";
-                return false;
-            }
+            // // Validar mes || año en curso
+            // if ( $data['asienton1_ano'] == date('Y') && (date('n') < $data['asienton1_mes'])) {
+            //     $this->errors = "La fecha no puede ser mayor al mes en curso";
+            //     return false;
+            // }
             // Armo fecha del asiento
             $fecha_asienton = "{$data['asienton1_ano']}-{$data['asienton1_mes']}-{$data['asienton1_dia']}";
 

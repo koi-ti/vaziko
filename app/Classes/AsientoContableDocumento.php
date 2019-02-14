@@ -203,17 +203,17 @@ class AsientoContableDocumento {
 		        return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
 		    }
 
-			// Mayorizacion de saldos x tercero
-			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			if($result != 'OK') {
-				return $result;
-			}
-
-			// Mayorizacion de saldos Contables
-			$result = $this->saldosContables($objCuenta, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
-			if($result != 'OK') {
-				return $result;
-			}
+			// // Mayorizacion de saldos x tercero
+			// $result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			// if($result != 'OK') {
+			// 	return $result;
+			// }
+			//
+			// // Mayorizacion de saldos Contables
+			// $result = $this->saldosContables($objCuenta, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			// if($result != 'OK') {
+			// 	return $result;
+			// }
 		}
 		return 'OK';
 	}

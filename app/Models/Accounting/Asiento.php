@@ -38,11 +38,11 @@ class Asiento extends Model
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-            // Validar mes || año en curso
-            if ( $data['asiento1_ano'] == date('Y') && (date('n') < $data['asiento1_mes'])) {
-                $this->errors = "La fecha no puede ser mayor al mes en curso";
-                return false;
-            }
+            // // Validar mes || año en curso
+            // if ( $data['asiento1_ano'] == date('Y') && (date('n') < $data['asiento1_mes'])) {
+            //     $this->errors = "La fecha no puede ser mayor al mes en curso";
+            //     return false;
+            // }
             // Armo fecha del asiento
             $fecha_asiento = "{$data['asiento1_ano']}-{$data['asiento1_mes']}-{$data['asiento1_dia']}";
 
