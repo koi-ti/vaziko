@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use Auth, DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
@@ -206,23 +206,16 @@ class DetalleOrdenpController extends Controller
                     // Empaques
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
-                        $materialp = Materialp::find($empaque->orden9_materialp);
-                        if (!$materialp instanceof Materialp) {
+                        $producto = Producto::find($empaque->orden9_producto);
+                        if (!$producto instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
-                        }
-
-                        $insumo = Producto::find($empaque->orden9_producto);
-                        if (!$insumo instanceof Producto) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $orden9 = new Ordenp9;
                         $orden9->orden9_orden2 = $orden2->id;
-                        $orden9->orden9_materialp = $materialp->id;
-                        $orden9->orden9_producto = $insumo->id;
+                        $orden9->orden9_producto = $producto->id;
                         $orden9->orden9_medidas = $empaque->orden9_medidas;
                         $orden9->orden9_valor_unitario = $empaque->orden9_valor_unitario;
                         $orden9->orden9_valor_total = $empaque->orden9_valor_total;
@@ -480,23 +473,16 @@ class DetalleOrdenpController extends Controller
                         foreach ($empaques as $empaque) {
                             $orden9 = Ordenp9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$orden9 instanceof Ordenp9) {
-                                $materialp = Materialp::find($empaque['orden9_materialp']);
-                                if (!$materialp instanceof Materialp) {
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
-                                }
-
-                                $insumo = Producto::find($empaque['orden9_producto']);
-                                if (!$insumo instanceof Producto) {
+                                $producto = Producto::find($empaque['orden9_producto']);
+                                if (!$producto instanceof Producto) {
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                                 }
 
                                 $orden9 = new Ordenp9;
                                 $orden9->fill($empaque);
-                                $orden9->orden9_producto = $insumo->id;
+                                $orden9->orden9_producto = $producto->id;
                                 $orden9->orden9_orden2 = $orden2->id;
-                                $orden9->orden9_materialp = $materialp->id;
                                 $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
                                 $orden9->orden9_usuario_elaboro = Auth::user()->id;
                                 $orden9->save();
@@ -611,9 +597,6 @@ class DetalleOrdenpController extends Controller
                 // Areasp
                 DB::table('koi_ordenproduccion6')->where('orden6_orden2', $orden2->id)->delete();
 
-                // Impresiones
-                DB::table('koi_ordenproduccion7')->where('orden7_orden2', $orden2->id)->delete();
-
                 // Imagenes
                 DB::table('koi_ordenproduccion8')->where('orden8_orden2', $orden2->id)->delete();
 
@@ -671,14 +654,6 @@ class DetalleOrdenpController extends Controller
                      $neworden5 = $orden5->replicate();
                      $neworden5->orden5_orden2 = $neworden2->id;
                      $neworden5->save();
-                }
-
-                // Impŕesiones
-                $impresiones = Ordenp7::where('orden7_orden2', $orden2->id)->get();
-                foreach ($impresiones as $orden7) {
-                     $neworden7 = $orden7->replicate();
-                     $neworden7->orden7_orden2 = $neworden2->id;
-                     $neworden7->save();
                 }
 
                 // Imagenes

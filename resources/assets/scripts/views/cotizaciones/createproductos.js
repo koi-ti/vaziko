@@ -41,7 +41,6 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // reference collections
-            this.impresionesProductopCotizacionList = new app.ImpresionesProductopCotizacionList();
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.empaquesProductopCotizacionList = new app.EmpaquesProductopCotizacionList();
             this.areasProductopCotizacionList = new app.AreasProductopCotizacionList();
@@ -129,14 +128,6 @@ app || (app = {});
                 dataFilter.cotizacion2 = this.model.get('id');
                 dataFilter.productop = this.model.get('cotizacion2_productop');
             }
-
-            // Impresiones
-            this.impresionesProductopCotizacionListView = new app.ImpresionesProductopCotizacionListView( {
-                collection: this.impresionesProductopCotizacionList,
-                parameters: {
-                    dataFilter: dataFilter
-               }
-            });
 
             // Materiales
             this.materialesProductopCotizacionListView = new app.MaterialesProductopCotizacionListView( {

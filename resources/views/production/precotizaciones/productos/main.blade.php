@@ -494,18 +494,12 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <select name="precotizacion9_materialp" id="precotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="precotizacion9_producto" data-wrapper="empaques-wrapper-producto" required>
+                                    <div class="form-group col-sm-12">
+                                        <select name="precotizacion9_producto" id="precotizacion9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Empaque" data-historial="historial_precotizacion9" data-valor="precotizacion9_valor_unitario" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\PreCotizacion9::getPackaging( $producto->id ) as $key => $value )
-                                            <option value="{{ $key }}">{{ $value }}</option>
+                                            @foreach( App\Models\Production\PreCotizacion9::getPackaging() as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <select name="precotizacion9_producto" id="precotizacion9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-placeholder="Insumo" data-historial="historial_precotizacion9" data-valor="precotizacion9_valor_unitario" disabled required>
-                                            <option value hidden selected>Seleccione</option>
                                         </select>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -537,8 +531,7 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2"></th>
-                                            <th width="25%">Empaque</th>
-                                            <th width="25%">Insumo</th>
+                                            <th width="50%">Empaque</th>
                                             <th width="25%">Dimensiones</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
@@ -546,7 +539,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="4"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -565,7 +558,7 @@
     </script>
 
     <script type="text/template" id="precotizacion-delete-empaque-confirm-tpl">
-        <p>¿Está seguro que desea eliminar el empaque <b><%- materialp_nombre %> </b>?</p>
+        <p>¿Está seguro que desea eliminar el empaque <b><%- empaque_nombre %> </b>?</p>
     </script>
 
     <script type="text/template" id="precotizacion-delete-impresion-confirm-tpl">
@@ -624,7 +617,6 @@
                 </a>
             </td>
         <% } %>
-        <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion9_medidas %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_unitario ) %></td>

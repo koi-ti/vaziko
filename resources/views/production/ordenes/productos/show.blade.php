@@ -314,34 +314,6 @@
 					</div>
 				</div>
 
-				@if( $orden->cotizacion1_precotizacion )
-					<div class="box box-primary">
-						<div class="box-header with-border">
-							<h3 class="box-title">Impresiones</h3>
-						</div>
-						<div class="box-body table-responsive no-padding">
-							<table id="browse-orden-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th width="70%">Detalle</th>
-										<th width="15%">Ancho</th>
-										<th width="15%">Alto</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach( App\Models\Production\Ordenp7::getOrdenesp7( $ordenp2->id ) as $impresion )
-										<tr>
-											<td class="text-left">{{ $impresion->orden7_texto }}</td>
-											<td class="text-left">{{ $impresion->orden7_ancho }}</td>
-											<td class="text-left">{{ $impresion->orden7_alto }}</td>
-										</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
-				@endif
-
 				<div class="box box-primary">
 					<div class="box-header with-border">
 						<h3 class="box-title">Materiales de producción</h3>
@@ -443,8 +415,7 @@
 						<table id="browse-orden-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="25%">Empaque</th>
-									<th width="25%">Insumo</th>
+									<th width="50%">Empaque</th>
 									<th width="20%">Dimensiones</th>
 									<th width="15%">Valor unidad</th>
 									<th width="15%">Valor</th>
@@ -454,7 +425,6 @@
 								{{--*/ $totalempaques = 0; /*--}}
 								@foreach( App\Models\Production\Ordenp9::getOrdenesp9( $ordenp2->id ) as $empaque )
 									<tr>
-										<td>{{ $empaque->empaque_nombre }}</td>
 										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
 										<td>{{ $empaque->orden9_medidas }}</td>
 										<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
@@ -465,7 +435,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="3"></td>
+									<td colspan="2"></td>
 									<th class="text-right">Total</th>
 									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
 								</tr>

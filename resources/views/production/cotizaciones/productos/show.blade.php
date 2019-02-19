@@ -319,34 +319,6 @@
 					</div>
 				</div>
 
-				@if( $cotizacion->cotizacion1_precotizacion )
-					<div class="box box-danger">
-						<div class="box-header with-border">
-							<h3 class="box-title">Impresiones</h3>
-						</div>
-						<div class="box-body table-responsive no-padding">
-							<table id="browse-cotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-								<thead>
-									<tr>
-										<th width="70%">Detalle</th>
-										<th width="15%">Ancho</th>
-										<th width="15%">Alto</th>
-									</tr>
-								</thead>
-								<tbody>
-									@foreach( App\Models\Production\Cotizacion7::getCotizaciones7( $cotizacion2->id ) as $impresion )
-										<tr>
-											<td class="text-left">{{ $impresion->cotizacion7_texto }}</td>
-											<td class="text-left">{{ $impresion->cotizacion7_ancho }}</td>
-											<td class="text-left">{{ $impresion->cotizacion7_alto }}</td>
-										</tr>
-									@endforeach
-								</tbody>
-							</table>
-						</div>
-					</div>
-				@endif
-
 				<div class="box box-danger">
 					<div class="box-header with-border">
 						<h3 class="box-title">Materiales de producción</h3>
@@ -448,8 +420,7 @@
 						<table id="browse-cotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="25%">Empaque</th>
-									<th width="25%">Insumo</th>
+									<th width="50%">Empaque</th>
 									<th width="20%">Dimensiones</th>
 									<th width="15%">Valor unidad</th>
 									<th width="15%">Valor</th>
@@ -459,7 +430,6 @@
 								{{--*/ $totalempaques = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion9::getCotizaciones9( $cotizacion2->id ) as $empaque )
 									<tr>
-										<td>{{ $empaque->empaque_nombre }}</td>
 										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
 										<td>{{ $empaque->cotizacion9_medidas }}</td>
 										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
@@ -470,7 +440,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="3"></td>
+									<td colspan="2"></td>
 									<th class="text-right">Total</th>
 									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
 								</tr>

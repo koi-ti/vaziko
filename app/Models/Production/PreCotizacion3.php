@@ -67,8 +67,6 @@ class PreCotizacion3 extends BaseModel
         $query->select('koi_materialp.id as id', 'materialp_nombre');
         $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
         $query->where('productop5_productop', $productop);
-
-        $collection = $query->lists('materialp_nombre', 'id');
-        return $collection;
+        return $query->lists('materialp_nombre', 'id');
     }
 }

@@ -342,29 +342,6 @@
                         </div>
                     </div>
 
-                    {{-- Content impresiones --}}
-                    @if( $orden->cotizacion1_precotizacion )
-                        <div id="impresiones-wrapper-producto" class="box box-primary">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Impresiones</h3>
-                            </div>
-                            <div class="box-body">
-                                <!-- table table-bordered table-striped -->
-                                <div class="box-body table-responsive no-padding">
-                                    <table id="browse-orden-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th width="70%">Detalle</th>
-                                                <th width="12%">Ancho</th>
-                                                <th width="12%">Alto</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-
                     {{-- Content materialesp --}}
                     <div id="materialesp-wrapper-producto" class="box box-primary">
                         <div class="box-header with-border">
@@ -520,18 +497,12 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    <div class="form-group col-sm-6">
-                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" required>
+                                    <div class="form-group col-sm-12">
+                                        <select name="orden9_producto" id="orden9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Empaque" data-historial="orden9" data-valor="orden9_valor_unitario" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Cotizacion9::getPackaging( $producto->id ) as $key => $value )
+                                            @foreach( App\Models\Production\Cotizacion9::getPackaging() as $key => $value )
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
-                                        </select>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-6">
-                                        <select name="orden9_producto" id="orden9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-placeholder="Insumo" data-historial="orden9" data-valor="orden9_valor_unitario" disabled required>
-                                            <option value hidden selected>Seleccione</option>
                                         </select>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -563,8 +534,7 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2"></th>
-                                            <th width="25%">Empaque</th>
-                                            <th width="25%">Insumo</th>
+                                            <th width="50%">Empaque</th>
                                             <th width="15%">Dimensiones</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
@@ -572,7 +542,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="4"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -739,7 +709,6 @@
                 </a>
             </td>
         <% } %>
-        <td><%- empaque_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- orden9_medidas %></td>
         <td class="text-right"><%- window.Misc.currency( orden9_valor_unitario ) %></td>
@@ -801,11 +770,5 @@
                 </div>
             </div>
         </td>
-    </script>
-
-    <script type="text/template" id="orden-producto-impresion-item-tpl">
-       <td><%- orden7_texto %></td>
-       <td><%- orden7_ancho %></td>
-       <td><%- orden7_alto %></td>
     </script>
 @stop

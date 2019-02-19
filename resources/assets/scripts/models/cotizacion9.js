@@ -15,8 +15,6 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'empaque_nombre': '',
-            'cotizacion9_materialp': '',
             'cotizacion9_medidas': '',
             'cotizacion9_valor_unitario': '',
             'cotizacion9_valor_total': ''

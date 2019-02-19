@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp9, App\Models\Production\Materialp, App\Models\Inventory\Producto;
+use App\Models\Production\Ordenp9, App\Models\Inventory\Producto;
 use DB, Log;
 
 class DetalleEmpaquesController extends Controller
@@ -44,18 +44,13 @@ class DetalleEmpaquesController extends Controller
             $orden9 = new Ordenp9;
             if ( $orden9->isValid($data) ) {
                 try {
-                    $empaque = Materialp::find($request->orden9_materialp);
-                    if(!$empaque instanceof Materialp){
+                    $producto = Producto::find($request->orden9_producto);
+                    if(!$producto instanceof Producto){
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    $insumo = Producto::find($request->orden9_producto);
-                    if(!$insumo instanceof Producto){
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo de ese empaque, por favor verifique la información o consulte al administrador.']);
-                    }
-
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'empaque_nombre' => $empaque->materialp_nombre, 'producto_nombre' => $insumo->producto_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'producto_nombre' => $producto->producto_nombre]);
                 }catch(\Exception $e){
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

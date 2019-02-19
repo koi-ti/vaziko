@@ -16,8 +16,6 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'materialp_nombre': '',
-            'precotizacion9_materialp': '',
             'precotizacion9_medidas': '',
             'precotizacion9_valor_unitario': '',
             'precotizacion9_valor_total': ''

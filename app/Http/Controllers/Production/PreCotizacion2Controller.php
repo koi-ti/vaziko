@@ -180,16 +180,10 @@ class PreCotizacion2Controller extends Controller
                     // Empaques
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
-                        $materialp = Materialp::find($empaque->precotizacion9_materialp);
-                        if (!$materialp instanceof Materialp) {
+                        $producto = Producto::find($empaque->precotizacion9_producto);
+                        if (!$producto instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
-                        }
-
-                        $insumo = Producto::find($empaque->precotizacion9_producto);
-                        if (!$insumo instanceof Producto) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
@@ -197,9 +191,8 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion9->precotizacion9_medidas = $empaque->precotizacion9_medidas;
                         $precotizacion9->precotizacion9_valor_unitario = $empaque->precotizacion9_valor_unitario;
                         $precotizacion9->precotizacion9_valor_total = $empaque->precotizacion9_valor_total;
-                        $precotizacion9->precotizacion9_producto = $insumo->id;
+                        $precotizacion9->precotizacion9_producto = $producto->id;
                         $precotizacion9->precotizacion9_precotizacion2 = $precotizacion2->id;
-                        $precotizacion9->precotizacion9_materialp = $materialp->id;
                         $precotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
                         $precotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
                         $precotizacion9->save();
@@ -435,23 +428,16 @@ class PreCotizacion2Controller extends Controller
                         foreach ($empaques as $empaque) {
                             $precotizacion9 = PreCotizacion9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$precotizacion9 instanceof PreCotizacion9) {
-                                $materialp = Materialp::find($empaque['precotizacion9_materialp']);
-                                if (!$materialp instanceof Materialp) {
+                                $producto = Producto::find($empaque['precotizacion9_producto']);
+                                if (!$producto instanceof Producto) {
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
                                 }
 
-                                $insumo = Producto::find($empaque['precotizacion9_producto']);
-                                if (!$insumo instanceof Producto) {
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
-                                }
-
                                 $precotizacion9 = new PreCotizacion9;
                                 $precotizacion9->fill($empaque);
-                                $precotizacion9->precotizacion9_producto = $insumo->id;
+                                $precotizacion9->precotizacion9_producto = $producto->id;
                                 $precotizacion9->precotizacion9_precotizacion2 = $precotizacion2->id;
-                                $precotizacion9->precotizacion9_materialp = $materialp->id;
                                 $precotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
                                 $precotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
                                 $precotizacion9->save();

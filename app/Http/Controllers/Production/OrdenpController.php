@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, Auth, DB, Log, Datatables, Storage;
 
 class OrdenpController extends Controller
@@ -505,14 +505,6 @@ class OrdenpController extends Controller
                         $neworden5 = $orden5->replicate();
                         $neworden5->orden5_orden2 = $neworden2->id;
                         $neworden5->save();
-                    }
-
-                    // Impresiones
-                    $impresiones = Ordenp7::where('orden7_orden2', $orden2->id)->get();
-                    foreach ($impresiones as $orden7) {
-                        $neworden7 = $orden7->replicate();
-                        $neworden7->orden7_orden2 = $neworden2->id;
-                        $neworden7->save();
                     }
 
                     // Imagenes

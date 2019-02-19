@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion1Controller extends Controller
@@ -533,17 +533,6 @@ class PreCotizacion1Controller extends Controller
                     }
 
                     // Recuperar Materiales de pre-cotizacion para generar cotizacion
-                    $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($impresiones as $precotizacion5) {
-                         $cotizacion7 = new Cotizacion7;
-                         $cotizacion7->cotizacion7_cotizacion2 = $cotizacion2->id;
-                         $cotizacion7->cotizacion7_texto = $precotizacion5->precotizacion5_texto;
-                         $cotizacion7->cotizacion7_ancho = $precotizacion5->precotizacion5_ancho;
-                         $cotizacion7->cotizacion7_alto = $precotizacion5->precotizacion5_alto;
-                         $cotizacion7->save();
-                    }
-
-                    // Recuperar Materiales de pre-cotizacion para generar cotizacion
                     $totalmaterialesp = $totalempaques = $totalareasp = 0;
                     $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
                     foreach ($materiales as $precotizacion3) {
@@ -565,7 +554,6 @@ class PreCotizacion1Controller extends Controller
                     $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
                     foreach ($empaques as $precotizacion9) {
                          $cotizacion9 = new Cotizacion9;
-                         $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
                          $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                          $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
                          $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;

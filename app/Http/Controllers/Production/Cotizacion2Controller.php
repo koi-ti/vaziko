@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
 use Auth, DB, Log, Datatables, Storage;
 
 class Cotizacion2Controller extends Controller
@@ -188,23 +188,16 @@ class Cotizacion2Controller extends Controller
                     // Empaques
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
-                        $materialp = Materialp::find($empaque->cotizacion9_materialp);
-                        if (!$materialp instanceof Materialp) {
+                        $producto = Producto::find($empaque->cotizacion9_producto);
+                        if (!$producto instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
-                        }
-
-                        $insumo = Producto::find($empaque->cotizacion9_producto);
-                        if (!$insumo instanceof Producto) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $cotizacion9 = new Cotizacion9;
                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
-                        $cotizacion9->cotizacion9_materialp = $materialp->id;
-                        $cotizacion9->cotizacion9_producto = $insumo->id;
+                        $cotizacion9->cotizacion9_producto = $producto->id;
                         $cotizacion9->cotizacion9_medidas = $empaque->cotizacion9_medidas;
                         $cotizacion9->cotizacion9_valor_unitario = $empaque->cotizacion9_valor_unitario;
                         $cotizacion9->cotizacion9_valor_total = $empaque->cotizacion9_valor_total;
@@ -461,23 +454,16 @@ class Cotizacion2Controller extends Controller
                         foreach ($empaques as $empaque) {
                             $cotizacion9 = Cotizacion9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$cotizacion9 instanceof Cotizacion9) {
-                                $materialp = Materialp::find($empaque['cotizacion9_materialp']);
-                                if (!$materialp instanceof Materialp) {
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
-                                }
-
-                                $insumo = Producto::find($empaque['cotizacion9_producto']);
-                                if (!$insumo instanceof Producto) {
+                                $producto = Producto::find($empaque['cotizacion9_producto']);
+                                if (!$producto instanceof Producto) {
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                                 }
 
                                 $cotizacion9 = new Cotizacion9;
                                 $cotizacion9->fill($empaque);
-                                $cotizacion9->cotizacion9_producto = $insumo->id;
+                                $cotizacion9->cotizacion9_producto = $producto->id;
                                 $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
-                                $cotizacion9->cotizacion9_materialp = $materialp->id;
                                 $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
                                 $cotizacion9->cotizacion9_usuario_elaboro = Auth::user()->id;
                                 $cotizacion9->save();
@@ -588,9 +574,6 @@ class Cotizacion2Controller extends Controller
                 // Areasp
                 DB::table('koi_cotizacion6')->where('cotizacion6_cotizacion2', $cotizacion2->id)->delete();
 
-                // Impresiones
-                DB::table('koi_cotizacion7')->where('cotizacion7_cotizacion2', $cotizacion2->id)->delete();
-
                 // Imagens
                 DB::table('koi_cotizacion8')->where('cotizacion8_cotizacion2', $cotizacion2->id)->delete();
 
@@ -668,14 +651,6 @@ class Cotizacion2Controller extends Controller
 
                          $files[] = $object;
                      }
-                }
-
-                // Impresiones
-                $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
-                foreach ($impresiones as $cotizacion7) {
-                    $newcotizacion7 = $cotizacion7->replicate();
-                    $newcotizacion7->cotizacion7_cotizacion2 = $newcotizacion2->id;
-                    $newcotizacion7->save();
                 }
 
                 // Materiales

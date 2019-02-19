@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion7, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp7, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
 use App, View, Auth, DB, Log, Datatables, Storage;
 
 class Cotizacion1Controller extends Controller
@@ -508,14 +508,6 @@ class Cotizacion1Controller extends Controller
                         $newcotizacion5->save();
                     }
 
-                    // Impresiones
-                    $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
-                    foreach ($impresiones as $cotizacion7) {
-                        $newcotizacion7 = $cotizacion7->replicate();
-                        $newcotizacion7->cotizacion7_cotizacion2 = $newcotizacion2->id;
-                        $newcotizacion7->save();
-                    }
-
                     // Imagenes
                     $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
                     foreach ($imagenes as $cotizacion8) {
@@ -689,17 +681,6 @@ class Cotizacion1Controller extends Controller
                     }
 
                     // Recuperar impresiones de cotizacion para generar orden
-                    $impresiones = Cotizacion7::where('cotizacion7_cotizacion2', $cotizacion2->id)->get();
-                    foreach ($impresiones as $cotizacion7) {
-                        $orden7 = new Ordenp7;
-                        $orden7->orden7_orden2 = $orden2->id;
-                        $orden7->orden7_texto = $cotizacion7->cotizacion7_texto;
-                        $orden7->orden7_ancho = $cotizacion7->cotizacion7_ancho;
-                        $orden7->orden7_alto = $cotizacion7->cotizacion7_alto;
-                        $orden7->save();
-                    }
-
-                    // Recuperar impresiones de cotizacion para generar orden
                     $imagenes = Cotizacion8::where('cotizacion8_cotizacion2', $cotizacion2->id)->get();
                     foreach ($imagenes as $cotizacion8) {
                         $orden8 = new Ordenp8;
@@ -739,7 +720,6 @@ class Cotizacion1Controller extends Controller
                     $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->get();
                     foreach ($empaques as $cotizacion9) {
                          $orden9 = new Ordenp9;
-                         $orden9->orden9_materialp = $cotizacion9->cotizacion9_materialp;
                          $orden9->orden9_orden2 = $orden2->id;
                          $orden9->orden9_producto = $cotizacion9->cotizacion9_producto;
                          $orden9->orden9_medidas = $cotizacion9->cotizacion9_medidas;

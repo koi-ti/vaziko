@@ -121,7 +121,7 @@ app || (app = {});
             if ( model instanceof Backbone.Model ) {
                 var cancelConfirm = new window.app.ConfirmWindow({
                     parameters: {
-                        dataFilter: { materialp_nombre: model.get('materialp_nombre')},
+                        dataFilter: { empaque_nombre: model.get('producto_nombre')},
                         template: _.template( ($('#precotizacion-delete-empaque-confirm-tpl').html() || '') ),
                         titleConfirm: 'Eliminar empaque de producción',
                         onConfirm: function () {
@@ -146,7 +146,7 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Empaque<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
                 var view = new app.EmpaquesProductopPreCotizacionItemView({
                     model: model,
                     parameters: {
@@ -183,7 +183,7 @@ app || (app = {});
                 if (model.get('precotizacion9_valor_unitario') != valor)
                     attributes.precotizacion9_valor_unitario = valor;
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="50%">Empaque<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }
