@@ -131,7 +131,7 @@ class PreCotizacion2Controller extends Controller
                         $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
                         $imagen->save();
 
-                        $object = \stdClass();
+                        $object = new \stdClass();
                         $object->route = "pre-cotizaciones/precotizacion_$precotizacion2->precotizacion2_precotizacion1/producto_$precotizacion2->id/$name";
                         $object->file = file_get_contents($image->getRealPath());
 
