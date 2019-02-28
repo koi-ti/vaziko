@@ -153,7 +153,7 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.MaterialesProductopPreCotizacionItemView({
                     model: model,
                     parameters: {
@@ -176,9 +176,10 @@ app || (app = {});
 
             if ( model instanceof Backbone.Model ) {
                 var medidas = this.$('#precotizacion3_medidas_' + model.get('id')).val(),
+                    cantidad = this.$('#precotizacion3_cantidad_' + model.get('id')).val(),
                     valor = this.$('#precotizacion3_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-                if (!medidas.length || !valor) {
+                if (!medidas.length || !cantidad.length || !valor) {
                     alertify.error('Ningun campo puede ir vacio.');
                     return;
                 }
@@ -187,10 +188,13 @@ app || (app = {});
                 if (model.get('precotizacion3_medidas') != medidas)
                     attributes.precotizacion3_medidas = medidas;
 
+                if (model.get('precotizacion3_cantidad') != cantidad)
+                    attributes.precotizacion3_cantidad = Math.round(cantidad*100)/100;
+
                 if (model.get('precotizacion3_valor_unitario') != valor)
                     attributes.precotizacion3_valor_unitario = valor;
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }

@@ -19,6 +19,7 @@ class CreateOrdenproduccion9Table extends Migration
             $table->integer('orden9_orden2')->unsigned();
             $table->integer('orden9_producto')->unsigned();
             $table->string('orden9_medidas', 50);
+            $table->double('orden9_cantidad')->default(0);
             $table->double('orden9_valor_unitario')->default(0);
             $table->double('orden9_valor_total')->default(0);
             $table->datetime('orden9_fh_elaboro');

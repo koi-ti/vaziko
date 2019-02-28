@@ -25,14 +25,14 @@ app || (app = {});
 
         totalMaterialp: function( ){
             _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('cotizacion4_valor_unitario') ) * window.Misc.validarMedida(model.get('cotizacion4_medidas'));
+                var total = parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
                 model.set('cotizacion4_valor_total', total);
             });
         },
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('cotizacion4_valor_unitario') ) * window.Misc.validarMedida(model.get('cotizacion4_medidas'));
+                return sum + parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
             }, 0);
         },
 

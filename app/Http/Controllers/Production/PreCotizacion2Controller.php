@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
 use Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion2Controller extends Controller
@@ -64,7 +64,6 @@ class PreCotizacion2Controller extends Controller
     {
         if($request->ajax()){
             $data = $request->all();
-            $data['impresiones'] = json_decode($data['impresiones']);
             $data['materialesp'] = json_decode($data['materialesp']);
             $data['empaques'] = json_decode($data['empaques']);
             $data['areasp'] = json_decode($data['areasp']);
@@ -138,17 +137,6 @@ class PreCotizacion2Controller extends Controller
                         $files[] = $object;
                     }
 
-                    // Impresiones
-                    $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
-                    foreach ($impresiones as $impresion) {
-                        $precotizacion5 = new PreCotizacion5;
-                        $precotizacion5->precotizacion5_texto = $impresion->precotizacion5_texto;
-                        $precotizacion5->precotizacion5_alto = $impresion->precotizacion5_alto;
-                        $precotizacion5->precotizacion5_ancho = $impresion->precotizacion5_ancho;
-                        $precotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
-                        $precotizacion5->save();
-                    }
-
                     // Materialesp
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
@@ -167,6 +155,7 @@ class PreCotizacion2Controller extends Controller
                         // Guardar individual porque sale error por ser objeto decodificado
                         $precotizacion3 = new PreCotizacion3;
                         $precotizacion3->precotizacion3_medidas = $material->precotizacion3_medidas;
+                        $precotizacion3->precotizacion3_cantidad = $material->precotizacion3_cantidad;
                         $precotizacion3->precotizacion3_valor_unitario = $material->precotizacion3_valor_unitario;
                         $precotizacion3->precotizacion3_valor_total = $material->precotizacion3_valor_total;
                         $precotizacion3->precotizacion3_producto = $insumo->id;
@@ -189,6 +178,7 @@ class PreCotizacion2Controller extends Controller
                         // Guardar individual porque sale error por ser objeto decodificado
                         $precotizacion9 = new PreCotizacion9;
                         $precotizacion9->precotizacion9_medidas = $empaque->precotizacion9_medidas;
+                        $precotizacion9->precotizacion9_cantidad = $empaque->precotizacion9_cantidad;
                         $precotizacion9->precotizacion9_valor_unitario = $empaque->precotizacion9_valor_unitario;
                         $precotizacion9->precotizacion9_valor_total = $empaque->precotizacion9_valor_total;
                         $precotizacion9->precotizacion9_producto = $producto->id;
@@ -364,24 +354,6 @@ class PreCotizacion2Controller extends Controller
                             }
                         }
 
-                        // Impresiones
-                        $keys = [];
-                        $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
-                        foreach ($impresiones as $impresion) {
-                            $precotizacion5 = PreCotizacion5::find( is_numeric($impresion['id']) ? $impresion['id'] : null);
-                            if (!$precotizacion5 instanceof PreCotizacion5) {
-                                $precotizacion5 = new PreCotizacion5;
-                                $precotizacion5->fill($impresion);
-                                $precotizacion5->precotizacion5_precotizacion2 = $precotizacion2->id;
-                                $precotizacion5->save();
-                            }
-
-                            $keys[] = $precotizacion5->id;
-                        }
-
-                        // Remover registros que no existan
-                        $deleteimpresiones = PreCotizacion5::whereNotIn('id', $keys)->where('precotizacion5_precotizacion2', $precotizacion2->id)->delete();
-
                         // Materiales
                         $keys = [];
                         $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
@@ -521,9 +493,6 @@ class PreCotizacion2Controller extends Controller
                 // Imagenes
                 DB::table('koi_precotizacion4')->where('precotizacion4_precotizacion2', $precotizacion2->id)->delete();
 
-                // Impresiones
-                DB::table('koi_precotizacion5')->where('precotizacion5_precotizacion2', $precotizacion2->id)->delete();
-
                 // Areasp
                 DB::table('koi_precotizacion6')->where('precotizacion6_precotizacion2', $precotizacion2->id)->delete();
 
@@ -604,14 +573,6 @@ class PreCotizacion2Controller extends Controller
                         // Copy file storege laravel
                         Storage::copy($oldfile, $newfile);
                     }
-                }
-
-                // Impresiones
-                $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
-                foreach ($impresiones as $precotizacion5) {
-                    $newprecotizacion5 = $precotizacion5->replicate();
-                    $newprecotizacion5->precotizacion5_precotizacion2 = $newprecotizacion2->id;
-                    $newprecotizacion5->save();
                 }
 
                 // Materiales

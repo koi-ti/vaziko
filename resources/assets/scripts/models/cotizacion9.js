@@ -16,6 +16,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'cotizacion9_medidas': '',
+            'cotizacion9_cantidad': 0,
             'cotizacion9_valor_unitario': '',
             'cotizacion9_valor_total': ''
         }

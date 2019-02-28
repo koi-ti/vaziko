@@ -19,6 +19,7 @@ app || (app = {});
             'materialp_nombre': '',
             'precotizacion3_materialp': '',
             'precotizacion3_medidas': '',
+            'precotizacion3_cantidad': '',
             'precotizacion3_valor_unitario': '',
             'precotizacion3_valor_total': ''
         }

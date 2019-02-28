@@ -25,14 +25,14 @@ app || (app = {});
 
         totalEmpaque: function( ){
             _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('precotizacion9_valor_unitario') ) * window.Misc.validarMedida(model.get('precotizacion9_medidas'));
+                var total = parseFloat( model.get('precotizacion9_valor_unitario') ) * model.get('precotizacion9_cantidad');
                 model.set('precotizacion9_valor_total', total);
             });
         },
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('precotizacion9_valor_unitario') ) * window.Misc.validarMedida(model.get('precotizacion9_medidas'));
+                return sum + parseFloat( model.get('precotizacion9_valor_unitario') ) * model.get('precotizacion9_cantidad');
             }, 0);
         },
 

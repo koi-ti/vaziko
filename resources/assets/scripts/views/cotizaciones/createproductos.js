@@ -269,6 +269,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.cotizacion4_cantidad = this.$('#cotizacion4_cantidad:disabled').val();
                 this.materialesProductopCotizacionList.trigger('store', data, this.$formmaterialp);
             }
         },
@@ -281,6 +282,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.cotizacion9_cantidad = this.$('#cotizacion9_cantidad:disabled').val();
                 this.empaquesProductopCotizacionList.trigger('store', data, this.$formempaque);
             }
         },

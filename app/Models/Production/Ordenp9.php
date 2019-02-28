@@ -22,7 +22,7 @@ class Ordenp9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden9_medidas', 'orden9_valor_unitario', 'orden9_valor_total'];
+    protected $fillable = ['orden9_medidas', 'orden9_cantidad', 'orden9_valor_unitario', 'orden9_valor_total'];
 
     /**
      * The attributes that are mass nullable.

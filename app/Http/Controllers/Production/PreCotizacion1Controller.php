@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion5, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion1Controller extends Controller
@@ -541,6 +541,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                          $cotizacion4->cotizacion4_producto = $precotizacion3->precotizacion3_producto;
                          $cotizacion4->cotizacion4_medidas = $precotizacion3->precotizacion3_medidas;
+                         $cotizacion4->cotizacion4_cantidad = $precotizacion3->precotizacion3_cantidad;
                          $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
                          $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
                          $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
@@ -557,6 +558,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                          $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
                          $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
+                         $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;
                          $cotizacion9->cotizacion9_valor_unitario = $precotizacion9->precotizacion9_valor_unitario;
                          $cotizacion9->cotizacion9_valor_total = $precotizacion9->precotizacion9_valor_total;
                          $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
@@ -676,14 +678,6 @@ class PreCotizacion1Controller extends Controller
                             // Copy file storege laravel
                             Storage::copy($oldfile, $newfile);
                         }
-                    }
-
-                    // Impresiones
-                    $impresiones = PreCotizacion5::where('precotizacion5_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($impresiones as $precotizacion5) {
-                        $newprecotizacion5 = $precotizacion5->replicate();
-                        $newprecotizacion5->precotizacion5_precotizacion2 = $newprecotizacion2->id;
-                        $newprecotizacion5->save();
                     }
 
                     // Materialep

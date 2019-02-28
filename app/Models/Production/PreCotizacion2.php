@@ -40,20 +40,12 @@ class PreCotizacion2 extends BaseModel
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-
             // Validar Carritos
-            $impresiones = isset($data['impresiones']) ? $data['impresiones'] : null;
-            if(!isset($impresiones) || $impresiones == null || !is_array($impresiones) || count($impresiones) == 0) {
-                $this->errors = 'Por favor ingrese impresiones para el producto.';
-                return false;
-            }
-
             $materialesp = isset($data['materialesp']) ? $data['materialesp'] : null;
             if(!isset($materialesp) || $materialesp == null || !is_array($materialesp) || count($materialesp) == 0) {
                 $this->errors = 'Por favor ingrese materiales para el producto.';
                 return false;
             }
-
             return true;
         }
         $this->errors = $validator->errors();

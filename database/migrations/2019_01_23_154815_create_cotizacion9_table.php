@@ -19,6 +19,7 @@ class CreateCotizacion9Table extends Migration
              $table->integer('cotizacion9_cotizacion2')->unsigned();
              $table->integer('cotizacion9_producto')->unsigned();
              $table->string('cotizacion9_medidas', 50);
+             $table->double('cotizacion9_cantidad')->default(0);
              $table->double('cotizacion9_valor_unitario')->default(0);
              $table->double('cotizacion9_valor_total')->default(0);
              $table->datetime('cotizacion9_fh_elaboro');

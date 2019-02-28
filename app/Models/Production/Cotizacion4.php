@@ -21,7 +21,7 @@ class Cotizacion4 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion4_medidas', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'];
+    protected $fillable = ['cotizacion4_medidas', 'cotizacion4_cantidad', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'];
 
     /**
      * The attributes that are mass nullable.

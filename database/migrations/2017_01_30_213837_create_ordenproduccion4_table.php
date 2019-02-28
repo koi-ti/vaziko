@@ -20,6 +20,7 @@ class CreateOrdenproduccion4Table extends Migration
             $table->integer('orden4_materialp')->unsigned();
             $table->integer('orden4_producto')->unsigned()->nullable();
             $table->string('orden4_medidas', 50)->nullable();
+            $table->double('orden4_cantidad')->default(0);
             $table->double('orden4_valor_unitario')->default(0);
             $table->double('orden4_valor_total')->default(0);
             $table->datetime('orden4_fh_elaboro');

@@ -371,9 +371,9 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="cotizacion4_medidas" name="cotizacion4_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion4_medidas_text" maxlength="50" required>
+                                            <input type="text" id="cotizacion4_medidas" name="cotizacion4_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion4_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
-                                            <input type="text" id="cotizacion4_medidas_text" class="form-control text-right" disabled>
+                                            <input type="text" id="cotizacion4_cantidad" name="cotizacion4_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -397,14 +397,15 @@
                                             <th colspan="2"></th>
                                             <th width="25%">Material</th>
                                             <th width="25%">Insumo</th>
-                                            <th width="15%">Dimensiones</th>
+                                            <th width="10%">Medidas</th>
+                                            <th width="10%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="6"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -505,9 +506,9 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="cotizacion9_medidas" name="cotizacion9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion9_medidas_text" maxlength="50" required>
+                                            <input type="text" id="cotizacion9_medidas" name="cotizacion9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion9_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
-                                            <input type="text" id="cotizacion9_medidas_text" class="form-control text-right" disabled>
+                                            <input type="text" id="cotizacion9_cantidad" name="cotizacion9_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -530,14 +531,15 @@
                                         <tr>
                                             <th colspan="2"></th>
                                             <th width="50%">Empaque</th>
-                                            <th width="15%">Dimensiones</th>
+                                            <th width="10%">Medidas</th>
+                                            <th width="10%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="4"></td>
+                                            <td colspan="5"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -672,6 +674,7 @@
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- cotizacion4_medidas %></td>
+        <td><%- cotizacion4_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_total ) %></td>
     </script>
@@ -683,8 +686,12 @@
             </a>
         </td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td colspan="2">
-            <input type="text" id="cotizacion4_medidas_<%- id %>" name="cotizacion4_medidas_<%- id %>" placeholder="Medidas" value="<%- cotizacion4_medidas %>" class="form-control input-xs input-formula" maxlength="50" required>
+        <td colspan="4">
+            <div class="input-group">
+                <input type="text" id="cotizacion4_medidas_<%- id %>" name="cotizacion4_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion4_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion4_medidas %>" required>
+                <span class="input-group-addon">=</span>
+                <input type="text" id="cotizacion4_cantidad_<%- id %>" name="cotizacion4_cantidad_<%- id %>" placeholder="Total" value="<%- cotizacion4_cantidad %>" class="form-control text-right" disabled>
+            </div>
         </td>
         <td colspan="2" class="text-right">
             <input id="cotizacion4_valor_unitario_<%- id %>" name="cotizacion4_valor_unitario_<%- id %>" value="<%- cotizacion4_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
@@ -706,6 +713,7 @@
         <% } %>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- cotizacion9_medidas %></td>
+        <td><%- cotizacion9_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( cotizacion9_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( cotizacion9_valor_total ) %></td>
     </script>
@@ -717,8 +725,12 @@
             </a>
         </td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td colspan="2">
-            <input type="text" id="cotizacion9_medidas_<%- id %>" name="cotizacion9_medidas_<%- id %>" placeholder="Medidas" value="<%- cotizacion9_medidas %>" class="form-control input-xs" maxlength="50" required>
+        <td colspan="4">
+            <div class="input-group">
+                <input type="text" id="cotizacion9_medidas_<%- id %>" name="cotizacion9_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion9_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion9_medidas %>" required>
+                <span class="input-group-addon">=</span>
+                <input type="text" id="cotizacion9_cantidad_<%- id %>" name="cotizacion9_cantidad_<%- id %>" placeholder="Total" value="<%- cotizacion9_cantidad %>" class="form-control text-right" disabled>
+            </div>
         </td>
         <td  colspan="2" class="text-right">
             <input id="cotizacion9_valor_unitario_<%- id %>" name="cotizacion9_valor_unitario_<%- id %>" value="<%- cotizacion9_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>

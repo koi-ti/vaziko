@@ -18,6 +18,7 @@ app || (app = {});
             'materialp_nombre': '',
             'cotizacion4_materialp': '',
             'cotizacion4_medidas': '',
+            'cotizacion4_cantidad': 0,
             'cotizacion4_valor_unitario': '',
             'cotizacion4_valor_total': ''
         }

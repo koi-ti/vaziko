@@ -297,50 +297,6 @@
                         </div>
                     </div>
 
-                    {{-- Content impresiones --}}
-                    <div  id="impresiones-wrapper-producto" class="box box-success">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Impresiones</h3>
-                        </div>
-                        <div class="box-body">
-                            <form method="POST" accept-charset="UTF-8" id="form-impresion-producto" data-toggle="validator">
-                                <div class="row">
-                                    <div class="form-group col-sm-7">
-                                        <input type="text" id="precotizacion5_texto" name="precotizacion5_texto" placeholder="Detalle" class="form-control input-xs" maxlength="150" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-2">
-                                      <input type="text" id="precotizacion5_ancho" name="precotizacion5_ancho" placeholder="Ancho" class="form-control input-xs" maxlength="10" required>
-                                      <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-2">
-                                        <input type="text" id="precotizacion5_alto" name="precotizacion5_alto" placeholder="Alto" class="form-control input-xs" maxlength="10" required>
-                                        <div class="help-block with-errors"></div>
-                                    </div>
-                                    <div class="form-group col-sm-1">
-                                        <button type="submit" class="btn btn-success btn-sm btn-block">
-                                            <i class="fa fa-plus"></i>
-                                        </button>
-                                    </div>
-                                </div>
-                            </form>
-
-                            <!-- table table-bordered table-striped -->
-                            <div class="box-body table-responsive no-padding">
-                                <table id="browse-precotizacion-producto-impresiones-list" class="table table-bordered" cellspacing="0" width="100%">
-                                    <thead>
-                                        <tr>
-                                            <th width="6%"></th>
-                                            <th width="70%">Detalle</th>
-                                            <th width="12%">Ancho</th>
-                                            <th width="12%">Alto</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
                     {{-- Content materialesp --}}
                     <div id="materialesp-wrapper-producto" class="box box-success">
                         <div class="box-header with-border">
@@ -375,9 +331,9 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion3_medidas_text" maxlength="50" required>
+                                            <input type="text" id="precotizacion3_medidas" name="precotizacion3_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion3_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
-                                            <input type="text" id="precotizacion3_medidas_text" class="form-control text-right" disabled>
+                                            <input type="text" id="precotizacion3_cantidad" name="precotizacion3_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -401,14 +357,15 @@
                                             <th colspan="2"></th>
                                             <th width="25%">Material</th>
                                             <th width="25%">Insumo</th>
-                                            <th width="25%">Dimensiones</th>
+                                            <th width="10%">Medidas</th>
+                                            <th width="10%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="6"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -507,9 +464,9 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="precotizacion9_medidas" name="precotizacion9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion9_medidas_text" maxlength="50" required>
+                                            <input type="text" id="precotizacion9_medidas" name="precotizacion9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion9_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
-                                            <input type="text" id="precotizacion9_medidas_text" class="form-control text-right" disabled>
+                                            <input type="text" id="precotizacion9_cantidad" name="precotizacion3_cantidad" class="form-control text-right" placeholder="Total" disabled>
                                         </div>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -532,14 +489,15 @@
                                         <tr>
                                             <th colspan="2"></th>
                                             <th width="50%">Empaque</th>
-                                            <th width="25%">Dimensiones</th>
+                                            <th width="10%">Medidas</th>
+                                            <th width="10%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="4"></td>
+                                            <td colspan="5"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -559,10 +517,6 @@
 
     <script type="text/template" id="precotizacion-delete-empaque-confirm-tpl">
         <p>¿Está seguro que desea eliminar el empaque <b><%- empaque_nombre %> </b>?</p>
-    </script>
-
-    <script type="text/template" id="precotizacion-delete-impresion-confirm-tpl">
-        <p>¿Está seguro que desea eliminar la impresion <b><%- precotizacion5_texto %> </b>?</p>
     </script>
 
     <script type="text/template" id="precotizacion-delete-areap-confirm-tpl">
@@ -585,6 +539,7 @@
         <td><%- materialp_nombre %></td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion3_medidas %></td>
+        <td><%- precotizacion3_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion3_valor_total ) %></td>
     </script>
@@ -596,8 +551,12 @@
             </a>
         </td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td colspan="2">
-            <input type="text" id="precotizacion3_medidas_<%- id %>" name="precotizacion3_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion3_medidas %>" class="form-control input-xs input-formula" maxlength="50" required>
+        <td colspan="4">
+            <div class="input-group">
+                <input type="text" id="precotizacion3_medidas_<%- id %>" name="precotizacion3_medidas_<%- id %>" value="<%- precotizacion3_medidas %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion3_cantidad_<%- id %>" maxlength="50" required>
+                <span class="input-group-addon">=</span>
+                <input type="text" id="precotizacion3_cantidad_<%- id %>" name="precotizacion3_cantidad_<%- id %>" value="<%- precotizacion3_cantidad %>" placeholder="Total" class="form-control text-right" disabled>
+            </div>
         </td>
         <td colspan="2" class="text-right">
             <input id="precotizacion3_valor_unitario_<%- id %>" name="precotizacion3_valor_unitario_<%- id %>" value="<%- precotizacion3_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
@@ -619,6 +578,7 @@
         <% } %>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- precotizacion9_medidas %></td>
+        <td><%- precotizacion9_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_unitario ) %></td>
         <td class="text-right"><%- window.Misc.currency( precotizacion9_valor_total ) %></td>
     </script>
@@ -630,25 +590,16 @@
             </a>
         </td>
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
-        <td colspan="2">
-            <input type="text" id="precotizacion9_medidas_<%- id %>" name="precotizacion9_medidas_<%- id %>" placeholder="Medidas" value="<%- precotizacion9_medidas %>" class="form-control input-xs" maxlength="50" required>
+        <td colspan="4">
+            <div class="input-group">
+                <input type="text" id="precotizacion9_medidas_<%- id %>" name="precotizacion9_medidas_<%- id %>" value="<%- precotizacion9_medidas %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="precotizacion9_cantidad_<%- id %>" maxlength="50" required>
+                <span class="input-group-addon">=</span>
+                <input type="text" id="precotizacion9_cantidad_<%- id %>" name="precotizacion9_cantidad_<%- id %>" value="<%- precotizacion9_cantidad %>" placeholder="Total" class="form-control text-right" disabled>
+            </div>
         </td>
         <td colspan="2" class="text-right">
             <input id="precotizacion9_valor_unitario_<%- id %>" name="precotizacion9_valor_unitario_<%- id %>" value="<%- precotizacion9_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
-    </script>
-
-    <script type="text/template" id="precotizacion-producto-impresion-item-tpl">
-        <% if( edit ) { %>
-           <td class="text-center">
-               <a class="btn btn-default btn-xs item-producto-impresion-precotizacion-remove" data-resource="<%- id %>">
-                   <span><i class="fa fa-times"></i></span>
-               </a>
-           </td>
-       <% } %>
-       <td><%- precotizacion5_texto %></td>
-       <td><%- precotizacion5_ancho %></td>
-       <td><%- precotizacion5_alto %></td>
     </script>
 
     <script type="text/template" id="precotizacion-producto-areasp-item-tpl">

@@ -16,6 +16,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'orden9_medidas': '',
+            'orden9_cantidad': 0,
             'orden9_valor_unitario': '',
             'orden9_valor_total': ''
         }

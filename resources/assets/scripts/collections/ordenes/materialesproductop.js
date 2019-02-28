@@ -25,14 +25,14 @@ app || (app = {});
 
         totalMaterialp: function( ){
             _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('orden4_valor_unitario') ) * window.Misc.validarMedida(model.get('orden4_medidas'));
+                var total = parseFloat( model.get('orden4_valor_unitario') ) * model.get('orden4_cantidad');
                 model.set('orden4_valor_total', total);
             });
         },
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('orden4_valor_unitario') ) * window.Misc.validarMedida(model.get('orden4_medidas'));
+                return sum + parseFloat( model.get('orden4_valor_unitario') ) * model.get('orden4_cantidad');
             }, 0);
         },
 

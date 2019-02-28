@@ -434,8 +434,15 @@ class Cotizacion1Controller extends Controller
                 $imagenes[] = "storage/cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$imagen->cotizacion8_archivo";
             }
 
+            $query = Cotizacion9::query();
+            $query->select(DB::raw("GROUP_CONCAT(producto_nombre SEPARATOR ', ') AS empaque_nombre"));
+            $query->join('koi_producto', 'cotizacion9_producto', '=', 'koi_producto.id');
+            $query->where('cotizacion9_cotizacion2', $cotizacion2->id);
+            $empaques = $query->first();
+
             $cotizacion2->materialp_nombre = $materialesp->materialp_nombre;
             $cotizacion2->acabadop_nombre = $acabadosp->acabadop_nombre;
+            $cotizacion2->empaque_nombre = $empaques->empaque_nombre;
             $cotizacion2->imagenes = $imagenes;
 
             $data[] = $cotizacion2;
@@ -709,6 +716,7 @@ class Cotizacion1Controller extends Controller
                          $orden4->orden4_orden2 = $orden2->id;
                          $orden4->orden4_producto = $cotizacion4->cotizacion4_producto;
                          $orden4->orden4_medidas = $cotizacion4->cotizacion4_medidas;
+                         $orden4->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                          $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                          $orden4->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
                          $orden4->orden4_usuario_elaboro = Auth::user()->id;
@@ -723,6 +731,7 @@ class Cotizacion1Controller extends Controller
                          $orden9->orden9_orden2 = $orden2->id;
                          $orden9->orden9_producto = $cotizacion9->cotizacion9_producto;
                          $orden9->orden9_medidas = $cotizacion9->cotizacion9_medidas;
+                         $orden9->orden9_cantidad = $cotizacion9->cotizacion9_cantidad;
                          $orden9->orden9_valor_unitario = $cotizacion9->cotizacion9_valor_unitario;
                          $orden9->orden9_valor_total = $cotizacion9->cotizacion9_valor_total;
                          $orden9->orden9_usuario_elaboro = Auth::user()->id;

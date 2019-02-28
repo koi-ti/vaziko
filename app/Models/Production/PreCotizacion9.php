@@ -22,7 +22,7 @@ class PreCotizacion9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['precotizacion9_medidas', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'];
+    protected $fillable = ['precotizacion9_medidas', 'precotizacion9_cantidad', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'];
 
     /**
      * The attributes that are mass nullable.

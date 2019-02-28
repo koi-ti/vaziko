@@ -329,7 +329,8 @@
 								<tr>
 									<th width="25%">Material</th>
 									<th width="25%">Insumo</th>
-									<th width="20%">Dimensiones</th>
+									<th width="10%">Medidas</th>
+									<th width="10%">Cantidad</th>
 									<th width="15%">Valor unidad</th>
 									<th width="15%">Valor</th>
 								</tr>
@@ -341,6 +342,7 @@
 										<td>{{ $materialp->materialp_nombre }}</td>
 										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 										<td>{{ $materialp->cotizacion4_medidas }}</td>
+										<td>{{ $materialp->cotizacion4_cantidad }}</td>
 										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
 										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
 									</tr>
@@ -349,7 +351,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="3"></td>
+									<td colspan="4"></td>
 									<th class="text-right">Total</th>
 									<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
 								</tr>
@@ -421,7 +423,8 @@
 							<thead>
 								<tr>
 									<th width="50%">Empaque</th>
-									<th width="20%">Dimensiones</th>
+									<th width="10%">Medidas</th>
+									<th width="10%">Cantidad</th>
 									<th width="15%">Valor unidad</th>
 									<th width="15%">Valor</th>
 								</tr>
@@ -432,6 +435,7 @@
 									<tr>
 										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
 										<td>{{ $empaque->cotizacion9_medidas }}</td>
+										<td>{{ $empaque->cotizacion9_cantidad }}</td>
 										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
 										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
 									</tr>
@@ -440,7 +444,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="2"></td>
+									<td colspan="3"></td>
 									<th class="text-right">Total</th>
 									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
 								</tr>

@@ -146,7 +146,7 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Empaque<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Empaque<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.EmpaquesProductopPreCotizacionItemView({
                     model: model,
                     parameters: {
@@ -169,9 +169,10 @@ app || (app = {});
 
             if ( model instanceof Backbone.Model ) {
                 var medidas = this.$('#precotizacion9_medidas_' + model.get('id')).val(),
+                    cantidad = this.$('#precotizacion9_cantidad_' + model.get('id')).val(),
                     valor = this.$('#precotizacion9_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-                if (!medidas.length || !valor) {
+                if (!medidas.length || !cantidad.length || !valor) {
                     alertify.error('Ningun campo puede ir vacio.');
                     return;
                 }
@@ -180,10 +181,13 @@ app || (app = {});
                 if (model.get('precotizacion9_medidas') != medidas)
                     attributes.precotizacion9_medidas = medidas;
 
+                if (model.get('precotizacion9_cantidad') != cantidad)
+                    attributes.precotizacion9_cantidad = Math.round(cantidad*100)/100;
+
                 if (model.get('precotizacion9_valor_unitario') != valor)
                     attributes.precotizacion9_valor_unitario = valor;
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="50%">Empaque<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="50%">Empaque<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }

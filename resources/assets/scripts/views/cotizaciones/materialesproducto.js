@@ -147,7 +147,7 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Dimensiones<th colspan="2">Valor unidad');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Insumo<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.MaterialesProductopCotizacionItemView({
                     model: model,
                     parameters: {
@@ -169,10 +169,11 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                var medidas = this.$('#cotizacion4_medidas_' + model.get('id')).val();
+                var medidas = this.$('#cotizacion4_medidas_' + model.get('id')).val(),
+                    cantidad = this.$('#cotizacion4_cantidad_' + model.get('id')).val(),
                     valor = this.$('#cotizacion4_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
 
-                if (!medidas.length || !valor) {
+                if (!medidas.length || !cantidad.length || !valor) {
                     alertify.error('Ningun campo puede ir vacio.');
                     return;
                 }
@@ -181,10 +182,13 @@ app || (app = {});
                 if (model.get('cotizacion4_medidas') != medidas)
                     attributes.cotizacion4_medidas = medidas;
 
+                if (model.get('cotizacion4_cantidad') != cantidad)
+                    attributes.cotizacion4_cantidad = Math.round(cantidad*100)/100;
+
                 if (model.get('cotizacion4_valor_unitario') != valor)
                     attributes.cotizacion4_valor_unitario = valor;
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="25%">Dimensiones<th width="15%">Valor unidad<th width="15%">Valor total');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Material<th width="25%">Insumo<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }

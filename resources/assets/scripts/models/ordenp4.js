@@ -18,6 +18,7 @@ app || (app = {});
             'materialp_nombre': '',
             'orden4_materialp': '',
             'orden4_medidas': '',
+            'orden4_cantidad': 0,
             'orden4_valor_unitario': '',
             'orden4_valor_total': ''
         }

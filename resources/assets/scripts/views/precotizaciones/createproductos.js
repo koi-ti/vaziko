@@ -17,13 +17,12 @@ app || (app = {});
             'click .submit-precotizacion2': 'submitForm',
             'submit #form-precotizacion-producto': 'onStore',
             'ifChanged .check-type': 'checkType',
-            'submit #form-impresion-producto': 'onStoreImpresion',
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
             'change .change-materialp': 'changeMaterialp',
             'change .change-insumo': 'changeInsumo',
-            'change #precotizacion6_areap': 'changeAreap',
+            'change #precotizacion6_areap': 'changeAreap'
         },
         parameters: {
             data: {
@@ -40,7 +39,6 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // reference collections
-            this.impresionesProductopPreCotizacionList = new app.ImpresionesProductopPreCotizacionList();
             this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
             this.empaquesProductopPreCotizacionList = new app.EmpaquesProductopPreCotizacionList();
             this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
@@ -64,7 +62,6 @@ app || (app = {});
 
             // reference forms
             this.$form = this.$('#form-precotizacion-producto');
-            this.$formimpresion = this.$('#form-impresion-producto');
             this.$formmaterialp = this.$('#form-materialp-producto');
             this.$formempaque = this.$('#form-empaque-producto');
             this.$formareap = this.$('#form-areap-producto');
@@ -116,7 +113,6 @@ app || (app = {});
                 if( this.model.id != undefined ){
 
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                        data.impresiones = this.impresionesProductopPreCotizacionList.toJSON();
                         data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                         data.empaques = this.empaquesProductopPreCotizacionList.toJSON();
                         data.areasp = this.areasProductopPreCotizacionList.toJSON();
@@ -125,7 +121,6 @@ app || (app = {});
 
                 } else {
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                        data.impresiones = JSON.stringify(this.impresionesProductopPreCotizacionList);
                         data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
                         data.empaques = JSON.stringify(this.empaquesProductopPreCotizacionList);
                         data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
@@ -174,23 +169,12 @@ app || (app = {});
         /**
         * Event Create
         */
-        onStoreImpresion: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.impresionesProductopPreCotizacionList.trigger('store', data, this.$formimpresion);
-            }
-        },
-
-        /**
-        * Event Create
-        */
         onStoreMaterialp: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.precotizacion3_cantidad = this.$('#precotizacion3_cantidad:disabled').val();
                 this.materialesProductopPreCotizacionList.trigger('store', data, this.$formmaterialp);
             }
         },
@@ -203,6 +187,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.precotizacion9_cantidad = this.$('#precotizacion9_cantidad:disabled').val();
                 this.empaquesProductopPreCotizacionList.trigger('store', data, this.$formempaque);
             }
         },
@@ -321,18 +306,6 @@ app || (app = {});
             if( this.model.id != undefined ) {
                 this.produtop = this.model.get('precotizacion2_productop');
             }
-
-            // Impresiones
-            this.impresionesProductopPreCotizacionListView = new app.ImpresionesProductopPreCotizacionListView( {
-                collection: this.impresionesProductopPreCotizacionList,
-                parameters: {
-                    edit: true,
-                    wrapper: $('#impresiones-wrapper-producto'),
-                    dataFilter: {
-                        precotizacion2: this.model.get('id')
-                    }
-               }
-            });
 
             // Materiales
             this.materialesProductopPreCotizacionListView = new app.MaterialesProductopPreCotizacionListView( {

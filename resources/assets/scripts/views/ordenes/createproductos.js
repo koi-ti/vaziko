@@ -272,6 +272,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.orden4_cantidad = this.$('#orden4_cantidad:disabled').val();
                 this.materialesProductopOrdenList.trigger('store' , data, this.$formmaterialp);
             }
         },
@@ -284,6 +285,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.orden9_cantidad = this.$('#orden9_cantidad:disabled').val();
                 this.empaquesProductopOrdenList.trigger('store' , data, this.$formempaque);
             }
         },

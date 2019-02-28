@@ -176,6 +176,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion4->cotizacion4_materialp = $materialp->id;
                         $cotizacion4->cotizacion4_producto = $insumo->id;
                         $cotizacion4->cotizacion4_medidas = $material->cotizacion4_medidas;
+                        $cotizacion4->cotizacion4_cantidad = $material->cotizacion4_cantidad;
                         $cotizacion4->cotizacion4_valor_unitario = $material->cotizacion4_valor_unitario;
                         $cotizacion4->cotizacion4_valor_total = $material->cotizacion4_valor_total;
                         $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
@@ -199,6 +200,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                         $cotizacion9->cotizacion9_producto = $producto->id;
                         $cotizacion9->cotizacion9_medidas = $empaque->cotizacion9_medidas;
+                        $cotizacion9->cotizacion9_cantidad = $empaque->cotizacion9_cantidad;
                         $cotizacion9->cotizacion9_valor_unitario = $empaque->cotizacion9_valor_unitario;
                         $cotizacion9->cotizacion9_valor_total = $empaque->cotizacion9_valor_total;
                         $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');

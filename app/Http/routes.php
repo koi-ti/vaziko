@@ -167,7 +167,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::group(['prefix' => 'productos'], function(){
 			Route::get('clonar/{productos}', ['as' => 'precotizaciones.productos.clonar', 'uses' => 'Production\PreCotizacion2Controller@clonar']);
 			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('impresiones', 'Production\PreCotizacion5Controller', ['only' => ['index', 'store']]);
 			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\PreCotizacion9Controller', ['only' => ['index', 'store']]);
 			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store']]);
