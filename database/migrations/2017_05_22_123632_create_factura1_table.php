@@ -38,8 +38,8 @@ class CreateFactura1Table extends Migration
 
             $table->boolean('factura1_anulado')->default(false);
 
-            $table->integer('factura1_usuario_anulo')->unsigned();
-            $table->dateTime('factura1_fh_anulo');
+            $table->integer('factura1_usuario_anulo')->unsigned()->nullable();
+            $table->dateTime('factura1_fh_anulo')->nullable();
             $table->integer('factura1_usuario_elaboro')->unsigned();
             $table->dateTime('factura1_fh_elaboro');
 

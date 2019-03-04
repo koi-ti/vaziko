@@ -199,6 +199,9 @@ app || (app = {});
         ready: function () {
             if( typeof window.initComponent.initInputMask == 'function' )
                 window.initComponent.initInputMask();
+
+            if( typeof window.initComponent.initInputFormula == 'function' )
+                window.initComponent.initInputFormula();
         },
 
         /**

@@ -112,10 +112,10 @@ class Factura1 extends Model
         }
 
         // Recuperar Hijos
-        $factura2 = factura2::where('factura2_factura1', $this->id)->get();
-        foreach ($factura2 as $item) {
+        $facturas2 = factura2::where('factura2_factura1', $this->id)->get();
+        foreach ($facturas2 as $factura2) {
             // Recuperar ordenp2
-            $ordenp2 = Ordenp2::find($item->factura2_orden2);
+            $ordenp2 = Ordenp2::find($factura2->factura2_orden2);
             if(!$ordenp2 instanceof Ordenp2){
                 throw new \Exception('No es posible recuperar la ordenp2.');
             }
@@ -126,7 +126,7 @@ class Factura1 extends Model
                 throw new \Exception('No es posible recuperar la ordenp.');
             }
 
-            $totalF2 = $ordenp2->orden2_total_valor_unitario * $item->factura2_cantidad;
+            $totalF2 = $ordenp2->orden2_total_valor_unitario * $factura2->factura2_cantidad;
 
             // Subtotal
             $subtotalobase = [];
@@ -177,7 +177,7 @@ class Factura1 extends Model
         $iva['Detalle'] = '';
         $iva['Naturaleza'] = 'C';
         $iva['Base'] = $this->factura1_subtotal;
-        $iva['Credito'] = $this->factura1_iva;
+        $iva['Credito'] = round($this->factura1_iva);
         $iva['Debito'] = '';
         $iva['Orden'] = '';
         $object->cuentas[] = $iva;
@@ -192,7 +192,7 @@ class Factura1 extends Model
             $rtfuente['Naturaleza'] = 'D';
             $rtfuente['Base'] = $this->factura1_subtotal;
             $rtfuente['Credito'] = '';
-            $rtfuente['Debito'] = $this->factura1_retefuente;
+            $rtfuente['Debito'] = round($this->factura1_retefuente);
             $rtfuente['Orden'] = '';
             $object->cuentas[] = $rtfuente;
         }
@@ -207,7 +207,7 @@ class Factura1 extends Model
             $rtiva['Naturaleza'] = 'D';
             $rtiva['Base'] = $this->factura1_subtotal;
             $rtiva['Credito'] = '';
-            $rtiva['Debito'] = $this->factura1_reteiva;
+            $rtiva['Debito'] = round($this->factura1_reteiva);
             $rtiva['Orden'] = '';
             $object->cuentas[] = $rtiva;
         }
@@ -222,7 +222,7 @@ class Factura1 extends Model
             $rtica['Naturaleza'] = 'D';
             $rtica['Base'] = $this->factura1_subtotal;
             $rtica['Credito'] = '';
-            $rtica['Debito'] = $this->factura1_reteica;
+            $rtica['Debito'] = round($this->factura1_reteica);
             $rtica['Orden'] = '';
             $object->cuentas[] = $rtica;
         }

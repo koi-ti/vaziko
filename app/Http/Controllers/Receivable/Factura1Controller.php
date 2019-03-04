@@ -262,9 +262,12 @@ class Factura1Controller extends Controller
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
 
-                    // Commit Transaction
-                    DB::commit();
-                    return response()->json(['success' => true, 'id' => $factura->id]);
+                    // Transaction rollback
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'K.O!']);
+                    // // Commit Transaction
+                    // DB::commit();
+                    // return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());

@@ -146,10 +146,10 @@ class AsientoContableDocumento {
 			}
 
 			if (floatval(abs($cuenta['Debito'])) > 0 && $cuenta['Credito'] == 0) {
-				$debito += round($cuenta['Debito'],2);
+				$debito += round($cuenta['Debito'], 2);
 
 			}else if (floatval(abs($cuenta['Credito'])) > 0 && $cuenta['Debito'] == 0) {
-				$credito += round($cuenta['Credito'],2);
+				$credito += round($cuenta['Credito'], 2);
 
 			}else{
 				return "Los registros de crédito y débito de la cuenta {$cuenta['Cuenta']} no son correctos. Valor crédito {$cuenta['Credito']}, Valor débito {$cuenta['Debito']}.";
@@ -157,7 +157,7 @@ class AsientoContableDocumento {
 		}
 
 		$resta = round(abs($credito) - abs($debito),2);
-		if (abs($resta)>0.01 || ($credito === 0 && $debito === 0)) {
+		if (abs($resta) > 0.01 || ($credito === 0 && $debito === 0)) {
 			return 'Las sumas de créditos como de débitos no son iguales: créditos '.$credito.', débitos '.$debito.', diferencia '.abs($resta);
 		}
 		return 'OK';
