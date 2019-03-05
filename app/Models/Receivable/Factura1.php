@@ -3,7 +3,7 @@
 namespace App\Models\Receivable;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Receivable\Factura1, App\Models\Receivable\Factura4, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto;
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura4, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto;
 use DB, Validator;
 
 class Factura1 extends Model
@@ -112,22 +112,8 @@ class Factura1 extends Model
         }
 
         // Recuperar Hijos
-        $facturas2 = factura2::where('factura2_factura1', $this->id)->get();
+        $facturas2 = factura2::select('koi_factura2.*', 'orden2_orden')->where('factura2_factura1', $this->id)->join('koi_ordenproduccion2', 'factura2_orden2', '=', 'koi_ordenproduccion2.id')->get();
         foreach ($facturas2 as $factura2) {
-            // Recuperar ordenp2
-            $ordenp2 = Ordenp2::find($factura2->factura2_orden2);
-            if(!$ordenp2 instanceof Ordenp2){
-                throw new \Exception('No es posible recuperar la ordenp2.');
-            }
-
-            // Recuperar ordenp
-            $ordenp = Ordenp::find($ordenp2->orden2_orden);
-            if(!$ordenp instanceof Ordenp){
-                throw new \Exception('No es posible recuperar la ordenp.');
-            }
-
-            $totalF2 = $ordenp2->orden2_total_valor_unitario * $factura2->factura2_cantidad;
-
             // Subtotal
             $subtotalobase = [];
             $subtotalobase['Cuenta'] = '41209510';
@@ -136,9 +122,9 @@ class Factura1 extends Model
             $subtotalobase['Detalle'] = '';
             $subtotalobase['Naturaleza'] = 'C';
             $subtotalobase['Base'] = '';
-            $subtotalobase['Credito'] = round($totalF2);
+            $subtotalobase['Credito'] = round($factura2->factura2_producto_valor_unitario * $factura2->factura2_cantidad);
             $subtotalobase['Debito'] = '';
-            $subtotalobase['Orden'] = $ordenp->id;
+            $subtotalobase['Orden'] = $factura2->orden2_orden;
             $object->cuentas[] = $subtotalobase;
         }
 

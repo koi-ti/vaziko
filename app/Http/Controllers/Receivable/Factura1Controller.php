@@ -144,13 +144,15 @@ class Factura1Controller extends Controller
                         $factura2->factura2_cantidad = $item['factura2_cantidad'];
                         $factura2->save();
 
-                        $subtotal += $item['factura2_cantidad'] * $item['factura2_producto_valor_unitario'];
+                        $subtotal += round($item['factura2_cantidad'] * $item['factura2_producto_valor_unitario']);
 
                         // Actualizar orden2_facturado de Orden2
                         $ordenp2->orden2_saldo -= $item['factura2_cantidad'];
                         $ordenp2->orden2_facturado += $item['factura2_cantidad'];
                         $ordenp2->save();
                     }
+
+                    Log::info("t: $subtotal");
 
                     // Calcular Retefuente, Reteiva, Reteica, Iva, Total
                     $iva = isset($request->impuestos['iva-create']) ? $request->impuestos['iva-create'] : ( round($subtotal) * $empresa->empresa_iva ) / 100;
@@ -262,12 +264,9 @@ class Factura1Controller extends Controller
                     $puntoventa->puntoventa_numero = $consecutive;
                     $puntoventa->save();
 
-                    // Transaction rollback
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'K.O!']);
-                    // // Commit Transaction
-                    // DB::commit();
-                    // return response()->json(['success' => true, 'id' => $factura->id]);
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $factura->id]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error($e->getMessage());
