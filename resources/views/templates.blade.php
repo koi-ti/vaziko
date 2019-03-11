@@ -724,6 +724,10 @@
 			<label for="materialp_descripcion" class="control-label">Descripción</label>
             <textarea id="materialp_descripcion" name="materialp_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- materialp_descripcion %></textarea>
 		</div>
+        <div class="form-group col-md-2">
+            <label for="materialp_empaque" class="control-label">Empaque</label>
+            <div><input type="checkbox" id="materialp_empaque" name="materialp_empaque" value="materialp_empaque" <%- parseInt(materialp_empaque) ? 'checked': ''%>></div>
+        </div>
     </div>
 </script>
 

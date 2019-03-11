@@ -16,7 +16,10 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+            'empaque_nombre': '',
+            'precotizacion9_materialp': '',
             'precotizacion9_medidas': '',
+            'precotizacion9_cantidad': '',
             'precotizacion9_valor_unitario': '',
             'precotizacion9_valor_total': ''
         }

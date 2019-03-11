@@ -358,7 +358,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden4_producto" data-wrapper="materialesp-wrapper-producto" required>
+                                        <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden4_producto" data-wrapper="materialesp-wrapper-producto" data-reference="material" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach( App\Models\Production\Ordenp4::getMaterials( $producto->id ) as $key => $value )
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -498,12 +498,25 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    <div class="form-group col-sm-12">
-                                        <select name="orden9_producto" id="orden9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Empaque" data-historial="orden9" data-valor="orden9_valor_unitario" required>
+                                    @foreach( App\Models\Production\Ordenp9::getPackaging( $producto->id ) as $empaque )
+                                        <div class="form-group col-md-4">
+                                            <label>{{ $empaque }}</label>
+                                        </div>
+                                    @endforeach
+                                </div><br>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Cotizacion9::getPackaging() as $key => $value )
+                                            @foreach( App\Models\Production\Ordenp9::getPackaging( $producto->id ) as $key => $value )
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="orden9_producto" id="orden9_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-historial="historial_orden9" data-valor="orden9_valor_unitario" disabled required>
+                                            <option value hidden selected>Seleccione</option>
                                         </select>
                                         <div class="help-block with-errors"></div>
                                     </div>
@@ -519,7 +532,7 @@
                                     </div>
                                     <div class="form-group col-sm-3">
                                         <input id="orden9_valor_unitario" name="orden9_valor_unitario" class="form-control input-sm" type="text" required data-currency>
-                                        <div class="help-block pull-right"><a id="orden9" class="historial-insumo cursor-pointer"></a></div>
+                                        <div class="help-block pull-right"><a id="historial_orden9" class="historial-insumo cursor-pointer"></a></div>
                                     </div>
                                     <div class="form-group col-sm-1">
                                         <button type="submit" class="btn btn-primary btn-sm btn-block">
@@ -535,7 +548,8 @@
                                     <thead>
                                         <tr>
                                             <th colspan="2"></th>
-                                            <th width="50%">Empaque</th>
+                                            <th width="25%">Empaque</th>
+                                            <th width="25%">Insumo</th>
                                             <th width="15%">Medidas</th>
                                             <th width="15%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
@@ -544,7 +558,7 @@
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="5"></td>
+                                            <td colspan="6"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -716,7 +730,8 @@
                 </a>
             </td>
         <% } %>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- !_.isUndefined(empaque_nombre) && !_.isNull(empaque_nombre) ? empaque_nombre : '-' %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
         <td><%- orden9_medidas %></td>
         <td><%- orden9_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency( orden9_valor_unitario ) %></td>

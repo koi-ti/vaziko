@@ -39,8 +39,10 @@ app || (app = {});
                     url: window.Misc.urlFull( Route.route('agendaordenes.index') ),
                     type: 'GET',
                     cache: true,
+                    className: 'fc-draggable',
+                    editable: false,
                     color: 'green',
-                    textColor: 'white'
+                    textColor: 'white',
                 }],
                 eventLimit: true,
                 eventClick: function(calEvent, jsEvent, view) {
@@ -51,33 +53,28 @@ app || (app = {});
                 eventAfterRender: function(event, element, view) {
 
                     if ( parseInt(event.orden_culminada ) ){
-                        element.addClass('fc-draggable');
                         element.css('background-color', 'gray');
                         element.css('border-color', 'white');
 
                     }else if( parseInt(event.orden_abierta) && event.type == 'OR'){
 
                         if (event.orden_fecha_entrega+' '+event.orden_hora_entrega < moment().format('YYYY-MM-DD HH:mm:ss')) {
-                            element.addClass('fc-draggable');
                             element.css('background-color', '#DD4B39');
                             element.css('border-color', 'white');
 
                         } else {
-                            element.addClass('fc-draggable');
                             element.css('background-color', '#00A65A');
                             element.css('border-color', 'white');
 
                         }
 
                     } else {
-                        element.addClass('fc-draggable');
                         element.css('background-color', 'black');
                         element.css('border-color', 'white');
 
                     }
 
                     if (event.type == 'RR' && parseInt(event.orden_abierta)) {
-                        element.addClass('fc-draggable');
                         element.addClass('bg-race');
                         element.css('border-color', 'black');
                         element.css('color', 'black');
@@ -85,7 +82,6 @@ app || (app = {});
                     }
 
                     if( event.type == 'R1' || event.type == 'R2') {
-                        element.addClass('fc-draggable');
                         element.css('background-color', '#337AB7');
                         element.css('border-color', 'white');
 

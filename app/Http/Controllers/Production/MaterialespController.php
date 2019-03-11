@@ -60,6 +60,7 @@ class MaterialespController extends Controller
 
                     // Material
                     $material->fill($data);
+                    $material->fillBoolean($data);
                     $material->materialp_tipomaterial = $tipomaterial->id;
                     $material->save();
 
@@ -131,12 +132,13 @@ class MaterialespController extends Controller
 
                     // Material
                     $material->fill($data);
+                    $material->fillBoolean($data);
                     $material->materialp_tipomaterial = $tipomaterial->id;
                     $material->save();
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
                     Cache::forget( Materialp::$key_cache );
                     return response()->json(['success' => true, 'id' => $material->id]);

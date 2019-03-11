@@ -326,8 +326,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
@@ -335,22 +337,26 @@
 								@foreach( App\Models\Production\Ordenp4::getOrdenesp4( $ordenp2->id ) as $materialp )
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
-										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->orden4_medidas }}</td>
 										<td>{{ $materialp->orden4_cantidad }}</td>
-										<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+											<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="4"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>
@@ -417,33 +423,41 @@
 						<table id="browse-orden-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="50%">Empaque</th>
+									<th width="25%">Empaque</th>
+									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
 								{{--*/ $totalempaques = 0; /*--}}
 								@foreach( App\Models\Production\Ordenp9::getOrdenesp9( $ordenp2->id ) as $empaque )
 									<tr>
-										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
+										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
+										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
 										<td>{{ $empaque->orden9_medidas }}</td>
 										<td>{{ $empaque->orden9_cantidad }}</td>
-										<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+											<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="3"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>

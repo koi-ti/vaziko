@@ -2,11 +2,10 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
-
+use App\Models\BaseModel;
 use Validator, Cache;
 
-class Materialp extends Model
+class Materialp extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -30,6 +29,13 @@ class Materialp extends Model
      * @var array
      */
     protected $fillable = ['materialp_nombre', 'materialp_descripcion'];
+
+    /**
+     * The attributes that are mass boolean assignable.
+     *
+     * @var array
+     */
+    protected $boolean = ['materialp_empaque'];
 
     public function isValid($data)
     {

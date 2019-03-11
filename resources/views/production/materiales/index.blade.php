@@ -14,6 +14,7 @@
                             <th>Código</th>
                             <th>Nombre</th>
                             <th>Tipo de material</th>
+                            <th>Empaque</th>
                         </tr>
                     </thead>
                 </table>

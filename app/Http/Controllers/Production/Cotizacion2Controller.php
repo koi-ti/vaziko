@@ -189,16 +189,23 @@ class Cotizacion2Controller extends Controller
                     // Empaques
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
-                        $producto = Producto::find($empaque->cotizacion9_producto);
-                        if (!$producto instanceof Producto) {
+                        $materialp = Materialp::where('materialp_empaque', true)->find($empaque->cotizacion9_materialp);
+                        if (!$materialp instanceof Materialp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $producto = Producto::where('producto_empaque', true)->find($empaque->cotizacion9_producto);
+                        if (!$producto instanceof Producto) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $cotizacion9 = new Cotizacion9;
                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                         $cotizacion9->cotizacion9_producto = $producto->id;
+                        $cotizacion9->cotizacion9_materialp = $materialp->id;
                         $cotizacion9->cotizacion9_medidas = $empaque->cotizacion9_medidas;
                         $cotizacion9->cotizacion9_cantidad = $empaque->cotizacion9_cantidad;
                         $cotizacion9->cotizacion9_valor_unitario = $empaque->cotizacion9_valor_unitario;
@@ -456,7 +463,13 @@ class Cotizacion2Controller extends Controller
                         foreach ($empaques as $empaque) {
                             $cotizacion9 = Cotizacion9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$cotizacion9 instanceof Cotizacion9) {
-                                $producto = Producto::find($empaque['cotizacion9_producto']);
+                                $materialp = Materialp::where('materialp_empaque', true)->find($empaque['cotizacion9_materialp']);
+                                if (!$materialp instanceof Materialp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $producto = Producto::where('producto_empaque', true)->find($empaque['cotizacion9_producto']);
                                 if (!$producto instanceof Producto) {
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
@@ -464,6 +477,7 @@ class Cotizacion2Controller extends Controller
 
                                 $cotizacion9 = new Cotizacion9;
                                 $cotizacion9->fill($empaque);
+                                $cotizacion9->cotizacion9_materialp = $materialp->id;
                                 $cotizacion9->cotizacion9_producto = $producto->id;
                                 $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
                                 $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');

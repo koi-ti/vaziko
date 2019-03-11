@@ -62,8 +62,12 @@ class ProductoController extends Controller
                 })->make(true);
             }
 
-            if( $request->has('materialp') ){
+            if( $request->has('materialp') && $request->has('reference') ){
                 $query->where('producto_materialp', $request->materialp);
+
+                if ($request->reference == 'empaque') {
+                    $query->where('producto_empaque', true);
+                }
             }
             return response()->json($query->get());
 

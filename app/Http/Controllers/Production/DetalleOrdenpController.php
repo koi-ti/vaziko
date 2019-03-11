@@ -207,16 +207,23 @@ class DetalleOrdenpController extends Controller
                     // Empaques
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
+                        $materialp = Materialp::find($empaque->orden9_materialp);
+                        if(!$materialp instanceof Materialp){
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
                         $producto = Producto::find($empaque->orden9_producto);
                         if (!$producto instanceof Producto) {
                             DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $orden9 = new Ordenp9;
                         $orden9->orden9_orden2 = $orden2->id;
                         $orden9->orden9_producto = $producto->id;
+                        $orden9->orden9_materialp = $materialp->id;
                         $orden9->orden9_medidas = $empaque->orden9_medidas;
                         $orden9->orden9_cantidad = $empaque->orden9_cantidad;
                         $orden9->orden9_valor_unitario = $empaque->orden9_valor_unitario;
@@ -475,6 +482,12 @@ class DetalleOrdenpController extends Controller
                         foreach ($empaques as $empaque) {
                             $orden9 = Ordenp9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$orden9 instanceof Ordenp9) {
+                                $materialp = Materialp::find($empaque['orden9_materialp']);
+                                if (!$materialp instanceof Materialp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
+                                }
+
                                 $producto = Producto::find($empaque['orden9_producto']);
                                 if (!$producto instanceof Producto) {
                                     DB::rollback();
@@ -484,6 +497,7 @@ class DetalleOrdenpController extends Controller
                                 $orden9 = new Ordenp9;
                                 $orden9->fill($empaque);
                                 $orden9->orden9_producto = $producto->id;
+                                $orden9->orden9_materialp = $materialp->id;
                                 $orden9->orden9_orden2 = $orden2->id;
                                 $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
                                 $orden9->orden9_usuario_elaboro = Auth::user()->id;

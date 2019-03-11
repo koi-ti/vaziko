@@ -34,7 +34,8 @@ app || (app = {});
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'materialp_nombre', name: 'materialp_nombre' },
-                    { data: 'tipomaterial_nombre', name: 'koi_tipomaterial.tipomaterial_nombre' }
+                    { data: 'tipomaterial_nombre', name: 'koi_tipomaterial.tipomaterial_nombre' },
+                    { data: 'materialp_empaque', name: 'materialp_empaque' }
                 ],
 				buttons: [
 					{
@@ -52,7 +53,14 @@ app || (app = {});
                         render: function ( data, type, full, row ) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('materialesp.show', {materialesp: full.id }) )  +'">' + data + '</a>';
                         }
-                    }
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
+                        render: function ( data, type, full, row ) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
                 ]
 			});
         }

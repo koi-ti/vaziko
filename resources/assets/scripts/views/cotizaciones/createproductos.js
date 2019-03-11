@@ -304,6 +304,7 @@ app || (app = {});
         */
         changeMaterialp: function (e) {
             var materialp = this.$(e.currentTarget).val(),
+                reference = this.$(e.currentTarget).data('reference'),
                 _this = this;
 
             // Reference
@@ -314,7 +315,7 @@ app || (app = {});
 
             if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
                 window.Misc.setSpinner( this.$referencewrapper );
-                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp}) ), function (resp){
+                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp, reference: reference}) ), function (resp){
                     if (resp.length) {
                         _this.$referenceselected.empty().val(0).removeAttr('disabled');
                         _this.$referenceselected.append("<option value=></option>");

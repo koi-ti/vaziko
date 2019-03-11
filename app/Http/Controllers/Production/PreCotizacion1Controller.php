@@ -556,6 +556,7 @@ class PreCotizacion1Controller extends Controller
                     foreach ($empaques as $precotizacion9) {
                          $cotizacion9 = new Cotizacion9;
                          $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
+                         $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
                          $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
                          $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
                          $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;

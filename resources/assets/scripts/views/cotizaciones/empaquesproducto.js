@@ -187,7 +187,7 @@ app || (app = {});
                 if (model.get('cotizacion9_valor_unitario') != valor)
                     attributes.cotizacion9_valor_unitario = valor;
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="50%">Empaque<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Empaque<th width="25%">Insumo<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }

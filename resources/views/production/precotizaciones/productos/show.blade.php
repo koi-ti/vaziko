@@ -398,7 +398,8 @@
 						<table id="browse-precotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="50%">Empaque</th>
+									<th width="25%">Empaque</th>
+									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									<th width="15%">Valor unidad</th>
@@ -409,7 +410,8 @@
 								{{--*/ $total = 0; /*--}}
 								@foreach( App\Models\Production\PreCotizacion9::getPreCotizaciones9( $precotizacion2->id ) as $materialp )
 									<tr>
-										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+										<td>{{ isset($materialp->empaque_nombre) ? $materialp->empaque_nombre : '-' }}</td>
+										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->precotizacion9_medidas }}</td>
 										<td>{{ $materialp->precotizacion9_cantidad }}</td>
 										<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
@@ -420,7 +422,7 @@
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="3"></td>
+									<td colspan="4"></td>
 									<th class="text-right">Total</th>
 									<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
 								</tr>

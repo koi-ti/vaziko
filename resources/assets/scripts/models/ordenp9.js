@@ -15,6 +15,8 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+            'empaque_nombre': '',
+            'orden9_materialp': '',
             'orden9_medidas': '',
             'orden9_cantidad': 0,
             'orden9_valor_unitario': '',

@@ -331,8 +331,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
@@ -340,22 +342,26 @@
 								@foreach( App\Models\Production\Cotizacion4::getCotizaciones4( $cotizacion2->id ) as $materialp )
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
-										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
+										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->cotizacion4_medidas }}</td>
 										<td>{{ $materialp->cotizacion4_cantidad }}</td>
-										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $totalmaterialesp += $materialp->cotizacion4_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="4"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>
@@ -422,33 +428,41 @@
 						<table id="browse-cotizacion-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<th width="50%">Empaque</th>
+									<th width="25%">Empaque</th>
+									<th width="25%">Empaque</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
 								{{--*/ $totalempaques = 0; /*--}}
 								@foreach( App\Models\Production\Cotizacion9::getCotizaciones9( $cotizacion2->id ) as $empaque )
 									<tr>
-										<td>{!! isset($empaque->producto_nombre) ? $empaque->producto_nombre : "-" !!}</td>
+										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
+										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
 										<td>{{ $empaque->cotizacion9_medidas }}</td>
 										<td>{{ $empaque->cotizacion9_cantidad }}</td>
-										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $totalempaques += $empaque->cotizacion9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="3"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>

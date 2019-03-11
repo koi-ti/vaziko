@@ -94,7 +94,7 @@
 			<div class="col-sm-12">
 				<label class="control-label">Orden</label>
                 <div>
-                    <a href="<%- window.Misc.urlFull( Route.route('ordenes.show', {ordenes: orden_id}) ) %>" title="Ir a orden"><b><%- title %></b></a> - <%- orden_referencia %>
+                    <a href="<%- window.Misc.urlFull( Route.route('ordenes.show', {ordenes: orden_id}) ) %>" title="Ir a orden"><%- title %></a>
                     <br>
                     <a href="<%- window.Misc.urlFull( Route.route('tiemposp.index', {ordenp: title}) ) %>" class="btn btn-primary btn-sm" title="Agregar tiempo">Agregar tiempo de producción</a></div>
                </div>

@@ -730,6 +730,7 @@ class Cotizacion1Controller extends Controller
                          $orden9 = new Ordenp9;
                          $orden9->orden9_orden2 = $orden2->id;
                          $orden9->orden9_producto = $cotizacion9->cotizacion9_producto;
+                         $orden9->orden9_materialp = $cotizacion9->cotizacion9_materialp;
                          $orden9->orden9_medidas = $cotizacion9->cotizacion9_medidas;
                          $orden9->orden9_cantidad = $cotizacion9->cotizacion9_cantidad;
                          $orden9->orden9_valor_unitario = $cotizacion9->cotizacion9_valor_unitario;

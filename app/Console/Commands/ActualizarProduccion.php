@@ -3,8 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Production\PreCotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Ordenp4, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion9, App\Models\Production\Ordenp9;
-use Log, DB;
 
 class ActualizarProduccion extends Command
 {
@@ -29,7 +27,6 @@ class ActualizarProduccion extends Command
      */
     public function __construct()
     {
-        ini_set('memory_limit', '-1');
         parent::__construct();
     }
 
@@ -40,56 +37,56 @@ class ActualizarProduccion extends Command
      */
     public function handle()
     {
-        $this->info('Rutina para actualizar produccion');
-        DB::beginTransaction();
-        try {
-            $pre_materialesp = PreCotizacion3::get();
-            foreach ($pre_materialesp as $precotizacion3) {
-                $precotizacion3->precotizacion3_cantidad = round(eval("return ($precotizacion3->precotizacion3_medidas);"), 2);
-                $precotizacion3->save();
-            }
-            $this->info('Se actualizaron materiales las precotizaciones');
-
-            $cot_materialesp = Cotizacion4::get();
-            foreach ($cot_materialesp as $cotizacion4) {
-                $cotizacion4->cotizacion4_cantidad = round(eval("return ($cotizacion4->cotizacion4_medidas);"), 2);
-                $cotizacion4->save();
-            }
-            $this->info('Se actualizaron materiales las cotizaciones');
-
-            $ord_materialesp = Ordenp4::get();
-            foreach ($ord_materialesp as $orden4) {
-                $orden4->orden4_cantidad = round(eval("return ($orden4->orden4_medidas);"), 2);
-                $orden4->save();
-            }
-            $this->info('Se actualizaron materiales las ordenes');
-
-            $pre_empaques = PreCotizacion9::get();
-            foreach ($pre_empaques as $precotizacion9) {
-                $precotizacion9->precotizacion9_cantidad = round(eval("return ($precotizacion9->precotizacion9_medidas);"), 2);
-                $precotizacion9->save();
-            }
-            $this->info('Se actualizaron empaques las precotizaciones');
-
-            $cot_empaques = Cotizacion9::get();
-            foreach ($cot_empaques as $cotizacion9) {
-                $cotizacion9->cotizacion9_cantidad = round(eval("return ($cotizacion9->cotizacion9_medidas);"), 2);
-                $cotizacion9->save();
-            }
-            $this->info('Se actualizaron empaques las cotizaciones');
-
-            $ord_empaques = Ordenp9::get();
-            foreach ($ord_empaques as $orden9) {
-                $orden9->orden9_cantidad = round(eval("return ($orden9->orden9_medidas);"), 2);
-                $orden9->save();
-            }
-            $this->info('Se actualizaron empaques las ordenes');
-
-            DB::commit();
-            $this->info("Se completo la rutina con exito.");
-        } catch (\Exception $e) {
-            DB::rollback();
-            $this->error($e->getMessage());
-        }
+        // $this->info('Rutina para actualizar produccion');
+        // DB::beginTransaction();
+        // try {
+        //     $pre_materialesp = PreCotizacion3::get();
+        //     foreach ($pre_materialesp as $precotizacion3) {
+        //         $precotizacion3->precotizacion3_cantidad = round(eval("return ($precotizacion3->precotizacion3_medidas);"), 2);
+        //         $precotizacion3->save();
+        //     }
+        //     $this->info('Se actualizaron materiales las precotizaciones');
+        //
+        //     $cot_materialesp = Cotizacion4::get();
+        //     foreach ($cot_materialesp as $cotizacion4) {
+        //         $cotizacion4->cotizacion4_cantidad = round(eval("return ($cotizacion4->cotizacion4_medidas);"), 2);
+        //         $cotizacion4->save();
+        //     }
+        //     $this->info('Se actualizaron materiales las cotizaciones');
+        //
+        //     $ord_materialesp = Ordenp4::get();
+        //     foreach ($ord_materialesp as $orden4) {
+        //         $orden4->orden4_cantidad = round(eval("return ($orden4->orden4_medidas);"), 2);
+        //         $orden4->save();
+        //     }
+        //     $this->info('Se actualizaron materiales las ordenes');
+        //
+        //     $pre_empaques = PreCotizacion9::get();
+        //     foreach ($pre_empaques as $precotizacion9) {
+        //         $precotizacion9->precotizacion9_cantidad = round(eval("return ($precotizacion9->precotizacion9_medidas);"), 2);
+        //         $precotizacion9->save();
+        //     }
+        //     $this->info('Se actualizaron empaques las precotizaciones');
+        //
+        //     $cot_empaques = Cotizacion9::get();
+        //     foreach ($cot_empaques as $cotizacion9) {
+        //         $cotizacion9->cotizacion9_cantidad = round(eval("return ($cotizacion9->cotizacion9_medidas);"), 2);
+        //         $cotizacion9->save();
+        //     }
+        //     $this->info('Se actualizaron empaques las cotizaciones');
+        //
+        //     $ord_empaques = Ordenp9::get();
+        //     foreach ($ord_empaques as $orden9) {
+        //         $orden9->orden9_cantidad = round(eval("return ($orden9->orden9_medidas);"), 2);
+        //         $orden9->save();
+        //     }
+        //     $this->info('Se actualizaron empaques las ordenes');
+        //
+        //     DB::commit();
+        //     $this->info("Se completo la rutina con exito.");
+        // } catch (\Exception $e) {
+        //     DB::rollback();
+        //     $this->error($e->getMessage());
+        // }
     }
 }

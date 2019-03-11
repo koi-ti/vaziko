@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use App\Models\BaseModel;
-use App\Models\Inventory\Producto;
 use DB, Validator;
 
 class PreCotizacion9 extends BaseModel
@@ -34,6 +33,7 @@ class PreCotizacion9 extends BaseModel
     public function isValid($data)
     {
         $rules = [
+            'precotizacion9_materialp' => 'required',
             'precotizacion9_producto' => 'required',
             'precotizacion9_medidas' => 'required',
             'precotizacion9_valor_unitario' => 'required',
@@ -50,21 +50,24 @@ class PreCotizacion9 extends BaseModel
     public static function getPreCotizaciones9($precotizacion2 = null)
     {
         $query = self::query();
-        $query->select('koi_precotizacion9.*', 'producto_nombre');
-        $query->join('koi_producto', 'precotizacion9_producto', '=', 'koi_producto.id');
+        $query->select('koi_precotizacion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
+        $query->leftJoin('koi_materialp', 'precotizacion9_materialp', '=', 'koi_materialp.id');
+        $query->leftJoin('koi_producto', 'precotizacion9_producto', '=', 'koi_producto.id');
         $query->where('precotizacion9_precotizacion2', $precotizacion2);
-        $query->orderBy('producto_nombre', 'asc');
+        $query->orderBy('empaque_nombre', 'asc');
         return $query->get();
     }
 
     /**
     *  Select materiales dependiendo del productop
     **/
-    public static function getPackaging()
+    public static function getPackaging($productop = null)
     {
-        $query = Producto::query();
-        $query->select('koi_producto.id as id', 'producto_nombre');
-        $query->where('producto_empaque', true);
-        return $query->lists('producto_nombre', 'id');
+        $query = Productop5::query();
+        $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
+        $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
+        $query->where('materialp_empaque', true);
+        $query->where('productop5_productop', $productop);
+        return $query->lists('empaque_nombre', 'id');
     }
 }

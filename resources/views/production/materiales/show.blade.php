@@ -9,13 +9,6 @@
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $material->id }}</div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>
                     <div>{{ $material->materialp_nombre }}</div>
@@ -28,9 +21,13 @@
             </div>
 
             <div class="row">
-                <div class="form-group col-md-12">
+                <div class="form-group col-md-8">
                     <label class="control-label">Descripción</label>
-                    <div>{{ $material->materialp_descripcion }}</div>
+                    <div>{{ $material->materialp_descripcion ?: '-' }}</div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Empaque</label>
+                    <div><input type="checkbox" disabled {{ $material->materialp_empaque ? 'checked': '' }}></div>
                 </div>
             </div>
         </div>
