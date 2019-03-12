@@ -1155,7 +1155,7 @@
             <span class="qq-upload-drop-area-text-selector"></span>
         </div>
 
-        @if (Auth::user()->hasRole('admin'))
+        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
             <div class="buttons">
                 <div class="qq-upload-button-selector qq-upload-button">
                     <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -1179,10 +1179,10 @@
                 <span class="qq-upload-size-selector qq-upload-size"></span>
                 <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                 <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                @if (Auth::user()->hasRole('admin'))
+                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                     <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                 @endif
-                @if (Auth::user()->hasRole('admin'))
+                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) || Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                     <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
                 @endif
                 <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>

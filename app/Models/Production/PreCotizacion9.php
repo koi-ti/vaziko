@@ -57,17 +57,4 @@ class PreCotizacion9 extends BaseModel
         $query->orderBy('empaque_nombre', 'asc');
         return $query->get();
     }
-
-    /**
-    *  Select materiales dependiendo del productop
-    **/
-    public static function getPackaging($productop = null)
-    {
-        $query = Productop5::query();
-        $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
-        $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
-        $query->where('materialp_empaque', true);
-        $query->where('productop5_productop', $productop);
-        return $query->lists('empaque_nombre', 'id');
-    }
 }

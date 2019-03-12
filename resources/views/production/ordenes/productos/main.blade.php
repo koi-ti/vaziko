@@ -498,7 +498,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Ordenp9::getPackaging( $producto->id ) as $empaque )
+                                    @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
                                         <div class="form-group col-md-4">
                                             <label>{{ $empaque }}</label>
                                         </div>
@@ -508,7 +508,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Ordenp9::getPackaging( $producto->id ) as $key => $value )
+                                            @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
