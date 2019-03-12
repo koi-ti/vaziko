@@ -503,7 +503,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="cotizacion9_materialp" id="cotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="cotizacion9_producto" data-wrapper="materialesp-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
+                                            @foreach( App\Models\Production\Productop5::getPackaging() as $key => $value )
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
