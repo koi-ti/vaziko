@@ -506,7 +506,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
+                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
                                                 <option value="{{ $key }}">{{ $value }}</option>
