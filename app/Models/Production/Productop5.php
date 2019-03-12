@@ -48,6 +48,7 @@ class Productop5 extends Model
     {
         $query = Productop5::query();
         $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
+        $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
         $query->where('materialp_empaque', true);
         return $query->lists('empaque_nombre', 'id');
     }
