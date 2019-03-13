@@ -390,7 +390,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                debug: false,
-               template: 'qq-template-precotizacion',
+               template: 'qq-template-precotizacion-producto',
                multiple: true,
                interceptSubmit: true,
                autoUpload: autoUpload,

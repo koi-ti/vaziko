@@ -652,7 +652,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-template-ordenp',
                 multiple: true,
                 autoUpload: true,
                 session: {

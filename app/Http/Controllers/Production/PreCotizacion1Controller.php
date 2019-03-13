@@ -16,8 +16,10 @@ class PreCotizacion1Controller extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:admin,crear', ['only' => ['abrir', 'cerrar']]);
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'cerrar']]);
         $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'generar', 'clonar']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
     }
 
     /**
@@ -204,7 +206,7 @@ class PreCotizacion1Controller extends Controller
     public function show(Request $request, $id)
     {
         $precotizacion = PreCotizacion1::getPreCotizacion($id);
-        if(!$precotizacion instanceof PreCotizacion1){
+        if (!$precotizacion instanceof PreCotizacion1) {
             abort(404);
         }
 
@@ -212,7 +214,7 @@ class PreCotizacion1Controller extends Controller
             return response()->json($precotizacion);
         }
 
-        if( $precotizacion->precotizacion1_abierta == true ) {
+        if ($precotizacion->precotizacion1_abierta == true && Auth::user()->ability('admin', ['crear', 'edit'], ['module' => 'precotizaciones'])) {
             return redirect()->route('precotizaciones.edit', ['precotizacion' => $precotizacion]);
         }
 
@@ -228,11 +230,11 @@ class PreCotizacion1Controller extends Controller
     public function edit($id)
     {
         $precotizacion = PreCotizacion1::getPreCotizacion($id);
-        if(!$precotizacion instanceof PreCotizacion1) {
+        if (!$precotizacion instanceof PreCotizacion1) {
             abort(404);
         }
 
-        if($precotizacion->precotizacion1_abierta == false ) {
+        if ($precotizacion->precotizacion1_abierta == false) {
             return redirect()->route('precotizaciones.show', ['precotizacion' => $precotizacion]);
         }
 

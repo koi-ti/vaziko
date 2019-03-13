@@ -20,11 +20,6 @@
 	                <div class="col-md-2 col-sm-6 col-xs-6 text-left">
 	                    <a href="{{ route('precotizaciones.show', ['precotizacion' => $precotizacion->id]) }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 	                </div>
-	                @if($precotizacion->precotizacion1_abierta)
-		                <div class="col-md-2 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-		                    <a href="{{ route('precotizaciones.productos.edit', ['productos' => $precotizacion2->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-		                </div>
-		         	@endif
 	            </div>
 	        </div>
 
@@ -313,8 +308,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
@@ -325,19 +322,23 @@
 										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 										<td>{{ $materialp->precotizacion3_medidas }}</td>
 										<td>{{ $materialp->precotizacion3_cantidad }}</td>
-										<td class="text-right">{{ number_format($materialp->precotizacion3_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($materialp->precotizacion3_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+											<td class="text-right">{{ number_format($materialp->precotizacion3_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($materialp->precotizacion3_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $total += $materialp->precotizacion3_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="4"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>
@@ -354,8 +355,10 @@
 										<th>Área</th>
 										<th>Nombre</th>
 										<th>Horas</th>
-										<th>Valor</th>
-										<th>Total</th>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+											<th>Valor</th>
+											<th>Total</th>
+										@endif
 									</tr>
 								</thead>
 								<tbody>
@@ -373,18 +376,22 @@
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 								            <td>{{ $areap->precotizacion6_nombre == '' ? '-': $areap->precotizacion6_nombre }}</td>
 								            <td class="text-left">{{  $areap->precotizacion6_tiempo }}</td>
-											<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
-								            <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+											@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+												<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
+									            <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
+											@endif
 										</tr>
 									@endforeach
 								</tbody>
-								<tfoot>
-									<tr>
-										<td colspan="3"></td>
-										<th class="text-right">Total</th>
-										<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
-									</tr>
-								</tfoot>
+								@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+									<tfoot>
+										<tr>
+											<td colspan="3"></td>
+											<th class="text-right">Total</th>
+											<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+										</tr>
+									</tfoot>
+								@endif
 							</table>
 	          			</div>
 					</div>
@@ -402,8 +409,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									<th width="15%">Valor unidad</th>
-									<th width="15%">Valor</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
 								</tr>
 							</thead>
 							<tbody>
@@ -414,19 +423,23 @@
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->precotizacion9_medidas }}</td>
 										<td>{{ $materialp->precotizacion9_cantidad }}</td>
-										<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
-										<td class="text-right">{{ number_format($materialp->precotizacion9_valor_total, 2, ',', '.') }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+											<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($materialp->precotizacion9_valor_total, 2, ',', '.') }}</td>
+										@endif
 									</tr>
 									{{--*/ $total += $materialp->precotizacion9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							<tfoot>
-								<tr>
-									<td colspan="4"></td>
-									<th class="text-right">Total</th>
-									<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
-								</tr>
-							</tfoot>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
 						</table>
 					</div>
 				</div>

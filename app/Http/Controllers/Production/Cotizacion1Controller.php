@@ -16,8 +16,10 @@ class Cotizacion1Controller extends Controller
      */
     public function __construct()
     {
-        $this->middleware('ability:admin,crear', ['only' => ['abrir', 'cerrar']]);
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'cerrar']]);
         $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
     }
 
     /**

@@ -11,6 +11,8 @@ use DB, Log, Storage, Auth;
 
 class Cotizacion8Controller extends Controller
 {
+    public function __construct() {}
+        
     /**
      * Display a listing of the resource.
      *

@@ -22,7 +22,7 @@
                             {{ $precotizacion->precotizacion_codigo }}
                             @if( $precotizacion->precotizacion1_culminada )
                                 <span class="label label-primary">CULMINADA</span>
-                            @elseif( $precotizacion->precotizacion_abierta )
+                            @elseif( $precotizacion->precotizacion1_abierta )
                                 <span class="label label-success">ABIERTA</span>
                             @else
                                 <span class="label label-warning">CERRADA</span>

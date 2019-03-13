@@ -11,6 +11,8 @@ use Storage, Auth, DB;
 
 class OrdenpImagenesController extends Controller
 {
+    public function __construct() {}
+
     /**
      * Display a listing of the resource.
      *

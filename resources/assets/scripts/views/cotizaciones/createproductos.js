@@ -507,7 +507,7 @@ app || (app = {});
 
            this.$uploaderFile.fineUploader({
                debug: false,
-               template: 'qq-template',
+               template: 'qq-template-cotiizacion-producto',
                multiple: true,
                interceptSubmit: true,
                autoUpload: autoUpload,

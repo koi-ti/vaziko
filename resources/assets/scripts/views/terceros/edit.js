@@ -222,7 +222,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-template-tercero',
                 multiple: true,
                 autoUpload: true,
                 session: {

@@ -264,7 +264,7 @@ class PreCotizacion2Controller extends Controller
         }
 
         // Validar precotizacion
-        if( $precotizacion->precotizacion1_abierta == true ){
+        if( $precotizacion->precotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'precotizaciones']) ){
             return redirect()->route('precotizaciones.productos.edit', ['productos' => $precotizacion2->id]);
         }
         return view('production.precotizaciones.productos.show', ['precotizacion' => $precotizacion, 'producto' => $producto, 'precotizacion2' => $precotizacion2]);

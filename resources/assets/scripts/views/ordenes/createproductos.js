@@ -509,7 +509,7 @@ app || (app = {});
 
             this.$uploaderFile.fineUploader({
                 debug: false,
-                template: 'qq-template',
+                template: 'qq-template-ordenp-producto',
                 multiple: true,
                 interceptSubmit: true,
                 autoUpload: autoUpload,

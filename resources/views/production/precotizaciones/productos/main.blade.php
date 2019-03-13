@@ -652,7 +652,7 @@
        </td>
     </script>
 
-    <script type="text/template" id="qq-template-precotizacion">
+    <script type="text/template" id="qq-template-precotizacion-producto">
         <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ trans('app.files.drop') }}">
             <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
                 <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
@@ -661,15 +661,17 @@
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
 
-            <div class="buttons">
-                <div class="qq-upload-button-selector qq-upload-button">
-                    <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                <div class="buttons">
+                    <div class="qq-upload-button-selector qq-upload-button">
+                        <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+                    </div>
                 </div>
-            </div>
-            <span class="qq-drop-processing-selector qq-drop-processing">
-                <span>{{ trans('app.files.process') }}</span>
-                <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-            </span>
+                <span class="qq-drop-processing-selector qq-drop-processing">
+                    <span>{{ trans('app.files.process') }}</span>
+                    <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+                </span>
+            @endif
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -683,7 +685,9 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                    @endif
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
