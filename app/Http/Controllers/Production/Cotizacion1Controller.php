@@ -437,8 +437,8 @@ class Cotizacion1Controller extends Controller
             }
 
             $query = Cotizacion9::query();
-            $query->select(DB::raw("GROUP_CONCAT(producto_nombre SEPARATOR ', ') AS empaque_nombre"));
-            $query->join('koi_producto', 'cotizacion9_producto', '=', 'koi_producto.id');
+            $query->select(DB::raw("GROUP_CONCAT(materialp_nombre SEPARATOR ', ') AS empaque_nombre"));
+            $query->leftJoin('koi_materialp', 'cotizacion9_materialp', '=', 'koi_materialp.id');
             $query->where('cotizacion9_cotizacion2', $cotizacion2->id);
             $empaques = $query->first();
 
