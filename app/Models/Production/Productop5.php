@@ -48,6 +48,8 @@ class Productop5 extends Model
         $query = Materialp::query();
         $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
         $query->where('materialp_empaque', true);
+        $query->orderBy('empaque_nombre', 'asc');
+        
         return $query->lists('empaque_nombre', 'id');
     }
 }
