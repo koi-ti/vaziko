@@ -3,8 +3,7 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
-use Validator;
+use App\Models\Production\Materialp;
 
 class Productop5 extends Model
 {
@@ -46,9 +45,8 @@ class Productop5 extends Model
     **/
     public static function getPackaging()
     {
-        $query = Productop5::query();
+        $query = Materialp::query();
         $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
-        $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
         $query->where('materialp_empaque', true);
         return $query->lists('empaque_nombre', 'id');
     }
