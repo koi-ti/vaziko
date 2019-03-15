@@ -4,6 +4,7 @@ namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Production\Materialp;
+use Validator;
 
 class Productop5 extends Model
 {
@@ -49,7 +50,7 @@ class Productop5 extends Model
         $query->select('koi_materialp.id as id', 'materialp_nombre as empaque_nombre');
         $query->where('materialp_empaque', true);
         $query->orderBy('empaque_nombre', 'asc');
-        
+
         return $query->lists('empaque_nombre', 'id');
     }
 }
