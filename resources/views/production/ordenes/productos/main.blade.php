@@ -808,7 +808,7 @@
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
 
-            @if(Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+            @if(Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -832,7 +832,7 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                    @if(Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                     @endif
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
