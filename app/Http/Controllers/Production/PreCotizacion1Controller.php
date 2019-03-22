@@ -113,6 +113,11 @@ class PreCotizacion1Controller extends Controller
                             $query->where('precotizacion1_culminada', true);
                         }
                     }
+
+                    // Producto
+                    if($request->has('precotizacion_productop')) {
+                        $query->whereRaw("$request->precotizacion_productop IN ( SELECT precotizacion2_productop FROM koi_precotizacion2 WHERE precotizacion2_precotizacion1 = koi_precotizacion1.id) ");
+                    }
                 })->make(true);
         }
         return view('production.precotizaciones.index', ['empresa' => parent::getPaginacion()]);

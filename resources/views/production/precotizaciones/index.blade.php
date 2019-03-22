@@ -49,8 +49,16 @@
 
                     <div class="form-group">
                         <label for="searchprecotizacion_referencia" class="col-sm-1 control-label">Referencia</label>
-                        <div class="col-sm-11">
+                        <div class="col-sm-5">
                             <input id="searchprecotizacion_referencia" name="searchprecotizacion_referencia" placeholder="Referencia" class="form-control input-sm" type="text" value="{{ session('searchprecotizacion_referencia') }}">
+                        </div>
+                        <label for="searchprecotizacion_productop" class="col-md-1 control-label">Producto</label>
+                        <div class="col-md-5">
+                            <select name="searchprecotizacion_productop" id="searchprecotizacion_productop" class="form-control select2-default-clear">
+                                @foreach (App\Models\Production\Productop::getProductos() as $key => $value)
+                                    <option value="{{ $key }}" {{ session('searchprecotizacion_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
 

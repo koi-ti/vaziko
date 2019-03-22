@@ -35,6 +35,7 @@ app || (app = {});
             this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
             this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
             this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
+            this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
             var paginacion = this.$precotizacionesSearchTable.data('paginacion');
 
             this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
@@ -53,6 +54,7 @@ app || (app = {});
                         data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
                         data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
                         data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
+                        data.precotizacion_productop = _this.$searchprecotizacionProductop.val();
                     }
                 },
                 columns: [
@@ -164,6 +166,7 @@ app || (app = {});
             this.$searchprecotizacionTerceroName.val('');
             this.$searchprecotizacionReferencia.val('');
             this.$searchprecotizacionEstado.val('');
+            this.$searchprecotizacionProductop.val('').trigger('change');
 
             this.precotizacionesSearchTable.ajax.reload();
         },
