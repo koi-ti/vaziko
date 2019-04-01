@@ -2,15 +2,12 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Auth;
+use App\Models\Base\Tercero;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
-
-use Validator;
-use Auth;
-
-use App\Models\Base\Tercero;
 
 class AuthController extends Controller
 {
@@ -32,7 +29,6 @@ class AuthController extends Controller
 
     protected $redirectPath = '/';
 
-
     /**
      * Create a new authentication controller instance.
      *
@@ -40,7 +36,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => ['getLogout', 'integrate'] ]);
+        $this->middleware('guest', ['except' => 'getLogout']);
     }
 
     /**
@@ -66,16 +62,15 @@ class AuthController extends Controller
 
         $credentials = $this->getCredentials($request);
 
-        if (Auth::attempt($credentials, $request->has('remember'))) {
+        if (Auth::attempt(array_merge($credentials, ['tercero_activo' => 1]), $request->has('remember'))) {
             return $this->handleUserWasAuthenticated($request, $throttles);
         }else{
             // Support md5 passwords
-            $user = Tercero::where('username', $request->username)->first();
+            $user = Tercero::where('username', $request->username)->where('tercero_activo', true)->first();
             if( $user instanceof Tercero && $user->password == md5($request->password) ) {
                 Auth::login($user);
             }
         }
-
 
         // If the login attempt was unsuccessful we will increment the number of attempts
         // to login and redirect the user back to the login form. Of course, when this
@@ -89,22 +84,5 @@ class AuthController extends Controller
             ->withErrors([
                 $this->loginUsername() => $this->getFailedLoginMessage(),
             ]);
-    }
-
-    /**
-     * Handle a integrate login request to the application.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function integrate(Request $request)
-    {
-        if($request->has('username')) {
-            $user = Tercero::where('username', $request->username)->firstOrFail();
-            Auth::login($user);
-
-            return redirect()->route($request->has('redirect') ? $request->redirect : 'dashboard');
-        }
-        abort(404);
     }
 }

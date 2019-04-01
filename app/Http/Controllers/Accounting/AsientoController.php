@@ -473,34 +473,21 @@ class AsientoController extends Controller
 
         DB::beginTransaction();
         try {
-            $asientos2 = $asiento->detalle()
-                                    ->select('koi_asiento2.*', 'plancuentas_tipo', 'plancuentas_cuenta', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"))
-                                    ->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id')
-                                    ->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id')
-                                    ->get() ?: [];
-
             // Recuperar detalles del asiento & recorrerlo
-            foreach ($asientos2 as $item) {
+            foreach ($asiento->detalle as $item) {
                 $result = $item->removeMovimientos();
                 if($result != 'OK') {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
+
+                $item->delete();
             }
 
-
-            // Nif movimiento
-            // DB::table('koi_asientonifmovimiento')->join('koi_asienton2', 'movimiento_asienton2', '=', 'koi_asienton2.id')->join('koi_asienton1', 'asienton2_asiento', '=', 'koi_asienton1.id')->where('asienton1_asiento', $asiento->id)->delete();
-            // DB::table('koi_asienton2')->join('koi_asienton1', 'asienton2_asiento', '=', 'koi_asienton1.id')->where('asienton1_asiento', $asiento->id)->delete();
-            // DB::table('koi_asienton1')->where('asienton1_asiento', $asiento->id)->delete();
-            //
-            // DB::table('koi_asientomovimiento')->join('koi_asiento2', 'movimiento_asiento2', '=', 'koi_asiento2.id')->join('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id')->where('koi_asiento1.id', $asiento->id)->delete();
-            // DB::table('koi_asiento2')->where('asiento2_asiento', $asiento->id)->delete();
-            // $asiento->delete();
-
-
+            $asiento->delete();
+            
             DB::rollback();
-            return response()->json(['success' => false, 'errors' => '!OK']);
+            return response()->json(['success' => false, 'errors' => 'K.O!']);
 
             // DB::commit();
             // return response()->json(['success' => true, 'msg' => 'Se elimino con exito el asiento.']);

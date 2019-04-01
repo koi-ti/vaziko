@@ -5,7 +5,7 @@ namespace App\Models\Treasury;
 use Illuminate\Database\Eloquent\Model;
 
 use App\Models\Base\Tercero;
-use DB;
+use DB, Carbon\Carbon;
 
 class Facturap extends Model
 {
@@ -18,8 +18,7 @@ class Facturap extends Model
 
     public $timestamps = false;
 
-    public function storeCuotas($valor)
-    {
+    public function storeCuotas($valor) {
         $response = new \stdClass();
         $response->success = false;
 
@@ -27,8 +26,7 @@ class Facturap extends Model
 		$fecha_cuota = $this->facturap1_fecha;
         $valor_cuota = $valor / $this->facturap1_cuotas;
 
-        for($i=1; $i <= $this->facturap1_cuotas; $i++)
-        {
+        for($i=1; $i <= $this->facturap1_cuotas; $i++) {
             if (!$fecha_cuota) {
             	$response->error = "No es posible recuperar información de fecha para cuota $i de la factura {$this->facturap1_factura}, por favor verifique la información del asiento o consulte al administrador.";
             	return $response;
@@ -43,28 +41,14 @@ class Facturap extends Model
             $facturap2->save();
 
             // Sumar fechas
-            $fecha_cuota = $this->sumaFechas($fecha_cuota, $this->facturap1_periodicidad);
+            $fecha_cuota = Carbon::parse($fecha_cuota)->addDays($this->facturap1_periodicidad)->format('Y-m-d H:i:s');
         }
 
         $response->success = true;
         return $response;
     }
 
-    public function sumaFechas($fecha, $ndias)
-    {
-        if (preg_match("/[0-9]{1,2}\/[0-9]{1,2}\/([0-9][0-9]){1,2}/",$fecha)) {
-            list($ao,$mes,$dia) = explode("/", $fecha);
-        }else if (preg_match("/[0-9]{1,2}-[0-9]{1,2}-([0-9][0-9]){1,2}/",$fecha)) {
-            list($ao,$mes,$dia) = explode("-", $fecha);
-        }else{
-            return NULL;
-        }
-        $nueva = mktime(0,0,0, $mes,$dia,$ao) + $ndias * 24 * 60 * 60;
-        $nuevafecha=date("Y-m-d",$nueva);
-        return ($nuevafecha);
-    }
-
-    public static function getFacturap($id){
+    public static function getFacturap($id) {
         $query = Facturap::query();
         $query->select('koi_facturap1.*', 'tercero_nit','documento_nombre', 'asiento1_numero','sucursal_nombre', DB::raw("(CASE WHEN tercero_persona = 'N'
                 THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
@@ -85,8 +69,7 @@ class Facturap extends Model
     /**
     * Function for report history provider
     */
-    public static function historyProviderReport(Tercero $tercero, Array $historyClient, $i )
-    {
+    public static function historyProviderReport(Tercero $tercero, Array $historyClient, $i ) {
         $response = new \stdClass();
         $response->success = false;
         $response->facturaProveedor = [];

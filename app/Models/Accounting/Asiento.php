@@ -86,6 +86,9 @@ class Asiento extends Model
     */
     public function detalle()
     {
-        return $this->hasMany('App\Models\Accounting\Asiento2', 'asiento2_asiento', 'id');
+        return $this->hasMany('App\Models\Accounting\Asiento2', 'asiento2_asiento', 'id')
+                    ->select('koi_asiento2.*', 'plancuentas_tipo', 'plancuentas_cuenta', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"))
+                    ->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id')
+                    ->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
     }
 }

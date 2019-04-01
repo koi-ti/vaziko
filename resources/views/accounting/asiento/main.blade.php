@@ -416,17 +416,19 @@
 
 	<script type="text/template" id="add-rfacturap2-asiento-tpl">
 		<div class="row">
-			<!-- table table-bordered table-striped -->
-			<div class="box-body table-responsive no-padding">
-				<table id="browse-rfacturap2-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
-		            <tr>
-		                <th>Cuota</th>
-		                <th>Vencimiento</th>
-		                <th>Valor</th>
-		                <th>Saldo</th>
-		                <th></th>
-		            </tr>
-			    </table>
+			<div class="col-sm-12">
+				<!-- table table-bordered table-striped -->
+				<div class="box-body table-responsive no-padding">
+					<table id="browse-rfacturap2-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+			            <tr>
+			                <th>Cuota</th>
+			                <th>Vencimiento</th>
+			                <th>Valor</th>
+			                <th>Saldo</th>
+			                <th></th>
+			            </tr>
+				    </table>
+				</div>
 			</div>
 		</div>
 	</script>
