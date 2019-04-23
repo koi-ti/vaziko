@@ -770,6 +770,7 @@ app || (app = {});
             this.editAsientoView = new app.EditAsientoView({ model: this.asientoModel });
             this.asientoModel.fetch();
         },
+
         /**
         * show view main asiento NIF contable
         */
@@ -782,6 +783,7 @@ app || (app = {});
 
             this.mainAsientosNifView = new app.MainAsientosNifView( );
         },
+
         /**
         * show view show asiento NIF contable
         */
@@ -796,6 +798,7 @@ app || (app = {});
 
             this.showAsientoNifView = new app.ShowAsientoNifView({ model: this.asientoNifModel });
         },
+
         /**
         * show view edit asiento NIF contable
         */
@@ -816,6 +819,7 @@ app || (app = {});
             this.editAsientoNifView = new app.EditAsientoNifView({ model: this.asientoNifModel });
             this.asientoNifModel.fetch();
         },
+
         /**
         * show view create cierre contable mensual
         */
@@ -829,6 +833,7 @@ app || (app = {});
             this.createCierreContableMensualView = new app.CreateCierreContableMensualView();
             this.createCierreContableMensualView.render();
         },
+        
         /**
         * show view show folders
         */

@@ -1,5 +1,5 @@
 <html><head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 	{{-- Format title --}}
 	<title>{{ $type == 'xls' ? substr($title, 0 , 31) : $title }}</title>
 

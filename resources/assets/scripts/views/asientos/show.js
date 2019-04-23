@@ -13,7 +13,7 @@ app || (app = {});
 
         el: '#asientos-show',
         events: {
-            'click .delete-asiento': 'deleteAsiento'
+            //
         },
 
         /**
@@ -25,6 +25,7 @@ app || (app = {});
                 this.asientoCuentasList = new app.AsientoCuentasList();
 
                 // Reference views
+                this.spinner = this.$('.spinner-main');
                 this.referenceViews();
             }
         },
@@ -37,7 +38,7 @@ app || (app = {});
             this.cuentasListView = new app.AsientoCuentasListView({
                 collection: this.asientoCuentasList,
                 parameters: {
-                    wrapper: this.el,
+                    wrapper: this.spinner,
                     dataFilter: {
                         asiento: this.model.get('id')
                     }
@@ -45,32 +46,18 @@ app || (app = {});
             });
         },
 
-        deleteAsiento: function(e) {
+        anularAsiento: function(e) {
             e.preventDefault();
-            var _this = this;
-                model = this.model;
+
+            var model = this.model,
+                _this = this;
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    template: _.template( ($('#asiento-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar asiento',
+                    template: _.template( ($('#asiento-anular-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Anular asiento',
                     onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.el );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('asientos.index')));
-                                    }
-                                }
-                            });
-                        }
+                        
                     }
                 }
             });

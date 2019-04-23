@@ -31,4 +31,8 @@ class Notificacion extends Model
         $notificacion->notificacion_titulo = $title;
         $notificacion->save();
     }
+
+    public function scopeState ($query, $state) {
+        return $query->where('notificacion_visto', $state);
+    }
 }

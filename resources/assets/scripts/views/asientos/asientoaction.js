@@ -21,12 +21,14 @@ app || (app = {});
         // Cartera
         templateCartera: _.template( ($('#rcartera-asiento-tpl').html() || '') ),
         templateCommentsFactura: _.template( ($('#add-comments-tpl').html() || '') ),
-
         // Inventario
         templateInventario: _.template( ($('#add-inventario-asiento-tpl').html() || '') ),
         templateAddItemRollo: _.template( ($('#add-itemrollo-asiento-tpl').html() || '') ),
         templateChooseItemsRollo: _.template( ($('#choose-itemrollo-asiento-tpl').html() || '') ),
         templateAddSeries: _.template( ($('#add-series-asiento-tpl').html() || '') ),
+        // Editar
+        templateUpdate: _.template( ($('#edit-info-asiento2-tpl').html() || '') ),
+
         events: {
             // Produccion
             'submit #form-create-ordenp-asiento-component-source': 'onStoreItemOrdenp',
@@ -41,7 +43,8 @@ app || (app = {});
             'submit #form-create-inventario-asiento-component-source': 'onStoreItemInventario',
             'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario',
 
-            'change .round-module': 'roundModule'
+            'change .round-module': 'roundModule',
+            'submit #form-edit-asiento-component-source': 'onStoreItem'
         },
         parameters: {
             data: { },
@@ -56,6 +59,7 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
+            this.$modalUp = this.$('#modal-asiento-edit-info-component'); // Modal for update
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -69,6 +73,8 @@ app || (app = {});
             this.productoSeriesINList = new app.ProductoSeriesINList();
             // Collection pendientes factura
             this.detalleFactura4List = new app.DetalleFactura4List();
+            // Collection update
+            this.asientoMovimientosList = new app.AsientoMovimientosList();
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
@@ -113,34 +119,43 @@ app || (app = {});
             var resp = this.evaluateNextAction(),
         		_this = this,
 	            stuffToDo = {
-	                'facturap' : function() {
+	                'facturap': function () {
 	                    _this.$modalFp.find('.content-modal').empty().html( _this.templateFacturap( _this.parameters.data ) );
 
 	                    // Reference facturap
 	                   	_this.referenceFacturap();
-
 	                },
 
-                    'cartera' : function() {
+                    'cartera': function () {
                         _this.$modalCt.find('.content-modal').empty().html( _this.templateCartera( _this.parameters.data ) );
 
                         // Reference cartera
                         _this.referenceCartera();
                     },
 
-	                'ordenp' : function() {
+	                'ordenp': function () {
                         _this.$modalOp.find('.content-modal').empty().html( _this.templateOrdenp( _this.parameters.data ) );
+
                         // Reference ordenp
                         _this.referenceOrdenp();
                     },
 
-                    'inventario' : function() {
+                    'inventario': function () {
                         _this.$modalIn.find('.content-modal').empty().html( _this.templateInventario( _this.parameters.data ) );
+
 	                 	// Reference inventario
 	            		_this.referenceInventario();
 	                },
 
-	                'store' : function() {
+                    'update': function () {
+                        _this.$modalUp.find('.modal-title').text('Movimiento (' + _this.parameters.data.plancuentas_cuenta + ' - ' + _this.parameters.data.plancuentas_nombre + ') - Editar');
+                        _this.$modalUp.find('.content-modal').empty().html( _this.templateUpdate( _this.parameters.data ) );
+
+                        // Reference update collections
+                        _this.referenceUpdate();
+                    },
+
+	                'store': function () {
                         _this.onStoreItem();
 	                }
 	            };
@@ -199,7 +214,6 @@ app || (app = {});
         * Validate action item asiento2 (facturap, ordenp, inventario, cartera)
         */
         validateAction: function ( options ) {
-
             options || (options = {});
 
             var defaults = {
@@ -292,7 +306,6 @@ app || (app = {});
             this.$modalCt.modal('show');
         },
 
-
         /**
         * Reference orden
         */
@@ -331,6 +344,22 @@ app || (app = {});
 
             // Open modal
             this.$modalIn.modal('show');
+        },
+
+        /**
+        * Reference update
+        */
+        referenceUpdate: function () {
+            // Reference wrapper render content
+            this.$wrapper = $('#wrapper-content-movements-source');
+
+            // Get movimientos list
+            if (this.model.get('plancuentas_tipo') != 'N') {
+                this.asientoMovimientosList.fetch({reset: true, data: {asiento2: this.model.get('id')}});
+            }
+
+            this.$modalUp.modal('show');
+            this.ready();
         },
 
         /**
@@ -453,8 +482,7 @@ app || (app = {});
                 this.validateAction({
                     'action': 'facturap',
                     'callback': (function (_this) {
-                        return function ( resp )
-                        {
+                        return function ( resp ) {
                             if(resp.success) {
                                 // Set action success
                                 _this.setSuccessAction('facturap', _this.parameters.actions);
@@ -697,13 +725,23 @@ app || (app = {});
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
-            // Model exist
-            if( this.model.id != undefined ) {
-                // Insert item
-                this.collection.trigger( 'store', this.parameters.data );
-            }else{
-                // Create model
-                this.model.save( this.parameters.data, {patch: true, silent: true} );
+            e.preventDefault();
+
+            // If actions is update
+            if (this.parameters.actions[0].action == 'update') {
+                var data = window.Misc.formToJson( e.target ),
+                    _this = this;
+
+                this.model.save( data, {patch: true, silent: true});
+            } else {
+                // Model exist
+                if (this.model.id != undefined) {
+                    // Insert item
+                    this.collection.trigger( 'store', this.parameters.data );
+                } else {
+                    // Create model
+                    this.model.save( this.parameters.data, {patch: true, silent: true} );
+                }
             }
         },
 
@@ -724,12 +762,12 @@ app || (app = {});
         responseServer: function ( model, resp, opts ) {
             if(!_.isUndefined(resp.success)) {
                 if( resp.success ) {
-
                     // Close modals
                     this.$modalOp.modal('hide');
                     this.$modalIn.modal('hide');
                     this.$modalFp.modal('hide');
                     this.$modalCt.modal('hide');
+                    this.$modalUp.modal('hide');
 
                     window.Misc.clearForm( $('#form-item-asiento') );
                 }

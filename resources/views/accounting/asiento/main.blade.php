@@ -230,42 +230,46 @@
 						<!-- table table-bordered table-striped -->
 						<div class="box-body table-responsive no-padding">
 							<table id="browse-detalle-asiento-list" class="table table-bordered" cellspacing="0" width="100%">
-								<tr>
-									<td colspan="5"></td>
-									<th class="text-left">Total</th>
-									<td class="text-right total-debitos">0</td>
-									<td class="text-right total-creditos">0</td>
-									<td></td>
-								</tr>
-								<tr>
-									<th colspan="5"></th>
-									<th class="text-left">Diferencia</th>
-									<td colspan="2" class="text-right">
-										<small class="label bg-red total-diferencia">0</small>
-									</td>
-									<td></td>
-								</tr>
-					            <tr>
-					                <th></th>
-					                <th>Cuenta</th>
-					                <th>Nombre</th>
-					                <th>Beneficiario</th>
-					                <th>Centro Costo</th>
-					                <th>Base</th>
-					                <th>Débito</th>
-					                <th>Crédito</th>
-					                <th></th>
-					            </tr>
-								<tfoot>
+								<thead>
 									<tr>
-										<td colspan="5"></td>
+										<td colspan="6"></td>
 										<th class="text-left">Total</th>
 										<td class="text-right total-debitos">0</td>
 										<td class="text-right total-creditos">0</td>
 										<td></td>
 									</tr>
 									<tr>
-										<th colspan="5"></th>
+										<th colspan="6"></th>
+										<th class="text-left">Diferencia</th>
+										<td colspan="2" class="text-right">
+											<small class="label bg-red total-diferencia">0</small>
+										</td>
+										<td></td>
+									</tr>
+						            <tr>
+						                <th colspan="2"></th>
+						                <th>Cuenta</th>
+						                <th>Nombre</th>
+						                <th>Beneficiario</th>
+						                <th>Centro Costo</th>
+						                <th>Base</th>
+						                <th>Débito</th>
+						                <th>Crédito</th>
+						                <th></th>
+						            </tr>
+								</thead>
+								<tbody>
+								</tbody>
+								<tfoot>
+									<tr>
+										<td colspan="6"></td>
+										<th class="text-left">Total</th>
+										<td class="text-right total-debitos">0</td>
+										<td class="text-right total-creditos">0</td>
+										<td></td>
+									</tr>
+									<tr>
+										<th colspan="6"></th>
 										<th class="text-left">Diferencia</th>
 										<td colspan="2" class="text-right">
 											<small class="label bg-red total-diferencia">0</small>
@@ -280,7 +284,6 @@
 			</div>
 		</section>
 	</script>
-
 
 	<script type="text/template" id="searchordenp-asiento-tpl">
 		<div class="row">

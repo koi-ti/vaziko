@@ -114,7 +114,7 @@
 
                         <div class="row">
                             <label for="productop_3d" class="col-sm-1 control-label">3D</label>
-                            <div class="form-group col-md-1">
+                            <div class="form-group col-sm-1">
                                 <input type="checkbox" id="productop_3d" name="productop_3d" value="productop_3d" <%- parseInt(productop_3d) ? 'checked': ''%> class="change-productop-3d-koi-component">
                             </div>
 
@@ -205,7 +205,7 @@
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
-                                                            <div class="form-group col-sm-1">
+                                                            <div class="form-group col-sm-1 col-xs-12">
                                                                 <button type="submit" class="btn btn-success btn-sm btn-block">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -283,7 +283,7 @@
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
-                                                            <div class="form-group col-sm-1">
+                                                            <div class="form-group col-sm-1 col-xs-12">
                                                                 <button type="submit" class="btn btn-success btn-sm btn-block">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -328,7 +328,7 @@
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
-                                                            <div class="form-group col-sm-1">
+                                                            <div class="form-group col-sm-1 col-xs-12">
                                                                 <button type="submit" class="btn btn-success btn-sm btn-block">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
@@ -373,7 +373,7 @@
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>
                                                             </div>
-                                                            <div class="form-group col-sm-1">
+                                                            <div class="form-group col-sm-1 col-xs-12">
                                                                 <button type="submit" class="btn btn-success btn-sm btn-block">
                                                                     <i class="fa fa-plus"></i>
                                                                 </button>

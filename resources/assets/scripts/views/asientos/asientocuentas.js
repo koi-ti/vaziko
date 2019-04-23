@@ -12,8 +12,14 @@ app || (app = {});
     app.AsientoCuentasListView = Backbone.View.extend({
 
         el: '#browse-detalle-asiento-list',
+        templateInfo: _.template( ($('#show-info-asiento2-tpl').html() || '') ),
+        templateInfoFacturaItem: _.template( ($('#add-info-factura-item').html() || '') ), // Factura
+        templateInfoFacturapItem: _.template( ($('#add-info-facturap-item').html() || '') ), // Facturap
+        templateInfoInventarioItem: _.template( ($('#add-info-inventario-item').html() || '') ), // Inventario
         events: {
-            'click .item-asiento2-remove': 'removeOne'
+            'click .item-asiento2-edit': 'editOne',
+            'click .item-asiento2-remove': 'removeOne',
+            'click .item-asiento2-show': 'showOne'
         },
         parameters: {
             wrapper: null,
@@ -34,6 +40,10 @@ app || (app = {});
             this.$creditos = this.$('.total-creditos');
             this.$diferencia = this.$('.total-diferencia');
 
+            // References show attributes
+            this.$modalInfo = $('#modal-asiento-show-info-component');
+            this.asientoMovimientosList = new app.AsientoMovimientosList();
+
             //Init Attributes
             this.confCollection = { reset: true, data: {} };
 
@@ -43,6 +53,10 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner );
             this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'sync', this.responseServer );
+
+            // show info collection
+            this.listenTo( this.asientoMovimientosList, 'reset', this.addAllDetail );
+
 
             /* if was passed asiento code */
             if( !_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter) ){
@@ -74,6 +88,7 @@ app || (app = {});
         * Render all view tast of the collection
         */
         addAll: function () {
+            this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
         },
 
@@ -114,6 +129,36 @@ app || (app = {});
                     alertify.error(error.statusText)
                 }
             });
+        },
+
+        /**
+        * Event edit item
+        */
+        editOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                data = model.toJSON();
+
+            // Open AsientoActionView
+            if ( this.asientoActionView instanceof Backbone.View ){
+                this.asientoActionView.stopListening();
+                this.asientoActionView.undelegateEvents();
+            }
+
+            this.asientoActionView = new app.AsientoActionView({
+                model: model,
+                collection: this.collection,
+                parameters: {
+                    data: data,
+                    actions: [{
+                        action: 'update',
+                        success: false
+                    }]
+                }
+            });
+            this.asientoActionView.render();
         },
 
         /**
@@ -170,6 +215,58 @@ app || (app = {});
         },
 
         /**
+        * Event show item
+        */
+        showOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            // Render info && Wrapper Info
+            this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( model.toJSON() ) );
+            this.$wrapGeneral = this.$modalInfo.find('#render-info-modal');
+
+            // Get movimientos list
+            this.asientoMovimientosList.fetch({ reset: true, data: { asiento2: model.get('id') } });
+
+            this.tercero = {
+                tercero_nit: model.get('tercero_nit'),
+                tercero_nombre: model.get('tercero_nombre')
+            };
+            this.naturaleza = model.get('asiento2_naturaleza');
+
+            // Open modal
+            this.$modalInfo.modal('show');
+        },
+
+        /**
+        * Render view task by model
+        * @param Object mentoringTaskModel Model instance
+        */
+        addOneDetail: function (AsientoMovModel) {
+            var attributes = AsientoMovModel.toJSON();
+                attributes.tercero = this.tercero;
+                attributes.naturaleza = this.naturaleza;
+
+            // SI Tipo es factura
+            if( attributes.type == 'F'){
+                this.$wrapGeneral.empty().html(  this.templateInfoFacturaItem( attributes ) );
+            }else if( attributes.type == 'FP'){
+                this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
+            }else if ( attributes.type == 'IP') {
+                this.$wrapGeneral.empty().html(  this.templateInfoInventarioItem( attributes ) );
+            }
+        },
+
+        /**
+        * Render all view tast of the collection
+        */
+        addAllDetail: function () {
+            this.asientoMovimientosList.forEach( this.addOneDetail, this );
+        },
+
+        /**
         * Render totalize debitos and creditos
         */
         totalize: function () {
@@ -200,6 +297,21 @@ app || (app = {});
         */
         responseServer: function ( model, resp, opts ) {
             window.Misc.removeSpinner( this.parameters.wrapper );
+            if(!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                this.confCollection.data = this.parameters.dataFilter;
+                this.collection.fetch( this.confCollection );
+            }
         }
    });
 

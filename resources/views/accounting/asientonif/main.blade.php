@@ -845,24 +845,4 @@
 		</td>
     	<td><%- factura3_observaciones %></td>
     </script>
-
-	<!-- Modal info -->
-	<div class="modal fade" id="modal-asiento-show-info-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
-		<div class="modal-dialog modal-md" role="document">
-			<div class="modal-content">
-				<div class="modal-header small-box {{ config('koi.template.bg') }}">
-					<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="inner-title-modal modal-title">Detalle item asiento</h4>
-				</div>
-				<div class="modal-body" id="modal-asiento-wrapper-show-info">
-					<div class="content-modal"></div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
 @stop

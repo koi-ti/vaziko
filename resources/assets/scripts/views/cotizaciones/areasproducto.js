@@ -25,7 +25,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function(opts) {
             // extends parameters
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({},this.parameters, opts.parameters);

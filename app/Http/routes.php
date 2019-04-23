@@ -29,6 +29,7 @@ Route::get('login', ['as' => 'login', 'uses' => 'Auth\AuthController@getLogin'])
 */
 Route::group(['middleware' => 'auth'], function() {
 	Route::get('/', ['as' => 'dashboard', 'uses' => 'HomeController@index']);
+
 	/*
 	|-------------------------
 	| Admin Routes
@@ -44,20 +45,18 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('imagenes', 'Admin\TerceroImagenController', ['only' => ['index', 'store', 'destroy']]);
 	});
-
-	Route::resource('terceros', 'Admin\TerceroController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('terceros', 'Admin\TerceroController', ['except' => ['destroy']]);
 	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
     Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
-	Route::resource('actividades', 'Admin\ActividadController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('actividades', 'Admin\ActividadController', ['except' => ['destroy']]);
 	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
 	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
-	Route::resource('notificaciones', 'Admin\NotificacionController', ['only' => ['index','update']]);
+	Route::resource('notificaciones', 'Admin\NotificacionController', ['only' => ['index', 'update']]);
 	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'roles'], function() {
 		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'update', 'destroy']]);
 	});
-
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
     Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
     Route::resource('modulos', 'Admin\ModuloController', ['only' => ['index']]);
@@ -71,37 +70,32 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
 		Route::get('search', ['as' => 'plancuentas.search', 'uses' => 'Accounting\PlanCuentasController@search']);
 	});
-
-    Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+    Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['except' => ['destroy']]);
     Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
 
 	Route::group(['prefix' => 'plancuentasnif'], function() {
 		Route::get('nivel', ['as' => 'plancuentasnif.nivel', 'uses' => 'Accounting\PlanCuentasNifController@nivel']);
 		Route::get('search', ['as' => 'plancuentasnif.search', 'uses' => 'Accounting\PlanCuentasNifController@search']);
 	});
-
     Route::resource('plancuentasnif', 'Accounting\PlanCuentasNifController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'documentos'], function() {
 		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
 	});
-
-	Route::resource('documentos', 'Accounting\DocumentoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('documentos', 'Accounting\DocumentoController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'asientos'], function() {
-		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'update', 'destroy']]);
+		Route::post('import', ['as' => 'asientos.import', 'uses' => 'Accounting\AsientoController@import']);
 		Route::get('exportar/{asientos}', ['as' => 'asientos.exportar', 'uses' => 'Accounting\AsientoController@exportar']);
-		Route::post('import',['as' =>'asientos.import','uses'=>'Accounting\AsientoController@import'] );
 
 		Route::group(['prefix' => 'detalle'], function() {
 			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
 			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
 			Route::get('movimientos', ['as' => 'asientos.detalle.movimientos', 'uses' => 'Accounting\DetalleAsientoController@movimientos']);
 		});
-
 	});
-
-	Route::resource('asientos', 'Accounting\AsientoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show', 'destroy']]);
+	Route::resource('asientos', 'Accounting\AsientoController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'asientosnif'], function() {
 		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
@@ -113,12 +107,11 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::get('movimientos', ['as' => 'asientosnif.detalle.movimientos', 'uses' => 'Accounting\AsientoNifDetalleController@movimientos']);
 		});
 	});
-
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
 	Route::resource('reglasasientos', 'Accounting\ReglaAsientoController', ['only' => ['index', 'store']]);
-	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['only' => ['index', 'create', 'store', 'edit', 'update', 'show']]);
-   	Route::resource('folders', 'Accounting\FolderController', ['only'=>['index', 'create', 'store', 'edit', 'update', 'show']]);
+	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['except' => ['destroy']]);
+	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['except' => ['destroy']]);
+   	Route::resource('folders', 'Accounting\FolderController', ['except' => ['destroy']]);
 
    	/*
    	|-------------------
@@ -134,8 +127,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);
 		Route::get('impuestos', ['as' => 'facturas.impuestos', 'uses' => 'Receivable\Factura1Controller@impuestos']);
 	});
-
-	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show','create','store']]);
+	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show', 'create', 'store']]);
 
    	/*
 	|-------------------------
@@ -146,8 +138,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Treasury\FacturapController@search']);
 		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
-
-	Route::resource('facturap', 'Treasury\FacturapController', ['only' => ['index','show']]);
+	Route::resource('facturap', 'Treasury\FacturapController', ['only' => ['index', 'show']]);
 
 	/*
 	|-------------------------
@@ -212,14 +203,12 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('empaques', 'Production\DetalleEmpaquesController', ['only' => ['index', 'store']]);
 			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store']]);
 		});
-
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 
 		Route::group(['prefix' => 'despachos'], function() {
 			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);
 			Route::get('pendientes', ['as' => 'ordenes.despachos.pendientes', 'uses' => 'Production\DespachopController@pendientes']);
 		});
-
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
@@ -227,7 +216,6 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'tiemposp'], function() {
 		Route::resource('detalle', 'Production\DetalleTiempospController', ['only' => ['index', 'update']]);
 	});
-
 	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
@@ -249,7 +237,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
 	});
-
 	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 
 	/*
@@ -264,8 +251,7 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'traslados'], function() {
 		Route::resource('detalle', 'Inventory\DetalleTrasladoController', ['only' => ['index', 'store']]);
 	});
-
-   	Route::resource('traslados', 'Inventory\TrasladosController', ['only'=>['index', 'create', 'store', 'show']]);
+   	Route::resource('traslados', 'Inventory\TrasladosController', ['only' => ['index', 'create', 'store', 'show']]);
 
 	Route::group(['prefix' => 'productos'], function() {
 		Route::get('search', ['as' => 'productos.search', 'uses' => 'Inventory\ProductoController@search']);
@@ -274,7 +260,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
 		Route::resource('history', 'Inventory\ProductoHistoryController', ['only' => ['index']]);
 	});
-
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 
    	/*
@@ -286,7 +271,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('charts', ['as' => 'rtiemposp.charts', 'uses' => 'Report\TiempopController@charts']);
 		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
 	});
-
 	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rresumentiemposp', 'Report\ResumenTiempopController', ['only' => ['index']]);
    	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);

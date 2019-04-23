@@ -825,15 +825,19 @@
     </div>
 </script>
 
-
 {{-- Inicio template general asiento detalle --}}
 <script type="text/template" id="add-asiento2-item-tpl">
 	<% if(edit) { %>
-	<td class="text-center">
-		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>" data-resource-nif = "<%- asientoNif2_id %>">
-			<span><i class="fa fa-times"></i></span>
-		</a>
-	</td>
+    	<td class="text-center" width="2%">
+    		<a class="btn btn-default btn-xs item-asiento2-edit" data-resource="<%- id %>">
+                <span><i class="fa fa-pencil"></i></span>
+    		</a>
+        </td>
+        <td class="text-center" width="2%">
+    		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>">
+                <span><i class="fa fa-times"></i></span>
+    		</a>
+    	</td>
 	<% } %>
 	<td><%- plancuentas_cuenta %></td>
     <td><%- plancuentas_nombre %></td>
@@ -852,13 +856,56 @@
     <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
     <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
     <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
-    <td class="text-center">
-		<a class="btn btn-default btn-xs item-asiento2-show-info" data-resource="<%- id %>">
+    <td class="text-center" width="2%">
+		<a class="btn btn-default btn-xs item-asiento2-show" data-resource="<%- id %>">
 			<span><i class="fa fa-info-circle"></i></span>
 		</a>
 	</td>
 </script>
 
+{{-- Asiento detalle (edit)--}}
+<script type="text/template" id="edit-info-asiento2-tpl">
+    <div class="row">
+        <div class="form-group col-sm-3 col-xs-12">
+            <div class="input-group input-group-sm">
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero_nit_1">
+                        <i class="fa fa-user"></i>
+                    </button>
+                </span>
+                <input type="text" id="tercero_nit_1" name="tercero_nit_1" maxlength="15" placeholder="Beneficiario" class="form-control tercero-koi-component" value="<%- tercero_nit %>" data-name="tercero_nombre_1">
+            </div>
+        </div>
+        <div class="form-group col-sm-5 col-xs-10">
+            <input type="text" id="tercero_nombre_1" name="tercero_nombre_1" placeholder="Nombre beneficiario" value="<%- tercero_nombre %>" class="form-control input-sm" maxlength="15" readonly>
+        </div>
+
+        <label class="control-label col-sm-1">Naturaleza</label>
+        <div class="form-group col-sm-3 col-xs-12 text-center">
+            <label class="radio-inline without-padding" for="asiento2_naturaleza_debito_1">
+                <input type="radio" id="asiento2_naturaleza_debito_1" name="asiento2_naturaleza_1" value="D" <%- asiento2_naturaleza == 'D' ? 'checked' : '' %>> Débito
+            </label>
+            <label class="radio-inline without-padding" for="asiento2_naturaleza_credito_1">
+                <input type="radio" id="asiento2_naturaleza_credito_1" name="asiento2_naturaleza_1" value="C" <%- asiento2_naturaleza == 'C' ? 'checked' : '' %>> Crédito
+            </label>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group col-sm-8 col-xs-12">
+            <input type="text" id="asiento2_detalle_1" name="asiento2_detalle_1" class="form-control input-sm" value="<%- asiento2_detalle %>" placeholder="Detalle">
+        </div>
+
+        <label for="asiento2_valor_1" class="control-label col-sm-1">Valor</label>
+        <div class="form-group col-sm-3 col-xs-12">
+            <input type="text" id="asiento2_valor_1" name="asiento2_valor_1" placeholder="Valor" value="<%- asiento2_naturaleza == 'D' ? asiento2_debito : asiento2_credito %>" class="form-control input-sm round-module" data-currency required>
+        </div>
+    </div>
+
+    <div id="wrapper-content-movements-source"></div>
+</script>
+
+{{-- Asiento detalle (show)--}}
 <script type="text/template" id="show-info-asiento2-tpl">
     <div class="row">
         <div class="form-group col-md-6">
@@ -900,14 +947,12 @@
     <% } %>
 
     <!-- Detalle -->
-    <% if( !_.isUndefined(asiento2_detalle) && !_.isNull(asiento2_detalle) && asiento2_detalle != '') { %>
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label class="control-label">Detalle</label>
-                <div><%- asiento2_detalle %></div>
-            </div>
+    <div class="row">
+        <div class="form-group col-md-12">
+            <label class="control-label">Detalle</label>
+            <div><%- asiento2_detalle ? asiento2_detalle : '-' %></div>
         </div>
-    <% } %>
+    </div>
 
     <!-- Detalle -->
     <% if( !_.isUndefined(asiento1_documentos) && !_.isNull(asiento1_documentos) && asiento1_documentos != '') { %>
@@ -1138,6 +1183,7 @@
         <% } %>
     </div>
 </script>
+
 {{-- fin template general asiento detalle --}}
 
 <script type="text/template" id="add-seriesprodbode-tpl">

@@ -32,16 +32,6 @@ class DetalleAsientoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -188,28 +178,6 @@ class DetalleAsientoController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -218,7 +186,36 @@ class DetalleAsientoController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $asiento2 = Asiento2::find($id);
+            if ($asiento2 instanceof Asiento2) {
+                DB::beginTransaction();
+                try {
+                    // Recuperar beneficiario
+                    $beneficiario = Tercero::where('tercero_nit', $request->tercero_nit_1)->first();
+                    if (!$beneficiario instanceof Tercero) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                    }
+
+                    // Update movimiento
+                    $asiento2->asiento2_beneficiario = $beneficiario->id;
+                    $asiento2->asiento2_detalle = $request->asiento2_detalle_1;
+                    $asiento2->asiento2_debito = $request->asiento2_naturaleza_1 == 'D' ? $request->asiento2_valor_1 : 0;
+                    $asiento2->asiento2_credito = $request->asiento2_naturaleza_1 == 'C' ? $request->asiento2_valor_1 : 0;
+                    $asiento2->save();
+
+                    DB::commit();
+                    return response()->json(['success' => true]);
+                }catch(\Exception $e){
+                    DB::rollback();
+                    Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'update', $e->getMessage()));
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el movimiento, por favor verifique la información del asiento o consulte al administrador.']);
+        }
+        abort(403);
     }
 
     /**
@@ -232,11 +229,17 @@ class DetalleAsientoController extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-
+                // Recuperar item
                 $asiento2 = Asiento2::find($id);
                 if(!$asiento2 instanceof Asiento2){
                     return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                 }
+
+                $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->count();
+                if ($movimientos != 0) {
+                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar item, ya que el plan de cuentas maneja algun tipo.']);
+                }
+
                 // Si existe asiento NIF
                 $asientoNif = AsientoNif::query()->where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
                 if ($asientoNif instanceof AsientoNif) {
@@ -244,15 +247,11 @@ class DetalleAsientoController extends Controller
                     $asientoNif2->delete();
                 }
 
-                // Eliminar movimiento
-                AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->delete();
-
                 // Eliminar item asiento2
                 $asiento2->delete();
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'destroy', $e->getMessage()));
@@ -307,6 +306,7 @@ class DetalleAsientoController extends Controller
 
         // Evaluate actions plancuentas
         $action = new \stdClass();
+
         // Proveedores
         if($cuenta->plancuentas_tipo && $cuenta->plancuentas_tipo == 'P') {
             $action->action = 'facturap';
@@ -344,17 +344,16 @@ class DetalleAsientoController extends Controller
 
         // Recuperar cuenta
         $cuenta = null;
-        if($request->has('plancuentas_cuenta')) {
+        if ($request->has('plancuentas_cuenta')) {
             $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
         }
 
-        if(!$cuenta instanceof PlanCuenta) {
+        if (!$cuenta instanceof PlanCuenta) {
             $response->errors = 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.';
             return response()->json($response);
         }
 
-        if($request->has('action'))
-        {
+        if ($request->has('action')) {
             switch ($request->action) {
                 case 'ordenp':
                     // Valido movimiento ordenp

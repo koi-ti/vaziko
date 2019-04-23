@@ -152,7 +152,8 @@ return [
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Zizaco\Entrust\EntrustServiceProvider::class,
-        Codedge\Fpdf\FpdfServiceProvider::class
+        Codedge\Fpdf\FpdfServiceProvider::class,
+        // Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*
@@ -207,7 +208,8 @@ return [
         'PDF'       => Barryvdh\DomPDF\Facade::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'Fpdf' => Codedge\Fpdf\Facades\Fpdf::class
+        'Fpdf'      => Codedge\Fpdf\Facades\Fpdf::class,
+        // 'Debugbar'  => Barryvdh\Debugbar\Facade::class
     ],
 
 ];

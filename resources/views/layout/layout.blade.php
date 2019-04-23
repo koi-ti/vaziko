@@ -28,7 +28,6 @@
     </head>
     <body class="hold-transition {{ env('APP_SKIN') }} sidebar-mini {{ Cookie::get('sidebar_toggle') }}">
         <div class="wrapper">
-
             {{-- Main Header --}}
     		@include('layout.header')
 
@@ -45,7 +44,6 @@
 
             <!-- Main Footer -->
             @include('layout.footer')
-
         </div>
 
         <script>window.document.url = "{{ URL::to('/') }}";</script>
