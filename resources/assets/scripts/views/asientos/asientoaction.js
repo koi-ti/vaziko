@@ -729,9 +729,9 @@ app || (app = {});
 
             // If actions is update
             if (this.parameters.actions[0].action == 'update') {
-                var data = window.Misc.formToJson( e.target ),
-                    _this = this;
+                var data = window.Misc.formToJson( e.target );
 
+                
                 this.model.save( data, {patch: true, silent: true});
             } else {
                 // Model exist

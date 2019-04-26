@@ -20,10 +20,11 @@ class DetalleAsientoController extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
-            if($request->has('asiento')) {
+            if ($request->has('asiento')) {
                 $detalle = Asiento2::getAsiento2($request->asiento);
             }
-            if($request->has('orden2_orden')){
+
+            if ($request->has('orden2_orden')) {
                 $detalle = Asiento2::getAsiento2Ordenp($request->orden2_orden);
             }
             return response()->json($detalle);
@@ -41,40 +42,39 @@ class DetalleAsientoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $asiento2 = new Asiento2;
             if ($asiento2->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar asiento
                     $asiento = Asiento::find($request->asiento1_id);
-                    if(!$asiento instanceof Asiento) {
+                    if (!$asiento instanceof Asiento) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar asiento, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
                     // Recuperar cuenta
                     $objCuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
-                    if(!$objCuenta instanceof PlanCuenta) {
+                    if (!$objCuenta instanceof PlanCuenta) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
                     // Recuperar centro costo
                     $centrocosto = $ordenp = null;
-                    if($request->has('asiento2_centro')) {
+                    if ($request->has('asiento2_centro')) {
                         $centrocosto = CentroCosto::find($request->asiento2_centro);
-                        if(!$centrocosto instanceof CentroCosto) {
+                        if (!$centrocosto instanceof CentroCosto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar centro costo, por favor verifique la información del asiento o consulte al administrador.']);
                         }
 
-                        if($centrocosto->centrocosto_codigo == 'OP') {
+                        if ($centrocosto->centrocosto_codigo == 'OP') {
                             // Validate orden
-                            if($request->has('asiento2_orden')) {
+                            if ($request->has('asiento2_orden')) {
                                 $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->asiento2_orden}'")->first();
                             }
-                            if(!$ordenp instanceof Ordenp) {
+                            if (!$ordenp instanceof Ordenp) {
                                 DB::rollback();
                                 return response()->json(['success' => false, 'errors' => "No es posible recuperar orden de producción para centro de costo OP, por favor verifique la información del asiento o consulte al administrador."]);
                             }
@@ -83,14 +83,14 @@ class DetalleAsientoController extends Controller
 
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->tercero_nit)->first();
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
                     // Validate asiento2
                     $result = Asiento2::validarAsiento2($request, $objCuenta);
-                    if($result != 'OK') {
+                    if ($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
@@ -107,27 +107,28 @@ class DetalleAsientoController extends Controller
                     $cuenta['Orden'] = ($ordenp instanceof Ordenp ? $ordenp->id : '');
 
                     $result = $asiento2->store($asiento, $cuenta);
-                    if(!$result->success) {
+                    if (!$result->success) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result->error]);
                     }
 
                     // Insertar movimiento asiento
                     $result = $asiento2->movimiento($request);
-                    if(!$result->success) {
+                    if (!$result->success) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result->error]);
                     }
+
                     // Asiento Nif
                     $asientoNif = AsientoNif::where('asienton1_asiento', $asiento->id)->first();
                     $asientoNif2 = null;
                     if ($asientoNif instanceof AsientoNif) {
-
                         $cuentaNif = PlanCuentaNif::find($objCuenta->plancuentas_equivalente);
-                        if ( !$cuentaNif instanceof PlanCuentaNif ) {
+                        if (!$cuentaNif instanceof PlanCuentaNif) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar cuenta NIF, por favor verifique la información del asiento o consulte al administrador.']);
                         }
+
                         $cuenta = [];
                         $cuenta['Cuenta'] = $cuentaNif->plancuentasn_cuenta;
                         $cuenta['Tercero'] = $request->tercero_nit;
@@ -141,7 +142,7 @@ class DetalleAsientoController extends Controller
 
                         $asientoNif2 = new AsientoNif2;
                         $result = $asientoNif2->store($asientoNif, $cuenta);
-                        if(!$result->success) {
+                        if (!$result->success) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $result->error]);
                         }
@@ -166,7 +167,7 @@ class DetalleAsientoController extends Controller
                         'asiento1_documentos' => $request->asiento1_documentos,
                         'asientoNif2_id' => ($asientoNif2 instanceof AsientoNif2 ? $asientoNif2->id : '')
                     ]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'store', $e->getMessage()));
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -231,17 +232,24 @@ class DetalleAsientoController extends Controller
             try {
                 // Recuperar item
                 $asiento2 = Asiento2::find($id);
-                if(!$asiento2 instanceof Asiento2){
+                if (!$asiento2 instanceof Asiento2) {
+                    DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->count();
-                if ($movimientos != 0) {
-                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar item, ya que el plan de cuentas maneja algun tipo.']);
+                $plancuenta = PlanCuenta::find($asiento2->asiento2_cuenta);
+                if (!$plancuenta instanceof PlanCuenta) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cuenta, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+
+                if ($plancuenta->plancuentas_tipo != 'N') {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar la cuenta porque maneja movimiento.']);
                 }
 
                 // Si existe asiento NIF
-                $asientoNif = AsientoNif::query()->where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
+                $asientoNif = AsientoNif::where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
                 if ($asientoNif instanceof AsientoNif) {
                     $asientoNif2 = AsientoNif2::query()->where('asienton2_asiento',$asientoNif->id)->where('asienton2_item', $asiento2->asiento2_item)->first();
                     $asientoNif2->delete();

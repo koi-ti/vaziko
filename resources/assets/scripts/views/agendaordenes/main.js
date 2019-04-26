@@ -51,7 +51,6 @@ app || (app = {});
                     _this.$modal.modal('show');
                 },
                 eventAfterRender: function(event, element, view) {
-
                     if ( parseInt(event.orden_culminada ) ){
                         element.css('background-color', 'gray');
                         element.css('border-color', 'white');

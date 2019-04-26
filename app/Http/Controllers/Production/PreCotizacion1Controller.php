@@ -496,6 +496,8 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2->cotizacion2_3d_ancho = $precotizacion2->precotizacion2_3d_ancho;
                     $cotizacion2->cotizacion2_3d_alto = $precotizacion2->precotizacion2_3d_alto;
                     $cotizacion2->cotizacion2_3d_profundidad = $precotizacion2->precotizacion2_3d_profundidad;
+                    $cotizacion2->cotizacion2_margen_materialp = 30;
+                    $cotizacion2->cotizacion2_margen_empaque = 30;
                     $cotizacion2->cotizacion2_usuario_elaboro = $cotizacion->cotizacion1_usuario_elaboro;
                     $cotizacion2->cotizacion2_fecha_elaboro = $cotizacion->cotizacion1_fecha_elaboro;
                     $cotizacion2->save();
@@ -555,7 +557,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
                          $cotizacion4->save();
 
-                         $totalmaterialesp += $precotizacion3->precotizacion3_valor_total / $cotizacion2->cotizacion2_cantidad;
+                         $totalmaterialesp += $precotizacion3->precotizacion3_valor_total;
                     }
 
                     // Recuperar Empaques de pre-cotizacion para generar cotizacion
@@ -573,7 +575,7 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion9->cotizacion9_usuario_elaboro = Auth::user()->id;
                          $cotizacion9->save();
 
-                         $totalempaques += $precotizacion9->precotizacion9_valor_total / $cotizacion2->cotizacion2_cantidad;
+                         $totalempaques += $precotizacion9->precotizacion9_valor_total;
                     }
 
                     // Recuperar Areasp de cotizacion para generar precotizacion
@@ -588,11 +590,19 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion6->save();
 
                          // Convertir minutos a horas y sumar horas
-                         $totalareasp += round($precotizacion6->total_areap) / $cotizacion2->cotizacion2_cantidad;
+                         $totalareasp += $precotizacion6->total_areap;
                     }
 
                     // Actualizar precio en cotizacion2;
-                    $cotizacion2->cotizacion2_total_valor_unitario = round($totalmaterialesp) + round($totalempaques) + round($totalareasp);
+                    $materiales = round(($totalmaterialesp/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
+                    $empaques = round(($totalempaques/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
+                    $areasp = round($totalareasp/$precotizacion2->precotizacion2_cantidad);
+                    $subtotal = $materiales + $empaques + $areasp;
+
+                    $comision = ($subtotal/((100-0)/100)) * (1-(((100-0)/100)));
+                    $total = round($subtotal+$comision);
+
+                    $cotizacion2->cotizacion2_total_valor_unitario = $total;
                     $cotizacion2->save();
                 }
 

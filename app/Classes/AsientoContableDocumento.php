@@ -15,12 +15,12 @@ class AsientoContableDocumento {
 	public $asiento_error = NULL;
 	private $empresa;
 
-	function __construct(Array $data, Asiento $asiento = null, $import = false)
-	{
+	function __construct(Array $data, Asiento $asiento = null, $import = false) {
 		// Cuando se edita termina un asiento ya existe $asiento
 		if (!$asiento instanceof Asiento) {
    	 		$asiento = new Asiento;
 		}
+
 		$this->asiento = $asiento;
 
         if (!$this->asiento->isValid($data)) {
@@ -78,8 +78,7 @@ class AsientoContableDocumento {
 		}
 	}
 
-	function asientoCuentas($cuentas = null)
-	{
+	function asientoCuentas($cuentas = null) {
 		if (!is_array($cuentas)) {
 			return 'El parámetro pasado como cuentas no es un array '.$cuentas;
 		}
@@ -107,8 +106,7 @@ class AsientoContableDocumento {
 		return 'OK';
 	}
 
-	function validarSumas()
-	{
+	function validarSumas() {
 		$debito = $credito = 0;
 		foreach ($this->asiento_cuentas as $cuenta) {
 			// Valido que las variables hayan sido correctamente inicializadas
@@ -161,8 +159,7 @@ class AsientoContableDocumento {
 		return 'OK';
 	}
 
-	public function insertarAsiento()
-	{
+	public function insertarAsiento() {
 		$this->documento->documento_consecutivo = $this->asiento->asiento1_numero;
 		$this->documento->save();
 
@@ -215,8 +212,7 @@ class AsientoContableDocumento {
 		return 'OK';
 	}
 
-	public function saldosTerceros(PlanCuenta $cuenta, Tercero $tercero, $debito = 0, $credito = 0, $xmes, $xano)
-	{
+	public function saldosTerceros(PlanCuenta $cuenta, Tercero $tercero, $debito = 0, $credito = 0, $xmes, $xano) {
         // Recuperar registro saldos terceros
 		$objSaldoTercero = SaldoTercero::where('saldosterceros_cuenta', $cuenta->id)->where('saldosterceros_tercero', $tercero->id)->where('saldosterceros_ano', $this->asiento->asiento1_ano)->where('saldosterceros_mes', $this->asiento->asiento1_mes)->first();
     	if (!$objSaldoTercero instanceof SaldoTercero) {
@@ -358,8 +354,7 @@ class AsientoContableDocumento {
 		return 'OK';
 	}
 
-	public function saldosContables(PlanCuenta $cuenta, $debito = 0, $credito = 0, $xmes, $xano)
-	{
+	public function saldosContables(PlanCuenta $cuenta, $debito = 0, $credito = 0, $xmes, $xano) {
         // Recuperar cuentas a mayorizar
 		$cuentas = $cuenta->getMayorizarCuentas();
         if(!is_array($cuentas) || count($cuentas) == 0) {
@@ -369,7 +364,7 @@ class AsientoContableDocumento {
         foreach ($cuentas as $item) {
 	        // Recuperar cuenta
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $item)->first();
-            if(!$objCuenta instanceof PlanCuenta) {
+            if (!$objCuenta instanceof PlanCuenta) {
                 return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (saldosContables).";
             }
 
@@ -392,7 +387,6 @@ class AsientoContableDocumento {
         		$objSaldoContable->saldoscontables_debito_mes = $debito ?: 0;
         		$objSaldoContable->saldoscontables_credito_mes = $credito ?: 0;
         		$objSaldoContable->save();
-
         	} else {
         		// Actualizar credito o debito mes si existe
 				$objSaldoContable->saldoscontables_debito_mes += $debito;

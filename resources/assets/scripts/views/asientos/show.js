@@ -12,9 +12,6 @@ app || (app = {});
     app.ShowAsientoView = Backbone.View.extend({
 
         el: '#asientos-show',
-        events: {
-            //
-        },
 
         /**
         * Constructor Method
@@ -45,25 +42,6 @@ app || (app = {});
                 }
             });
         },
-
-        anularAsiento: function(e) {
-            e.preventDefault();
-
-            var model = this.model,
-                _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    template: _.template( ($('#asiento-anular-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Anular asiento',
-                    onConfirm: function () {
-                        
-                    }
-                }
-            });
-
-            cancelConfirm.render();
-        }
     });
 
 })(jQuery, this, this.document);

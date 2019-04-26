@@ -18,13 +18,73 @@
                     <div class="box-header with-border">
                         <h4 class="box-title">Ordenes</h4>
                     </div>
-                    <div class="box-body">
-                        <div class="external-event bg-green">Abierta</div>
-                        <div class="external-event bg-black">Cerrada</div>
-                        <div class="external-event bg-gray">Facturada</div>
-                        <div class="external-event bg-race">Remisionada</div>
-                        <div class="external-event bg-primary">Recogida</div>
-                        <div class="external-event bg-red">Incumplida</div>
+                    <div class="box-body info-agenda">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-green">
+                                    <span class="info-box-icon"><i class="fa fa-unlock"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Abierta</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-black">
+                                    <span class="info-box-icon"><i class="fa fa-lock"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Cerrada</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-gray">
+                                    <span class="info-box-icon"><i class="fa fa-check"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Facturada</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-race">
+                                    <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Remisionada</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-aqua">
+                                    <span class="info-box-icon"><i class="fa fa-truck"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Recogida</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="info-box bg-red">
+                                    <span class="info-box-icon"><i class="fa fa-ban"></i></span>
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Incumplida</span>
+                                        <span class="info-box-number">41,410</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
