@@ -101,7 +101,7 @@
 		</div>
 
 		<!-- Modal show info detalle asiento -->
-		<div class="modal fade" id="modal-asiento-edit-info-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+		<div class="modal fade" id="modal-asiento-edit-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 			<div class="modal-dialog modal-lg" role="document">
 				<div class="modal-content">
 					<div class="modal-header small-box {{ config('koi.template.bg') }}">

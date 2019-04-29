@@ -898,7 +898,7 @@
 
         <label for="asiento2_valor_1" class="control-label col-sm-1">Valor</label>
         <div class="form-group col-sm-3 col-xs-12">
-            <input type="text" id="asiento2_valor_1" name="asiento2_valor_1" placeholder="Valor" value="<%- asiento2_naturaleza == 'D' ? asiento2_debito : asiento2_credito %>" class="form-control input-sm round-module" data-currency required>
+            <input type="text" id="asiento2_valor_1" name="asiento2_valor_1" placeholder="Valor" value="<%- asiento2_valor %>" class="form-control input-sm round-module" data-currency required>
         </div>
     </div>
 

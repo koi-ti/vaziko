@@ -100,8 +100,7 @@ app || (app = {});
                     'data': data,
                     'wrap': this.spinner,
                     'callback': (function (_this) {
-                        return function ( actions )
-                        {
+                        return function ( actions ) {
                             if( Array.isArray( actions ) && actions.length > 0 ) {
                                 // Open AsientoActionView
                                 if ( _this.asientoActionView instanceof Backbone.View ){
@@ -118,7 +117,7 @@ app || (app = {});
                                     }
                                 });
                                 _this.asientoActionView.render();
-                            }else{
+                            } else {
                                 // Default insert
                                 _this.model.save( data, {patch: true, silent: true} );
                             }

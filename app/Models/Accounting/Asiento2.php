@@ -183,6 +183,7 @@ class Asiento2 extends Model
             $this->asiento2_credito = $data['Credito'] ?: 0;
             $this->asiento2_debito = $data['Debito'] ?: 0;
             $this->asiento2_base = $data['Base'] ?: 0;
+            $this->asiento2_nuevo = true;
             $this->save();
         }
 
@@ -335,11 +336,13 @@ class Asiento2 extends Model
         // Recuperar Factura4 -> Hijo
         $factura4 = Factura4::where('factura4_factura1', $factura->id)->get();
         foreach ($factura4 as $item) {
-            $costo += $request->get("factura4_pagar_{$item->id}");
+            if ($request->has("factura4_pagar_{$item->id}")) {
+                $costo += $request->get("factura4_pagar_{$item->id}");
+            }
         }
 
         // Validar Cantidad
-        if ($costo == 0 ) {
+        if ($costo == 0) {
             return "El valor a pagar debe ser diferente a 0.";
         }
 

@@ -59,7 +59,7 @@ app || (app = {});
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
-            this.$modalUp = this.$('#modal-asiento-edit-info-component'); // Modal for update
+            this.$modalUp = this.$('#modal-asiento-edit-component'); // Modal for update
             this.$modalOp = this.$('#modal-asiento-ordenp-component');
             this.$modalFp = this.$('#modal-asiento-facturap-component');
             this.$modalIn = this.$('#modal-asiento-inventario-component');
@@ -79,6 +79,7 @@ app || (app = {});
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
+            this.listenTo( this.asientoMovimientosList, 'reset', this.addAllItemUpdate );
 
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.collection, 'sync', this.responseServer );
@@ -148,8 +149,8 @@ app || (app = {});
 	                },
 
                     'update': function () {
-                        _this.$modalUp.find('.modal-title').text('Movimiento (' + _this.parameters.data.plancuentas_cuenta + ' - ' + _this.parameters.data.plancuentas_nombre + ') - Editar');
-                        _this.$modalUp.find('.content-modal').empty().html( _this.templateUpdate( _this.parameters.data ) );
+                        _this.$modalUp.find('.modal-title').text(_this.parameters.data.title);
+                        _this.$modalUp.find('.content-modal').empty().html(_this.templateUpdate(_this.parameters.data));
 
                         // Reference update collections
                         _this.referenceUpdate();
@@ -178,7 +179,9 @@ app || (app = {});
                 }
             }
 
-            return { action :'store' };
+            console.log(this.parameters);
+
+            return { action: 'store' };
         },
 
         /**
@@ -351,16 +354,29 @@ app || (app = {});
         */
         referenceUpdate: function () {
             // Reference wrapper render content
+            var checkTypes = ['N', 'I'];
+                type = this.model.get('plancuentas_tipo');
+
             this.$wrapper = $('#wrapper-content-movements-source');
 
             // Get movimientos list
-            if (this.model.get('plancuentas_tipo') != 'N') {
-                this.asientoMovimientosList.fetch({reset: true, data: {asiento2: this.model.get('id')}});
+            if (checkTypes.indexOf(type) === -1) {
+                this.asientoMovimientosList.fetch({
+                    reset: true,
+                    data: {
+                        asiento2: this.model.get('id')
+                    }
+                });
             }
 
             this.$modalUp.modal('show');
             this.ready();
         },
+
+        addAllItemUpdate: function () {
+            console.log('asdasdasda s');
+        },
+
 
         /**
         * Event add item ordenp
@@ -457,7 +473,6 @@ app || (app = {});
             });
 
             this.$wraperCuotasFp.append( view.render().el );
-
             this.ready();
         },
 
@@ -517,7 +532,6 @@ app || (app = {});
             });
 
             this.$wraperItemRollo.append( view.render().el );
-
             this.ready();
         },
 
@@ -541,7 +555,6 @@ app || (app = {});
             });
 
             this.$wraperSeries.append( view.render().el );
-
             this.ready();
         },
 
@@ -725,14 +738,13 @@ app || (app = {});
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
-            e.preventDefault();
-
-            // If actions is update
+            // If callbacks is form
             if (this.parameters.actions[0].action == 'update') {
-                var data = window.Misc.formToJson( e.target );
+                e.preventDefault();
 
-                
-                this.model.save( data, {patch: true, silent: true});
+                var data = window.Misc.formToJson( e.target );
+                    data.movimiento = this.asientoMovimientosList.toJSON();
+                this.model.save(data, {patch: true, silent: true});
             } else {
                 // Model exist
                 if (this.model.id != undefined) {
