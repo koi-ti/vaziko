@@ -190,7 +190,6 @@ class DetalleAsientoController extends Controller
     public function update(Request $request, $id)
     {
         if ($request->ajax()) {
-            dd($request->all());
             $asiento2 = Asiento2::find($id);
             if ($asiento2 instanceof Asiento2) {
                 DB::beginTransaction();
@@ -208,11 +207,6 @@ class DetalleAsientoController extends Controller
                     $asiento2->asiento2_debito = $request->asiento2_naturaleza_1 == 'D' ? $request->asiento2_valor_1 : 0;
                     $asiento2->asiento2_credito = $request->asiento2_naturaleza_1 == 'C' ? $request->asiento2_valor_1 : 0;
                     $asiento2->save();
-
-                    // // Validacion de movimientos 
-                    // if ($request->filled('movimientos')) {
-                    //
-                    // }
 
                     DB::commit();
                     return response()->json(['success' => true]);

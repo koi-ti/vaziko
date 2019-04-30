@@ -28,6 +28,8 @@ app || (app = {});
         templateAddSeries: _.template( ($('#add-series-asiento-tpl').html() || '') ),
         // Editar
         templateUpdate: _.template( ($('#edit-info-asiento2-tpl').html() || '') ),
+        templateUpdateFacturaItem: _.template( ($('#edit-info-factura-item').html() || '') ),
+        templateUpdateFacturapItem: _.template( ($('#edit-info-facturap-item').html() || '') ),
 
         events: {
             // Produccion
@@ -44,7 +46,9 @@ app || (app = {});
             'change .evaluate-producto-movimiento-asiento': 'evaluateProductoInventario',
 
             'change .round-module': 'roundModule',
-            'submit #form-edit-asiento-component-source': 'onStoreItem'
+            'submit #form-edit-asiento-component-source': 'onStoreItem',
+
+            'hidden.bs.modal': 'closeModal'
         },
         parameters: {
             data: { },
@@ -178,10 +182,7 @@ app || (app = {});
                     return action;
                 }
             }
-
-            console.log(this.parameters);
-
-            return { action: 'store' };
+            return {action: 'store'};
         },
 
         /**
@@ -373,10 +374,28 @@ app || (app = {});
             this.ready();
         },
 
-        addAllItemUpdate: function () {
-            console.log('asdasdasda s');
+        /**
+        * Render view task by model
+        * @param Object AsientoMovModel Model instance
+        */
+        addOmeUpdateItem: function (AsientoMovModel) {
+            var attributes = AsientoMovModel.toJSON();
+                attributes.naturaleza = this.model.get('asiento2_naturaleza');
+
+            // SI Tipo es factura
+            if( attributes.type == 'F'){
+                this.$wrapper.empty().html(  this.templateUpdateFacturaItem( attributes ) );
+            }else if( attributes.type == 'FP'){
+                this.$wrapper.empty().html(  this.templateUpdateFacturapItem( attributes ) );
+            }
         },
 
+        /**
+        * Render all view tast of the collection
+        */
+        addAllItemUpdate: function () {
+            this.asientoMovimientosList.forEach( this.addOmeUpdateItem, this );
+        },
 
         /**
         * Event add item ordenp
@@ -765,6 +784,17 @@ app || (app = {});
 
             if( parseInt(this.parameters.data.empresa_round) ){
                 this.$(e.currentTarget).val( Math.round( valor ) );
+            }
+        },
+
+        /**
+        * Event delegate view
+        */
+        closeModal: function (e) {
+            // delegate this view
+            if ( this instanceof Backbone.View ){
+                this.stopListening();
+                this.undelegateEvents();
             }
         },
 

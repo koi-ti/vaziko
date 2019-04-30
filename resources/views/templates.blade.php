@@ -905,6 +905,115 @@
     <div id="wrapper-content-movements-source"></div>
 </script>
 
+<!-- Facturas, Facturap, Inventario -> Padres -->
+<script type="text/template" id="edit-info-facturap-item">
+    <div class="box box-success">
+            <div class="box-header with-border">
+            <h3 class="box-title">
+                <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+            </h3>
+        </div>
+        <div class="box-body">
+            <% if (father[0].movimiento_nuevo && naturaleza == 'C') { %>
+                <div class="row">
+                    <div class="form-group col-md-4">
+                        <label for="facturap1_vencimiento" class="control-label">Vencimiento</label>
+                        <input type="text" id="facturap1_vencimiento" name="facturap1_vencimiento" placeholder="Vencimiento" value="<%- father[0].movimiento_fecha %>" class="form-control input-sm datepicker" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="facturap1_cuotas" class="control-label">Cuotas</label>
+                        <input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" value="<%- father[0].facturap2_cuota %>" class="form-control input-sm" value="1" min="1" max="100" required>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
+                        <input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" value="<%- father[0].movimiento_periodicidad %>" class="form-control input-sm" min="1" value="30" required>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <input type="hidden" id="facturap1_sucursal" class="form-control" name="facturap1_sucursal" value="1" required>
+                        <label for="facturap1_observaciones" class="control-label">Observaciones</label>
+                        <textarea id="facturap1_observaciones" name="facturap1_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- father[0].movimiento_observaciones %></textarea>
+                    </div>
+                </div>
+            <% } %>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="edit-info-factura-item">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <b>Factura </b>
+            </h3>
+            <div class="pull-right">
+                <% if ( !_.isNull(father.movimiento_factura) ) { %>
+                    <b>Número </b><small># <%- father.factura1_numero %></small>
+                <% } %>
+                <b>Prefijo </b><small><%- father.puntoventa_prefijo %></small>
+            </div>
+        </div>
+        <div class="box-body">
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">Fecha</label>
+                    <div><%- father.factura1_fecha %></div>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label">Vencimiento</label>
+                    <div><%- father.factura1_fecha_vencimiento %></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <label class="control-label">Punto de venta</label>
+                    <div><%- father.puntoventa_nombre %></div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Valor</label>
+                    <div><%- window.Misc.currency( father.factura1_total ) %></div>
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label">Cuotas</label>
+                    <div><%- father.factura1_cuotas %></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label">Tercero</label>
+                    <div><%- father.tercero_nit %> - <%- father.tercero_nombre %></div>
+                </div>
+            </div>
+        </div>
+        <div class="box-footer">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <table class="table no-margin" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Cuota No.</th>
+                                <th class="text-center">Pago</th>
+                                <th class="text-center">Nuevo valor</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% _.each(childrens, function(children) { %>
+                                <tr>
+                                    <td class="text-center"><%- children.factura4_cuota %></td>
+                                    <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
+                                    <td><input type="text" id="factura4_pagar_<%- children.movimiento_id %>" name="factura4_pagar_<%- children.movimiento_id %>" class="form-control input-sm round-module"></td>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
 {{-- Asiento detalle (show)--}}
 <script type="text/template" id="show-info-asiento2-tpl">
     <div class="row">
