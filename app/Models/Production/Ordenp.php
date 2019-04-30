@@ -3,7 +3,7 @@
 namespace App\Models\Production;
 
 use App\Models\BaseModel;
-use Validator, DB;
+use Validator, DB, Carbon\Carbon;
 
 class Ordenp extends BaseModel
 {
@@ -199,9 +199,9 @@ class Ordenp extends BaseModel
     }
 
     public function scopeSchedule () {
-        return self::selectRaw("SUM((orden2_cantidad-orden2_facturado)*orden2_total_valor_unitario) as total")
+        return self::selectRaw("SUM((orden2_cantidad - orden2_facturado) * orden2_total_valor_unitario) as total")
                             ->join('koi_ordenproduccion2', 'koi_ordenproduccion.id', '=', 'koi_ordenproduccion2.orden2_orden')
-                            ->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
+                            ->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
     }
 
     public function scopeAbiertas ($query) {
@@ -214,5 +214,18 @@ class Ordenp extends BaseModel
 
     public function scopeCulminadas ($query) {
         return $query->where('orden_culminada', true);
+    }
+
+    public function scopeIncumplidas ($query) {
+        return $query->where('orden_fecha_entrega', '<', Carbon::now());
+    }
+
+    public function scopeRecogidas ($query) {
+        return $query->where('orden2_saldo', 0);
+    }
+
+    public function scopeRemisionadas ($query) {
+        return $query->whereNotNull('orden_fecha_recogida1')
+                        ->orWhereNotNull('orden_fecha_recogida2');
     }
 }

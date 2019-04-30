@@ -42,10 +42,11 @@ class AgendaOrdenespController extends Controller
         }
 
         $abiertas = Ordenp::query()->schedule()->abiertas()->pluck('total');
-        $cerradas = Ordenp::query()->schedule()->cerradas()->pluck('total');
-        $culminadas = Ordenp::query()->schedule()->culminadas()->pluck('total');
+        $recogidas = Ordenp::query()->schedule()->abiertas()->recogidas()->pluck('total');
+        $incumplidas = Ordenp::query()->schedule()->abiertas()->incumplidas()->pluck('total');
+        $remisionadas = Ordenp::query()->schedule()->abiertas()->remisionadas()->pluck('total');
 
         // Prepare data getSchedul
-        return view('production.agendaordenes.main', compact('abiertas', 'cerradas', 'culminadas'));
+        return view('production.agendaordenes.main', compact('abiertas', 'incumplidas', 'recogidas', 'remisionadas'));
     }
 }
