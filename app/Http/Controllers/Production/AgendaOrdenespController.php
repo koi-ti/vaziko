@@ -40,6 +40,12 @@ class AgendaOrdenespController extends Controller
 
             return response()->json($ordenes);
         }
-        return view('production.agendaordenes.main');
+
+        $abiertas = Ordenp::query()->schedule()->abiertas()->pluck('total');
+        $cerradas = Ordenp::query()->schedule()->cerradas()->pluck('total');
+        $culminadas = Ordenp::query()->schedule()->culminadas()->pluck('total');
+
+        // Prepare data getSchedul
+        return view('production.agendaordenes.main', compact('abiertas', 'cerradas', 'culminadas'));
     }
 }

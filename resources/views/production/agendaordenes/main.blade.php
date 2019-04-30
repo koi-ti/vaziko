@@ -25,7 +25,7 @@
                                     <span class="info-box-icon"><i class="fa fa-unlock"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Abierta</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">{{ number_format($abiertas,2,',','.') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -36,7 +36,7 @@
                                     <span class="info-box-icon"><i class="fa fa-lock"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Cerrada</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">{{ number_format($cerradas,2,',','.') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                                     <span class="info-box-icon"><i class="fa fa-check"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Facturada</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">{{ number_format($culminadas,2,',','.') }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                                     <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Remisionada</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -69,7 +69,7 @@
                                     <span class="info-box-icon"><i class="fa fa-truck"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Recogida</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -80,7 +80,7 @@
                                     <span class="info-box-icon"><i class="fa fa-ban"></i></span>
                                     <div class="info-box-content">
                                         <span class="info-box-text">Incumplida</span>
-                                        <span class="info-box-number">41,410</span>
+                                        <span class="info-box-number">-</span>
                                     </div>
                                 </div>
                             </div>

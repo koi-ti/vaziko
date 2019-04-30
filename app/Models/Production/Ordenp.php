@@ -37,8 +37,7 @@ class Ordenp extends BaseModel
      */
     protected $nullable = ['orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'];
 
-    public function isValid($data)
-    {
+    public function isValid ($data) {
         $rules = [
             'orden_referencia' => 'required|max:200',
             'orden_cliente' => 'required',
@@ -56,12 +55,12 @@ class Ordenp extends BaseModel
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
-            if( isset($data['orden_estado_recogida1']) && $data['orden_estado_recogida1'] == true && ($data['orden_fecha_recogida1'] == '' || $data['orden_hora_recogida1'] == '') ) {
+            if (isset($data['orden_estado_recogida1']) && $data['orden_estado_recogida1'] == true && ($data['orden_fecha_recogida1'] == '' || $data['orden_hora_recogida1'] == '')) {
                 $this->errors = "La fecha y/o hora de recogida #1 esta incorrecta.";
                 return false;
             }
 
-            if( isset($data['orden_estado_recogida2']) && $data['orden_estado_recogida2'] == true && ($data['orden_fecha_recogida2'] == '' || $data['orden_hora_recogida2'] == '') ) {
+            if (isset($data['orden_estado_recogida2']) && $data['orden_estado_recogida2'] == true && ($data['orden_fecha_recogida2'] == '' || $data['orden_hora_recogida2'] == '')) {
                 $this->errors = "La fecha y/o hora de recogida #2 esta incorrecta.";
                 return false;
             }
@@ -72,8 +71,7 @@ class Ordenp extends BaseModel
         return false;
     }
 
-    public function pendintesDespacho()
-    {
+    public function pendintesDespacho () {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_cantidad', 'orden2_saldo', 'orden2_entregado',
             DB::raw("
@@ -121,8 +119,7 @@ class Ordenp extends BaseModel
         return $query->get();
     }
 
-    public function paraFacturar()
-    {
+    public function paraFacturar () {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta',
             DB::raw("
@@ -170,8 +167,7 @@ class Ordenp extends BaseModel
         return $query->get();
     }
 
-    public static function getOrden($id)
-    {
+    public static function getOrden ($id) {
         $query = Ordenp::query();
         $query->select('koi_ordenproduccion.*', 'cotizacion1_precotizacion', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio');
         $query->join('koi_tercero as t', 'orden_cliente', '=', 't.id');
@@ -184,9 +180,7 @@ class Ordenp extends BaseModel
         return $query->first();
     }
 
-    // Traer item con codigo (tiempop)
-    public static function getOrdenp( $codigo )
-    {
+    public static function getOrdenp ($codigo) {
         $query = Ordenp::query();
         $query->select('koi_ordenproduccion.id as id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
             CONCAT(
@@ -202,5 +196,23 @@ class Ordenp extends BaseModel
         $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$codigo'");
         return $query->first();
+    }
+
+    public function scopeSchedule () {
+        return self::selectRaw("SUM((orden2_cantidad-orden2_facturado)*orden2_total_valor_unitario) as total")
+                            ->join('koi_ordenproduccion2', 'koi_ordenproduccion.id', '=', 'koi_ordenproduccion2.orden2_orden')
+                            ->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
+    }
+
+    public function scopeAbiertas ($query) {
+        return $query->where('orden_abierta', true);
+    }
+
+    public function scopeCerradas ($query) {
+        return $query->where('orden_abierta', false);
+    }
+
+    public function scopeCulminadas ($query) {
+        return $query->where('orden_culminada', true);
     }
 }
