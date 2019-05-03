@@ -193,6 +193,7 @@ class Ordenp extends BaseModel
             ' (', orden_referencia ,')'
             ) AS tercero_nombre"
         ));
+        @
         $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$codigo'");
         return $query->first();
@@ -217,15 +218,15 @@ class Ordenp extends BaseModel
     }
 
     public function scopeIncumplidas ($query) {
-        return $query->where('orden_fecha_entrega', '<', Carbon::now());
+        return $query->whereRaw("CONCAT(orden_fecha_entrega, ' ',orden_hora_entrega) <= '".Carbon::now()."'");
     }
 
     public function scopeRecogidas ($query) {
-        return $query->where('orden2_saldo', 0);
+        return $query->whereNotNull('orden_fecha_recogida1')
+                    ->orWhereNotNull('orden_fecha_recogida2');
     }
 
     public function scopeRemisionadas ($query) {
-        return $query->whereNotNull('orden_fecha_recogida1')
-                        ->orWhereNotNull('orden_fecha_recogida2');
+        return $query->where('orden2_saldo', 0);
     }
 }

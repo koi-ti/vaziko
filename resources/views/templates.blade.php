@@ -936,7 +936,30 @@
                         <textarea id="facturap1_observaciones" name="facturap1_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- father[0].movimiento_observaciones %></textarea>
                     </div>
                 </div>
-            <% } %>
+            <% } else { %>
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <table id="browse-showinfo-facturap-list" class="table no-margin" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">Cuota</th>
+                                    <th class="text-center">Valor actual</th>
+                                    <th class="text-center">Nuevo valor</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% _.each(father, function(children) { %>
+                                    <tr>
+                                        <td class="text-center"><%- children.facturap2_cuota %></td>
+                                        <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
+                                        <td><input type="text" id="facturap_movimiento_<%- children.movimiento_id %>" name="facturap_movimiento_<%- children.movimiento_id %>" class="form-control input-sm round-module"></td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+             <% } %>
         </div>
     </div>
 </script>

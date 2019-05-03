@@ -201,6 +201,8 @@ class DetalleAsientoController extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
+                    dd($asiento2);
+
                     // Update movimiento
                     $asiento2->asiento2_beneficiario = $beneficiario->id;
                     $asiento2->asiento2_detalle = $request->asiento2_detalle_1;
@@ -208,8 +210,19 @@ class DetalleAsientoController extends Controller
                     $asiento2->asiento2_credito = $request->asiento2_naturaleza_1 == 'C' ? $request->asiento2_valor_1 : 0;
                     $asiento2->save();
 
-                    DB::commit();
-                    return response()->json(['success' => true]);
+
+                    // Si maneja movimiento
+                    if ($request->has('movimiento')) {
+                        $movimientos = $request->movimiento;
+                        foreach ($movimientos as $item) {
+                            dd($item['father'], $item['type']);
+                        }
+                    }
+
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'K.O!']);
+                    // DB::commit();
+                    // return response()->json(['success' => true]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'update', $e->getMessage()));
