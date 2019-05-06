@@ -201,7 +201,8 @@ class DetalleAsientoController extends Controller
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
-                    dd($asiento2);
+                    // Naturaleza
+                    $naturaleza = $request->asiento2_naturaleza_1;
 
                     // Update movimiento
                     $asiento2->asiento2_beneficiario = $beneficiario->id;
@@ -210,19 +211,62 @@ class DetalleAsientoController extends Controller
                     $asiento2->asiento2_credito = $request->asiento2_naturaleza_1 == 'C' ? $request->asiento2_valor_1 : 0;
                     $asiento2->save();
 
-
                     // Si maneja movimiento
                     if ($request->has('movimiento')) {
-                        $movimientos = $request->movimiento;
-                        foreach ($movimientos as $item) {
-                            dd($item['father'], $item['type']);
+                        foreach ($request->movimiento as $movimiento) {
+                            if ($movimiento['type'] == 'F') {
+                                foreach ($movimiento['childrens'] as $children) {
+                                    if ($request->has("factura4_nuevo_valor_{$children['movimiento_id']}")) {
+                                        $asientomovimiento = AsientoMovimiento::find($children['movimiento_id']);
+                                        if ($asientomovimiento instanceof AsientoMovimiento) {
+                                            $asientomovimiento->movimiento_valor = $request->get("factura4_nuevo_valor_{$children['movimiento_id']}");
+                                            $asientomovimiento->save();
+                                        }
+
+                                        // Si el movimiennto no es nuevo
+                                        if (!$asiento2->asiento2_nuevo) {
+                                            $factura4 = Factura4::find($children['movimiento_factura4']);
+                                            if ($factura4 instanceof Factura4) {
+                                                $factura4->factura4_saldo = ($naturaleza == 'D') ? $factura4->factura4_saldo + $movimiento->movimiento_valor : $factura4->factura4_saldo - $movimiento->movimiento_valor;
+                                                $factura4->save();
+                                            }
+                                        }
+                                    }
+                                }
+                            } else if ($movimiento['type'] == 'FP') {
+                                foreach ($movimiento['father'] as $father) {
+                                    if ($father['movimiento_nuevo']) {
+                                        // Validar que no se pueda modificar si es tipo Debito
+                                        if ($naturaleza == 'D') {
+                                            DB::rollback();
+                                            return response()->json(['success' => false, 'errors' => 'No es posible modificar este movimiento.']);
+                                        }
+
+                                        $asientomovimiento = AsientoMovimiento::find($father['movimiento_id']);
+                                        if ($asientomovimiento instanceof AsientoMovimiento) {
+                                            $asientomovimiento->movimiento_fecha = $request->get('facturap1_vencimiento');
+                                            $asientomovimiento->movimiento_item = $request->get('facturap1_cuotas');
+                                            $asientomovimiento->movimiento_periodicidad = $request->get('facturap1_periodicidad');
+                                            $asientomovimiento->movimiento_observaciones = $request->get('facturap1_observaciones');
+                                            $asientomovimiento->save();
+                                        }
+
+                                    } else {
+                                        if ($request->has("facturap_movimiento_{$father['movimiento_id']}")) {
+                                            $asientomovimiento = AsientoMovimiento::find($father['movimiento_id']);
+                                            if ($asientomovimiento instanceof AsientoMovimiento) {
+                                                $asientomovimiento->movimiento_valor = $request->get("facturap_movimiento_{$father['movimiento_id']}");
+                                                $asientomovimiento->save();
+                                            }
+                                        }
+                                    }
+                                }
+                             }
                         }
                     }
 
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'K.O!']);
-                    // DB::commit();
-                    // return response()->json(['success' => true]);
+                    DB::commit();
+                    return response()->json(['success' => true]);
                 }catch(\Exception $e){
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'update', $e->getMessage()));
@@ -449,7 +493,7 @@ class DetalleAsientoController extends Controller
                 $asiento2 = Asiento2::find($request->asiento2);
                 if ($asiento2 instanceof Asiento2) {
                     $query = AsientoMovimiento::query();
-                    $query->select('koi_asientomovimiento.*', 'koi_asientomovimiento.id as movimiento_id', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
+                    $query->select('koi_asientomovimiento.*', 'koi_asientomovimiento.id as movimiento_id', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_saldo', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
                             THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                                     (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                                 )
@@ -534,6 +578,7 @@ class DetalleAsientoController extends Controller
                             $data['childrens'][] = [
                                 'movimiento_id' => $item->movimiento_id,
                                 'factura4_cuota' => $item->factura4_cuota,
+                                'factura4_saldo' => $item->factura4_saldo,
                                 'movimiento_valor' => $item->movimiento_valor
                             ];
                         }

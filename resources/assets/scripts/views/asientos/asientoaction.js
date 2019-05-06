@@ -395,6 +395,7 @@ app || (app = {});
         */
         addAllItemUpdate: function () {
             this.asientoMovimientosList.forEach( this.addOmeUpdateItem, this );
+            this.ready();
         },
 
         /**

@@ -922,7 +922,7 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label for="facturap1_cuotas" class="control-label">Cuotas</label>
-                        <input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" value="<%- father[0].facturap2_cuota %>" class="form-control input-sm" value="1" min="1" max="100" required>
+                        <input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" value="<%- father[0].movimiento_item %>" class="form-control input-sm" value="1" min="1" max="100" required>
                     </div>
                     <div class="form-group col-md-4">
                         <label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
@@ -952,7 +952,7 @@
                                     <tr>
                                         <td class="text-center"><%- children.facturap2_cuota %></td>
                                         <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
-                                        <td><input type="text" id="facturap_movimiento_<%- children.movimiento_id %>" name="facturap_movimiento_<%- children.movimiento_id %>" class="form-control input-sm round-module"></td>
+                                        <td><input type="text" id="facturap_movimiento_<%- children.movimiento_id %>" name="facturap_movimiento_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
                                     </tr>
                                 <% }); %>
                             </tbody>
@@ -1010,14 +1010,15 @@
                 </div>
             </div>
         </div>
-        <div class="box-footer">
+        <div class="box-footer box-success">
             <div class="row">
                 <div class="col-sm-8 col-sm-offset-2">
                     <table class="table no-margin" cellspacing="0">
                         <thead>
                             <tr>
                                 <th class="text-center">Cuota No.</th>
-                                <th class="text-center">Pago</th>
+                                <th class="text-center">Saldo</th>
+                                <th class="text-center">Valor actual</th>
                                 <th class="text-center">Nuevo valor</th>
                             </tr>
                         </thead>
@@ -1025,8 +1026,9 @@
                             <% _.each(childrens, function(children) { %>
                                 <tr>
                                     <td class="text-center"><%- children.factura4_cuota %></td>
+                                    <td class="text-center"><%- window.Misc.currency( children.factura4_saldo ) %></td>
                                     <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
-                                    <td><input type="text" id="factura4_pagar_<%- children.movimiento_id %>" name="factura4_pagar_<%- children.movimiento_id %>" class="form-control input-sm round-module"></td>
+                                    <td><input type="text" id="factura4_nuevo_valor_<%- children.movimiento_id %>" name="factura4_nuevo_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
                                 </tr>
                             <% }); %>
                         </tbody>
