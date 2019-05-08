@@ -16,7 +16,8 @@
             <div class="col-sm-3">
                 <div class="box box-solid">
                     <div class="box-body">
-                        <table class="table table-condensed table-schedule">
+                        <div class="table-responsive">
+                            <table class="table table-condensed table-schedule">
                             <tbody>
                                 <tr>
                                     <th colspan="2" class="bg-gray">Ordenes de producción</th>
@@ -54,6 +55,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                     </div>
                 </div>
             </div>
