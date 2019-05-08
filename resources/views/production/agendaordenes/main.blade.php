@@ -15,9 +15,6 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="box box-solid">
-                    <div class="box-header">
-                        <h3 class="box-title">Información</h3>
-                    </div>
                     <div class="box-body">
                         <table class="table table-condensed table-schedule">
                             <tbody>
