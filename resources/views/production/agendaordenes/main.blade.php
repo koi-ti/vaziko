@@ -15,81 +15,53 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="box box-solid">
-                    <div class="box-header with-border">
-                        <h4 class="box-title">Ordenes</h4>
+                    <div class="box-header">
+                        <h3 class="box-title">Información</h3>
                     </div>
-                    <div class="box-body info-agenda">
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-green">
-                                    <span class="info-box-icon"><i class="fa fa-unlock"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Abierta</span>
-                                        <span class="info-box-number">{{ number_format($abiertas,2,',','.') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-black">
-                                    <span class="info-box-icon"><i class="fa fa-lock"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Cerrada</span>
-                                        <span class="info-box-number">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-gray">
-                                    <span class="info-box-icon"><i class="fa fa-check"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Facturada</span>
-                                        <span class="info-box-number">-</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-race">
-                                    <span class="info-box-icon"><i class="fa fa-clock-o"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Remisionada</span>
-                                        <span class="info-box-number">{{ number_format($remisionadas,2,',','.') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-aqua">
-                                    <span class="info-box-icon"><i class="fa fa-truck"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Recogida</span>
-                                        <span class="info-box-number">{{ number_format($recogidas,2,',','.') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12">
-                                <div class="info-box bg-red">
-                                    <span class="info-box-icon"><i class="fa fa-ban"></i></span>
-                                    <div class="info-box-content">
-                                        <span class="info-box-text">Incumplida</span>
-                                        <span class="info-box-number">{{ number_format($incumplidas,2,',','.') }}</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="box-body">
+                        <table class="table table-condensed table-schedule">
+                            <tbody>
+                                <tr>
+                                    <th colspan="2" class="bg-gray">Ordenes de producción</th>
+                                </tr>
+                                <tr>
+                                    <td>Abierta</td>
+                                    <td><span class="badge bg-green pull-right">{{ $schedule->op_abiertas }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Cerrada</td>
+                                    <td><span class="badge bg-black pull-right">-</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Facturada</td>
+                                    <td><span class="badge bg-gray pull-right">-</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Remisionada</td>
+                                    <td><span class="badge bg-race pull-right">{{ $schedule->op_remisionadas }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Recogida</td>
+                                    <td><span class="badge bg-light-blue pull-right">{{ $schedule->op_recogidas }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td>Incumplidas</td>
+                                    <td><span class="badge bg-red pull-right">{{ $schedule->op_incumplidas }}</span></td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="bg-gray">Cotizaciones</th>
+                                </tr>
+                                <tr>
+                                    <td>Abierta</td>
+                                    <td><span class="badge bg-green pull-right">{{ $schedule->co_abiertas }}</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
 
-		   	<div class="col-sm-9">
+            <div class="col-sm-9">
 		        <div class="box box-solid" id="spinner-calendar">
 		        	<div class="box-body">
 		                <div id="calendar"></div>

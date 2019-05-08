@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp;
+use App\Models\Production\Ordenp, App\Models\Production\Cotizacion1;
 use DB;
 
 class AgendaOrdenespController extends Controller
@@ -41,12 +41,22 @@ class AgendaOrdenespController extends Controller
             return response()->json($ordenes);
         }
 
-        $abiertas = Ordenp::query()->schedule()->abiertas()->pluck('total');
-        $recogidas = Ordenp::query()->schedule()->abiertas()->recogidas()->pluck('total');
-        $incumplidas = Ordenp::query()->schedule()->abiertas()->incumplidas()->pluck('total');
-        $remisionadas = Ordenp::query()->schedule()->abiertas()->remisionadas()->pluck('total');
+        $schedule = new \stdClass();
+        if (auth()->user()->hasRole('admin')) {
+            $schedule->op_abiertas = number_format(Ordenp::query()->schedule()->abiertas()->pluck('total'),2,',','.');
+            $schedule->op_recogidas = number_format(Ordenp::query()->schedule()->abiertas()->recogidas()->pluck('total'),2,',','.');
+            $schedule->op_incumplidas = number_format(Ordenp::query()->schedule()->abiertas()->incumplidas()->pluck('total'),2,',','.');
+            $schedule->op_remisionadas = number_format(Ordenp::query()->schedule()->abiertas()->remisionadas()->pluck('total'),2,',','.');
+            $schedule->co_abiertas = number_format(Cotizacion1::query()->schedule()->abiertas()->pluck('total'),2,',','.');
+        } else {
+            $schedule->op_abiertas = '-';
+            $schedule->op_recogidas = '-';
+            $schedule->op_incumplidas = '-';
+            $schedule->op_remisionadas = '-';
+            $schedule->co_abiertas = '-';
+        }
 
         // Prepare data getSchedul
-        return view('production.agendaordenes.main', compact('abiertas', 'incumplidas', 'recogidas', 'remisionadas'));
+        return view('production.agendaordenes.main', compact('schedule'));
     }
 }

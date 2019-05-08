@@ -78,4 +78,14 @@ class Cotizacion1 extends BaseModel
         $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) = '$codigo'");
         return $query->first();
     }
+
+    public function scopeSchedule () {
+        return self::selectRaw("SUM((cotizacion2_cantidad - cotizacion2_facturado) * cotizacion2_total_valor_unitario) as total")
+                            ->join('koi_cotizacion2', 'koi_cotizacion1.id', '=', 'koi_cotizacion2.cotizacion2_cotizacion')
+                            ->whereRaw('(cotizacion2_cantidad - cotizacion2_facturado) <> 0');
+    }
+
+    public function scopeAbiertas ($query) {
+        return $query->where('cotizacion1_abierta', true);
+    }
 }

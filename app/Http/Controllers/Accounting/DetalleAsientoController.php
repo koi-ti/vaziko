@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2,App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 use Log, DB;
 
 class DetalleAsientoController extends Controller
@@ -227,7 +227,7 @@ class DetalleAsientoController extends Controller
                                         if (!$asiento2->asiento2_nuevo) {
                                             $factura4 = Factura4::find($children['movimiento_factura4']);
                                             if ($factura4 instanceof Factura4) {
-                                                $factura4->factura4_saldo = ($naturaleza == 'D') ? $factura4->factura4_saldo + $movimiento->movimiento_valor : $factura4->factura4_saldo - $movimiento->movimiento_valor;
+                                                $factura4->factura4_saldo = ($naturaleza == 'D') ? $factura4->factura4_saldo + $asientomovimiento->movimiento_valor : $factura4->factura4_saldo - $asientomovimiento->movimiento_valor;
                                                 $factura4->save();
                                             }
                                         }
@@ -579,6 +579,7 @@ class DetalleAsientoController extends Controller
                                 'movimiento_id' => $item->movimiento_id,
                                 'factura4_cuota' => $item->factura4_cuota,
                                 'factura4_saldo' => $item->factura4_saldo,
+                                'movimiento_factura4' => $item->movimiento_factura4,
                                 'movimiento_valor' => $item->movimiento_valor
                             ];
                         }
