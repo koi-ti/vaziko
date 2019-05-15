@@ -134,14 +134,15 @@ app || (app = {});
             var _this = this;
 
             var tasa = this.$inputTasa.val();
+            var ica = this.$inputTasa.data('ica');
             var base = this.$inputBase.inputmask('unmaskedvalue');
 
             // Set valor
             if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
                 if( parseInt(this.roundempresa) ){
-                    this.$inputValor.val( Math.round( (tasa * base) / 100) );
+                    this.$inputValor.val( Math.round( (tasa * base) / (ica ? 1000 : 100)) );
                 }else{
-                    this.$inputValor.val( (tasa * base) / 100 );
+                    this.$inputValor.val( (tasa * base) / (ica ? 1000 : 100) );
                 }
             }else{
                 // Case without plancuentas_tasa

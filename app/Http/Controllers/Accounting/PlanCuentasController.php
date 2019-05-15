@@ -250,7 +250,8 @@ class PlanCuentasController extends Controller
         if($request->has('plancuentas_cuenta')) {
             $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
             if($plancuenta instanceof PlanCuenta) {
-                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre, 'plancuentas_tasa' => $plancuenta->plancuentas_tasa, 'plancuentas_centro' => $plancuenta->plancuentas_centro, 'plancuentas_naturaleza' => $plancuenta->plancuentas_naturaleza, 'plancuentas_tipo' => $plancuenta->plancuentas_tipo]);
+                $ica = ($plancuenta->plancuentas_nivel == 4 && strstr($plancuenta->plancuentas_cuenta, '2368') && $plancuenta->plancuentas_tasa != 0) ? true : false;
+                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre, 'plancuentas_tasa' => $plancuenta->plancuentas_tasa, 'plancuentas_centro' => $plancuenta->plancuentas_centro, 'plancuentas_naturaleza' => $plancuenta->plancuentas_naturaleza, 'plancuentas_tipo' => $plancuenta->plancuentas_tipo, 'ica' => $ica]);
             }
         }
         return response()->json(['success' => false]);

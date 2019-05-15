@@ -178,7 +178,7 @@ app || (app = {});
 
 			// Clear tasa
             if(this.$inputTasa.length) {
-				this.$inputTasa.val('');
+				this.$inputTasa.attr('data-ica', false).val('');
 			}
 
 			if(!_.isUndefined(cuenta) && !_.isNull(cuenta) && cuenta != '') {
@@ -221,7 +221,7 @@ app || (app = {});
             		// Case plancuentas_tasa eval value
         			this.$inputBase.prop('readonly', false);
                     var base = this.$inputBase.inputmask('unmaskedvalue');
-     				this.$inputValor.val( (data.plancuentas_tasa * base) / 100);
+     				this.$inputValor.val( (data.plancuentas_tasa * base) / data.ica ? 1000 : 100);
             	}else{
             		// Case without plancuentas_tasa
             		this.$inputBase.val('');
@@ -238,9 +238,9 @@ app || (app = {});
             // Eval tasa
             if(this.$inputTasa.length) {
             	if(!_.isUndefined(data.plancuentas_tasa) && !_.isNull(data.plancuentas_tasa) && data.plancuentas_tasa > 0) {
-            		this.$inputTasa.val( data.plancuentas_tasa );
+            		this.$inputTasa.attr('data-ica', data.ica).val( data.plancuentas_tasa );
             	}else{
-					this.$inputTasa.val('');
+					this.$inputTasa.attr('data-ica', false).val('');
 				}
 			}
 		},
