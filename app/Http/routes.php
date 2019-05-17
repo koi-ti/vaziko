@@ -145,6 +145,9 @@ Route::group(['middleware' => 'auth'], function() {
 	| Production Routes
 	|-------------------------
 	*/
+	Route::group(['prefix' => 'agendaordenes'], function() {
+		Route::get('exportar', ['as' => 'agendaordenes.exportar', 'uses' => 'Production\AgendaOrdenespController@exportar']);
+	});
 	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
 
 	Route::group(['prefix' => 'precotizaciones'], function(){

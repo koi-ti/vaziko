@@ -7,10 +7,19 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Ordenp, App\Models\Production\Cotizacion1;
-use DB;
+use DB, Excel;
 
 class AgendaOrdenespController extends Controller
 {
+    /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->middleware('role:admin', ['only' => 'exportar']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -58,5 +67,29 @@ class AgendaOrdenespController extends Controller
 
         // Prepare data getSchedul
         return view('production.agendaordenes.main', compact('schedule'));
+    }
+
+    public function exportar(Request $request)
+    {
+        $abiertas = Ordenp::query()->orden()->abiertas()->get();
+        $remisionadas = Ordenp::query()->orden('R')->abiertas()->get();
+        $recogidas = Ordenp::query()->orden()->abiertas()->recogidas()->get();
+        $incumplidas = Ordenp::query()->orden()->abiertas()->incumplidas()->get();
+
+        Excel::create(sprintf('%s_%s', 'agendaordenes', date('Y_m_d_H_i_s')), function ($excel) use ($abiertas, $remisionadas, $recogidas, $incumplidas) {
+            $excel->sheet('Abiertas', function ($sheet) use ($abiertas) {
+                $sheet->loadView('production.agendaordenes.reporte.abiertas', compact('abiertas'));
+            });
+            $excel->sheet('Remisionadas', function ($sheet) use ($remisionadas) {
+                $sheet->loadView('production.agendaordenes.reporte.remisionadas', compact('remisionadas'));
+            });
+            $excel->sheet('Recogidas', function ($sheet) use ($recogidas) {
+                $sheet->loadView('production.agendaordenes.reporte.recogidas', compact('recogidas'));
+            });
+            $excel->sheet('Incumplidas', function ($sheet) use ($incumplidas) {
+                $sheet->loadView('production.agendaordenes.reporte.incumplidas', compact('incumplidas'));
+            });
+            $excel->setActiveSheetIndex(0);
+        })->download('xlsx');
     }
 }

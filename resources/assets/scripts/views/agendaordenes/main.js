@@ -13,6 +13,9 @@ app || (app = {});
 
         el: '#agendaordenes-main',
         template: _.template( ($('#add-info-event-tpl').html() || '') ),
+        events: {
+            'click .export-excel': 'exportExcel'
+        },
 
         /**
         * Constructor Method
@@ -87,6 +90,16 @@ app || (app = {});
                     }
                 },
             });
+        },
+
+        /**
+        * export to Excel
+        */
+        exportExcel: function (e) {
+            e.preventDefault();
+
+            // Redirect to pdf
+            window.open( window.Misc.urlFull(Route.route('agendaordenes.exportar')), '_blank');
         }
     });
 

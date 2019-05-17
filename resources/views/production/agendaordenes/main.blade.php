@@ -24,7 +24,15 @@
                                 </tr>
                                 <tr>
                                     <td>Abierta</td>
-                                    <td><span class="badge bg-green pull-right">{{ $schedule->op_abiertas }}</span></td>
+                                    <td>
+                                        @if (auth()->user()->hasRole('admin'))
+                                            <a href="#" class="export-excel">
+                                                <span class="badge bg-green pull-right">{{ $schedule->op_abiertas }}</span>
+                                            </a>
+                                        @else
+                                            <span class="badge bg-green pull-right">{{ $schedule->op_abiertas }}</span>
+                                        @endif
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td>Cerrada</td>

@@ -193,7 +193,6 @@ class Ordenp extends BaseModel
             ' (', orden_referencia ,')'
             ) AS tercero_nombre"
         ));
-        @
         $query->leftJoin('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$codigo'");
         return $query->first();
@@ -228,5 +227,34 @@ class Ordenp extends BaseModel
 
     public function scopeRemisionadas ($query) {
         return $query->where('orden2_saldo', 0);
+    }
+
+    public function scopeOrden ($query, $remisionada = null) {
+        $query->select('koi_ordenproduccion.id', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
+            DB::raw("
+                CONCAT(
+                    (CASE WHEN tercero_persona = 'N'
+                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                        ELSE tercero_razonsocial
+                    END),
+                ' (', orden_referencia ,')'
+                ) AS tercero_nombre"
+            )
+        );
+        $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
+        $query->with(['detalle' => function ($q) use ($remisionada){
+            $q->detalle();
+            if ($remisionada) {
+                $q->where('orden2_saldo', 0);
+            }
+        }]);
+        $query->orderBy('orden_ano', 'desc');
+        return $query;
+    }
+
+    public function detalle () {
+        return $this->hasMany(Ordenp2::class, 'orden2_orden', 'id');
     }
 }
