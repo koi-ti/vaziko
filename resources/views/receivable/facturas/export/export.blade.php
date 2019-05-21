@@ -5,7 +5,7 @@
 	<div class="container-factura">
 		<tr>
 			<th width="83%" class="left"></th>
-			<th width="17%" class="center">{{ $factura->id }}</th>
+			<th width="17%" class="center">{{ $factura->puntoventa_prefijo }} - {{ $factura->factura1_numero }}</th>
 		</tr>
 	</div>
 

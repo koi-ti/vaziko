@@ -69,7 +69,7 @@
                         </div>
                         <div class="form-group col-md-4">
                             <label class="control-label">Punto de venta</label>
-                            <div>{{ $factura->puntoventa_prefijo }} - {{ $factura->puntoventa_nombre }}</div>
+                            <div>{{ $factura->puntoventa_prefijo }} - {{ $factura->factura1_numero }}</div>
                         </div>
                 	</div>
                 	<div class="row">
