@@ -34,9 +34,8 @@ class DespachopController extends Controller
             if($request->has('despachop1_orden'))
             {
                 $query = Despachop::query();
-                $query->select('koi_despachop1.id as id', 'despachop1_fecha', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"));
+                $query->select('koi_despachop1.id as id', 'despachop1_fecha', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'despachop1_anulado');
                 $query->join('koi_tcontacto', 'despachop1_contacto', '=', 'koi_tcontacto.id');
-                $query->where('despachop1_anulado', false);
                 $query->where('despachop1_orden', $request->despachop1_orden);
                 $query->orderBy('koi_despachop1.id', 'asc');
                 $despachos = $query->get();
@@ -217,7 +216,13 @@ class DespachopController extends Controller
             try {
                 $despacho = Despachop::find($id);
                 if(!$despacho instanceof Despachop){
+                    DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar despacho, por favor verifique la información del asiento o consulte al administrador.']);
+                }
+
+                if ($despacho->despachop1_anulado) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'El despacho que intenta eliminar ya esta anulado.']);
                 }
 
                 // Anular despachop1
@@ -232,6 +237,7 @@ class DespachopController extends Controller
                     // Orden2
                     $orden2 = Ordenp2::find($despacho2->despachop2_orden2);
                     if(!$orden2 instanceof Ordenp2){
+                        DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar item orden, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
@@ -242,7 +248,6 @@ class DespachopController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
             }catch(\Exception $e){
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DespachopController', 'destroy', $e->getMessage()));

@@ -454,11 +454,12 @@
                                                         <thead>
                                                             <tr>
                                                                 @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
-                                                                <th width="5%"></th>
+                                                                    <th width="5%"></th>
                                                                 @endif
                                                                 <th width="5%">Código</th>
-                                                                <th width="70%">Contacto</th>
+                                                                <th width="60%">Contacto</th>
                                                                 <th width="15%">Fecha</th>
+                                                                <th width="10%">Estado</th>
                                                                 <th width="5%"></th>
                                                             </tr>
                                                         </thead>
@@ -580,15 +581,20 @@
         <% if(edit) { %>
             @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
                 <td class="text-center">
-                    <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
-                        <span><i class="fa fa-times"></i></span>
-                    </a>
+                    <% if (!despachop1_anulado) { %>
+                        <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
+                            <span><i class="fa fa-times"></i></span>
+                        </a>
+                    <% } %>
                 </td>
             @endif
         <% } %>
         <td class="text-center"><%- id %></td>
         <td><%- tcontacto_nombre %></td>
         <td><%- despachop1_fecha %></td>
+        <td>
+            <span class="label <%- despachop1_anulado ? 'label-danger' : 'label-success' %>"><%- despachop1_anulado ? 'Anulado' : 'Finalizado' %></span>
+        </td>
         <td>
             <a href="<%- window.Misc.urlFull( Route.route('ordenes.despachos.exportar', {despachos: id}) ) %>"  target="_blank" class="btn btn-danger btn-xs" data-resource="<%- id %>">
                 <span><i class="fa fa-file-pdf-o"></i></span>

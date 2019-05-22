@@ -250,8 +250,9 @@
                                         <thead>
                                             <tr>
                                                 <th width="5%">Código</th>
-                                                <th width="75%">Contacto</th>
+                                                <th width="60%">Contacto</th>
                                                 <th width="15%">Fecha</th>
+                                                <th width="10%">Estado</th>
                                                 <th width="5%"></th>
                                             </tr>
                                         </thead>
