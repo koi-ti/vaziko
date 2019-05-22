@@ -16,6 +16,7 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
+            'despachop1_anulado': 0
 		}
     });
 
