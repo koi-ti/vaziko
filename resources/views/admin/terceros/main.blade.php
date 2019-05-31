@@ -127,10 +127,12 @@
                 	    </div>
 
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-12">
                                 <label for="tercero_sigla" class="control-label">Sigla</label>
-                                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="20">
+                                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="200">
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-3">
                                 <label for="tercero_codigopostal" class="control-label">Código postal</label>
                                 <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6">

@@ -89,11 +89,13 @@
 				</div>
 
 				<div class="row">
-					<div class="form-group col-md-3">
+					<div class="form-group col-md-12">
 						<label class="control-label">Sigla</label>
 						<div>{{ $tercero->tercero_sigla }}</div>
 					</div>
+				</div>
 
+				<div class="row">
 					<div class="form-group col-md-3">
 						<label class="control-label">Código postal</label>
 						<div>{{ $tercero->tercero_codigopostal }}</div>

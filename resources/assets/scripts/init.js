@@ -247,11 +247,12 @@ var app = app || {};
         * Init Datepicker
         */
         initDatePicker: function () {
-
             $('.datepicker').datepicker({
                 autoclose: true,
                 language: 'es',
-                format: 'yyyy-mm-dd'
+                format: 'yyyy-mm-dd',
+                todayHighlight: true,
+                todayBtn: 'linked'
             });
         },
 
