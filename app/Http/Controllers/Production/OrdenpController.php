@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
-use App, View, Auth, DB, Log, Datatables, Storage;
+use App, View, DB, Log, Datatables, Storage;
 
 class OrdenpController extends Controller
 {
@@ -18,6 +18,7 @@ class OrdenpController extends Controller
         $this->middleware('ability:admin,consultar');
         $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'cerrar', 'abrir']]);
         $this->middleware('ability:admin,opcional2', ['only' => ['completar', 'clonar']]);
+        $this->middleware('ability:admin,opcional3', ['only' => ['abrir']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
     }
 
@@ -47,17 +48,24 @@ class OrdenpController extends Controller
             $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
 
             // Permisions mostrar botones crear [close, open]
-            if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) ) {
+            if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes'])) {
                 $query->addSelect(DB::raw('TRUE as orden_create'));
             } else {
                 $query->addSelect(DB::raw('FALSE as orden_create'));
             }
 
             // Permisions mostrar botones opcional2 [complete, clone]
-            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ) {
+            if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes'])) {
                 $query->addSelect(DB::raw('TRUE as orden_opcional'));
             } else {
                 $query->addSelect(DB::raw('FALSE as orden_opcional'));
+            }
+
+            // Permisions mostrar botones opcional2 [complete, clone]
+            if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes'])) {
+                $query->addSelect(DB::raw('TRUE as orden_opcional3'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as orden_opcional3'));
             }
 
             // Persistent data filter
@@ -72,47 +80,57 @@ class OrdenpController extends Controller
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Orden codigo
-                    if($request->has('orden_numero')) {
+                    if ($request->has('orden_numero')) {
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
                     }
+
                     // Ordenes a facturar
-                    if($request->has('factura') && $request->factura == 'true') {
+                    if ($request->has('factura') && $request->factura == 'true') {
                         $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('(orden2_cantidad - orden2_facturado) > 0'));
                     }
+
                     // Tercero nit
-                    if($request->has('orden_tercero_nit')) {
+                    if ($request->has('orden_tercero_nit')) {
                         $query->where('tercero_nit', $request->orden_tercero_nit);
                     }
+
                     // Tercero id
-                    if($request->has('orden_cliente')) {
+                    if ($request->has('orden_cliente')) {
                         $query->where('orden_cliente', $request->orden_cliente);
                     }
+
                     // Estado
-                    if($request->has('orden_estado')) {
-                        if($request->orden_estado == 'A') {
+                    if ($request->has('orden_estado')) {
+                        if ($request->orden_estado == 'A') {
                             $query->where('orden_abierta', true);
                         }
-                        if($request->orden_estado == 'C') {
+
+                        if ($request->orden_estado == 'C') {
                             $query->where('orden_abierta', false);
                             $query->where('orden_culminada', false);
                         }
-                        if($request->orden_estado == 'N') {
+
+                        if ($request->orden_estado == 'N') {
                             $query->where('orden_anulada', true);
                         }
-                        if($request->orden_estado == 'T') {
+
+                        if ($request->orden_estado == 'T') {
                             $query->where('orden_culminada', true);
                         }
-                        if($request->orden_estado == 'AT') {
+
+                        if ($request->orden_estado == 'AT') {
                             $query->where('orden_abierta', true);
                             $query->orWhere('orden_culminada', true);
                         }
                     }
+
                     // Referencia
-                    if($request->has('orden_referencia')) {
+                    if ($request->has('orden_referencia')) {
                         $query->whereRaw("orden_referencia LIKE '%{$request->orden_referencia}%'");
                     }
+
                     // Producto
-                    if($request->has('orden_productop')) {
+                    if ($request->has('orden_productop')) {
                         $query->whereRaw("$request->orden_productop IN ( SELECT orden2_productop
                             FROM koi_ordenproduccion2 WHERE orden2_orden = koi_ordenproduccion.id) ");
                     }
@@ -185,7 +203,7 @@ class OrdenpController extends Controller
                     $orden->orden_numero = $numero;
                     $orden->orden_contacto = $contacto->id;
                     $orden->orden_iva = $empresa->empresa_iva;
-                    $orden->orden_usuario_elaboro = Auth::user()->id;
+                    $orden->orden_usuario_elaboro = auth()->user()->id;
                     $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                     $orden->save();
                     // Commit Transaction
@@ -217,7 +235,7 @@ class OrdenpController extends Controller
         if ($request->ajax()) {
             return response()->json($orden);
         }
-        if( $orden->orden_abierta == true && $orden->orden_anulada == false && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
+        if( $orden->orden_abierta == true && $orden->orden_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
             return redirect()->route('ordenes.edit', ['orden' => $orden]);
         }
         return view('production.ordenes.show', ['orden' => $orden]);
@@ -475,7 +493,7 @@ class OrdenpController extends Controller
                 $neworden->orden_anulada = false;
                 $neworden->orden_ano = date('Y');
                 $neworden->orden_numero = $numero;
-                $neworden->orden_usuario_elaboro = Auth::user()->id;
+                $neworden->orden_usuario_elaboro = auth()->user()->id;
                 $neworden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                 $neworden->save();
 
@@ -487,7 +505,7 @@ class OrdenpController extends Controller
                     $neworden2->orden2_orden = $neworden->id;
                     $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
                     $neworden2->orden2_entregado = 0;
-                    $neworden2->orden2_usuario_elaboro = Auth::user()->id;
+                    $neworden2->orden2_usuario_elaboro = auth()->user()->id;
                     $neworden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
                     $neworden2->save();
 
@@ -512,7 +530,7 @@ class OrdenpController extends Controller
                     foreach ($imagenes as $orden8) {
                         $neworden8 = $orden8->replicate();
                         $neworden8->orden8_orden2 = $neworden2->id;
-                        $neworden8->orden8_usuario_elaboro = Auth::user()->id;
+                        $neworden8->orden8_usuario_elaboro = auth()->user()->id;
                         $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                         $neworden8->save();
 

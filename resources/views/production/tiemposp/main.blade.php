@@ -26,7 +26,7 @@
                                         <i class="fa fa-building-o"></i>
                                     </button>
                                 </span>
-                                <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-name="tiempop_ordenp_beneficiario">
+                                <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-name="tiempop_ordenp_beneficiario" data-estado="A">
                             </div>
                         </div>
                         <div class="col-md-5">

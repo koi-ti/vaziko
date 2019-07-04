@@ -26,7 +26,7 @@
                     <li class="pull-right">
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                            @if( !$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                            @if (!$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                                 <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
                             @endif
                             @if( $orden->orden_culminada && Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )

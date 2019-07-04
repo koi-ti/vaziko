@@ -102,8 +102,12 @@ app || (app = {});
                             const complete = '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
                             var buttons = '';
 
-                            if ( parseInt(full.orden_create) && parseInt(full.orden_opcional) ){
-                                buttons += parseInt(full.orden_abierta) ? close : open;
+                            if (parseInt(full.orden_create) && parseInt(full.orden_opcional)) {
+                                buttons += parseInt(full.orden_abierta) ? close : '';
+                            }
+
+                            if (parseInt(full.orden_opcional3)) {
+                                buttons += open;
                             }
 
                             if ( parseInt(full.orden_opcional) ){
