@@ -31,7 +31,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $query = Cotizacion1::query();
-            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta',
+            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -45,6 +45,10 @@ class Cotizacion1Controller extends Controller
                 )
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
+            $query->with(['productos' => function ($producto) {
+                $producto->select('cotizacion2_cotizacion', DB::raw("SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total"))
+                            ->groupBy('cotizacion2_cotizacion');
+            }]);
 
             // Permisions mostrar botones crear [close, open]
             if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) ) {
@@ -62,7 +66,7 @@ class Cotizacion1Controller extends Controller
             }
 
             // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
+            if ($request->has('persistent') && $request->persistent) {
                 session(['searchcotizacion_numero' => $request->has('cotizacion_numero') ? $request->cotizacion_numero : '']);
                 session(['searchcotizacion_tercero' => $request->has('cotizacion_tercero_nit') ? $request->cotizacion_tercero_nit : '']);
                 session(['searchcotizacion_tercero_nombre' => $request->has('cotizacion_tercero_nombre') ? $request->cotizacion_tercero_nombre : '']);

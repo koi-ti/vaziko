@@ -65,6 +65,7 @@ app || (app = {});
                     { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
                     { data: 'cotizacion1_fecha_inicio', name: 'cotizacion1_fecha_inicio' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'productos[0].total', name: 'productos[0].total' },
                     { data: 'cotizacion1_abierta', name: 'cotizacion1_abierta' }
                 ],
                 order: [
@@ -129,6 +130,14 @@ app || (app = {});
                     },
                     {
                         targets: 6,
+                        width: '7%',
+                        render: function (data, type, full, row) {
+                            var total = parseFloat(data) + (parseFloat(data) * (full.cotizacion1_iva/100));
+                            return window.Misc.currency(parseInt(full.cotizacion_opcional) ? total : 0);
+                        }
+                    },
+                    {
+                        targets: 7,
                         width: '7%',
                         searchable: false,
                         orderable: false,

@@ -88,6 +88,7 @@
                                 <th>Numero</th>
                                 <th nowrap="nowrap">F. Inicio</th>
                                 <th>Tercero</th>
+                                <th>Valor</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>

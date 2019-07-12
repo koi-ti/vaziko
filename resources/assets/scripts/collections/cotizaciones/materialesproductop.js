@@ -32,7 +32,7 @@ app || (app = {});
 
         total: function() {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
+                return sum + parseFloat(model.get('cotizacion4_valor_unitario')) * model.get('cotizacion4_cantidad');
             }, 0);
         },
 

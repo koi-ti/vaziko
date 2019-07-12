@@ -239,8 +239,8 @@ class Cotizacion2Controller extends Controller
                     $precio = $cotizacion2->cotizacion2_precio_venta;
                     $transporte = round($cotizacion2->cotizacion2_transporte/$cotizacion2->cotizacion2_cantidad);
                     $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
-                    $materiales = ($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-                    $empaques = ($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
+                    $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                    $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
                     $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad);
 
                     $subtotal = $precio + $transporte + $viaticos + $materiales + $empaques + $areas;
@@ -531,12 +531,13 @@ class Cotizacion2Controller extends Controller
                         $precio = $cotizacion2->cotizacion2_precio_venta;
                         $transporte = round($cotizacion2->cotizacion2_transporte/$cotizacion2->cotizacion2_cantidad);
                         $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
-                        $materiales = ($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-                        $empaques = ($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
+                        $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                        $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
                         $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad);
 
                         $subtotal = $precio + $transporte + $viaticos + $materiales + $empaques + $areas;
                         $volumen = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                        $total = $subtotal + $volumen;
                         $total = round(($subtotal+$volumen), $cotizacion2->cotizacion2_round);
 
                         // Actualizar valores

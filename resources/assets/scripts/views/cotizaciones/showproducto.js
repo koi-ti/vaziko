@@ -33,7 +33,6 @@ app || (app = {});
             this.$uploaderFile.fineUploader({
                 debug: false,
                 template: 'qq-template-cotizacion-producto',
-                autoUpload: true,
                 dragDrop: false,
                 session: {
                     endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
@@ -42,48 +41,18 @@ app || (app = {});
                     },
                     refreshOnRequest: false
                 },
-                request: {
-                    inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
-                    params: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        cotizacion2: this.model.get('id')
-                    }
-                },
-                retry: {
-                    maxAutoAttempts: 3,
-                },
-                deleteFile: {
-                    enabled: true,
-                    forceConfirm: true,
-                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
-                    params: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        cotizacion2: this.model.get('id')
-                    }
-                },
                 thumbnails: {
                     placeholders: {
                         notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
                         waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
                     }
                 },
-                validation: {
-                    itemLimit: 10,
-                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
-                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
-                },
-                messages: {
-                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
-                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
-                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
-                },
                 callbacks: {
                     onSessionRequestComplete: _this.onSessionRequestComplete,
                 },
             });
 
+            this.$uploaderFile.find('.buttons').remove();
             this.$uploaderFile.find('.qq-upload-drop-area').remove();
         },
 
