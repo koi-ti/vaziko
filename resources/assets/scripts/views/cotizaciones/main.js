@@ -131,9 +131,11 @@ app || (app = {});
                     {
                         targets: 6,
                         width: '7%',
+                        searchable: false,
+                        orderable: false,
                         render: function (data, type, full, row) {
                             var total = parseFloat(data) + (parseFloat(data) * (full.cotizacion1_iva/100));
-                            return window.Misc.currency(parseInt(full.cotizacion_opcional) ? total : 0);
+                            return parseInt(full.admin) ? window.Misc.currency(total) : '-';
                         }
                     },
                     {

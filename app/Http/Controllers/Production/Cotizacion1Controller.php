@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
-use App, View, Auth, DB, Log, Datatables, Storage;
+use App, View, DB, Log, Datatables, Storage;
 
 class Cotizacion1Controller extends Controller
 {
@@ -51,14 +51,20 @@ class Cotizacion1Controller extends Controller
             }]);
 
             // Permisions mostrar botones crear [close, open]
-            if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) ) {
+            if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones'])) {
                 $query->addSelect(DB::raw('TRUE as cotizacion_create'));
             } else {
                 $query->addSelect(DB::raw('FALSE as cotizacion_create'));
             }
 
+            if (auth()->user()->hasRole('admin')) {
+                $query->addSelect(DB::raw('TRUE as admin'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as admin'));
+            }
+
             // Permisions mostrar botones opcional2 [complete, clone]
-            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ) {
+            if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones'])) {
                 $query->addSelect(DB::raw('TRUE as cotizacion_opcional'));
             } else {
                 $query->where('cotizacion1_abierta', true);
@@ -79,41 +85,41 @@ class Cotizacion1Controller extends Controller
                 ->filter(function($query) use($request) {
 
                     // Cotizacion codigo
-                    if($request->has('cotizacion_numero')) {
+                    if ($request->has('cotizacion_numero')) {
                         $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) LIKE '%{$request->cotizacion_numero}%'");
                     }
 
                     // Tercero nit
-                    if($request->has('cotizacion_tercero_nit')) {
+                    if ($request->has('cotizacion_tercero_nit')) {
                         $query->where('tercero_nit', $request->cotizacion_tercero_nit);
                     }
 
                     // Tercero id
-                    if($request->has('cotizacion_cliente')) {
+                    if ($request->has('cotizacion_cliente')) {
                         $query->where('cotizacion1_cliente', $request->cotizacion_cliente);
                     }
 
                     // Estado
-                    if($request->has('cotizacion_estado')) {
-                        if($request->cotizacion_estado == 'A') {
+                    if ($request->has('cotizacion_estado')) {
+                        if ($request->cotizacion_estado == 'A') {
                             $query->where('cotizacion1_abierta', true);
                         }
-                        if($request->cotizacion_estado == 'C') {
+                        if ($request->cotizacion_estado == 'C') {
                             $query->where('cotizacion1_abierta', false);
                             $query->where('cotizacion1_anulada', false);
                         }
-                        if($request->cotizacion_estado == 'N') {
+                        if ($request->cotizacion_estado == 'N') {
                             $query->where('cotizacion1_anulada', true);
                         }
                     }
 
                     // Referencia
-                    if($request->has('cotizacion_referencia')) {
+                    if ($request->has('cotizacion_referencia')) {
                         $query->whereRaw("cotizacion1_referencia LIKE '%{$request->cotizacion_referencia}%'");
                     }
 
                     // Producto
-                    if($request->has('cotizacion_productop')) {
+                    if ($request->has('cotizacion_productop')) {
                         $query->whereRaw("$request->cotizacion_productop IN ( SELECT cotizacion2_productop FROM koi_cotizacion2 WHERE cotizacion2_cotizacion = koi_cotizacion1.id) ");
                     }
                 })
@@ -189,7 +195,7 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_numero = $numero;
                     $cotizacion->cotizacion1_contacto = $contacto->id;
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
-                    $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
+                    $cotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
                     $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                     $cotizacion->save();
 
@@ -225,11 +231,11 @@ class Cotizacion1Controller extends Controller
         }
 
         // Permisions
-        if( !Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_abierta == false) {
+        if( !auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_abierta == false) {
             abort(403);
         }
 
-        if( $cotizacion->cotizacion1_abierta == true && $cotizacion->cotizacion1_anulada == false && Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
+        if( $cotizacion->cotizacion1_abierta == true && $cotizacion->cotizacion1_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
             return redirect()->route('cotizaciones.edit', ['cotizacion' => $cotizacion]);
         }
 
@@ -490,7 +496,7 @@ class Cotizacion1Controller extends Controller
                 $newcotizacion->cotizacion1_estado = '';
                 $newcotizacion->cotizacion1_ano = date('Y');
                 $newcotizacion->cotizacion1_numero = $numero;
-                $newcotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
+                $newcotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
                 $newcotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                 $newcotizacion->save();
 
@@ -501,7 +507,7 @@ class Cotizacion1Controller extends Controller
                     $newcotizacion2->cotizacion2_cotizacion = $newcotizacion->id;
                     $newcotizacion2->cotizacion2_saldo = $newcotizacion2->cotizacion2_cantidad;
                     $newcotizacion2->cotizacion2_entregado = 0;
-                    $newcotizacion2->cotizacion2_usuario_elaboro = Auth::user()->id;
+                    $newcotizacion2->cotizacion2_usuario_elaboro = auth()->user()->id;
                     $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');
                     $newcotizacion2->save();
 
@@ -526,7 +532,7 @@ class Cotizacion1Controller extends Controller
                     foreach ($imagenes as $cotizacion8) {
                         $newcotizacion8 = $cotizacion8->replicate();
                         $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
-                        $newcotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                        $newcotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
                         $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                         $newcotizacion8->save();
 
@@ -546,7 +552,7 @@ class Cotizacion1Controller extends Controller
                     foreach ($materiales as $cotizacion4) {
                          $newcotizacion4 = $cotizacion4->replicate();
                          $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                         $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                          $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                          $newcotizacion4->save();
                     }
@@ -556,7 +562,7 @@ class Cotizacion1Controller extends Controller
                     foreach ($empaques as $cotizacion9) {
                          $newcotizacion9 = $cotizacion9->replicate();
                          $newcotizacion9->cotizacion9_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion9->cotizacion9_usuario_elaboro = Auth::user()->id;
+                         $newcotizacion9->cotizacion9_usuario_elaboro = auth()->user()->id;
                          $newcotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
                          $newcotizacion9->save();
                     }
@@ -619,7 +625,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_abierta = true;
                 $orden->orden_observaciones = $cotizacion->cotizacion1_observaciones;
                 $orden->orden_terminado = $cotizacion->cotizacion1_terminado;
-                $orden->orden_usuario_elaboro = Auth::user()->id;
+                $orden->orden_usuario_elaboro = auth()->user()->id;
                 $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                 $orden->save();
 
@@ -700,7 +706,7 @@ class Cotizacion1Controller extends Controller
                         $orden8->orden8_orden2 = $orden2->id;
                         $orden8->orden8_archivo = $cotizacion8->cotizacion8_archivo;
                         $orden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
-                        $orden8->orden8_usuario_elaboro = Auth::user()->id;
+                        $orden8->orden8_usuario_elaboro = auth()->user()->id;
                         $orden8->save();
 
                         // Recuperar imagen y copiar
@@ -725,7 +731,7 @@ class Cotizacion1Controller extends Controller
                          $orden4->orden4_cantidad = $cotizacion4->cotizacion4_cantidad;
                          $orden4->orden4_valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                          $orden4->orden4_valor_total = $cotizacion4->cotizacion4_valor_total;
-                         $orden4->orden4_usuario_elaboro = Auth::user()->id;
+                         $orden4->orden4_usuario_elaboro = auth()->user()->id;
                          $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
                          $orden4->save();
                     }
@@ -741,7 +747,7 @@ class Cotizacion1Controller extends Controller
                          $orden9->orden9_cantidad = $cotizacion9->cotizacion9_cantidad;
                          $orden9->orden9_valor_unitario = $cotizacion9->cotizacion9_valor_unitario;
                          $orden9->orden9_valor_total = $cotizacion9->cotizacion9_valor_total;
-                         $orden9->orden9_usuario_elaboro = Auth::user()->id;
+                         $orden9->orden9_usuario_elaboro = auth()->user()->id;
                          $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
                          $orden9->save();
                     }
