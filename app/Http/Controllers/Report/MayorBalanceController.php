@@ -19,8 +19,7 @@ class MayorBalanceController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('type'))
-        {
+        if ($request->has('type')) {
             // Preparar datos reporte
             $sql = '';
             $title = sprintf('%s %s %s', 'Mayor y balance de ',  config('koi.meses')[$request->mes], $request->ano);
@@ -29,11 +28,16 @@ class MayorBalanceController extends Controller
             $ano = $request->ano;
             $saldos = [];
 
-            if($mes == 1) {
+            if ($mes == 1) {
                 $mes2 = 13;
                 $ano2 = $ano - 1;
-            }else{
+            } else {
                 $mes2 = $mes - 1;
+                $ano2 = $ano;
+            }
+
+            if ($request->ano == '2018' && $mes == 1) {
+                $mes2 = 1;
                 $ano2 = $ano;
             }
 
