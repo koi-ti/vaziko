@@ -42,7 +42,7 @@ class TiempopController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $tiempop = new Tiempop;
-            if ( $tiempop->isValid($data) ) {
+            if ($tiempop->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     $itemcodigo = $itemtercero = $itemsubactividadp = null;
@@ -57,31 +57,36 @@ class TiempopController extends Controller
                     });
                     $rango = $query->get();
 
-                    if(count($rango) > 0){
+                    if (count($rango) > 0) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede interferir con otras ya registradas, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Recuperar Actividadop
-                    $actividadp = Actividadp::find( $request->tiempop_actividadp );
-                    if( !$actividadp instanceof Actividadp ) {
+                    $actividadp = Actividadp::find($request->tiempop_actividadp);
+                    if (!$actividadp instanceof Actividadp) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Recuperar Areap
-                    $areap = Areap::find( $request->tiempop_areap );
-                    if( !$areap instanceof Areap ) {
+                    $areap = Areap::find($request->tiempop_areap);
+                    if (!$areap instanceof Areap) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar area de producción, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    if($request->has('tiempop_ordenp')){
+                    if ($request->has('tiempop_ordenp')) {
                         // Recuperar Ordenp
                         $ordenp = Ordenp::getOrdenp($request->tiempop_ordenp);
-                        if( !$ordenp instanceof Ordenp ){
+                        if (!$ordenp instanceof Ordenp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        if ($ordenp->orden_anulada && (!$ordenp->orden_culminada || !$ordenp->orden_abierta)) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'La orden de producción no es válida.']);
                         }
 
                         $tiempop->tiempop_ordenp = $ordenp->id;
@@ -90,15 +95,15 @@ class TiempopController extends Controller
                     }
 
                     // Recuperar Subactividadp
-                    if($request->has('tiempop_subactividadp')){
+                    if ($request->has('tiempop_subactividadp')) {
                         $subactividadp = SubActividadp::find( $request->tiempop_subactividadp );
-                        if( !$subactividadp instanceof SubActividadp ) {
+                        if (!$subactividadp instanceof SubActividadp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar subactividad de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
                         // Validar que sean validas actividadp y subactividadp
-                        if( $actividadp->id != $subactividadp->subactividadp_actividadp) {
+                        if ($actividadp->id != $subactividadp->subactividadp_actividadp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'La actividad no esta relacionada con la subactividad, por favor verifique la información o consulte al administrador.']);
                         }

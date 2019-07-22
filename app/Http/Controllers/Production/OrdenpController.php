@@ -121,6 +121,7 @@ class OrdenpController extends Controller
                         if ($request->orden_estado == 'AT') {
                             $query->where('orden_abierta', true);
                             $query->orWhere('orden_culminada', true);
+                            $query->where('orden_anulada', false);
                         }
                     }
 
@@ -335,7 +336,7 @@ class OrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('orden_codigo')) {
+        if ($request->has('orden_codigo')) {
             $query = Ordenp::query();
             $query->select('koi_ordenproduccion.id', DB::raw("CONCAT((CASE WHEN tercero_persona = 'N'
                         THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
@@ -345,13 +346,32 @@ class OrdenpController extends Controller
                 ) AS tercero_nombre"));
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
-            if($request->has('orden_estado')){
-                if($request->orden_estado == 'A'){
+            if ($request->has('orden_estado')) {
+                if ($request->orden_estado == 'A') {
                     $query->where('orden_abierta', true);
+                }
+
+                if ($request->orden_estado == 'C') {
+                    $query->where('orden_abierta', false);
+                    $query->where('orden_culminada', false);
+                }
+
+                if ($request->orden_estado == 'N') {
+                    $query->where('orden_anulada', true);
+                }
+
+                if ($request->orden_estado == 'T') {
+                    $query->where('orden_culminada', true);
+                }
+
+                if ($request->orden_estado == 'AT') {
+                    $query->where('orden_abierta', true);
+                    $query->orWhere('orden_culminada', true);
+                    $query->where('orden_anulada', false);
                 }
             }
             $ordenp = $query->first();
-            if($ordenp instanceof Ordenp) {
+            if ($ordenp instanceof Ordenp) {
                 return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre, 'id' => $ordenp->id]);
             }
         }
