@@ -252,7 +252,8 @@ var app = app || {};
                 language: 'es',
                 format: 'yyyy-mm-dd',
                 todayHighlight: true,
-                todayBtn: 'linked'
+                todayBtn: 'linked',
+                daysOfWeekHighlighted: [0, 6]
             });
         },
 

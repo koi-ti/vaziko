@@ -19,7 +19,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
 
             // Rerefences
@@ -36,8 +36,8 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('plancuentas.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('plancuentas.index')),
+                    data: function (data) {
                         data.persistent = true;
                         data.plancuentas_cuenta = _this.$searchCuenta.val();
                         data.plancuentas_nombre = _this.$searchName.val();
@@ -56,8 +56,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '13%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('plancuentas.show', {plancuentas: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('plancuentas.show', {plancuentas: full.id}))  +'">' + data + '</a>';
                         }
                     },
                     {
@@ -67,23 +67,23 @@ app || (app = {});
                     {
                         targets: 3,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return data == 'D' ? 'Débito' : 'Crédito';
                         }
                     },
                     {
                         targets: 4,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
                     },
                     {
                         targets: 5,
                         width: '15%',
-                        render: function ( data, type, full, row ) {
-                            if( !_.isNull( full.plancuentas_equivalente ) && !_.isUndefined( full.plancuentas_equivalente ) ){
-                                return '<a href="'+ window.Misc.urlFull( Route.route('plancuentasnif.show', {plancuentasnif: full.plancuentas_equivalente }) )  +'">' + full.plancuentasn_cuenta + '</a>';
+                        render: function (data, type, full, row) {
+                            if (!_.isNull( full.plancuentas_equivalente ) && !_.isUndefined( full.plancuentas_equivalente)) {
+                                return '<a href="'+ window.Misc.urlFull(Route.route('plancuentasnif.show', {plancuentasnif: full.plancuentas_equivalente })) +'">' + full.plancuentasn_cuenta + '</a>';
                             }
                             return '';
                         }
@@ -91,31 +91,30 @@ app || (app = {});
                     {
                         targets: 6,
                         width: '15%',
-                        render: function ( data, type, full, row ) {
-                            if( data == 'N' ){
+                        render: function (data, type, full, row) {
+                            if (data == 'N') {
                                 return 'Ninguno';
-                            }else if( data == 'I' ){
+                            } else if (data == 'I') {
                                 return 'Inventario';
-                            }else if( data == 'C' ){
+                            } else if (data == 'C') {
                                 return 'Cartera';
-                            }else if( data == 'P' ){
+                            } else if (data == 'P') {
                                 return 'Cuentas por pagar';
-                            }else{
-                                return '';
                             }
+                            return '';
                         }
                     }
                 ]
 			});
         },
 
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.plancuentasSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchCuenta.val('');

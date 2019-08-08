@@ -133,9 +133,9 @@ app || (app = {});
                         width: '7%',
                         searchable: false,
                         orderable: false,
+                        className: 'text-right',
                         render: function (data, type, full, row) {
-                            var total = parseFloat(data) + (parseFloat(data) * (full.cotizacion1_iva/100));
-                            return parseInt(full.admin) ? window.Misc.currency(total) : '-';
+                            return parseInt(full.admin) ? window.Misc.currency(parseFloat(data)) : '-';
                         }
                     },
                     {

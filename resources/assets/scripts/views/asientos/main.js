@@ -43,7 +43,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
             	pageLength: paginacion,
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('asientos.index') ),
+                    url: window.Misc.urlFull(Route.route('asientos.index')),
                     data: function( data ) {
                         data.persistent = true;
                         data.asiento_numero = _this.$searchNumero.val();
@@ -72,11 +72,11 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '7%',
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.asiento1_preguardado) ) {
-                                return '<a href="'+ window.Misc.urlFull( Route.route('asientos.edit', {asientos: full.id }) )  +'">' + data + ' <span class="label label-warning">PRE</span></a>';
-                            }else{
-                                return '<a href="'+ window.Misc.urlFull( Route.route('asientos.show', {asientos: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            if (parseInt(full.asiento1_preguardado)) {
+                                return '<a href="'+ window.Misc.urlFull(Route.route('asientos.edit', {asientos: full.id}))  +'">' + data + ' <span class="label label-warning">PRE</span></a>';
+                            } else {
+                                return '<a href="'+ window.Misc.urlFull(Route.route('asientos.show', {asientos: full.id}))  +'">' + data + '</a>';
                             }
                         }
                     },
@@ -108,13 +108,13 @@ app || (app = {});
 			});
         },
 
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.asientosSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             // References
@@ -132,16 +132,17 @@ app || (app = {});
         /*
         * Import data of Excel
         */
-        import: function(e) {
+        import: function (e) {
             var _this = this;
 
             e.preventDefault();
 
             // ImportActionView undelegateEvents
-            if ( this.importActionView instanceof Backbone.View ){
+            if (this.importActionView instanceof Backbone.View) {
                 this.importActionView.stopListening();
                 this.importActionView.undelegateEvents();
             }
+
             this.importActionView = new app.ImportDataActionView({
                 parameters: {
                     title: 'asientos',

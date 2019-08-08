@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, DB, Log, Datatables, Storage;
@@ -47,11 +46,22 @@ class OrdenpController extends Controller
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
 
+            $query->with(['detalle' => function ($producto) {
+                $producto->select('orden2_orden', DB::raw('SUM(orden2_total_valor_unitario * orden2_cantidad) as total'))
+                                ->groupBy('orden2_orden');
+            }]);
+
             // Permisions mostrar botones crear [close, open]
             if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes'])) {
                 $query->addSelect(DB::raw('TRUE as orden_create'));
             } else {
                 $query->addSelect(DB::raw('FALSE as orden_create'));
+            }
+
+            if (auth()->user()->hasRole('admin')) {
+                $query->addSelect(DB::raw('TRUE as admin'));
+            } else {
+                $query->addSelect(DB::raw('FALSE as admin'));
             }
 
             // Permisions mostrar botones opcional2 [complete, clone]
@@ -69,7 +79,7 @@ class OrdenpController extends Controller
             }
 
             // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
+            if ($request->has('persistent') && $request->persistent) {
                 session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
                 session(['searchordenp_tercero' => $request->has('orden_tercero_nit') ? $request->orden_tercero_nit : '']);
                 session(['searchordenp_tercero_nombre' => $request->has('orden_tercero_nombre') ? $request->orden_tercero_nombre : '']);
@@ -336,16 +346,23 @@ class OrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if ($request->has('orden_codigo')) {
+        if ($request->ajax()) {
+            // Orden de produccion
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', DB::raw("CONCAT((CASE WHEN tercero_persona = 'N'
+            $query->select('koi_ordenproduccion.id', 'orden_numero', 'orden_ano', DB::raw("CONCAT((CASE WHEN tercero_persona = 'N'
                         THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                         ) ELSE tercero_razonsocial END),
                 ' (', orden_referencia ,')'
                 ) AS tercero_nombre"));
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
-            $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->orden_codigo}'");
+
+            // If exists codigo
+            if ($request->has('orden_codigo')) {
+                $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$request->orden_codigo'");
+            }
+
+            // If exists estados
             if ($request->has('orden_estado')) {
                 if ($request->orden_estado == 'A') {
                     $query->where('orden_abierta', true);
@@ -366,16 +383,17 @@ class OrdenpController extends Controller
 
                 if ($request->orden_estado == 'AT') {
                     $query->where('orden_abierta', true);
-                    $query->orWhere('orden_culminada', true);
                     $query->where('orden_anulada', false);
                 }
             }
             $ordenp = $query->first();
+
             if ($ordenp instanceof Ordenp) {
                 return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre, 'id' => $ordenp->id]);
             }
+            return response()->json(['success' => false]);
         }
-        return response()->json(['success' => false]);
+        abort(404);
     }
 
     /**
@@ -613,16 +631,16 @@ class OrdenpController extends Controller
      */
     public function charts(Request $request, $id)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             $ordenp = Ordenp::getOrden($id);
-            if( !$ordenp instanceof Ordenp ){
+            if (!$ordenp instanceof Ordenp) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden']);
             }
 
             // Construir object con graficas
             $object = new \stdClass();
             $sentencia = "(
-                    SELECT CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM( TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio) )) as tiempo_x_empleado
+                    SELECT CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)))/3600 as tiempo_x_empleado
                     FROM koi_tiempop
                     INNER JOIN koi_tercero ON tiempop_tercero = koi_tercero.id
                     WHERE tiempop_ordenp = $ordenp->id
@@ -631,17 +649,12 @@ class OrdenpController extends Controller
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
-            $chartempleado->labels = [];
-            $chartempleado->data = [];
-            foreach ($empleados as $empleado) {
-                $hours = ($empleado->tiempo_x_empleado / 3600);
-                $chartempleado->labels[] = $empleado->tercero_nombre;
-                $chartempleado->data[] = $hours;
-            }
+            $chartempleado->labels = array_pluck($empleados, 'tercero_nombre');
+            $chartempleado->data = array_pluck($empleados, 'tiempo_x_empleado');
             $object->chartempleado = $chartempleado;
 
             $sentencia = "(
-                    SELECT areap_nombre, SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_area
+                    SELECT areap_nombre, SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)))/3600 as tiempo_x_area
                     FROM koi_tiempop
                     INNER JOIN koi_areap ON tiempop_areap = koi_areap.id
                     WHERE tiempop_ordenp = $ordenp->id
@@ -650,26 +663,21 @@ class OrdenpController extends Controller
 
             // Armar objecto para la grafica
             $chartareap = new \stdClass();
-            $chartareap->labels = [];
-            $chartareap->data = [];
-            foreach ($areasp as $areap) {
-                $hours = ($areap->tiempo_x_area / 3600);
-                $chartareap->labels[] = $areap->areap_nombre;
-                $chartareap->data[] = $hours;
-            }
+            $chartareap->labels = array_pluck($areasp, 'areap_nombre');
+            $chartareap->data = array_pluck($areasp, 'tiempo_x_area');
             $object->chartareap = $chartareap;
 
             $sentencia = "
             SELECT areap_nombre, SUM(tiempo_x_areasp) as tiempo_areasp, SUM(tiempo_x_producto) as tiempo_producto
             FROM (
-                SELECT (CASE WHEN orden6_areap THEN areap_nombre ELSE orden6_nombre END) AS areap_nombre, SUM(0) as tiempo_x_areasp, SUM( TIME_TO_SEC(orden6_tiempo) ) as tiempo_x_producto
+                SELECT (CASE WHEN orden6_areap THEN areap_nombre ELSE orden6_nombre END) AS areap_nombre, SUM(0) as tiempo_x_areasp, SUM(TIME_TO_SEC(orden6_tiempo))/3600 as tiempo_x_producto
                 FROM koi_ordenproduccion6
                 LEFT JOIN koi_areap ON orden6_areap = koi_areap.id
                 INNER JOIN koi_ordenproduccion2 ON orden6_orden2 = koi_ordenproduccion2.id
                 WHERE orden2_orden = $ordenp->id
                 GROUP BY areap_nombre
             UNION
-                SELECT areap_nombre, SUM( TIME_TO_SEC( TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_x_areasp, SUM(0) as tiempo_x_producto
+                SELECT areap_nombre, SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)))/3600 as tiempo_x_areasp, SUM(0) as tiempo_x_producto
                 FROM koi_tiempop
                 INNER JOIN koi_areap ON tiempop_areap = koi_areap.id
                 WHERE tiempop_ordenp = $ordenp->id
@@ -679,22 +687,47 @@ class OrdenpController extends Controller
             $ordenes = DB::select($sentencia);
 
             $chartcomparativa = new \stdClass();
-            $chartcomparativa->labels = [];
-            foreach ($ordenes as $orden6) {
-                // Armar objecto para la grafica
-                $hoursproduction = ($orden6->tiempo_areasp / 3600);
-                $hourscotizacion = ($orden6->tiempo_producto / 3600);
+            $chartcomparativa->labels = array_pluck($ordenes, 'areap_nombre');
+            $chartcomparativa->tiempoproduction = array_pluck($ordenes, 'tiempo_areasp');
+            $chartcomparativa->tiempocotizacion = array_pluck($ordenes, 'tiempo_producto');
 
-                $chartcomparativa->labels[] = $orden6->areap_nombre;
-                $chartcomparativa->tiempoproduction[] = $hoursproduction;
-                $chartcomparativa->tiempocotizacion[] = $hourscotizacion;
-            }
             $object->chartcomparativa = $chartcomparativa;
 
             $tiempototal = Tiempop::select(DB::raw("SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio))) as tiempo_total"))->where('tiempop_ordenp', $ordenp->id)->first();
             $hours = ($tiempototal->tiempo_total / 3600);
             $object->orden_codigo = $ordenp->orden_codigo;
             $object->tiempototal = $hours;
+
+            // Chart productos
+            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = $ttotal = 0;
+            $ordenesp2 = Ordenp2::where('orden2_orden', $ordenp->id)->get();
+            foreach ($ordenesp2 as $ordenp2) {
+                $tprecio += $precio = $ordenp2->orden2_precio_venta;
+                $ttransporte += $transporte = round($ordenp2->orden2_transporte/$ordenp2->orden2_cantidad);
+                $tviaticos += $viaticos = round($ordenp2->orden2_viaticos/$ordenp2->orden2_cantidad);
+
+                $materiales = Ordenp4::where('orden4_orden2', $ordenp2->id)->sum('orden4_valor_total');
+                $tmateriales += $materiales = ($materiales/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
+
+                $tareas += $areas = Ordenp6::select(DB::raw("SUM(((SUBSTRING_INDEX(orden6_tiempo, ':', 1) + (SUBSTRING_INDEX(orden6_tiempo, ':', -1)/60)) * orden6_valor)/$ordenp2->orden2_cantidad) as total"))->where('orden6_orden2', $ordenp2->id)->value('total');
+
+                $empaques = Ordenp9::where('orden9_orden2', $ordenp2->id)->sum('orden9_valor_total');
+                $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
+
+                $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
+                $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
+                $ttotal += $total = round(($subtotal+$comision), $ordenp2->orden2_round);
+            }
+
+            // Make object
+            $chartproducto = new \stdClass();
+            $chartproducto->labels = [
+                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen', 'Total'
+            ];
+            $chartproducto->data = [
+                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen, $ttotal
+            ];
+            $object->chartproductos = $chartproducto;
 
             $object->success = true;
             return response()->json($object);

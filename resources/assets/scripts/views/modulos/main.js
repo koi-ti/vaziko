@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$modulosSearchTable = this.$('#modulos-search-table');
             var paginacion = this.$modulosSearchTable.data('paginacion');
@@ -27,7 +27,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('modulos.index') ),
+                ajax: window.Misc.urlFull(Route.route('modulos.index')),
                 columns: [
                     { data: 'display_name', name: 'display_name'},
                     { data: 'name', name: 'name'}

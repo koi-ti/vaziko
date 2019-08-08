@@ -18,15 +18,14 @@ app || (app = {});
             'submit #form-item-traslado': 'onStoreItem',
             'submit #form-traslado': 'onStore',
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
@@ -43,10 +42,9 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
-
+        render: function () {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+            this.$wraperForm.html(this.template(attributes));
 
             // References
             this.$form = this.$('#form-traslado');
@@ -81,14 +79,12 @@ app || (app = {});
         * Event Create Folder
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
-                data.detalle = this.trasladoProductosList.toJSON()
-                console.log(data);
-                this.model.save( data, {patch: true, silent: true} );
+                    data.detalle = this.trasladoProductosList.toJSON()
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -108,13 +104,13 @@ app || (app = {});
                         'data': data,
                         'wrap': this.$el,
                         'callback': (function (_this) {
-                            return function ( action, tipo, producto )
-                            {
+                            return function (action, tipo, producto) {
                                 // Open InventarioActionView
-                                if ( _this.inventarioActionView instanceof Backbone.View ){
+                                if (_this.inventarioActionView instanceof Backbone.View) {
                                     _this.inventarioActionView.stopListening();
                                     _this.inventarioActionView.undelegateEvents();
                                 }
+
                                 _this.inventarioActionView = new app.InventarioActionView({
                                     model: _this.model,
                                     collection: _this.trasladoProductosList,
@@ -130,7 +126,6 @@ app || (app = {});
                             }
                         })(this)
                     });
-                // this.trasladoProductosList.trigger( 'store', data );
             }
         },
 
@@ -138,28 +133,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner(this.el);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('traslados.show', { traslados: resp.id})) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('traslados.show', {traslados: resp.id})));
             }
         }
     });

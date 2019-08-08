@@ -99,7 +99,7 @@ class Asiento2 extends Model
         return $query->get();
     }
 
-    public function store(Asiento $asiento, Array $data, $import = false) {
+    public function store(Asiento $asiento, Array $data, $import = false, $nuevo = true) {
         $response = new \stdClass();
         $response->success = false;
 
@@ -183,7 +183,7 @@ class Asiento2 extends Model
             $this->asiento2_credito = $data['Credito'] ?: 0;
             $this->asiento2_debito = $data['Debito'] ?: 0;
             $this->asiento2_base = $data['Base'] ?: 0;
-            $this->asiento2_nuevo = true;
+            $this->asiento2_nuevo = $nuevo;
             $this->save();
         }
 
@@ -911,7 +911,7 @@ class Asiento2 extends Model
         if ($producto->producto_metrado == true) {
             // Producto metrado
             // Debito
-            if($this->asiento2_naturaleza == 'D') {
+            if ($this->asiento2_naturaleza == 'D') {
                 // Consecutivo item
                 $item = DB::table('koi_prodboderollo')->where('prodboderollo_producto', $producto->id)->where('prodboderollo_sucursal', $movfather->movimiento_sucursal)->max('prodboderollo_item');
                 foreach ($movchildren as $children) {
@@ -1028,28 +1028,27 @@ class Asiento2 extends Model
         }
 
         $movfather = $movements->where('movimiento_tipo', 'F')->first();
-        if(!$movfather instanceof AsientoMovimiento) {
+        if (!$movfather instanceof AsientoMovimiento) {
             return "No es posible recuperar movimiento padre de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
         // Recuperar hijos de factura FH
         $movchildren = $movements->where('movimiento_tipo', 'FH');
-        if($movchildren->count() <= 0) {
+        if ($movchildren->count() <= 0) {
             return "No es posible recuperar movimientos detalle de factura para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
         // Nuevo registro en factura
-        if(!$movfather->movimiento_nuevo) {
-
+        if (!$movfather->movimiento_nuevo) {
             // Recuperar factura1 -> Padre
             $factura = Factura1::find($movfather->movimiento_factura);
-            if(!$factura instanceof Factura1){
+            if (!$factura instanceof Factura1) {
                 return "No es posible recuperar la factura, por favor verifique la informacion o consulte con el administrador.";
             }
 
             // Actualizar factura4
             $result = $factura->actualizarFactura4($movchildren, $this->asiento2_naturaleza);
-            if(!$result->success){
+            if (!$result->success) {
                 return $result->error;
             }
 
@@ -1058,23 +1057,23 @@ class Asiento2 extends Model
     }
 
     // Funciones para eliminar un asiento y retornar los item almacenados
-    public function removeMovimientos() {
+    public function validarMovimiento($plancuenta) {
         // Remover facturap
-        if($this->plancuentas_tipo && $this->plancuentas_tipo == 'P') {
-            $result = $this->returnFacturap();
-            if($result != 'OK') {
-                return $result;
-            }
-        }else if($this->plancuentas_tipo && $this->plancuentas_tipo == 'I') {
-            $result = $this->returnInventario();
-            if($result != 'OK') {
-                return $result;
-            }
-        }else if($this->plancuentas_tipo && $this->plancuentas_tipo == 'C') {
-            $result = $this->returnFactura();
-            if($result != 'OK') {
-                return $result;
-            }
+        if ($plancuenta->plancuentas_tipo == 'P') {
+            // $result = $this->returnFacturap();
+            // if($result != 'OK') {
+            //     return $result;
+            // }
+        } else if ($plancuenta->plancuentas_tipo == 'I') {
+            // $result = $this->returnInventario();
+            // if($result != 'OK') {
+            //     return $result;
+            // }
+        } else if ($plancuenta->plancuentas_tipo == 'C') {
+            // $result = $this->returnFactura();
+            // if($result != 'OK') {
+            //     return $result;
+            // }
         }
         return 'OK';
     }

@@ -12,19 +12,20 @@ app || (app = {});
     app.ShowAsientoView = Backbone.View.extend({
 
         el: '#asientos-show',
+        events: {
+            'click .reverse-asiento': 'reverseAsiento'
+        },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Model exist
-            if( this.model.id != undefined ) {
-                this.asientoCuentasList = new app.AsientoCuentasList();
+            this.asientoCuentasList = new app.AsientoCuentasList();
 
-                // Reference views
-                this.spinner = this.$('.spinner-main');
-                this.referenceViews();
-            }
+            // Reference views
+            this.spinner = this.$('.spinner-main');
+            this.referenceViews();
         },
 
         /**
@@ -39,6 +40,35 @@ app || (app = {});
                     dataFilter: {
                         asiento: this.model.get('id')
                     }
+                }
+            });
+        },
+
+        /**
+        * Reverse asiento
+        */
+        reverseAsiento: function (e) {
+            e.preventDefault();
+
+            var _this = this;
+            
+            window.Misc.setSpinner(this.spinner);
+            $.get(window.Misc.urlFull(Route.route('asientos.reverse', {asientos: this.model.get('id')})), function (resp) {
+                window.Misc.removeSpinner(_this.spinner);
+                if (!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if (_.isObject(resp.errors)) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+
+                    if (!resp.success) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Redirect to Content Course
+                    window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id}), {trigger: true}));
                 }
             });
         },

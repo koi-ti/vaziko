@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Ordenp, App\Models\Production\Cotizacion1;
 use DB, Excel;

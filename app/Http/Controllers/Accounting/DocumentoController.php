@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\Documento, App\Models\Accounting\Folder;
 use DB, Log, Datatables;
@@ -47,14 +45,13 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $documento = new Documento;
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar folder
                     $folder = Folder::find($request->documento_folder);
-                    if(!$folder instanceof Folder){
+                    if (!$folder instanceof Folder) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el folder, por favor verifique la información o consulte al administrador.']);
                     }
@@ -68,7 +65,7 @@ class DocumentoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $documento->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -88,11 +85,11 @@ class DocumentoController extends Controller
     public function show(Request $request, $id)
     {
         $documento = Documento::getDocument($id);
-        if($documento instanceof Documento){
+        if ($documento instanceof Documento){
             if ($request->ajax()) {
                 return response()->json($documento);
             }
-            return view('accounting.documentos.show', ['documento' => $documento]);
+            return view('accounting.documentos.show', compact('documento'));
         }
         abort(404);
     }
@@ -106,7 +103,7 @@ class DocumentoController extends Controller
     public function edit($id)
     {
         $documento = Documento::findOrFail($id);
-        return view('accounting.documentos.edit', ['documento' => $documento]);
+        return view('accounting.documentos.edit', compact('documento'));
     }
 
     /**
@@ -120,14 +117,13 @@ class DocumentoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $documento = Documento::findOrFail($id);
             if ($documento->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar folder
                     $folder = Folder::find($request->documento_folder);
-                    if(!$folder instanceof Folder){
+                    if (!$folder instanceof Folder) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el folder, por favor verifique la información o consulte al administrador.']);
                     }
@@ -141,7 +137,7 @@ class DocumentoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $documento->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -170,7 +166,7 @@ class DocumentoController extends Controller
      */
     public function filter(Request $request)
     {
-        if($request->has('folder')) {
+        if ($request->has('folder')) {
             $data = Documento::select('id', 'documento_nombre')->where('documento_folder', $request->folder)->get();
             return response()->json(['success' => true, 'documents' => $data]);
         }

@@ -24,7 +24,7 @@
         </section>
 
         <section class="content">
-            <div class="box box-success spinner-main">
+            <div class="box box-danger spinner-main">
                 <div class="box-header with-border">
                     <div class="row">
                         <div class="col-md-2 col-sm-6 col-xs-6 text-left">

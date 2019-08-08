@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion2, App\Models\Production\Areap;
+use App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion2;
+use App\Models\Production\Areap;
 use DB, Log;
 
 class Cotizacion6Controller extends Controller
@@ -18,24 +17,14 @@ class Cotizacion6Controller extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
-            $cotizacion = [];
-            if($request->has('cotizacion2')) {
-                $cotizacion = Cotizacion6::getCotizaciones6($request->cotizacion2);
+        if ($request->ajax()) {
+            $data = [];
+            if ($request->has('cotizacion2')) {
+                $data = Cotizacion6::getCotizaciones6($request->cotizacion2);
             }
-            return response()->json($cotizacion);
+            return response()->json($data);
         }
         abort(404);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -49,27 +38,27 @@ class Cotizacion6Controller extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $cotizacion6 = new Cotizacion6;
-            if ( $cotizacion6->isValid($data) ) {
+            if ($cotizacion6->isValid($data)) {
                 try {
                     $areap_nombre = null;
 
-                    if($request->cotizacion6_horas == 0 && $request->cotizacion6_minutos == 0){
+                    if ($request->cotizacion6_horas == 0 && $request->cotizacion6_minutos == 0) {
                         return response()->json(['success' => false, 'errors' => 'No puede ingresar horas y minutos en 0.']);
                     }
 
-                    if(empty(trim($request->cotizacion6_valor)) || is_null(trim($request->cotizacion6_valor))){
+                    if (empty(trim($request->cotizacion6_valor)) || is_null(trim($request->cotizacion6_valor))) {
                         return response()->json(['success' => false, 'errors' => 'El campo valor es obligatorio.']);
                     }
 
                     // Recuperar areap
-                    if( !empty($request->cotizacion6_areap) ){
+                    if (!empty($request->cotizacion6_areap)) {
                         $areap = Areap::find($request->cotizacion6_areap);
-                        if( !$areap instanceof Areap){
+                        if (!$areap instanceof Areap) {
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el area.']);
                         }
                         $areap_nombre = $areap->areap_nombre;
-                    }else{
-                        if(empty(trim($request->cotizacion6_nombre)) || is_null(trim($request->cotizacion6_nombre))){
+                    } else {
+                        if (empty(trim($request->cotizacion6_nombre)) || is_null(trim($request->cotizacion6_nombre))) {
                             return response()->json(['success' => false, 'errors' => 'El campo nombre es obligatorio cuando no tiene area.']);
                         }
                     }
@@ -78,7 +67,7 @@ class Cotizacion6Controller extends Controller
 
                     // Commit Transaction
                     return response()->json(['success' => true, 'id' => uniqid(), 'areap_nombre' => $areap_nombre, 'cotizacion6_horas' => $request->cotizacion6_horas, 'cotizacion6_minutos' => $request->cotizacion6_minutos]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
@@ -86,40 +75,6 @@ class Cotizacion6Controller extends Controller
             return response()->json(['success' => false, 'errors' => $cotizacion6->errors]);
         }
         abort(403);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -134,13 +89,13 @@ class Cotizacion6Controller extends Controller
             DB::beginTransaction();
             try {
                 $cotizacion6 = Cotizacion6::select('koi_cotizacion6.id as id', 'cotizacion6_cotizacion2', 'cotizacion6_valor', DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', '-1') AS cotizacion6_minutos"), DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', '1') AS cotizacion6_horas"))->where('koi_cotizacion6.id', $id)->first();
-                if(!$cotizacion6 instanceof Cotizacion6){
+                if (!$cotizacion6 instanceof Cotizacion6) {
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar area, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
                 // Recuperar cotizacion2
-                $cotizacion2 = Cotizacion2::find( $cotizacion6->cotizacion6_cotizacion2 );
-                if(!$cotizacion2 instanceof Cotizacion2){
+                $cotizacion2 = Cotizacion2::find($cotizacion6->cotizacion6_cotizacion2);
+                if (!$cotizacion2 instanceof Cotizacion2) {
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
@@ -165,9 +120,9 @@ class Cotizacion6Controller extends Controller
                 $valorunitario = $cotizacion2->cotizacion2_precio_venta + round($transporte) + round($viaticos) + round($areapfinal);
 
                 // Recalcular comision (total/(((100-volumen)/100))) * (1-(((100-volumen)/100)))
-                if($cotizacion2->cotizacion2_round == true){
+                if ($cotizacion2->cotizacion2_round) {
                     $comision = round(($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100))));
-                }else{
+                } else {
                     $comision = ($valorunitario / (((100-$cotizacion2->cotizacion2_volumen)/100))) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
                 }
 
@@ -181,7 +136,7 @@ class Cotizacion6Controller extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Cotizacion6Controller', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

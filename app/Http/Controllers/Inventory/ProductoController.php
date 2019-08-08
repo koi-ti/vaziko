@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Inventory;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Inventory\Producto, App\Models\Production\Materialp, App\Models\Inventory\Grupo, App\Models\Inventory\SubGrupo, App\Models\Inventory\Unidad;
+use App\Models\Inventory\Producto, App\Models\Inventory\Grupo, App\Models\Inventory\SubGrupo, App\Models\Inventory\Unidad;
+use App\Models\Production\Materialp;
 use DB, Log, Datatables;
 
 class ProductoController extends Controller
@@ -19,13 +18,12 @@ class ProductoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-
             $query = Producto::query();
             $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre', 'producto_unidades', 'producto_serie', 'producto_metrado');
 
-            if( $request->has('datatables') ) {
+            if ($request->has('datatables')) {
                 // Persistent data filter
-                if($request->has('persistent') && $request->persistent) {
+                if ($request->has('persistent') && $request->persistent) {
                     session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
                     session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
                 }
@@ -33,27 +31,26 @@ class ProductoController extends Controller
                 $query->addSelect('materialp_nombre');
 
                 return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Codigo
-                    if($request->has('producto_codigo')) {
+                    if ($request->has('producto_codigo')) {
                         $query->whereRaw("producto_codigo LIKE '%{$request->producto_codigo}%'");
                     }
 
                     // Nombre
-                    if($request->has('producto_nombre')) {
+                    if ($request->has('producto_nombre')) {
                         $query->whereRaw("producto_nombre LIKE '%{$request->producto_nombre}%'");
                     }
 
                     // Nombre
-                    if($request->has('asiento') && $request->asiento == true) {
-
+                    if ($request->has('asiento') && $request->asiento) {
                         if ($request->has('naturaleza')) {
                             if ($request->naturaleza == 'D') {
-                                $query->where(function($query){
+                                $query->where(function ($query) {
                                     $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo = producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
                                 });
                             } else {
-                                $query->where(function($query){
+                                $query->where(function ($query) {
                                     $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo <> producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
                                 });
                             }
@@ -62,7 +59,7 @@ class ProductoController extends Controller
                 })->make(true);
             }
 
-            if( $request->has('materialp') && $request->has('reference') ){
+            if ($request->has('materialp') && $request->has('reference')) {
                 $query->where('producto_materialp', $request->materialp);
 
                 if ($request->reference == 'empaque') {
@@ -83,10 +80,10 @@ class ProductoController extends Controller
     public function create()
     {
         // Recuperar numero cotizacion
-        $numero = DB::table('koi_producto')->max('producto_codigo');
-        $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+        $codigo = DB::table('koi_producto')->max('producto_codigo');
+        $codigo = !is_integer(intval($codigo)) ? 1 : ($codigo + 1);
 
-        return view('inventory.productos.create', ['codigo' => $numero]);
+        return view('inventory.productos.create', compact('codigo'));
     }
 
     /**
@@ -99,15 +96,14 @@ class ProductoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $producto = new Producto;
             if ($producto->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // recuperar Materialp
-                    if( $request->has('producto_materialp') ){
+                    if ($request->has('producto_materialp')) {
                         $materialp = Materialp::find($request->producto_materialp);
-                        if(!$materialp instanceof Materialp){
+                        if (!$materialp instanceof Materialp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
@@ -116,24 +112,23 @@ class ProductoController extends Controller
 
                     // Validar grupo y SubGrupo$
                     $grupo = Grupo::find($request->producto_grupo);
-                    if(!$grupo instanceof Grupo){
+                    if (!$grupo instanceof Grupo) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el grupo, por favor verifique la información o consulte al administrador.']);
                     }
 
                     $subgrupo = SubGrupo::find($request->producto_subgrupo);
-                    if(!$subgrupo instanceof SubGrupo){
+                    if (!$subgrupo instanceof SubGrupo) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subgrupo, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    if( $request->has('producto_unidadmedida') ){
+                    if ($request->has('producto_unidadmedida')) {
                         $unidadmedida = Unidad::find($request->producto_unidadmedida);
-                        if(!$unidadmedida instanceof Unidad){
+                        if (!$unidadmedida instanceof Unidad) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar la unidad de medida, por favor verifique la información o consulte al administrador.']);
                         }
-
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
@@ -156,7 +151,7 @@ class ProductoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $producto->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -176,7 +171,7 @@ class ProductoController extends Controller
     public function show(Request $request, $id)
     {
         $producto = Producto::getProduct($id);
-        if($producto instanceof Producto){
+        if ($producto instanceof Producto) {
             if ($request->ajax()) {
                 return response()->json($producto);
             }
@@ -194,9 +189,8 @@ class ProductoController extends Controller
     public function edit($id)
     {
         $producto = Producto::findOrFail($id);
-        // Redireccionar si es hijo
-        if($producto->id != $producto->producto_referencia){
-            return redirect()->route('productos.show', ['producto' => $producto]);
+        if ($producto->id != $producto->producto_referencia) {
+            return redirect()->route('productos.show', compact('producto'));
         }
         return view('inventory.productos.edit', ['producto' => $producto, 'codigo' => $producto->producto_codigo]);
     }
@@ -214,44 +208,43 @@ class ProductoController extends Controller
             $data = $request->all();
             $producto = Producto::findOrFail($id);
             if ($producto->isValid($data)) {
-                if($producto->id != $producto->producto_referencia ) {
+                if ($producto->id != $producto->producto_referencia) {
                     return response()->json(['success' => false, 'errors' => 'No es posible editar una serie, para modificar comportamiento por favor modifique la referencia padre.']);
                 }
 
                 DB::beginTransaction();
                 try {
                     // recuperar Materialp
-                    if( $request->has('producto_materialp') ){
+                    if ($request->has('producto_materialp')) {
                         $materialp = Materialp::find($request->producto_materialp);
                         if(!$materialp instanceof Materialp){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
                         $producto->producto_materialp = $materialp->id;
-                    }else{
+                    } else {
                         $producto->producto_materialp = null;
                     }
 
                     // Validar grupo y SubGrupo$
                     $grupo = Grupo::find($request->producto_grupo);
-                    if(!$grupo instanceof Grupo){
+                    if (!$grupo instanceof Grupo) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el grupo, por favor verifique la información o consulte al administrador.']);
                     }
 
                     $subgrupo = SubGrupo::find($request->producto_subgrupo);
-                    if(!$subgrupo instanceof SubGrupo){
+                    if (!$subgrupo instanceof SubGrupo) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el subgrupo, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    if( $request->has('producto_unidadmedida') ){
+                    if ($request->has('producto_unidadmedida')) {
                         $unidadmedida = Unidad::find($request->producto_unidadmedida);
-                        if(!$unidadmedida instanceof Unidad){
+                        if (!$unidadmedida instanceof Unidad) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar la unidad de medida, por favor verifique la información o consulte al administrador.']);
                         }
-
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
@@ -265,7 +258,7 @@ class ProductoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $producto->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -294,9 +287,9 @@ class ProductoController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('producto_codigo')) {
+        if ($request->has('producto_codigo')) {
             $producto = Producto::select('id', 'producto_nombre', 'producto_metrado', 'producto_serie', 'producto_unidades')->where('producto_codigo', $request->producto_codigo)->first();
-            if($producto instanceof Producto) {
+            if ($producto instanceof Producto) {
                 return response()->json(['success' => true, 'id' => $producto->id, 'producto_nombre' => $producto->producto_nombre, 'producto_metrado' => $producto->producto_metrado, 'producto_serie' => $producto->producto_serie, 'producto_unidades' => $producto->producto_unidades]);
             }
         }
@@ -317,19 +310,18 @@ class ProductoController extends Controller
 
         // Recuperar producto
         $producto = Producto::where('producto_codigo', $request->producto_codigo)->first();
-        if(!$producto instanceof Producto){
+        if (!$producto instanceof Producto) {
             return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
         }
 
         //Maneja unidaes en inventario
-        if ($producto->producto_unidades == true)
-        {
+        if ($producto->producto_unidades) {
             if ($request->tipo === 'S') {
                 if ($producto->producto_metrado) {
                     $action = 'metrado';
-                }else if ($producto->producto_serie){
+                } else if ($producto->producto_serie) {
                     $action = 'series';
-                }else{
+                } else {
                     $action = 'unidades';
                 }
                 $response->producto = $producto->id;
@@ -337,7 +329,7 @@ class ProductoController extends Controller
                 $response->action = $action;
                 $response->success = true;
             }
-        }else{
+        } else {
             $response->errors = "No es posible realizar movimientos para productos que no manejan unidades";
             $response->success = false;
         }

@@ -8,7 +8,7 @@
         <ol class="breadcrumb">
             <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{ trans('app.home') }}</a></li>
             <li><a href="{{ route('roles.index') }}">Rol</a></li>
-            <li class="active">{{ $rol->id }}</li>
+            <li class="active">{{ $rol->display_name }}</li>
         </ol>
     </section>
 
@@ -17,13 +17,8 @@
             <div class="box-body">
                 <div class="row">
                     <div class="form-group col-md-6">
-    					<label class="control-label">Mostrar nombre</label>
+    					<label class="control-label">Nombre</label>
     					<div>{{ $rol->display_name }}</div>
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label class="control-label">Nombre</label>
-                        <div>{{ $rol->name }}</div>
                     </div>
                 </div>
                 <div class="row">

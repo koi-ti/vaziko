@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Inventory;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\SubGrupo;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class SubGrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( SubGrupo::query() )->make(true);
+            return Datatables::of(SubGrupo::query())->make(true);
         }
         return view('inventory.subgrupos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class SubGrupoController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubGrupo::$key_cache );
+                    Cache::forget(SubGrupo::$key_cache);
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class SubGrupoController extends Controller
         if ($request->ajax()) {
             return response()->json($subgrupo);
         }
-        return view('inventory.subgrupos.show', ['subgrupo' => $subgrupo]);
+        return view('inventory.subgrupos.show', compact('subgrupo'));
     }
 
     /**
@@ -93,7 +91,7 @@ class SubGrupoController extends Controller
     public function edit($id)
     {
         $subgrupo = SubGrupo::findOrFail($id);
-        return view('inventory.subgrupos.edit', ['subgrupo' => $subgrupo]);
+        return view('inventory.subgrupos.edit', compact('subgrupo'));
     }
 
     /**
@@ -119,9 +117,9 @@ class SubGrupoController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubGrupo::$key_cache );
+                    Cache::forget(SubGrupo::$key_cache);
                     return response()->json(['success' => true, 'id' => $subgrupo->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

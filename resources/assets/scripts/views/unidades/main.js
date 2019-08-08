@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$unidadesSearchTable = this.$('#unidades-search-table');
             var paginacion = this.$unidadesSearchTable.data('paginacion');
@@ -30,17 +30,17 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('unidades.index') ),
+                ajax: window.Misc.urlFull(Route.route('unidades.index')),
                 columns: [
                     { data: 'unidadmedida_sigla', name: 'unidadmedida_sigla' },
                     { data: 'unidadmedida_nombre', name: 'unidadmedida_nombre' }
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nueva unidad',
+						text: '<i class="fa fa-plus"></i> Nueva',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('unidades.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('unidades.create')))
 						}
 					}
 				],
@@ -48,8 +48,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('unidades.show', {unidades: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('unidades.show', {unidades: full.id})) + '">' + data + '</a>';
                         }
                     }
                 ]

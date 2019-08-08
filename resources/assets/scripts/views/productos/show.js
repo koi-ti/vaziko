@@ -20,8 +20,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function() {
-
+        initialize: function () {
             // Referencie fields
             this.$('#browse-prodbode-table').hide();
             this.sucursal = null;
@@ -39,11 +38,10 @@ app || (app = {});
         * Event show series products father's OR
         * Event show metros in rollos
         */
-        getInfoAvailability: function(e){
+        getInfoAvailability: function (e) {
             e.preventDefault();
 
             if (this.$(e.target).attr('data-action') === 'rollos') {
-
                 // sucursal
                 this.sucursal = this.$(e.target).attr('data-sucursal');
 
@@ -56,7 +54,7 @@ app || (app = {});
                 this.referenceViews();
             }
 
-            if (this.$(e.target).attr('data-action') === 'series' && this.prodbodeList.length == 0){
+            if (this.$(e.target).attr('data-action') === 'series' && this.prodbodeList.length == 0) {
                 this.call = true;
                 this.$('#browse-prodbode-table').show();
                 this.referenceViews();

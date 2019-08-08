@@ -2,7 +2,7 @@
 
 namespace App\Classes;
 
-use Auth, DB, Log;
+use DB, Log;
 use App\Models\Accounting\PlanCuenta, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\CentroCosto, App\Models\Accounting\SaldoContable, App\Models\Accounting\SaldoTercero, App\Models\Base\Empresa;
 
 class AsientoContableDocumento {
@@ -42,11 +42,6 @@ class AsientoContableDocumento {
             $this->asiento_error = "No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.";
             return;
         }
-
-        // // Recuperar consecutivo
-        // if ($this->documento->documento_tipo_consecutivo == 'A') {
-        // 	$this->asiento->asiento1_numero = $this->documento->documento_consecutivo + 1;
-        // }
 
         // Validar consecutivo
         if (!intval($this->asiento->asiento1_numero) || $this->asiento->asiento1_numero <= 0){
@@ -159,16 +154,17 @@ class AsientoContableDocumento {
 		return 'OK';
 	}
 
-	public function insertarAsiento() {
+	public function insertarAsiento($nuevo = true) {
 		$this->documento->documento_consecutivo = $this->asiento->asiento1_numero;
 		$this->documento->save();
 
 		// Asiento
 		$this->asiento->asiento1_preguardado = false;
 		$this->asiento->asiento1_beneficiario = $this->beneficiario->id;
-		$this->asiento->asiento1_usuario_elaboro = Auth::user()->id;
+		$this->asiento->asiento1_usuario_elaboro = auth()->user()->id;
 		$this->asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
 		$this->asiento->save();
+
 
 		foreach ($this->asiento_cuentas as $cuenta) {
 			// Asiento2
@@ -179,7 +175,7 @@ class AsientoContableDocumento {
 
 			if (!$asiento2 instanceof Asiento2) {
 				$asiento2 = new Asiento2;
-				$result = $asiento2->store($this->asiento, $cuenta, $this->import);
+				$result = $asiento2->store($this->asiento, $cuenta, $this->import, $nuevo);
 	            if (!$result->success) {
 	                return $result->error;
 	            }
@@ -198,13 +194,13 @@ class AsientoContableDocumento {
 		    }
 
 			// Mayorizacion de saldos x tercero
-			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			$result = $this->saldosTerceros($objCuenta, $objTercero, $cuenta['Debito'] ?: 0, $cuenta['Credito'] ?: 0, $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
 			if ($result != 'OK') {
 				return $result;
 			}
 
 			// Mayorizacion de saldos Contables
-			$result = $this->saldosContables($objCuenta, $cuenta['Debito'], $cuenta['Credito'], $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
+			$result = $this->saldosContables($objCuenta, $cuenta['Debito'] ?: 0, $cuenta['Credito'] ?: 0, $this->asiento->asiento1_mes, $this->asiento->asiento1_ano);
 			if ($result != 'OK') {
 				return $result;
 			}
@@ -498,85 +494,5 @@ class AsientoContableDocumento {
 			$xmes = $this->asiento->asiento1_mes;
         }
         return 'OK';
-	}
-
-	public static function revertirMovimientos($asiento, $cuentas) {
-		foreach ($cuentas as $cuenta) {
-			// Asiento2
-			$asiento2 = null;
-			if (isset($cuenta['Id']) && !empty($cuenta['Id'])) {
-				$asiento2 = Asiento2::find($cuenta['Id']);
-			}
-
-			// Recuperar cuenta
-			$objCuenta = PlanCuenta::find($asiento2->asiento2_cuenta);
-			if (!$objCuenta instanceof PlanCuenta) {
-				return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
-			}
-
-			// Recuperar tercero
-			$objTercero = Tercero::find($asiento2->asiento2_beneficiario);
-			if (!$objTercero instanceof Tercero) {
-				return "No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.";
-			}
-
-			// Mayorizacion de saldos x tercero
-			$result = self::revertirSaldosTerceros($asiento, $objCuenta, $objTercero, $cuenta['Debito'], $cuenta['Credito']);
-			if ($result != 'OK') {
-				return $result;
-			}
-
-			// Mayorizacion de saldos Contables
-			$result = self::revertirSaldosContables($asiento, $objCuenta, $cuenta['Debito'], $cuenta['Credito']);
-			if ($result != 'OK') {
-				return $result;
-			}
-		}
-		return 'OK';
-	}
-
-	public static function revertirSaldosTerceros(Asiento $asiento, PlanCuenta $cuenta, Tercero $tercero, $debito = 0, $credito = 0) {
-		// Recuperar registro saldos terceros
-		$objSaldoTercero = SaldoTercero::where('saldosterceros_cuenta', $cuenta->id)
-										->where('saldosterceros_tercero', $tercero->id)
-										->where('saldosterceros_ano', $asiento->asiento1_ano)
-										->where('saldosterceros_mes', $asiento->asiento1_mes)
-										->first();
-
-		if ($objSaldoTercero instanceof SaldoTercero) {
-			$objSaldoTercero->saldosterceros_debito_mes -= $debito;
-			$objSaldoTercero->saldosterceros_credito_mes -= $credito;
-			$objSaldoTercero->save();
-		}
-		return 'OK';
-	}
-
-	public static function revertirSaldosContables(Asiento $asiento, PlanCuenta $cuenta, $debito = 0, $credito = 0) {
-		// Recuperar cuentas a mayorizar
-		$cuentas = $cuenta->getMayorizarCuentas();
-		if (!is_array($cuentas) || count($cuentas) == 0) {
-			return "Error al recuperar cuentas para mayorizar.";
-		}
-
-		foreach ($cuentas as $item) {
-			// Recuperar cuenta
-			$objCuenta = PlanCuenta::where('plancuentas_cuenta', $item)->first();
-			if (!$objCuenta instanceof PlanCuenta) {
-				return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (saldosContables).";
-			}
-
-			// Recuperar registro saldos contable
-			$objSaldoContable = SaldoContable::where('saldoscontables_cuenta', $objCuenta->id)
-												->where('saldoscontables_ano', $asiento->asiento1_ano)
-												->where('saldoscontables_mes', $asiento->asiento1_mes)
-												->first();
-
-			if ($objSaldoContable instanceof SaldoContable) {
-				$objSaldoContable->saldoscontables_debito_mes -= $debito;
-				$objSaldoContable->saldoscontables_credito_mes -= $credito;
-				$objSaldoContable->save();
-			}
-		}
-		return 'OK';
 	}
 }

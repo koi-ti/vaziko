@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$sucursalesSearchTable = this.$('#sucursales-search-table');
             var paginacion = this.$sucursalesSearchTable.data('paginacion');
@@ -30,24 +30,24 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('sucursales.index') ),
+                ajax: window.Misc.urlFull(Route.route('sucursales.index')),
                 columns: [
                     { data: 'sucursal_nombre', name: 'sucursal_nombre' }
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nueva sucursal',
+						text: '<i class="fa fa-plus"></i> Nueva',
                         className: 'btn-sm',
 						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('sucursales.create') ) )
+							window.Misc.redirect(window.Misc.urlFull(Route.route('sucursales.create')))
 						}
 					}
 				],
                 columnDefs: [
                     {
                         targets: 0,
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('sucursales.show', {sucursales: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('sucursales.show', {sucursales: full.id }))  +'">' + data + '</a>';
                         }
                     }
                 ]

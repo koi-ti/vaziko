@@ -3,10 +3,10 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Base\Tercero, App\Models\Inventory\Producto, App\Models\Production\Materialp;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Production\Materialp;
+use App\Models\Base\Tercero;
+use App\Models\Inventory\Producto;
 use Auth, DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
@@ -19,29 +19,29 @@ class DetalleOrdenpController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $detalle = [];
-            if( $request->has('datatables') ) {
+            $data = [];
+            if ($request->has('datatables')) {
                 $query = Ordenp2::getDetails();
 
                 return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Orden
-                    if($request->has('search_ordenp')) {
+                    if ($request->has('search_ordenp')) {
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
                     }
 
-                    if($request->has('search_ordenpestado')) {
-                        if($request->search_ordenpestado == 'A') {
+                    if ($request->has('search_ordenpestado')) {
+                        if ($request->search_ordenpestado == 'A') {
                             $query->where('orden_abierta', true);
                         }
-                        if($request->search_ordenpestado == 'C') {
+                        if ($request->search_ordenpestado == 'C') {
                             $query->where('orden_abierta', false);
                             $query->where('orden_culminada', false);
                         }
-                        if($request->search_ordenpestado == 'N') {
+                        if ($request->search_ordenpestado == 'N') {
                             $query->where('orden_anulada', true);
                         }
-                        if($request->search_ordenpestado == 'T') {
+                        if ($request->search_ordenpestado == 'T') {
                             $query->where('orden_culminada', true);
                         }
                     }
@@ -49,10 +49,10 @@ class DetalleOrdenpController extends Controller
                 ->make(true);
             }
 
-            if($request->has('orden2_orden')) {
-                $detalle = Ordenp2::getOrdenesp2($request->orden2_orden);
+            if ($request->has('orden2_orden')) {
+                $data = Ordenp2::getOrdenesp2($request->orden2_orden);
             }
-            return response()->json($detalle);
+            return response()->json($data);
         }
         abort(404);
     }
@@ -66,21 +66,21 @@ class DetalleOrdenpController extends Controller
     {
         // Recuperar orden
         $orden = $request->has('ordenp') ? Ordenp::getOrden($request->ordenp) : null;
-        if(!$orden instanceof Ordenp) {
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = $request->has('productop') ? Productop::getProduct($request->productop) : null;
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
-        if($orden->orden_abierta == false || $orden->orden_anulada == true) {
+        if (!$orden->orden_abierta || $orden->orden_anulada) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
 
-        return view('production.ordenes.productos.create', ['orden' => $orden, 'producto' => $producto]);
+        return view('production.ordenes.productos.create', compact('orden', 'producto'));
     }
 
     /**

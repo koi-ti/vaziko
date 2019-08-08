@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$subgruposSearchTable = this.$('#subgrupos-search-table');
             var paginacion = this.$subgruposSearchTable.data('paginacion');
@@ -30,17 +30,17 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('subgrupos.index') ),
+                ajax: window.Misc.urlFull(Route.route('subgrupos.index')),
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'subgrupo_nombre', name: 'subgrupo_nombre' }
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo subgrupo',
+						text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('subgrupos.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('subgrupos.create')))
 						}
 					}
 				],
@@ -48,8 +48,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('subgrupos.show', {subgrupos: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('subgrupos.show', {subgrupos: full.id})) + '">' + data + '</a>';
                         }
                     }
                 ]

@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$municipiosSearchTable = this.$('#municipios-search-table');
             var paginacion = this.$municipiosSearchTable.data('paginacion');
@@ -28,8 +28,8 @@ app || (app = {});
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('municipios.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('municipios.index')),
+                    data: function (data) {
                         data.datatables = true;
                     }
                 },
@@ -46,19 +46,15 @@ app || (app = {});
                         width: '15%'
                     },
                     {
-                        targets: 1,
+                        targets: [1, 3],
                         width: '35%'
                     },
                     {
                         targets: 2,
                         width: '15%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('departamentos.show', {departamentos: full.departamento_id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('departamentos.show', {departamentos: full.departamento_id}))  +'">' + data + '</a>';
                         }
-                    },
-                    {
-                        targets: 3,
-                        width: '35%'
                     },
                     {
                         targets: 4,

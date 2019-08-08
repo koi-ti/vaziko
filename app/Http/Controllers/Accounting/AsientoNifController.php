@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\AsientoNifContableDocumento;
 use App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\CentroCosto;
@@ -26,27 +24,6 @@ class AsientoNifController extends Controller
             return Datatables::of($query->get())->make(true);
         }
         return view('accounting.asientonif.index', ['empresa' => parent::getPaginacion()]);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -168,17 +145,6 @@ class AsientoNifController extends Controller
             return response()->json(['success' => false, 'errors' => $asientoNif->errors]);
         }
         abort(403);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**

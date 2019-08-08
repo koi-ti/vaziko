@@ -92,9 +92,4 @@ class Cotizacion1 extends BaseModel
     public function productos () {
         return $this->hasMany('App\Models\Production\Cotizacion2', 'cotizacion2_cotizacion', 'id');
     }
-
-    // public function scopeTotal ($query) {
-    //     return $query->addSelect(DB::raw("SUM(cotizacion2_precio_venta*) AS cotizacion_total"))
-    //                     ->leftjoin('koi_cotizacion2', 'koi_cotizacion1.id', '=', 'koi_cotizacion2.cotizacion2_cotizacion');
-    // }
 }

@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$areaspSearchTable = this.$('#areasp-search-table');
             var paginacion = this.$areaspSearchTable.data('paginacion');
@@ -30,7 +30,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
             	pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('areasp.index') ),
+                ajax: window.Misc.urlFull(Route.route('areasp.index')),
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'areap_nombre', name: 'areap_nombre' },
@@ -38,10 +38,10 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nueva area',
+						text: '<i class="fa fa-plus"></i> Nueva',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('areasp.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('areasp.create')))
 						}
 					}
 				],
@@ -49,14 +49,15 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('areasp.show', {areasp: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('areasp.show', {areasp: full.id}))  +'">' + data + '</a>';
                         }
                     },
                     {
                         targets: 2,
-                        render: function ( data ) {
-                            return window.Misc.currency( data );
+                        className: 'text-right',
+                        render: function (data) {
+                            return window.Misc.currency(data);
                         }
                     },
                 ]

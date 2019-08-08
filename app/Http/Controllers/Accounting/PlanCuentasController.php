@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
 use DB, Log, Datatables;
@@ -105,7 +103,7 @@ class PlanCuentasController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $plancuenta->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -125,11 +123,11 @@ class PlanCuentasController extends Controller
     public function show(Request $request, $id)
     {
         $plancuenta = PlanCuenta::getCuenta($id);
-        if($plancuenta instanceof PlanCuenta){
+        if ($plancuenta instanceof PlanCuenta) {
             if ($request->ajax()) {
                 return response()->json($plancuenta);
             }
-            return view('accounting.plancuentas.show', ['plancuenta' => $plancuenta]);
+            return view('accounting.plancuentas.show', compact('plancuenta'));
         }
         abort(404);
     }
@@ -143,7 +141,7 @@ class PlanCuentasController extends Controller
     public function edit($id)
     {
         $plancuenta = PlanCuenta::findOrFail($id);
-        return view('accounting.plancuentas.edit', ['plancuenta' => $plancuenta]);
+        return view('accounting.plancuentas.edit', compact('plancuenta'));
     }
 
     /**
@@ -197,7 +195,7 @@ class PlanCuentasController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $plancuenta->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -247,9 +245,9 @@ class PlanCuentasController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('plancuentas_cuenta')) {
+        if ($request->has('plancuentas_cuenta')) {
             $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
-            if($plancuenta instanceof PlanCuenta) {
+            if ($plancuenta instanceof PlanCuenta) {
                 $ica = ($plancuenta->plancuentas_nivel == 4 && strstr($plancuenta->plancuentas_cuenta, '2368') && $plancuenta->plancuentas_tasa != 0) ? true : false;
                 return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre, 'plancuentas_tasa' => $plancuenta->plancuentas_tasa, 'plancuentas_centro' => $plancuenta->plancuentas_centro, 'plancuentas_naturaleza' => $plancuenta->plancuentas_naturaleza, 'plancuentas_tipo' => $plancuenta->plancuentas_tipo, 'ica' => $ica]);
             }

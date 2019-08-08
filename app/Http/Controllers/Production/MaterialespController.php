@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Materialp, App\Models\Production\TipoMaterialp;
 use DB, Log, Datatables, Cache;
@@ -53,7 +51,7 @@ class MaterialespController extends Controller
                 try {
                     // Recuperar TipoMaterialp
                     $tipomaterial = TipoMaterialp::find($request->materialp_tipomaterial);
-                    if(!$tipomaterial instanceof TipoMaterialp){
+                    if (!$tipomaterial instanceof TipoMaterialp) {
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
                     }
@@ -68,9 +66,9 @@ class MaterialespController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Materialp::$key_cache );
+                    Cache::forget(Materialp::$key_cache);
                     return response()->json(['success' => true, 'id' => $material->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -125,7 +123,7 @@ class MaterialespController extends Controller
                 try {
                     // Recuperar TipoMaterialp
                     $tipomaterial = TipoMaterialp::find($request->materialp_tipomaterial);
-                    if(!$tipomaterial instanceof TipoMaterialp){
+                    if (!$tipomaterial instanceof TipoMaterialp) {
                         DB::rollback();
                         return response()->json(['success'=>false, 'errors'=>'No es posible recuperar el tipo de material, por favor verifique la informacion o consulte al administrador.']);
                     }
@@ -140,9 +138,9 @@ class MaterialespController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Materialp::$key_cache );
+                    Cache::forget(Materialp::$key_cache);
                     return response()->json(['success' => true, 'id' => $material->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

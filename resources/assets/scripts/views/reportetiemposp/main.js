@@ -23,7 +23,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Render row funcionarios
             this.$wraperfuncionarios = this.$('#render-funcionarios');
             this.$wrapercharts = $('#render-chart');
@@ -32,24 +32,24 @@ app || (app = {});
             this.ready();
         },
 
-        addFuncionario: function(e) {
+        addFuncionario: function (e) {
             e.preventDefault();
 
             var posactual = this.count,
                 attributes = {posactual: posactual};
 
-            this.$wraperfuncionarios.append( this.template(attributes) );
+            this.$wraperfuncionarios.append(this.template(attributes));
             this.count++;
         },
 
-        removeFuncionario: function(e) {
+        removeFuncionario: function (e) {
             e.preventDefault();
 
             var posactual = this.$(e.currentTarget).data('resource');
             this.$('#row_'+posactual).remove();
         },
 
-        onGenerateExport: function(e) {
+        onGenerateExport: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
@@ -58,38 +58,38 @@ app || (app = {});
 
                 switch (data.type) {
                     case 'pdf':
-                        window.open( window.Misc.urlFull( Route.route('rtiemposp.exportar', data) ), '_blank');
+                        window.open(window.Misc.urlFull(Route.route('rtiemposp.exportar', data)), '_blank');
 
                         break;
                     case 'chart':
 
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('rtiemposp.charts') ),
+                            url: window.Misc.urlFull(Route.route('rtiemposp.charts')),
                             type: 'GET',
                             data: data,
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.el );
+                            beforeSend: function () {
+                                window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.el);
-                            if(!_.isUndefined(resp.success)) {
+                        .done(function (resp) {
+                            window.Misc.removeSpinner(_this.el);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
-                                _this.referenceCharts( resp );
+                                _this.referenceCharts(resp);
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.el );
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner(_this.el);
                             alertify.error(thrownError);
                         });
                         break;
@@ -97,10 +97,10 @@ app || (app = {});
             }
         },
 
-        referenceCharts: function( resp ) {
-            this.$wrapercharts.html( this.templateCharts() );
+        referenceCharts: function(resp) {
+            this.$wrapercharts.html(this.templateCharts());
 
-            function formatTime( timeHour ){
+            function formatTime(timeHour) {
                 var dias = Math.floor( timeHour / 24 );
                 var horas = Math.floor( timeHour - ( dias * 24 ) );
                 var minutos = Math.floor( ( timeHour - (dias * 24) - (horas) ) * 60 );
@@ -169,10 +169,10 @@ app || (app = {});
         * fires libraries js
         */
         ready: function () {
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
         },
     });

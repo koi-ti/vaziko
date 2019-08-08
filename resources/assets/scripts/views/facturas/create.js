@@ -14,20 +14,19 @@ app || (app = {});
         el: '#factura-create',
         template: _.template(($('#add-facturas-tpl').html() || '') ),
         events: {
-            'click .submit-factura' :'submitFactura',
             'submit #form-factura' :'onStore',
-            'submit #form-detail-factura' :'onStoreItem',
-            'change #factura1_fecha_vencimiento' :'changeVencimiento',
+            'submit #form-detalle-factura' :'onStoreItem',
             'change .change-impuestos' :'changeImpuestos'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Attributes
             this.detalleFactura2List = new app.DetalleFactura2List();
             this.impuestos = {};
+
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -37,18 +36,13 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
             this.$el.html( this.template(attributes) );
 
-            this.$form = this.$('#form-factura');
-            this.$formdetail = this.$('#form-detail-factura');
-
-            // wrapper $detail
-            this.$wrapperdetail = this.$('#wrapper-detalle-factura');
-            this.$fechavencimiento = this.$('#factura1_fecha_vencimiento');
-            this.formapago = this.$('#tercero_formapago');
-            this.spinner = this.$('#spinner-main');
+            // Declare wrappers
+            this.$formdetalle = this.$('#form-detalle-factura');
+            this.spinner = this.$('.spinner-main');
 
             this.referenceView();
             this.ready();
@@ -62,34 +56,11 @@ app || (app = {});
            this.detalleFacturaView = new app.DetalleFacturaView({
                collection: this.detalleFactura2List,
                parameters: {
-                   wrapper: this.$wrapperdetail,
-                   form: this.$formdetail,
-                   edit: true,
-                   dataFilter: {
-                       factura1_orden: this.model.get('id')
-                   }
+                   wrapper: this.spinner,
+                   edit: true
                }
            });
         },
-
-        changeVencimiento: function(e){
-            e.preventDefault();
-
-            var formapago = parseInt( this.formapago.val() );
-            if( formapago > 0){
-                var fecha = this.$(e.currentTarget).val().split('-');
-
-                var nuevafecha = new Date(fecha[0], fecha[1]-1, fecha[2]);
-                    nuevafecha.setDate(nuevafecha.getDate() + formapago);
-
-                    year = nuevafecha.getFullYear();
-                    month = nuevafecha.getMonth()+1;
-                    day = nuevafecha.getDate();
-
-                this.$fechavencimiento.val( year+'-'+month+'-'+day );
-            }
-        },
-
 
         changeImpuestos: function(e){
             var value = $(e.currentTarget).inputmask('unmaskedvalue'),
@@ -97,13 +68,6 @@ app || (app = {});
                 total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
                 $('#total-create').html(window.Misc.currency(total))
                 this.impuestos[key] = value;
-        },
-
-        /**
-        * Event submit factura1
-        */
-        submitFactura: function (e) {
-            this.$form.submit();
         },
 
         /**
@@ -116,6 +80,7 @@ app || (app = {});
                 var data = window.Misc.formToJson( e.target );
                     data.detalle = this.detalleFactura2List.toJSON();
                     data.impuestos = this.impuestos;
+
                 this.model.save( data, {patch: true, silent: true} );
             }
         },
@@ -127,9 +92,8 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                    data.tercero =  this.$('#factura1_tercero').val()
-                this.detalleFactura2List.trigger( 'store', data );
+                var data = window.Misc.formToJson(e.target);
+                this.detalleFactura2List.trigger('store', data, this.$formdetalle);
             }
         },
 
@@ -138,16 +102,16 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
         },
 
@@ -155,33 +119,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                // CreateFacturaView undelegateEvents
-                if ( this.createFacturaView instanceof Backbone.View ){
-                    this.createFacturaView.stopListening();
-                    this.createFacturaView.undelegateEvents();
-                }
-
-                window.Misc.redirect( window.Misc.urlFull( Route.route('facturas.show', { facturas: resp.id})) );
+                // Redirect if ok
+                window.Misc.redirect(window.Misc.urlFull(Route.route('facturas.show', {facturas: resp.id})));
             }
         }
     });

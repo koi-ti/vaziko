@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento;
+use App\Classes\AsientoContableDocumento, App\Classes\AsientoNifContableDocumento, App\Classes\AsientoContableDocumentoDevolver;
 use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Base\Tercero, App\Models\Accounting\Documento, App\Models\Accounting\Folder, App\Models\Production\Ordenp, App\Models\Accounting\CentroCosto, App\Models\Base\Empresa, App\Models\Receivable\Factura1, App\Models\Treasury\Facturap;
 use DB, Log, Datatables, Auth, View, App, Fpdf, Excel;
 
@@ -26,7 +24,7 @@ class AsientoController extends Controller
             $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
 
             // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
+            if ($request->has('persistent') && $request->persistent) {
                 session(['search_tercero' => $request->has('asiento_tercero_nit') ? $request->asiento_tercero_nit : '']);
                 session(['search_tercero_nombre' => $request->has('asiento_tercero_nombre') ? $request->asiento_tercero_nombre : '']);
                 session(['search_documento' => $request->has('asiento_documento') ? $request->asiento_documento : '']);
@@ -36,29 +34,29 @@ class AsientoController extends Controller
             }
 
             return Datatables::of($query)
-                ->filter(function($query) use ($request){
+                ->filter(function ($query) use ($request){
                     // Tercero nit
-                    if($request->has('asiento_numero')) {
+                    if ($request->has('asiento_numero')) {
                         $query->where('asiento1_numero', $request->asiento_numero);
                     }
 
                     // Tercero nit
-                    if($request->has('asiento_tercero_nit')) {
+                    if ($request->has('asiento_tercero_nit')) {
                         $query->where('tercero_nit', $request->asiento_tercero_nit);
                     }
 
                     // Documento
-                    if($request->has('asiento_documento')) {
+                    if ($request->has('asiento_documento')) {
                         $query->where('asiento1_documento', $request->asiento_documento);
                     }
 
                     // Fecha asiento
-                    if($request->has('asiento_fecha_asiento')) {
+                    if ($request->has('asiento_fecha_asiento')) {
                         $query->where(DB::raw("CAST(CONCAT(asiento1_ano,'-',asiento1_mes,'-',asiento1_dia) AS DATE)"), $request->asiento_fecha_asiento);
                     }
 
                     // Fecha elaboro
-                    if($request->has('asiento_fecha_elaboro')) {
+                    if ($request->has('asiento_fecha_elaboro')) {
                         $query->where(DB::raw("SUBSTRING_INDEX(asiento1_fecha_elaboro, ' ', 1)"), $request->asiento_fecha_elaboro);
                     }
                 })
@@ -87,7 +85,6 @@ class AsientoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $asiento = new Asiento;
             $asiento2 = new Asiento2;
             $asientoNif = null;
@@ -131,7 +128,7 @@ class AsientoController extends Controller
                                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar centro costo, por favor verifique la información del asiento o consulte al administrador.']);
                             }
 
-                            if($centrocosto->centrocosto_codigo == 'OP') {
+                            if ($centrocosto->centrocosto_codigo == 'OP') {
                                 // Validate orden
                                 if ($request->has('asiento2_orden')) {
                                     $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->asiento2_orden}'")->first();
@@ -155,7 +152,7 @@ class AsientoController extends Controller
 
                             $asiento->asiento1_beneficiario = $tercero->id;
                             $asiento->asiento1_preguardado = true;
-                            $asiento->asiento1_usuario_elaboro = Auth::user()->id;
+                            $asiento->asiento1_usuario_elaboro = auth()->user()->id;
                             $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
                             $asiento->save();
 
@@ -200,7 +197,7 @@ class AsientoController extends Controller
                             $asientoNif->asienton1_documento = $documento->id;
                             $asientoNif->asienton1_preguardado = true;
                             $asientoNif->asienton1_beneficiario = $tercero->id;
-                            $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
+                            $asientoNif->asienton1_usuario_elaboro = auth()->user()->id;
                             $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 
                             // Consecutivo
@@ -252,8 +249,8 @@ class AsientoController extends Controller
 
                         // Commit Transaction
                         DB::commit();
-                        return response()->json(['success' => true, 'id' => ( isset($asiento->id) ) ? $asiento->id : '', 'nif' => ( isset($asientoNif->id) ) ? $asientoNif->id : '' ]);
-                    }catch(\Exception $e){
+                        return response()->json(['success' => true, 'id' => (isset($asiento->id)) ? $asiento->id : '', 'nif' => (isset($asientoNif->id)) ? $asientoNif->id : '' ]);
+                    } catch(\Exception $e) {
                         DB::rollback();
                         Log::error($e->getMessage());
                         return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -283,7 +280,7 @@ class AsientoController extends Controller
             return response()->json($asiento);
         }
 
-        return view('accounting.asiento.show', ['asiento' => $asiento]);
+        return view('accounting.asiento.show', compact('asiento'));
     }
 
     /**
@@ -292,52 +289,11 @@ class AsientoController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request, $id)
+    public function edit($id)
     {
         $asiento = Asiento::findOrFail($id);
-        // Si no esta en preguardado revertir movimientos
-        if (!$asiento->asiento1_preguardado) {
-            DB::beginTransaction();
-            try {
-                $asiento->asiento1_preguardado = true;
-                $asiento->save();
-
-                // Preparar cuentas
-                $query = Asiento2::query();
-                $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_tipo', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
-                $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
-                $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
-                $query->where('asiento2_asiento', $asiento->id);
-                $asiento2 = $query->get();
-
-                $cuentas = [];
-                foreach ($asiento2 as $item) {
-                    $arCuenta = [];
-                    $arCuenta['Id'] = $item->id;
-                    $arCuenta['Cuenta'] = $item->plancuentas_cuenta;
-                    $arCuenta['Tercero'] = $item->tercero_nit;
-                    $arCuenta['Naturaleza'] = $item->asiento2_naturaleza;
-                    $arCuenta['CentroCosto'] = $item->asiento2_centro;
-                    $arCuenta['Base'] = $item->asiento2_base;
-                    $arCuenta['Credito'] = $item->asiento2_credito;
-                    $arCuenta['Debito'] = $item->asiento2_debito;
-                    $cuentas[] = $arCuenta;
-                }
-
-                if ($cuentas) {
-                    // Creo el objeto para manejar el asiento
-                    $objAsiento = AsientoContableDocumento::revertirMovimientos($asiento, $cuentas);
-                    if ($objAsiento != 'OK') {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => $objAsiento]);
-                    }
-                }
-
-                DB::commit();
-            } catch (\Exception $e) {
-                DB::rollback();
-                return view('accounting.asiento.show', compact('asiento'));
-            }
+        if (!$asiento->asiento1_preguardado || $asiento->asiento1_documentos != NULL) {
+            return redirect()->route('asientos.show', compact('asiento'));
         }
         return view('accounting.asiento.create', compact('asiento'));
     }
@@ -358,8 +314,27 @@ class AsientoController extends Controller
             if ($asiento->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // Preparar cuentas
-                    // Recupero items asiento 2
+                    // // Pluck array
+                    // $cuentas = array_pluck($request->cuentas, 'id');
+                    //
+                    // // Eliminar asientos
+                    // $movimientos = Asiento2::whereNotIn('id', $cuentas)->get();
+                    // foreach ($movimientos as $movimiento) {
+                    //     // Validar plan cuentas
+                    //     $plancuenta = PlanCuenta::find($movimiento->asiento2_cuenta);
+                    //     if (!$plancuenta instanceof PlanCuenta) {
+                    //         DB::rollback();
+                    //         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el plan de cuentas.']);
+                    //     }
+                    //
+                    //     $valid = $movimiento->validarMovimiento($plancuenta);
+                    //     if ($valid != 'OK') {
+                    //         DB::rollback();
+                    //         return response()->json(['success' => false, 'errors' => $valid]);
+                    //     }
+                    // }
+
+                    // Preparar cuentas && Recupero items asiento 2
                     $query = Asiento2::query();
                     $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_tipo', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
                     $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
@@ -396,7 +371,7 @@ class AsientoController extends Controller
 
                     // Preparar asiento
                     $result = $objAsiento->asientoCuentas($cuentas);
-                    if ($result != 'OK'){
+                    if ($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
@@ -485,6 +460,9 @@ class AsientoController extends Controller
                         }
                     }
 
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => 'K.O!']);
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento->id]);
@@ -500,14 +478,86 @@ class AsientoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Reverse the specified resource in storage.
      *
+     * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request, $id)
+    public function reverse(Request $request, $id)
     {
-        //
+        if ($request->ajax()) {
+            $asiento = Asiento::find($id);
+            if (!$asiento instanceof Asiento) {
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el asiento.']);
+            }
+
+            if (!$asiento->asiento1_preguardado) {
+                // Si no esta en preguardado revertir movimientos
+                DB::beginTransaction();
+                try {
+                    $asiento->asiento1_preguardado = true;
+                    $asiento->save();
+
+                    // Preparar cuentas
+                    $query = Asiento2::query();
+                    $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_tipo', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
+                    $query->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id');
+                    $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
+                    $query->where('asiento2_asiento', $asiento->id);
+                    $asiento2 = $query->get();
+
+                    $cuentas = [];
+                    foreach ($asiento2 as $item) {
+                        $arCuenta = [];
+                        $arCuenta['Id'] = $item->id;
+                        $arCuenta['Cuenta'] = $item->plancuentas_cuenta;
+                        $arCuenta['Tercero'] = $item->tercero_nit;
+                        $arCuenta['Naturaleza'] = $item->asiento2_naturaleza;
+                        $arCuenta['CentroCosto'] = $item->asiento2_centro;
+                        $arCuenta['Base'] = $item->asiento2_base;
+                        $arCuenta['Credito'] = $item->asiento2_credito;
+                        $arCuenta['Debito'] = $item->asiento2_debito;
+                        $cuentas[] = $arCuenta;
+                    }
+
+                    if ($cuentas) {
+                        // Crear instancia del asiento documento devovler
+                        $objAsiento = new AsientoContableDocumentoDevolver($asiento, $cuentas);
+                        if ($objAsiento->asiento_error) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                        }
+
+                        // Validar que se pueda devolver el inventario
+                        $result = $objAsiento->validarMovimientos();
+                        if ($result != 'OK') {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result]);
+                        }
+
+                        // Validar que se pueda devolver el inventario
+                        $result = $objAsiento->revertirMovimientos();
+                        if ($result != 'OK') {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => $result]);
+                        }
+                    }
+
+                    // DB::rollback();
+                    // return response()->json(['success' => false, 'errors' => 'K.O!']);
+
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $asiento->id]);
+                } catch (\Exception $e) {
+                    DB::rollback();
+                    Log::error($e->getMessage());
+                    return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+                }
+            }
+            return response()->json(['success' => true, 'id' => $asiento->id]);
+        }
+        abort(404);
     }
 
     /**
@@ -626,7 +676,7 @@ class AsientoController extends Controller
                 $asiento->asiento1_documento = $documento->id;
                 $asiento->asiento1_beneficiario = $tercero->id;
                 $asiento->asiento1_preguardado = false;
-                $asiento->asiento1_usuario_elaboro = Auth::user()->id;
+                $asiento->asiento1_usuario_elaboro = auth()->user()->id;
                 $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
 
                 // Creo el objeto para manejar el asiento
@@ -665,7 +715,7 @@ class AsientoController extends Controller
                 $asientoNif->asienton1_documento = $documento->id;
                 $asientoNif->asienton1_beneficiario = $tercero->id;
                 $asientoNif->asienton1_preguardado = false;
-                $asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
+                $asientoNif->asienton1_usuario_elaboro = auth()->user()->id;
                 $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 
                 foreach ($cuentas as $value) {

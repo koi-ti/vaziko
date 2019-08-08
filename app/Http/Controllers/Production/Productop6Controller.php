@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log;
-
 use App\Models\Production\Acabadop, App\Models\Production\Productop, App\Models\Production\Productop6;
+use DB, Log;
 
 class Productop6Controller extends Controller
 {
@@ -20,8 +16,7 @@ class Productop6Controller extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $query = Productop6::query();
             $query->where('productop6_productop', $request->productop_id);
             $query->select('koi_productop6.*', 'koi_acabadop.id as acabadop_id', 'acabadop_nombre');
@@ -30,16 +25,6 @@ class Productop6Controller extends Controller
             return response()->json( $query->get() );
         }
         abort(404);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -52,28 +37,27 @@ class Productop6Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $productop6 = new Productop6;
             if ($productop6->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Validar producto
                     $productop = Productop::find($request->productop6_productop);
-                    if(!$productop instanceof Productop) {
+                    if (!$productop instanceof Productop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar Acabadop
                     $acabadop = Acabadop::find($request->productop6_acabadop);
-                    if(!$acabadop instanceof Acabadop) {
+                    if (!$acabadop instanceof Acabadop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar acabado, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar unique
                     $productop6uq = Productop6::where('productop6_productop', $productop->id)->where('productop6_acabadop', $acabadop->id)->first();
-                    if($productop6uq instanceof Productop6) {
+                    if ($productop6uq instanceof Productop6) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => "El acabado {$acabadop->acabadop_nombre} ya se encuentra asociada a este producto."]);
                     }
@@ -86,7 +70,7 @@ class Productop6Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $productop6->id, 'acabadop_id' => $acabadop->id, 'acabadop_nombre' => $acabadop->acabadop_nombre]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -95,40 +79,6 @@ class Productop6Controller extends Controller
             return response()->json(['success' => false, 'errors' => $productop6->errors]);
         }
         abort(403);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -154,7 +104,7 @@ class Productop6Controller extends Controller
                 DB::commit();
                 return response()->json(['success' => true]);
 
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Productop6Controller', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

@@ -14,7 +14,7 @@
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
                 <li><a href="{{ route('roles.index')}}">Rol</a></li>
                 <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                    <li><a href="<%- window.Misc.urlFull( Route.route('roles.show', { roles: id}) ) %>"><%- id %></a></li>
+                    <li><a href="<%- window.Misc.urlFull( Route.route('roles.show', {roles: id}) ) %>"><%- display_name %></a></li>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nuevo</li>
@@ -36,20 +36,6 @@
                             <div class="form-group col-sm-3">
                                 <input id="name" value="<%- name %>" placeholder="Nombre" class="form-control input-sm" name="name" <%- typeof(id) !== 'undefined' ? 'readonly' : ''%> >
                             </div>
-
-                            {{--*/ $empresa = App\Models\Base\Empresa::getEmpresaHelp() /*--}}
-                            @if( !empty( trim($empresa->empresa_help) ) )
-                                <div class="col-sm-offset-2 col-sm-1 text-right">
-                                    <div class="dropdown dropdown2">
-                                        <span class="dropspan"><i class="fa fa-question-circle"></i></span>
-                                        <div class="dropdown-content text-left">
-                                            <div class="dropdown-content text-left">
-                                                {!! str_replace( array("\r\n", "\r", "\n"), "<br />", $empresa->empresa_help) !!}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
                         </div>
                         <div class="row">
                             <label for="display_name" class="col-sm-1 control-label">Descripcion</label>

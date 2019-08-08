@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Actividadp, App\Models\Production\SubActividadp;
 use Cache, Datatables, DB, Log;
@@ -18,20 +16,19 @@ class SubActividadpController extends Controller
      */
      public function index(Request $request)
      {
-         if($request->ajax()){
+         if ($request->ajax()) {
              $query = SubActividadp::query();
              $query->select('koi_subactividadp.*', 'actividadp_nombre');
              $query->join('koi_actividadp', 'subactividadp_actividadp', '=', 'koi_actividadp.id');
 
-             if( $request->has('datatables') ) {
+             if ($request->has('datatables')) {
                  return Datatables::of($query)->make(true);
              }
 
-             if( $request->has('actividadesp') ){
+             if ($request->has('actividadesp')) {
                  $query->where('subactividadp_actividadp', $request->actividadesp);
                  $query->where('subactividadp_activo', true);
              }
-
              return response()->json($query->get());
          }
          return view('production.subactividadesp.index', ['empresa' => parent::getPaginacion()]);
@@ -58,12 +55,12 @@ class SubActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $subactividadp = new SubActividadp;
-            if( $subactividadp->isValid($data) ) {
+            if ($subactividadp->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar actividad
                     $actividadp = Actividadp::find( $request->subactividadp_actividadp );
-                    if(!$actividadp instanceof Actividadp) {
+                    if (!$actividadp instanceof Actividadp) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
@@ -78,9 +75,9 @@ class SubActividadpController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubActividadp::$key_cache );
+                    Cache::forget(SubActividadp::$key_cache);
                     return response()->json(['success' => true, 'id' => $subactividadp->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -104,7 +101,7 @@ class SubActividadpController extends Controller
         if ($request->ajax()) {
             return response()->json($subactividadp);
         }
-        return view('production.subactividadesp.show', ['subactividadp' => $subactividadp]);
+        return view('production.subactividadesp.show', compact('subactividadp'));
     }
 
     /**
@@ -116,7 +113,7 @@ class SubActividadpController extends Controller
     public function edit($id)
     {
         $subactividadp = SubActividadp::findOrFail($id);
-        return view('production.subactividadesp.edit', ['subactividadp' => $subactividadp]);
+        return view('production.subactividadesp.edit', compact('subactividadp'));
     }
 
     /**
@@ -131,12 +128,12 @@ class SubActividadpController extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $subactividadp = SubActividadp::findOrFail($id);
-            if( $subactividadp->isValid($data) ) {
+            if ($subactividadp->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar actividad
                     $actividadp = Actividadp::find( $request->subactividadp_actividadp );
-                    if(!$actividadp instanceof Actividadp){
+                    if (!$actividadp instanceof Actividadp) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar actividad de producción, por favor verifique la información o consulte al administrador.']);
                     }
@@ -151,9 +148,9 @@ class SubActividadpController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubActividadp::$key_cache );
+                    Cache::forget(SubActividadp::$key_cache);
                     return response()->json(['success' => true, 'id' => $subactividadp->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

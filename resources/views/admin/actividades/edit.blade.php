@@ -1,6 +1,6 @@
 @extends('admin.actividades.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
 	<li><a href="{{route('actividades.index')}}">Actividades</a></li>
 	<li><a href="{{ route('actividades.show', ['actividades' => $actividad->id]) }}">{{ $actividad->actividad_codigo }}</a></li>
 	<li class="active">Editar</li>

@@ -20,8 +20,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
-
+        initialize: function () {
             // Events
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -30,10 +29,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = false;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             this.spinner = this.$('#spinner-main');
         },
@@ -43,10 +42,10 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -54,29 +53,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit rol
-                Backbone.history.navigate(Route.route('roles.edit', { roles: resp.id}), { trigger: true });
+                Backbone.history.navigate(Route.route('roles.edit', {roles: resp.id}), {trigger: true});
             }
         }
     });

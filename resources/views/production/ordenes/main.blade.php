@@ -24,7 +24,7 @@
 
         <section class="content">
             <div class="box box-solid" id="spinner-main">
-                <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
+                <div class="nav-tabs-custom tab-primary tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                         <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
@@ -32,7 +32,7 @@
                             <li><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
                             @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
-                                <li><a href="#tab_tiempospcharts" data-toggle="tab">Gráficas de producción</a></li>
+                                <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                                 <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
                             @endif
                             <li class="pull-right">
@@ -231,7 +231,8 @@
                                             </div>
                                         </div>
                                     </form>
-
+                                </div>
+                                <div class="box-footer with-border">
                                     <div class="row">
                                         <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
                                             <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
@@ -240,10 +241,11 @@
                                             <button type="button" class="btn btn-primary btn-sm btn-block submit-ordenp">{{ trans('app.save') }}</button>
                                         </div>
                                     </div>
-                                    <br>
-
-                                    <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                                        <div class="box box-primary">
+                                </div>
+                            </div>
+                            <div class="box box-whithout-border">
+                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                    <div class="box box-primary">
                                             <div class="box-body">
                                                 <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
                                                     <div class="row">
@@ -333,8 +335,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    <% } %>
-                                </div>
+                                <% } %>
                             </div>
                         </div>
 
@@ -523,7 +524,7 @@
                                     </div>
                                 </div>
 
-                                <div class="tab-pane" id="tab_tiempospcharts">
+                                <div class="tab-pane" id="tab_charts">
                                     @include('production.ordenes.charts.charts')
                                 </div>
 
@@ -777,6 +778,26 @@
                     <div class="box-body">
                         <div class="chart-container">
                             <canvas id="chart_comparativa" width="500" height="200"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="chart-detalle-ordenp">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <h3 class="box-title">Productos</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        </div>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart-container">
+                            <canvas id="chart_producto" width="500" height="200"></canvas>
                         </div>
                     </div>
                 </div>

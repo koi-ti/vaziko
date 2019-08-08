@@ -20,7 +20,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
 
             // Rerefences
@@ -37,8 +37,8 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
             	pageLength: paginacion,
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('productosp.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('productosp.index')),
+                    data: function (data) {
                         data.persistent = true;
                         data.datatables = true;
                         data.productop_codigo = _this.$searchCod.val();
@@ -51,10 +51,10 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-user-plus"></i> Nuevo producto',
+						text: '<i class="fa fa-user-plus"></i> Nuevo',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('productosp.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull( Route.route('productosp.create')))
 						}
 					}
 				],
@@ -62,21 +62,21 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('productosp.show', {productosp: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('productosp.show', {productosp: full.id})) + '">' + data + '</a>';
                         }
                     }
                 ]
 			});
         },
 
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.productospSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchCod.val('');

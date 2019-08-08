@@ -63,7 +63,8 @@ class PuntoVenta extends Model
             $query = PuntoVenta::query();
             $query->orderby('puntoventa_nombre', 'asc');
             $collection = $query->lists('puntoventa_nombre', 'id');
-
+            
+            $collection->prepend('', '');
             return $collection;
         });
     }

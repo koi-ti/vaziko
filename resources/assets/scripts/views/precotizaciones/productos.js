@@ -13,8 +13,8 @@ app || (app = {});
 
         el: '#browse-precotizacion-productop-list',
         events: {
-            'click .item-precotizacion-producto-remove': 'removeOne',
-            'click .item-precotizacion-producto-clone': 'cloneOne'
+            'click .item-remove': 'removeOne',
+            'click .item-clone': 'cloneOne'
         },
         parameters: {
         	wrapper: null,
@@ -25,9 +25,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listeners
@@ -36,13 +36,7 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {precotizacion2_precotizacion1: this.parameters.dataFilter.precotizacion2_precotizacion1}, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
 
         /**
@@ -57,14 +51,14 @@ app || (app = {});
                 }
             });
             precotizacion2Model.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
         },
 
         /**
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -77,29 +71,20 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            // Function confirm delete item
-            this.confirmDelete( model );
-        },
-
-        /**
-        * modal confirm delete area
-        */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { productop_nombre: model.get('productop_nombre') },
-                    template: _.template( ($('#precotizacion-productop-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar producto',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            productop_nombre: model.get('productop_nombre')
+                        },
+                        template: _.template( ($('#precotizacion-productop-delete-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar producto',
+                        onConfirm: function () {
                             model.destroy({
-                                success : function(model, resp) {
+                                success: function (model, resp) {
                                     if(!_.isUndefined(resp.success)) {
                                         window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
+                                        if (!resp.success) {
                                             alertify.error(resp.errors);
                                             return;
                                         }
@@ -111,10 +96,10 @@ app || (app = {});
                             });
                         }
                     }
-                }
-            });
+                });
 
-            cancelConfirm.render();
+                cancelConfirm.render();
+            }
         },
 
         /**
@@ -155,15 +140,15 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

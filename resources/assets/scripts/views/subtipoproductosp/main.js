@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$subtipoproductospSearchTable = this.$('#subtipoproductosp-search-table');
             var paginacion = this.$subtipoproductospSearchTable.data('paginacion');
@@ -31,8 +31,8 @@ app || (app = {});
             	pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('subtipoproductosp.index')),
+                    data: function (data) {
                         data.datatables = true;
                     }
                 },
@@ -44,10 +44,10 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo subtipo de producto',
+						text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('subtipoproductosp.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('subtipoproductosp.create')))
 						}
 					}
 				],
@@ -55,14 +55,14 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('subtipoproductosp.show', {subtipoproductosp: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('subtipoproductosp.show', {subtipoproductosp: full.id})) + '">' + data + '</a>';
                         }
                     },
                     {
                         targets: [3],
                         width: '10%',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
                     },

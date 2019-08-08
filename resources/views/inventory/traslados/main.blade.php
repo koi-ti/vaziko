@@ -24,7 +24,7 @@
                     <div class="row">
                         <label for="traslado1_sucursal" class="col-sm-1 control-label">Sucursal</label>
                         <div class="form-group col-sm-3">
-                            <select name="traslado1_sucursal" id="traslado1_sucursal" class="form-control change-sucursal-consecutive-koi-component" data-wrapper="traslados-create" data-field="traslado1_numero" data-module="traslados" required>
+                            <select name="traslado1_sucursal" id="traslado1_sucursal" class="form-control select2-default change-sucursal-consecutive-koi-component" data-wrapper="traslados-create" data-field="traslado1_numero" data-module="traslados" required>
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
                                     <option value="{{ $key }}" <%- traslado1_sucursal == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
@@ -41,7 +41,7 @@
                     <div class="row">
                         <label for="traslado1_destino" class="col-sm-1 control-label">Destino</label>
                         <div class="form-group col-sm-3">
-                            <select name="traslado1_destino" id="traslado1_destino" class="form-control" required>
+                            <select name="traslado1_destino" id="traslado1_destino" class="form-control select2-default" required>
                                 <option value="" selected>Seleccione</option>
                                 @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
                                     <option value="{{ $key }}" <%- traslado1_destino == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>

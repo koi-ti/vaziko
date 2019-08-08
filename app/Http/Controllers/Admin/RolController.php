@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Rol, App\Models\Base\Permiso;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class RolController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Rol::query() )->make(true);
+            return Datatables::of(Rol::query())->make(true);
         }
         return view('admin.roles.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class RolController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Rol::$key_cache );
+                    Cache::forget(Rol::$key_cache);
                     return response()->json(['success' => true, 'id' => $rol->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -79,12 +77,12 @@ class RolController extends Controller
     {
         $rol = Rol::findOrFail($id);
         if ($request->ajax()) {
-            if(!in_array($rol->name, ['admin'])) {
+            if (!in_array($rol->name, ['admin'])) {
                 $rol->permissions = Permiso::get()->toArray();
             }
             return response()->json($rol);
         }
-        return view('admin.roles.show', ['rol' => $rol]);
+        return view('admin.roles.show', compact('rol'));
     }
 
     /**
@@ -96,7 +94,7 @@ class RolController extends Controller
     public function edit($id)
     {
         $rol = Rol::findOrFail($id);
-        return view('admin.roles.create', ['rol' => $rol]);
+        return view('admin.roles.create', compact('rol'));
     }
 
     /**
@@ -115,7 +113,7 @@ class RolController extends Controller
                 DB::beginTransaction();
                 try {
                     $valRol = Rol::where('name', $request->name)->first();
-                    if(!$valRol instanceof Rol) {
+                    if (!$valRol instanceof Rol) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar Key, por favor verifique la información o consulte al administrador.']);
                     }
@@ -128,9 +126,9 @@ class RolController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Rol::$key_cache );
+                    Cache::forget(Rol::$key_cache);
                     return response()->json(['success' => true, 'id' => $rol->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

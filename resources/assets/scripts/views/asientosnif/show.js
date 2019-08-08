@@ -16,15 +16,11 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
-             
-                this.asientoNifCuentasList = new app.AsientoNifCuentasList();
+        initialize: function () {
+            this.asientoNifCuentasList = new app.AsientoNifCuentasList();
 
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**
@@ -38,7 +34,7 @@ app || (app = {});
                     wrapper: this.spinner,
                     edit: false,
                     dataFilter: {
-                        'asiento': this.model.get('id')
+                        asiento: this.model.get('id')
                     }
                 }
             });

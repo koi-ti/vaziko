@@ -16,6 +16,7 @@ app || (app = {});
         templateEmpleado: _.template( ($('#chart-empleado-ordenp').html() || '') ),
         templateAreap: _.template( ($('#chart-areasp-ordenp').html() || '') ),
         templateProductop: _.template( ($('#chart-productop-ordenp').html() || '') ),
+        templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
             'click .close-ordenp': 'closeOrdenp',
@@ -72,6 +73,7 @@ app || (app = {});
             this.$renderChartEmpleado = this.$('#render-chart-empleado');
             this.$renderChartAreasp = this.$('#render-chart-areasp');
             this.$renderChartProductop = this.$('#render-chart-productop');
+            this.$renderChartOrdenp = this.$('#render-chart-ordenp');
 
             // Initialize fineuploader && textarea tab imagenes
             this.$observacionesimagen = this.$('#orden_observaciones_imagen');
@@ -441,45 +443,45 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull( Route.route('ordenes.charts', { ordenes: _this.model.get('id') }) ),
+                url: window.Misc.urlFull(Route.route('ordenes.charts', {ordenes: _this.model.get('id')})),
                 type: 'GET',
-                beforeSend: function() {
-                    window.Misc.setSpinner( _this.spinner );
+                beforeSend: function () {
+                    window.Misc.setSpinner(_this.spinner);
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.spinner );
-                if(!_.isUndefined(resp.success)) {
+                window.Misc.removeSpinner(_this.spinner);
+                if (!_.isUndefined(resp.success)) {
                     // response success or error
                     var text = resp.success ? '' : resp.errors;
-                    if( _.isObject( resp.errors ) ) {
+                    if (_.isObject(resp.errors)) {
                         text = window.Misc.parseErrors(resp.errors);
                     }
-                    if( !resp.success ) {
+
+                    if (!resp.success) {
                         alertify.error(text);
                         return;
                     }
 
                     // Render calendar
-                    _this.charts( resp );
+                    _this.charts(resp);
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.spinner );
+                window.Misc.removeSpinner(_this.spinner);
                 alertify.error(thrownError);
             });
 
         },
 
-        charts: function ( resp ){
+        charts: function (resp) {
             // Definir opciones globales para graficas del modulo
             Chart.defaults.global.defaultFontColor="black";
-            Chart.defaults.global.defaultFontStyle="bold";
-            Chart.defaults.global.defaultFontSize=9;
-            Chart.defaults.global.title.fontSize=12;
+            Chart.defaults.global.defaultFontSize=12;
+            Chart.defaults.global.title.fontSize=14;
 
-            function formatTime( timeHour ){
-                var dias = Math.floor( timeHour / 24 );
+            function formatTime (timeHour) {
+                var dias = Math.floor( timeHour / 24);
                 var horas = Math.floor( timeHour - ( dias * 24 ) );
                 var minutos = Math.floor( ( timeHour - (dias * 24) - (horas) ) * 60 );
 
@@ -487,7 +489,7 @@ app || (app = {});
             }
 
             // Chart empleado
-            if ( !_.isEmpty( resp.chartempleado.data ) ) {
+            if (!_.isEmpty(resp.chartempleado.data)) {
                 this.$renderChartEmpleado.html( this.templateEmpleado() );
 
                 var ctx = this.$('#chart_empleado').get(0).getContext('2d');
@@ -545,7 +547,9 @@ app || (app = {});
                     }
                 });
             }
-            if ( !_.isEmpty( resp.chartareap.data ) ) {
+
+            // Chart areap
+            if (!_.isEmpty(resp.chartareap.data)) {
                 this.$renderChartAreasp.html( this.templateAreap() );
 
                 var ctx = this.$('#chart_areas').get(0).getContext('2d');
@@ -577,7 +581,9 @@ app || (app = {});
                     }
                 });
             }
-            if ( !_.isEmpty( resp.chartcomparativa.labels ) ){
+
+            // Charts comparativa
+            if (!_.isEmpty(resp.chartcomparativa.labels)) {
                 this.$renderChartProductop.html( this.templateProductop() );
 
                 var ctx = this.$('#chart_comparativa').get(0).getContext('2d');
@@ -637,6 +643,48 @@ app || (app = {});
                             }
                         },
                     }
+                });
+            }
+
+            // Charts productos
+            if (!_.isEmpty(resp.chartproductos.data)) {
+                this.$renderChartOrdenp.html(this.templateOrdenp());
+                var ctx = this.$('#chart_producto').get(0).getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            backgroundColor: [
+                                '#ADD8E6',
+                                '#87CEEB',
+                                '#87CEFA',
+                                '#00BFFF',
+                                '#1E90FF',
+                                '#6495ED',
+                                '#7B68EE'
+                            ],
+                            data: resp.chartproductos.data,
+                        }],
+                        labels: resp.chartproductos.labels,
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: false,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
+                        }
+                    },
                 });
             }
 

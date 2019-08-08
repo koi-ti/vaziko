@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Maquinap;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class MaquinaspController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Maquinap::query() )->make(true);
+            return Datatables::of(Maquinap::query())->make(true);
         }
         return view('production.maquinas.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class MaquinaspController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Maquinap::$key_cache );
+                    Cache::forget(Maquinap::$key_cache);
                     return response()->json(['success' => true, 'id' => $maquina->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class MaquinaspController extends Controller
         if ($request->ajax()) {
             return response()->json($maquina);
         }
-        return view('production.maquinas.show', ['maquina' => $maquina]);
+        return view('production.maquinas.show', compact('maquina'));
     }
 
     /**
@@ -93,7 +91,7 @@ class MaquinaspController extends Controller
     public function edit($id)
     {
         $maquina = Maquinap::findOrFail($id);
-        return view('production.maquinas.edit', ['maquina' => $maquina]);
+        return view('production.maquinas.edit', compact('maquina'));
     }
 
     /**
@@ -119,9 +117,9 @@ class MaquinaspController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Maquinap::$key_cache );
+                    Cache::forget(Maquinap::$key_cache);
                     return response()->json(['success' => true, 'id' => $maquina->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

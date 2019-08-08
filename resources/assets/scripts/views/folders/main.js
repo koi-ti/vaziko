@@ -10,7 +10,9 @@ app || (app={});
 (function ($, window, document, undefined) {
 
     app.MainFoldersView = Backbone.View.extend({
+
         el: '#folders-main',
+
         /*
          * Constructor method
          */
@@ -28,17 +30,17 @@ app || (app={});
                 language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('folders.index') ),
+                ajax: window.Misc.urlFull(Route.route('folders.index')),
                 columns: [
                     { data: 'folder_codigo', name: 'folder_codigo' },
                     { data: 'folder_nombre', name: 'folder_nombre' }
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nuevo folder',
+                        text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-                        action: function ( e, dt, node, config ) {
-                                window.Misc.redirect(window.Misc.urlFull( Route.route('folders.create') ) )
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('folders.create')))
                         }
                     }
                 ],
@@ -46,8 +48,8 @@ app || (app={});
                     {
                         targets: 0,
                         width: '15%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('folders.show', {folders: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('folders.show', {folders: full.id}))  +'">' + data + '</a>';
                         }
                     }
                 ]

@@ -48,6 +48,7 @@ app || (app = {});
             this.$inputNit = this.$("#"+this.$inputContent.attr("data-nit"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$factura = this.$inputContent.attr("data-factura");
+            this.activo = this.$inputContent.attr("data-activo");
 
 			this.facturaSearchTable = this.$facturaSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -57,10 +58,11 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 ajax: {
                     url: window.Misc.urlFull( Route.route('facturas.index') ),
-                    data: function( data ) {
+                    data: function (data) {
                         data.factura1_estado = true;
                         data.factura1_numero = _this.$searchfacturaNumero.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
+                        data.activo = _this.activo;
                     }
                 },
                 columns: [
@@ -124,44 +126,6 @@ app || (app = {});
 
             this.facturaSearchTable.ajax.reload();
 		},
-
-		// facturaChanged: function(e) {
-		// 	var _this = this;
-        //
-		// 	this.$inputContent = $(e.currentTarget);
-		// 	this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-		// 	this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
-        //
-		// 	var factura = this.$inputContent.val();
-        //
-        //     // Before eval clear data
-        //     this.$inputName.val('');
-        //
-		// 	if(!_.isUndefined(factura) && !_.isNull(factura) && factura != '') {
-		// 		// Get Factura
-	    //         $.ajax({
-	    //             url: window.Misc.urlFull(Route.route('facturas.search')),
-	    //             type: 'GET',
-	    //             data: { factura_numero: factura },
-	    //             beforeSend: function() {
-		// 				_this.$inputName.val('');
-	    //                 window.Misc.setSpinner( _this.$wraperConten );
-	    //             }
-	    //         })
-	    //         .done(function(resp) {
-	    //             window.Misc.removeSpinner( _this.$wraperConten );
-	    //             if(resp.success) {
-	    //                 if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
-		// 					_this.$inputName.val(resp.tercero_nombre);
-	    //                 }
-	    //             }
-	    //         })
-	    //         .fail(function(jqXHR, ajaxOptions, thrownError) {
-	    //             window.Misc.removeSpinner( _this.$wraperConten );
-	    //             alertify.error(thrownError);
-	    //         });
-	    //  	}
-		// },
 
         /**
         * fires libraries js

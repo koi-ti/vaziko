@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$trasladosSearchTable = this.$('#traslados-search-table');
             var paginacion = this.$trasladosSearchTable.data('paginacion');
@@ -30,7 +30,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('traslados.index') ),
+                ajax: window.Misc.urlFull(Route.route('traslados.index')),
                 columns: [
                     { data: 'traslado1_numero', name: 'koi_traslado1.traslado1_numero' },
                     { data: 'sucursa_origen', name: 'o.sucursal_nombre' },
@@ -39,10 +39,10 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo traslado',
+						text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('traslados.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('traslados.create')))
 						}
 					}
 				],
@@ -50,8 +50,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('traslados.show', {traslados: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('traslados.show', {traslados: full.id})) + '">' + data + '</a>';
                         }
                     }
                 ]

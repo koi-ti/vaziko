@@ -14,24 +14,23 @@ app || (app = {});
         el: '#precotizaciones-create',
         template: _.template( ($('#add-precotizacion-tpl').html() || '') ),
         events: {
-            'click .submit-precotizacion': 'submitForm',
             'submit #form-precotizaciones': 'onStore',
             'click .close-precotizacion': 'closePreCotizacion',
             'click .clone-precotizacion': 'clonePreCotizacion',
             'click .complete-precotizacion': 'completePreCotizacion',
             'click .generate-precotizacion': 'generatePreCotizacion',
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
+            // Initialize collection
             this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
 
             // Events
@@ -43,12 +42,13 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = true;
+
+            // Reference wrappers
             this.$el.html( this.template(attributes) );
-            this.$form = this.$('#form-precotizaciones');
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
 
             // Reference views and ready
             this.referenceViews();
@@ -66,17 +66,10 @@ app || (app = {});
                     edit: true,
                     wrapper: this.spinner,
                     dataFilter: {
-                        precotizacion2_precotizacion1: this.model.get('id')
+                        precotizacion: this.model.get('id')
                     }
                }
             });
-        },
-
-        /**
-        * Event submit productop
-        */
-        submitForm: function (e) {
-            this.$form.submit();
         },
 
         /**
@@ -87,7 +80,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -251,21 +244,20 @@ app || (app = {});
                         })
                         .done(function(resp) {
                             window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
                                 // Redireccionar a cotizacion cuando todo este !OK
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.cotizacion_id })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.cotizacion_id})));
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -284,16 +276,16 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
         },
 
@@ -301,29 +293,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit cotizacion
-                window.Misc.redirect( window.Misc.urlFull( Route.route('precotizaciones.edit', { precotizaciones: resp.id}), { trigger:true } ));
+                window.Misc.redirect(window.Misc.urlFull(Route.route('precotizaciones.edit', {precotizaciones: resp.id}), {trigger: true}));
             }
         }
     });

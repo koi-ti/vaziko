@@ -24,10 +24,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
-
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             this.parameters.wrapper
@@ -42,13 +41,6 @@ app || (app = {});
             this.collection.fetch({ data: {productop_id: this.parameters.dataFilter.productop_id}, reset: true });
         },
 
-        /*
-        * Render View Element
-        */
-        render: function() {
-
-        },
-
         /**
         * Render view contact by model
         * @param Object productop6Model Model instance
@@ -61,7 +53,7 @@ app || (app = {});
                 }
             });
             productop6Model.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.prepend(view.render().el);
 
         },
 
@@ -69,7 +61,7 @@ app || (app = {});
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -80,38 +72,37 @@ app || (app = {});
             var _this = this
 
             // Set Spinner
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
 
             // Prepare data
             data.productop6_productop = this.parameters.dataFilter.productop_id;
 
             // Add model in collection
             var productop6Model = new app.Productop6Model();
-            productop6Model.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.parameters.wrapper );
+                productop6Model.save(data, {
+                    succes: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
 
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
                         }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        // Add model in collection
-                        _this.collection.add(model);
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
                 /**
@@ -124,13 +115,12 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
                 model.destroy({
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                            if( !resp.success ) {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            if (!resp.success) {
                                 alertify.error(resp.errors);
                                 return;
                             }
@@ -146,29 +136,28 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                window.Misc.clearForm( $('#form-productosp6') );
+                window.Misc.clearForm($('#form-productosp6'));
             }
         }
    });

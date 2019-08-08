@@ -21,9 +21,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // collection && Attributes
@@ -38,7 +38,7 @@ app || (app = {});
             // Reference views and ready
             this.spinner = $('.spinner-main');
 
-            if ( this.parameters.data.ordenp ){
+            if (this.parameters.data.ordenp) {
                 $('#tiempop_ordenp').val(this.parameters.data.ordenp).trigger('change');
             }
 
@@ -49,36 +49,35 @@ app || (app = {});
         /**
         * Event change select actividadp
         */
-        changeActividadp: function(e) {
-            var _this = this,
-                actividadesp = this.$(e.currentTarget).val();
+        changeActividadp: function (e) {
+            var actividadesp = this.$(e.currentTarget).val(),
+                _this = this;
 
-            if( typeof(actividadesp) !== 'undefined' && !_.isUndefined(actividadesp) && !_.isNull(actividadesp) && actividadesp != '' ){
+            if (typeof(actividadesp) !== 'undefined' && !_.isUndefined(actividadesp) && !_.isNull(actividadesp) && actividadesp != '') {
                 $.ajax({
                     url: window.Misc.urlFull( Route.route('subactividadesp.index', {actividadesp: actividadesp}) ),
                     type: 'GET',
                     beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-
-                    if(resp.length > 0){
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
+                    if (resp.length > 0) {
                         _this.$subactividadesp.empty().val(0).attr('required', 'required');
                         _this.$subactividadesp.append("<option value=></option>");
-                        _.each(resp, function(item){
-                            _this.$subactividadesp.append("<option value="+item.id+">"+item.subactividadp_nombre+"</option>");
+                        _.each(resp, function (item) {
+                            _this.$subactividadesp.append("<option value=" + item.id + ">" + item.subactividadp_nombre + "</option>");
                         });
-                    }else{
+                    } else {
                         _this.$subactividadesp.empty().val(0).removeAttr('required');
                     }
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
-            }else{
+            } else {
                 this.$subactividadesp.empty().val(0);
             }
         },
@@ -99,7 +98,6 @@ app || (app = {});
             });
         },
 
-
         /**
         * Event submit productop
         */
@@ -115,7 +113,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -124,19 +122,19 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
 
-            if( typeof window.initComponent.initClockPicker == 'function' )
+            if (typeof window.initComponent.initClockPicker == 'function')
                 window.initComponent.initClockPicker();
 
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
         },
 
@@ -144,27 +142,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner( this.spinner);
             if(!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                window.Misc.successRedirect( resp.msg, window.Misc.urlFull( Route.route('tiemposp.index') ) );
+                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('tiemposp.index')));
             }
         }
     });

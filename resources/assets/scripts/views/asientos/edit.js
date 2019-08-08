@@ -14,17 +14,16 @@ app || (app = {});
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
         events: {
+            'submit #form-asientos': 'onStore',
             'submit #form-item-asiento': 'onStoreItem',
             'change input#asiento2_base': 'baseChanged',
-            'change .round-module': 'roundModule',
-            'click .submit-asiento': 'submitAsiento',
-            'submit #form-asientos': 'onStore',
+            'change .round-module': 'roundModule'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Attributes
             this.asientoCuentasList = new app.AsientoCuentasList();
 
@@ -36,12 +35,13 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             // Attributes
             var attributes = this.model.toJSON();
                 attributes.edit = true;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
+            // Reference wrappers
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
             this.$formItem = this.$('#form-item-asiento');
@@ -50,42 +50,17 @@ app || (app = {});
             this.$inputBase = this.$("#asiento2_base");
             this.$inputDocumento = this.$("#asiento1_documento");
             this.roundempresa = this.$("#empresa_round").val();
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
 
-            // Reference views
-            this.referenceViews();
-
-            // to fire plugins
-            this.ready();
-
+            // If tipo consecutivo A:automatico, M:manual
             if (this.model.get('documento_tipo_consecutivo') == 'A') {
                 this.$numero.prop('readonly', true);
             }
+
+            // Reference views
+            this.referenceViews();
+            this.ready();
 		},
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if ( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
-
-            if ( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
-
-            if ( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
-
-            if ( typeof window.initComponent.initValidator == 'function' )
-                window.initComponent.initValidator();
-
-            if ( typeof window.initComponent.initDatePicker == 'function' )
-                window.initComponent.initDatePicker();
-
-            if ( typeof window.initComponent.initInputMask == 'function' )
-                window.initComponent.initInputMask();
-        },
 
         /**
         * reference to views
@@ -105,10 +80,27 @@ app || (app = {});
         },
 
         /**
-        * Event submit Asiento
+        * fires libraries js
         */
-        submitAsiento: function (e) {
-            this.$form.submit();
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+
+            if (typeof window.initComponent.initDatePicker == 'function')
+                window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initInputMask == 'function')
+                window.initComponent.initInputMask();
         },
 
         /**
@@ -118,8 +110,9 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                var data = window.Misc.formToJson(e.target);
+                    data.cuentas = this.asientoCuentasList.toJSON();
+                this.model.save( data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -132,11 +125,9 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                    data.asiento1_id = this.model.get('id');
-
-                    // Definir tercero
-                    data.tercero_nit = data.tercero_nit ? data.tercero_nit : this.model.get('tercero_nit');
-                    data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : this.model.get('tercero_nombre');
+                    data.asiento = this.model.get('id');
+                    data.tercero_nit = (data.tercero_nit || this.model.get('tercero_nit'));
+                    data.tercero_nombre = (data.tercero_nombre || this.model.get('tercero_nombre'));
                     data.round_module = this.roundempresa;
 
                 // Evaluate account
@@ -144,10 +135,10 @@ app || (app = {});
                     'data': data,
                     'wrap': this.spinner,
                     'callback': (function (_this) {
-                        return function ( actions ) {
-                            if (Array.isArray( actions ) && actions.length > 0) {
+                        return function (actions) {
+                            if (Array.isArray(actions) && actions.length > 0) {
                                 // Open AsientoActionView
-                                if ( _this.asientoActionView instanceof Backbone.View ){
+                                if (_this.asientoActionView instanceof Backbone.View) {
                                     _this.asientoActionView.stopListening();
                                     _this.asientoActionView.undelegateEvents();
                                 }
@@ -163,8 +154,8 @@ app || (app = {});
                                 _this.asientoActionView.render();
                             } else {
                                 // Default insert
-                                _this.asientoCuentasList.trigger( 'store', data );
-                                window.Misc.clearForm( _this.$formItem );
+                                _this.asientoCuentasList.trigger('store', data);
+                                window.Misc.clearForm(_this.$formItem);
                             }
                         }
                     })(this)
@@ -175,21 +166,20 @@ app || (app = {});
         /**
         * Change base
         */
-        baseChanged: function(e) {
-            var _this = this;
-
-            var tasa = this.$inputTasa.val();
-            var ica = this.$inputTasa.data('ica');
-            var base = this.$inputBase.inputmask('unmaskedvalue');
+        baseChanged: function (e) {
+            var tasa = this.$inputTasa.val(),
+                ica = this.$inputTasa.data('ica'),
+                base = this.$inputBase.inputmask('unmaskedvalue'),
+                _this = this;
 
             // Set valor
-            if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                if( parseInt(this.roundempresa) ){
-                    this.$inputValor.val( Math.round( (tasa * base) / (ica ? 1000 : 100)) );
-                }else{
-                    this.$inputValor.val( (tasa * base) / (ica ? 1000 : 100) );
+            if (!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
+                if (parseInt(this.roundempresa)) {
+                    this.$inputValor.val(Math.round( (tasa * base) / (ica ? 1000 : 100)));
+                } else {
+                    this.$inputValor.val((tasa * base) / (ica ? 1000 : 100));
                 }
-            }else{
+            } else {
                 // Case without plancuentas_tasa
                 this.$inputValor.val('');
             }
@@ -198,10 +188,11 @@ app || (app = {});
         /**
         * Change Valor
         */
-        roundModule: function(e) {
+        roundModule: function (e) {
             var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
+
             if (parseInt(this.roundempresa)) {
-                this.$(e.currentTarget).val(Math.round( valor ));
+                this.$(e.currentTarget).val(Math.round(valor));
             }
         },
 
@@ -215,9 +206,9 @@ app || (app = {});
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
+        responseServer: function (model, resp, opts) {
             window.Misc.removeSpinner(this.spinner);
-            if(!_.isUndefined(resp.success)) {
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
                 if (_.isObject( resp.errors )) {
@@ -230,7 +221,7 @@ app || (app = {});
                 }
 
                 // Redirect to show view
-                window.Misc.redirect( window.Misc.urlFull( Route.route('asientos.show', { asientos: resp.id}) ) );
+                window.Misc.redirect(window.Misc.urlFull( Route.route('asientos.show', {asientos: resp.id})));
             }
         }
     });

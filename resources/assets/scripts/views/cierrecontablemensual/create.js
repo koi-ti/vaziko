@@ -15,13 +15,11 @@ app || (app = {});
         events: {
             'click .sumbit-close-month': 'submitForm',
         },
-        parameters: {
-        },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Reference form
             this.$form = this.$('#form-close-month');
 
@@ -62,28 +60,28 @@ app || (app = {});
                 var _this = this;
                 // Create cierre
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('cierresmensuales.index') ),
+                    url: window.Misc.urlFull(Route.route('cierresmensuales.index')),
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.el );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.el);
                     }
                 })
-                .done(function(resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.el);
+                .done(function (resp) {
+                    if (!_.isUndefined(resp.success)) {
+                        window.Misc.removeSpinner(_this.el);
                         // response success or error
                         var text = resp.success ? resp.msg : resp.errors;
-                        if( !resp.success ) {
+                        if (!resp.success) {
                             alertify.error(text);
                             return;
-                        }else{
+                        } else {
                             alertify.success(text);
                             return;
                         }
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.el );
+                    window.Misc.removeSpinner(_this.el);
                     alertify.error(thrownError);
                 });
             }
@@ -93,7 +91,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initSpinner == 'function' )
+            if (typeof window.initComponent.initSpinner == 'function')
                 window.initComponent.initSpinner();
         }
     });

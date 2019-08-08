@@ -13,15 +13,14 @@ app || (app = {});
 
         tagName: 'tr',
         template: _.template( ($('#facturap-item-list-tpl').html() || '') ),
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listener
@@ -31,9 +30,9 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             return this;
         }
     });

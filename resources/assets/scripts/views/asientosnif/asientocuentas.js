@@ -24,9 +24,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
@@ -35,7 +35,7 @@ app || (app = {});
             this.$diferencia = this.$('#total-diferencia');
 
             //Init Attributes
-            this.confCollection = { reset: true, data: {} };
+            this.confCollection = {reset: true, data: {}};
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -45,10 +45,9 @@ app || (app = {});
             this.listenTo( this.collection, 'sync', this.responseServer );
 
             /* if was passed asiento code */
-            if( !_.isUndefined(this.parameters.dataFilter.asiento) && !_.isNull(this.parameters.dataFilter.asiento) ){
-                 this.confCollection.data.asiento = this.parameters.dataFilter.asiento;
-
-                this.collection.fetch( this.confCollection );
+            if (!_.isUndefined(this.parameters.dataFilter.asiento) && !_.isNull(this.parameters.dataFilter.asiento)) {
+                this.confCollection.data.asiento = this.parameters.dataFilter.asiento;
+                this.collection.fetch(this.confCollection);
             }
         },
 
@@ -64,7 +63,7 @@ app || (app = {});
                 }
             });
             asientoNif2Model.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
 
             // Update total
             this.totalize();
@@ -74,7 +73,7 @@ app || (app = {});
         * Render all view tast of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -85,35 +84,34 @@ app || (app = {});
             var _this = this
 
             // Set Spinner
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
 
             // Add model in collection
             var asiento2Model = new app.AsientoNif2Model();
-            asiento2Model.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.parameters.wrapper );
+                asiento2Model.save(data, {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
 
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
                         }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        // Add model in collection
-                        _this.collection.add(model);
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
         /**
@@ -126,13 +124,12 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
                 model.destroy({
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
                             window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                            if( !resp.success ) {
+                            if (!resp.success) {
                                 alertify.error(resp.errors);
                                 return;
                             }
@@ -145,7 +142,6 @@ app || (app = {});
                         }
                     }
                 });
-
             }
         },
 
@@ -155,16 +151,16 @@ app || (app = {});
         totalize: function () {
             var data = this.collection.totalize();
 
-            if(this.$debitos.length) {
-                this.$debitos.html( window.Misc.currency(data.debitos) );
+            if (this.$debitos.length) {
+                this.$debitos.html(window.Misc.currency(data.debitos));
             }
 
-            if(this.$creditos.length) {
-                this.$creditos.html( window.Misc.currency(data.creditos) );
+            if (this.$creditos.length) {
+                this.$creditos.html(window.Misc.currency(data.creditos));
             }
 
-            if(this.$diferencia.length) {
-                this.$diferencia.html( window.Misc.currency(data.diferencia) );
+            if (this.$diferencia.length) {
+                this.$diferencia.html(window.Misc.currency(data.diferencia));
             }
         },
 
@@ -172,14 +168,14 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

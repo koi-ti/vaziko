@@ -20,7 +20,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Events
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
@@ -29,10 +29,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = false;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             this.spinner = this.$('.spinner-main');
             this.$form = this.$('#form-tercero');
@@ -41,7 +41,6 @@ app || (app = {});
             this.ready();
         },
 
-
         /**
         * Event Create Forum Post
         */
@@ -49,8 +48,8 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ));
-                this.model.save( data, {patch: true, silent: true} );
+                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson(this.$formAccounting));
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -59,19 +58,19 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
         },
 
@@ -79,29 +78,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit tercero
-                Backbone.history.navigate(Route.route('terceros.edit', { terceros: resp.id}), { trigger:true });
+                Backbone.history.navigate(Route.route('terceros.edit', { terceros: resp.id}), {trigger: true});
             }
         }
     });

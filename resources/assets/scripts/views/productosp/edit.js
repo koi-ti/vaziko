@@ -26,15 +26,14 @@ app || (app = {});
             'submit #form-productosp5': 'onStoreMaterial',
             'submit #form-productosp6': 'onStoreAcabado'
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             this.tipsList = new app.TipsList();
@@ -52,11 +51,11 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = true;
 
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             this.$form = this.$('#form-productosp');
             this.spinner = this.$('#spinner-main');
 
@@ -91,7 +90,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-productop-tips'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -103,7 +102,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-productop-areas'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -115,7 +114,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-productop-maquinas'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -127,7 +126,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-productop-materiales'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -139,7 +138,7 @@ app || (app = {});
                     edit: true,
                     wrapper: this.$('#wrapper-productop-acabados'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -160,20 +159,19 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
-        changedAbierto: function(e) {
-
+        changedAbierto: function (e) {
             var selected = $(e.target).is(':checked');
-            if( selected ) {
+            if (selected) {
                 this.$input3d.iCheck('uncheck');
                 this.$input3d.iCheck('disable');
                 this.$input3dAncho.prop('disabled', true).val('');
                 this.$input3dAlto.prop('disabled', true).val('');
                 this.$input3dProfundidad.prop('disabled', true).val('');
-            }else{
+            } else {
                 this.$input3d.iCheck('enable');
                 this.$input3dAncho.prop('disabled', false);
                 this.$input3dAlto.prop('disabled', false);
@@ -181,16 +179,15 @@ app || (app = {});
             }
         },
 
-        changedCerrado: function(e) {
-
+        changedCerrado: function (e) {
             var selected = $(e.target).is(':checked');
-            if( selected ) {
+            if (selected) {
                 this.$input3d.iCheck('uncheck');
                 this.$input3d.iCheck('disable');
                 this.$input3dAncho.prop('disabled', true).val('');
                 this.$input3dAlto.prop('disabled', true).val('');
                 this.$input3dProfundidad.prop('disabled', true).val('');
-            }else{
+            } else {
                 this.$input3d.iCheck('enable');
                 this.$input3dAncho.prop('disabled', false);
                 this.$input3dAlto.prop('disabled', false);
@@ -198,10 +195,9 @@ app || (app = {});
             }
         },
 
-        changed3d: function(e) {
-
+        changed3d: function (e) {
             var selected = $(e.target).is(':checked');
-            if( selected ){
+            if (selected) {
                 // Abierto
                 this.$inputAbierto.iCheck('uncheck');
                 this.$inputAbierto.iCheck('disable');
@@ -213,7 +209,7 @@ app || (app = {});
                 this.$inputCerrado.iCheck('disable');
                 this.$inputCerradoAncho.prop('disabled', true).val('');
                 this.$inputCerradoAlto.prop('disabled', true).val('');
-            }else{
+            } else {
                 // Abierto
                 this.$inputAbierto.iCheck('enable');
                 this.$inputAbiertoAncho.prop('disabled', false);
@@ -226,34 +222,32 @@ app || (app = {});
             }
         },
 
-        changeTypeProduct: function(e) {
-            var _this = this;
-                typeproduct = this.$(e.currentTarget).val();
+        changeTypeProduct: function (e) {
+            var typeproduct = this.$(e.currentTarget).val(),
+                _this = this;
 
-            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+            if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    url: window.Misc.urlFull(Route.route('subtipoproductosp.index', {typeproduct: typeproduct})),
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
                     _this.$subtypeproduct.empty().val(0);
-
                     _this.$subtypeproduct.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    _.each(resp, function (item) {
+                        _this.$subtypeproduct.append("<option value=" + item.id + ">" + item.subtipoproductop_nombre + "</option>");
                     });
 
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
-            }else{
+            } else {
                 this.$subtypeproduct.empty().val(0);
             }
         },
@@ -267,7 +261,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.tipsList.trigger( 'store', data );
+                this.tipsList.trigger('store', data);
             }
         },
 
@@ -280,7 +274,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.areasList.trigger( 'store', data );
+                this.areasList.trigger('store', data);
             }
         },
 
@@ -293,7 +287,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.maquinasList.trigger( 'store', data );
+                this.maquinasList.trigger('store', data);
             }
         },
 
@@ -306,7 +300,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.materialesList.trigger( 'store', data );
+                this.materialesList.trigger('store', data);
             }
         },
 
@@ -319,7 +313,7 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.acabadosList.trigger( 'store', data );
+                this.acabadosList.trigger('store', data);
             }
         },
 
@@ -328,16 +322,16 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
         },
 
@@ -345,29 +339,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit productop
-                window.Misc.redirect( window.Misc.urlFull( Route.route('productosp.show', { productosp: resp.id}) ) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('productosp.show', {productosp: resp.id})));
             }
         }
     });

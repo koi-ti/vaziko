@@ -18,20 +18,19 @@ app || (app = {});
             'click .toggle-children': 'toggleChildren',
             'click .btn-set-permission': 'changePermissions'
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
-            this.stuffToDo = { };
-            this.stuffToVw = { };
+            this.stuffToDo = {};
+            this.stuffToVw = {};
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -42,10 +41,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = true;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             this.spinner = this.$('#spinner-main');
         },
@@ -55,10 +54,10 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -74,8 +73,7 @@ app || (app = {});
                 nivel2 = $(e.currentTarget).attr("data-nivel2"),
                 _this = this;
 
-            if ( (this.stuffToVw[resource] instanceof Backbone.View) == false )
-            {
+            if ((this.stuffToVw[resource] instanceof Backbone.View) == false) {
                 this.stuffToDo[resource] = new app.PermisosRolList();
                 this.stuffToVw[resource] = new app.PermisosRolListView({
                     el: '#wrapper-permisions-'+resource,
@@ -92,10 +90,9 @@ app || (app = {});
                    }
                 });
             }
-
         },
 
-        changePermissions: function(e) {
+        changePermissions: function (e) {
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
@@ -104,7 +101,7 @@ app || (app = {});
                 model = collection.get(resource),
                 _this = this;
 
-            if ( this.createPermisoRolView instanceof Backbone.View ){
+            if (this.createPermisoRolView instanceof Backbone.View) {
                 this.createPermisoRolView.stopListening();
                 this.createPermisoRolView.undelegateEvents();
             }
@@ -128,29 +125,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit rol
-                window.Misc.redirect( window.Misc.urlFull( Route.route('roles.edit', { roles: resp.id}) ) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.index')));
             }
         }
     });

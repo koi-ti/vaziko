@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\SubtipoProductop, App\Models\Production\TipoProductop;
 use DB, Log, Datatables, Cache;
@@ -18,16 +16,16 @@ class SubtipoProductopController extends Controller
      */
      public function index(Request $request)
      {
-         if($request->ajax()){
+         if ($request->ajax()) {
              $query = SubtipoProductop::query();
              $query->join('koi_tipoproductop', 'subtipoproductop_tipoproductop', '=', 'koi_tipoproductop.id');
 
-             if( $request->has('datatables') ) {
+             if ($request->has('datatables')) {
                  $query->select('koi_subtipoproductop.*', 'tipoproductop_nombre');
                  return Datatables::of($query)->make(true);
              }
 
-             if( $request->has('typeproduct') ){
+             if ($request->has('typeproduct')) {
                  $query->select('koi_subtipoproductop.*');
                  $query->where('subtipoproductop_tipoproductop', $request->typeproduct);
                  $query->where('subtipoproductop_activo', true);
@@ -57,14 +55,13 @@ class SubtipoProductopController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $subtipoproductop = new SubtipoProductop;
             if ($subtipoproductop->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar tipo de productop
                     $tipoproductop = TipoProductop::find( $request->subtipoproductop_tipoproductop );
-                    if(!$tipoproductop instanceof TipoProductop){
+                    if (!$tipoproductop instanceof TipoProductop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion o consulte al administrador.']);
                     }
@@ -79,9 +76,9 @@ class SubtipoProductopController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubtipoProductop::$key_cache );
+                    Cache::forget(SubtipoProductop::$key_cache);
                     return response()->json(['success' => true, 'id' => $subtipoproductop->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -107,7 +104,7 @@ class SubtipoProductopController extends Controller
          if ($request->ajax()) {
              return response()->json($subtipoproductop);
          }
-         return view('production.subtipoproductosp.show', ['subtipoproductop' => $subtipoproductop]);
+         return view('production.subtipoproductosp.show', compact('subtipoproductop'));
      }
 
     /**
@@ -119,7 +116,7 @@ class SubtipoProductopController extends Controller
      public function edit($id)
      {
          $subtipoproductop = SubtipoProductop::findOrFail($id);
-         return view('production.subtipoproductosp.edit', ['subtipoproductop' => $subtipoproductop]);
+         return view('production.subtipoproductosp.edit', compact('subtipoproductop'));
      }
 
     /**
@@ -133,14 +130,13 @@ class SubtipoProductopController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $subtipoproductop = SubtipoProductop::findOrFail($id);
             if ($subtipoproductop->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar tipo de productop
                     $tipoproductop = TipoProductop::find( $request->subtipoproductop_tipoproductop );
-                    if(!$tipoproductop instanceof TipoProductop){
+                    if (!$tipoproductop instanceof TipoProductop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tipo de producto, por favor verifique la informacion o consulte al administrador.']);
                     }
@@ -155,9 +151,9 @@ class SubtipoProductopController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( SubtipoProductop::$key_cache );
+                    Cache::forget(SubtipoProductop::$key_cache);
                     return response()->json(['success' => true, 'id' => $subtipoproductop->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

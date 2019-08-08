@@ -65,6 +65,7 @@ app || (app = {});
                     { data: 'orden_fecha_entrega', name: 'orden_fecha_entrega' },
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'detalle[0].total', name: 'detalle[0].total' },
                     { data: 'orden_abierta', name: 'orden_abierta' }
                 ],
                 rowReorder: {
@@ -141,6 +142,16 @@ app || (app = {});
                     },
                     {
                         targets: 8,
+                        width: '7%',
+                        searchable: false,
+                        orderable: false,
+                        className: 'text-right',
+                        render: function (data, type, full, row) {
+                            return parseInt(full.admin) ? window.Misc.currency(parseFloat(data)) : '-';
+                        }
+                    },
+                    {
+                        targets: 9,
                         width: '7%',
                         orderable: false,
                         className: 'text-center',

@@ -24,12 +24,12 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            this.$el.find('.inner-title-modal').empty().html( this.model.get('display_name') );
+            this.$el.find('.inner-title-modal').empty().html(this.model.get('display_name'));
             this.$wraperContent = this.$el.find('.modal-body');
 
             // Events
@@ -40,7 +40,7 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             // Attributes
             var attributes = this.model.toJSON();
             attributes.permissions = this.parameters.permissions;
@@ -59,7 +59,7 @@ app || (app = {});
         * fires libraries js
         */
         ready: function () {
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
         },
 
@@ -71,9 +71,9 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                data.role_id = this.parameters.dataFilter.role_id;
+                    data.role_id = this.parameters.dataFilter.role_id;
 
-                this.model.save( data, {patch: true} );
+                this.model.save(data, {wait: true, patch: true});
             }
         },
 
@@ -81,28 +81,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.$wraperContent );
+            window.Misc.setSpinner(this.$wraperContent);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.$wraperContent );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.$wraperContent);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
 
             	this.$el.modal('hide');
             }

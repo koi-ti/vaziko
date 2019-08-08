@@ -23,8 +23,7 @@ app || (app = {});
             'change #subtypeproductop': 'changeSubtypeProduct',
             'submit #form-cotizaciones': 'onStore'
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method
@@ -54,8 +53,10 @@ app || (app = {});
             this.$subtypeproduct = this.$('#subtypeproductop');
             this.$form = this.$('#form-cotizaciones');
             this.spinner = this.$('#spinner-main');
+            this.$renderChartProductos = this.$('#render-chart-cotizacion');
 
             // Reference views and ready
+            this.referenceCharts();
             this.referenceViews();
             this.ready();
         },
@@ -322,6 +323,90 @@ app || (app = {});
         },
 
         /**
+        * Reference charts
+        */
+        referenceCharts: function () {
+            var _this = this;
+
+            // Ajax charts
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('cotizaciones.charts', {cotizaciones: _this.model.get('id')})),
+                type: 'GET',
+                beforeSend: function () {
+                    window.Misc.setSpinner(_this.spinner);
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner(_this.spinner);
+                if (!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if (_.isObject(resp.errors)) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+
+                    if (!resp.success) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Render calendar
+                    _this.charts(resp);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner(_this.spinner);
+                alertify.error(thrownError);
+            });
+
+        },
+
+        /**
+        * charts
+        */
+        charts: function (resp) {
+            // Definir opciones globales para graficas del modulo
+            Chart.defaults.global.defaultFontColor="black";
+            Chart.defaults.global.defaultFontSize=12;
+            Chart.defaults.global.title.fontSize=14;
+
+            // Charts productos
+            if (!_.isEmpty(resp.chartproductos.data)) {
+                var ctx = this.$('#chart_producto').get(0).getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            backgroundColor: [
+                                '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C', '#FF0000'
+                            ],
+                            data: resp.chartproductos.data,
+                        }],
+                        labels: resp.chartproductos.labels,
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: false,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
+                        }
+                    },
+                });
+            }
+        },
+
+        /**
         * fires libraries js
         */
         ready: function () {
@@ -349,23 +434,22 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }

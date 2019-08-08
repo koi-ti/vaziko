@@ -91,6 +91,7 @@
                                 <th nowrap="nowrap">F. Entrega</th>
                                 <th nowrap="nowrap">H. Entrega</th>
                                 <th>Tercero</th>
+                                <th>Valor</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>

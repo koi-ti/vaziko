@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$rolesSearchTable = this.$('#roles-search-table');
             var paginacion = this.$rolesSearchTable.data('paginacion');
@@ -28,7 +28,7 @@ app || (app = {});
                 processing: true,
                 serverSide: true,
                 language: window.Misc.dataTableES(),
-                ajax: window.Misc.urlFull( Route.route('roles.index') ),
+                ajax: window.Misc.urlFull(Route.route('roles.index')),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 columns: [
@@ -38,10 +38,10 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nuevo rol',
+                        text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-                        action: function ( e, dt, node, config ) {
-                            window.Misc.redirect( window.Misc.urlFull( Route.route('roles.create') ) )
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('roles.create')))
                         }
                     }
                 ],
@@ -49,8 +49,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '25%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('roles.show', {roles: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('roles.show', {roles: full.id }))  +'">' + data + '</a>';
                         }
                     }
                 ]

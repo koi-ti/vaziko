@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('sucursales.index')}}">Sucursales</a></li>
-    <li class="active">{{ $sucursal->id }}</li>
+    <li class="active">{{ $sucursal->sucursal_nombre }}</li>
 @stop
 
 @section('module')

@@ -16,15 +16,11 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
+            this.cuotasFPList = new app.CuotasFPList();
 
-            // Model exist
-            if( this.model.id != undefined ) {
-                this.cuotasFPList = new app.CuotasFPList();
-
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**

@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             this.$asientosNifSearchTable = this.$('#asientosnif-search-table');
             var paginacion = this.$asientosNifSearchTable.data('paginacion');
 
@@ -26,7 +26,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('asientosnif.index') ),
+                ajax: window.Misc.urlFull(Route.route('asientosnif.index')),
                 columns: [
                     { data: 'asienton1_numero', name: 'asienton1_numero' },
                     { data: 'asienton1_ano', name: 'asienton1_ano' },

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\PuntoVenta;
 use DB, Log, Datatables, Cache;
@@ -56,9 +54,9 @@ class PuntoVentaController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( PuntoVenta::$key_cache );
+                    Cache::forget(PuntoVenta::$key_cache);
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class PuntoVentaController extends Controller
         if ($request->ajax()) {
             return response()->json($puntoventa);
         }
-        return view('admin.puntosventa.show', ['puntoventa' => $puntoventa]);
+        return view('admin.puntosventa.show', compact('puntoventa'));
     }
 
     /**
@@ -93,7 +91,7 @@ class PuntoVentaController extends Controller
     public function edit($id)
     {
         $puntoventa = PuntoVenta::findOrFail($id);
-        return view('admin.puntosventa.edit', ['puntoventa' => $puntoventa]);
+        return view('admin.puntosventa.edit', compact('puntoventa'));
     }
 
     /**
@@ -119,9 +117,9 @@ class PuntoVentaController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( PuntoVenta::$key_cache );
+                    Cache::forget(PuntoVenta::$key_cache);
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

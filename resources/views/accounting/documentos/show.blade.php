@@ -1,8 +1,8 @@
 @extends('accounting.documentos.main')
 
 @section('breadcrumb')
-<li><a href="{{route('documentos.index')}}">Documentos</a></li>
-<li class="active">{{ $documento->documento_codigo }}</li>
+    <li><a href="{{route('documentos.index')}}">Documentos</a></li>
+    <li class="active">{{ $documento->documento_codigo }}</li>
 @stop
 
 @section('module')

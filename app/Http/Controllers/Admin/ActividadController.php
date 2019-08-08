@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Actividad;
 use DB, Log, Datatables, Cache;
@@ -21,7 +19,7 @@ class ActividadController extends Controller
         if ($request->ajax()) {
             $query = Actividad::query();
 
-            if( $request->has('datatables') ) {
+            if ($request->has('datatables')) {
                 return Datatables::of($query)->make(true);
             }
 
@@ -29,25 +27,23 @@ class ActividadController extends Controller
             $query->select('koi_actividad.id', DB::raw("UPPER(CONCAT(actividad_codigo, ' - ', actividad_nombre)) as text"));
             $query->orderby('actividad_codigo', 'asc');
 
-            if($request->has('id')){
+            if ($request->has('id')) {
                 $query->where('koi_actividad.id', $request->id);
             }
 
-            if($request->has('q')) {
+            if ($request->has('q')) {
                 $query->where( function($query) use($request) {
                     $query->whereRaw("actividad_nombre like '%".$request->q."%'");
                     $query->orWhereRaw("actividad_codigo like '%".$request->q."%'");
                 });
             }
 
-            if(empty($request->q) && empty($request->id)) {
+            if (empty($request->q) && empty($request->id)) {
                 $query->take(50);
             }
 
             $query->orderby('actividad_nombre','asc');
             return response()->json($query->get());
-
-            return $data;
         }
         return view('admin.actividades.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -72,7 +68,6 @@ class ActividadController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $actividad = new Actividad;
             if ($actividad->isValid($data)) {
                 DB::beginTransaction();
@@ -85,9 +80,9 @@ class ActividadController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Actividad::$key_cache );
+                    Cache::forget(Actividad::$key_cache);
                     return response()->json(['success' => true, 'id' => $actividad->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -110,7 +105,7 @@ class ActividadController extends Controller
         if ($request->ajax()) {
             return response()->json($actividad);
         }
-        return view('admin.actividades.show', ['actividad' => $actividad]);
+        return view('admin.actividades.show', compact('actividad'));
     }
 
     /**
@@ -122,7 +117,7 @@ class ActividadController extends Controller
     public function edit($id)
     {
         $actividad = Actividad::findOrFail($id);
-        return view('admin.actividades.edit', ['actividad' => $actividad]);
+        return view('admin.actividades.edit', compact('actividad'));
     }
 
     /**
@@ -136,7 +131,6 @@ class ActividadController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $actividad = Actividad::findOrFail($id);
             if ($actividad->isValid($data)) {
                 DB::beginTransaction();
@@ -149,9 +143,9 @@ class ActividadController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Actividad::$key_cache );
+                    Cache::forget(Actividad::$key_cache);
                     return response()->json(['success' => true, 'id' => $actividad->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

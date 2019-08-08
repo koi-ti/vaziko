@@ -12,8 +12,8 @@
         </ol>
     </section>
 
-    <section class="content">
-        <div class="box box-success" id="precotizaciones-show">
+    <section class="content" id="precotizaciones-show">
+        <div class="box box-success spinner-main">
             <div class="box-body">
             	<div class="row">
 					<div class="form-group col-md-2">
@@ -29,19 +29,17 @@
                             @endif
                         </div>
 					</div>
-
 					<div class="form-group col-md-3">
 						<label class="control-label">Fecha</label>
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
-
-                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                    @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
                         <div class="col-md-offset-5 col-md-2">
                             <div class="btn-group btn-group-justified" role="group">
-                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                                     <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
                                 @endif
-                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                                @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
                                     <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                                     <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                                 @endif
@@ -100,8 +98,7 @@
                         <label class="control-label">Fecha elaboro</label>
                         <div>{{ $precotizacion->precotizacion1_fh_elaboro }}</div>
                     </div>
-
-                    @if ( $precotizacion->precotizacion1_usuario_culminada )
+                    @if ($precotizacion->precotizacion1_usuario_culminada)
                         <div class="form-group col-md-2">
                             <label class="control-label">Usuario culmino</label>
                             <div>
@@ -115,31 +112,32 @@
                         </div>
                     @endif
                 </div>
-
+            </div>
+            <div class="box-footer with-border">
                 <div class="row">
                     <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
                         <a href="{{ route('precotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                     </div>
-                </div><br />
-
-                <div class="box box-success" id="wrapper-productop-precotizacion">
-                    <div class="box-body">
-                        <!-- table table-bordered table-striped -->
-                        <div class="box-body table-responsive no-padding">
-                            <table id="browse-precotizacion-productop-list" class="table table-bordered" cellspacing="0">
-                                <thead>
-                                    <tr>
-                                        <th width="5%">Código</th>
-                                        <th width="65%">Nombre</th>
-                                        <th width="10%">Cantidad</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-               </div>
+                </div>
             </div>
-      	</div>
+        </div>
+
+        <div class="box box-success spinner-main">
+            <div class="box-body">
+                <!-- table table-bordered table-striped -->
+                <div class="box-body table-responsive no-padding">
+                    <table id="browse-precotizacion-productop-list" class="table table-bordered" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th width="5%">Código</th>
+                                <th width="65%">Nombre</th>
+                                <th width="10%">Cantidad</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+       </div>
     </section>
 
     <script type="text/template" id="precotizaciones-open-confirm-tpl">

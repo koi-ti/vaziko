@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Modulo, App\Models\Base\Rol, App\Models\Base\PermisoRol, App\Models\Base\Permiso;
 use Datatables, DB, Log;
@@ -18,8 +16,7 @@ class PermisoRolController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax())
-        {
+        if ($request->ajax()) {
             $query = Modulo::query();
             $query->select('koi_modulo.id', 'display_name', 'nivel1', 'nivel2', 'nivel3', 'nivel4');
             $query->where('nivel1', '=', $request->nivel1);
@@ -30,8 +27,7 @@ class PermisoRolController extends Controller
             $modules = $query->get();
 
             $data = [];
-            foreach ($modules as $module)
-            {
+            foreach ($modules as $module) {
                 $object = new \stdClass();
                 $object->id = $module->id;
                 $object->display_name = $module->display_name;
@@ -54,49 +50,6 @@ class PermisoRolController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -109,13 +62,13 @@ class PermisoRolController extends Controller
             DB::beginTransaction();
             try {
                 $module = Modulo::find($id);
-                if(!$module instanceof Modulo) {
+                if (!$module instanceof Modulo) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
 
                 $role = Rol::find($request->role_id);
-                if(!$role instanceof Rol) {
+                if (!$role instanceof Rol) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
@@ -128,16 +81,16 @@ class PermisoRolController extends Controller
                     $query->where('permission_id', $permission->id);
                     $permissionrole = $query->first();
 
-                    if($request->has("permiso_$permission->id")) {
-                        if(!$permissionrole instanceof PermisoRol){
+                    if ($request->has("permiso_$permission->id")) {
+                        if (!$permissionrole instanceof PermisoRol) {
                             $permissionrole = new PermisoRol;
                             $permissionrole->role_id = $role->id;
                             $permissionrole->module_id = $module->id;
                             $permissionrole->permission_id = $permission->id;
                             $permissionrole->save();
                         }
-                    }else{
-                        if($permissionrole instanceof PermisoRol){
+                    } else {
+                        if ($permissionrole instanceof PermisoRol) {
                             PermisoRol::where('role_id', $role->id)->where('module_id', $module->id)->where('permission_id', $permission->id)->delete();
                         }
                     }
@@ -146,23 +99,12 @@ class PermisoRolController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
         }
         abort(403);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

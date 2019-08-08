@@ -16,15 +16,11 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
+        initialize: function () {
+        	this.trasladoProductosList = new app.TrasladoProductosList();
 
-            	this.trasladoProductosList = new app.TrasladoProductosList();
-
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**

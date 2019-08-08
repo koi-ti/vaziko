@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\Folder;
 use DB, Log, Datatables;
@@ -19,7 +17,7 @@ class FolderController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Folder::query() )->make(true);
+            return Datatables::of(Folder::query())->make(true);
         }
         return view('accounting.folders.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -55,7 +53,7 @@ class FolderController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $folder->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -78,7 +76,7 @@ class FolderController extends Controller
         if ($request->ajax()) {
             return response()->json($folder);
         }
-        return view('accounting.folders.show', ['folder' => $folder]);
+        return view('accounting.folders.show', compact('folder'));
     }
 
     /**
@@ -90,7 +88,7 @@ class FolderController extends Controller
     public function edit($id)
     {
         $folder = Folder::findOrFail($id);
-        return view('accounting.folders.edit', ['folder' => $folder]);
+        return view('accounting.folders.edit', compact('folder'));
     }
 
     /**
@@ -115,7 +113,7 @@ class FolderController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $folder->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

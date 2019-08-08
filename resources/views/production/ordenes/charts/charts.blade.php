@@ -7,5 +7,6 @@
         <div id="render-chart-empleado"></div>
         <div id="render-chart-areasp"></div>
         <div id="render-chart-productop"></div>
+        <div id="render-chart-ordenp"></div>
     </div>
 </div>

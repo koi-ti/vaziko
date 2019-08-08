@@ -20,7 +20,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
 
             // Rerefences
@@ -41,8 +41,8 @@ app || (app = {});
                 language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('facturap.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('facturap.index')),
+                    data: function(data) {
                         data.persistent = true;
                         data.facturap = _this.$searchfacturapFacturap.val();
                         data.facturap_fecha = _this.$searchfacturapFecha.val();
@@ -61,21 +61,21 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '5%',
-                        render: function ( data, type, full, row ) {
-                           return '<a href="'+ window.Misc.urlFull( Route.route('facturap.show', {facturap: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturap.show', {facturap: full.id}))  +'">' + data + '</a>';
                         },
                     },
                 ]
             });
         },
 
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.facturaspSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchfacturapFacturap.val('');

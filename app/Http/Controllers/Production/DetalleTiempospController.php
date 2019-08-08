@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Tiempop, App\Models\Production\Actividadp, App\Models\Production\SubActividadp, App\Models\Production\Ordenp, App\Models\Production\Areap;
 use DB, Log, Auth, Carbon\Carbon;
@@ -18,63 +16,19 @@ class DetalleTiempospController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
-            $detalle = [];
-
-            if( $request->type == 'tiemposp' ){
-                $detalle = Tiempop::getTiemposp();
+        if ($request->ajax()) {
+            $data = [];
+            if ($request->type == 'tiemposp') {
+                $data = Tiempop::getTiemposp();
             }
 
-            if( $request->type == 'ordenp' ){
-                $detalle = Tiempop::getTiempospOrdenp( $request->orden2_orden );
+            if ($request->type == 'ordenp') {
+                $data = Tiempop::getTiempospOrdenp($request->orden2_orden);
             }
 
-            return response()->json($detalle);
+            return response()->json($data);
         }
         abort(404);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -91,13 +45,13 @@ class DetalleTiempospController extends Controller
             $type = $request->type;
 
             $tiempop = Tiempop::findOrFail( $id );
-            if( !$tiempop instanceof Tiempop ){
+            if (!$tiempop instanceof Tiempop) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar el tiempo de la orden, por favor verifique la información o consulte al administrador.']);
             }
 
             switch ($type) {
                 case 'tiemposp':
-                    if( $tiempop->tiempop_tercero != Auth::user()->id ){
+                    if ($tiempop->tiempop_tercero != Auth::user()->id) {
                         return response()->json(['success' => false, 'errors' => 'El tiempo que esta intentando editar no corresponde al tercero, por favor verifique la información o consulte al administrador.']);
                     }
 
@@ -115,17 +69,17 @@ class DetalleTiempospController extends Controller
                     });
                     $rango = $query->get();
 
-                    if( count($rango) > 0){
+                    if (count($rango) > 0) {
                         return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede interferir con otras ya registradas, por favor verifique la información o consulte al administrador.']);
                     }
 
-                    if( $convertendtime <= $convertinitialtime ){
+                    if ($convertendtime <= $convertinitialtime) {
                         return response()->json(['success' => false, 'errors' => 'La hora de inicio no puede ser mayor o igual a la final.']);
                     }
 
                     // Recuperar ordenp
                     $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$request->tiempop_ordenp_edit'")->first();
-                    if(!$ordenp instanceof Ordenp){
+                    if (!$ordenp instanceof Ordenp) {
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden, por favor verifique la información o consulte al administrador.']);
                     }
 
@@ -139,7 +93,7 @@ class DetalleTiempospController extends Controller
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'msg' => 'El tiempo se edito con exito.']);
-                    }catch(\Exception $e){
+                    } catch(\Exception $e) {
                         DB::rollback();
                         Log::error($e->getMessage());
                         return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -147,39 +101,38 @@ class DetalleTiempospController extends Controller
                     break;
 
                 case 'ordenp':
-                    if ( $tiempop->isValid($data) ) {
+                    if ($tiempop->isValid($data)) {
                        DB::beginTransaction();
                        try{
                            $subactividadp = null;
                            // Recuperar Actividadp
                            $actividadp = Actividadp::find($request->tiempop_actividadp);
-                           if(!$actividadp instanceof Actividadp){
+                           if (!$actividadp instanceof Actividadp) {
                                DB::rollback();
                                return  response()->json(['success' => false, 'errors' => 'No es posible recuperar la actividad de producción, por favor verifique la información o consulte al administrador.']);
                            }
 
                            // Recuperar SubActividadp
-                           if( !empty($request->tiempop_subactividadp) ){
+                           if (!empty($request->tiempop_subactividadp)) {
                                $subactividadp = SubActividadp::find( $request->tiempop_subactividadp );
-                               if(!$subactividadp instanceof SubActividadp){
+                               if (!$subactividadp instanceof SubActividadp) {
                                    DB::rollback();
                                    return  response()->json(['success' => false, 'errors' => 'No es posible recuperar la subactividad de producción, por favor verifique la información o consulte al administrador.']);
                                }
 
-                               if( $subactividadp->subactividadp_actividadp != $actividadp->id ){
+                               if ($subactividadp->subactividadp_actividadp != $actividadp->id) {
                                    DB::rollback();
                                    return  response()->json(['success' => false, 'errors' => 'La subactividad no corresponde a la actividad de producción, por favor verifique la información o consulte al administrador.']);
                                }
-
                                $tiempop->tiempop_subactividadp = $subactividadp->id;
                                $subactividadp = $subactividadp->subactividadp_nombre;
-                           }else{
+                           } else {
                                $tiempop->tiempop_subactividadp = null;
                            }
 
                            // Recuperar Areap
                            $areap = Areap::find($request->tiempop_areap);
-                           if(!$areap instanceof Areap){
+                           if (!$areap instanceof Areap) {
                                DB::rollback();
                                return  response()->json(['success' => false, 'errors' => 'No es posible recuperar el área de producción, por favor verifique la información o consulte al administrador.']);
                            }
@@ -193,7 +146,7 @@ class DetalleTiempospController extends Controller
                            // Commit Transaction
                            DB::commit();
                            return response()->json(['success' => true, 'actividadp_nombre' => $actividadp->actividadp_nombre, 'subactividadp_nombre' => $subactividadp, 'areap_nombre' => $areap->areap_nombre, 'msg' => 'El tiempo se edito con exito.']);
-                       }catch(\Exception $e){
+                       } catch(\Exception $e) {
                            DB::rollback();
                            Log::error($e->getMessage());
                            return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -208,16 +161,5 @@ class DetalleTiempospController extends Controller
             return response()->json(['success' => false, 'errors' => $tiempop->errors]);
         }
         abort(404);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

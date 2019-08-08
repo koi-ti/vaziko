@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Ordenp2, App\Models\Production\Ordenp8;
 use DB, Log, Storage, Auth;
@@ -20,8 +18,8 @@ class DetalleImagenespController extends Controller
      */
     public function index(Request $request)
     {
-        if( $request->ajax() ){
-            if( $request->has('orden2') ){
+        if ($request->ajax()) {
+            if ($request->has('orden2')) {
                 $query = Ordenp8::query();
                 $query->select('koi_ordenproduccion8.*', 'orden2_orden');
                 $query->join('koi_ordenproduccion2', 'orden8_orden2', '=', 'koi_ordenproduccion2.id');
@@ -30,7 +28,7 @@ class DetalleImagenespController extends Controller
 
                 $data = [];
                 foreach ($imagenes as $imagen) {
-                    if(Storage::has("ordenes/orden_$imagen->orden2_orden/producto_$imagen->orden8_orden2/$imagen->orden8_archivo")) {
+                    if (Storage::has("ordenes/orden_$imagen->orden2_orden/producto_$imagen->orden8_orden2/$imagen->orden8_archivo")) {
                         $object = new \stdClass();
                         $object->uuid = $imagen->id;
                         $object->name = $imagen->orden8_archivo;
@@ -46,16 +44,6 @@ class DetalleImagenespController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -66,13 +54,13 @@ class DetalleImagenespController extends Controller
         if ($request->ajax()) {
             // Recuperar orden
             $orden2 = Ordenp2::find($request->orden2);
-            if(!$orden2 instanceof Ordenp2){
+            if (!$orden2 instanceof Ordenp2) {
                 abort(404);
             }
 
             // Validar que tenga imagenes
             $file = $request->file;
-            if( !empty($file) ){
+            if (!empty($file)) {
                 DB::beginTransaction();
                 try {
                     // Recuperar nombre de archivo
@@ -94,7 +82,7 @@ class DetalleImagenespController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $imagen->id, 'name' => $imagen->orden8_archivo, 'url' => $url]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -102,40 +90,6 @@ class DetalleImagenespController extends Controller
             }
         }
         abort(403);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -150,31 +104,31 @@ class DetalleImagenespController extends Controller
             DB::beginTransaction();
             try {
                 $orden8 = Ordenp8::find($id);
-                if(!$orden8 instanceof Ordenp8){
+                if (!$orden8 instanceof Ordenp8) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen de la orden de producción, por favor verifique la información o consulte al administrador.']);
                 }
 
                 $orden2 = Ordenp2::find($request->orden2);
-                if(!$orden2 instanceof Ordenp2){
+                if (!$orden2 instanceof Ordenp2) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden de producción, por favor verifique la información o consulte al administrador.']);
                 }
 
-                if( $orden8->orden8_orden2 != $orden2->id ){
+                if ($orden8->orden8_orden2 != $orden2->id) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'La imagen que esta intentando eliminar no corresponde al detalle, por favor verifique la información o consulte al administrador.']);
                 }
 
                 // Eliminar item detallepedido
-                if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                if (Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo")) {
                     Storage::delete("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo");
                     $orden8->delete();
                 }
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error("Ordenp8Controller->destroy:{$e->getMessage()}");
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

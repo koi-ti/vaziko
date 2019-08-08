@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('puntosventa.index')}}">Puntos de venta</a></li>
-	<li><a href="{{ route('puntosventa.show', ['puntosventa' => $puntoventa->id]) }}">{{ $puntoventa->id }}</a></li>
+	<li><a href="{{ route('puntosventa.show', ['puntosventa' => $puntoventa->id]) }}">{{ $puntoventa->puntoventa_nombre }}</a></li>
 	<li class="active">Editar</li>
 @stop
 

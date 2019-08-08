@@ -3,13 +3,9 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use DB, Log;
-
 use App\Models\Production\Maquinap, App\Models\Production\Productop, App\Models\Production\Productop4;
+use DB, Log;
 
 class Productop4Controller extends Controller
 {
@@ -20,26 +16,15 @@ class Productop4Controller extends Controller
      */
     public function index(Request $request)
     {
-        if ($request->ajax())
-        {
+        if ($request->ajax()) {
             $query = Productop4::query();
             $query->where('productop4_productop', $request->productop_id);
             $query->select('koi_productop4.*', 'koi_maquinap.id as maquinap_id', 'maquinap_nombre');
             $query->join('koi_maquinap', 'productop4_maquinap', '=', 'koi_maquinap.id');
             $query->orderBy('koi_productop4.id', 'asc');
-            return response()->json( $query->get() );
+            return response()->json($query->get());
         }
         abort(404);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -52,28 +37,27 @@ class Productop4Controller extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $productop4 = new Productop4;
             if ($productop4->isValid($data)) {
                 DB::beginTransaction();
                 try {
                     // Validar producto
                     $productop = Productop::find($request->productop4_productop);
-                    if(!$productop instanceof Productop) {
+                    if (!$productop instanceof Productop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar maquinap
                     $maquinap = Maquinap::find($request->productop4_maquinap);
-                    if(!$maquinap instanceof Maquinap) {
+                    if (!$maquinap instanceof Maquinap) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar maquina, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar unique
                     $productop4uq = Productop4::where('productop4_productop', $productop->id)->where('productop4_maquinap', $maquinap->id)->first();
-                    if($productop4uq instanceof Productop4) {
+                    if ($productop4uq instanceof Productop4) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => "El área {$maquinap->maquinap_nombre} ya se encuentra asociada a este producto."]);
                     }
@@ -86,7 +70,7 @@ class Productop4Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $productop4->id, 'maquinap_id' => $maquinap->id, 'maquinap_nombre' => $maquinap->maquinap_nombre]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -95,40 +79,6 @@ class Productop4Controller extends Controller
             return response()->json(['success' => false, 'errors' => $productop4->errors]);
         }
         abort(403);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
     }
 
     /**
@@ -142,9 +92,8 @@ class Productop4Controller extends Controller
         if ($request->ajax()) {
             DB::beginTransaction();
             try {
-
                 $productop4 = Productop4::find($id);
-                if(!$productop4 instanceof Productop4){
+                if (!$productop4 instanceof Productop4) {
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar maquina, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
@@ -153,8 +102,7 @@ class Productop4Controller extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Productop4Controller', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

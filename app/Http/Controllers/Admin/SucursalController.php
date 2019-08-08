@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Sucursal;
 use DB, Log, Datatables, Cache;
@@ -58,9 +56,9 @@ class SucursalController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Sucursal::$key_cache );
+                    Cache::forget(Sucursal::$key_cache);
                     return response()->json(['success' => true, 'id' => $sucursal->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -83,7 +81,7 @@ class SucursalController extends Controller
         if ($request->ajax()) {
             return response()->json($sucursal);
         }
-        return view('admin.sucursal.show', ['sucursal' => $sucursal]);
+        return view('admin.sucursal.show', compact('sucursal'));
     }
 
     /**
@@ -95,7 +93,7 @@ class SucursalController extends Controller
     public function edit($id)
     {
         $sucursal = Sucursal::findOrFail($id);
-        return view('admin.sucursal.edit', ['sucursal' => $sucursal]);
+        return view('admin.sucursal.edit', compact('sucursal'));
     }
 
     /**
@@ -121,9 +119,9 @@ class SucursalController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Sucursal::$key_cache );
+                    Cache::forget(Sucursal::$key_cache);
                     return response()->json(['success' => true, 'id' => $sucursal->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

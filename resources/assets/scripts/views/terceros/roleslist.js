@@ -24,9 +24,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listeners
@@ -36,14 +36,7 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            this.collection.fetch({data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true});
         },
 
         /**
@@ -58,14 +51,14 @@ app || (app = {});
                 }
             });
             usuariorolModel.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.prepend(view.render().el);
         },
 
         /**
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -73,43 +66,43 @@ app || (app = {});
         * @param form element
         */
         storeOne: function (data) {
-            var _this = this
+            var _this = this;
+
             // Set Spinner
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
 
             // Prepare data
             data.user_id = this.parameters.dataFilter.tercero_id;
 
             // Add model in collection
             var usuariorolModel = new app.UsuarioRolModel();
-            usuariorolModel.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.parameters.wrapper );
+                usuariorolModel.save(data, {
+                    success: function(model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
 
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
                         }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        // Add model in collection
-                        _this.collection.add(model);
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
-                /**
+        /**
         * Event remove item
         */
         removeOne: function (e) {
@@ -119,15 +112,14 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
                 model.destroy({
                     data: { user_id: this.parameters.dataFilter.tercero_id },
                     processData: true,
-                    success : function(model, resp) {
-                        if(!_.isUndefined(resp.success)) {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
                             window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                            if( !resp.success ) {
+                            if (!resp.success) {
                                 alertify.error(resp.errors);
                                 return;
                             }
@@ -142,15 +134,15 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

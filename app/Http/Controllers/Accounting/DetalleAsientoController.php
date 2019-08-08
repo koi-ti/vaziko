@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
 use Log, DB;
@@ -47,7 +45,7 @@ class DetalleAsientoController extends Controller
                 DB::beginTransaction();
                 try {
                     // Recuperar asiento
-                    $asiento = Asiento::find($request->asiento1_id);
+                    $asiento = Asiento::find($request->asiento);
                     if (!$asiento instanceof Asiento) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar asiento, por favor verifique la información del asiento o consulte al administrador.']);

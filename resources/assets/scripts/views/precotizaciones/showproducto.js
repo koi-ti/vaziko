@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             _.bindAll(this, 'onSessionRequestComplete');
 
             // Recuperar fineuploader container
@@ -27,7 +27,7 @@ app || (app = {});
         /**
         * UploadPictures
         */
-        uploadPictures: function(e) {
+        uploadPictures: function (e) {
             var _this = this;
 
             this.$uploaderFile.fineUploader({
@@ -49,7 +49,7 @@ app || (app = {});
                 },
                 callbacks: {
                     onSessionRequestComplete: _this.onSessionRequestComplete,
-                },
+                }
             });
 
             this.$uploaderFile.find('.buttons').remove();
@@ -57,11 +57,9 @@ app || (app = {});
         },
 
         onSessionRequestComplete: function (id, name, resp) {
-            this.$uploaderFile.find('.btn-imprimir').remove();
-
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
             }, this);
         },
     });

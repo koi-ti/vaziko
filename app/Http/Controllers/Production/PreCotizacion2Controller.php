@@ -3,11 +3,11 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Productop, App\Models\Base\Tercero, App\Models\Production\Materialp, App\Models\Production\Areap, App\Models\Inventory\Producto;
-use Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Productop, App\Models\Production\Materialp, App\Models\Production\Areap;
+use App\Models\Base\Tercero;
+use App\Models\Inventory\Producto;
+use Auth, DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
 {
@@ -19,11 +19,11 @@ class PreCotizacion2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $detalle = [];
-            if($request->has('precotizacion2_precotizacion1')) {
-                $detalle = PreCotizacion2::getPreCotizaciones2($request->precotizacion2_precotizacion1);
+            $data = [];
+            if ($request->has('precotizacion')) {
+                $data = PreCotizacion2::getPreCotizaciones2($request->precotizacion);
             }
-            return response()->json($detalle);
+            return response()->json($data);
         }
         abort(404);
     }
@@ -37,21 +37,21 @@ class PreCotizacion2Controller extends Controller
     {
         // Recuperar precotizacion
         $precotizacion = $request->has('precotizacion') ? PreCotizacion1::getPreCotizacion($request->precotizacion) : null;
-        if(!$precotizacion instanceof PreCotizacion1) {
+        if (!$precotizacion instanceof PreCotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = $request->has('productop') ? Productop::getProduct($request->productop) : null;
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
-        if( $precotizacion->precotizacion1_abierta == false ) {
-            return redirect()->route('precotizaciones.show', ['precotizacion' => $precotizacion]);
+        if (!$precotizacion->precotizacion1_abierta) {
+            return redirect()->route('precotizaciones.show', compact('precotizacion'));
         }
 
-        return view('production.precotizaciones.productos.create', ['precotizacion' => $precotizacion, 'producto' => $producto]);
+        return view('production.precotizaciones.productos.create', compact('precotizacion', 'producto'));
     }
 
     /**
@@ -62,7 +62,7 @@ class PreCotizacion2Controller extends Controller
      */
     public function store(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             $data = $request->all();
             $data['materialesp'] = json_decode($data['materialesp']);
             $data['empaques'] = json_decode($data['empaques']);
@@ -74,14 +74,14 @@ class PreCotizacion2Controller extends Controller
                 try {
                     // Validar producto
                     $producto = Productop::find($request->precotizacion2_productop);
-                    if(!$producto instanceof Productop) {
+                    if (!$producto instanceof Productop) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar producto, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar cotizacion
-                    $precotizacion = PreCotizacion1::find($request->precotizacion2_precotizacion1);
-                    if(!$precotizacion instanceof PreCotizacion1) {
+                    $precotizacion = PreCotizacion1::find($request->precotizacion);
+                    if (!$precotizacion instanceof PreCotizacion1) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar pre-cotizacion, por favor verifique la información o consulte al administrador.']);
                     }
@@ -127,7 +127,7 @@ class PreCotizacion2Controller extends Controller
                         $imagen->precotizacion4_archivo = $name;
                         $imagen->precotizacion4_precotizacion2 = $precotizacion2->id;
                         $imagen->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
-                        $imagen->precotizacion4_usuario_elaboro = Auth::user()->id;
+                        $imagen->precotizacion4_usuario_elaboro = auth()->user()->id;
                         $imagen->save();
 
                         $object = new \stdClass();
@@ -162,7 +162,7 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                         $precotizacion3->precotizacion3_materialp = $materialp->id;
                         $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
-                        $precotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                        $precotizacion3->precotizacion3_usuario_elaboro = auth()->user()->id;
                         $precotizacion3->save();
                     }
 
@@ -208,7 +208,7 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion9->precotizacion9_producto = $producto->id;
                         $precotizacion9->precotizacion9_precotizacion2 = $precotizacion2->id;
                         $precotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
-                        $precotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
+                        $precotizacion9->precotizacion9_usuario_elaboro = auth()->user()->id;
                         $precotizacion9->save();
                     }
 
@@ -243,7 +243,7 @@ class PreCotizacion2Controller extends Controller
     {
         // Recuperar precotizacion2
         $precotizacion2 = PreCotizacion2::getPreCotizacion2($id);
-        if(!$precotizacion2 instanceof PreCotizacion2) {
+        if (!$precotizacion2 instanceof PreCotizacion2) {
             abort(404);
         }
 
@@ -252,22 +252,22 @@ class PreCotizacion2Controller extends Controller
         }
 
         // Recuperar precotizacion
-        $precotizacion = PreCotizacion1::getPreCotizacion( $precotizacion2->precotizacion2_precotizacion1 );
-        if(!$precotizacion instanceof PreCotizacion1) {
+        $precotizacion = PreCotizacion1::getPreCotizacion($precotizacion2->precotizacion2_precotizacion1);
+        if (!$precotizacion instanceof PreCotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = Productop::getProduct($precotizacion2->precotizacion2_productop);
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar precotizacion
-        if( $precotizacion->precotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'precotizaciones']) ){
+        if ($precotizacion->precotizacion1_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'precotizaciones'])) {
             return redirect()->route('precotizaciones.productos.edit', ['productos' => $precotizacion2->id]);
         }
-        return view('production.precotizaciones.productos.show', ['precotizacion' => $precotizacion, 'producto' => $producto, 'precotizacion2' => $precotizacion2]);
+        return view('production.precotizaciones.productos.show', compact('precotizacion', 'producto', 'precotizacion2'));
     }
 
     /**
@@ -282,22 +282,22 @@ class PreCotizacion2Controller extends Controller
         $precotizacion2 = PreCotizacion2::findOrFail($id);
 
         // Recuperar cotizacion
-        $precotizacion = PreCotizacion1::getPreCotizacion( $precotizacion2->precotizacion2_precotizacion1 );
-        if(!$precotizacion instanceof PreCotizacion1) {
+        $precotizacion = PreCotizacion1::getPreCotizacion($precotizacion2->precotizacion2_precotizacion1);
+        if (!$precotizacion instanceof PreCotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
-        $producto = Productop::getProduct( $precotizacion2->precotizacion2_productop );
-        if(!$producto instanceof Productop) {
+        $producto = Productop::getProduct($precotizacion2->precotizacion2_productop);
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar cotizacion
-        if($precotizacion->precotizacion1_abierta == false) {
+        if (!$precotizacion->precotizacion1_abierta) {
             return redirect()->route('precotizaciones.productos.show', ['productos' => $precotizacion2->id]);
         }
-        return view('production.precotizaciones.productos.create', ['precotizacion' => $precotizacion, 'producto' => $producto, 'precotizacion2' => $precotizacion2]);
+        return view('production.precotizaciones.productos.create', compact('precotizacion', 'producto', 'precotizacion2'));
     }
 
     /**
@@ -386,7 +386,7 @@ class PreCotizacion2Controller extends Controller
                                 $precotizacion3->precotizacion3_precotizacion2 = $precotizacion2->id;
                                 $precotizacion3->precotizacion3_materialp = $materialp->id;
                                 $precotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
-                                $precotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                                $precotizacion3->precotizacion3_usuario_elaboro = auth()->user()->id;
                                 $precotizacion3->save();
 
                             } else {
@@ -426,7 +426,7 @@ class PreCotizacion2Controller extends Controller
                                 $precotizacion9->precotizacion9_materialp = $materialp->id;
                                 $precotizacion9->precotizacion9_precotizacion2 = $precotizacion2->id;
                                 $precotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
-                                $precotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
+                                $precotizacion9->precotizacion9_usuario_elaboro = auth()->user()->id;
                                 $precotizacion9->save();
 
                             } else {
@@ -575,7 +575,7 @@ class PreCotizacion2Controller extends Controller
                 foreach ($imagenes as $precotizacion4) {
                     $newprecotizacion4 = $precotizacion4->replicate();
                     $newprecotizacion4->precotizacion4_precotizacion2 = $newprecotizacion2->id;
-                    $newprecotizacion4->precotizacion4_usuario_elaboro = Auth::user()->id;
+                    $newprecotizacion4->precotizacion4_usuario_elaboro = auth()->user()->id;
                     $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                     $newprecotizacion4->save();
 
@@ -595,7 +595,7 @@ class PreCotizacion2Controller extends Controller
                 foreach ($materiales as $precotizacion3) {
                      $newprecotizacion3 = $precotizacion3->replicate();
                      $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
-                     $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                     $newprecotizacion3->precotizacion3_usuario_elaboro = auth()->user()->id;
                      $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
                      $newprecotizacion3->save();
                 }
@@ -605,7 +605,7 @@ class PreCotizacion2Controller extends Controller
                 foreach ($empaques as $precotizacion9) {
                      $newprecotizacion9 = $precotizacion9->replicate();
                      $newprecotizacion9->precotizacion9_precotizacion2 = $newprecotizacion2->id;
-                     $newprecotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
+                     $newprecotizacion9->precotizacion9_usuario_elaboro = auth()->user()->id;
                      $newprecotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
                      $newprecotizacion9->save();
                 }

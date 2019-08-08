@@ -492,7 +492,7 @@
 <script type="text/template" id="add-serie-tpl">
     <td class="text-center"><%- id %></td>
     <td>
-    	<input type="text" id="producto_serie_<%- id %>" name="producto_serie_<%- id %>" class="form-control input-sm input-toupper" maxlength="15" required>
+    	<input type="text" id="producto_serie_<%- id %>" name="producto_serie_<%- id %>" class="form-control input-sm input-toupper" placeholder="Nombre" maxlength="15" required>
     </td>
 </script>
 
@@ -550,14 +550,14 @@
                 <input type="text" value="{{ $codigo }}" class="form-control input-sm input-toupper" disabled>
     		</div>
         @endif
-
-		<div class="form-group col-md-3">
-			<label for="producto_codigoori" class="control-label">Código proveedor</label>
-			<input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="50" required>
+        <div class="form-group col-md-9">
+            <label for="producto_codigoori" class="control-label">Código proveedor</label>
+            <input type="text" id="producto_codigoori" name="producto_codigoori" value="<%- producto_codigoori %>" placeholder="Código" class="form-control input-sm input-toupper" maxlength="200" required>
             <div class="help-block with-errors"></div>
-		</div>
-
-		<div class="form-group col-md-6">
+        </div>
+	</div>
+	<div class="row">
+        <div class="form-group col-md-12">
 			<label for="producto_nombre" class="control-label">Nombre</label>
 			<input type="text" id="producto_nombre" name="producto_nombre" value="<%- producto_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
             <div class="help-block with-errors"></div>
@@ -829,12 +829,12 @@
 <script type="text/template" id="add-asiento2-item-tpl">
 	<% if(edit) { %>
     	<td class="text-center" width="2%">
-    		<a class="btn btn-default btn-xs item-asiento2-edit" data-resource="<%- id %>">
+    		<a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
                 <span><i class="fa fa-pencil"></i></span>
     		</a>
         </td>
         <td class="text-center" width="2%">
-    		<a class="btn btn-default btn-xs item-asiento2-remove" data-resource="<%- id %>">
+    		<a class="btn btn-default btn-xs item-remove" data-resource="<%- id %>">
                 <span><i class="fa fa-times"></i></span>
     		</a>
     	</td>
@@ -857,7 +857,7 @@
     <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
     <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
     <td class="text-center" width="2%">
-		<a class="btn btn-default btn-xs item-asiento2-show" data-resource="<%- id %>">
+		<a class="btn btn-default btn-xs item-show" data-resource="<%- id %>">
 			<span><i class="fa fa-info-circle"></i></span>
 		</a>
 	</td>

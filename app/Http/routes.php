@@ -58,8 +58,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'update', 'destroy']]);
 	});
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
-    Route::resource('permisos', 'Admin\PermisoController', ['only' => ['index']]);
-    Route::resource('modulos', 'Admin\ModuloController', ['only' => ['index']]);
 
 	/*
 	|-------------------------
@@ -85,9 +83,10 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::resource('documentos', 'Accounting\DocumentoController', ['except' => ['destroy']]);
 
 	Route::group(['prefix' => 'asientos'], function() {
-		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'update', 'destroy']]);
-		Route::post('import', ['as' => 'asientos.import', 'uses' => 'Accounting\AsientoController@import']);
+		Route::get('reverse/{asientos}', ['as' => 'asientos.reverse', 'uses' => 'Accounting\AsientoController@reverse']);
 		Route::get('exportar/{asientos}', ['as' => 'asientos.exportar', 'uses' => 'Accounting\AsientoController@exportar']);
+		Route::post('import', ['as' => 'asientos.import', 'uses' => 'Accounting\AsientoController@import']);
+		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'update', 'destroy']]);
 
 		Route::group(['prefix' => 'detalle'], function() {
 			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
@@ -175,6 +174,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
 		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
 		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
+		Route::get('charts/{cotizaciones}', ['as' => 'cotizaciones.charts', 'uses' => 'Production\Cotizacion1Controller@charts']);
 
 		Route::group(['prefix' => 'productos'], function(){
 			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\TipoMaterialp;
 use DB, Log, Datatables, Cache;
@@ -18,8 +16,8 @@ class TipoMaterialespController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
-            return Datatables::of( TipoMaterialp::query() )->make(true);
+        if ($request->ajax()) {
+            return Datatables::of(TipoMaterialp::query())->make(true);
         }
         return view('production.tipomaterialesp.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -57,9 +55,9 @@ class TipoMaterialespController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( TipoMaterialp::$key_cache );
+                    Cache::forget(TipoMaterialp::$key_cache);
                     return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -82,7 +80,7 @@ class TipoMaterialespController extends Controller
         if ($request->ajax()) {
             return response()->json($tipomaterialp);
         }
-        return view('production.tipomaterialesp.show', ['tipomaterialp' => $tipomaterialp]);
+        return view('production.tipomaterialesp.show', compact('tipomaterialp'));
     }
 
     /**
@@ -94,7 +92,7 @@ class TipoMaterialespController extends Controller
     public function edit($id)
     {
         $tipomaterialp = TipoMaterialp::findOrFail($id);
-        return view('production.tipomaterialesp.edit', ['tipomaterialp' => $tipomaterialp]);
+        return view('production.tipomaterialesp.edit', compact('tipomaterialp'));
     }
 
     /**
@@ -119,11 +117,11 @@ class TipoMaterialespController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
-                    Cache::forget( TipoMaterialp::$key_cache );
+                    Cache::forget(TipoMaterialp::$key_cache);
                     return response()->json(['success' => true, 'id' => $tipomaterialp->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

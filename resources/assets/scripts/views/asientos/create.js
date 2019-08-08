@@ -14,69 +14,69 @@ app || (app = {});
         el: '#asientos-create',
         template: _.template( ($('#add-asiento-tpl').html() || '') ),
         events: {
+            'submit #form-asientos': 'onStore',
             'change select#asiento1_documento': 'documentoChanged',
             'change input#asiento2_base': 'baseChanged',
-            'change .round-module': 'roundModule',
-            'submit #form-asientos': 'onStore',
+            'change .round-module': 'roundModule'
         },
 
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
+            // Events listener
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
             // Attributes
             var attributes = this.model.toJSON();
                 attributes.edit = false;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
+            // Reference wrappers
             this.$numero = this.$('#asiento1_numero');
             this.$form = this.$('#form-asientos');
             this.$formItem = this.$('#form-item-asiento');
             this.$inputTasa = this.$("#asiento2_tasa");
             this.$inputValor = this.$("#asiento2_valor");
             this.$inputBase = this.$("#asiento2_base");
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
             this.roundempresa = this.$("#empresa_round").val();
 
-            // Events listener
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-
-            // to fire plugins
+            // Fire plugins
             this.ready();
         },
 
-        documentoChanged: function(e) {
-            var _this = this,
-                documento = $(e.currentTarget).val();
+        /**
+        * Event change documetno
+        */
+        documentoChanged: function (e) {
+            var documento = $(e.currentTarget).val(),
+                _this = this;
 
             // Clear numero
-            _this.$numero.val('');
+            this.$numero.val('');
 
-            if(!_.isUndefined(documento) && !_.isNull(documento) && documento != '') {
-                $.ajax({
-                    url: window.Misc.urlFull(Route.route('documentos.show', { documentos: documento })),
-                    type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
-                    }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-                    if( _.isObject( resp ) ) {
-                        if(!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
-                            _this.$numero.val(parseInt(resp.documento_consecutivo ) + 1 );
-                            if(resp.documento_tipo_consecutivo == 'M') {
+            // If documento exists
+            if (documento) {
+                window.Misc.setSpinner(this.spinner);
+                $.get(window.Misc.urlFull(Route.route('documentos.show', {documentos: documento})), function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
+                    if (resp) {
+                        if (!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {
+                            _this.$numero.val(parseInt(resp.documento_consecutivo) + 1 );
+                            if (resp.documento_tipo_consecutivo == 'M') {
                                 _this.$numero.prop('readonly', false);
-                            }else if (resp.documento_tipo_consecutivo == 'A'){
+                            } else if (resp.documento_tipo_consecutivo == 'A') {
                                 _this.$numero.prop('readonly', true);
                             }
                         }
                     }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
-                    alertify.error(thrownError);
                 });
             }
         },
@@ -90,27 +90,24 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-
-                // Definir tercero
-                data.tercero_nit = data.tercero_nit ? data.tercero_nit : data.asiento1_beneficiario;
-                data.tercero_nombre = data.tercero_nombre ? data.tercero_nombre : data.asiento1_beneficiario_nombre;
-                data.round_module = this.roundempresa;
+                    data.tercero_nit = (data.tercero_nit || data.asiento1_beneficiario);
+                    data.tercero_nombre = (data.tercero_nombre || data.asiento1_beneficiario_nombre);
+                    data.round_module = this.roundempresa;
 
                 window.Misc.evaluateActionsAccount({
                     'data': data,
                     'wrap': this.spinner,
                     'callback': (function (_this) {
-                        return function ( actions ) {
-                            if( Array.isArray( actions ) && actions.length > 0 ) {
+                        return function (actions) {
+                            if (Array.isArray(actions) && actions.length > 0) {
                                 // Open AsientoActionView
-                                if ( _this.asientoActionView instanceof Backbone.View ){
+                                if (_this.asientoActionView instanceof Backbone.View) {
                                     _this.asientoActionView.stopListening();
                                     _this.asientoActionView.undelegateEvents();
                                 }
 
                                 _this.asientoActionView = new app.AsientoActionView({
                                     model: _this.model,
-                                    collection: _this.asientoCuentasList,
                                     parameters: {
                                         data: data,
                                         actions: actions
@@ -119,7 +116,7 @@ app || (app = {});
                                 _this.asientoActionView.render();
                             } else {
                                 // Default insert
-                                _this.model.save( data, {patch: true, silent: true} );
+                                _this.model.save(data, {wait: true, patch: true, silent: true});
                             }
                         }
                     })(this)
@@ -130,31 +127,30 @@ app || (app = {});
         /**
         * Change base
         */
-        baseChanged: function(e) {
-            var _this = this;
-
-            var tasa = this.$inputTasa.val();
-            var ica = this.$inputTasa.data('ica');
-            var base = this.$inputBase.inputmask('unmaskedvalue');
+        baseChanged: function (e) {
+            var tasa = this.$inputTasa.val(),
+                ica = this.$inputTasa.data('ica'),
+                base = this.$inputBase.inputmask('unmaskedvalue'),
+                _this = this;
 
             // Set valor
-            if(!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
-                if( parseInt(this.roundempresa) ){
-                    this.$inputValor.val( Math.round( (tasa * base) / (ica ? 1000 : 100)) );
-                }else{
-                    this.$inputValor.val( (tasa * base) / (ica ? 1000 : 100) );
+            if (!_.isUndefined(tasa) && !_.isNull(tasa) && tasa > 0) {
+                if (parseInt(this.roundempresa)) {
+                    this.$inputValor.val(Math.round( (tasa * base) / (ica ? 1000 : 100)));
+                } else {
+                    this.$inputValor.val((tasa * base) / (ica ? 1000 : 100));
                 }
-            }else{
+            } else {
                 // Case without plancuentas_tasa
                 this.$inputValor.val('');
             }
         },
 
-        roundModule: function(e) {
+        roundModule: function (e) {
             var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
 
-            if( parseInt( this.roundempresa ) ){
-                this.$(e.currentTarget).val( Math.round(valor) );
+            if (parseInt(this.roundempresa)) {
+                this.$(e.currentTarget).val(Math.round(valor));
             }
         },
 
@@ -163,19 +159,19 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
         },
 
@@ -183,41 +179,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                // AsientoActionView undelegateEvents
-                if ( this.asientoActionView instanceof Backbone.View ){
-                    this.asientoActionView.stopListening();
-                    this.asientoActionView.undelegateEvents();
-                }
-
-                if ( resp.id == '' && resp.nif != '' ) {
-                    // Redirect to Content Course
-                    window.Misc.redirect( window.Misc.urlFull( Route.route('asientosnif.edit', { asientosnif: resp.nif}), { trigger:true }));
-
-                }else{
-                    // Redirect to Content Course
-                    Backbone.history.navigate(Route.route('asientos.edit', { asientos: resp.id}), { trigger:true });
-                }
+                // Redirect to Content Course
+                window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id}), {trigger: true}));
             }
         }
     });

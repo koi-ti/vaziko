@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-2 col-xs-4">
                             <a href="{{ route('facturas.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nueva factura
+                                <i class="fa fa-plus"></i> Nueva
                             </a>
                         </div>
                     </div>
@@ -62,6 +62,7 @@
                             <th >Nit</th>
                             <th >Cliente</th>
                             <th >Valor</th>
+                            <th >Estado</th>
                         </tr>
                     </thead>
                 </table>

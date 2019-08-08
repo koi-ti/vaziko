@@ -12,36 +12,26 @@ app || (app = {});
     app.DetalleFacturaItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        className: 'form-group',
-        template: _.template( ($('#facturado-item-list-tpl').html() || '') ),
-        events: {
-            // 'change .change-cantidad': 'changeCantidad'
-        },
-        parameters: {
-        },
+        template: _.template(($('#add-factura-item-tpl').html() || '')),
 
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            if( !this.parameters.edit ){
-                this.template = _.template( ($('#add-factura-item-tpl').html() || '') );
-            }
 
             this.impuestos = {};
 
             // Events Listener
-            this.listenTo( this.model, 'change', this.render );
+            this.listenTo(this.model, 'change', this.render);
         },
 
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
             this.$el.html( this.template(attributes) );
             return this;

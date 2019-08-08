@@ -111,7 +111,7 @@ app || (app = {});
             this.range = [-3, -2, -1, 0, 1, 2, 3];
 
             // Reference views
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
             this.referenceViews();
             this.uploadPictures();
             this.ready();

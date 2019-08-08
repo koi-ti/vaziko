@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Inventory;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\Unidad;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class UnidadesMedidaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Unidad::query() )->make(true);
+            return Datatables::of(Unidad::query())->make(true);
         }
         return view('inventory.unidades.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class UnidadesMedidaController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Unidad::$key_cache );
+                    Cache::forget(Unidad::$key_cache);
                     return response()->json(['success' => true, 'id' => $unidad->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class UnidadesMedidaController extends Controller
         if ($request->ajax()) {
             return response()->json($unidad);
         }
-        return view('inventory.unidades.show', ['unidad' => $unidad]);
+        return view('inventory.unidades.show', compact('unidad'));
     }
 
     /**
@@ -93,7 +91,7 @@ class UnidadesMedidaController extends Controller
     public function edit($id)
     {
         $unidad = Unidad::findOrFail($id);
-        return view('inventory.unidades.edit', ['unidad' => $unidad]);
+        return view('inventory.unidades.edit', compact('unidad'));
     }
 
     /**
@@ -117,11 +115,11 @@ class UnidadesMedidaController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
-                    Cache::forget( Unidad::$key_cache );
+                    Cache::forget(Unidad::$key_cache);
                     return response()->json(['success' => true, 'id' => $unidad->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

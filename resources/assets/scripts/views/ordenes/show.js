@@ -15,6 +15,7 @@ app || (app = {});
         templateEmpleado: _.template( ($('#chart-empleado-ordenp').html() || '') ),
         templateAreap: _.template( ($('#chart-areasp-ordenp').html() || '') ),
         templateProductop: _.template( ($('#chart-productop-ordenp').html() || '') ),
+        templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
@@ -38,6 +39,7 @@ app || (app = {});
             this.$renderChartEmpleado = this.$('#render-chart-empleado');
             this.$renderChartAreasp = this.$('#render-chart-areasp');
             this.$renderChartProductop = this.$('#render-chart-productop');
+            this.$renderChartOrdenp = this.$('#render-chart-ordenp');
             this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views && fineuploader container
@@ -185,7 +187,6 @@ app || (app = {});
             cancelConfirm.render();
         },
 
-
         /**
         * Clone ordenp
         */
@@ -250,6 +251,9 @@ app || (app = {});
             this.$uploaderFile.find('.qq-upload-drop-area').remove();
         },
 
+        /**
+        * onSessionRequestComplete
+        */
         onSessionRequestComplete: function (id, name, resp) {
             this.$uploaderFile.find('.btn-imprimir').remove();
 
@@ -269,7 +273,10 @@ app || (app = {});
             window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
         },
 
-        referenceCharts: function (){
+        /**
+        * reference charts
+        */
+        referenceCharts: function () {
             var _this = this;
 
             // Ajax charts
@@ -304,12 +311,14 @@ app || (app = {});
 
         },
 
-        charts: function ( resp ){
+        /**
+        * callback charts
+        */
+        charts: function (resp) {
             // Definir opciones globales para graficas del modulo
             Chart.defaults.global.defaultFontColor="black";
-            Chart.defaults.global.defaultFontStyle="bold";
-            Chart.defaults.global.defaultFontSize=9;
-            Chart.defaults.global.title.fontSize=12;
+            Chart.defaults.global.defaultFontSize=12;
+            Chart.defaults.global.title.fontSize=14;
 
             function formatTime( timeHour ){
                 var dias = Math.floor( timeHour / 24 );
@@ -320,7 +329,7 @@ app || (app = {});
             }
 
             // Chart empleado
-            if ( !_.isEmpty( resp.chartempleado.data ) ) {
+            if (!_.isEmpty(resp.chartempleado.data)) {
                 this.$renderChartEmpleado.html( this.templateEmpleado() );
 
                 var ctx = this.$('#chart_empleado').get(0).getContext('2d');
@@ -375,7 +384,9 @@ app || (app = {});
                     }
                 });
             }
-            if ( !_.isEmpty( resp.chartareap.data ) ) {
+
+            // Charts areasp
+            if (!_.isEmpty(resp.chartareap.data)) {
                 this.$renderChartAreasp.html( this.templateAreap() );
 
                 var ctx = this.$('#chart_areas').get(0).getContext('2d');
@@ -407,7 +418,9 @@ app || (app = {});
                     }
                 });
             }
-            if ( !_.isEmpty( resp.chartcomparativa.labels ) ){
+
+            // Charts comparativa
+            if (!_.isEmpty(resp.chartcomparativa.labels)) {
                 this.$renderChartProductop.html( this.templateProductop() );
 
                 var ctx = this.$('#chart_comparativa').get(0).getContext('2d');
@@ -467,6 +480,48 @@ app || (app = {});
                             }
                         },
                     }
+                });
+            }
+
+            // Charts productos
+            if (!_.isEmpty(resp.chartproductos.data)) {
+                this.$renderChartOrdenp.html(this.templateOrdenp());
+                var ctx = this.$('#chart_producto').get(0).getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            backgroundColor: [
+                                '#ADD8E6',
+                                '#87CEEB',
+                                '#87CEFA',
+                                '#00BFFF',
+                                '#1E90FF',
+                                '#6495ED',
+                                '#7B68EE'
+                            ],
+                            data: resp.chartproductos.data,
+                        }],
+                        labels: resp.chartproductos.labels,
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: false,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'right',
+                        },
+                        tooltips: {
+                            callbacks: {
+                                label: function(item, data) {
+                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                }
+                            }
+                        }
+                    },
                 });
             }
 

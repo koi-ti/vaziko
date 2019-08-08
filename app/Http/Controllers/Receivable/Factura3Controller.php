@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Receivable;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Receivable\Factura3;
 
@@ -17,13 +15,12 @@ class Factura3Controller extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
-            $orden_id = [];
-            if($request->has('orden_id')) {
-                $query = Factura3::query();
-                $orden_id = $query->get();
+        if ($request->ajax()) {
+            $data = [];
+            if ($request->has('orden_id')) {
+                $data = Factura3::get();
             }
-            return response()->json($orden_id);
+            return response()->json($data);
         }
         abort(404);
     }

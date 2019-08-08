@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$actividadesSearchTable = this.$('#actividades-search-table');
             var paginacion = this.$actividadesSearchTable.data('paginacion');
@@ -31,8 +31,8 @@ app || (app = {});
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('actividades.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('actividades.index')),
+                    data: function(data) {
                         data.datatables = true;
                     }
                 },
@@ -44,10 +44,10 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nueva actividad',
+                        text: '<i class="fa fa-plus"></i> Nueva',
                         className: 'btn-sm',
-                        action: function ( e, dt, node, config ) {
-                                window.Misc.redirect( window.Misc.urlFull( Route.route('actividades.create') ) )
+                        action: function (e, dt, node, config) {
+                                window.Misc.redirect(window.Misc.urlFull(Route.route('actividades.create')))
                         }
                     }
                 ],
@@ -55,7 +55,7 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '15%',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('actividades.show', {actividades: full.id }) )  +'">' + data + '</a>';
                         }
                     }

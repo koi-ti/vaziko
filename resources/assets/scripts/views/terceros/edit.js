@@ -26,11 +26,11 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
@@ -48,11 +48,11 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = true;
 
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             this.$form = this.$('#form-tercero');
             this.$formAccounting = this.$('#form-accounting');
@@ -116,7 +116,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ), window.Misc.formToJson( this.$formEmployee ));
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -129,11 +129,11 @@ app || (app = {});
 
                 // Prepare global data
                 var data = window.Misc.formToJson( e.target );
-                this.rolList.trigger( 'store', data );
+                this.rolList.trigger('store', data);
             }
         },
 
-        addContacto: function() {
+        addContacto: function () {
             this.contactsListView.trigger('createOne',
                 this.model.get('id'),
                 this.model.get('tercero_direccion'),
@@ -142,64 +142,63 @@ app || (app = {});
             );
         },
 
-        changedTechnical: function(e) {
+        changedTechnical: function (e) {
             var selected = $(e.target).is(':checked');
-            if( selected ) {
+            if (selected) {
                 this.$wrapperCoordinador.removeClass('hide');
-            }else{
+            } else {
                 this.$wrapperCoordinador.addClass('hide');
             }
         },
 
-        changedCoordinador: function(e){
+        changedCoordinador: function (e) {
             var selected = $(e.target).is(':checked');
             var nombre = this.model.get('tercero_nombre1')+' '+this.model.get('tercero_nombre2')+' '+this.model.get('tercero_apellido1')+' '+this.model.get('tercero_apellido2');
             var select = [{id: this.model.get('id') , text: nombre}];
 
-            if( selected ) {
+            if (selected) {
                 this.$coordinador_por.select2({ data: select }).trigger('change');
                 this.$coordinador_por.select2({ language: 'es', placeholder: 'Seleccione', allowClear: false });
-            }else{
+            } else {
                 this.$coordinador_por.find('option[value='+this.model.get('id')+']').remove();
             }
         },
 
-        changedEmployee: function(e) {
+        changedEmployee: function (e) {
             // Active if internal or employee
-            if( this.$checkInternal.is(':checked') || this.$checkEmployee.is(':checked') ) {
+            if (this.$checkInternal.is(':checked') || this.$checkEmployee.is(':checked')) {
                 this.$wrapperEmployes.removeClass('hide')
-            }else{
+            } else {
                 this.$wrapperEmployes.addClass('hide')
             }
         },
 
         onStorePassword: function(e) {
-            var _this = this;
-
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                data.id = this.model.get('id');
+                var data = window.Misc.formToJson(e.target);
+                    data.id = this.model.get('id');
+                    _this = this;
 
                 $.ajax({
                     type: "POST",
-                    url: window.Misc.urlFull( Route.route('terceros.setpassword') ),
+                    url: window.Misc.urlFull(Route.route('terceros.setpassword')),
                     data: data,
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.$('#wrapper-password') );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.$('#wrapper-password'));
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.$('#wrapper-password') );
-                    if(!_.isUndefined(resp.success)) {
+                    window.Misc.removeSpinner(_this.$('#wrapper-password'));
+                    if (!_.isUndefined(resp.success)) {
                         // response success or error
                         var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
+                        if (_.isObject(resp.errors)) {
                             text = window.Misc.parseErrors(resp.errors);
                         }
 
-                        if( !resp.success ) {
+                        if (!resp.success) {
                             alertify.error(text);
                             return;
                         }
@@ -217,7 +216,7 @@ app || (app = {});
         /**
         * UploadPictures
         */
-        uploadPictures: function(e) {
+        uploadPictures: function (e) {
             var _this = this;
 
             this.$uploaderFile.fineUploader({
@@ -283,22 +282,18 @@ app || (app = {});
         * @param Object resp
         */
         onCompleteLoadFile: function (id, name, resp) {
-            this.$uploaderFile.find('.btn-imprimir').remove();
-
             var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
             this.$uploaderFile.fineUploader('setUuid', id, resp.id);
             this.$uploaderFile.fineUploader('setName', id, resp.name);
 
             var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
-            previewLink.attr("href", resp.url);
+                previewLink.attr("href", resp.url);
         },
 
         onSessionRequestComplete: function (id, name, resp) {
-            this.$uploaderFile.find('.btn-imprimir').remove();
-
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
             }, this);
         },
 
@@ -307,19 +302,19 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
         },
 
@@ -327,31 +322,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                alertify.success(this.msgSuccess);
-
                 // Redirect to edit tercero
-                window.Misc.redirect( window.Misc.urlFull( Route.route('terceros.index') ) );
+                window.Misc.successRedirect(this.msgSuccess, window.Misc.urlFull(Route.route('terceros.index')));
             }
         }
     });

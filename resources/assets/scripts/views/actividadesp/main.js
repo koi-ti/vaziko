@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$actividadespSearchTable = this.$('#actividadesp-search-table');
             paginacion = this.$actividadespSearchTable.data('paginacion');
@@ -31,7 +31,7 @@ app || (app = {});
                 pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('actividadesp.index') ),
+                    url: window.Misc.urlFull(Route.route('actividadesp.index')),
                     data: function( data ) {
                         data.datatables = true;
                     }
@@ -43,10 +43,10 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nueva actividad',
+                        text: '<i class="fa fa-plus"></i> Nueva',
                         className: 'btn-sm',
-                        action: function ( e, dt, node, config ) {
-                                window.Misc.redirect( window.Misc.urlFull( Route.route('actividadesp.create') ) )
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('actividadesp.create')))
                         }
                     }
                 ],
@@ -54,14 +54,14 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('actividadesp.show', {actividadesp: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('actividadesp.show', {actividadesp: full.id}))  +'">' + data + '</a>';
                         }
                     },
                     {
                         targets: 2,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
                     }

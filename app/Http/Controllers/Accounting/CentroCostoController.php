@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\CentroCosto;
 use DB, Log, Datatables;
@@ -19,8 +17,7 @@ class CentroCostoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = CentroCosto::query();
-            return Datatables::of($query)->make(true);
+            return Datatables::of(CentroCosto::query())->make(true);
         }
         return view('accounting.centroscosto.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -45,7 +42,6 @@ class CentroCostoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $centrocosto = new CentroCosto;
             if ($centrocosto->isValid($data)) {
                 DB::beginTransaction();
@@ -58,7 +54,7 @@ class CentroCostoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $centrocosto->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +77,7 @@ class CentroCostoController extends Controller
         if ($request->ajax()) {
             return response()->json($centrocosto);
         }
-        return view('accounting.centroscosto.show', ['centrocosto' => $centrocosto]);
+        return view('accounting.centroscosto.show', compact('centrocosto'));
     }
 
     /**
@@ -93,7 +89,7 @@ class CentroCostoController extends Controller
     public function edit($id)
     {
         $centrocosto = CentroCosto::findOrFail($id);
-        return view('accounting.centroscosto.edit', ['centrocosto' => $centrocosto]);
+        return view('accounting.centroscosto.edit', compact('centrocosto'));
     }
 
     /**
@@ -107,7 +103,6 @@ class CentroCostoController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             $centrocosto = CentroCosto::findOrFail($id);
             if ($centrocosto->isValid($data)) {
                 DB::beginTransaction();
@@ -120,7 +115,7 @@ class CentroCostoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $centrocosto->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

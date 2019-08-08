@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Materialp, App\Models\Production\Ordenp4, App\Models\Inventory\Producto;
+use App\Models\Production\Materialp, App\Models\Production\Ordenp4;
+use App\Models\Inventory\Producto;
 use DB, Log;
 
 class DetalleMaterialesController extends Controller

@@ -3,10 +3,8 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Auth, Validator;
+use Validator;
 
 class SaldosController extends Controller
 {
@@ -17,7 +15,7 @@ class SaldosController extends Controller
      */
     public function index(Request $request)
     {
-        if( $request->has('saldos') ){
+        if ($request->has('saldos')) {
             // Validate fields
             $validator = Validator::make($request->all(), [
                 'filter_mes' => 'required',
@@ -30,7 +28,7 @@ class SaldosController extends Controller
                         ->withInput();
             }
 
-            $user = Auth::user()->id;
+            $user = auth()->user()->id;
 
             // Definir la ruta del proyecto
             define('ARTISAN_BINARY',base_path().'/artisan');

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Tercero, App\Models\Base\Actividad, App\Models\Treasury\Facturap2;
 use DB, Log, Datatables, Cache;
@@ -30,7 +28,7 @@ class TerceroController extends Controller
             );
 
             // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
+            if ($request->has('persistent') && $request->persistent) {
                 session(['search_tercero_nit' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
                 session(['search_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
             }
@@ -38,13 +36,13 @@ class TerceroController extends Controller
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Documento
-                    if($request->has('tercero_nit')) {
+                    if ($request->has('tercero_nit')) {
                         $query->whereRaw("tercero_nit LIKE '%{$request->tercero_nit}%'");
                     }
 
                     // Nombre
-                    if($request->has('tercero_nombre')) {
-                        $query->where(function ($query) use($request) {
+                    if ($request->has('tercero_nombre')) {
+                        $query->where(function ($query) use ($request) {
                             $query->whereRaw("tercero_nombre1 LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("tercero_nombre2 LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("tercero_apellido1 LIKE '%{$request->tercero_nombre}%'");
@@ -56,12 +54,12 @@ class TerceroController extends Controller
                     }
 
                     // funcionario = tiemposp
-                    if($request->has('tercero_tiempop')){
+                    if ($request->has('tercero_tiempop')) {
                         $query->where('tercero_activo', true);
                         $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
                     }
 
-                    if($request->has('tercero_proveedor')){
+                    if ($request->has('tercero_proveedor')) {
                         $query->where('tercero_proveedor', true);
                     }
                 })
@@ -103,9 +101,9 @@ class TerceroController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Tercero::$key_cache_tadministrators );
+                    Cache::forget(Tercero::$key_cache_tadministrators);
                     return response()->json(['success' => true, 'id' => $tercero->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -128,7 +126,7 @@ class TerceroController extends Controller
         if ($request->ajax()) {
             return response()->json($tercero);
         }
-        return view('admin.terceros.show', ['tercero' => $tercero]);
+        return view('admin.terceros.show', compact('tercero'));
     }
 
     /**
@@ -140,7 +138,7 @@ class TerceroController extends Controller
     public function edit($id)
     {
         $tercero = Tercero::findOrFail($id);
-        return view('admin.terceros.create', ['tercero' => $tercero]);
+        return view('admin.terceros.create', compact('tercero'));
     }
 
     /**
@@ -167,9 +165,9 @@ class TerceroController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Tercero::$key_cache_tadministrators );
+                    Cache::forget(Tercero::$key_cache_tadministrators);
                     return response()->json(['success' => true, 'id' => $tercero->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -254,7 +252,7 @@ class TerceroController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('tercero_nit')) {
+        if ($request->has('tercero_nit')) {
             $query = Tercero::query();
             $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_dir_nomenclatura', 'tercero_municipio', 'tercero_formapago',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
@@ -266,17 +264,17 @@ class TerceroController extends Controller
             );
             $query->where('tercero_nit', $request->tercero_nit);
 
-            if($request->has('tiempop_tercero')){
+            if ($request->has('tiempop_tercero')) {
                 $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
             }
 
-            if($request->has('tercero_proveedor')){
+            if ($request->has('tercero_proveedor')) {
                 $query->where('tercero_proveedor', true);
             }
 
             $tercero = $query->first();
 
-            if($tercero instanceof Tercero) {
+            if ($tercero instanceof Tercero) {
                 return response()->json(['success' => true, 'id' => $tercero->id, 'tercero_nombre' => $tercero->tercero_nombre, 'tercero_direccion' => $tercero->tercero_direccion, 'tercero_dir_nomenclatura' => $tercero->tercero_dir_nomenclatura, 'tercero_municipio' => $tercero->tercero_municipio, 'tercero_formapago' => $tercero->tercero_formapago]);
             }
         }
@@ -290,16 +288,17 @@ class TerceroController extends Controller
      */
     public function facturap(Request $request)
     {
-        if($request->ajax() && $request->has('tercero_id')) {
-
-            $query = Facturap2::query();
-            $query->select('koi_facturap2.id as id', 'facturap2_cuota', 'facturap2_vencimiento', 'facturap2_saldo', 'facturap1_factura', 'facturap1_fecha', DB::raw('facturap2_vencimiento - current_date as dias'));
-            $query->join('koi_facturap1', 'facturap2_factura', '=', 'koi_facturap1.id');
-            $query->whereRaw('facturap2_saldo != 0');
-            $query->where('facturap1_tercero', $request->tercero_id)->get();
-            $facturap = $query->get();
-
-            return response()->json($facturap);
+        if ($request->ajax()) {
+            $data = [];
+            if ($request->has('tercero_id')) {
+                $query = Facturap2::query();
+                $query->select('koi_facturap2.id as id', 'facturap2_cuota', 'facturap2_vencimiento', 'facturap2_saldo', 'facturap1_factura', 'facturap1_fecha', DB::raw('facturap2_vencimiento - current_date as dias'));
+                $query->join('koi_facturap1', 'facturap2_factura', '=', 'koi_facturap1.id');
+                $query->whereRaw('facturap2_saldo != 0');
+                $query->where('facturap1_tercero', $request->tercero_id)->get();
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }
@@ -312,13 +311,13 @@ class TerceroController extends Controller
             if ($tercero->isValidPass($data)) {
                 DB::beginTransaction();
                 try {
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar tercero, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
                     $tercero->username = trim($request->username);
-                    if($request->has('password')) {
+                    if ($request->has('password')) {
                         $tercero->password = bcrypt($request->password);
                     }
                     $tercero->save();
@@ -326,7 +325,7 @@ class TerceroController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'message' => 'Datos de acceso fueron actualizados.']);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

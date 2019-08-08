@@ -23,9 +23,9 @@
         </section>
 
         <section class="content">
-            <div class="box box-success" id="spinner-main">
-                <div class="box-body">
-                    <form method="POST" accept-charset="UTF-8" id="form-precotizaciones" data-toggle="validator">
+            <div class="box box-success spinner-main">
+                <form method="POST" accept-charset="UTF-8" id="form-precotizaciones" data-toggle="validator">
+                    <div class="box-body">
                         <div class="row">
                             <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                 <label class="col-sm-1 control-label">Código</label>
@@ -33,13 +33,11 @@
                                     <%- precotizacion_codigo %>
                                 </div>
                             <% } %>
-
                             <label for="precotizacion1_fecha" class="col-xs-12 col-md-1 control-label">Fecha</label>
                             <div class="form-group col-xs-12 col-md-2">
                                 <input type="text" id="precotizacion1_fecha" name="precotizacion1_fecha" placeholder="Fecha" class="form-control input-sm datepicker" value="<%- precotizacion1_fecha %>" required>
                             </div>
-
-                            <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                            <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                 <div class="col-md-offset-5 col-xs-12 col-md-2">
                                     <div class="btn-group btn-group-justified btn-group-sm">
                                         @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
@@ -60,7 +58,6 @@
                                 <input id="precotizacion1_referencia" value="<%- precotizacion1_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="precotizacion1_referencia" type="text" maxlength="100" required>
                             </div>
                         </div>
-
                         <div class="row">
                             <label for="precotizacion1_cliente" class="col-xs-12 col-sm-1 control-label">Cliente</label>
                             <div class="form-group col-xs-12 col-sm-3">
@@ -82,7 +79,6 @@
                                 </button>
                             </div>
                         </div>
-
                         <div class="row">
                             <label for="tcontacto_nombre" class="col-xs-12 col-sm-1 control-label">Contacto</label>
                             <div class="form-group col-sm-5 col-xs-10">
@@ -113,7 +109,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="row">
                             <label for="precotizacion1_suministran" class="col-xs-12 col-sm-1 control-label">Suministran</label>
                             <div class="form-group col-xs-12 col-sm-10">
@@ -121,69 +116,70 @@
                             </div>
                         </div>
                         <div class="row">
-                            <label for="precotizacion1_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
-                            <div class="form-group col-xs-12 col-sm-10">
-                                <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>
+                        <label for="precotizacion1_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
+                        <div class="form-group col-xs-12 col-sm-10">
+                            <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>
+                        </div>
+                    </div>
+                    </div>
+                    <div class="box-footer with-border">
+                        <div class="row">
+                            <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+                                <a href="{{ route('precotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+                            </div>
+                            <div class="col-md-2 col-sm-6 col-xs-6">
+                                <button type="submit" class="btn btn-success btn-sm btn-block">{{ trans('app.save') }}</button>
                             </div>
                         </div>
-                    </form>
+                    </div>
+                </form>
+            </div>
 
-                    <div class="row">
-                        <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                            <a href="{{ route('precotizaciones.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
-                        </div>
-                        <div class="col-md-2 col-sm-6 col-xs-6">
-                            <button type="button" class="btn btn-success btn-sm btn-block submit-precotizacion">{{ trans('app.save') }}</button>
-                        </div>
-                    </div><br>
-
-                    <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                        <div class="box box-success">
-                            <div class="box-body">
-                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.create') ) %>">
-                                    <div class="row">
-                                        <label for="productop" class="control-label col-xs-12 col-sm-1 col-sm-offset-2">Producto</label>
-                                        <div class="form-group col-sm-6 col-xs-12">
-                                            <div class="input-group input-group-sm">
-                                                <span class="input-group-btn">
-                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
-                                                </span>
-                                                <input type="hidden" id="precotizacion" name="precotizacion" value="<%- id %>" required>
-                                                <input type="hidden" id="productop" name="productop" data-name="productop_name" required>
-                                                <input name="productop_name" id="productop_name" class="form-control" readonly required>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group col-sm-1 col-xs-12">
-                                            <button type="submit" class="btn btn-success btn-sm btn-block">
-                                                <i class="fa fa-plus"></i>
+            <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                <div class="box box-success spinner-main">
+                    <div class="box-body">
+                        <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.create') ) %>">
+                            <div class="row">
+                                <label for="productop" class="control-label col-xs-12 col-sm-1 col-sm-offset-2">Producto</label>
+                                <div class="form-group col-sm-6 col-xs-12">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-btn">
+                                            <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
+                                                <i class="fa fa-search"></i>
                                             </button>
-                                        </div>
+                                        </span>
+                                        <input type="hidden" id="precotizacion" name="precotizacion" value="<%- id %>" required>
+                                        <input type="hidden" id="productop" name="productop" data-name="productop_name" required>
+                                        <input name="productop_name" id="productop_name" class="form-control" placeholder="Nombre del producto" readonly required>
                                     </div>
-                                </form>
-                                <!-- table table-bordered table-striped -->
-                                <div class="box-body table-responsive no-padding">
-                                    <table id="browse-precotizacion-productop-list" class="table table-hover table-bordered" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th width="2%"></th>
-                                                @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
-                                                    <th width="2%"></th>
-                                                @endif
-                                                <th width="5%">Código</th>
-                                                <th width="60%">Nombre</th>
-                                                <th width="5%">Cantidad</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                </div>
+
+                                <div class="form-group col-sm-1 col-xs-12">
+                                    <button type="submit" class="btn btn-success btn-sm btn-block">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
                                 </div>
                             </div>
+                        </form>
+                        <!-- table table-bordered table-striped -->
+                        <div class="box-body table-responsive no-padding">
+                            <table id="browse-precotizacion-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th width="2%"></th>
+                                        @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
+                                            <th width="2%"></th>
+                                        @endif
+                                        <th width="5%">Código</th>
+                                        <th width="60%">Nombre</th>
+                                        <th width="5%">Cantidad</th>
+                                    </tr>
+                                </thead>
+                            </table>
                         </div>
-                    <% } %>
+                    </div>
                 </div>
-            </div>
+            <% } %>
         </section>
     </script>
 
@@ -216,15 +212,15 @@
     </script>
 
     <script type="text/template" id="precotizacion-producto-item-list-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
-                <a class="btn btn-default btn-xs item-precotizacion-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
+                <a class="btn btn-default btn-xs item-remove" data-resource="<%- id %>" title="Eliminar producto">
                     <span><i class="fa fa-times"></i></span>
                 </a>
             </td>
-            @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+            @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                 <td class="text-center">
-                    <a class="btn btn-default btn-xs item-precotizacion-producto-clone" data-resource="<%- id %>" title="Clonar producto">
+                    <a class="btn btn-default btn-xs item-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
                 </td>

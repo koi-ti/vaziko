@@ -19,19 +19,15 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
-            // Model exist
-            if( this.model.id != undefined ) {
+        initialize: function () {
+            this.tipsList = new app.TipsList();
+            this.areasList = new app.AreasList();
+            this.maquinasList = new app.MaquinasList();
+            this.materialesList = new app.MaterialesList();
+            this.acabadosList = new app.AcabadosList();
 
-                this.tipsList = new app.TipsList();
-                this.areasList = new app.AreasList();
-                this.maquinasList = new app.MaquinasList();
-                this.materialesList = new app.MaterialesList();
-                this.acabadosList = new app.AcabadosList();
-
-                // Reference views
-                this.referenceViews();
-            }
+            // Reference views
+            this.referenceViews();
         },
 
         /**
@@ -45,7 +41,7 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-productop-tips'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -57,7 +53,7 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-productop-areas'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -69,7 +65,7 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-productop-maquinas'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -81,7 +77,7 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-productop-materiales'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
@@ -93,38 +89,36 @@ app || (app = {});
                     edit: false,
                     wrapper: this.$('#wrapper-productop-acabados'),
                     dataFilter: {
-                        'productop_id': this.model.get('id')
+                        productop_id: this.model.get('id')
                     }
                }
             });
         },
 
-        cloneProductop: function(e){
+        cloneProductop: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                route = window.Misc.urlFull( Route.route('productosp.clonar', { productosp: this.model.get('id')}) );
+            var route = window.Misc.urlFull(Route.route('productosp.clonar', {productosp: this.model.get('id')})),
+                _this = this;
 
+            // Clone producto
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    template: _.template( ($('#productop-clone-confirm-tpl').html() || '') ),
+                    template: _.template(($('#productop-clone-confirm-tpl').html() || '')),
                     titleConfirm: 'Clonar producto',
                     onConfirm: function () {
-                        // Clone producto
                         window.Misc.cloneModule({
                             'url': route,
                             'wrap': _this.el,
                             'callback': (function (_this) {
-                                return function ( resp )
-                                {
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('productosp.show', { productosp: resp.id })) );
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('productosp.show', {productosp: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         }
     });

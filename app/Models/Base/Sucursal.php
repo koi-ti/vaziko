@@ -63,6 +63,7 @@ class Sucursal extends Model
             $query->orderby('sucursal_nombre', 'asc');
             $collection = $query->lists('sucursal_nombre', 'id');
 
+            $collection->prepend('', '');
             return $collection;
         });
     }

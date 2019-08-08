@@ -54,7 +54,8 @@ app || (app = {});
                     { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
                     { data: 'tercero_nit', name: 'tercero_nit' },
                     { data: 'tercero_nombre', name: 'factura1_tercero' },
-                    { data: 'factura1_total', name: 'factura1_total' }
+                    { data: 'factura1_total', name: 'factura1_total' },
+                    { data: 'factura1_anulado', name: 'factura1_anulado' }
                 ],
                 columnDefs: [
                     {
@@ -78,6 +79,13 @@ app || (app = {});
                         className: 'text-right',
                         render: function ( data, type, full, row ) {
                             return window.Misc.currency(data);
+                        },
+                    },
+                    {
+                        targets: 5,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) ? 'ANULADO' : 'ABIERTA';
                         },
                     },
                 ],

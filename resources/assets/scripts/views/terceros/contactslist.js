@@ -22,10 +22,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
-
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listeners
@@ -40,13 +39,6 @@ app || (app = {});
             this.collection.fetch({ data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true });
         },
 
-        /*
-        * Render View Element
-        */
-        render: function() {
-
-        },
-
         /**
         * Render view contact by model
         * @param Object contactModel Model instance
@@ -55,28 +47,28 @@ app || (app = {});
             var view = new app.ContactItemView({
                 model: contactModel,
                 parameters: {
-                    edit: this.parameters.edit,
+                    edit: this.parameters.edit
                 }
             });
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
         },
 
         /**
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
 
-        editOne: function(e) {
+        editOne: function (e) {
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( this.createTContactoView instanceof Backbone.View ){
+            if (this.createTContactoView instanceof Backbone.View) {
                 this.createTContactoView.stopListening();
                 this.createTContactoView.undelegateEvents();
             }
@@ -90,7 +82,7 @@ app || (app = {});
         createOne: function(tercero, address, nomenclatura, municipio) {
             var _this = this;
 
-            if ( this.createTContactoView instanceof Backbone.View ){
+            if (this.createTContactoView instanceof Backbone.View) {
                 this.createTContactoView.stopListening();
                 this.createTContactoView.undelegateEvents();
             }
@@ -112,15 +104,15 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.el );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.el);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.el);
         }
    });
 

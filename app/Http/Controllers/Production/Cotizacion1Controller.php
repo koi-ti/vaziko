@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
+use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 use App, View, DB, Log, Datatables, Storage;
 
 class Cotizacion1Controller extends Controller
@@ -46,8 +45,8 @@ class Cotizacion1Controller extends Controller
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
             $query->with(['productos' => function ($producto) {
-                $producto->select('cotizacion2_cotizacion', DB::raw("SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total"))
-                            ->groupBy('cotizacion2_cotizacion');
+                $producto->select('cotizacion2_cotizacion', DB::raw('SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total'))
+                                ->groupBy('cotizacion2_cotizacion');
             }]);
 
             // Permisions mostrar botones crear [close, open]
@@ -780,5 +779,56 @@ class Cotizacion1Controller extends Controller
             }
         }
         abort(403);
+    }
+
+    /**
+     * function charts ordenesp
+     */
+    public function charts(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $cotizacion = Cotizacion1::find($id);
+            if (!$cotizacion instanceof Cotizacion1) {
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización']);
+            }
+
+            // Construir object con graficas
+            $object = new \stdClass();
+
+            // Chart productos
+            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = $ttotal = 0;
+            $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
+            foreach ($cotizaciones2 as $cotizacion2) {
+                $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta;
+                $ttransporte += $transporte = round($cotizacion2->cotizacion2_transporte/$cotizacion2->cotizacion2_cantidad);
+                $tviaticos += $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
+
+                $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
+                $tmateriales += $materiales = ($materiales/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+
+                $tareas += $areas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
+
+                $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
+                $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+
+                $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
+                $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                $ttotal += $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
+            }
+
+            // Make object
+            $chartproducto = new \stdClass();
+            $chartproducto->labels = [
+                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen', 'Total'
+            ];
+            $chartproducto->data = [
+                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen, $ttotal
+            ];
+            $object->chartproductos = $chartproducto;
+
+            $object->success = true;
+            return response()->json($object);
+        }
+        return response()->json(['success' => false]);
     }
 }

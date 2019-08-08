@@ -21,7 +21,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Attributes
             this.$wraperForm = this.$('#render-form-plancuentas');
 
@@ -35,24 +35,27 @@ app || (app = {});
         * Render View Element
         */
         render: function() {
-
             var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
+            this.$wraperForm.html(this.template(attributes));
 
             this.$nivel = this.$('#plancuentas_nivel');
 
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
-                window.initComponent.initToUpper();
-
-       		if( typeof window.initComponent.initICheck == 'function' )
-                window.initComponent.initICheck();
-
-            if( typeof window.initComponent.initSelect2 == 'function' )
-                window.initComponent.initSelect2();
+            this.ready();
 		},
 
-        cuentaChanged: function(e) {
+        ready: function () {
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+       		if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        },
+
+        cuentaChanged: function (e) {
             var _this = this;
 
             $.ajax({
@@ -61,20 +64,20 @@ app || (app = {});
                 data: { plancuentas_cuenta: $(e.currentTarget).val() },
                 beforeSend: function() {
             		_this.$nivel.val('');
-                    window.Misc.setSpinner( _this.el );
+                    window.Misc.setSpinner(_this.el);
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.el );
-                if(resp.success) {
-           		 	if(_.isUndefined(resp.nivel) || _.isNull(resp.nivel) || !_.isNumber(resp.nivel)) {
+                window.Misc.removeSpinner(_this.el);
+                if (resp.success) {
+           		 	if (_.isUndefined(resp.nivel) || _.isNull(resp.nivel) || !_.isNumber(resp.nivel)) {
 		                alertify.error('Ocurrió un error definiendo el nivel de la cuenta, por favor verifique el número de caracteres.');
              		}
                     _this.$nivel.val(resp.nivel);
                 }
             })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.el );
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner(_this.el);
                 alertify.error(thrownError);
             });
         },
@@ -83,12 +86,11 @@ app || (app = {});
         * Event Create Cuenta
         */
         onStore: function (e) {
-
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -96,28 +98,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.el );
+            window.Misc.setSpinner(this.el);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.el );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                window.Misc.redirect( window.Misc.urlFull( Route.route('plancuentas.index') ) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('plancuentas.index')));
             }
         }
     });

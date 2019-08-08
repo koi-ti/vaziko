@@ -42,7 +42,7 @@ class Producto extends BaseModel
     public function isValid($data)
     {
         $rules = [
-            'producto_codigoori' => 'required|max:50|min:1',
+            'producto_codigoori' => 'required|max:200|min:1',
             'producto_nombre' => 'required|max:200',
             'producto_grupo' => 'required',
             'producto_subgrupo' => 'required',

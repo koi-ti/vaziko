@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Empresa, App\Models\Base\Tercero;
 use Log, DB;
@@ -19,53 +17,9 @@ class EmpresaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $empresa = Empresa::getEmpresa();
-            return response()->json($empresa);
+            return response()->json(Empresa::getEmpresa());
         }
         return view('admin.empresa.main');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-           //
     }
 
     /**
@@ -97,7 +51,7 @@ class EmpresaController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -106,16 +60,5 @@ class EmpresaController extends Controller
             return response()->json(['success' => false, 'errors' => $tercero->errors]);
         }
         abort(403);
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

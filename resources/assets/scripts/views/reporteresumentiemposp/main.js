@@ -21,7 +21,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // Render row funcionarios
             this.$wraperfuncionarios = this.$('#render-funcionarios');
             this.count = 2;
@@ -29,17 +29,17 @@ app || (app = {});
             this.ready();
         },
 
-        addFuncionario: function(e) {
+        addFuncionario: function (e) {
             e.preventDefault();
 
             var posactual = this.count,
                 attributes = {posactual: posactual};
 
-            this.$wraperfuncionarios.append( this.template(attributes) );
+            this.$wraperfuncionarios.append(this.template(attributes));
             this.count++;
         },
 
-        removeFuncionario: function(e) {
+        removeFuncionario: function (e) {
             e.preventDefault();
 
             var posactual = this.$(e.currentTarget).data('resource');
@@ -50,10 +50,10 @@ app || (app = {});
         * fires libraries js
         */
         ready: function () {
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
         },
     });

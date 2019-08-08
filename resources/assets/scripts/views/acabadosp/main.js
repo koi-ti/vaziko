@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$acabadospSearchTable = this.$('#acabadosp-search-table');
             var paginacion = this.$acabadospSearchTable.data('paginacion');
@@ -30,7 +30,7 @@ app || (app = {});
             	language: window.Misc.dataTableES(),
             	pageLength: paginacion,
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: window.Misc.urlFull( Route.route('acabadosp.index') ),
+                ajax: window.Misc.urlFull(Route.route('acabadosp.index')),
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'acabadop_nombre', name: 'acabadop_nombre' },
@@ -38,10 +38,10 @@ app || (app = {});
                 ],
 				buttons: [
 					{
-						text: '<i class="fa fa-plus"></i> Nuevo acabado',
+						text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-						action: function ( e, dt, node, config ) {
-							window.Misc.redirect( window.Misc.urlFull( Route.route('acabadosp.create') ) )
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('acabadosp.create')))
 						}
 					}
 				],
@@ -49,8 +49,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '10%',
-                        render: function ( data, type, full, row ) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id}) )  +'">' + data + '</a>';
                         }
                     }
                 ]

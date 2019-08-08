@@ -92,12 +92,14 @@
 			</div>
 			<div class="box-footer">
 				<div class="row">
-					<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+					<div class="col-md-2 col-md-offset-{{ $asiento->asiento1_documentos == NULL ? 4 : 5 }} col-sm-6 col-xs-6 text-left">
 						<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 					</div>
-					<div class="col-md-2 col-sm-6 col-xs-6 text-right">
-						<a href="{{ route('asientos.edit', ['asientos' => $asiento->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-					</div>
+					@if ($asiento->asiento1_documentos == NULL) 
+						<div class="col-md-2 col-sm-6 col-xs-6 text-right">
+							<a href="#" class="btn btn-primary btn-sm btn-block reverse-asiento">{{ trans('app.edit') }}</a>
+						</div>
+					@endif
 				</div>
 			</div>
 		</div>

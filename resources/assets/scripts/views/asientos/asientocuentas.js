@@ -17,9 +17,9 @@ app || (app = {});
         templateInfoFacturapItem: _.template( ($('#add-info-facturap-item').html() || '') ), // Facturap
         templateInfoInventarioItem: _.template( ($('#add-info-inventario-item').html() || '') ), // Inventario
         events: {
-            'click .item-asiento2-edit': 'editOne',
-            'click .item-asiento2-remove': 'removeOne',
-            'click .item-asiento2-show': 'showOne'
+            'click .item-edit': 'editOne',
+            'click .item-remove': 'removeOne',
+            'click .item-show': 'showOne'
         },
         parameters: {
             wrapper: null,
@@ -30,9 +30,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
@@ -68,17 +68,17 @@ app || (app = {});
 
         /**
         * Render view task by model
-        * @param Object mentoringTaskModel Model instance
+        * @param Object asiento2Model Model instance
         */
-        addOne: function (Asiento2Model) {
+        addOne: function (asiento2Model) {
             var view = new app.AsientoCuentasItemView({
-                model: Asiento2Model,
+                model: asiento2Model,
                 parameters: {
                     edit: this.parameters.edit
                 }
             });
-            Asiento2Model.view = view;
-            this.$el.append( view.render().el );
+            asiento2Model.view = view;
+            this.$el.append(view.render().el);
 
             // Update total
             this.totalize();
@@ -89,7 +89,7 @@ app || (app = {});
         */
         addAll: function () {
             this.$el.find('tbody').html('');
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -100,35 +100,34 @@ app || (app = {});
             var _this = this
 
             // Set Spinner
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
 
             // Add model in collection
             var asiento2Model = new app.Asiento2Model();
-            asiento2Model.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.parameters.wrapper );
+                asiento2Model.save(data, {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
 
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
                         }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        // Add model in collection
-                        _this.collection.add(model);
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
         /**
@@ -152,7 +151,8 @@ app || (app = {});
                 asiento2_centro: model.get('asiento2_centro'),
                 asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
                 asiento2_detalle: model.get('asiento2_detalle'),
-                asiento2_nuevo: model.get('asiento2_nuevo')
+                asiento2_nuevo: model.get('asiento2_nuevo'),
+                title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
             }
 
             // Open AsientoActionView
@@ -160,9 +160,6 @@ app || (app = {});
                 this.asientoActionView.stopListening();
                 this.asientoActionView.undelegateEvents();
             }
-
-            // Title
-            data.title = data.plancuentas_cuenta + ' - ' + data.plancuentas_nombre + ' - (EDITANDO)';
 
             // Open view asiento action
             this.asientoActionView = new app.AsientoActionView({
@@ -189,47 +186,26 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            // Function confirm delete item
-            this.confirmDelete( model );
-        },
+            if (model instanceof Backbone.Model) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            plancuentas_cuenta: model.get('plancuentas_cuenta'),
+                            plancuentas_nombre: model.get('plancuentas_nombre')
+                        },
+                        template: _.template( ($('#asiento-item-delete-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar cuenta',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.totalize();
 
-        /**
-        * modal confirm delete area
-        */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { plancuentas_cuenta: model.get('plancuentas_cuenta'), plancuentas_nombre: model.get('plancuentas_nombre') },
-                    template: _.template( ($('#asiento-item-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar cuenta',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
-                                        }
-
-                                        model.view.remove();
-                                        _this.collection.remove(model);
-
-                                        // Update total
-                                        _this.totalize();
-                                    }
-                                }
-                            });
                         }
                     }
-                }
-            });
+                });
 
-            cancelConfirm.render();
+                cancelConfirm.render();
+            }
         },
 
         /**

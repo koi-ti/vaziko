@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Receivable;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Receivable\Factura4;
 use DB;
@@ -18,7 +16,7 @@ class Factura4Controller extends Controller
      */
     public function index(Request $request)
     {
-        if($request->ajax()){
+        if ($request->ajax()) {
             $query = Factura4::query();
             $query->select('koi_factura4.*', 'factura1_numero', 'factura1_fecha');
             $query->join('koi_factura1', 'factura4_factura1', '=', 'koi_factura1.id');
@@ -33,11 +31,11 @@ class Factura4Controller extends Controller
                 $query->where('factura1_tercero', $request->tercero_id);
             }
 
-            if($request->has('factura1_id')){
-                $query->where('factura4_factura1', $request->factura1_id);
+            if ($request->has('factura')) {
+                $query->where('factura4_factura1', $request->factura);
             }
 
-            return response()->json( $query->get() );
+            return response()->json($query->get());
         }
     }
 }

@@ -14,13 +14,13 @@
 
     <section class="content">
         <div class="box box-solid" id="ordenes-show">
-            <div class="nav-tabs-custom tab-success tab-whithout-box-shadow">
+            <div class="nav-tabs-custom tab-primary tab-whithout-box-shadow">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                     <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                     @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                         <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
-                        <li><a href="#tab_tiempospcharts" data-toggle="tab">Gráficas de producción</a></li>
+                        <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                         <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
                     @endif
                     <li class="pull-right">
@@ -38,7 +38,6 @@
                         </div>
                     </li>
                 </ul>
-
                 <div class="tab-content">
                     {{-- Content orden --}}
                     <div class="tab-pane active" id="tab_orden">
@@ -181,62 +180,64 @@
 										<div>{{ $orden->orden_fecha_elaboro }}</div>
 									</div>
 								</div>
+                            </div>
 
+							<div class="box-footer with-border">
 								<div class="row">
                                     <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
                                         <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
 
-                                <br />
-
-                                <div class="box box-primary" id="wrapper-productop-orden">
-                                   	<div class="box-body">
-                                   		<!-- table table-bordered table-striped -->
-                                        <div class="box-body table-responsive no-padding">
-                                            <table id="browse-orden-productop-list" class="table table-hover table-bordered" cellspacing="0">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="5%">Código</th>
-                                                        <th width="65%">Nombre</th>
-                                                        <th width="10%">Cantidad</th>
-                                                        <th width="10%">Facturado</th>
-                                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                            <th width="10%">Precio</th>
-                                                            <th width="10%">Total</th>
-                                                        @endif
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    {{-- Render content productos --}}
-                                                </tbody>
-                                                <tfoot>
+                        <div class="box box-whithout-border">
+                            <div class="box box-primary" id="wrapper-productop-orden">
+                               	<div class="box-body">
+                               		<!-- table table-bordered table-striped -->
+                                    <div class="box-body table-responsive no-padding">
+                                        <table id="browse-orden-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="5%">Código</th>
+                                                    <th width="65%">Nombre</th>
+                                                    <th width="10%">Cantidad</th>
+                                                    <th width="10%">Facturado</th>
+                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                        <th width="10%">Precio</th>
+                                                        <th width="10%">Total</th>
+                                                    @endif
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{-- Render content productos --}}
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <th class="text-right">Subtotal</th>
+                                                    <td class="text-center" id="subtotal-cantidad">0</td>
+                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                        <td colspan="2"></td>
+                                                        <td class="text-right" id="subtotal-total">0</td>
+                                                    @endif
+                                                </tr>
+                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
                                                     <tr>
                                                         <td></td>
-                                                        <th class="text-right">Subtotal</th>
-                                                        <td class="text-center" id="subtotal-cantidad">0</td>
-                                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                            <td colspan="2"></td>
-                                                            <td class="text-right" id="subtotal-total">0</td>
-                                                        @endif
+                                                        <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
+                                                        <td colspan="4" class="text-right" id="iva-total">0</td>
                                                     </tr>
-                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                        <tr>
-                                                            <td></td>
-                                                            <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
-                                                            <td colspan="4" class="text-right" id="iva-total">0</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                            <th class="text-right">Total</th>
-                                                            <td colspan="4" class="text-right" id="total-total">0</td>
-                                                        </tr>
-                                                    @endif
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                   	</div>
-                               </div>
+                                                    <tr>
+                                                        <td></td>
+                                                        <th class="text-right">Total</th>
+                                                        <td colspan="4" class="text-right" id="total-total">0</td>
+                                                    </tr>
+                                                @endif
+                                            </tfoot>
+                                        </table>
+                                    </div>
+                               	</div>
                             </div>
                       	</div>
                   	</div>
@@ -290,19 +291,19 @@
                             </div>
                         </div>
 
-                        <div class="tab-pane" id="tab_tiempospcharts">
+                        <div class="tab-pane" id="tab_charts">
                             @include('production.ordenes.charts.charts')
                         </div>
 
                         <div class="tab-pane" id="tab_imagenes">
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <textarea name="orden_observaciones_imagen" rows="2" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_imagen }}</textarea>
+                                    <div class="fine-uploader"></div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <div class="fine-uploader"></div>
+                                    <textarea name="orden_observaciones_imagen" rows="8" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_imagen }}</textarea>
                                 </div>
                             </div>
                         </div>

@@ -21,12 +21,13 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             // precotizacion codigo
             this.codigo = this.$('#precotizacion_codigo').val();
 
             // Attributes
             this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
+            this.spinner = this.$('.spinner-main');
 
             // Reference views
             this.referenceViews();
@@ -40,9 +41,9 @@ app || (app = {});
             this.productopPreCotizacionListView = new app.ProductopPreCotizacionListView( {
                 collection: this.productopPreCotizacionList,
                 parameters: {
-                    wrapper: this.$('#wrapper-productop-precotizacion'),
+                    wrapper: this.spinner,
                     dataFilter: {
-                        'precotizacion2_precotizacion1': this.model.get('id')
+                        precotizacion: this.model.get('id')
                     }
                }
             });
@@ -57,7 +58,9 @@ app || (app = {});
 
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { precotizacion_codigo: _this.model.get('precotizacion_codigo') },
+                    dataFilter: {
+                        precotizacion_codigo: _this.model.get('precotizacion_codigo')
+                    },
                     template: _.template( ($('#precotizaciones-open-confirm-tpl').html() || '') ),
                     titleConfirm: 'Reabir pre-cotización',
                     onConfirm: function () {
@@ -66,29 +69,28 @@ app || (app = {});
                             url: window.Misc.urlFull( Route.route('precotizaciones.abrir', { precotizaciones: _this.model.get('id') }) ),
                             type: 'GET',
                             beforeSend: function() {
-                                window.Misc.setSpinner( _this.el );
+                                window.Misc.setSpinner(_this.spinner);
                             }
                         })
                         .done(function(resp) {
-                            window.Misc.removeSpinner( _this.el );
-
-                            if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('precotizaciones.edit', { precotizaciones: _this.model.get('id') })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('precotizaciones.edit', {precotizaciones: _this.model.get('id') })));
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.el );
+                            window.Misc.removeSpinner( _this.spinner );
                             alertify.error(thrownError);
                         });
                     }
@@ -115,7 +117,7 @@ app || (app = {});
                         // Clone precotizacion
                         window.Misc.cloneModule({
                             'url': route,
-                            'wrap': _this.el,
+                            'wrap': _this.spinner,
                             'callback': (function (_this) {
                                 return function ( resp ) {
                                     window.Misc.successRedirect( resp.msg, window.Misc.urlFull( Route.route('precotizaciones.edit', { precotizaciones: resp.id })) );

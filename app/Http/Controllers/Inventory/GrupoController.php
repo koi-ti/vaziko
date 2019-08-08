@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Inventory;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\Grupo;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class GrupoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Grupo::query() )->make(true);
+            return Datatables::of(Grupo::query())->make(true);
         }
         return view('inventory.grupos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class GrupoController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Grupo::$key_cache );
+                    Cache::forget(Grupo::$key_cache);
                     return response()->json(['success' => true, 'id' => $grupo->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             return response()->json($grupo);
         }
-        return view('inventory.grupos.show', ['grupo' => $grupo]);
+        return view('inventory.grupos.show', compact('grupo'));
     }
 
     /**
@@ -93,7 +91,7 @@ class GrupoController extends Controller
     public function edit($id)
     {
         $grupo = Grupo::findOrFail($id);
-        return view('inventory.grupos.edit', ['grupo' => $grupo]);
+        return view('inventory.grupos.edit', compact('grupo'));
     }
 
     /**
@@ -119,9 +117,9 @@ class GrupoController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Grupo::$key_cache );
+                    Cache::forget(Grupo::$key_cache);
                     return response()->json(['success' => true, 'id' => $grupo->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Receivable;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Receivable\Factura2;
+use App\Models\Receivable\Factura2;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2;
 use DB;
 
 class Factura2Controller extends Controller
@@ -19,18 +18,18 @@ class Factura2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $detalle = [];
-            if($request->has('factura2')) {
-                $detalle = Factura2::where('factura2_factura1', $request->factura2)->get();
+            $data = [];
+            if ($request->has('factura')) {
+                $data = Factura2::where('factura2_factura1', $request->factura)->get();
             }
 
-            if($request->has('factura1_orden')) {
+            if ($request->has('factura1_orden')) {
                 $orden = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$request->factura1_orden}'")->first();
-                if($orden instanceof Ordenp){
-                    $detalle = $orden->paraFacturar();
+                if ($orden instanceof Ordenp) {
+                    $data = $orden->paraFacturar();
                 }
             }
-            return response()->json($detalle);
+            return response()->json($data);
         }
         abort(404);
     }
@@ -47,12 +46,12 @@ class Factura2Controller extends Controller
             try {
                 //Recuperar ordenp2
                 $ordenp2 = Ordenp2::getDetail($request->factura1_orden);
-                if(!$ordenp2 instanceof Ordenp2){
+                if (!$ordenp2 instanceof Ordenp2) {
                     return response()->json(['success'=>false, 'errors'=>'No es posible recuperar la orden, por favor verifique la informacion o consulte al administrador.']);
                 }
 
                 return response()->json(['success' => true, 'id' => uniqid(), 'factura2_orden2' => $ordenp2->id, 'factura2_producto_nombre' => $ordenp2->productop_nombre, 'orden2_cantidad' => $ordenp2->orden2_cantidad, 'orden2_facturado' => $ordenp2->orden2_facturado, 'factura2_producto_valor_unitario' => $ordenp2->orden2_total_valor_unitario, 'orden_codigo' => $ordenp2->orden_codigo]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }

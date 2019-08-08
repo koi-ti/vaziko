@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Acabadop;
 use DB, Log, Datatables, Cache;
@@ -19,7 +17,7 @@ class AcabadospController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( Acabadop::query() )->make(true);
+            return Datatables::of(Acabadop::query())->make(true);
         }
         return view('production.acabados.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -56,9 +54,9 @@ class AcabadospController extends Controller
                     DB::commit();
 
                     // Forget cache
-                    Cache::forget( Acabadop::$key_cache );
+                    Cache::forget(Acabadop::$key_cache);
                     return response()->json(['success' => true, 'id' => $acabado->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -81,7 +79,7 @@ class AcabadospController extends Controller
         if ($request->ajax()) {
             return response()->json($acabado);
         }
-        return view('production.acabados.show', ['acabado' => $acabado]);
+        return view('production.acabados.show', compact('acabado'));
     }
 
     /**
@@ -93,7 +91,7 @@ class AcabadospController extends Controller
     public function edit($id)
     {
         $acabado = Acabadop::findOrFail($id);
-        return view('production.acabados.edit', ['acabado' => $acabado]);
+        return view('production.acabados.edit', compact('acabado'));
     }
 
     /**
@@ -117,11 +115,11 @@ class AcabadospController extends Controller
 
                     // Commit Transaction
                     DB::commit();
-                    
+
                     // Forget cache
-                    Cache::forget( Acabadop::$key_cache );
+                    Cache::forget(Acabadop::$key_cache);
                     return response()->json(['success' => true, 'id' => $acabado->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

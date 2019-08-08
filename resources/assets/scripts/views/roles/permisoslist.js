@@ -11,9 +11,7 @@ app || (app = {});
 
     app.PermisosRolListView = Backbone.View.extend({
 
-        events: {
-
-        },
+        events: {},
         parameters: {
             wrapper: null,
             father: null,
@@ -25,9 +23,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listeners
@@ -37,14 +35,7 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
 
         /**
@@ -61,7 +52,7 @@ app || (app = {});
                 }
             });
             moduloModel.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
         },
 
         /**
@@ -69,21 +60,21 @@ app || (app = {});
         */
         addAll: function () {
             this.$el.find('tbody').html('');
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

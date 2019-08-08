@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
 use DB, Log, Cache, Datatables;
@@ -67,14 +65,13 @@ class PlanCuentasNifController extends Controller
             if ($plancuentanif->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    if( $request->has('plancuentasn_centro') ){
+                    if ($request->has('plancuentasn_centro')) {
                         // Validar centro costos
                         $centrocosto = CentroCosto::find($request->plancuentasn_centro);
-                        if(!$centrocosto instanceof CentroCosto){
+                        if (!$centrocosto instanceof CentroCosto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
                         }
-
                         $plancuentanif->plancuentasn_centro = $centrocosto->id;
                     }
 
@@ -88,9 +85,9 @@ class PlanCuentasNifController extends Controller
                     DB::commit();
 
                     //Forget cache
-                    Cache::forget( PlanCuentaNif::$key_cache );
+                    Cache::forget(PlanCuentaNif::$key_cache);
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -110,11 +107,11 @@ class PlanCuentasNifController extends Controller
     public function show(Request $request, $id)
     {
         $plancuentanif = PlanCuentaNif::getCuenta($id);
-        if($plancuentanif instanceof PlanCuentaNif){
+        if ($plancuentanif instanceof PlanCuentaNif) {
             if ($request->ajax()) {
                 return response()->json($plancuentanif);
             }
-            return view('accounting.plancuentasnif.show', ['plancuentanif' => $plancuentanif]);
+            return view('accounting.plancuentasnif.show', compact('plancuentanif'));
         }
         abort(404);
     }
@@ -128,7 +125,7 @@ class PlanCuentasNifController extends Controller
     public function edit($id)
     {
         $plancuentanif = PlanCuentaNif::findOrFail($id);
-        return view('accounting.plancuentasnif.edit', ['plancuentanif' => $plancuentanif]);
+        return view('accounting.plancuentasnif.edit', compact('plancuentanif'));
     }
 
     /**
@@ -146,14 +143,13 @@ class PlanCuentasNifController extends Controller
             if ($plancuentanif->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    if( $request->has('plancuentasn_centro') ){
+                    if ($request->has('plancuentasn_centro')) {
                         // Validar centro costos
                         $centrocosto = CentroCosto::find($request->plancuentasn_centro);
-                        if(!$centrocosto instanceof CentroCosto){
+                        if (!$centrocosto instanceof CentroCosto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
                         }
-
                         $plancuentanif->plancuentasn_centro = $centrocosto->id;
                     }
 
@@ -167,9 +163,9 @@ class PlanCuentasNifController extends Controller
                     DB::commit();
 
                     //Forget cache
-                    Cache::forget( PlanCuentaNif::$key_cache );
+                    Cache::forget(PlanCuentaNif::$key_cache);
                     return response()->json(['success' => true, 'id' => $plancuentanif->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -219,9 +215,9 @@ class PlanCuentasNifController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('plancuentasn_cuenta')) {
+        if ($request->has('plancuentasn_cuenta')) {
             $plancuentanif = PlanCuentaNif::where('plancuentasn_cuenta', $request->plancuentasn_cuenta)->first();
-            if($plancuentanif instanceof PlanCuenta) {
+            if ($plancuentanif instanceof PlanCuenta) {
                 return response()->json(['success' => true, 'plancuentasn_nombre' => $plancuentanif->plancuentasn_nombre, 'plancuentasn_tasa' => $plancuentanif->plancuentasn_tasa, 'plancuentasn_centro' => $plancuentanif->plancuentasn_centro, 'plancuentasn_naturaleza' => $plancuentanif->plancuentasn_naturaleza, 'plancuentasn_tipo' => $plancuentanif->plancuentasn_tipo]);
             }
         }

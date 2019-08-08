@@ -228,4 +228,12 @@ class Factura1 extends Model
 
         return $object;
     }
+
+    public function puntoventa () {
+        return $this->hasOne('App\Models\Base\PuntoVenta', 'id', 'factura1_puntoventa');
+    }
+
+    public function cuotas () {
+        return $this->hasMany('App\Models\Receivable\Factura4', 'factura4_factura1', 'id');
+    }
 }

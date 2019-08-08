@@ -23,9 +23,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events
@@ -39,7 +39,7 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             // Attributes
             var attributes = this.model.toJSON();
 
@@ -59,13 +59,13 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
         },
 
@@ -74,14 +74,11 @@ app || (app = {});
         */
         onStore: function (e) {
             if (!e.isDefaultPrevented()) {
-
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-				if( !_.isUndefined(this.parameters.tercero_id) && !_.isNull(this.parameters.tercero_id) && this.parameters.tercero_id != '') {
                 	data.tcontacto_tercero = this.parameters.tercero_id;
-                }
-                this.model.save( data, {patch: true} );
+                this.model.save(data, {wait: true, patch: true});
             }
         },
 
@@ -89,28 +86,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.$wraperContent );
+            window.Misc.setSpinner(this.$wraperContent);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.$wraperContent );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.$wraperContent);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                if(this.collection instanceof Backbone.Collection) {
+                if (this.collection instanceof Backbone.Collection) {
 	                // Add model in collection
 	            	this.collection.add(model);
 	            }

@@ -33,9 +33,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // reference collections
@@ -55,7 +55,7 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.model.get('id') ? 1 : 0;
             this.$el.html( this.template(attributes) );
@@ -110,15 +110,13 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                if( this.model.id != undefined ){
-
+                if (this.model.id != undefined) {
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                         data.empaques = this.empaquesProductopPreCotizacionList.toJSON();
                         data.areasp = this.areasProductopPreCotizacionList.toJSON();
 
-                    this.model.save( data, {path: true, silent: true});
-
+                    this.model.save(data, {wait: true, path: true, silent: true});
                 } else {
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
@@ -448,11 +446,9 @@ app || (app = {});
         * @param Object resp
         */
         onSessionRequestComplete: function (id, name, resp) {
-            this.$uploaderFile.find('.btn-imprimir').remove();
-
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
             }, this);
         },
 
@@ -461,19 +457,19 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
         },
 
@@ -481,28 +477,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to cotizacion
-                window.Misc.redirect( window.Misc.urlFull( Route.route('precotizaciones.edit', { precotizaciones: resp.id_precotizacion })) );
+                window.Misc.redirect(window.Misc.urlFull( Route.route('precotizaciones.edit', {precotizaciones: resp.id_precotizacion})));
             }
         }
     });
