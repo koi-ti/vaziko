@@ -136,44 +136,44 @@ app || (app = {});
         editOne: function (e) {
             e.preventDefault();
 
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
-
-            // Declare data
-            var data = {
-                plancuentas_cuenta: model.get('plancuentas_cuenta'),
-                plancuentas_nombre: model.get('plancuentas_nombre'),
-                plancuentas_tipo: model.get('plancuentas_tipo'),
-                tercero_nit: model.get('tercero_nit'),
-                tercero_nombre: model.get('tercero_nombre'),
-                asiento2_naturaleza: model.get('asiento2_naturaleza'),
-                asiento2_base: model.get('asiento2_base'),
-                asiento2_centro: model.get('asiento2_centro'),
-                asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
-                asiento2_detalle: model.get('asiento2_detalle'),
-                asiento2_nuevo: model.get('asiento2_nuevo'),
-                title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
-            }
-
-            // Open AsientoActionView
-            if (this.asientoActionView instanceof Backbone.View) {
-                this.asientoActionView.stopListening();
-                this.asientoActionView.undelegateEvents();
-            }
-
-            // Open view asiento action
-            this.asientoActionView = new app.AsientoActionView({
-                model: model,
-                collection: this.collection,
-                parameters: {
-                    data: data,
-                    actions: [{
-                        action: 'update',
-                        success: false
-                    }]
-                }
-            });
-            this.asientoActionView.render();
+            // var resource = $(e.currentTarget).attr("data-resource"),
+            //     model = this.collection.get(resource);
+            //
+            // // Declare data
+            // var data = {
+            //     plancuentas_cuenta: model.get('plancuentas_cuenta'),
+            //     plancuentas_nombre: model.get('plancuentas_nombre'),
+            //     plancuentas_tipo: model.get('plancuentas_tipo'),
+            //     tercero_nit: model.get('tercero_nit'),
+            //     tercero_nombre: model.get('tercero_nombre'),
+            //     asiento2_naturaleza: model.get('asiento2_naturaleza'),
+            //     asiento2_base: model.get('asiento2_base'),
+            //     asiento2_centro: model.get('asiento2_centro'),
+            //     asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
+            //     asiento2_detalle: model.get('asiento2_detalle'),
+            //     asiento2_nuevo: model.get('asiento2_nuevo'),
+            //     title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
+            // }
+            //
+            // // Open AsientoActionView
+            // if (this.asientoActionView instanceof Backbone.View) {
+            //     this.asientoActionView.stopListening();
+            //     this.asientoActionView.undelegateEvents();
+            // }
+            //
+            // // Open view asiento action
+            // this.asientoActionView = new app.AsientoActionView({
+            //     model: model,
+            //     collection: this.collection,
+            //     parameters: {
+            //         data: data,
+            //         actions: [{
+            //             action: 'update',
+            //             success: false
+            //         }]
+            //     }
+            // });
+            // this.asientoActionView.render();
         },
 
         /**

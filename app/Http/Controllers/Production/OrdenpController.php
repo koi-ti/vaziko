@@ -715,7 +715,7 @@ class OrdenpController extends Controller
                 $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
 
                 $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
-                $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
+                $tvolumen += $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
                 $ttotal += $total = round(($subtotal+$comision), $ordenp2->orden2_round);
             }
 

@@ -812,7 +812,7 @@ class Cotizacion1Controller extends Controller
                 $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 
                 $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
-                $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                $tvolumen += $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
                 $ttotal += $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
             }
 

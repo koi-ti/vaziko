@@ -132,6 +132,8 @@ app || (app = {});
 			this.$inputContent = $(e.currentTarget);
 			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
 			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+            this.asiento = this.$inputContent.attr("data-asiento");
+			this.naturaleza = this.$inputContent.attr("data-naturaleza");
 
 			var producto = this.$inputContent.val();
 
@@ -143,7 +145,11 @@ app || (app = {});
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('productos.search')),
 	                type: 'GET',
-	                data: { producto_codigo: producto },
+	                data: {
+                        producto_codigo: producto,
+                        asiento: _this.asiento,
+                        naturaleza: _this.naturaleza
+                    },
 	                beforeSend: function() {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner( _this.$wraperConten );

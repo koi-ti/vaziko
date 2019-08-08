@@ -28,8 +28,9 @@ app || (app = {});
         templateAddSeries: _.template( ($('#add-series-asiento-tpl').html() || '') ),
         // Editar
         templateUpdate: _.template( ($('#edit-info-asiento2-tpl').html() || '') ),
-        templateUpdateFacturaItem: _.template( ($('#edit-info-factura-item').html() || '') ),
-        templateUpdateFacturapItem: _.template( ($('#edit-info-facturap-item').html() || '') ),
+        templateUpdateInventarioItem: _.template( ($('#edit-asiento-inventario-item').html() || '') ),
+        templateUpdateFacturaItem: _.template( ($('#edit-asiento-factura-item').html() || '') ),
+        templateUpdateFacturapItem: _.template( ($('#edit-asiento-facturap-item').html() || '') ),
 
         events: {
             // Produccion
@@ -95,7 +96,7 @@ app || (app = {});
 		/**
         * Run actions
         */
-        runAction: function( ) {
+        runAction: function () {
             var resp = this.evaluateNextAction(),
         		_this = this,
 	            stuffToDo = {
@@ -667,11 +668,10 @@ app || (app = {});
         * Event add item Asiento Cuentas
         */
         onStoreItem: function (e) {
-            e.preventDefault();
-
             // If callbacks is form
             if (this.parameters.actions[0].action == 'update') {
                 e.preventDefault();
+
                 var data = window.Misc.formToJson( e.target );
                     data.movimiento = this.asientoMovimientosList.toJSON();
                 this.model.save(data, {wait: true, patch: true, silent: true});
@@ -692,13 +692,11 @@ app || (app = {});
         */
         referenceUpdate: function () {
             // Reference wrapper render content
-            var checkTypes = ['N', 'I'];
-                type = this.model.get('plancuentas_tipo');
+            var tipo = this.model.get('plancuentas_tipo');
 
-            this.$wrapper = $('#wrapper-content-movements-source');
+            if (tipo != 'N') {
+                this.$wrapper = $('#wrapper-content-movements-source');
 
-            // Get movimientos list
-            if (checkTypes.indexOf(type) === -1) {
                 this.asientoMovimientosList.fetch({
                     reset: true,
                     data: {
@@ -711,51 +709,32 @@ app || (app = {});
             this.ready();
         },
 
-        /**
-        * Render view task by model
-        * @param Object AsientoMovModel Model instance
-        */
-        addOneUpdateItem: function (AsientoMovModel) {
-            var attributes = AsientoMovModel.toJSON();
-                attributes.naturaleza = this.model.get('asiento2_naturaleza');
-
-            // SI Tipo es factura
-            if (attributes.type == 'F') {
-                this.$wrapper.empty().html(this.templateUpdateFacturaItem(attributes));
-            } else if( attributes.type == 'FP') {
-                this.$wrapper.empty().html(this.templateUpdateFacturapItem(attributes));
-            }
-        },
-
-        /**
-        * Render all view tast of the collection
-        */
-        addAllItemUpdate: function () {
-            this.asientoMovimientosList.forEach(this.addOneUpdateItem, this);
-            this.ready();
-        },
-
         // /**
-        // * Event add item Asiento Cuentas
+        // * Render view task by model
+        // * @param Object asientoMovModel Model instance
         // */
-        // onStoreItem: function (e) {
-        //     // If callbacks is form
-        //     if (this.parameters.actions[0].action == 'update') {
-        //         e.preventDefault();
+        // addOneUpdateItem: function (asientoMovModel) {
+        //     var attributes = asientoMovModel.toJSON();
+        //         attributes.naturaleza = this.model.get('asiento2_naturaleza');
         //
-        //         var data = window.Misc.formToJson( e.target );
-        //             data.movimiento = this.asientoMovimientosList.toJSON();
-        //         this.model.save(data, {patch: true, silent: true});
-        //     } else {
-        //         // Model exist
-        //         if (this.model.id != undefined) {
-        //             // Insert item
-        //             this.collection.trigger( 'store', this.parameters.data );
-        //         } else {
-        //             // Create model
-        //             this.model.save( this.parameters.data, {patch: true, silent: true} );
-        //         }
+        //     console.log(attributes);
+        //
+        //     // SI Tipo es factura
+        //     if (attributes.type == 'F') {
+        //         this.$wrapper.empty().html(this.templateUpdateFacturaItem(attributes));
+        //     } else if (attributes.type == 'FP') {
+        //         this.$wrapper.empty().html(this.templateUpdateFacturapItem(attributes));
+        //     } else if (attributes.type == 'IP') {
+        //         this.$wrapper.empty().html(this.templateUpdateInventarioItem(attributes));
         //     }
+        // },
+        //
+        // /**
+        // * Render all view tast of the collection
+        // */
+        // addAllItemUpdate: function () {
+        //     this.asientoMovimientosList.forEach(this.addOneUpdateItem, this);
+        //     this.ready();
         // },
 
         /**

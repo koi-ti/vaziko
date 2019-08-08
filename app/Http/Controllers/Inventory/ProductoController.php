@@ -288,7 +288,23 @@ class ProductoController extends Controller
     public function search(Request $request)
     {
         if ($request->has('producto_codigo')) {
-            $producto = Producto::select('id', 'producto_nombre', 'producto_metrado', 'producto_serie', 'producto_unidades')->where('producto_codigo', $request->producto_codigo)->first();
+            $query = Producto::query();
+            $query->select('id', 'producto_nombre', 'producto_metrado', 'producto_serie', 'producto_unidades');
+            $query->where('producto_codigo', $request->producto_codigo);
+            if ($request->has('asiento') && $request->asiento) {
+                if ($request->has('naturaleza')) {
+                    if ($request->naturaleza == 'D') {
+                        $query->where(function ($query) {
+                            $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo = producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
+                        });
+                    } else {
+                        $query->where(function ($query) {
+                            $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo <> producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
+                        });
+                    }
+                }
+            }
+            $producto = $query->first();
             if ($producto instanceof Producto) {
                 return response()->json(['success' => true, 'id' => $producto->id, 'producto_nombre' => $producto->producto_nombre, 'producto_metrado' => $producto->producto_metrado, 'producto_serie' => $producto->producto_serie, 'producto_unidades' => $producto->producto_unidades]);
             }

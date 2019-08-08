@@ -12,12 +12,10 @@ app || (app = {});
     app.AsientoMovModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull( Route.route('asientos.detalle.movimientos') );
+            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos'));
         },
         idAttribute: 'id',
-        defaults: {
-
-        }
+        defaults: {}
     });
 
 })(this, this.document);
