@@ -656,17 +656,11 @@ app || (app = {});
                     data: {
                         datasets: [{
                             backgroundColor: [
-                                '#ADD8E6',
-                                '#87CEEB',
-                                '#87CEFA',
-                                '#00BFFF',
-                                '#1E90FF',
-                                '#6495ED',
-                                '#7B68EE'
+                                '#ADD8E6', '#87CEEB', '#87CEFA', '#00BFFF', '#1E90FF', '#6495ED'
                             ],
-                            data: resp.chartproductos.data,
+                            data: resp.chartproductos.data
                         }],
-                        labels: resp.chartproductos.labels,
+                        labels: resp.chartproductos.labels
                     },
                     options: {
                         responsive: true,

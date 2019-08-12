@@ -31,8 +31,6 @@ app || (app = {});
                     this.template = _.template(($('#edit-asiento-factura-item').html() || ''));
                 } else if (this.model.get('type') == 'FP') {
                     this.template = _.template(($('#edit-asiento-facturap-item').html() || ''));
-                } else if (this.model.get('type') == 'IP') {
-                    this.template = _.template(($('#edit-asiento-inventario-item').html() || ''));
                 }
             } else {
                 if (this.model.get('type') == 'F') {

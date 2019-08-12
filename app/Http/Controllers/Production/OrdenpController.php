@@ -699,7 +699,7 @@ class OrdenpController extends Controller
             $object->tiempototal = $hours;
 
             // Chart productos
-            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = $ttotal = 0;
+            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
             $ordenesp2 = Ordenp2::where('orden2_orden', $ordenp->id)->get();
             foreach ($ordenesp2 as $ordenp2) {
                 $tprecio += $precio = $ordenp2->orden2_precio_venta;
@@ -714,18 +714,17 @@ class OrdenpController extends Controller
                 $empaques = Ordenp9::where('orden9_orden2', $ordenp2->id)->sum('orden9_valor_total');
                 $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
 
-                $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
+                $subtotal = $precio + $transporte + $viaticos + $materiales + round($areas) + $empaques;
                 $tvolumen += $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
-                $ttotal += $total = round(($subtotal+$comision), $ordenp2->orden2_round);
             }
 
             // Make object
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
-                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen', 'Total'
+                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen'
             ];
             $chartproducto->data = [
-                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen, $ttotal
+                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
             ];
             $object->chartproductos = $chartproducto;
 

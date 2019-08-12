@@ -200,11 +200,11 @@ app || (app = {});
                     data: {
                         datasets: [{
                             backgroundColor: [
-                                '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C', '#FF0000'
+                                '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C'
                             ],
-                            data: resp.chartproductos.data,
+                            data: resp.chartproductos.data
                         }],
-                        labels: resp.chartproductos.labels,
+                        labels: resp.chartproductos.labels
                     },
                     options: {
                         responsive: true,

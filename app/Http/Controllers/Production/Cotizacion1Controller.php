@@ -796,7 +796,7 @@ class Cotizacion1Controller extends Controller
             $object = new \stdClass();
 
             // Chart productos
-            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = $ttotal = 0;
+            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
             $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
             foreach ($cotizaciones2 as $cotizacion2) {
                 $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta;
@@ -811,18 +811,17 @@ class Cotizacion1Controller extends Controller
                 $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
                 $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 
-                $subtotal = $precio + $transporte + $viaticos + $materiales + $areas + $empaques;
+                $subtotal = $precio + $transporte + $viaticos + $materiales + round($areas) + $empaques;
                 $tvolumen += $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                $ttotal += $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
             }
 
             // Make object
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
-                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen', 'Total'
+                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen'
             ];
             $chartproducto->data = [
-                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen, $ttotal
+                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
             ];
             $object->chartproductos = $chartproducto;
 

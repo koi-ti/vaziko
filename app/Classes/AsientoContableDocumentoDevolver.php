@@ -44,15 +44,13 @@ class AsientoContableDocumentoDevolver {
 				return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
 			}
 
-			// Reveritr movmientos
-			$devolucion = $asiento2->devolverMovimiento($objCuenta);
-			if ($devolucion != 'OK') {
-				return $devolucion;
+			if (!in_array($objCuenta->plancuentas_tipo, ['N', 'I'])) {
+				// Reveritr movmientos
+				$devolucion = $asiento2->devolverMovimiento($objCuenta);
+				if ($devolucion != 'OK') {
+					return $devolucion;
+				}
 			}
-
-			// asiento2_nuevo = true
-			$asiento2->asiento2_nuevo = true;
-			$asiento2->save();
 
 			// Recuperar tercero
 			$objTercero = Tercero::find($asiento2->asiento2_beneficiario);

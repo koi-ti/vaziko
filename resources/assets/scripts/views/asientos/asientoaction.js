@@ -43,8 +43,6 @@ app || (app = {});
             // Update
             'change .round-module': 'roundModule',
             'submit #form-edit-asiento-component-source': 'onStoreItem',
-            'ifChecked input[name=movimiento_naturaleza]': 'changeNaturaleza',
-            'change #movimiento_facturap': 'facturapChanged',
 
             'hidden.bs.modal': 'closeModal'
         },
@@ -687,7 +685,7 @@ app || (app = {});
         */
         referenceUpdate: function () {
             // Reference wrapper render content
-            if (this.model.get('plancuentas_tipo') != 'N') {
+            if (this.model.get('plancuentas_tipo').indexOf(['N', 'I']) !== -1) {
                 this.referenceViews();
             }
 
@@ -709,23 +707,10 @@ app || (app = {});
                     edit: true,
                     nuevo: this.model.get('asiento2_nuevo'),
                     dataFilter: {
-                        naturaleza: this.model.get('asiento2_naturaleza'),
                         asiento2: this.model.get('id')
                     }
                 }
             });
-        },
-
-        /**
-        * reference to views
-        */
-        changeNaturaleza: function (e) {
-            e.preventDefault();
-
-            if (this.model.get('plancuentas_tipo') != 'N') {
-                this.model.set('asiento2_naturaleza', this.$(e.currentTarget).val());
-                this.referenceViews();
-            }
         },
 
         /**

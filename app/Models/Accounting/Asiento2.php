@@ -1054,11 +1054,6 @@ class Asiento2 extends Model
             if ($result != 'OK') {
                 return $result;
             }
-        } else if ($plancuenta->plancuentas_tipo == 'I') {
-            $result = $this->returnInventario();
-            if ($result != 'OK') {
-                return $result;
-            }
         } else if ($plancuenta->plancuentas_tipo == 'C') {
             $result = $this->returnFactura();
             if ($result != 'OK') {
@@ -1078,19 +1073,10 @@ class Asiento2 extends Model
             return "No es posible recuperar movimientos de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
         }
 
+        // Movimientos facturap
         foreach ($movementsfp as $movefp) {
             // Validar si existia la facturap como nueva
-            if ($movefp->movimiento_nuevo) {
-                $movfather = Facturap::where('facturap1_asiento', $this->asiento2_asiento)->where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
-                if (!$movfather instanceof Facturap) {
-                    return "No es posible recuperar información factura proveedor para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-                }
-
-                // Eliminar cuotas
-                Facturap2::where('facturap2_factura', $movfather->id)->delete();
-                $movfather->delete();
-
-            } else {
+            if (!$movefp->movimiento_nuevo) {
                 // Restaurar valores en caso de estar modificados facturap
                 $facturap = Facturap::where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
                 if (!$facturap instanceof Facturap) {
@@ -1110,186 +1096,14 @@ class Asiento2 extends Model
                     return "No es posible recuperar naturaleza para la afectación de la cuota {$movefp->movimiento_item}, por favor verifique la información del asiento o consulte al administrador.";
                 }
                 $facturap2->save();
+
+                // asiento2_nuevo = true
+                $this->asiento2_nuevo = true;
+                $this->save();
             }
         }
 
         return 'OK';
-    }
-
-    public function returnInventario () {
-        // Naturaleza
-        $naturaleza = $this->asiento2_debito != 0 ? 'D' : 'C';
-
-        // Recuperar movimientos
-        $movements = AsientoMovimiento::where('movimiento_asiento2', $this->id)->whereIn('movimiento_tipo', ['IP', 'IH'])->get();
-        if ($movements->count() <= 0) {
-            return "No es posible recuperar movimientos de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-        }
-
-        $movfather = $movements->where('movimiento_tipo', 'IP')->first();
-        if (!$movfather instanceof AsientoMovimiento) {
-            return "No es posible recuperar movimiento padre de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-        }
-
-        // Validar producto
-        $producto = Producto::find($movfather->movimiento_producto);
-        if (!$producto instanceof Producto) {
-            return "No es posible recuperar producto para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-        }
-
-        // Valor
-        $costo = 0;
-        // Actualizar prodbode producto padre (Maneja unidades o Producto metrado)
-        if ($producto->producto_unidades || ($producto->producto_unidades && $producto->producto_metrado)) {
-            if ($naturaleza == 'D') {
-                // Entrada
-                // Actualizar prodbode
-                $result = Prodbode::actualizar($producto, $movfather->movimiento_sucursal, 'S', $movfather->movimiento_valor);
-                if ($result != 'OK') {
-                    return $result;
-                }
-
-                // Insertar movimientos inventario
-                $inventario = Inventario::movimiento($producto, $movfather->movimiento_sucursal, 'AS', 0, $movfather->movimiento_valor, 0, 0);
-                if (!$inventario instanceof Inventario) {
-                    return $inventario;
-                }
-            } else {
-                // Registrar salida padre productos no metrados
-                if (!$producto->producto_metrado) {
-                    // Entrada
-                    $costo = $this->asiento2_credito / $movfather->movimiento_valor;
-                    $costopromedio = $producto->costopromedio($costo, $movfather->movimiento_valor);
-
-                    // Actualizar prodbode
-                    $result = Prodbode::actualizar($producto, $movfather->movimiento_sucursal, 'E', $movfather->movimiento_valor);
-                    if ($result != 'OK') {
-                        return $result;
-                    }
-
-                    // Insertar movimientos inventario
-                    $inventario = Inventario::movimiento($producto, $movfather->movimiento_sucursal, 'AS', $movfather->movimiento_valor, 0, $costo, $costopromedio);
-                    if (!$inventario instanceof Inventario) {
-                        return $inventario;
-                    }
-                }
-            }
-        }
-
-        // Validar movimientos (Maneja serie o Producto metrado)
-        if ($producto->producto_metrado || $producto->producto_serie) {
-            $movchildren = $movements->where('movimiento_tipo', 'IH');
-            if (!$movfather->movimiento_serie && !$movfather->movimiento_producto) {
-                if ($movchildren->count() != $movfather->movimiento_valor) {
-                    return "No es posible recuperar movimientos detalle de inventario para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
-                }
-            }
-        }
-
-        if ($producto->producto_metrado) {
-            // Producto metrado
-            // Debito
-            if ($naturaleza == 'D') {
-                foreach ($movchildren as $children) {
-                    // Prodbode rollo
-                    $result = ProdbodeRollo::actualizar($producto, $movfather->movimiento_sucursal, 'S', $children->movimiento_item, $children->movimiento_valor, 0);
-                    if ($result != 'OK') {
-                        return $result;
-                    }
-
-                    // Movimiento rollo
-                    $inventariorollo = InventarioRollo::movimiento($inventario, $children->movimiento_item, 0, 0, $children->movimiento_valor);
-                    if (!$inventariorollo instanceof InventarioRollo) {
-                        return $inventariorollo;
-                    }
-                }
-            } else { // Credito
-                // Entrada
-                $costo = $this->asiento2_credito / $movfather->movimiento_valor;
-                $costopromedio = $producto->costopromedio($costo, $movfather->movimiento_valor);
-
-                // Insertar movimientos inventario
-                $inventario = Inventario::movimiento($producto, $movfather->movimiento_sucursal, 'AS', $movfather->movimiento_valor, 0, $costo, $costopromedio);
-                if (!$inventario instanceof Inventario) {
-                    return $inventario;
-                }
-
-                foreach ($movchildren as $children) {
-                    // Entradas
-                    $uentrada = 0;
-                    $prodboderollo = ProdbodeRollo::where('prodboderollo_producto', $producto->id)->where('prodboderollo_sucursal', $movfather->movimiento_sucursal)->where('prodboderollo_item', $children->movimiento_item)->first();
-
-                    // Si se termina rollo restar una unidad al padre
-                    if ($prodboderollo->prodboderollo_saldo == 0 && (($prodboderollo->prodboderollo_saldo + $children->movimiento_valor) == $prodboderollo->prodboderollo_metros)) {
-                        $uentrada++;
-                    }
-
-                    // Si se termina algun rollo actualizamos prodbode para padre
-                    if ($uentrada > 0) {
-                        // Actualizar prodbode
-                        $result = Prodbode::actualizar($producto, $movfather->movimiento_sucursal, 'E', $uentrada);
-                        if ($result != 'OK') {
-                            return $result;
-                        }
-                    }
-
-                    // Prodbode rollo
-                    $costometro = $costo / $children->movimiento_valor;
-                    $result = ProdbodeRollo::actualizar($producto, $movfather->movimiento_sucursal, 'E', $children->movimiento_item, $children->movimiento_valor, $costometro);
-                    if ($result != 'OK') {
-                        return $result;
-                    }
-
-                    // Movimiento rollo
-                    $inventariorollo = InventarioRollo::movimiento($inventario, $children->movimiento_item, 0, $children->movimiento_valor, 0);
-                    if (!$inventariorollo instanceof InventarioRollo) {
-                        return $inventariorollo;
-                    }
-                }
-            }
-
-        } else if ($producto->producto_serie) { // Producto serie
-            // Debito
-            if ($naturaleza == 'D') {
-                foreach ($movchildren as $children) {
-                    // Validar serie
-                    $serie = Producto::where('producto_nombre', $children->movimiento_serie)->first();
-
-                    // Actualizar prodbode
-                    $result = Prodbode::actualizar($serie, $movfather->movimiento_sucursal, 'S', 1);
-                    if ($result != 'OK') {
-                        return $result;
-                    }
-
-                    // Insertar movimientos inventario (Al ingresar serie costo_promedio es igual a costo de la entrada)
-                    $inventario = Inventario::movimiento($serie, $movfather->movimiento_sucursal, 'AS', 0, 1, 0, 0);
-                    if (!$inventario instanceof Inventario) {
-                        return $inventario;
-                    }
-                }
-            } else {
-                // Salida
-                $costo = $this->asiento2_credito / $movfather->movimiento_valor;
-                $costopromedio = $producto->costopromedio($costo, $movfather->movimiento_valor);
-
-                // Recuperar serie
-                $serie = Producto::where('producto_codigo', $movfather->movimiento_serie)->first();
-
-                // Actualizar prodbode
-                $result = Prodbode::actualizar($serie, $movfather->movimiento_sucursal, 'E', 1);
-                if ($result != 'OK') {
-                    return $result;
-                }
-
-                // Insertar movimientos inventario (Al ingresar serie costo_promedio es igual a costo de la entrada)
-                $inventario = Inventario::movimiento($serie, $movfather->movimiento_sucursal, 'AS', 1, 0, $costo, $costopromedio);
-                if (!$inventario instanceof Inventario) {
-                    return $inventario;
-                }
-            }
-        }
-
-        return "OK";
     }
 
     public function returnFactura () {
@@ -1325,6 +1139,10 @@ class Asiento2 extends Model
         if (!$result->success){
             return $result->error;
         }
+
+        // asiento2_nuevo = true
+        $this->asiento2_nuevo = true;
+        $this->save();
 
         return 'OK';
     }

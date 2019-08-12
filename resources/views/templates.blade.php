@@ -1035,64 +1035,6 @@
     </div>
 </script>
 
-<script type="text/template" id="edit-asiento-inventario-item">
-    <div class="box box-success">
-        <div class="box-header with-border">
-            <h3 class="box-title">
-                <b>Inventario</b></small>
-            </h3>
-        </div>
-        <div class="box-body">
-            <div class="row">
-                <div class="form-group col-md-12">
-                    <label class="control-label">Producto</label>
-                    <div><%- father.producto_codigo %> - <%- father.producto_nombre %></div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-4">
-                    <label class="control-label">Sucursal</label>
-                    <div><%- father.sucursal_nombre %></div>
-                </div>
-                <div class="form-group col-md-8">
-                    <label class="control-label">Cantidad</label>
-                    <div><%- father.movimiento_valor %></div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <% if (typeof(childrens) !== 'undefined') { %>
-        <div class="box box-success">
-            <div class="box-body">
-                <div class="row">
-                    <div class="col-sm-8 col-sm-offset-2">
-                        <table class="table no-margin" cellspacing="0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="10%">Item</th>
-                                    <th class="text-center"><%- !_.isNull(childrens[0].movimiento_serie) ? 'Serie' : 'Metros (m)' %> actual</th>
-                                    <th class="text-center">Nuev<%- !_.isNull(childrens[0].movimiento_serie) ? 'a serie' : 'o metros (m)' %></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% _.each(childrens, function(children) { %>
-                                    <tr>
-                                        <td class="text-center"><%- children.movimiento_item %></td>
-                                        <td class="text-center"><%- children.movimiento_serie || children.movimiento_valor %></td>
-                                        <td class="text-center">
-                                            <input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm">
-                                        </td>
-                                    </tr>
-                                <% }); %>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    <% } %>
-</script>
-
 {{-- Asiento detalle (show)--}}
 <script type="text/template" id="show-info-asiento2-tpl">
     <div class="row">
