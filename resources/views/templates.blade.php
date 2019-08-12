@@ -869,70 +869,72 @@
         <div class="form-group col-sm-3 col-xs-12">
             <div class="input-group input-group-sm">
                 <span class="input-group-btn">
-                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero_nit_1">
+                    <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="movimiento_beneficiario">
                         <i class="fa fa-user"></i>
                     </button>
                 </span>
-                <input type="text" id="tercero_nit_1" name="tercero_nit_1" maxlength="15" placeholder="Beneficiario" class="form-control tercero-koi-component" value="<%- tercero_nit %>" data-name="tercero_nombre_1">
+                <input type="text" id="movimiento_beneficiario" name="movimiento_beneficiario" maxlength="15" placeholder="Beneficiario" class="form-control tercero-koi-component" value="<%- tercero_nit %>" data-name="movimiento_beneficiario_nombre">
             </div>
         </div>
         <div class="form-group col-sm-5 col-xs-10">
-            <input type="text" id="tercero_nombre_1" name="tercero_nombre_1" placeholder="Nombre beneficiario" value="<%- tercero_nombre %>" class="form-control input-sm" maxlength="15" readonly>
+            <input type="text" id="movimiento_beneficiario_nombre" name="movimiento_beneficiario_nombre" placeholder="Nombre beneficiario" value="<%- tercero_nombre %>" class="form-control input-sm" maxlength="15" readonly>
         </div>
         <label class="control-label col-sm-1">Naturaleza</label>
         <div class="form-group col-sm-3 col-xs-12 text-center">
-            <label class="radio-inline without-padding" for="asiento2_naturaleza_debito_1">
-                <input type="radio" id="asiento2_naturaleza_debito_1" name="asiento2_naturaleza_1" value="D" <%- asiento2_naturaleza == 'D' ? 'checked' : '' %>> Débito
+            <label class="radio-inline without-padding" for="asiento2_naturaleza_debito">
+                <input type="radio" id="asiento2_naturaleza_debito" name="movimiento_naturaleza" value="D" <%- asiento2_naturaleza == 'D' ? 'checked' : '' %>> Débito
             </label>
-            <label class="radio-inline without-padding" for="asiento2_naturaleza_credito_1">
-                <input type="radio" id="asiento2_naturaleza_credito_1" name="asiento2_naturaleza_1" value="C" <%- asiento2_naturaleza == 'C' ? 'checked' : '' %>> Crédito
+            <label class="radio-inline without-padding" for="asiento2_naturaleza_credito">
+                <input type="radio" id="asiento2_naturaleza_credito" name="movimiento_naturaleza" value="C" <%- asiento2_naturaleza == 'C' ? 'checked' : '' %>> Crédito
             </label>
         </div>
     </div>
-
     <div class="row">
         <div class="form-group col-sm-8 col-xs-12">
-            <input type="text" id="asiento2_detalle_1" name="asiento2_detalle_1" class="form-control input-sm" value="<%- asiento2_detalle %>" placeholder="Detalle">
+            <input type="text" id="movimiento_detalle" name="movimiento_detalle" class="form-control input-sm" value="<%- asiento2_detalle %>" placeholder="Detalle">
         </div>
-
-        <label for="asiento2_valor_1" class="control-label col-sm-1">Valor</label>
+        <label for="movimiento_valor" class="control-label col-sm-1">Valor</label>
         <div class="form-group col-sm-3 col-xs-12">
-            <input type="text" id="asiento2_valor_1" name="asiento2_valor_1" placeholder="Valor" value="<%- asiento2_valor %>" class="form-control input-sm round-module" data-currency required>
+            <input type="text" id="movimiento_valor" name="movimiento_valor" placeholder="Valor" value="<%- asiento2_valor %>" class="form-control input-sm round-module" data-currency required>
         </div>
     </div>
 
-    <div id="wrapper-content-movements-source"></div>
+    <div id="wrapper-movimientos-edit"></div>
 </script>
 
-<!-- Facturas, Facturap, Inventario -> Padres -->
 <script type="text/template" id="edit-asiento-facturap-item">
     <div class="box box-success">
             <div class="box-header with-border">
             <h3 class="box-title">
-                <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                <b>Factura proveedor</b>
             </h3>
         </div>
         <div class="box-body">
-            <% if (father[0].movimiento_nuevo && naturaleza == 'C') { %>
+            <% if (father[0].movimiento_nuevo) { %>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="movimiento_facturap" class="control-label">Factura</label>
+                        <input type="text" id="movimiento_facturap" name="movimiento_facturap" placeholder="Factura" value="<%- father[0].movimiento_facturap %>" class="form-control input-sm" maxlength="200" required>
+                    </div>
+                </div>
                 <div class="row">
                     <div class="form-group col-md-4">
-                        <label for="facturap1_vencimiento" class="control-label">Vencimiento</label>
-                        <input type="text" id="facturap1_vencimiento" name="facturap1_vencimiento" placeholder="Vencimiento" value="<%- father[0].movimiento_fecha %>" class="form-control input-sm datepicker" required>
+                        <label for="movimiento_fecha" class="control-label">Vencimiento</label>
+                        <input type="text" id="movimiento_fecha" name="movimiento_fecha" placeholder="Vencimiento" value="<%- father[0].movimiento_fecha %>" class="form-control input-sm datepicker" required>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="facturap1_cuotas" class="control-label">Cuotas</label>
-                        <input type="number" id="facturap1_cuotas" name="facturap1_cuotas" placeholder="Cuotas" value="<%- father[0].movimiento_item %>" class="form-control input-sm" value="1" min="1" max="100" required>
+                        <label for="movimiento_item" class="control-label">Cuotas</label>
+                        <input type="number" id="movimiento_item" name="movimiento_item" placeholder="Cuotas" value="<%- father[0].movimiento_item %>" class="form-control input-sm" value="1" min="1" max="100" required>
                     </div>
                     <div class="form-group col-md-4">
-                        <label for="facturap1_periodicidad" class="control-label">Periodicidad (días)</label>
-                        <input type="number" id="facturap1_periodicidad" name="facturap1_periodicidad" placeholder="Periodicidad" value="<%- father[0].movimiento_periodicidad %>" class="form-control input-sm" min="1" value="30" required>
+                        <label for="movimiento_periodicidad" class="control-label">Periodicidad (días)</label>
+                        <input type="number" id="movimiento_periodicidad" name="movimiento_periodicidad" placeholder="Periodicidad" value="<%- father[0].movimiento_periodicidad %>" class="form-control input-sm" min="1" value="30" required>
                     </div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-12">
-                        <input type="hidden" id="facturap1_sucursal" class="form-control" name="facturap1_sucursal" value="1" required>
-                        <label for="facturap1_observaciones" class="control-label">Observaciones</label>
-                        <textarea id="facturap1_observaciones" name="facturap1_observaciones" class="form-control" rows="2" placeholder="Observaciones"><%- father[0].movimiento_observaciones %></textarea>
+                        <label for="movimiento_observaciones" class="control-label">Observaciones</label>
+                        <textarea id="movimiento_observaciones" name="movimiento_observaciones" class="form-control" rows="3" placeholder="Observaciones"><%- father[0].movimiento_observaciones %></textarea>
                     </div>
                 </div>
             <% } else { %>
@@ -949,16 +951,18 @@
                             <tbody>
                                 <% _.each(father, function(children) { %>
                                     <tr>
-                                        <td class="text-center"><%- children.facturap2_cuota %></td>
+                                        <td class="text-center"><%- children.movimiento_item %></td>
                                         <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
-                                        <td><input type="text" id="facturap_movimiento_<%- children.movimiento_id %>" name="facturap_movimiento_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
+                                        <td>
+                                            <input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency>
+                                        </td>
                                     </tr>
                                 <% }); %>
                             </tbody>
                         </table>
                     </div>
                 </div>
-             <% } %>
+            <% }%>
         </div>
     </div>
 </script>
@@ -970,7 +974,7 @@
                 <b>Factura </b>
             </h3>
             <div class="pull-right">
-                <% if ( !_.isNull(father.movimiento_factura) ) { %>
+                <% if (!_.isNull(father.movimiento_factura)) { %>
                     <b>Número </b><small># <%- father.factura1_numero %></small>
                 <% } %>
                 <b>Prefijo </b><small><%- father.puntoventa_prefijo %></small>
@@ -994,18 +998,11 @@
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Valor</label>
-                    <div><%- window.Misc.currency( father.factura1_total ) %></div>
+                    <div><%- window.Misc.currency(father.factura1_total) %></div>
                 </div>
                 <div class="form-group col-md-4">
                     <label class="control-label">Cuotas</label>
                     <div><%- father.factura1_cuotas %></div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-md-12">
-                    <label class="control-label">Tercero</label>
-                    <div><%- father.tercero_nit %> - <%- father.tercero_nombre %></div>
                 </div>
             </div>
         </div>
@@ -1025,9 +1022,9 @@
                             <% _.each(childrens, function(children) { %>
                                 <tr>
                                     <td class="text-center"><%- children.factura4_cuota %></td>
-                                    <td class="text-center"><%- window.Misc.currency( children.factura4_saldo ) %></td>
-                                    <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
-                                    <td><input type="text" id="factura4_nuevo_valor_<%- children.movimiento_id %>" name="factura4_nuevo_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
+                                    <td class="text-center"><%- window.Misc.currency(children.factura4_saldo) %></td>
+                                    <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
+                                    <td><input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
                                 </tr>
                             <% }); %>
                         </tbody>
@@ -1042,7 +1039,7 @@
     <div class="box box-success">
         <div class="box-header with-border">
             <h3 class="box-title">
-                <b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                <b>Inventario</b></small>
             </h3>
         </div>
         <div class="box-body">
@@ -1064,51 +1061,54 @@
             </div>
         </div>
     </div>
-    <div class="box box-success">
-        <div class="box-body">
-            <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
-                    <table class="table no-margin" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th class="text-center" width="10%">Item</th>
-                                <th class="text-center"><%- !_.isNull(childrens[0].movimiento_serie) ? 'Serie' : 'Metros (m)' %> actual</th>
-                                <th class="text-center">Nuev<%- !_.isNull(childrens[0].movimiento_serie) ? 'a serie' : 'o metros (m)' %></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% _.each(childrens, function(children) { %>
+    <% if (typeof(childrens) !== 'undefined') { %>
+        <div class="box box-success">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <table class="table no-margin" cellspacing="0">
+                            <thead>
                                 <tr>
-                                    <td class="text-center"><%- children.movimiento_item %></td>
-                                    <td class="text-center"><%- !_.isNull(children.movimiento_serie) ? children.movimiento_serie : children.movimiento_valor %></td>
-                                    <td class="text-center">
-                                        <input type="text" id="producto_nuevo_valor_<%- children.movimiento_id %>" name="producto_nuevo_valor_<%- children.movimiento_id %>" class="form-control input-sm">
-                                    </td>
+                                    <th class="text-center" width="10%">Item</th>
+                                    <th class="text-center"><%- !_.isNull(childrens[0].movimiento_serie) ? 'Serie' : 'Metros (m)' %> actual</th>
+                                    <th class="text-center">Nuev<%- !_.isNull(childrens[0].movimiento_serie) ? 'a serie' : 'o metros (m)' %></th>
                                 </tr>
-                            <% }); %>
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <% _.each(childrens, function(children) { %>
+                                    <tr>
+                                        <td class="text-center"><%- children.movimiento_item %></td>
+                                        <td class="text-center"><%- children.movimiento_serie || children.movimiento_valor %></td>
+                                        <td class="text-center">
+                                            <input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm">
+                                        </td>
+                                    </tr>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    <% } %>
 </script>
 
 {{-- Asiento detalle (show)--}}
 <script type="text/template" id="show-info-asiento2-tpl">
     <div class="row">
-        <div class="form-group col-md-6">
+        <div class="form-group col-md-12">
+            <label class="control-label">Cuenta</label>
+            <div><%- plancuentas_cuenta %> - <%- plancuentas_nombre %></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-12">
             <label class="control-label">Naturaleza</label>
             <div><%- asiento2_naturaleza == 'D' ? 'Débito' : 'Crédito' %></div>
         </div>
-        <div class="form-group col-md-6">
-            <label class="control-label">Asiento N°</label>
-            <div><%- asiento1_numero %></div>
-        </div>
     </div>
-
     <!-- Orden -->
-    <% if( !_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != ''){ %>
+    <% if (!_.isUndefined(asiento2_ordenp) && !_.isNull(asiento2_ordenp) && asiento2_ordenp != '') { %>
         <div class="row">
             <div class="form-group col-md-12">
                 <label class="control-label">Orden de producción</label>
@@ -1116,7 +1116,6 @@
             </div>
         </div>
     <% } %>
-
     <!-- Beneficiario -->
     <div class="row">
         <div class="form-group col-md-12">
@@ -1124,9 +1123,8 @@
             <div><%- tercero_nit %> - <%- tercero_nombre %></div>
         </div>
     </div>
-
     <!-- Centro costo -->
-    <% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
+    <% if (!_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
         <div class="row">
             <div class="form-group col-md-12">
                 <label class="control-label">Centro Costo</label>
@@ -1134,7 +1132,6 @@
             </div>
         </div>
     <% } %>
-
     <!-- Detalle -->
     <div class="row">
         <div class="form-group col-md-12">
@@ -1142,20 +1139,19 @@
             <div><%- asiento2_detalle ? asiento2_detalle : '-' %></div>
         </div>
     </div>
-
     <!-- Detalle -->
-    <% if( !_.isUndefined(asiento1_documentos) && !_.isNull(asiento1_documentos) && asiento1_documentos != '') { %>
-        <% if( asiento1_documentos == 'FACT') { %>
+    <% if (!_.isUndefined(asiento1_documentos) && !_.isNull(asiento1_documentos) && asiento1_documentos != '') { %>
+        <% if (asiento1_documentos == 'FACT') { %>
             <div class="row">
                 <div class="form-group col-md-12">
                     <label class="control-label">Documento</label>
-                    <div><b><%- documento_nombre %></b> <a href="<%- window.Misc.urlFull( Route.route('facturas.show', { facturas: asiento1_id_documentos}) ) %>">Ver factura</a> </div>
+                    <div><b><%- documento_nombre %></b> <a href="<%- window.Misc.urlFull( Route.route('facturas.show', {facturas: asiento1_id_documentos})) %>">Ver factura</a> </div>
                 </div>
             </div>
         <% } %>
     <% } %>
 
-    <div class="row" id="render-info-modal"></div>
+    <div id="wrapper-movimientos"></div>
 </script>
 
 <!-- Facturas, Facturap, Inventario -> Padres -->
@@ -1164,7 +1160,7 @@
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <b>Factura proveedor </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                    <b>Factura proveedor</b>
                 </h3>
             </div>
             <div class="box-body">
@@ -1173,20 +1169,14 @@
                         <label class="control-label">Factura proveedor</label>
                         <div><%- father[0].movimiento_facturap %></div>
                     </div>
-                    <% if( father[0].movimiento_nuevo ) { %>
+                    <% if (father[0].movimiento_nuevo) { %>
                         <div class="form-group col-md-6">
                             <label class="control-label">Valor</label>
-                            <div><%- window.Misc.currency( father[0].movimiento_valor ) %></div>
+                            <div><%- window.Misc.currency(father[0].movimiento_valor) %></div>
                         </div>
                     <% } %>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="control-label">Tercero</label>
-                        <div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
-                    </div>
-                </div>
-                <% if( father[0].movimiento_nuevo ) { %>
+                <% if (father[0].movimiento_nuevo) { %>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label class="control-label">Vencimiento</label>
@@ -1211,23 +1201,22 @@
             </div>
         </div>
     </div>
-    <% if ( !father[0].movimiento_nuevo ) { %>
+    <% if (!father[0].movimiento_nuevo) { %>
         <div class="box box-success">
             <div class="box-body">
                 <div class="box-header with-border">
                     <h3 class="box-title"><b>Información adicional</b></h3>
                 </div>
-
                 <div class="box-body table-responsive no-padding">
                     <table id="browse-showinfo-facturap-list" class="table no-margin" cellspacing="0">
                         <tr>
                             <th class="text-center">Cuota</th>
                             <th class="text-center">Pago</th>
                         </tr>
-                        <% _.each( father, function(children){ %>
+                        <% _.each(father, function(children) { %>
                             <tr>
                                 <td class="text-center"><%- children.facturap2_cuota %></td>
-                                <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
+                                <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
                             </tr>
                         <% }); %>
                     </table>
@@ -1242,10 +1231,10 @@
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title">
-                    <b>Factura </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
+                    <b>Factura </b></small>
                 </h3>
                 <div class="pull-right">
-                    <% if ( !_.isNull(father.movimiento_factura) ) { %>
+                    <% if (!_.isNull(father.movimiento_factura)) { %>
                         <b>Número </b><small># <%- father.factura1_numero %></small>
                     <% } %>
                     <b>Prefijo </b><small><%- father.puntoventa_prefijo %></small>
@@ -1269,40 +1258,31 @@
                     </div>
                     <div class="form-group col-md-4">
                         <label class="control-label">Valor</label>
-                        <div><%- window.Misc.currency( father.factura1_total ) %></div>
+                        <div><%- window.Misc.currency(father.factura1_total) %></div>
                     </div>
                     <div class="form-group col-md-4">
                         <label class="control-label">Cuotas</label>
                         <div><%- father.factura1_cuotas %></div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="control-label">Tercero</label>
-                        <div><%- father.tercero_nit %> - <%- father.tercero_nombre %></div>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
-
     <div class="box box-success">
         <div class="box-body">
             <div class="box-header with-border">
                 <h3 class="box-title"><b>Información adicional</b></h3>
             </div>
-
             <div class="box-body table-responsive no-padding">
                 <table id="browse-showinfo-factura-list" class="table no-margin" cellspacing="0">
                     <tr>
                         <th class="text-center">Cuota No.</th>
                         <th class="text-center">Pago</th>
                     </tr>
-                    <% _.each( childrens, function( children ){ %>
+                    <% _.each( childrens, function(children) { %>
                         <tr>
                             <td class="text-center"><%- children.factura4_cuota %></td>
-                            <td class="text-center"><%- window.Misc.currency( children.movimiento_valor ) %></td>
+                            <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
                         </tr>
                     <% }); %>
                 </table>
@@ -1315,17 +1295,11 @@
     <div class="box box-success">
         <div class="box-body">
             <div class="box-header with-border">
-                <h3 class="box-title">
-                    <b>Inventario </b><small>(<%- naturaleza == 'D' ? 'Débito' : 'Crédito' %>)</small>
-                </h3>
+                <h4 class="box-title">
+                    <b>Inventario </b>
+                </h4>
             </div>
             <div class="box-body">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <label class="control-label">Tercero</label>
-                        <div><%- tercero.tercero_nit %> - <%- tercero.tercero_nombre %></div>
-                    </div>
-                </div>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label class="control-label">Producto</label>
@@ -1357,12 +1331,12 @@
                     <table id="browse-showinfo-asiento-list" class="table table-bordered" cellspacing="0">
                         <tr>
                             <th class="text-center">Item</th>
-                            <th class="text-center"><%- !_.isNull( childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
+                            <th class="text-center"><%- !_.isNull(childrens[0].movimiento_serie) ? 'Series' : 'Metros (m)' %></th>
                         </tr>
-                        <% _.each(childrens, function( children ){ %>
+                        <% _.each(childrens, function(children) { %>
                             <tr>
                                 <td class="text-center"><%- children.movimiento_item %></td>
-                                <td class="text-center"><%- !_.isNull(children.movimiento_serie) ? children.movimiento_serie : children.movimiento_valor %></td>
+                                <td class="text-center"><%- children.movimiento_serie || children.movimiento_valor %></td>
                             </tr>
                         <% }); %>
                     </table>

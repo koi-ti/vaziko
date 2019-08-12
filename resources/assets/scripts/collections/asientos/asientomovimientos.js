@@ -12,9 +12,9 @@ app || (app = {});
     app.AsientoMovimientosList = Backbone.Collection.extend({
 
         url: function() {
-            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos'));
+            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
         },
-        model: app.AsientoMovModel,
+        model: app.AsientoMovimientoModel,
 
         /**
         * Constructor Method

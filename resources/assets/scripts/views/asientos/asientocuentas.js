@@ -13,9 +13,6 @@ app || (app = {});
 
         el: '#browse-detalle-asiento-list',
         templateInfo: _.template( ($('#show-info-asiento2-tpl').html() || '') ),
-        templateInfoFacturaItem: _.template( ($('#add-info-factura-item').html() || '') ), // Factura
-        templateInfoFacturapItem: _.template( ($('#add-info-facturap-item').html() || '') ), // Facturap
-        templateInfoInventarioItem: _.template( ($('#add-info-inventario-item').html() || '') ), // Inventario
         events: {
             'click .item-edit': 'editOne',
             'click .item-remove': 'removeOne',
@@ -41,11 +38,7 @@ app || (app = {});
             this.$diferencia = this.$('.total-diferencia');
 
             // References show attributes
-            this.$modalInfo = $('#modal-asiento-show-info-component');
-            this.asientoMovimientosList = new app.AsientoMovimientosList();
-
-            //Init Attributes
-            this.confCollection = { reset: true, data: {} };
+            this.$modal = $('#modal-asiento-show-info-component');
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
@@ -54,16 +47,7 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'sync', this.responseServer );
 
-            // show info collection
-            this.listenTo( this.asientoMovimientosList, 'reset', this.addAllDetail );
-
-
-            /* if was passed asiento code */
-            if( !_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter) ){
-                 this.confCollection.data = this.parameters.dataFilter;
-
-                this.collection.fetch( this.confCollection );
-            }
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
 
         /**
@@ -136,44 +120,37 @@ app || (app = {});
         editOne: function (e) {
             e.preventDefault();
 
-            // var resource = $(e.currentTarget).attr("data-resource"),
-            //     model = this.collection.get(resource);
-            //
-            // // Declare data
-            // var data = {
-            //     plancuentas_cuenta: model.get('plancuentas_cuenta'),
-            //     plancuentas_nombre: model.get('plancuentas_nombre'),
-            //     plancuentas_tipo: model.get('plancuentas_tipo'),
-            //     tercero_nit: model.get('tercero_nit'),
-            //     tercero_nombre: model.get('tercero_nombre'),
-            //     asiento2_naturaleza: model.get('asiento2_naturaleza'),
-            //     asiento2_base: model.get('asiento2_base'),
-            //     asiento2_centro: model.get('asiento2_centro'),
-            //     asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
-            //     asiento2_detalle: model.get('asiento2_detalle'),
-            //     asiento2_nuevo: model.get('asiento2_nuevo'),
-            //     title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
-            // }
-            //
-            // // Open AsientoActionView
-            // if (this.asientoActionView instanceof Backbone.View) {
-            //     this.asientoActionView.stopListening();
-            //     this.asientoActionView.undelegateEvents();
-            // }
-            //
-            // // Open view asiento action
-            // this.asientoActionView = new app.AsientoActionView({
-            //     model: model,
-            //     collection: this.collection,
-            //     parameters: {
-            //         data: data,
-            //         actions: [{
-            //             action: 'update',
-            //             success: false
-            //         }]
-            //     }
-            // });
-            // this.asientoActionView.render();
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            // Declare data
+            var data = {
+                asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
+                title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
+            }
+
+            // Set valor
+            model.set('asiento2_valor', data.asiento2_valor);
+
+            // Open AsientoActionView
+            if (this.asientoActionView instanceof Backbone.View) {
+                this.asientoActionView.stopListening();
+                this.asientoActionView.undelegateEvents();
+            }
+
+            // Open view asiento action
+            this.asientoActionView = new app.AsientoActionView({
+                model: model,
+                collection: this.collection,
+                parameters: {
+                    data: data,
+                    actions: [{
+                        action: 'update',
+                        success: false
+                    }]
+                }
+            });
+            this.asientoActionView.render();
         },
 
         /**
@@ -186,26 +163,38 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if (model instanceof Backbone.Model) {
-                var cancelConfirm = new window.app.ConfirmWindow({
-                    parameters: {
-                        dataFilter: {
-                            plancuentas_cuenta: model.get('plancuentas_cuenta'),
-                            plancuentas_nombre: model.get('plancuentas_nombre')
-                        },
-                        template: _.template( ($('#asiento-item-delete-confirm-tpl').html() || '') ),
-                        titleConfirm: 'Eliminar cuenta',
-                        onConfirm: function () {
-                            model.view.remove();
-                            _this.collection.remove(model);
-                            _this.totalize();
+            var cancelConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: {
+                        plancuentas_cuenta: model.get('plancuentas_cuenta'),
+                        plancuentas_nombre: model.get('plancuentas_nombre')
+                    },
+                    template: _.template( ($('#asiento-item-delete-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Eliminar cuenta',
+                    onConfirm: function () {
+                        if (model instanceof Backbone.Model) {
+                            model.destroy({
+                                wait: true,
+                                success: function (model, resp) {
+                                    if (!_.isUndefined(resp.success)) {
+                                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                                        if (!resp.success) {
+                                            alertify.error(resp.errors);
+                                            return;
+                                        }
 
+                                        model.view.remove();
+                                        _this.collection.remove(model);
+                                        _this.totalize();
+                                    }
+                                }
+                            });
                         }
                     }
-                });
+                }
+            });
 
-                cancelConfirm.render();
-            }
+            cancelConfirm.render();
         },
 
         /**
@@ -215,49 +204,33 @@ app || (app = {});
             e.preventDefault();
 
             var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
+                model = this.collection.get(resource).toJSON();
 
-            // Render info && Wrapper Info
-            this.$modalInfo.find('.content-modal').empty().html( this.templateInfo( model.toJSON() ) );
-            this.$wrapGeneral = this.$modalInfo.find('#render-info-modal');
+            // Render modal info
+            this.$modal.find('.content-modal').empty().html(this.templateInfo(model));
 
-            // Get movimientos list
-            this.asientoMovimientosList.fetch({ reset: true, data: { asiento2: model.get('id') } });
-
-            this.tercero = {
-                tercero_nit: model.get('tercero_nit'),
-                tercero_nombre: model.get('tercero_nombre')
-            };
-            this.naturaleza = model.get('asiento2_naturaleza');
-
-            // Open modal
-            this.$modalInfo.modal('show');
-        },
-
-        /**
-        * Render view task by model
-        * @param Object mentoringTaskModel Model instance
-        */
-        addOneDetail: function (AsientoMovModel) {
-            var attributes = AsientoMovModel.toJSON();
-                attributes.tercero = this.tercero;
-                attributes.naturaleza = this.naturaleza;
-
-            // SI Tipo es factura
-            if( attributes.type == 'F'){
-                this.$wrapGeneral.empty().html(  this.templateInfoFacturaItem( attributes ) );
-            }else if( attributes.type == 'FP'){
-                this.$wrapGeneral.empty().html(  this.templateInfoFacturapItem( attributes ) );
-            }else if ( attributes.type == 'IP') {
-                this.$wrapGeneral.empty().html(  this.templateInfoInventarioItem( attributes ) );
+            // Tipo de cuenta (Ninguna)
+            if (model.plancuentas_tipo != 'N') {
+                this.referenceViews(model);
             }
+
+            this.$modal.modal('show');
         },
 
         /**
-        * Render all view tast of the collection
+        * reference to views
         */
-        addAllDetail: function () {
-            this.asientoMovimientosList.forEach( this.addOneDetail, this );
+        referenceViews: function (model) {
+            // Detalle asiento list
+            this.asientoMovimientosListView = new app.AsientoMovimientosListView({
+                collection: new app.AsientoMovimientosList(),
+                parameters: {
+                    edit: false,
+                    dataFilter: {
+                        asiento2: model.id
+                    }
+                }
+            });
         },
 
         /**
@@ -266,16 +239,16 @@ app || (app = {});
         totalize: function () {
             var data = this.collection.totalize();
 
-            if(this.$debitos.length) {
-                this.$debitos.html( window.Misc.currency(data.debitos) );
+            if (this.$debitos.length) {
+                this.$debitos.html(window.Misc.currency(data.debitos));
             }
 
-            if(this.$creditos.length) {
-                this.$creditos.html( window.Misc.currency(data.creditos) );
+            if (this.$creditos.length) {
+                this.$creditos.html(window.Misc.currency(data.creditos));
             }
 
-            if(this.$diferencia.length) {
-                this.$diferencia.html( window.Misc.currency(data.diferencia) );
+            if (this.$diferencia.length) {
+                this.$diferencia.html(window.Misc.currency(data.diferencia));
             }
         },
 
@@ -283,28 +256,27 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                this.confCollection.data = this.parameters.dataFilter;
-                this.collection.fetch( this.confCollection );
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
             }
         }
    });

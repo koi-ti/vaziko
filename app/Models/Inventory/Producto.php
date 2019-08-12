@@ -77,7 +77,7 @@ class Producto extends BaseModel
 
     public function serie($serie)
     {
-        $producto = Producto::where('producto_codigo', $serie)->first();
+        $producto = Producto::where('producto_nombre', $serie)->first();
         if ($producto instanceof Producto) {
             return "Ya existe un producto con este número de serie {$producto->producto_codigo}, por favor verifique la información del asiento o consulte al administrador.";
         }

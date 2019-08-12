@@ -15,15 +15,14 @@ class InventarioRollo extends Model
 
     public $timestamps = false;
 
-    public static function movimiento(Inventario $inventario, $item, $costo = 0, $mentrada = 0, $msalida = 0)
-    {
+    public static function movimiento (Inventario $inventario, $item, $costo = 0, $mentrada = 0, $msalida = 0) {
     	// Validar item
-        if(!is_numeric($item) || $item <= 0){
+        if (!is_numeric($item) || $item <= 0) {
             return "No es posible recuperar item movimiento rollo, por favor verifique la información o consulte al administrador.";
         }
 
         // Validar unidades
-        if($mentrada <= 0 && $msalida <= 0){
+        if ($mentrada <= 0 && $msalida <= 0) {
             return "No es posible recuperar metros movimiento rollo, por favor verifique la información o consulte al administrador.";
         }
 

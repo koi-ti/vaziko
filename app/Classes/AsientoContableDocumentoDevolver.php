@@ -12,7 +12,7 @@ class AsientoContableDocumentoDevolver {
 	private $asiento_cuentas = [];
 	public $asiento_error = NULL;
 
-	function __construct(Asiento $asiento, Array $cuentas) {
+	function __construct (Asiento $asiento, Array $cuentas) {
 		// Validar asiento
 		if (!$asiento instanceof Asiento) {
 			$this->asiento_error = "No es posible recuperar el asiento contable.";
@@ -30,65 +30,7 @@ class AsientoContableDocumentoDevolver {
 		$this->cuentas = $cuentas;
 	}
 
-	public function validarMovimientos() {
-		// Validar que la cuenta no tenga movimientos en cuerso
-		foreach ($this->cuentas as $cuenta) {
-			// Recuperar asiento
-			$asiento2 = Asiento2::find($cuenta['Id']);
-			if (!$asiento2 instanceof Asiento2) {
-				return "No es posible recuperar la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']}.";
-			}
-
-			// Recuperar movimiento del asiento
-			$movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->get();
-			foreach ($movimientos as $movimiento) {
-				// Recuperar Inventario
-				if ($movimiento->movimiento_tipo == 'IP') {
-					$producto = Producto::find($movimiento->movimiento_producto);
-					if (!$producto instanceof Producto) {
-						return "No es posible recuperar el producto de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']}.";
-					}
-
-					// Validar inventario
-					$inventario = Prodbode::where('prodbode_producto', $producto->id)->where('prodbode_sucursal', $movimiento->movimiento_sucursal)->where('prodbode_cantidad', '<', $movimiento->movimiento_valor)->count();
-					if ($inventario != 0) {
-						return "No es posible editar el asiento contable porque el producto de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']} tiene movimientos.";
-					}
-				}
-
-				// Recuperar factura
-				if ($movimiento->movimiento_tipo == 'F') {
-					$factura = Factura1::find($movimiento->movimiento_factura);
-					if ($factura instanceof Factura) {
-						return "No es posible recuperar la factura de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']}.";
-					}
-
-					$cuotas = Factura4::where('factura4_factura1', $factura->id)->whereRaw('factura4_valor <> factura4_saldo')->count();
-					if ($cuotas != 0) {
-						return "No es posible editar el asiento contable porque la factura de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']} tiene movimientos.";
-					}
-				}
-
-				// Recuperar factura proveedor
-				if ($movimiento->movimiento_tipo == 'FP') {
-					// Recuperar factura proveedor
-					$facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
-					if (!$facturap instanceof Facturap) {
-						return "No es posible recuperar la factura proveedor de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']}.";
-					}
-
-					$cuotas = Facturap2::where('facturap2_factura', $facturap->id)->whereRaw('facturap2_saldo <> facturap2_valor')->count();
-					if ($cuotas != 0) {
-						return "No es posible editar el asiento contable porque la factura proveedor de la cuenta {$cuenta['Cuenta']} del beneficiario {$cuenta['Tercero']} tiene movimientos.";
-					}
-				}
-			}
-		}
-
-		return 'OK';
-	}
-
-	public function revertirMovimientos() {
+	public function revertirMovimientos () {
 		foreach ($this->cuentas as $cuenta) {
 			// Asiento2
 			$asiento2 = Asiento2::find($cuenta['Id']);
@@ -101,6 +43,16 @@ class AsientoContableDocumentoDevolver {
 			if (!$objCuenta instanceof PlanCuenta) {
 				return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador.";
 			}
+
+			// Reveritr movmientos
+			$devolucion = $asiento2->devolverMovimiento($objCuenta);
+			if ($devolucion != 'OK') {
+				return $devolucion;
+			}
+
+			// asiento2_nuevo = true
+			$asiento2->asiento2_nuevo = true;
+			$asiento2->save();
 
 			// Recuperar tercero
 			$objTercero = Tercero::find($asiento2->asiento2_beneficiario);
@@ -123,7 +75,7 @@ class AsientoContableDocumentoDevolver {
 		return 'OK';
 	}
 
-	public function revertirSaldosTerceros(PlanCuenta $cuenta, $tercero, $debito = 0, $credito = 0, $xano, $xmes) {
+	public function revertirSaldosTerceros (PlanCuenta $cuenta, $tercero, $debito = 0, $credito = 0, $xano, $xmes) {
 		// Recuperar registro saldos terceros
 		$objSaldoTercero = SaldoTercero::where('saldosterceros_cuenta', $cuenta->id)->where('saldosterceros_tercero', $tercero)->where('saldosterceros_ano', $xano)->where('saldosterceros_mes', $xmes)->first();
 		if ($objSaldoTercero instanceof SaldoTercero) {
@@ -134,7 +86,7 @@ class AsientoContableDocumentoDevolver {
 		return 'OK';
 	}
 
-	public function revertirSaldosContables(PlanCuenta $cuenta, $debito = 0, $credito = 0, $xano, $xmes) {
+	public function revertirSaldosContables (PlanCuenta $cuenta, $debito = 0, $credito = 0, $xano, $xmes) {
 		// Recuperar cuentas a mayorizar
 		$cuentas = $cuenta->getMayorizarCuentas();
 		if (!is_array($cuentas) || count($cuentas) == 0) {

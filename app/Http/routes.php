@@ -91,7 +91,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::group(['prefix' => 'detalle'], function() {
 			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
 			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
-			Route::get('movimientos', ['as' => 'asientos.detalle.movimientos', 'uses' => 'Accounting\DetalleAsientoController@movimientos']);
+			Route::resource('movimientos', 'Accounting\AsientoMovimientoController', ['only' => ['index']]);
 		});
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['except' => ['destroy']]);

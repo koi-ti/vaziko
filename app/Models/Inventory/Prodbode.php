@@ -3,9 +3,7 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use App\Models\Base\Sucursal;
-
 use DB;
 
 class Prodbode extends Model
@@ -19,7 +17,7 @@ class Prodbode extends Model
 
     public $timestamps = false;
 
-    public static function prodbode(Producto $producto, $sucursal) {
+    public static function prodbode (Producto $producto, $sucursal) {
         $query = Prodbode::query();
         $query->select('koi_prodbode.*', DB::raw('(prodbode_cantidad - prodbode_reservada) as disponibles'));
         $query->where('prodbode_producto', $producto->id);
@@ -27,22 +25,21 @@ class Prodbode extends Model
         return $query->first();
     }
 
-    public static function actualizar(Producto $producto, $sucursal, $tipo, $unidades, $movfather = null)
-    {
+    public static function actualizar (Producto $producto, $sucursal, $tipo, $unidades) {
         // Validar producto
         $sucursal = Sucursal::find($sucursal);
-        if(!$sucursal instanceof Sucursal) {
+        if (!$sucursal instanceof Sucursal) {
             return "No es posible recuperar sucursal prodbode, por favor verifique la información o consulte al administrador.";
         }
 
         // Validar unidades
-        if(!is_numeric($unidades) || $unidades <= 0){
+        if (!is_numeric($unidades) || $unidades <= 0) {
             return "No es posible recuperar unidades prodbode, por favor verifique la información o consulte al administrador.";
         }
 
         // Recuperar prodbode
     	$prodbode = Prodbode::where('prodbode_producto', $producto->id)->where('prodbode_sucursal', $sucursal->id)->first();
-		if(!$prodbode instanceof Prodbode){
+		if (!$prodbode instanceof Prodbode) {
         	$prodbode = new Prodbode;
 	        $prodbode->prodbode_producto = $producto->id;
 	        $prodbode->prodbode_sucursal = $sucursal->id;
@@ -55,41 +52,11 @@ class Prodbode extends Model
 
 			case 'S':
                 // Validar disponibles
-                if($unidades > $prodbode->prodbode_cantidad){
+                if ($unidades > $prodbode->prodbode_cantidad) {
                     return "No existen suficientes unidades para salida producto {$producto->producto_codigo}, disponibles {$prodbode->prodbode_cantidad}, salida $unidades, por favor verifique la información o consulte al administrador.";
                 }
 		        $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
 			break;
-
-			case 'SS':
-                // Validar disponibles
-                if ($unidades <= $prodbode->prodbode_cantidad) {
-                    $prodbode->prodbode_cantidad -= $unidades;
-
-                    $child = Prodbode::where('prodbode_producto', $movfather->movimiento_serie, 'prodbode_sucursal', $sucursal->id)->first();
-                    if ($child instanceof Prodbode){
-                        $child->prodbode_cantidad -= $unidades;
-                        $child->save();
-                    }
-
-                    Log::info('as');
-
-                } else {
-                    return "No existen suficientes unidades para salida producto {$producto->producto_codigo}, disponibles {$prodbode->prodbode_cantidad}, salida $unidades, por favor verifique la información o consulte al administrador.";
-                }
-			break;
-
-            // // Delete
-            // case 'D':
-            //     $prodbode->prodbode_cantidad = ($prodbode->prodbode_cantidad - $unidades);
-            //     $prodbode->save();
-            //
-            //     if( $prodbode->prodbode_cantidad <= 0 ){
-            //         $prodbode->delete();
-            //     }
-            //
-            //     return "OK";
-            // break;
 
     		default:
     			return "No es posible recuperar tipo movimiento prodbode, por favor verifique la información o consulte al administrador.";

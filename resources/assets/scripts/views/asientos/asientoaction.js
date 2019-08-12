@@ -28,10 +28,6 @@ app || (app = {});
         templateAddSeries: _.template( ($('#add-series-asiento-tpl').html() || '') ),
         // Editar
         templateUpdate: _.template( ($('#edit-info-asiento2-tpl').html() || '') ),
-        templateUpdateInventarioItem: _.template( ($('#edit-asiento-inventario-item').html() || '') ),
-        templateUpdateFacturaItem: _.template( ($('#edit-asiento-factura-item').html() || '') ),
-        templateUpdateFacturapItem: _.template( ($('#edit-asiento-facturap-item').html() || '') ),
-
         events: {
             // Produccion
             'submit #form-create-ordenp-asiento-component-source': 'onStoreItemOrdenp',
@@ -47,12 +43,14 @@ app || (app = {});
             // Update
             'change .round-module': 'roundModule',
             'submit #form-edit-asiento-component-source': 'onStoreItem',
+            'ifChecked input[name=movimiento_naturaleza]': 'changeNaturaleza',
+            'change #movimiento_facturap': 'facturapChanged',
 
             'hidden.bs.modal': 'closeModal'
         },
         parameters: {
-            data: { },
-            actions: { },
+            data: {},
+            actions: {}
         },
 
         /**
@@ -75,12 +73,10 @@ app || (app = {});
             this.itemRolloINList = new app.ItemRolloINList();
             this.productoSeriesINList = new app.ProductoSeriesINList();
             this.detalleFactura4List = new app.DetalleFactura4List();
-            this.asientoMovimientosList = new app.AsientoMovimientosList();
 
 			// Events Listeners
             this.listenTo( this.cuotasFPList, 'reset', this.addAllCuotasFacturap );
             this.listenTo( this.itemRolloINList, 'reset', this.addAllItemRolloInventario );
-            this.listenTo( this.asientoMovimientosList, 'reset', this.addAllItemUpdate );
 
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.collection, 'sync', this.responseServer );
@@ -130,7 +126,7 @@ app || (app = {});
 
                     'update': function () {
                         _this.$modalUp.find('.modal-title').text(_this.parameters.data.title);
-                        _this.$modalUp.find('.content-modal').empty().html(_this.templateUpdate(_this.parameters.data));
+                        _this.$modalUp.find('.content-modal').empty().html(_this.templateUpdate(_this.model.toJSON()));
 
                         // Reference update collections
                         _this.referenceUpdate();
@@ -672,8 +668,7 @@ app || (app = {});
             if (this.parameters.actions[0].action == 'update') {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                    data.movimiento = this.asientoMovimientosList.toJSON();
+                var data = window.Misc.formToJson(e.target);
                 this.model.save(data, {wait: true, patch: true, silent: true});
             } else {
                 // Model exist
@@ -692,50 +687,46 @@ app || (app = {});
         */
         referenceUpdate: function () {
             // Reference wrapper render content
-            var tipo = this.model.get('plancuentas_tipo');
-
-            if (tipo != 'N') {
-                this.$wrapper = $('#wrapper-content-movements-source');
-
-                this.asientoMovimientosList.fetch({
-                    reset: true,
-                    data: {
-                        asiento2: this.model.get('id')
-                    }
-                });
+            if (this.model.get('plancuentas_tipo') != 'N') {
+                this.referenceViews();
             }
 
             this.$modalUp.modal('show');
             this.ready();
         },
 
-        // /**
-        // * Render view task by model
-        // * @param Object asientoMovModel Model instance
-        // */
-        // addOneUpdateItem: function (asientoMovModel) {
-        //     var attributes = asientoMovModel.toJSON();
-        //         attributes.naturaleza = this.model.get('asiento2_naturaleza');
-        //
-        //     console.log(attributes);
-        //
-        //     // SI Tipo es factura
-        //     if (attributes.type == 'F') {
-        //         this.$wrapper.empty().html(this.templateUpdateFacturaItem(attributes));
-        //     } else if (attributes.type == 'FP') {
-        //         this.$wrapper.empty().html(this.templateUpdateFacturapItem(attributes));
-        //     } else if (attributes.type == 'IP') {
-        //         this.$wrapper.empty().html(this.templateUpdateInventarioItem(attributes));
-        //     }
-        // },
-        //
-        // /**
-        // * Render all view tast of the collection
-        // */
-        // addAllItemUpdate: function () {
-        //     this.asientoMovimientosList.forEach(this.addOneUpdateItem, this);
-        //     this.ready();
-        // },
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            this.asientoMovimientosList = new app.AsientoMovimientosList();
+
+            // Detalle asiento list
+            this.asientoMovimientosListView = new app.AsientoMovimientosListView({
+                el: $('#wrapper-movimientos-edit'),
+                collection: this.asientoMovimientosList,
+                parameters: {
+                    edit: true,
+                    nuevo: this.model.get('asiento2_nuevo'),
+                    dataFilter: {
+                        naturaleza: this.model.get('asiento2_naturaleza'),
+                        asiento2: this.model.get('id')
+                    }
+                }
+            });
+        },
+
+        /**
+        * reference to views
+        */
+        changeNaturaleza: function (e) {
+            e.preventDefault();
+
+            if (this.model.get('plancuentas_tipo') != 'N') {
+                this.model.set('asiento2_naturaleza', this.$(e.currentTarget).val());
+                this.referenceViews();
+            }
+        },
 
         /**
         * Change Valor

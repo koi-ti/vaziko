@@ -54,10 +54,10 @@ class Factura1 extends Model
 
         foreach ($movchildren as $item) {
             $factura = Factura4::find($item->movimiento_factura4);
-            if($naturaleza == 'D'){
-                $factura->factura4_saldo = $factura->factura4_saldo + $item->movimiento_valor;
-            }else{
-                $factura->factura4_saldo = $factura->factura4_saldo - $item->movimiento_valor;
+            if ($naturaleza == 'D') {
+                $factura->factura4_saldo -= $item->movimiento_valor;
+            } else {
+                $factura->factura4_saldo += $item->movimiento_valor;
             }
             $factura->save();
         }

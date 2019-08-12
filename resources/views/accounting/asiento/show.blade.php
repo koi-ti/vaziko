@@ -143,6 +143,10 @@
 		</div>
 	</section>
 
+	<script type="text/template" id="asiento-reverse-confirm-tpl">
+		<p>Si edita el asiento contable y las cuentas manejan inventario, cartera ó cuentas por pagar se eliminaran los registros y se crearan de nuevo.</p>
+	</script>
+
 	<script type="text/template" id="asiento-anular-confirm-tpl">
 		<p>¿Está seguro que desea eliminar el asiento <b>{{ $asiento->asiento1_numero }}</b>?</p>
 	</script>

@@ -51,26 +51,36 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this;
-            
-            window.Misc.setSpinner(this.spinner);
-            $.get(window.Misc.urlFull(Route.route('asientos.reverse', {asientos: this.model.get('id')})), function (resp) {
-                window.Misc.removeSpinner(_this.spinner);
-                if (!_.isUndefined(resp.success)) {
-                    // response success or error
-                    var text = resp.success ? '' : resp.errors;
-                    if (_.isObject(resp.errors)) {
-                        text = window.Misc.parseErrors(resp.errors);
-                    }
 
-                    if (!resp.success) {
-                        alertify.error(text);
-                        return;
-                    }
+            var editConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template( ($('#asiento-reverse-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Editar asiento contable',
+                    onConfirm: function () {
+                        window.Misc.setSpinner(_this.spinner);
+                        $.get(window.Misc.urlFull(Route.route('asientos.reverse', {asientos: _this.model.get('id')})), function (resp) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if (_.isObject(resp.errors)) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
 
-                    // Redirect to Content Course
-                    window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id}), {trigger: true}));
+                                if (!resp.success) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                // Redirect to Content Course
+                                window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id}), {trigger: true}));
+                            }
+                        });
+                    }
                 }
             });
+
+            editConfirm.render();
         },
     });
 

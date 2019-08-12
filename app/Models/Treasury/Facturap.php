@@ -100,4 +100,8 @@ class Facturap extends Model
         $response->position = $i;
         return $response;
     }
+
+    public function cuotas () {
+        return $this->hasMany('App\Models\Treasury\Facturap2', 'facturap2_factura', 'id');
+    }
 }

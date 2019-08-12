@@ -314,26 +314,6 @@ class AsientoController extends Controller
             if ($asiento->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // // Pluck array
-                    // $cuentas = array_pluck($request->cuentas, 'id');
-                    //
-                    // // Eliminar asientos
-                    // $movimientos = Asiento2::whereNotIn('id', $cuentas)->get();
-                    // foreach ($movimientos as $movimiento) {
-                    //     // Validar plan cuentas
-                    //     $plancuenta = PlanCuenta::find($movimiento->asiento2_cuenta);
-                    //     if (!$plancuenta instanceof PlanCuenta) {
-                    //         DB::rollback();
-                    //         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el plan de cuentas.']);
-                    //     }
-                    //
-                    //     $valid = $movimiento->validarMovimiento($plancuenta);
-                    //     if ($valid != 'OK') {
-                    //         DB::rollback();
-                    //         return response()->json(['success' => false, 'errors' => $valid]);
-                    //     }
-                    // }
-
                     // Preparar cuentas && Recupero items asiento 2
                     $query = Asiento2::query();
                     $query->select('koi_asiento2.*', 'plancuentas_cuenta', 'plancuentas_tipo', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"));
@@ -460,9 +440,6 @@ class AsientoController extends Controller
                         }
                     }
 
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => 'K.O!']);
-
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento->id]);
@@ -530,22 +507,12 @@ class AsientoController extends Controller
                         }
 
                         // Validar que se pueda devolver el inventario
-                        $result = $objAsiento->validarMovimientos();
-                        if ($result != 'OK') {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => $result]);
-                        }
-
-                        // Validar que se pueda devolver el inventario
                         $result = $objAsiento->revertirMovimientos();
                         if ($result != 'OK') {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $result]);
                         }
                     }
-
-                    // DB::rollback();
-                    // return response()->json(['success' => false, 'errors' => 'K.O!']);
 
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asiento->id]);

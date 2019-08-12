@@ -1,5 +1,5 @@
 /**
-* Class AsientoMovModel extend of Backbone Model
+* Class AsientoMovimientoModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AsientoMovModel = Backbone.Model.extend({
+    app.AsientoMovimientoModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos'));
+            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
         },
         idAttribute: 'id',
         defaults: {}

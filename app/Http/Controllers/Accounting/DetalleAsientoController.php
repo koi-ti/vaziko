@@ -4,7 +4,12 @@ namespace App\Http\Controllers\Accounting;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta,App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto, App\Models\Base\Tercero, App\Models\Production\Ordenp;
+use App\Models\Accounting\Asiento, App\Models\Accounting\Asiento2, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\AsientoMovimiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\CentroCosto;
+use App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
+use App\Models\Inventory\Producto;
+use App\Models\Receivable\Factura4;
+use App\Models\Production\Ordenp;
+use App\Models\Base\Tercero;
 use Log, DB;
 
 class DetalleAsientoController extends Controller
@@ -17,15 +22,15 @@ class DetalleAsientoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $detalle = [];
+            $data = [];
             if ($request->has('asiento')) {
-                $detalle = Asiento2::getAsiento2($request->asiento);
+                $data = Asiento2::getAsiento2($request->asiento);
             }
 
             if ($request->has('orden2_orden')) {
-                $detalle = Asiento2::getAsiento2Ordenp($request->orden2_orden);
+                $data = Asiento2::getAsiento2Ordenp($request->orden2_orden);
             }
-            return response()->json($detalle);
+            return response()->json($data);
         }
         return view('admin.actividades.index');
     }
@@ -192,80 +197,113 @@ class DetalleAsientoController extends Controller
             if ($asiento2 instanceof Asiento2) {
                 DB::beginTransaction();
                 try {
+                    // Validar valor
+                    if (empty($request->movimiento_valor)) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'Por favor ingrese el valor.']);
+                    }
+
                     // Recuperar beneficiario
-                    $beneficiario = Tercero::where('tercero_nit', $request->tercero_nit_1)->first();
+                    $beneficiario = Tercero::where('tercero_nit', $request->movimiento_beneficiario)->first();
                     if (!$beneficiario instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar el beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
                     }
 
                     // Naturaleza
-                    $naturaleza = $request->asiento2_naturaleza_1;
+                    $naturaleza = $request->movimiento_naturaleza;
 
                     // Update movimiento
                     $asiento2->asiento2_beneficiario = $beneficiario->id;
-                    $asiento2->asiento2_detalle = $request->asiento2_detalle_1;
-                    $asiento2->asiento2_debito = $request->asiento2_naturaleza_1 == 'D' ? $request->asiento2_valor_1 : 0;
-                    $asiento2->asiento2_credito = $request->asiento2_naturaleza_1 == 'C' ? $request->asiento2_valor_1 : 0;
+                    $asiento2->asiento2_detalle = $request->movimiento_detalle;
+                    $asiento2->asiento2_debito = $naturaleza == 'D' ? $request->movimiento_valor : 0;
+                    $asiento2->asiento2_credito = $naturaleza == 'C' ? $request->movimiento_valor : 0;
                     $asiento2->save();
 
                     // Si maneja movimiento
-                    if ($request->has('movimiento')) {
-                        foreach ($request->movimiento as $movimiento) {
-                            if ($movimiento['type'] == 'F') {
-                                foreach ($movimiento['childrens'] as $children) {
-                                    if ($request->has("factura4_nuevo_valor_{$children['movimiento_id']}")) {
-                                        $asientomovimiento = AsientoMovimiento::find($children['movimiento_id']);
-                                        if ($asientomovimiento instanceof AsientoMovimiento) {
-                                            $asientomovimiento->movimiento_valor = $request->get("factura4_nuevo_valor_{$children['movimiento_id']}");
-                                            $asientomovimiento->save();
-                                        }
+                    $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->get();
+                    foreach ($movimientos as $movimiento) {
+                        if ($movimiento->movimiento_tipo == 'FP') {
+                            // Si el movimiento es nuevo
+                            if ($movimiento->movimiento_nuevo) {
+                                // Si el movimiennto no es nuevo
+                                if (!$asiento2->asiento2_nuevo) {
+                                    $facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
+                                    if ($facturap instanceof Facturap) {
+                                        $facturap->facturap1_factura = $request->movimiento_facturap;
+                                        $facturap->facturap1_tercero = $asiento2->asiento2_beneficiario;
+                                        $facturap->facturap1_fecha = $request->movimiento_fecha;
+                                        $facturap->facturap1_cuotas = $request->movimiento_item;
+                                        $facturap->facturap1_periodicidad = $request->movimiento_periodicidad;
+                                        $facturap->facturap1_observaciones = $request->movimiento_observaciones;
+                                        $facturap->save();
+                                    }
+                                }
 
-                                        // Si el movimiennto no es nuevo
-                                        if (!$asiento2->asiento2_nuevo) {
-                                            $factura4 = Factura4::find($children['movimiento_factura4']);
-                                            if ($factura4 instanceof Factura4) {
-                                                $factura4->factura4_saldo = ($naturaleza == 'D') ? $factura4->factura4_saldo + $asientomovimiento->movimiento_valor : $factura4->factura4_saldo - $asientomovimiento->movimiento_valor;
-                                                $factura4->save();
-                                            }
+                                $movimiento->movimiento_facturap = $request->movimiento_facturap;
+                                $movimiento->movimiento_fecha = $request->movimiento_fecha;
+                                $movimiento->movimiento_item = $request->movimiento_item;
+                                $movimiento->movimiento_periodicidad = $request->movimiento_periodicidad;
+                                $movimiento->movimiento_observaciones = $request->movimiento_observaciones;
+                                $movimiento->movimiento_valor = $request->movimiento_valor;
+                                $movimiento->save();
+                            }
+                        }
+
+                        if ($movimiento->movimiento_tipo == 'IP') {
+                            // Recuperar producto
+                            $producto = Producto::find($movimiento->movimiento_producto);
+                            if (!$producto instanceof Producto) {
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto.']);
+                            }
+
+                            if ($producto->producto_serie || $producto->producto_metrado) {
+                                $childs = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->where('movimiento_tipo', 'IH')->get();
+                                foreach ($childs as $child) {
+                                    if ($producto->producto_serie) {
+                                        if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
+                                            $child->movimiento_serie = $request->get("movimiento_valor_{$child->id}");
+                                            $child->save();
+                                        }
+                                    } else if ($producto->producto_metrado) {
+                                        if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
+                                            $child->movimiento_valor = $request->get("movimiento_valor_{$child->id}");
+                                            $child->save();
                                         }
                                     }
                                 }
-                            } else if ($movimiento['type'] == 'FP') {
-                                foreach ($movimiento['father'] as $father) {
-                                    if ($father['movimiento_nuevo']) {
-                                        // Validar que no se pueda modificar si es tipo Debito
-                                        if ($naturaleza == 'D') {
-                                            DB::rollback();
-                                            return response()->json(['success' => false, 'errors' => 'No es posible modificar este movimiento.']);
-                                        }
+                            }
+                        }
 
-                                        $asientomovimiento = AsientoMovimiento::find($father['movimiento_id']);
-                                        if ($asientomovimiento instanceof AsientoMovimiento) {
-                                            $asientomovimiento->movimiento_fecha = $request->get('facturap1_vencimiento');
-                                            $asientomovimiento->movimiento_item = $request->get('facturap1_cuotas');
-                                            $asientomovimiento->movimiento_periodicidad = $request->get('facturap1_periodicidad');
-                                            $asientomovimiento->movimiento_observaciones = $request->get('facturap1_observaciones');
-                                            $asientomovimiento->save();
-                                        }
+                        if ($movimiento->movimiento_tipo == 'F') {
+                            $childs = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->where('movimiento_tipo', 'FH')->get();
+                            foreach ($childs as $child) {
+                                if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
+                                    $prevValor = $child->movimiento_valor;
+                                    $child->movimiento_valor = $request->get("movimiento_valor_{$child->id}");
+                                    $child->save();
 
-                                    } else {
-                                        if ($request->has("facturap_movimiento_{$father['movimiento_id']}")) {
-                                            $asientomovimiento = AsientoMovimiento::find($father['movimiento_id']);
-                                            if ($asientomovimiento instanceof AsientoMovimiento) {
-                                                $asientomovimiento->movimiento_valor = $request->get("facturap_movimiento_{$father['movimiento_id']}");
-                                                $asientomovimiento->save();
+                                    // Si el movimiennto no es nuevo
+                                    if (!$asiento2->asiento2_nuevo) {
+                                        $factura4 = Factura4::find($child->movimiento_factura4);
+                                        if ($factura4 instanceof Factura4) {
+                                            if ($naturaleza == 'D') {
+                                                $factura4->factura4_saldo += $prevValor + $child->movimiento_valor;
+                                            } else {
+                                                $factura4->factura4_saldo += $prevValor - $child->movimiento_valor;
                                             }
+                                            $factura4->save();
                                         }
                                     }
                                 }
-                             }
+                            }
                         }
                     }
 
                     DB::commit();
                     return response()->json(['success' => true]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'update', $e->getMessage()));
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -291,33 +329,31 @@ class DetalleAsientoController extends Controller
                 $asiento2 = Asiento2::find($id);
                 if (!$asiento2 instanceof Asiento2) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible definir beneficiario, por favor verifique la información del asiento o consulte al administrador.'], 500);
                 }
 
                 $plancuenta = PlanCuenta::find($asiento2->asiento2_cuenta);
                 if (!$plancuenta instanceof PlanCuenta) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cuenta, por favor verifique la información del asiento o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cuenta, por favor verifique la información del asiento o consulte al administrador.'], 500);
                 }
-
-                if ($plancuenta->plancuentas_tipo != 'N') {
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar la cuenta porque maneja movimiento.']);
-                }
-
+                
                 // Si existe asiento NIF
-                $asientoNif = AsientoNif::where('asienton1_asiento',$asiento2->asiento2_asiento)->first();
+                $asientoNif = AsientoNif::where('asienton1_asiento', $asiento2->asiento2_asiento)->first();
                 if ($asientoNif instanceof AsientoNif) {
                     $asientoNif2 = AsientoNif2::query()->where('asienton2_asiento',$asientoNif->id)->where('asienton2_item', $asiento2->asiento2_item)->first();
                     $asientoNif2->delete();
                 }
+
+                // Remover movimientos del asiento
+                AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->delete();
 
                 // Eliminar item asiento2
                 $asiento2->delete();
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleAsientoController', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -475,150 +511,5 @@ class DetalleAsientoController extends Controller
 
         $response->errors = 'No es posible definir acción a validar, por favor verifique la información del asiento o consulte al administrador.';
         return response()->json($response);
-    }
-
-    /**
-     * Display a listing movimientos of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function movimientos(Request $request)
-    {
-        if ($request->ajax()) {
-            $movimientos = [];
-            if ($request->has('asiento2')) {
-                // Recuperar padre
-                $asiento2 = Asiento2::find($request->asiento2);
-                if ($asiento2 instanceof Asiento2) {
-                    $query = AsientoMovimiento::query();
-                    $query->select('koi_asientomovimiento.*', 'koi_asientomovimiento.id as movimiento_id', 'producto_codigo', 'producto_nombre', 'koi_producto.id as producto_id', 'koi_factura1.*', 'sucursal_nombre', 'puntoventa_nombre', 'puntoventa_prefijo', 'factura4_cuota', 'factura4_saldo', 'factura4_factura1', 'facturap2_cuota', 'tercero_nit', DB::raw("(CASE WHEN tercero_persona = 'N'
-                            THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                                    (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                                )
-                            ELSE tercero_razonsocial END)
-                        AS tercero_nombre"), DB::raw("
-                            CASE
-                                WHEN productop_3d != 0 THEN
-                                        CONCAT(
-                                        COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') 3D(',
-                                        COALESCE(orden2_3d_ancho,0), COALESCE(me6.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_3d_alto,0), COALESCE(me7.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_3d_profundidad,0), COALESCE(me5.unidadmedida_sigla,''),')' )
-                                WHEN productop_abierto != 0 AND productop_cerrado != 0 THEN
-                                        CONCAT(
-                                        COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') A(',
-                                        COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ') C(',
-                                        COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
-                                WHEN productop_abierto != 0 AND productop_cerrado = 0 THEN
-                                        CONCAT(
-                                        COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') A(',
-                                        COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ')')
-                                WHEN productop_abierto = 0 AND productop_cerrado != 0 THEN
-                                        CONCAT(
-                                        COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,') C(',
-                                        COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
-                                        COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
-                                ELSE
-                                        CONCAT(
-                                            COALESCE(productop_nombre,'') ,' (', COALESCE(orden2_referencia,'') ,')' )
-                                END AS productop_nombre
-                            ")
-                        );
-                    $query->where('movimiento_asiento2', $request->asiento2);
-                    $query->leftJoin('koi_producto', 'movimiento_producto', '=', 'koi_producto.id');
-                    $query->leftJoin('koi_sucursal', 'movimiento_sucursal', '=', 'koi_sucursal.id');
-
-                    // Factura
-                    $query->leftJoin('koi_factura1', 'movimiento_factura', '=', 'koi_factura1.id');
-                    $query->leftJoin('koi_factura4', 'movimiento_factura4', '=', 'koi_factura4.id');
-                    $query->leftJoin('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
-                    $query->leftJoin('koi_ordenproduccion2', 'movimiento_ordenp2', '=', 'koi_ordenproduccion2.id');
-                    $query->leftJoin('koi_puntoventa', 'factura1_puntoventa', '=', 'koi_puntoventa.id');
-
-                    // Facturap
-                    $query->leftJoin('koi_facturap2', 'movimiento_item', '=', 'koi_facturap2.id');
-
-                    // Joins producto
-                    $query->leftJoin('koi_productop', 'orden2_productop', '=', 'koi_productop.id');
-                    $query->leftJoin('koi_unidadmedida as me1', 'productop_ancho_med', '=', 'me1.id');
-                    $query->leftJoin('koi_unidadmedida as me2', 'productop_alto_med', '=', 'me2.id');
-                    $query->leftJoin('koi_unidadmedida as me3', 'productop_c_med_ancho', '=', 'me3.id');
-                    $query->leftJoin('koi_unidadmedida as me4', 'productop_c_med_alto', '=', 'me4.id');
-                    $query->leftJoin('koi_unidadmedida as me5', 'productop_3d_profundidad_med', '=', 'me5.id');
-                    $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
-                    $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
-                    $movimientos = $query->get();
-
-                    // Object detalle
-                    $data = [];
-                    foreach ($movimientos as $item) {
-                        if ($item->movimiento_tipo == 'F') {
-                            $data['type'] = $item->movimiento_tipo;
-                            $data['father'] = [
-                                'movimiento_id' => $item->movimiento_id,
-                                'factura1_puntoventa' => $item->factura1_puntoventa,
-                                'factura1_numero' => $item->factura1_numero,
-                                'factura1_fecha' => $item->factura1_fecha,
-                                'factura1_fecha_vencimiento' => $item->factura1_fecha_vencimiento,
-                                'factura1_total' => $item->factura1_total,
-                                'factura1_cuotas' => $item->factura1_cuotas,
-                                'puntoventa_prefijo' => $item->puntoventa_prefijo,
-                                'puntoventa_nombre' => $item->puntoventa_nombre,
-                                'movimiento_factura' => $item->movimiento_factura,
-                                'tercero_nit' => $item->tercero_nit,
-                                'tercero_nombre' => $item->tercero_nombre,
-                            ];
-                        }
-                        if ($item->movimiento_tipo == 'FH') {
-                            $data['childrens'][] = [
-                                'movimiento_id' => $item->movimiento_id,
-                                'factura4_cuota' => $item->factura4_cuota,
-                                'factura4_saldo' => $item->factura4_saldo,
-                                'movimiento_factura4' => $item->movimiento_factura4,
-                                'movimiento_valor' => $item->movimiento_valor
-                            ];
-                        }
-
-                        if ($item->movimiento_tipo == 'FP') {
-                            $data['type'] = $item->movimiento_tipo;
-                            $data['father'][] = [
-                                'movimiento_id' => $item->movimiento_id,
-                                'facturap2_cuota' => $item->facturap2_cuota,
-                                'movimiento_facturap' => $item->movimiento_facturap,
-                                'movimiento_nuevo' => $item->movimiento_nuevo,
-                                'movimiento_valor' => $item->movimiento_valor,
-                                'movimiento_fecha' => $item->movimiento_fecha,
-                                'movimiento_item' => $item->movimiento_item,
-                                'movimiento_periodicidad' => $item->movimiento_periodicidad,
-                                'movimiento_observaciones' => $item->movimiento_observaciones,
-                            ];
-                        }
-
-                        if ($item->movimiento_tipo == 'IP') {
-                            $data['type'] = $item->movimiento_tipo;
-                            $data['father'] = [
-                                'movimiento_id' => $item->movimiento_id,
-                                'producto_codigo' => $item->producto_codigo,
-                                'producto_nombre' => $item->producto_nombre,
-                                'sucursal_nombre' => $item->sucursal_nombre,
-                                'movimiento_valor' => $item->movimiento_valor
-                            ];
-                        }
-                        if ($item->movimiento_tipo == 'IH') {
-                            $data['childrens'][] = [
-                                'movimiento_id' => $item->movimiento_id,
-                                'movimiento_serie' => $item->movimiento_serie,
-                                'movimiento_item' => $item->movimiento_item,
-                                'movimiento_valor' => $item->movimiento_valor,
-                            ];
-                        }
-                    }
-                }
-            }
-            return response()->json($data);
-        }
     }
 }
