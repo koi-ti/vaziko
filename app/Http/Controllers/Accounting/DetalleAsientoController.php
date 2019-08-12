@@ -224,53 +224,21 @@ class DetalleAsientoController extends Controller
                     $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->get();
                     foreach ($movimientos as $movimiento) {
                         if ($movimiento->movimiento_tipo == 'FP') {
+                            // Recuperar factura
+                            $facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
+                            if (!$facturap instanceof Facturap) {
+                                return 'No es posible recuperar la factura del proveedor.';
+                            }
+
                             // Si el movimiento es nuevo
-                            if ($movimiento->movimiento_nuevo) {
-                                // Si el movimiennto no es nuevo
-                                if (!$asiento2->asiento2_nuevo) {
-                                    $facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
-                                    if ($facturap instanceof Facturap) {
-                                        $facturap->facturap1_factura = $request->movimiento_facturap;
-                                        $facturap->facturap1_tercero = $asiento2->asiento2_beneficiario;
-                                        $facturap->facturap1_fecha = $request->movimiento_fecha;
-                                        $facturap->facturap1_cuotas = $request->movimiento_item;
-                                        $facturap->facturap1_periodicidad = $request->movimiento_periodicidad;
-                                        $facturap->facturap1_observaciones = $request->movimiento_observaciones;
-                                        $facturap->save();
-                                    }
-                                }
-
-                                $movimiento->movimiento_facturap = $request->movimiento_facturap;
-                                $movimiento->movimiento_fecha = $request->movimiento_fecha;
-                                $movimiento->movimiento_item = $request->movimiento_item;
-                                $movimiento->movimiento_periodicidad = $request->movimiento_periodicidad;
-                                $movimiento->movimiento_observaciones = $request->movimiento_observaciones;
-                                $movimiento->movimiento_valor = $request->movimiento_valor;
-                                $movimiento->save();
-                            }
-                        }
-
-                        if ($movimiento->movimiento_tipo == 'IP') {
-                            // Recuperar producto
-                            $producto = Producto::find($movimiento->movimiento_producto);
-                            if (!$producto instanceof Producto) {
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto.']);
-                            }
-
-                            if ($producto->producto_serie || $producto->producto_metrado) {
-                                $childs = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->where('movimiento_tipo', 'IH')->get();
-                                foreach ($childs as $child) {
-                                    if ($producto->producto_serie) {
-                                        if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
-                                            $child->movimiento_serie = $request->get("movimiento_valor_{$child->id}");
-                                            $child->save();
-                                        }
-                                    } else if ($producto->producto_metrado) {
-                                        if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
-                                            $child->movimiento_valor = $request->get("movimiento_valor_{$child->id}");
-                                            $child->save();
-                                        }
+                            if (!$movimiento->movimiento_nuevo) {
+                                // Recuperar cuotas
+                                $cuota = Facturap2::where('facturap2_factura', $facturap->id)->where('facturap2_cuota', $movimiento->movimiento_item)->first();
+                                if ($cuota instanceof Facturap2) {
+                                    // Validar que existan valores
+                                    if ($request->has("movimiento_valor_{$cuota->facturap2_cuota}") && $request->get("movimiento_valor_{$cuota->facturap2_cuota}") != '') {
+                                        $movimiento->movimiento_valor = $request->get("movimiento_valor_{$cuota->facturap2_cuota}");
+                                        $movimiento->save();
                                     }
                                 }
                             }
@@ -337,7 +305,7 @@ class DetalleAsientoController extends Controller
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cuenta, por favor verifique la información del asiento o consulte al administrador.'], 500);
                 }
-                
+
                 // Si existe asiento NIF
                 $asientoNif = AsientoNif::where('asienton1_asiento', $asiento2->asiento2_asiento)->first();
                 if ($asientoNif instanceof AsientoNif) {

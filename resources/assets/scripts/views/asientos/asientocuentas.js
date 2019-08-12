@@ -126,6 +126,7 @@ app || (app = {});
             // Declare data
             var data = {
                 asiento2_valor: model.get('asiento2_naturaleza') == 'D' ? model.get('asiento2_debito') : model.get('asiento2_credito'),
+                nuevo: model.get('asiento2_nuevo'),
                 title: model.get('plancuentas_cuenta') + ' - ' + model.get('plancuentas_nombre') + ' - (EDITANDO)'
             }
 

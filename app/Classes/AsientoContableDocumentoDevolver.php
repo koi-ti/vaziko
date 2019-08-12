@@ -52,6 +52,12 @@ class AsientoContableDocumentoDevolver {
 				}
 			}
 
+			if ($objCuenta->plancuentas_tipo == 'N') {
+				// asiento2_nuevo = true
+				$asiento2->asiento2_nuevo = true;
+				$asiento2->save();
+			}
+
 			// Recuperar tercero
 			$objTercero = Tercero::find($asiento2->asiento2_beneficiario);
 			if (!$objTercero instanceof Tercero) {

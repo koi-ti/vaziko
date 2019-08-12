@@ -910,7 +910,7 @@
             </h3>
         </div>
         <div class="box-body">
-            <% if (father[0].movimiento_nuevo) { %>
+            <% if (nuevo && father[0].movimiento_nuevo && father.length == 1) { %>
                 <div class="row">
                     <div class="form-group col-md-12">
                         <label for="movimiento_facturap" class="control-label">Factura</label>
@@ -950,13 +950,15 @@
                             </thead>
                             <tbody>
                                 <% _.each(father, function(children) { %>
-                                    <tr>
-                                        <td class="text-center"><%- children.movimiento_item %></td>
-                                        <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
-                                        <td>
-                                            <input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency>
-                                        </td>
-                                    </tr>
+                                    <% if (!children.movimiento_nuevo) { %>
+                                        <tr>
+                                            <td class="text-center"><%- children.movimiento_item %></td>
+                                            <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
+                                            <td>
+                                                <input type="text" id="movimiento_valor_<%- children.movimiento_item %>" name="movimiento_valor_<%- children.movimiento_item %>" class="form-control input-sm" data-currency>
+                                            </td>
+                                        </tr>
+                                    <% } %>
                                 <% }); %>
                             </tbody>
                         </table>

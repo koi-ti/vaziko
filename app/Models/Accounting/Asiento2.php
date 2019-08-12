@@ -758,28 +758,26 @@ class Asiento2 extends Model
             $facturap = Facturap::where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
             // Nuevo registro en facturap
             if ($movefp->movimiento_nuevo) {
-                if ($facturap instanceof Facturap) {
-                    return "Ya fue generada la factura proveedor número {$facturap->facturap1_factura} para el tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-                }
+                if (!$facturap instanceof Facturap) {
+                    // Facturap
+                    $facturap = new Facturap;
+                    $facturap->facturap1_tercero = $this->asiento2_beneficiario;
+                    $facturap->facturap1_factura = $movefp->movimiento_facturap;
+                    $facturap->facturap1_asiento = $this->asiento2_asiento;
+                    $facturap->facturap1_sucursal = $movefp->movimiento_sucursal;
+                    $facturap->facturap1_fecha = $movefp->movimiento_fecha;
+                    $facturap->facturap1_cuotas = $movefp->movimiento_item;
+                    $facturap->facturap1_periodicidad = $movefp->movimiento_periodicidad;
+                    $facturap->facturap1_observaciones = $movefp->movimiento_observaciones;
+                    $facturap->facturap1_usuario_elaboro = auth()->user()->id;
+                    $facturap->facturap1_fecha_elaboro = date('Y-m-d H:i:s');
+                    $facturap->save();
 
-                // Facturap
-                $facturap = new Facturap;
-                $facturap->facturap1_tercero = $this->asiento2_beneficiario;
-                $facturap->facturap1_factura = $movefp->movimiento_facturap;
-                $facturap->facturap1_asiento = $this->asiento2_asiento;
-                $facturap->facturap1_sucursal = $movefp->movimiento_sucursal;
-                $facturap->facturap1_fecha = $movefp->movimiento_fecha;
-                $facturap->facturap1_cuotas = $movefp->movimiento_item;
-                $facturap->facturap1_periodicidad = $movefp->movimiento_periodicidad;
-                $facturap->facturap1_observaciones = $movefp->movimiento_observaciones;
-                $facturap->facturap1_usuario_elaboro = auth()->user()->id;
-                $facturap->facturap1_fecha_elaboro = date('Y-m-d H:i:s');
-                $facturap->save();
-
-                // Facturap2 (Cuotas)
-                $result = $facturap->storeCuotas($movefp->movimiento_valor);
-                if (!$result->success) {
-                    return $result->error;
+                    // Facturap2 (Cuotas)
+                    $result = $facturap->storeCuotas($movefp->movimiento_valor);
+                    if (!$result->success) {
+                        return $result->error;
+                    }
                 }
 
             } else {
@@ -1075,14 +1073,34 @@ class Asiento2 extends Model
 
         // Movimientos facturap
         foreach ($movementsfp as $movefp) {
-            // Validar si existia la facturap como nueva
-            if (!$movefp->movimiento_nuevo) {
-                // Restaurar valores en caso de estar modificados facturap
-                $facturap = Facturap::where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
-                if (!$facturap instanceof Facturap) {
-                    return "No es posible recuperar información factura proveedor para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
-                }
+            // Restaurar valores en caso de estar modificados facturap
+            $facturap = Facturap::where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
+            if (!$facturap instanceof Facturap) {
+                return "No es posible recuperar información factura proveedor para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, por favor verifique la información del asiento o consulte al administrador.";
+            }
 
+            // Validar si existia la facturap como nueva
+            if ($movefp->movimiento_nuevo) {
+                $cuotas = Facturap2::where('facturap2_factura', $facturap->id)->get();
+                foreach ($cuotas as $cuota) {
+                    $child = AsientoMovimiento::where('movimiento_asiento2', $this->id)
+                                                ->where('movimiento_facturap', $facturap->facturap1_factura)
+                                                ->where('movimiento_nuevo', 0)
+                                                ->where('movimiento_item', $cuota->facturap2_cuota)
+                                                ->first();
+                    if (!$child instanceof AsientoMovimiento) {
+                        $child = $movefp->replicate();
+                        $child->movimiento_nuevo = 0;
+                        $child->movimiento_sucursal = NULL;
+                        $child->movimiento_fecha = NULL;
+                        $child->movimiento_periodicidad = NULL;
+                        $child->movimiento_observaciones = NULL;
+                        $child->movimiento_item = $cuota->facturap2_cuota;
+                        $child->movimiento_valor = $cuota->facturap2_saldo;
+                        $child->save();
+                    }
+                }
+            } else {
                 $facturap2 = Facturap2::where('facturap2_factura', $facturap->id)->where('facturap2_cuota', $movefp->movimiento_item)->first();
                 if (!$facturap2 instanceof Facturap2) {
                     return "No es posible recuperar información cuota {$movefp->movimiento_item}, por favor verifique la información del asiento o consulte al administrador.";
@@ -1096,12 +1114,12 @@ class Asiento2 extends Model
                     return "No es posible recuperar naturaleza para la afectación de la cuota {$movefp->movimiento_item}, por favor verifique la información del asiento o consulte al administrador.";
                 }
                 $facturap2->save();
-
-                // asiento2_nuevo = true
-                $this->asiento2_nuevo = true;
-                $this->save();
             }
         }
+
+        // asiento2_nuevo = true
+        $this->asiento2_nuevo = true;
+        $this->save();
 
         return 'OK';
     }

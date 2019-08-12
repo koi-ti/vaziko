@@ -685,7 +685,7 @@ app || (app = {});
         */
         referenceUpdate: function () {
             // Reference wrapper render content
-            if (this.model.get('plancuentas_tipo').indexOf(['N', 'I']) !== -1) {
+            if (['N', 'I'].indexOf(this.model.get('plancuentas_tipo')) === -1) {
                 this.referenceViews();
             }
 
