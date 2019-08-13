@@ -224,6 +224,8 @@ class DetalleAsientoController extends Controller
                     $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->get();
                     foreach ($movimientos as $movimiento) {
                         if ($movimiento->movimiento_tipo == 'FP') {
+                            $valor = $request->movimiento_valor/$movimientos->where('movimiento_nuevo', 0)->count();
+
                             // Recuperar factura
                             $facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
                             if (!$facturap instanceof Facturap) {
@@ -231,40 +233,22 @@ class DetalleAsientoController extends Controller
                             }
 
                             // Si el movimiento es nuevo
-                            if (!$movimiento->movimiento_nuevo) {
-                                // Recuperar cuotas
-                                $cuota = Facturap2::where('facturap2_factura', $facturap->id)->where('facturap2_cuota', $movimiento->movimiento_item)->first();
-                                if ($cuota instanceof Facturap2) {
-                                    // Validar que existan valores
-                                    if ($request->has("movimiento_valor_{$cuota->facturap2_cuota}") && $request->get("movimiento_valor_{$cuota->facturap2_cuota}") != '') {
-                                        $movimiento->movimiento_valor = $request->get("movimiento_valor_{$cuota->facturap2_cuota}");
-                                        $movimiento->save();
-                                    }
-                                }
+                            if ($movimiento->movimiento_nuevo) {
+                                $movimiento->movimiento_valor = $request->movimiento_valor;
+                                $movimiento->save();
+                            } else {
+                                // Cuotas
+                                $movimiento->movimiento_valor = $valor;
+                                $movimiento->save();
                             }
                         }
 
                         if ($movimiento->movimiento_tipo == 'F') {
                             $childs = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->where('movimiento_tipo', 'FH')->get();
+                            $valor = $request->movimiento_valor/$childs->count();
                             foreach ($childs as $child) {
-                                if ($request->has("movimiento_valor_{$child->id}") && $request->get("movimiento_valor_{$child->id}") != '') {
-                                    $prevValor = $child->movimiento_valor;
-                                    $child->movimiento_valor = $request->get("movimiento_valor_{$child->id}");
-                                    $child->save();
-
-                                    // Si el movimiennto no es nuevo
-                                    if (!$asiento2->asiento2_nuevo) {
-                                        $factura4 = Factura4::find($child->movimiento_factura4);
-                                        if ($factura4 instanceof Factura4) {
-                                            if ($naturaleza == 'D') {
-                                                $factura4->factura4_saldo += $prevValor + $child->movimiento_valor;
-                                            } else {
-                                                $factura4->factura4_saldo += $prevValor - $child->movimiento_valor;
-                                            }
-                                            $factura4->save();
-                                        }
-                                    }
-                                }
+                                $child->movimiento_valor = $valor;
+                                $child->save();
                             }
                         }
                     }

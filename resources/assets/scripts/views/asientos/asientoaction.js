@@ -43,6 +43,7 @@ app || (app = {});
             // Update
             'change .round-module': 'roundModule',
             'submit #form-edit-asiento-component-source': 'onStoreItem',
+            'change #movimiento_valor': 'changeValue',
 
             'hidden.bs.modal': 'closeModal'
         },
@@ -721,6 +722,17 @@ app || (app = {});
 
             if (parseInt(this.parameters.data.empresa_round)) {
                 this.$(e.currentTarget).val(Math.round(valor));
+            }
+        },
+
+        /**
+        * Change Valor
+        */
+        changeValue: function (e) {
+            var valor = this.$(e.currentTarget).inputmask('unmaskedvalue');
+
+            if (['N', 'I'].indexOf(this.model.get('plancuentas_tipo')) === -1) {
+                this.asientoMovimientosList.trigger('totalize', valor);
             }
         },
 

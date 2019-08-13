@@ -4,9 +4,12 @@ namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-
-use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
-use Validator, Auth, DB;
+use App\Models\Base\Tercero, App\Models\Base\PuntoVenta;
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4;
+use App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2;
+use App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
+use Validator, DB;
 
 class Asiento2 extends Model
 {
@@ -293,8 +296,8 @@ class Asiento2 extends Model
             // Validar valor distribucion cuotas
             $suma_valor = 0;
             foreach ($cuotas as $cuota) {
-                if ($request->has("movimiento_valor_{$cuota->facturap2_cuota}")) {
-                    $suma_valor += $request->get("movimiento_valor_{$cuota->facturap2_cuota}");
+                if ($request->has("movimiento_valor_{$cuota->id}")) {
+                    $suma_valor += $request->get("movimiento_valor_{$cuota->id}");
                 }
             }
 
@@ -532,8 +535,8 @@ class Asiento2 extends Model
                 // Validar valor distribucion cuotas
                 $suma_valor = 0;
                 foreach ($cuotas as $cuota) {
-                    if ($request->has("movimiento_valor_{$cuota->facturap2_cuota}")) {
-                        $suma_valor += $request->get("movimiento_valor_{$cuota->facturap2_cuota}");
+                    if ($request->has("movimiento_valor_{$cuota->id}")) {
+                        $suma_valor += $request->get("movimiento_valor_{$cuota->id}");
                     }
                 }
 
@@ -544,9 +547,9 @@ class Asiento2 extends Model
 
                 // Insertar movimientos
                 foreach ($cuotas as $cuota) {
-                    if ($request->has("movimiento_valor_{$cuota->facturap2_cuota}")) {
-                        $datamov['Cuotas'] = $cuota->facturap2_cuota;
-                        $datamov['Valor'] = $request->get("movimiento_valor_{$cuota->facturap2_cuota}");
+                    if ($request->has("movimiento_valor_{$cuota->id}")) {
+                        $datamov['Cuotas'] = $cuota->id;
+                        $datamov['Valor'] = $request->get("movimiento_valor_{$cuota->id}");
                         $datamov['Nuevo'] = false;
 
                         $movimiento = new AsientoMovimiento;
@@ -756,6 +759,7 @@ class Asiento2 extends Model
 
         foreach ($movementsfp as $movefp) {
             $facturap = Facturap::where('facturap1_factura', $movefp->movimiento_facturap)->where('facturap1_tercero', $this->asiento2_beneficiario)->first();
+
             // Nuevo registro en facturap
             if ($movefp->movimiento_nuevo) {
                 if (!$facturap instanceof Facturap) {
@@ -786,9 +790,13 @@ class Asiento2 extends Model
                     return "No es posible recuperar información factura proveedor para la cuenta {$this->plancuentas_cuenta} y tercero {$this->tercero_nit}, id {$this->id}, por favor verifique la información del asiento o consulte al administrador.";
                 }
 
-                $facturap2 = Facturap2::where('facturap2_factura', $facturap->id)->where('facturap2_cuota', $movefp->movimiento_item)->first();
+                $facturap2 = Facturap2::find($movefp->movimiento_item);
                 if (!$facturap2 instanceof Facturap2) {
                     return "No es posible recuperar información cuota {$movefp->movimiento_item}, por favor verifique la información del asiento o consulte al administrador.";
+                }
+
+                if ($facturap->id != $facturap2->facturap2_factura) {
+                    return "La cuota que intenta modificar no pertenece a esa factura de proveedor.";
                 }
 
                 // Credito cuota
@@ -886,21 +894,21 @@ class Asiento2 extends Model
             // Producto metrado
             // Debito
             if ($this->asiento2_naturaleza == 'D') {
-                // // Consecutivo item
-                // $item = DB::table('koi_prodboderollo')->where('prodboderollo_producto', $producto->id)->where('prodboderollo_sucursal', $movfather->movimiento_sucursal)->max('prodboderollo_item');
+                // Consecutivo item
+                $item = DB::table('koi_prodboderollo')->where('prodboderollo_producto', $producto->id)->where('prodboderollo_sucursal', $movfather->movimiento_sucursal)->max('prodboderollo_item');
                 foreach ($movchildren as $children) {
-                    // // Aumentar item
-                    // $item++;
+                    // Aumentar item
+                    $item++;
 
                     // Prodbode rollo
                     $costometro = $costo / $children->movimiento_valor;
-                    $result = ProdbodeRollo::actualizar($producto, $movfather->movimiento_sucursal, 'E', $children->movimiento_item, $children->movimiento_valor, $costometro);
+                    $result = ProdbodeRollo::actualizar($producto, $movfather->movimiento_sucursal, 'E', $item, $children->movimiento_valor, $costometro);
                     if ($result != 'OK') {
                         return $result;
                     }
 
                     // Movimiento rollo
-                    $inventariorollo = InventarioRollo::movimiento($inventario, $children->movimiento_item, $costo, $children->movimiento_valor);
+                    $inventariorollo = InventarioRollo::movimiento($inventario, $item, $costo, $children->movimiento_valor);
                     if (!$inventariorollo instanceof InventarioRollo) {
                         return $inventariorollo;
                     }
@@ -1082,11 +1090,12 @@ class Asiento2 extends Model
             // Validar si existia la facturap como nueva
             if ($movefp->movimiento_nuevo) {
                 $cuotas = Facturap2::where('facturap2_factura', $facturap->id)->get();
+                $valor = $movefp->movimiento_valor/$cuotas->count();
                 foreach ($cuotas as $cuota) {
                     $child = AsientoMovimiento::where('movimiento_asiento2', $this->id)
                                                 ->where('movimiento_facturap', $facturap->facturap1_factura)
                                                 ->where('movimiento_nuevo', 0)
-                                                ->where('movimiento_item', $cuota->facturap2_cuota)
+                                                ->where('movimiento_item', $cuota->id)
                                                 ->first();
                     if (!$child instanceof AsientoMovimiento) {
                         $child = $movefp->replicate();
@@ -1095,15 +1104,22 @@ class Asiento2 extends Model
                         $child->movimiento_fecha = NULL;
                         $child->movimiento_periodicidad = NULL;
                         $child->movimiento_observaciones = NULL;
-                        $child->movimiento_item = $cuota->facturap2_cuota;
+                        $child->movimiento_item = $cuota->id;
                         $child->movimiento_valor = $cuota->facturap2_saldo;
                         $child->save();
+
+                        $cuota->facturap2_saldo -= $valor;
+                        $cuota->save();
                     }
                 }
             } else {
-                $facturap2 = Facturap2::where('facturap2_factura', $facturap->id)->where('facturap2_cuota', $movefp->movimiento_item)->first();
+                $facturap2 = Facturap2::find($movefp->movimiento_item);
                 if (!$facturap2 instanceof Facturap2) {
                     return "No es posible recuperar información cuota {$movefp->movimiento_item}, por favor verifique la información del asiento o consulte al administrador.";
+                }
+
+                if ($facturap->id != $facturap2->facturap2_factura) {
+                    return "La cuota que intenta modificar no pertenece a esa factura de proveedor.";
                 }
 
                 if ($naturaleza == 'C') {
@@ -1116,11 +1132,6 @@ class Asiento2 extends Model
                 $facturap2->save();
             }
         }
-
-        // asiento2_nuevo = true
-        $this->asiento2_nuevo = true;
-        $this->save();
-
         return 'OK';
     }
 
@@ -1157,11 +1168,6 @@ class Asiento2 extends Model
         if (!$result->success){
             return $result->error;
         }
-
-        // asiento2_nuevo = true
-        $this->asiento2_nuevo = true;
-        $this->save();
-
         return 'OK';
     }
 }

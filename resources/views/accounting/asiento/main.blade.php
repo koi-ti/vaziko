@@ -418,7 +418,7 @@
 	    <td class="text-right"><%- window.Misc.currency(facturap2_valor) %></td>
 	    <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
 	    <td>
-			<input id="movimiento_valor_<%- facturap2_cuota %>" name="movimiento_valor_<%- facturap2_cuota %>" placeholder="Valor" class="form-control input-sm round-module" data-currency type="text">
+			<input id="movimiento_valor_<%- id %>" name="movimiento_valor_<%- id %>" placeholder="Valor" class="form-control input-sm round-module" data-currency type="text">
 	    </td>
 	</script>
 

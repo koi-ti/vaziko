@@ -50,6 +50,10 @@ class AsientoContableDocumentoDevolver {
 				if ($devolucion != 'OK') {
 					return $devolucion;
 				}
+
+				// asiento2_nuevo = true
+				$asiento2->asiento2_nuevo = true;
+				$asiento2->save();
 			}
 
 			if ($objCuenta->plancuentas_tipo == 'N') {

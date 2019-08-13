@@ -25,11 +25,15 @@ app || (app = {});
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
+            // Valor
+            this.$valor = $('#movimiento_valor');
+
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
             this.listenTo( this.collection, 'request', this.loadSpinner );
             this.listenTo( this.collection, 'sync', this.responseServer );
+            this.listenTo( this.collection, 'totalize', this.totalize );
 
             this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
@@ -57,6 +61,9 @@ app || (app = {});
         addAll: function () {
             this.$el.empty();
             this.collection.forEach(this.addOne, this);
+
+            // Totalizar && fire libraties
+            this.totalize(this.$valor.inputmask('unmaskedvalue'));
             this.ready();
         },
 
@@ -79,6 +86,10 @@ app || (app = {});
 
             if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
+        },
+
+        totalize: function (valor) {
+            var data = this.collection.totalize(valor);
         },
 
         /**

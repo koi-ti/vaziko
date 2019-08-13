@@ -952,11 +952,9 @@
                                 <% _.each(father, function(children) { %>
                                     <% if (!children.movimiento_nuevo) { %>
                                         <tr>
-                                            <td class="text-center"><%- children.movimiento_item %></td>
+                                            <td class="text-center"><%- children.facturap2_cuota %></td>
                                             <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
-                                            <td>
-                                                <input type="text" id="movimiento_valor_<%- children.movimiento_item %>" name="movimiento_valor_<%- children.movimiento_item %>" class="form-control input-sm" data-currency>
-                                            </td>
+                                            <td class="text-center" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>"><%- window.Misc.currency(0) %></td>
                                         </tr>
                                     <% } %>
                                 <% }); %>
@@ -1026,7 +1024,7 @@
                                     <td class="text-center"><%- children.factura4_cuota %></td>
                                     <td class="text-center"><%- window.Misc.currency(children.factura4_saldo) %></td>
                                     <td class="text-center"><%- window.Misc.currency(children.movimiento_valor) %></td>
-                                    <td><input type="text" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>" class="form-control input-sm" data-currency></td>
+                                    <td class="text-center" id="movimiento_valor_<%- children.movimiento_id %>" name="movimiento_valor_<%- children.movimiento_id %>"><%- window.Misc.currency(0) %></td>
                                 </tr>
                             <% }); %>
                         </tbody>
