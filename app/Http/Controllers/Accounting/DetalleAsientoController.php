@@ -224,20 +224,13 @@ class DetalleAsientoController extends Controller
                     $movimientos = AsientoMovimiento::where('movimiento_asiento2', $asiento2->id)->get();
                     foreach ($movimientos as $movimiento) {
                         if ($movimiento->movimiento_tipo == 'FP') {
-                            $valor = $request->movimiento_valor/$movimientos->where('movimiento_nuevo', 0)->count();
-
-                            // Recuperar factura
-                            $facturap = Facturap::where('facturap1_factura', $movimiento->movimiento_facturap)->first();
-                            if (!$facturap instanceof Facturap) {
-                                return 'No es posible recuperar la factura del proveedor.';
-                            }
-
                             // Si el movimiento es nuevo
                             if ($movimiento->movimiento_nuevo) {
                                 $movimiento->movimiento_valor = $request->movimiento_valor;
                                 $movimiento->save();
                             } else {
                                 // Cuotas
+                                $valor = $request->movimiento_valor/$movimientos->where('movimiento_nuevo', 0)->count();
                                 $movimiento->movimiento_valor = $valor;
                                 $movimiento->save();
                             }
