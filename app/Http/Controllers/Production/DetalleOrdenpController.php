@@ -177,13 +177,13 @@ class DetalleOrdenpController extends Controller
                     $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                     foreach ($materiales as $material) {
                         $materialp = Materialp::find($material->orden4_materialp);
-                        if(!$materialp instanceof Materialp){
+                        if (!$materialp instanceof Materialp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
                         $insumo = Producto::find($material->orden4_producto);
-                        if(!$insumo instanceof Producto){
+                        if (!$insumo instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                         }
@@ -208,7 +208,7 @@ class DetalleOrdenpController extends Controller
                     $empaques = isset($data['empaques']) ? $data['empaques'] : null;
                     foreach ($empaques as $empaque) {
                         $materialp = Materialp::find($empaque->orden9_materialp);
-                        if(!$materialp instanceof Materialp){
+                        if (!$materialp instanceof Materialp) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
                         }
@@ -280,7 +280,7 @@ class DetalleOrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id_orden' => $orden->id]);
-                }catch(\Exception $e){
+                }catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -301,8 +301,13 @@ class DetalleOrdenpController extends Controller
     {
         // Recuperar orden2
         $ordenp2 = Ordenp2::getOrdenp2($id);
-        if(!$ordenp2 instanceof Ordenp2) {
+        if (!$ordenp2 instanceof Ordenp2) {
             abort(404);
+        }
+
+        // Validate users 312->N, 756->D
+        if (in_array(auth()->user()->id, [312, 756])) {
+            $ordenp2->continue = true;
         }
 
         if ($request->ajax()) {
@@ -311,18 +316,18 @@ class DetalleOrdenpController extends Controller
 
         // Recuperar orden
         $orden = Ordenp::getOrden($ordenp2->orden2_orden);
-        if(!$orden instanceof Ordenp) {
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = Productop::getProduct($ordenp2->orden2_productop);
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar orden
-        if( $orden->orden_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
+        if ($orden->orden_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes'])) {
             return redirect()->route('ordenes.productos.edit', ['productos' => $ordenp2->id]);
         }
         return view('production.ordenes.productos.show', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
@@ -341,18 +346,18 @@ class DetalleOrdenpController extends Controller
 
         // Recuperar orden
         $orden = Ordenp::getOrden($ordenp2->orden2_orden);
-        if(!$orden instanceof Ordenp) {
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = Productop::getProduct($ordenp2->orden2_productop);
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar orden
-        if($orden->orden_abierta == false) {
+        if ($orden->orden_abierta == false) {
             return redirect()->route('ordenes.productos.show', ['productos' => $ordenp2->id]);
         }
         return view('production.ordenes.productos.create', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
@@ -375,7 +380,7 @@ class DetalleOrdenpController extends Controller
 
             // Recuperar orden
             $orden = Ordenp::findOrFail($orden2->orden2_orden);
-            if($orden->orden_abierta) {
+            if ($orden->orden_abierta) {
 
                 if ($orden2->isValid($data)) {
                     DB::beginTransaction();
@@ -564,7 +569,7 @@ class DetalleOrdenpController extends Controller
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $orden2->id, 'id_orden' => $orden->id]);
-                    }catch(\Exception $e){
+                    }catch(\Exception $e) {
                         DB::rollback();
                         Log::error($e->getMessage());
                         return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -589,14 +594,14 @@ class DetalleOrdenpController extends Controller
             DB::beginTransaction();
             try {
                 $orden2 = Ordenp2::find($id);
-                if(!$orden2 instanceof Ordenp2) {
+                if (!$orden2 instanceof Ordenp2) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle orden, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
                 // Validar despachos
                 $despacho = Despachop2::where('despachop2_orden2', $orden2->id)->first();
-                if($despacho instanceof Despachop2) {
+                if ($despacho instanceof Despachop2) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible eliminar producto, contiene despachos asociados, por favor verifique la información del asiento o consulte al administrador.']);
                 }
@@ -622,13 +627,13 @@ class DetalleOrdenpController extends Controller
                 // Eliminar item orden2
                 $orden2->delete();
 
-                if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id") ) {
+                if ( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id") ) {
                     Storage::deleteDirectory("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id");
                 }
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            }catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleOrdenpController', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -682,7 +687,7 @@ class DetalleOrdenpController extends Controller
                      $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                      $neworden8->save();
 
-                     if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                     if ( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
                          $object = new \stdClass();
                          $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
                          $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
@@ -729,7 +734,7 @@ class DetalleOrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden2->id, 'msg' => 'Producto orden clonado con exito.']);
-            }catch(\Exception $e){
+            }catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -745,9 +750,9 @@ class DetalleOrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if($request->has('ordenp2')) {
+        if ($request->has('ordenp2')) {
             $ordenp2 = Ordenp2::getDetail($request->ordenp2);
-            if($ordenp2 instanceof Ordenp2) {
+            if ($ordenp2 instanceof Ordenp2) {
                 return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
             }
         }

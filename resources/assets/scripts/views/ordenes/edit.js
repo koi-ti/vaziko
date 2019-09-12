@@ -29,8 +29,7 @@ app || (app = {});
             'submit #form-despachosp': 'onStoreDespacho',
             'ifChanged .change-recogida': 'changeRecogidas'
         },
-        parameters: {
-        },
+        parameters: {},
 
         /**
         * Constructor Method

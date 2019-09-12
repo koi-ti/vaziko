@@ -1828,6 +1828,7 @@ app || (app = {});
             this.showOrdenp2View = new app.ShowOrdenp2View({
                 model: this.ordenp2Model
             });
+            this.ordenp2Model.fetch();
         },
 
         /**
