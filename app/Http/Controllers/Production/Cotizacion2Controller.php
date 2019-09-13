@@ -20,7 +20,7 @@ class Cotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
-            if($request->has('cotizacion2_cotizacion')) {
+            if ($request->has('cotizacion2_cotizacion')) {
                 $detalle = Cotizacion2::getCotizaciones2($request->cotizacion2_cotizacion);
             }
             return response()->json($detalle);
@@ -37,17 +37,17 @@ class Cotizacion2Controller extends Controller
     {
         // Recuperar cotizacion
         $cotizacion = $request->has('cotizacion') ? Cotizacion1::getCotizacion($request->cotizacion) : null;
-        if(!$cotizacion instanceof Cotizacion1) {
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = $request->has('productop') ? Productop::getProduct($request->productop) : null;
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
-        if($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
+        if ($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
             return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
         }
 
@@ -283,8 +283,13 @@ class Cotizacion2Controller extends Controller
     {
         // Recuperar cotizacion2
         $cotizacion2 = Cotizacion2::getCotizacion2($id);
-        if(!$cotizacion2 instanceof Cotizacion2) {
+        if (!$cotizacion2 instanceof Cotizacion2) {
             abort(404);
+        }
+
+        // Validate users 312->N, 756->D
+        if (in_array(auth()->user()->id, [312, 756])) {
+            $cotizacion2->continue = true;
         }
 
         if ($request->ajax()) {
@@ -293,18 +298,18 @@ class Cotizacion2Controller extends Controller
 
         // Recuperar cotizacion
         $cotizacion = Cotizacion1::getCotizacion($cotizacion2->cotizacion2_cotizacion);
-        if(!$cotizacion instanceof Cotizacion1) {
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = Productop::getProduct($cotizacion2->cotizacion2_productop);
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar cotizacion
-        if( $cotizacion->cotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
+        if ( $cotizacion->cotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
             return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.show', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
@@ -323,18 +328,18 @@ class Cotizacion2Controller extends Controller
 
         // Recuperar cotizacion
         $cotizacion = Cotizacion1::getCotizacion($cotizacion2->cotizacion2_cotizacion);
-        if(!$cotizacion instanceof Cotizacion1) {
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
         // Recuperar producto
         $producto = Productop::getProduct($cotizacion2->cotizacion2_productop);
-        if(!$producto instanceof Productop) {
+        if (!$producto instanceof Productop) {
             abort(404);
         }
 
         // Validar cotizacion
-        if($cotizacion->cotizacion1_abierta == false) {
+        if ($cotizacion->cotizacion1_abierta == false) {
             return redirect()->route('cotizaciones.productos.show', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.create', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
@@ -357,7 +362,7 @@ class Cotizacion2Controller extends Controller
 
             // Recuperar cotizacion
             $cotizacion = Cotizacion1::findOrFail($cotizacion2->cotizacion2_cotizacion);
-            if($cotizacion->cotizacion1_abierta) {
+            if ($cotizacion->cotizacion1_abierta) {
 
                 if ($cotizacion2->isValid($data)) {
                     DB::beginTransaction();
@@ -574,7 +579,7 @@ class Cotizacion2Controller extends Controller
             DB::beginTransaction();
             try {
                 $cotizacion2 = Cotizacion2::find($id);
-                if(!$cotizacion2 instanceof Cotizacion2) {
+                if (!$cotizacion2 instanceof Cotizacion2) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle la cotizacion, por favor verifique la información del asiento o consulte al administrador.']);
                 }
@@ -600,7 +605,7 @@ class Cotizacion2Controller extends Controller
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
 
-                if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id") ) {
+                if ( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id") ) {
                     Storage::deleteDirectory("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id");
                 }
 
@@ -661,7 +666,7 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion8->save();
 
                      // Recuperar imagen y copiar
-                     if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
+                     if ( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
                          $object = new \stdClass();
                          $object->copy = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
                          $object->paste = "cotizaciones/cotizacion_$newcotizacion2->cotizacion2_cotizacion/producto_$newcotizacion2->id/$newcotizacion8->cotizacion8_archivo";

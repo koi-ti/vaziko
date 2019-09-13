@@ -2144,6 +2144,7 @@ app || (app = {});
             this.showCotizacion2View = new app.ShowCotizacion2View({
                 model: this.cotizacion2Model
             });
+            this.cotizacion2Model.fetch();
         },
 
         /**
