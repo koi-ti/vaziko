@@ -76,6 +76,9 @@ class DetalleOrdenpController extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         if (!$orden->orden_abierta || $orden->orden_anulada) {
             return redirect()->route('ordenes.show', ['orden' => $orden]);
         }
@@ -326,6 +329,9 @@ class DetalleOrdenpController extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         // Validar orden
         if ($orden->orden_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'ordenes'])) {
             return redirect()->route('ordenes.productos.edit', ['productos' => $ordenp2->id]);
@@ -355,6 +361,9 @@ class DetalleOrdenpController extends Controller
         if (!$producto instanceof Productop) {
             abort(404);
         }
+
+        // Lazy Eager Loading
+        $producto->load('tips');
 
         // Validar orden
         if ($orden->orden_abierta == false) {

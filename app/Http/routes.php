@@ -239,6 +239,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('imagenes', 'Production\ProductopImagenController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 

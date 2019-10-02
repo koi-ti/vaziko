@@ -251,6 +251,25 @@
                             </div>
                         @endif
 
+                        @if ($producto->tips->count())
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="box box-primary">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Tips del producto</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <ul class="list-group">
+                                                @foreach ($producto->tips as $tip)
+                                                    <li class="list-group-item">{{ $tip->productop2_tip }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Content produccion --}}
                         <div class="row">
                             <div class="col-sm-6">
@@ -818,7 +837,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @elseif ($ordenp2->continue)
+            @elseif (isset($ordenp2) && $ordenp2->continue)
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -844,7 +863,7 @@
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
                     @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @elseif ($ordenp2->continue)
+                    @elseif (isset($ordenp2) && $ordenp2->continue)
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                     @endif
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>

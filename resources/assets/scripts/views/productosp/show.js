@@ -20,14 +20,18 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
+            _.bindAll(this, 'onSessionRequestComplete');
+
             this.tipsList = new app.TipsList();
             this.areasList = new app.AreasList();
             this.maquinasList = new app.MaquinasList();
             this.materialesList = new app.MaterialesList();
             this.acabadosList = new app.AcabadosList();
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views
             this.referenceViews();
+            this.fineUploader();
         },
 
         /**
@@ -93,6 +97,48 @@ app || (app = {});
                     }
                }
             });
+        },
+
+        /**
+        * Events FineUploader
+        */
+        fineUploader: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-producto',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull(Route.route('productosp.imagenes.index')),
+                    params: {
+                        productop: _this.model.get('id')
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                }
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        /**
+        * onSessionRequestComplete
+        */
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each(id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         cloneProductop: function (e) {

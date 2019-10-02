@@ -81,19 +81,17 @@ class Productop extends BaseModel
         return $query->first();
     }
 
-    public function setProductopObservacionesAttribute($observaciones)
-    {
+    public function setProductopObservacionesAttribute($observaciones) {
         $this->attributes['productop_observaciones'] = strtoupper($observaciones);
     }
 
-    public function setProperties()
-    {
-        if($this->productop_abierto || $this->productop_cerrado) {
+    public function setProperties() {
+        if ($this->productop_abierto || $this->productop_cerrado) {
             $this->productop_3d_ancho_med = null;
             $this->productop_3d_alto_med = null;
             $this->productop_3d_profundidad_med = null;
 
-        }else if($this->productop_3d) {
+        } else if ($this->productop_3d) {
             $this->productop_ancho_med = null;
             $this->productop_alto_med = null;
             $this->productop_c_med_ancho = null;
@@ -101,13 +99,12 @@ class Productop extends BaseModel
         }
     }
 
-    public static function getProductos()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getProductos() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache , function() {
             $query = Productop::query();
             $query->orderBy('productop_nombre', 'asc');
             $collection = $query->lists('productop_nombre', 'id');
@@ -115,5 +112,9 @@ class Productop extends BaseModel
             $collection->prepend('', '');
             return $collection;
         });
+    }
+
+    public function tips() {
+        return $this->hasMany('App\Models\Production\Productop2', 'productop2_productop', 'id');
     }
 }

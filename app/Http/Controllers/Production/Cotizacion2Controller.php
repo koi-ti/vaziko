@@ -47,6 +47,9 @@ class Cotizacion2Controller extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         if ($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
             return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
         }
@@ -308,8 +311,11 @@ class Cotizacion2Controller extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         // Validar cotizacion
-        if ( $cotizacion->cotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
+        if ($cotizacion->cotizacion1_abierta == true && Auth::user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.show', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
@@ -337,6 +343,9 @@ class Cotizacion2Controller extends Controller
         if (!$producto instanceof Productop) {
             abort(404);
         }
+
+        // Lazy Eager Loading
+        $producto->load('tips');
 
         // Validar cotizacion
         if ($cotizacion->cotizacion1_abierta == false) {

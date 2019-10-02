@@ -223,6 +223,25 @@
 					</div>
 				@endif
 
+				@if ($producto->tips->count())
+					<div class="row">
+						<div class="col-sm-12">
+							<div class="box box-primary">
+								<div class="box-header with-border">
+									<h3 class="box-title">Tips del producto</h3>
+								</div>
+								<div class="box-body">
+									<ul class="list-group">
+										@foreach ($producto->tips as $tip)
+											<li class="list-group-item">{{ $tip->productop2_tip }}</li>
+										@endforeach
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				@endif
+
 				<div class="row">
 					{{-- Content maquinas --}}
 					<div class="col-sm-6">

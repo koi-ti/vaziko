@@ -36,6 +36,8 @@ class CreateAsiento2Table extends Migration
             $table->integer('asiento2_nivel7')->default(0);
             $table->integer('asiento2_nivel8')->default(0);
 
+            $table->boolean('asiento2_nuevo')->default(1);
+
             $table->foreign('asiento2_asiento')->references('id')->on('koi_asiento1')->onDelete('restrict');
             $table->foreign('asiento2_cuenta')->references('id')->on('koi_plancuentas')->onDelete('restrict');
             $table->foreign('asiento2_beneficiario')->references('id')->on('koi_tercero')->onDelete('restrict');

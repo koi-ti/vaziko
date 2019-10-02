@@ -47,6 +47,9 @@ class PreCotizacion2Controller extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         if (!$precotizacion->precotizacion1_abierta) {
             return redirect()->route('precotizaciones.show', compact('precotizacion'));
         }
@@ -263,6 +266,9 @@ class PreCotizacion2Controller extends Controller
             abort(404);
         }
 
+        // Lazy Eager Loading
+        $producto->load('tips');
+
         // Validar precotizacion
         if ($precotizacion->precotizacion1_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'precotizaciones'])) {
             return redirect()->route('precotizaciones.productos.edit', ['productos' => $precotizacion2->id]);
@@ -292,6 +298,9 @@ class PreCotizacion2Controller extends Controller
         if (!$producto instanceof Productop) {
             abort(404);
         }
+
+        // Lazy Eager Loading
+        $producto->load('tips');
 
         // Validar cotizacion
         if (!$precotizacion->precotizacion1_abierta) {

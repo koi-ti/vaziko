@@ -57,7 +57,7 @@ app || (app = {});
 
             this.$form = this.$('#form-productosp');
             this.$subtypeproduct = this.$('#productop_subtipoproductop');
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
 
             this.ready();
         },

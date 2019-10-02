@@ -246,6 +246,25 @@
                             </div>
                         @endif
 
+                        @if ($producto->tips->count())
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="box box-danger">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Tips del producto</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <ul class="list-group">
+                                                @foreach ($producto->tips as $tip)
+                                                    <li class="list-group-item">{{ $tip->productop2_tip }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Content produccion --}}
                         <div class="row">
                             <div class="col-sm-6">
@@ -813,7 +832,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @elseif ($cotizacion2->continue)
+            @elseif (isset($cotizacion2) && $cotizacion2->continue)
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -840,7 +859,7 @@
                     @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                         <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
-                    @elseif ($cotizacion2->continue)
+                    @elseif (isset($cotizacion2) && $cotizacion2->continue)
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                         <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
                     @endif
