@@ -1,32 +1,32 @@
-<table class="brtable" border="0" cellspacing="0" cellpadding="0">
-	<thead>
-		<tr>
-			<th width="15%" class="title left">Fecha</th>
-			<th width="20%" class="title left">Orden de Producción</th>
-			<th width="20%" class="title left">C.C o Nit</th>
-			<th width="25%" class="title left">Revisado por</th>
-			<th width="20%" class="titleespecial center">Remisión</th>
-		</tr>
-	</thead>
-	<tbody>
-		<tr>
-			<th class="title left">{{ $despacho->despachop1_fecha }}</th>
-			<th class="title left">{{ $despacho->orden_codigo }}</th>
-			<th class="title left">{{ $despacho->tercero_nit }}</th>
-			<th class="title left">IGN</th>
-			<th class="title left">{{ sprintf('%s-%s', $despacho->id, substr($despacho->despachop1_fecha, -8, 2)) }}</th>
-		</tr>
-		<tr>
-			<th colspan="5" class="title left">Cliente</th>
-		</tr>
-	</tbody>
+<table class="htable" border="0" cellspacing="0" cellpadding="0">
+	<tr>
+		<th rowspan="2" width="15%">
+			<img src="{{ asset('images/logo-header-pdf.png') }}" alt="logo-vaziko" style="width: 90px; height: 40px;">
+		</th>
+		<th class="bold" width="15%">Remisión</th>
+		<th class="bold" width="15%">OP</th>
+		<th class="bold" width="15%">Fecha</th>
+		<th class="bold" width="15%">Revisado</th>
+		<th rowspan="2" width="15%">
+			{{ $empresa->tercero_razonsocial }}<br>
+			NIT: {{ $empresa->tercero_nit }}
+		</th>
+	</tr>
+	<tr>
+		<td>{{ sprintf('%s-%s', $despacho->id, substr($despacho->despachop1_fecha, -8, 2)) }}</td>
+		<td>{{ $despacho->orden_codigo }}</td>
+		<td>{{ $despacho->despachop1_fecha }}</td>
+		<td>{{ auth()->user()->getName() }}</td>
+	</tr>
 </table>
 
-<table class="htable" border="0" cellspacing="0" cellpadding="0">
+<table class="hrtable" border="0" cellspacing="0" cellpadding="0">
 	<tbody>
 		<tr>
 			<th width="10%" class="border-left">Compañia</th>
-			<td colspan="3" class="size-7 border-right">{{ $despacho->tercero_nombre }}</td>
+			<td class="size-7">{{ $despacho->tercero_nombre }}</td>
+			<th width="10%">Nit</th>
+			<td class="size-7 border-right">{{ $despacho->tercero_nombre }}</td>
 		</tr>
 		<tr>
 			<th width="10%" class="border-left">Contacto</th>
@@ -46,9 +46,9 @@
 <table class="brtable" border="0" cellspacing="0" cellpadding="0">
 	<thead>
 		<tr>
-			<th width="50%">Referencia</th>
-			<th width="30%">Términos</th>
-			<th width="20%">Transporte</th>
+			<th class="left" width="45%">Referencia</th>
+			<th class="left" width="45%">Términos</th>
+			<th class="center" width="10%">Transporte</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -63,44 +63,52 @@
 <table class="rtable" border="0" cellspacing="0" cellpadding="0">
 	<thead>
 		<tr>
-			<th width="80%" class="center title">Descripción</th>
-			<th width="20%" class="center title">Cantidad</th>
+			<th class="center bold" width="10%">Item</th>
+			<th class="center bold" width="80%">Descripción</th>
+			<th class="center bold" width="10%">Cantidad</th>
 		</tr>
 	</thead>
 	<tbody>
-		@if(count($detalle) > 0)
-			@foreach($detalle as $despacho2)
+		@foreach($detalle as $key => $despacho2)
+			<tr>
+				<td class="center size-7 border-left">{{ $key+1 }}</td>
+				<td class="left size-7 border-left">{{ $despacho2->productop_nombre }}</td>
+				<td class="center size-7 border-right border-left">{{ $despacho2->despachop2_cantidad }}</td>
+			</tr>
+		@endforeach
+		@if (count($detalle) < 9)
+			@for($i = count($detalle); $i < 9; $i++)
 				<tr>
-					<td class="left size-7 border-left">{{ $despacho2->productop_nombre }}</td>
-					<td class="center size-7 border-right border-left">{{ $despacho2->despachop2_cantidad }}</td>
+					<td class="center size-7 border-left"></td>
+					<td class="left size-7 border-left"></td>
+					<td class="center size-7 border-right border-left"></td>
 				</tr>
-			@endforeach
+			@endfor
 		@endif
 	</tbody>
 </table>
 
-<table class="brtable size-7" border="0" cellspacing="0" cellpadding="0">
+<table class="brtable" border="0" cellspacing="0" cellpadding="0">
 	<tbody>
 		<tr>
-			<td class="size-7 height-19">{{ $despacho->despachop1_observacion }}</td>
-		</tr>
-		<tr>
-			<td class="size-7 height-19">&nbsp;</td>
+			<td class="height-40">
+				Notas {{ $despacho->despachop1_observacion }}
+			</td>
 		</tr>
 	</tbody>
 </table>
 
 {{-- Empresa --}}
-<table class="width-100" border="0" cellspacing="0" cellpadding="0">
+<table class="hrtable" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td class="center size-7">
-			{{ "$empresa->tercero_razonsocial | $empresa->tercero_direccion | Código postal: 760042 | PBX : $despacho->empresa_telefono | www.vaziko.com | $empresa->tercero_email | Cali - Colombia | ".Auth::user()->username.' - '.date('Y-m-d H:i:s') }}
+			{{ "$empresa->tercero_razonsocial | $empresa->tercero_direccion | Código postal: 760042 | PBX : $despacho->empresa_telefono | www.vaziko.com | $empresa->tercero_email | Cali - Colombia | ".auth()->user()->username.' - '.date('Y-m-d H:i:s') }}
 		</td>
 	</tr>
 </table>
 
 {{-- Firma --}}
-<table class="width-100 margin-top-60" border="0" cellspacing="0" cellpadding="0">
+<table class="hrtable margin-top-50" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td width="10%">&nbsp;</td>
 		<td width="30%" class="center border-top">Nombre y firma del cliente</td>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Models\Production\Ordenp, App\Models\Production\Ordenp2;
-use App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use Auth, DB, Log, App, View;
 
 class DespachopController extends Controller
@@ -241,12 +241,15 @@ class DespachopController extends Controller
         if (!$despacho instanceof Despachop) {
             abort(404);
         }
+
         $detalle = Despachop2::getDespacho2($despacho->id);
         $title = sprintf('Despacho de mercancía %s-%s', $despacho->id, substr($despacho->despachop1_fecha, -8, 2));
 
+        $empresa = Empresa::getEmpresa();
+
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('production.despachos.export', compact('title', 'despacho', 'detalle'))->render());
+        $pdf->loadHTML(View::make('production.despachos.export', compact('title', 'despacho', 'detalle', 'empresa'))->render());
         return $pdf->stream(sprintf('%s_%s.pdf', 'despachop', $despacho->id));
     }
 }
