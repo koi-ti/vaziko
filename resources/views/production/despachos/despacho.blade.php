@@ -1,7 +1,7 @@
 <table class="htable" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<th rowspan="2" width="15%">
-			<img src="{{ asset('images/logo-header-pdf.png') }}" alt="logo-vaziko" style="width: 90px; height: 40px;">
+			<img src="http://104.236.57.82/vaziko/public/images/logo-header-pdf.png" alt="logo-vaziko" style="width: 90px; height: 40px;">
 		</th>
 		<th class="bold" width="15%">Remisión</th>
 		<th class="bold" width="15%">OP</th>
