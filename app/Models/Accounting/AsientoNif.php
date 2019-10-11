@@ -3,13 +3,12 @@
 namespace App\Models\Accounting;
 
 use Illuminate\Database\Eloquent\Model;
-
 use App\Models\Base\Empresa;
 use Validator, DB;
 
 class AsientoNif extends Model
 {
-/**
+    /**
      * The database table used by the model.
      *
      * @var string
@@ -23,10 +22,11 @@ class AsientoNif extends Model
      *
      * @var array
      */
-    protected $fillable = ['asienton1_mes', 'asienton1_ano', 'asienton1_dia', 'asienton1_folder', 'asienton1_documento', 'asienton1_numero', 'asienton1_detalle', 'asienton1_documentos', 'asienton1_id_documentos'];
+    protected $fillable = [
+        'asienton1_mes', 'asienton1_ano', 'asienton1_dia', 'asienton1_folder', 'asienton1_documento', 'asienton1_numero', 'asienton1_detalle', 'asienton1_documentos', 'asienton1_id_documentos'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'asienton1_mes' => 'required|integer',
             'asienton1_ano' => 'required|integer',
@@ -54,7 +54,7 @@ class AsientoNif extends Model
                 return false;
             }
             // Validar contra fecha de cierre
-            if (strtotime($fecha_asienton) <= strtotime($empresa->fecha_cierre) ) {
+            if (strtotime($fecha_asienton) <= strtotime($empresa->fecha_cierre)) {
                 $this->errors = "La fecha que intenta realizar el asiento: $fecha_asienton no esta PERMITIDA. Es menor a la del cierre contable : $empresa->fecha_cierre";
                 return false;
             }
@@ -64,8 +64,7 @@ class AsientoNif extends Model
         return false;
     }
 
-    public static function getAsientoNif($id)
-    {
+    public static function getAsientoNif($id) {
         $query = AsientoNif::query();
         $query->select('koi_asienton1.*', 'folder_nombre', 'documento_nombre', 't.tercero_nit', 'documento_tipo_consecutivo', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 'u.username as username_elaboro');
         $query->join('koi_tercero as t', 'asienton1_beneficiario', '=', 't.id');
@@ -77,16 +76,14 @@ class AsientoNif extends Model
         return $query->first();
     }
 
-    public function setAsiento1DetalleAttribute($detail)
-    {
+    public function setAsiento1DetalleAttribute($detail) {
         $this->attributes['asienton1_detalle'] = strtoupper($detail);
     }
 
     /**
     * Traer detalles del asienton.
     */
-    public function detalle()
-    {
+    public function detalle() {
         return $this->hasMany('App\Models\Accounting\AsientoNif2', 'asienton2_asiento', 'id');
     }
 }

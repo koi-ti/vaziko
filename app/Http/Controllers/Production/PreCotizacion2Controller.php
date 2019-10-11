@@ -4,10 +4,10 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Productop, App\Models\Production\Materialp, App\Models\Production\Areap;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\PreCotizacion10, App\Models\Production\Productop, App\Models\Production\Materialp, App\Models\Production\Areap;
 use App\Models\Base\Tercero;
 use App\Models\Inventory\Producto;
-use Auth, DB, Log, Datatables, Storage;
+use DB, Log, Datatables, Storage;
 
 class PreCotizacion2Controller extends Controller
 {
@@ -68,8 +68,9 @@ class PreCotizacion2Controller extends Controller
         if ($request->ajax()) {
             $data = $request->all();
             $data['materialesp'] = json_decode($data['materialesp']);
-            $data['empaques'] = json_decode($data['empaques']);
             $data['areasp'] = json_decode($data['areasp']);
+            $data['empaques'] = json_decode($data['empaques']);
+            $data['transportes'] = json_decode($data['transportes']);
 
             $precotizacion2 = new PreCotizacion2;
             if ($precotizacion2->isValid($data)) {
@@ -215,6 +216,36 @@ class PreCotizacion2Controller extends Controller
                         $precotizacion9->save();
                     }
 
+                    // Transportes
+                    $transportes = isset($data['transportes']) ? $data['transportes'] : null;
+                    foreach ($transportes as $transporte) {
+                        $materialp = Materialp::where('materialp_transporte', true)->find($transporte->precotizacion10_materialp);
+                        if (!$materialp instanceof Materialp) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
+                        }
+
+
+                        $producto = Producto::where('producto_transporte', true)->find($transporte->precotizacion10_producto);
+                        if (!$producto instanceof Producto) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        // Guardar individual porque sale error por ser objeto decodificado
+                        $precotizacion10 = new PreCotizacion10;
+                        $precotizacion10->precotizacion10_medidas = $transporte->precotizacion10_medidas;
+                        $precotizacion10->precotizacion10_cantidad = $transporte->precotizacion10_cantidad;
+                        $precotizacion10->precotizacion10_valor_unitario = $transporte->precotizacion10_valor_unitario;
+                        $precotizacion10->precotizacion10_valor_total = $transporte->precotizacion10_valor_total;
+                        $precotizacion10->precotizacion10_materialp = $materialp->id;
+                        $precotizacion10->precotizacion10_producto = $producto->id;
+                        $precotizacion10->precotizacion10_precotizacion2 = $precotizacion2->id;
+                        $precotizacion10->precotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                        $precotizacion10->precotizacion10_usuario_elaboro = auth()->user()->id;
+                        $precotizacion10->save();
+                    }
+
                     // Guardar imagenes si todo sale bien
                     if (count($files)) {
                         foreach ($files as $file) {
@@ -225,7 +256,7 @@ class PreCotizacion2Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $precotizacion2->id, 'id_precotizacion' => $precotizacion->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -411,6 +442,33 @@ class PreCotizacion2Controller extends Controller
                         // Remover registros que no existan
                         $deletemateriales = PreCotizacion3::whereNotIn('id', $keys)->where('precotizacion3_precotizacion2', $precotizacion2->id)->delete();
 
+                        // Areasp
+                        $keys = [];
+                        $areasp = isset($data['areasp']) ? $data['areasp'] : null;
+                        foreach ($areasp as $areap) {
+                            $precotizacion6 = PreCotizacion6::find( is_numeric($areap['id']) ? $areap['id'] : null);
+                            if (!$precotizacion6 instanceof PreCotizacion6) {
+                                $precotizacion6 = new PreCotizacion6;
+                                $precotizacion6->fill($areap);
+                                if (!empty($areap['precotizacion6_areap'])) {
+                                    $precotizacion6->precotizacion6_areap = $areap['precotizacion6_areap'];
+                                } else {
+                                    $precotizacion6->precotizacion6_nombre = $areap['precotizacion6_nombre'];
+                                }
+                                $precotizacion6->precotizacion6_tiempo = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+                                $precotizacion6->precotizacion6_precotizacion2 = $precotizacion2->id;
+                                $precotizacion6->save();
+                            } else {
+                                $precotizacion6->precotizacion6_tiempo = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
+                                $precotizacion6->save();
+                            }
+
+                            $keys[] = $precotizacion6->id;
+                        }
+
+                        // Remover registros que no existan
+                        $deleteareasp = PreCotizacion6::whereNotIn('id', $keys)->where('precotizacion6_precotizacion2', $precotizacion2->id)->delete();
+
                         // Empaques
                         $keys = [];
                         $empaques = isset($data['empaques']) ? $data['empaques'] : null;
@@ -451,37 +509,50 @@ class PreCotizacion2Controller extends Controller
                         // Remover registros que no existan
                         $deleteempaques = PreCotizacion9::whereNotIn('id', $keys)->where('precotizacion9_precotizacion2', $precotizacion2->id)->delete();
 
-                        // Areasp
+                        // Transportes
                         $keys = [];
-                        $areasp = isset($data['areasp']) ? $data['areasp'] : null;
-                        foreach ($areasp as $areap) {
-                            $precotizacion6 = PreCotizacion6::find( is_numeric($areap['id']) ? $areap['id'] : null);
-                            if (!$precotizacion6 instanceof PreCotizacion6) {
-                                $precotizacion6 = new PreCotizacion6;
-                                $precotizacion6->fill($areap);
-                                if (!empty($areap['precotizacion6_areap'])) {
-                                    $precotizacion6->precotizacion6_areap = $areap['precotizacion6_areap'];
-                                } else {
-                                    $precotizacion6->precotizacion6_nombre = $areap['precotizacion6_nombre'];
+                        $transportes = isset($data['transportes']) ? $data['transportes'] : null;
+                        foreach ($transportes as $transporte) {
+                            $precotizacion10 = PreCotizacion10::find( is_numeric($transporte['id']) ? $transporte['id'] : null);
+                            if (!$precotizacion10 instanceof PreCotizacion10) {
+                                $materialp = Materialp::find($transporte['precotizacion10_materialp']);
+                                if (!$materialp instanceof Materialp) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el empaque de producción, por favor verifique la información o consulte al administrador.']);
                                 }
-                                $precotizacion6->precotizacion6_tiempo = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
-                                $precotizacion6->precotizacion6_precotizacion2 = $precotizacion2->id;
-                                $precotizacion6->save();
+
+                                $producto = Producto::find($transporte['precotizacion10_producto']);
+                                if (!$producto instanceof Producto) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                                }
+
+                                $precotizacion10 = new PreCotizacion10;
+                                $precotizacion10->fill($transporte);
+                                $precotizacion10->precotizacion10_producto = $producto->id;
+                                $precotizacion10->precotizacion10_materialp = $materialp->id;
+                                $precotizacion10->precotizacion10_precotizacion2 = $precotizacion2->id;
+                                $precotizacion10->precotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                                $precotizacion10->precotizacion10_usuario_elaboro = auth()->user()->id;
+                                $precotizacion10->save();
+
                             } else {
-                                $precotizacion6->precotizacion6_tiempo = "{$areap['precotizacion6_horas']}:{$areap['precotizacion6_minutos']}";
-                                $precotizacion6->save();
+                                $precotizacion10->fill($transporte);
+                                $precotizacion10->save();
+
                             }
 
-                            $keys[] = $precotizacion6->id;
+                            // asociar id a un array para validar
+                            $keys[] = $precotizacion10->id;
                         }
 
                         // Remover registros que no existan
-                        $deleteareasp = PreCotizacion6::whereNotIn('id', $keys)->where('precotizacion6_precotizacion2', $precotizacion2->id)->delete();
+                        $deletetransportes = PreCotizacion10::whereNotIn('id', $keys)->where('precotizacion10_precotizacion2', $precotizacion2->id)->delete();
 
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $precotizacion2->id, 'id_precotizacion' => $precotizacion->id]);
-                    }catch(\Exception $e){
+                    } catch(\Exception $e) {
                         DB::rollback();
                         Log::error($e->getMessage());
                         return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -529,6 +600,9 @@ class PreCotizacion2Controller extends Controller
                 // Empaques
                 DB::table('koi_precotizacion9')->where('precotizacion9_precotizacion2', $precotizacion2->id)->delete();
 
+                // Transportes
+                DB::table('koi_precotizacion10')->where('precotizacion10_precotizacion2', $precotizacion2->id)->delete();
+
                 // Eliminar item precotizacion2
                 $precotizacion2->delete();
 
@@ -539,7 +613,7 @@ class PreCotizacion2Controller extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'Precotizacion2Controller', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -609,16 +683,6 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion3->save();
                 }
 
-                // Empaques
-                $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
-                foreach ($empaques as $precotizacion9) {
-                     $newprecotizacion9 = $precotizacion9->replicate();
-                     $newprecotizacion9->precotizacion9_precotizacion2 = $newprecotizacion2->id;
-                     $newprecotizacion9->precotizacion9_usuario_elaboro = auth()->user()->id;
-                     $newprecotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
-                     $newprecotizacion9->save();
-                }
-
                 // Areasp
                 $areasp = PreCotizacion6::where('precotizacion6_precotizacion2', $precotizacion2->id)->get();
                 foreach ($areasp as $precotizacion6) {
@@ -627,10 +691,20 @@ class PreCotizacion2Controller extends Controller
                      $newprecotizacion6->save();
                 }
 
+                // Transportes
+                $transportes = PreCotizacion10::where('precotizacion10_precotizacion2', $precotizacion2->id)->get();
+                foreach ($transportes as $precotizacion10) {
+                     $newprecotizacion10 = $precotizacion10->replicate();
+                     $newprecotizacion10->precotizacion10_precotizacion2 = $newprecotizacion2->id;
+                     $newprecotizacion10->precotizacion10_usuario_elaboro = auth()->user()->id;
+                     $newprecotizacion10->precotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                     $newprecotizacion10->save();
+                }
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $newprecotizacion2->id, 'msg' => 'Producto de pre-cotización clonado con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

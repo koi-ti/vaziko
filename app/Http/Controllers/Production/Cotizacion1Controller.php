@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10;
 use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 use App, View, DB, Log, Datatables, Storage;
 
@@ -30,7 +30,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $query = Cotizacion1::query();
-            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
+            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -44,6 +44,7 @@ class Cotizacion1Controller extends Controller
                 )
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
+            $query->leftjoin('koi_precotizacion1', 'cotizacion1_precotizacion', '=', 'koi_precotizacion1.id');
             $query->with(['productos' => function ($producto) {
                 $producto->select('cotizacion2_cotizacion', DB::raw('SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total'))
                                 ->groupBy('cotizacion2_cotizacion');
@@ -201,7 +202,7 @@ class Cotizacion1Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $cotizacion->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -310,7 +311,7 @@ class Cotizacion1Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $cotizacion->id, 'cotizacion1_iva' => $cotizacion->cotizacion1_iva]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -357,7 +358,7 @@ class Cotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Cotización cerrada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -396,7 +397,7 @@ class Cotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Cotización reabierta con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -556,6 +557,14 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion4->save();
                     }
 
+                    // Areasp
+                    $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($areasp as $cotizacion6) {
+                         $newcotizacion6 = $cotizacion6->replicate();
+                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion6->save();
+                    }
+
                     // Empaques
                     $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->get();
                     foreach ($empaques as $cotizacion9) {
@@ -566,19 +575,21 @@ class Cotizacion1Controller extends Controller
                          $newcotizacion9->save();
                     }
 
-                    // Areasp
-                    $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
-                    foreach ($areasp as $cotizacion6) {
-                         $newcotizacion6 = $cotizacion6->replicate();
-                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion6->save();
+                    // Transportes
+                    $transportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($transportes as $cotizacion10) {
+                         $newcotizacion10 = $cotizacion10->replicate();
+                         $newcotizacion10->cotizacion10_cotizacion2 = $newcotizacion2->id;
+                         $newcotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
+                         $newcotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                         $newcotizacion10->save();
                     }
                 }
 
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $newcotizacion->id, 'msg' => 'Cotización clonada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -651,6 +662,7 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
                     $orden2->orden2_margen_materialp = $cotizacion2->cotizacion2_margen_materialp;
                     $orden2->orden2_margen_empaque = $cotizacion2->cotizacion2_margen_empaque;
+                    $orden2->orden2_margen_transporte = $cotizacion2->cotizacion2_margen_transporte;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;
                     $orden2->orden2_tiro = $cotizacion2->cotizacion2_tiro;
@@ -735,6 +747,18 @@ class Cotizacion1Controller extends Controller
                          $orden4->save();
                     }
 
+                    // Recuperar Areasp de cotizacion para generar orden
+                    $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($areasp as $cotizacion6) {
+                         $orden6 = new Ordenp6;
+                         $orden6->orden6_orden2 = $orden2->id;
+                         $orden6->orden6_areap = $cotizacion6->cotizacion6_areap;
+                         $orden6->orden6_nombre = $cotizacion6->cotizacion6_nombre;
+                         $orden6->orden6_tiempo = $cotizacion6->cotizacion6_tiempo;
+                         $orden6->orden6_valor = $cotizacion6->cotizacion6_valor;
+                         $orden6->save();
+                    }
+
                     // Recuperar Empaques de cotizacion para generar orden
                     $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->get();
                     foreach ($empaques as $cotizacion9) {
@@ -751,16 +775,20 @@ class Cotizacion1Controller extends Controller
                          $orden9->save();
                     }
 
-                    // Recuperar Areasp de cotizacion para generar orden
-                    $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
-                    foreach ($areasp as $cotizacion6) {
-                         $orden6 = new Ordenp6;
-                         $orden6->orden6_orden2 = $orden2->id;
-                         $orden6->orden6_areap = $cotizacion6->cotizacion6_areap;
-                         $orden6->orden6_nombre = $cotizacion6->cotizacion6_nombre;
-                         $orden6->orden6_tiempo = $cotizacion6->cotizacion6_tiempo;
-                         $orden6->orden6_valor = $cotizacion6->cotizacion6_valor;
-                         $orden6->save();
+                    // Recuperar Transportes de cotizacion para generar orden
+                    $transportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->get();
+                    foreach ($transportes as $cotizacion10) {
+                         $orden10 = new Ordenp10;
+                         $orden10->orden10_orden2 = $orden2->id;
+                         $orden10->orden10_producto = $cotizacion10->cotizacion10_producto;
+                         $orden10->orden10_materialp = $cotizacion10->cotizacion10_materialp;
+                         $orden10->orden10_medidas = $cotizacion10->cotizacion10_medidas;
+                         $orden10->orden10_cantidad = $cotizacion10->cotizacion10_cantidad;
+                         $orden10->orden10_valor_unitario = $cotizacion10->cotizacion10_valor_unitario;
+                         $orden10->orden10_valor_total = $cotizacion10->cotizacion10_valor_total;
+                         $orden10->orden10_usuario_elaboro = auth()->user()->id;
+                         $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
+                         $orden10->save();
                     }
                 }
 
@@ -772,7 +800,7 @@ class Cotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Se genero con exito la orden de producción', 'orden_id' => $orden->id]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

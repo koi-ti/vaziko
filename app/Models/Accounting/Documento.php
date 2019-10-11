@@ -2,9 +2,7 @@
 
 namespace App\Models\Accounting;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
-
 use Validator;
 
 class Documento extends BaseModel
@@ -23,17 +21,20 @@ class Documento extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['documento_codigo', 'documento_nombre', 'documento_tipo_consecutivo'];
+    protected $fillable = [
+        'documento_codigo', 'documento_nombre', 'documento_tipo_consecutivo'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['documento_nif', 'documento_actual'];
+    protected $boolean = [
+        'documento_nif', 'documento_actual'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'documento_codigo' => 'required|max:20|min:1|unique:koi_documento',
             'documento_nombre' => 'required|max:200',
@@ -41,9 +42,9 @@ class Documento extends BaseModel
             'documento_tipo_consecutivo' => 'required|max:1'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['documento_codigo'] .= ',documento_codigo,' . $this->id;
-        }else{
+        } else {
             $rules['documento_codigo'] .= '|required';
         }
 
@@ -55,8 +56,7 @@ class Documento extends BaseModel
         return false;
     }
 
-    public static function getDocument($id)
-    {
+    public static function getDocument($id) {
         $query = Documento::query();
         $query->select('koi_documento.*', 'folder_nombre');
         $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
@@ -64,8 +64,7 @@ class Documento extends BaseModel
         return $query->first();
     }
 
-    public static function getDocuments()
-    {
+    public static function getDocuments() {
         // if (Cache::has('_documents')) {
         //     return Cache::get('_documents');
         // }

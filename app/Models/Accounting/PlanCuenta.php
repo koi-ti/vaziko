@@ -2,10 +2,7 @@
 
 namespace App\Models\Accounting;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\BaseModel;
-
 use Validator;
 
 class PlanCuenta extends BaseModel
@@ -24,25 +21,30 @@ class PlanCuenta extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tipo', 'plancuentas_tasa'];
+    protected $fillable = [
+        'plancuentas_cuenta', 'plancuentas_nivel', 'plancuentas_nombre', 'plancuentas_naturaleza', 'plancuentas_tipo', 'plancuentas_tasa'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['plancuentas_tercero'];
+    protected $boolean = [
+        'plancuentas_tercero'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['plancuentas_centro'];
+    protected $nullable = [
+        'plancuentas_centro'
+    ];
 
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'plancuentas_cuenta' => 'required|max:20|min:1|unique:koi_plancuentas',
             'plancuentas_nombre' => 'required|max:200',
@@ -51,9 +53,9 @@ class PlanCuenta extends BaseModel
             'plancuentas_tipo' => 'required'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['plancuentas_cuenta'] .= ',plancuentas_cuenta,' . $this->id;
-        }else{
+        } else {
             $rules['plancuentas_cuenta'] .= '|required';
         }
 
@@ -61,7 +63,7 @@ class PlanCuenta extends BaseModel
         if ($validator->passes()) {
             // Validar cuenta
             $valid = $this->validarTienePadre($data);
-            if($valid != 'OK') {
+            if ($valid != 'OK') {
                 $this->errors = $valid;
                 return false;
             }
@@ -71,57 +73,56 @@ class PlanCuenta extends BaseModel
         return false;
     }
 
-    public function validarTienePadre(Array $data)
-    {
+    public function validarTienePadre(Array $data) {
         // Recuperamos niveles cuenta
         $niveles = self::getNivelesCuenta($data['plancuentas_cuenta']);
         $error = 'La cuenta a crear no tiene un papa inmediatamente anterior.';
         switch ($data['plancuentas_nivel']) {
             case 2:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', 0)->where('plancuentas_nivel3', 0)->where('plancuentas_nivel4', 0)->where('plancuentas_nivel5', 0)->where('plancuentas_nivel6', 0)->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 3:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', 0)->where('plancuentas_nivel4', 0)->where('plancuentas_nivel5', 0)->where('plancuentas_nivel6', 0)->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 4:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', $niveles['nivel3'])->where('plancuentas_nivel4', 0)->where('plancuentas_nivel5', 0)->where('plancuentas_nivel6', 0)->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 5:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', $niveles['nivel3'])->where('plancuentas_nivel4', $niveles['nivel4'])->where('plancuentas_nivel5', 0)->where('plancuentas_nivel6', 0)->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 6:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', $niveles['nivel3'])->where('plancuentas_nivel4', $niveles['nivel4'])->where('plancuentas_nivel5', $niveles['nivel5'])->where('plancuentas_nivel6', 0)->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 7:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', $niveles['nivel3'])->where('plancuentas_nivel4', $niveles['nivel4'])->where('plancuentas_nivel5', $niveles['nivel5'])->where('plancuentas_nivel6', $niveles['nivel6'])->where('plancuentas_nivel7', 0)->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
 
             case 8:
                 $padre = PlanCuenta::where('plancuentas_nivel1', $niveles['nivel1'])->where('plancuentas_nivel2', $niveles['nivel2'])->where('plancuentas_nivel3', $niveles['nivel3'])->where('plancuentas_nivel4', $niveles['nivel4'])->where('plancuentas_nivel5', $niveles['nivel5'])->where('plancuentas_nivel6', $niveles['nivel6'])->where('plancuentas_nivel7', $niveles['nivel7'])->where('plancuentas_nivel8', 0)->first();
-                if(!$padre instanceof PlanCuenta) {
+                if (!$padre instanceof PlanCuenta) {
                     return $error;
                 }
             break;
@@ -132,8 +133,7 @@ class PlanCuenta extends BaseModel
     /**
      * Funcion para verificar que no existan subniveles de la cuenta
      */
-    public function validarSubnivelesCuenta()
-    {
+    public function validarSubnivelesCuenta() {
         $niveles = self::getNivelesCuenta($this->plancuentas_cuenta);
         $nivel1 = $niveles['nivel1'];
         $nivel2 = $niveles['nivel2'];
@@ -144,35 +144,35 @@ class PlanCuenta extends BaseModel
         $nivel7 = $niveles['nivel7'];
         $nivel8 = $niveles['nivel8'];
 
-        if($nivel1 == 0 || $nivel2 == 0 || $nivel3 == 0 || $nivel4 == 0 || $nivel5 == 0 || $nivel6 == 0 || $nivel7 == 0 || $nivel8 == 0) {
+        if ($nivel1 == 0 || $nivel2 == 0 || $nivel3 == 0 || $nivel4 == 0 || $nivel5 == 0 || $nivel6 == 0 || $nivel7 == 0 || $nivel8 == 0) {
 
             $query = self::query();
-            if($nivel1 != 0 && $nivel2 == 0 && $nivel3 == 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
+            if ($nivel1 != 0 && $nivel2 == 0 && $nivel3 == 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 == 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 == 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 == 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', $nivel3);
                 $query->where('plancuentas_nivel4', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 == 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', $nivel3);
                 $query->where('plancuentas_nivel4', $nivel4);
                 $query->where('plancuentas_nivel5', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 == 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', $nivel3);
                 $query->where('plancuentas_nivel4', $nivel4);
                 $query->where('plancuentas_nivel5', $nivel5);
                 $query->where('plancuentas_nivel6', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 != 0 && $nivel7 == 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 != 0 && $nivel7 == 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', $nivel3);
@@ -180,7 +180,7 @@ class PlanCuenta extends BaseModel
                 $query->where('plancuentas_nivel5', $nivel5);
                 $query->where('plancuentas_nivel6', $nivel6);
                 $query->where('plancuentas_nivel7', '!=', 0);
-            }else if($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 != 0 && $nivel7 != 0 && $nivel8 == 0) {
+            } else if ($nivel1 != 0 && $nivel2 != 0 && $nivel3 != 0 && $nivel4 != 0 && $nivel5 != 0 && $nivel6 != 0 && $nivel7 != 0 && $nivel8 == 0) {
                 $query->where('plancuentas_nivel1', $nivel1);
                 $query->where('plancuentas_nivel2', $nivel2);
                 $query->where('plancuentas_nivel3', $nivel3);
@@ -189,12 +189,12 @@ class PlanCuenta extends BaseModel
                 $query->where('plancuentas_nivel6', $nivel6);
                 $query->where('plancuentas_nivel7', $nivel7);
                 $query->where('plancuentas_nivel8', '!=', 0);
-            }else{
+            } else{
                 return "No se puede determinar el metodo de revision cuentas inferiores {$objCuenta->plancuentas_cuenta} - Consulte al administrador";
             }
             $objSubCuenta = $query->first();
 
-            if($objSubCuenta instanceof PlanCuenta){
+            if ($objSubCuenta instanceof PlanCuenta){
                 return "Senor usuario usted no puede realizar asientos con la cuenta {$this->plancuentas_cuenta} debido  a que existe una subcuenta {$objSubCuenta->plancuentas_cuenta}";
             }
         }
@@ -206,8 +206,7 @@ class PlanCuenta extends BaseModel
      *
      * @var array cta
      */
-    public static function getNivelesCuenta($cta = NULL)
-    {
+    public static function getNivelesCuenta($cta = NULL) {
         $nivel1 = substr($cta,0,1);
         $nivel2 = substr($cta,1,1);
         $nivel3 = substr($cta,2,2);
@@ -232,10 +231,9 @@ class PlanCuenta extends BaseModel
     /**
      * Funcion para setear los niveles de una cuenta, el seteo se realiza hasta el nivel 8
      */
-    public function setNivelesCuenta()
-    {
+    public function setNivelesCuenta() {
         $niveles = self::getNivelesCuenta($this->plancuentas_cuenta);
-        if(!is_array($niveles)){
+        if (!is_array($niveles)){
           return false;
         }
 
@@ -254,15 +252,14 @@ class PlanCuenta extends BaseModel
     /**
      * Funcion para recuperar cuentas a mayorizar, se realiza hasta nivel 8
      */
-    public function getMayorizarCuentas()
-    {
+    public function getMayorizarCuentas() {
         $niveles = self::getNivelesCuenta($this->plancuentas_cuenta);
-        if(!is_array($niveles)) {
+        if (!is_array($niveles)) {
             return "Error al recuperar niveles para la cuenta {$this->plancuentas_cuenta}.";
         }
 
         $cuentas = [];
-        if(isset($niveles['nivel8']) && intval($niveles['nivel8'])) {
+        if (isset($niveles['nivel8']) && intval($niveles['nivel8'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}{$niveles['nivel3']}{$niveles['nivel4']}{$niveles['nivel5']}{$niveles['nivel6']}{$niveles['nivel7']}",
@@ -274,7 +271,7 @@ class PlanCuenta extends BaseModel
                 8 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel7']) && intval($niveles['nivel7']) && !intval($niveles['nivel8'])) {
+        } else if (isset($niveles['nivel7']) && intval($niveles['nivel7']) && !intval($niveles['nivel8'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}{$niveles['nivel3']}{$niveles['nivel4']}{$niveles['nivel5']}{$niveles['nivel6']}",
@@ -285,7 +282,7 @@ class PlanCuenta extends BaseModel
                 7 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel6']) && intval($niveles['nivel6']) && !intval($niveles['nivel7'])) {
+        } else if (isset($niveles['nivel6']) && intval($niveles['nivel6']) && !intval($niveles['nivel7'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}{$niveles['nivel3']}{$niveles['nivel4']}{$niveles['nivel5']}",
@@ -295,7 +292,7 @@ class PlanCuenta extends BaseModel
                 6 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel5']) && intval($niveles['nivel5']) && !intval($niveles['nivel6'])) {
+        } else if (isset($niveles['nivel5']) && intval($niveles['nivel5']) && !intval($niveles['nivel6'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}{$niveles['nivel3']}{$niveles['nivel4']}",
@@ -304,7 +301,7 @@ class PlanCuenta extends BaseModel
                 5 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel4']) && intval($niveles['nivel4']) && !intval($niveles['nivel5'])) {
+        } else if (isset($niveles['nivel4']) && intval($niveles['nivel4']) && !intval($niveles['nivel5'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}{$niveles['nivel3']}",
@@ -312,20 +309,20 @@ class PlanCuenta extends BaseModel
                 4 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel3']) && intval($niveles['nivel3']) && !intval($niveles['nivel4'])) {
+        } else if (isset($niveles['nivel3']) && intval($niveles['nivel3']) && !intval($niveles['nivel4'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}{$niveles['nivel2']}",
                 3 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel2']) && intval($niveles['nivel2']) && !intval($niveles['nivel3'])) {
+        } else if (isset($niveles['nivel2']) && intval($niveles['nivel2']) && !intval($niveles['nivel3'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta,
                 2 => "{$niveles['nivel1']}"
             ];
 
-        }else if(isset($niveles['nivel1']) && intval($niveles['nivel1']) && !intval($niveles['nivel2'])) {
+        } else if (isset($niveles['nivel1']) && intval($niveles['nivel1']) && !intval($niveles['nivel2'])) {
             $cuentas = [
                 1 => $this->plancuentas_cuenta
             ];
@@ -333,8 +330,7 @@ class PlanCuenta extends BaseModel
         return $cuentas;
     }
 
-    public static function getCuenta($id)
-    {
+    public static function getCuenta($id) {
         $query = PlanCuenta::query();
         $query->select('koi_plancuentas.*', 'centrocosto_nombre', 'plancuentasn_cuenta', 'plancuentasn_nombre');
         $query->leftJoin('koi_centrocosto', 'koi_plancuentas.plancuentas_centro', '=', 'koi_centrocosto.id');
@@ -343,8 +339,7 @@ class PlanCuenta extends BaseModel
         return $query->first();
     }
 
-    public function setPlancuentasNombreAttribute($name)
-    {
+    public function setPlancuentasNombreAttribute($name) {
         $this->attributes['plancuentas_nombre'] = strtoupper($name);
     }
 }

@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB, Cache, Validator;
 
 class Actividad extends Model
@@ -29,19 +28,20 @@ class Actividad extends Model
      *
      * @var array
      */
-    protected $fillable = ['actividad_codigo', 'actividad_nombre', 'actividad_tarifa', 'actividad_categoria'];
+    protected $fillable = [
+        'actividad_codigo', 'actividad_nombre', 'actividad_tarifa', 'actividad_categoria'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'actividad_codigo' => 'required|min:1|max:11|unique:koi_actividad',
             'actividad_nombre' => 'required',
             'actividad_tarifa' => 'required|numeric|max:100|min:0'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['actividad_codigo'] .= ',actividad_codigo,' . $this->id;
-        }else{
+        } else {
             $rules['actividad_codigo'] .= '|required';
         }
 
@@ -53,8 +53,7 @@ class Actividad extends Model
         return false;
     }
 
-    public static function getActividades()
-    {
+    public static function getActividades() {
         if (Cache::has( self::$key_cache )) {
             return Cache::get( self::$key_cache );
         }

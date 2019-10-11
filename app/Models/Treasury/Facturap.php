@@ -3,7 +3,6 @@
 namespace App\Models\Treasury;
 
 use Illuminate\Database\Eloquent\Model;
-
 use App\Models\Base\Tercero;
 use DB, Carbon\Carbon;
 
@@ -26,7 +25,7 @@ class Facturap extends Model
 		$fecha_cuota = $this->facturap1_fecha;
         $valor_cuota = $valor / $this->facturap1_cuotas;
 
-        for($i=1; $i <= $this->facturap1_cuotas; $i++) {
+        for ($i=1; $i <= $this->facturap1_cuotas; $i++) {
             if (!$fecha_cuota) {
             	$response->error = "No es posible recuperar información de fecha para cuota $i de la factura {$this->facturap1_factura}, por favor verifique la información del asiento o consulte al administrador.";
             	return $response;
@@ -69,7 +68,7 @@ class Facturap extends Model
     /**
     * Function for report history provider
     */
-    public static function historyProviderReport(Tercero $tercero, Array $historyClient, $i ) {
+    public static function historyProviderReport(Tercero $tercero, Array $historyClient, $i) {
         $response = new \stdClass();
         $response->success = false;
         $response->facturaProveedor = [];

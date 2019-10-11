@@ -2,7 +2,6 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
 use Validator, Cache;
 
@@ -29,17 +28,20 @@ class SubtipoProductop extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['subtipoproductop_nombre'];
+    protected $fillable = [
+        'subtipoproductop_nombre'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['subtipoproductop_activo'];
+    protected $boolean = [
+        'subtipoproductop_activo'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'subtipoproductop_nombre' => 'required|max:25',
         ];

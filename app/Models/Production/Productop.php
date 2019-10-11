@@ -2,10 +2,7 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\BaseModel;
-
 use Validator, Cache, DB;
 
 class Productop extends BaseModel
@@ -31,40 +28,43 @@ class Productop extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['productop_nombre', 'productop_observaciones', 'productop_ancho_med', 'productop_alto_med', 'productop_c_med_ancho', 'productop_c_med_alto', 'productop_3d_profundidad_med', 'productop_3d_ancho_med', 'productop_3d_alto_med'];
+    protected $fillable = [
+        'productop_nombre', 'productop_observaciones', 'productop_ancho_med', 'productop_alto_med', 'productop_c_med_ancho', 'productop_c_med_alto', 'productop_3d_profundidad_med', 'productop_3d_ancho_med', 'productop_3d_alto_med'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['productop_ancho_med', 'productop_alto_med', 'productop_c_med_ancho', 'productop_c_med_alto', 'productop_3d_profundidad_med', 'productop_3d_ancho_med', 'productop_3d_alto_med'];
+    protected $nullable = [
+        'productop_ancho_med', 'productop_alto_med', 'productop_c_med_ancho', 'productop_c_med_alto', 'productop_3d_profundidad_med', 'productop_3d_ancho_med', 'productop_3d_alto_med'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['productop_tiro', 'productop_retiro', 'productop_abierto', 'productop_cerrado', 'productop_3d'];
+    protected $boolean = [
+        'productop_tiro', 'productop_retiro', 'productop_abierto', 'productop_cerrado', 'productop_3d'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'productop_nombre' => 'required|max:250',
             'productop_tipoproductop' => 'required'
         ];
 
         $validator = Validator::make($data, $rules);
-        if ($validator->passes())
-        {
+        if ($validator->passes()) {
             return true;
         }
         $this->errors = $validator->errors();
         return false;
     }
 
-    public static function getProduct($id)
-    {
+    public static function getProduct($id) {
         $query = Productop::query();
         $query->select('koi_productop.*', 'm1.unidadmedida_nombre as m1_nombre', 'm1.unidadmedida_sigla as m1_sigla', 'm2.unidadmedida_nombre as m2_nombre', 'm2.unidadmedida_sigla as m2_sigla', 'm3.unidadmedida_nombre as m3_nombre', 'm3.unidadmedida_sigla as m3_sigla', 'm4.unidadmedida_nombre as m4_nombre', 'm4.unidadmedida_sigla as m4_sigla', 'm5.unidadmedida_nombre as m5_nombre', 'm5.unidadmedida_sigla as m5_sigla', 'm6.unidadmedida_nombre as m6_nombre', 'm6.unidadmedida_sigla as m6_sigla', 'm7.unidadmedida_nombre as m7_nombre', 'm7.unidadmedida_sigla as m7_sigla', 'u.username as username_elaboro', 'tipoproductop_nombre', 'subtipoproductop_nombre');
         $query->join('koi_tercero as u', 'productop_usuario_elaboro', '=', 'u.id');
@@ -104,7 +104,7 @@ class Productop extends BaseModel
             return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever(self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function () {
             $query = Productop::query();
             $query->orderBy('productop_nombre', 'asc');
             $collection = $query->lists('productop_nombre', 'id');

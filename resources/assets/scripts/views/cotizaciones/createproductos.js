@@ -22,6 +22,7 @@ app || (app = {});
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
+            'submit #form-transporte-producto': 'onStoreTransporte',
             'change .change-materialp': 'changeMaterialp',
             'change .change-insumo': 'changeInsumo',
             'change #cotizacion6_areap': 'changeAreap',
@@ -44,6 +45,7 @@ app || (app = {});
             this.materialesProductopCotizacionList = new app.MaterialesProductopCotizacionList();
             this.empaquesProductopCotizacionList = new app.EmpaquesProductopCotizacionList();
             this.areasProductopCotizacionList = new app.AreasProductopCotizacionList();
+            this.transportesProductopCotizacionList = new app.TransportesProductopCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -68,6 +70,7 @@ app || (app = {});
             this.$formmaterialp = this.$('#form-materialp-producto');
             this.$formempaque = this.$('#form-empaque-producto');
             this.$formareap = this.$('#form-areap-producto');
+            this.$formtransporte = this.$('#form-transporte-producto');
 
             // reference to Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
@@ -158,6 +161,16 @@ app || (app = {});
                     dataFilter: dataFilter
                }
             });
+
+            // Transportes
+            this.transportesProductopCotizacionListView = new app.TransportesProductopCotizacionListView( {
+                collection: this.transportesProductopCotizacionList,
+                model: this.model,
+                parameters: {
+                    edit: true,
+                    dataFilter: dataFilter
+                }
+            });
         },
 
         /**
@@ -225,8 +238,9 @@ app || (app = {});
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopCotizacionList.toJSON();
-                        data.empaques = this.empaquesProductopCotizacionList.toJSON();
                         data.areasp = this.areasProductopCotizacionList.toJSON();
+                        data.empaques = this.empaquesProductopCotizacionList.toJSON();
+                        data.transportes = this.transportesProductopCotizacionList.toJSON();
 
                     this.model.save(data, {silent: true});
 
@@ -237,8 +251,9 @@ app || (app = {});
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopCotizacionList);
-                        data.empaques = JSON.stringify(this.empaquesProductopCotizacionList);
                         data.areasp = JSON.stringify(this.areasProductopCotizacionList);
+                        data.empaques = JSON.stringify(this.empaquesProductopCotizacionList);
+                        data.transportes = JSON.stringify(this.transportesProductopCotizacionList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
@@ -296,6 +311,19 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                 this.areasProductopCotizacionList.trigger('store', data, this.$formareap);
+            }
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreTransporte: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
+                    data.cotizacion10_cantidad = this.$('#cotizacion10_cantidad:disabled').val();
+                this.transportesProductopCotizacionList.trigger('store', data, this.$formtransporte);
             }
         },
 

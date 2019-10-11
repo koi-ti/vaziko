@@ -20,6 +20,7 @@ app || (app = {});
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
+            'submit #form-transporte-producto': 'onStoreTransporte',
             'change .change-materialp': 'changeMaterialp',
             'change .change-insumo': 'changeInsumo',
             'change #precotizacion6_areap': 'changeAreap'
@@ -42,6 +43,7 @@ app || (app = {});
             this.materialesProductopPreCotizacionList = new app.MaterialesProductopPreCotizacionList();
             this.empaquesProductopPreCotizacionList = new app.EmpaquesProductopPreCotizacionList();
             this.areasProductopPreCotizacionList = new app.AreasProductopPreCotizacionList();
+            this.transportesProductopPreCotizacionList = new app.TransportesProductopPreCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -65,6 +67,7 @@ app || (app = {});
             this.$formmaterialp = this.$('#form-materialp-producto');
             this.$formempaque = this.$('#form-empaque-producto');
             this.$formareap = this.$('#form-areap-producto');
+            this.$formtransporte = this.$('#form-transporte-producto');
 
             // reference uplaoadfile
             this.$uploaderFile = this.$('.fine-uploader');
@@ -115,6 +118,7 @@ app || (app = {});
                         data.materialesp = this.materialesProductopPreCotizacionList.toJSON();
                         data.empaques = this.empaquesProductopPreCotizacionList.toJSON();
                         data.areasp = this.areasProductopPreCotizacionList.toJSON();
+                        data.transportes = this.transportesProductopPreCotizacionList.toJSON();
 
                     this.model.save(data, {wait: true, path: true, silent: true});
                 } else {
@@ -122,6 +126,7 @@ app || (app = {});
                         data.materialesp = JSON.stringify(this.materialesProductopPreCotizacionList);
                         data.empaques = JSON.stringify(this.empaquesProductopPreCotizacionList);
                         data.areasp = JSON.stringify(this.areasProductopPreCotizacionList);
+                        data.transportes = JSON.stringify(this.transportesProductopPreCotizacionList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
@@ -199,6 +204,19 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                 this.areasProductopPreCotizacionList.trigger('store', data, this.$formareap);
+            }
+        },
+
+        /**
+        * Event Create
+        */
+        onStoreTransporte: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                    data.precotizacion10_cantidad = this.$('#precotizacion10_cantidad:disabled').val();
+                this.transportesProductopPreCotizacionList.trigger('store', data, this.$formtransporte);
             }
         },
 
@@ -340,6 +358,18 @@ app || (app = {});
                         precotizacion2: this.model.get('id')
                     }
                }
+            });
+
+            // Transportes
+            this.transportesProductopPreCotizacionListView = new app.TransportesProductopPreCotizacionListView( {
+                collection: this.transportesProductopPreCotizacionList,
+                parameters: {
+                    edit: true,
+                    wrapper: $('#transportes-wrapper-producto'),
+                    dataFilter: {
+                        precotizacion2: this.model.get('id')
+                    }
+                }
             });
         },
 

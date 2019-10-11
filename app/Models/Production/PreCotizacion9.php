@@ -21,17 +21,20 @@ class PreCotizacion9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['precotizacion9_medidas', 'precotizacion9_cantidad', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'];
+    protected $fillable = [
+        'precotizacion9_medidas', 'precotizacion9_cantidad', 'precotizacion9_valor_unitario', 'precotizacion9_valor_total'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['precotizacion9_producto'];
+    protected $nullable = [
+        'precotizacion9_producto'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'precotizacion9_materialp' => 'required',
             'precotizacion9_producto' => 'required',
@@ -47,8 +50,7 @@ class PreCotizacion9 extends BaseModel
         return false;
     }
 
-    public static function getPreCotizaciones9($precotizacion2 = null)
-    {
+    public static function getPreCotizaciones9($precotizacion2 = null) {
         $query = self::query();
         $query->select('koi_precotizacion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
         $query->leftJoin('koi_materialp', 'precotizacion9_materialp', '=', 'koi_materialp.id');

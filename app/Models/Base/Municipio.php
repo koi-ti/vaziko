@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB, Cache;
 
 class Municipio extends Model
@@ -17,10 +16,9 @@ class Municipio extends Model
 
     public $timestamps = false;
 
-    public static function getMunicipios()
-    {
+    public static function getMunicipios() {
         if (Cache::has('_municipios')) {
-            return Cache::get('_municipios');    
+            return Cache::get('_municipios');
         }
 
         return Cache::rememberForever('_municipios', function() {
@@ -29,7 +27,7 @@ class Municipio extends Model
             $query->join('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
             $query->orderby('municipio_nombre', 'asc');
             $collection = $query->lists('municipio_nombre', 'koi_municipio.id');
-            
+
             $collection->prepend('', '');
             return $collection;
         });

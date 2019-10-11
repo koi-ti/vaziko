@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB, Validator;
 
 class Despachop extends Model
@@ -22,10 +21,11 @@ class Despachop extends Model
      *
      * @var array
      */
-    protected $fillable = ['despachop1_observacion', 'despachop1_transporte'];
+    protected $fillable = [
+        'despachop1_observacion', 'despachop1_transporte'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'despachop1_contacto' => 'required|integer',
             'despachop1_orden' => 'required|integer',
@@ -42,8 +42,7 @@ class Despachop extends Model
         return false;
     }
 
-    public static function getDespacho($id)
-    {
+    public static function getDespacho($id) {
         $query = Despachop::query();
         $query->select('koi_despachop1.*', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_referencia', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as tcontacto_municipio"), DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 'tcontacto_celular', 'tcontacto_direccion', 'tercero_nit',
             DB::raw("(CASE WHEN tercero_persona = 'N'

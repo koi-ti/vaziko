@@ -21,17 +21,20 @@ class Ordenp9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden9_medidas', 'orden9_cantidad', 'orden9_valor_unitario', 'orden9_valor_total'];
+    protected $fillable = [
+        'orden9_medidas', 'orden9_cantidad', 'orden9_valor_unitario', 'orden9_valor_total'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['orden9_producto'];
+    protected $nullable = [
+        'orden9_producto'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'orden9_materialp' => 'required',
             'orden9_producto' => 'required',
@@ -47,8 +50,7 @@ class Ordenp9 extends BaseModel
         return false;
     }
 
-    public static function getOrdenesp9($orden2 = null)
-    {
+    public static function getOrdenesp9($orden2 = null) {
         $query = self::query();
         $query->select('koi_ordenproduccion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
         $query->leftJoin('koi_materialp', 'orden9_materialp', '=', 'koi_materialp.id');

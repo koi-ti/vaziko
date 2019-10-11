@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Sucursal extends Model
@@ -29,17 +28,18 @@ class Sucursal extends Model
      *
      * @var array
      */
-    protected $fillable = ['sucursal_nombre'];
+    protected $fillable = [
+        'sucursal_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'sucursal_nombre' => 'required|max:100|unique:koi_sucursal'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['sucursal_nombre'] .= ',sucursal_nombre,' . $this->id;
-        }else{
+        } else {
             $rules['sucursal_nombre'] .= '|required';
         }
 
@@ -52,13 +52,12 @@ class Sucursal extends Model
     }
 
 
-    public static function getSucursales()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getSucursales() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Sucursal::query();
             $query->orderby('sucursal_nombre', 'asc');
             $collection = $query->lists('sucursal_nombre', 'id');

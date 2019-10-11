@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator;
 
 class Productop3 extends Model
@@ -17,8 +16,7 @@ class Productop3 extends Model
 
     public $timestamps = false;
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'productop3_productop' => 'required|integer',
             'productop3_areap' => 'required|integer'

@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Unidad extends Model
@@ -29,18 +28,19 @@ class Unidad extends Model
      *
      * @var array
      */
-    protected $fillable = ['unidadmedida_nombre', 'unidadmedida_sigla'];
+    protected $fillable = [
+        'unidadmedida_nombre', 'unidadmedida_sigla'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'unidadmedida_sigla' => 'required|max:15|min:1|unique:koi_unidadmedida',
             'unidadmedida_nombre' => 'required|max:100'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['unidadmedida_sigla'] .= ',unidadmedida_sigla,' . $this->id;
-        }else{
+        } else {
             $rules['unidadmedida_sigla'] .= '|required';
         }
 
@@ -52,13 +52,12 @@ class Unidad extends Model
         return false;
     }
 
-    public static function getUnidades()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getUnidades() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Unidad::query();
             $query->orderby('unidadmedida_nombre', 'asc');
             return $query->lists('unidadmedida_nombre', 'id');

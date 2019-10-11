@@ -17,21 +17,24 @@ class Cotizacion2 extends BaseModel
     public $timestamps = false;
 
     /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+    protected $fillable = [
+        'cotizacion2_referencia', 'cotizacion2_observaciones', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round', 'cotizacion2_margen_materialp', 'cotizacion2_margen_empaque'
+    ];
+
+    /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['cotizacion2_tiro', 'cotizacion2_retiro', 'cotizacion2_yellow', 'cotizacion2_magenta', 'cotizacion2_cyan', 'cotizacion2_key', 'cotizacion2_color1', 'cotizacion2_color2', 'cotizacion2_yellow2', 'cotizacion2_magenta2', 'cotizacion2_cyan2', 'cotizacion2_key2', 'cotizacion2_color12', 'cotizacion2_color22'];
+    protected $boolean = [
+        'cotizacion2_tiro', 'cotizacion2_retiro', 'cotizacion2_yellow', 'cotizacion2_magenta', 'cotizacion2_cyan', 'cotizacion2_key', 'cotizacion2_color1', 'cotizacion2_color2', 'cotizacion2_yellow2', 'cotizacion2_magenta2', 'cotizacion2_cyan2', 'cotizacion2_key2', 'cotizacion2_color12', 'cotizacion2_color22'
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['cotizacion2_referencia', 'cotizacion2_observaciones', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round', 'cotizacion2_margen_materialp', 'cotizacion2_margen_empaque'];
-
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
@@ -51,8 +54,7 @@ class Cotizacion2 extends BaseModel
         return false;
     }
 
-    public static function getCotizaciones2( $cotizacion )
-    {
+    public static function getCotizaciones2($cotizacion) {
         $query = self::query();
         $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario',
             DB::raw("CASE WHEN cotizacion2_tiro != 0 THEN ( cotizacion2_yellow + cotizacion2_magenta + cotizacion2_cyan + cotizacion2_key + cotizacion2_color1 + cotizacion2_color2) ELSE '0' END AS tiro"),
@@ -94,8 +96,7 @@ class Cotizacion2 extends BaseModel
         return $query->get();
     }
 
-    public static function getCotizacion2( $cotizacion2 )
-    {
+    public static function getCotizacion2($cotizacion2) {
         $query = self::query();
         $query->select('koi_cotizacion2.*',
                 DB::raw("CASE WHEN productop_3d != 0 THEN CONCAT(

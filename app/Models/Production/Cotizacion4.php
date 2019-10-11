@@ -21,17 +21,20 @@ class Cotizacion4 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion4_medidas', 'cotizacion4_cantidad', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'];
+    protected $fillable = [
+        'cotizacion4_medidas', 'cotizacion4_cantidad', 'cotizacion4_valor_unitario', 'cotizacion4_valor_total'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['cotizacion4_producto'];
+    protected $nullable = [
+        'cotizacion4_producto'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'cotizacion4_materialp' => 'required',
             'cotizacion4_producto' => 'required',
@@ -47,8 +50,7 @@ class Cotizacion4 extends BaseModel
         return false;
     }
 
-    public static function getCotizaciones4($cotizacion2 = null)
-    {
+    public static function getCotizaciones4($cotizacion2 = null) {
         $query = self::query();
         $query->select('koi_cotizacion4.*', 'materialp_nombre', 'producto_nombre');
         $query->join('koi_materialp', 'cotizacion4_materialp', '=', 'koi_materialp.id');
@@ -61,8 +63,7 @@ class Cotizacion4 extends BaseModel
     /**
     *  Select materiales dependiendo del productop
     **/
-    public static function getMaterials($productop = null)
-    {
+    public static function getMaterials($productop = null) {
         $query = Productop5::query();
         $query->select('koi_materialp.id as id', 'materialp_nombre');
         $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');

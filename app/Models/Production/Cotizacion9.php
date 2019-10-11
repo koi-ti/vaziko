@@ -21,17 +21,20 @@ class Cotizacion9 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion9_medidas', 'cotizacion9_cantidad', 'cotizacion9_valor_unitario', 'cotizacion9_valor_total'];
+    protected $fillable = [
+        'cotizacion9_medidas', 'cotizacion9_cantidad', 'cotizacion9_valor_unitario', 'cotizacion9_valor_total'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['cotizacion9_producto'];
+    protected $nullable = [
+        'cotizacion9_producto'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'cotizacion9_materialp' => 'required',
             'cotizacion9_producto' => 'required',
@@ -47,8 +50,7 @@ class Cotizacion9 extends BaseModel
         return false;
     }
 
-    public static function getCotizaciones9($cotizacion2 = null)
-    {
+    public static function getCotizaciones9($cotizacion2 = null) {
         $query = self::query();
         $query->select('koi_cotizacion9.*', 'materialp_nombre as empaque_nombre', 'producto_nombre');
         $query->leftJoin('koi_materialp', 'cotizacion9_materialp', '=', 'koi_materialp.id');

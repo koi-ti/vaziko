@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class PuntoVenta extends Model
@@ -29,19 +28,20 @@ class PuntoVenta extends Model
      *
      * @var array
      */
-    protected $fillable = ['puntoventa_nombre', 'puntoventa_prefijo', 'puntoventa_resolucion_dian'];
+    protected $fillable = [
+        'puntoventa_nombre', 'puntoventa_prefijo', 'puntoventa_resolucion_dian'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'puntoventa_nombre' => 'required|max:200|unique:koi_puntoventa',
             'puntoventa_prefijo' => 'max:4|unique:koi_puntoventa'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['puntoventa_nombre'] .= ',puntoventa_nombre,' . $this->id;
             $rules['puntoventa_prefijo'] .= ',puntoventa_prefijo,' . $this->id;
-        }else{
+        } else {
             $rules['puntoventa_nombre'] .= '|required';
         }
 
@@ -53,17 +53,16 @@ class PuntoVenta extends Model
         return false;
     }
 
-    public static function getPuntosVenta()
-    {
-        if (Cache::has( self::$key_cache )) {
+    public static function getPuntosVenta() {
+        if (Cache::has(self::$key_cache)) {
             return Cache::get( self::$key_cache );
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache , function() {
             $query = PuntoVenta::query();
             $query->orderby('puntoventa_nombre', 'asc');
             $collection = $query->lists('puntoventa_nombre', 'id');
-            
+
             $collection->prepend('', '');
             return $collection;
         });

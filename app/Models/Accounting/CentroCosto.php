@@ -2,10 +2,7 @@
 
 namespace App\Models\Accounting;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\BaseModel;
-
 use Validator, DB;
 
 class CentroCosto extends BaseModel
@@ -24,17 +21,20 @@ class CentroCosto extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['centrocosto_centro', 'centrocosto_codigo', 'centrocosto_nombre', 'centrocosto_tipo', 'centrocosto_descripcion1', 'centrocosto_descripcion2', 'centrocosto_estructura'];
+    protected $fillable = [
+        'centrocosto_centro', 'centrocosto_codigo', 'centrocosto_nombre', 'centrocosto_tipo', 'centrocosto_descripcion1', 'centrocosto_descripcion2', 'centrocosto_estructura'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['centrocosto_activo'];
+    protected $boolean = [
+        'centrocosto_activo'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'centrocosto_codigo' => 'required|max:4|min:1|unique_with:koi_centrocosto,centrocosto_centro',
             'centrocosto_centro' => 'required|max:20',
@@ -44,9 +44,9 @@ class CentroCosto extends BaseModel
             'centrocosto_descripcion2' => 'max:200'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['centrocosto_codigo'] .= ',centrocosto_codigo,' . $this->id;
-        }else{
+        } else {
             $rules['centrocosto_codigo'] .= '|required';
         }
 
@@ -58,28 +58,24 @@ class CentroCosto extends BaseModel
         return false;
     }
 
-    public function setCentrocostoCodigoAttribute($code)
-    {
+    public function setCentrocostoCodigoAttribute($code) {
         $this->attributes['centrocosto_codigo'] = strtoupper(trim($code));
     }
 
-    public function setCentrocostoNombreAttribute($name)
-    {
+    public function setCentrocostoNombreAttribute($name) {
         $this->attributes['centrocosto_nombre'] = strtoupper($name);
     }
 
-    public function getCode()
-    {
+    public function getCode() {
         return sprintf('%s%s', $this->attributes['centrocosto_codigo'], $this->attributes['centrocosto_centro']);
     }
 
-    public static function getCentrosCosto($centrocosto_estructura = null)
-    {
+    public static function getCentrosCosto($centrocosto_estructura = null) {
         $query = CentroCosto::query();
         $query->select('id', DB::raw("CONCAT(centrocosto_codigo, centrocosto_centro, ' - ', centrocosto_nombre) as centrocosto_nombre"));
         $query->orderby('centrocosto_nombre', 'asc');
-        
-        if($centrocosto_estructura != null){
+
+        if ($centrocosto_estructura != null) {
             $query->where('centrocosto_estructura', $centrocosto_estructura);
         }
 

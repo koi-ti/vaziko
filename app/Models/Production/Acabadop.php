@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Acabadop extends Model
@@ -29,10 +28,11 @@ class Acabadop extends Model
      *
      * @var array
      */
-    protected $fillable = ['acabadop_nombre', 'acabadop_descripcion'];
+    protected $fillable = [
+        'acabadop_nombre', 'acabadop_descripcion'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'acabadop_nombre' => 'required|max:200'
         ];
@@ -45,18 +45,16 @@ class Acabadop extends Model
         return false;
     }
 
-    public function setAcabadopDescripcionAttribute($descripcion)
-    {
+    public function setAcabadopDescripcionAttribute($descripcion) {
         $this->attributes['acabadop_descripcion'] = strtoupper($descripcion);
     }
 
-    public static function getAcabados()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getAcabados() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Acabadop::query();
             $query->orderBy('acabadop_nombre', 'asc');
             $collection = $query->lists('acabadop_nombre', 'id');

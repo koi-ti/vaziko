@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
 use App, View, DB, Log, Datatables, Storage;
 
 class OrdenpController extends Controller
@@ -30,7 +30,7 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', 'orden_cotizacion', 'cotizacion1_precotizacion', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
+            $query->select('koi_ordenproduccion.id', 'orden_cotizacion', 'cotizacion1_precotizacion', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo, CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -45,6 +45,7 @@ class OrdenpController extends Controller
             );
             $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
             $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
+            $query->leftjoin('koi_precotizacion1', 'cotizacion1_precotizacion', '=', 'koi_precotizacion1.id');
 
             $query->with(['detalle' => function ($producto) {
                 $producto->select('orden2_orden', DB::raw('SUM(orden2_total_valor_unitario * orden2_cantidad) as total'))
@@ -220,7 +221,7 @@ class OrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -317,7 +318,7 @@ class OrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id, 'orden_iva' => $orden->orden_iva]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -416,7 +417,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -444,7 +445,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden cerrada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -474,7 +475,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Culmino la orden de producción con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -590,6 +591,14 @@ class OrdenpController extends Controller
                          $neworden4->save();
                     }
 
+                    // Areasp
+                    $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
+                    foreach ($areasp as $orden6) {
+                         $neworden6 = $orden6->replicate();
+                         $neworden6->orden6_orden2 = $neworden2->id;
+                         $neworden6->save();
+                    }
+
                     // Enmpaques
                     $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
                     foreach ($empaques as $orden9) {
@@ -598,12 +607,12 @@ class OrdenpController extends Controller
                          $neworden9->save();
                     }
 
-                    // Areasp
-                    $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
-                    foreach ($areasp as $orden6) {
-                         $neworden6 = $orden6->replicate();
-                         $neworden6->orden6_orden2 = $neworden2->id;
-                         $neworden6->save();
+                    // Transporte
+                    $transporte = Ordenp10::where('orden10_orden2', $orden2->id)->get();
+                    foreach ($transporte as $orden10) {
+                         $neworden10 = $orden10->replicate();
+                         $neworden10->orden10_orden2 = $neworden2->id;
+                         $neworden10->save();
                     }
                 }
 
@@ -617,7 +626,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden clonada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

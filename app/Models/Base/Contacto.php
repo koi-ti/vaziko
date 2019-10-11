@@ -3,7 +3,6 @@
 namespace App\Models\Base;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator;
 
 class Contacto extends Model
@@ -22,10 +21,11 @@ class Contacto extends Model
      *
      * @var array
      */
-    protected $fillable = ['tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_municipio', 'tcontacto_direccion', 'tcontacto_telefono', 'tcontacto_celular', 'tcontacto_email', 'tcontacto_cargo','tcontacto_direccion_nomenclatura'];
+    protected $fillable = [
+        'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_municipio', 'tcontacto_direccion', 'tcontacto_telefono', 'tcontacto_celular', 'tcontacto_email', 'tcontacto_cargo','tcontacto_direccion_nomenclatura'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'tcontacto_nombres' => 'required|max:200',
             'tcontacto_apellidos' => 'required|max:200',

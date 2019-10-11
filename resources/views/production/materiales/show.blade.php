@@ -25,9 +25,13 @@
                     <label class="control-label">Descripción</label>
                     <div>{{ $material->materialp_descripcion ?: '-' }}</div>
                 </div>
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-2">
                     <label class="control-label">Empaque</label>
                     <div><input type="checkbox" disabled {{ $material->materialp_empaque ? 'checked': '' }}></div>
+                </div>
+                <div class="form-group col-md-2">
+                    <label class="control-label">Transporte</label>
+                    <div><input type="checkbox" disabled {{ $material->materialp_transporte ? 'checked': '' }}></div>
                 </div>
             </div>
         </div>

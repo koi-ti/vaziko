@@ -581,6 +581,83 @@
                             </div>
                         </div>
                     </div>
+
+                    {{-- Content transportes --}}
+                    <div id="transportes-wrapper-producto" class="box box-danger">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Transportes de producción</h3>
+                        </div>
+                        <div class="box-body">
+                            <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
+                                <div class="row">
+                                    @foreach( App\Models\Production\Productop5::getTransportes() as $transporte )
+                                        <div class="form-group col-md-4">
+                                            <label>{{ $transporte }}</label>
+                                        </div>
+                                    @endforeach
+                                </div><br>
+                                <div class="row">
+                                    <div class="form-group col-sm-6">
+                                        <select name="cotizacion10_materialp" id="cotizacion10_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="cotizacion10_producto" data-wrapper="materialesp-wrapper-producto" data-reference="transporte" required>
+                                            <option value hidden selected>Seleccione</option>
+                                            @foreach( App\Models\Production\Productop5::getTransportes() as $key => $value )
+                                                <option value="{{ $key }}">{{ $value }}</option>
+                                            @endforeach
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-6">
+                                        <select name="cotizacion10_producto" id="cotizacion10_producto" class="form-control select2-default-clear" data-placeholder="Insumo" data-valor="cotizacion10_valor_unitario" disabled required>
+                                            <option value hidden selected>Seleccione</option>
+                                        </select>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-sm-8">
+                                        <div class="input-group">
+                                            <input type="text" id="cotizacion10_medidas" name="cotizacion10_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion10_cantidad" maxlength="50" required>
+                                            <span class="input-group-addon">=</span>
+                                            <input type="text" id="cotizacion10_cantidad" name="cotizacion10_cantidad" placeholder="Total" class="form-control text-right" disabled>
+                                        </div>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-3">
+                                        <input id="cotizacion10_valor_unitario" name="cotizacion10_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                    </div>
+                                    <div class="form-group col-sm-1">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-block">
+                                            <i class="fa fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- table table-bordered table-striped -->
+                            <div class="box-body table-responsive no-padding">
+                                <table id="browse-cotizacion-producto-transportes-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2"></th>
+                                            <th width="25%">Transporte</th>
+                                            <th width="25%">Insumo</th>
+                                            <th width="10%">Medidas</th>
+                                            <th width="10%">Cantidad</th>
+                                            <th width="15%">Valor unidad</th>
+                                            <th width="15%">Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="6"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -636,6 +713,17 @@
                                             <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-empaques"></span></b></div>
                                         </div>
                                     </div>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="cotizacion2_margen_transporte" name="cotizacion2_margen_transporte" class="form-control input-sm total-calculate" value="<%- cotizacion2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-transportes"></span></b></div>
+                                        </div>
+                                    </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
                                             <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
@@ -689,6 +777,10 @@
 
     <script type="text/template" id="cotizacion-delete-areap-confirm-tpl">
         <p>¿Está seguro que desea eliminar el area <b><%- cotizacion6_areap %> <%- cotizacion6_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="cotizacion-delete-transporte-confirm-tpl">
+        <p>¿Está seguro que desea eliminar el transporte <b><%- transporte_nombre %> </b>?</p>
     </script>
 
     <script type="text/template" id="cotizacion-producto-materialp-item-tpl">
@@ -810,6 +902,46 @@
                     <input type="number" id="cotizacion6_minutos_<%- id %>" name="cotizacion6_minutos_<%- id %>" placeholder="Minutos" value="<%- cotizacion6_minutos %>" class="form-control input-xs" min="00" step="01" max="59" required>
                 </div>
             </div>
+        </td>
+    </script>
+
+    <script type="text/template" id="cotizacion-producto-transporte-item-tpl">
+        <% if( edit ) { %>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-transporte-cotizacion-remove" data-resource="<%- id %>">
+                    <span><i class="fa fa-times"></i></span>
+                </a>
+            </td>
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-producto-transporte-cotizacion-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
+        <% } %>
+        <td><%- !_.isUndefined(transporte_nombre) && !_.isNull(transporte_nombre) ? transporte_nombre : '-' %></td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
+        <td><%- cotizacion10_medidas %></td>
+        <td><%- cotizacion10_cantidad %></td>
+        <td class="text-right"><%- window.Misc.currency( cotizacion10_valor_unitario ) %></td>
+        <td class="text-right"><%- window.Misc.currency( cotizacion10_valor_total ) %></td>
+    </script>
+
+    <script type="text/template" id="cotizacion-producto-transporte-edit-item-tpl">
+        <td class="text-center" colspan="2">
+            <a class="btn btn-success btn-xs item-producto-transporte-cotizacion-success" data-resource="<%- id %>">
+                <span><i class="fa fa-check"></i></span>
+            </a>
+        </td>
+        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td colspan="4">
+            <div class="input-group">
+                <input type="text" id="cotizacion10_medidas_<%- id %>" name="cotizacion10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion10_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion10_medidas %>" required>
+                <span class="input-group-addon">=</span>
+                <input type="text" id="cotizacion10_cantidad_<%- id %>" name="cotizacion10_cantidad_<%- id %>" placeholder="Total" value="<%- cotizacion10_cantidad %>" class="form-control text-right" disabled>
+            </div>
+        </td>
+        <td  colspan="2" class="text-right">
+            <input id="cotizacion10_valor_unitario_<%- id %>" name="cotizacion10_valor_unitario_<%- id %>" value="<%- cotizacion10_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
     </script>
 

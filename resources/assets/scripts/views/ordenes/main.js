@@ -80,15 +80,20 @@ app || (app = {});
                         width: '13%',
                         searchable: false,
                         render: function ( data, type, full, row ) {
-                            if( full.cotizacion1_precotizacion && full.orden_cotizacion ){
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}) )+'" title="Ir a precotización"><span class="label label-success">PRE</span></a> <a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}) )+'" title="Ir a cotización"><span class="label label-danger">COT</span></a>';
-                            }else if( full.cotizacion1_precotizacion ){
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}) )+'" title="Ir a precotización"><span class="label label-success">PRE</span></a>';
-                            }else if( full.orden_cotizacion ) {
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a> <a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}) )+'" title="Ir a cotización"><span class="label label-danger">COT</span></a>';
-                            }else{
-                                return '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
+                            const pre = '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}) )+'" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
+                            const cot = '<a href="'+ window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}) )+'" title="Ir a cotización"><span class="label label-danger">' + full.cotizacion_codigo + '</span></a>';
+                            const nor = '<a href="'+ window.Misc.urlFull( Route.route('ordenes.show', {ordenes: full.id }) )  +'">' + data + '</a>';
+                            var badges = nor + " ";
+
+                            if (full.cotizacion1_precotizacion) {
+                                badges += pre + " ";
                             }
+
+                            if (full.orden_cotizacion) {
+                                badges += cot;
+                            }
+
+                            return badges
                         }
                     },
                     {

@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Maquinap extends Model
@@ -29,10 +28,11 @@ class Maquinap extends Model
      *
      * @var array
      */
-    protected $fillable = ['maquinap_nombre'];
+    protected $fillable = [
+        'maquinap_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'maquinap_nombre' => 'required|max:200'
         ];
@@ -45,13 +45,12 @@ class Maquinap extends Model
         return false;
     }
 
-    public static function getMaquinas()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getMaquinas() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Maquinap::query();
             $query->orderBy('maquinap_nombre', 'asc');
             $collection = $query->lists('maquinap_nombre', 'id');

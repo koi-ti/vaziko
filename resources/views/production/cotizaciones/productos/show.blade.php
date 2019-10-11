@@ -485,6 +485,53 @@
 						</table>
 					</div>
 				</div>
+
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Transportes de producción</h3>
+					</div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-cotizacion-producto-transportes-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="25%">Transporte</th>
+									<th width="25%">Transporte</th>
+									<th width="10%">Medidas</th>
+									<th width="10%">Cantidad</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $totaltransportes = 0; /*--}}
+								@foreach( App\Models\Production\Cotizacion10::getCotizaciones10( $cotizacion2->id ) as $transporte )
+									<tr>
+										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
+										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
+										<td>{{ $transporte->cotizacion10_medidas }}</td>
+										<td>{{ $transporte->cotizacion10_cantidad }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_total, 2, ',', '.') }}</td>
+										@endif
+									</tr>
+									{{--*/ $totaltransportes += $transporte->cotizacion10_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($totaltransportes, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
+						</table>
+					</div>
+				</div>
         	</div>
         </div>
 

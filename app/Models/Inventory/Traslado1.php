@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator;
 
 class Traslado1 extends Model
@@ -22,10 +21,11 @@ class Traslado1 extends Model
      *
      * @var array
      */
-    protected $fillable = ['traslado1_sucursal', 'traslado1_destino', 'traslado1_fecha', 'traslado1_observaciones'];
+    protected $fillable = [
+        'traslado1_sucursal', 'traslado1_destino', 'traslado1_fecha', 'traslado1_observaciones'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'traslado1_sucursal' => 'required|integer',
             'traslado1_destino' => 'required|integer',
@@ -37,7 +37,7 @@ class Traslado1 extends Model
         if ($validator->passes()) {
 			// Validar Carrito
 			$detalle = isset($data['detalle']) ? $data['detalle'] : null;
-			if(!isset($detalle) || $detalle == null || !is_array($detalle) || count($detalle) == 0) {
+			if (!isset($detalle) || $detalle == null || !is_array($detalle) || count($detalle) == 0) {
                 $this->errors = 'Por favor ingrese detalle para el tralado.';
                 return false;
             }
@@ -48,8 +48,7 @@ class Traslado1 extends Model
         return false;
     }
 
-    public static function getTraslado($id)
-    {
+    public static function getTraslado($id) {
         $query = Traslado1::query();
         $query->select('koi_traslado1.*', 'o.sucursal_nombre as origen', 'd.sucursal_nombre as destino', 'u.username as username_elaboro');
         $query->join('koi_sucursal as o', 'traslado1_sucursal', '=', 'o.id');
@@ -59,8 +58,7 @@ class Traslado1 extends Model
         return $query->first();
     }
 
-    public function setTraslado1ObservacionesAttribute($observaciones)
-    {
+    public function setTraslado1ObservacionesAttribute($observaciones) {
         $this->attributes['traslado1_observaciones'] = strtoupper($observaciones);
     }
 }

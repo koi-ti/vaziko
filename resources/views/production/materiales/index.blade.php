@@ -15,6 +15,7 @@
                             <th>Nombre</th>
                             <th>Tipo de material</th>
                             <th>Empaque</th>
+                            <th>Transporte</th>
                         </tr>
                     </thead>
                 </table>

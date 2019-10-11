@@ -28,6 +28,7 @@ app || (app = {});
             'cotizacion2_round': 0,
             'cotizacion2_margen_materialp': 30,
             'cotizacion2_margen_empaque': 30,
+            'cotizacion2_margen_transporte': 30,
             'cotizacion2_vtotal': 0,
             'cotizacion2_observaciones': '',
             'cotizacion2_ancho': 0,

@@ -33,6 +33,7 @@ class CreateProductoTable extends Migration
             $table->double('producto_ancho')->default(0)->comment = 'Cuando el producto es metrado';
             $table->double('producto_largo')->default(0)->comment = 'Cuando el producto es metrado';
             $table->boolean('producto_empaque')->default(false)->comment = 'El producto es un empaque';
+            $table->boolean('producto_transporte')->default(false)->comment = 'El producto maneja transporte';
 
             $table->foreign('producto_grupo')->references('id')->on('koi_grupo')->onDelete('restrict');
             $table->foreign('producto_subgrupo')->references('id')->on('koi_subgrupo')->onDelete('restrict');

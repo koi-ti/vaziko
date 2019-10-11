@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Areap extends Model
@@ -29,10 +28,11 @@ class Areap extends Model
      *
      * @var array
      */
-    protected $fillable = ['areap_nombre', 'areap_valor'];
+    protected $fillable = [
+        'areap_nombre', 'areap_valor'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'areap_nombre' => 'required|max:200',
             'areap_valor' => 'required'
@@ -46,13 +46,12 @@ class Areap extends Model
         return false;
     }
 
-    public static function getAreas()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getAreas() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Areap::query();
             $query->orderBy('areap_nombre', 'asc');
             $collection = $query->lists('areap_nombre', 'id');

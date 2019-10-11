@@ -22,10 +22,11 @@ class Asiento extends Model
      *
      * @var array
      */
-    protected $fillable = ['asiento1_mes', 'asiento1_ano', 'asiento1_dia', 'asiento1_folder', 'asiento1_documento', 'asiento1_numero', 'asiento1_detalle', 'asiento1_documentos', 'asiento1_id_documentos'];
+    protected $fillable = [
+        'asiento1_mes', 'asiento1_ano', 'asiento1_dia', 'asiento1_folder', 'asiento1_documento', 'asiento1_numero', 'asiento1_detalle', 'asiento1_documentos', 'asiento1_id_documentos'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'asiento1_mes' => 'required|integer',
             'asiento1_ano' => 'required|integer',
@@ -53,7 +54,7 @@ class Asiento extends Model
                 return false;
             }
             // Validar contra fecha de cierre
-            if (strtotime($fecha_asiento) <= strtotime($empresa->fecha_cierre) ) {
+            if (strtotime($fecha_asiento) <= strtotime($empresa->fecha_cierre)) {
                 $this->errors = "La fecha que intenta realizar el asiento: $fecha_asiento no esta PERMITIDA. Es menor a la del cierre contable : $empresa->fecha_cierre";
                 return false;
             }
@@ -64,8 +65,7 @@ class Asiento extends Model
         return false;
     }
 
-    public static function getAsiento($id)
-    {
+    public static function getAsiento($id) {
         $query = Asiento::query();
         $query->select('koi_asiento1.*', 'folder_nombre', 'documento_nombre', 't.tercero_nit', 'documento_tipo_consecutivo', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 'u.username as username_elaboro');
         $query->join('koi_tercero as t', 'asiento1_beneficiario', '=', 't.id');
@@ -76,16 +76,14 @@ class Asiento extends Model
         return $query->first();
     }
 
-    public function setAsiento1DetalleAttribute($detail)
-    {
+    public function setAsiento1DetalleAttribute($detail) {
         $this->attributes['asiento1_detalle'] = strtoupper($detail);
     }
 
     /**
     * Traer detalles del asiento.
     */
-    public function detalle()
-    {
+    public function detalle() {
         return $this->hasMany('App\Models\Accounting\Asiento2', 'asiento2_asiento', 'id')
                     ->select('koi_asiento2.*', 'plancuentas_tipo', 'plancuentas_cuenta', 'tercero_nit', DB::raw("(CASE WHEN asiento2_credito != 0 THEN 'C' ELSE 'D' END) as asiento2_naturaleza"))
                     ->join('koi_tercero', 'asiento2_beneficiario', '=', 'koi_tercero.id')

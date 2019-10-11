@@ -2,9 +2,8 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
-use Auth, DB, Validator, Carbon\Carbon;
+use DB, Validator, Carbon\Carbon;
 
 class Tiempop extends BaseModel
 {
@@ -22,17 +21,20 @@ class Tiempop extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['tiempop_fecha', 'tiempop_hora_inicio', 'tiempop_hora_fin'];
+    protected $fillable = [
+        'tiempop_fecha', 'tiempop_hora_inicio', 'tiempop_hora_fin'
+    ];
 
     /**
     * The attributes that are nullable..
     *
     * @var array
     */
-    protected $nullable = ['tiempop_ordenp', 'tiempop_subactividadp'];
+    protected $nullable = [
+        'tiempop_ordenp', 'tiempop_subactividadp'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'tiempop_areap' => 'required|integer',
             'tiempop_actividadp' => 'required|integer',
@@ -43,7 +45,7 @@ class Tiempop extends BaseModel
         $data['tiempop_hora_inicio'] = Carbon::parse("{$data['tiempop_hora_inicio']}:00")->toTimeString();
         $data['tiempop_hora_fin'] = Carbon::parse("{$data['tiempop_hora_fin']}:00")->toTimeString();
 
-        if( $data['tiempop_hora_fin'] <= $data['tiempop_hora_inicio'] ){
+        if ($data['tiempop_hora_fin'] <= $data['tiempop_hora_inicio']) {
             $this->errors = 'La hora de inicio no puede ser mayor o igual a la final.';
             return false;
         }
@@ -57,7 +59,7 @@ class Tiempop extends BaseModel
     }
 
     // Consulta modulo tiemposp
-    public static function getTiemposp(){
+    public static function getTiemposp() {
         $query = Tiempop::query();
         $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
             CONCAT(
@@ -75,14 +77,14 @@ class Tiempop extends BaseModel
         $query->leftJoin('koi_subactividadp', 'tiempop_subactividadp', '=', 'koi_subactividadp.id');
         $query->join('koi_actividadp', 'tiempop_actividadp', '=', 'koi_actividadp.id');
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
-        $query->where('tiempop_tercero', Auth::user()->id);
+        $query->where('tiempop_tercero', auth()->user()->id);
         $query->orderBy('koi_tiempop.id', 'desc');
 
         return $query->get();
     }
 
     // Consulta de detalle ordenp
-    public static function getTiempospOrdenp( $ordenp2 ){
+    public static function getTiempospOrdenp($ordenp2) {
         $query = Tiempop::query();
         $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre',  DB::raw("(CASE WHEN tercero_persona = 'N'
                 THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,

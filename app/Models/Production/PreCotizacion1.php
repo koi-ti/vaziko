@@ -21,10 +21,11 @@ class PreCotizacion1 extends Model
      *
      * @var array
      */
-    protected $fillable = ['precotizacion1_referencia', 'precotizacion1_fecha', 'precotizacion1_observaciones', 'precotizacion1_suministran'];
+    protected $fillable = [
+        'precotizacion1_referencia', 'precotizacion1_fecha', 'precotizacion1_observaciones', 'precotizacion1_suministran'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'precotizacion1_referencia' => 'required|max:100',
             'precotizacion1_cliente' => 'required',
@@ -42,8 +43,7 @@ class PreCotizacion1 extends Model
         return false;
     }
 
-    public static function getPreCotizacion($id)
-    {
+    public static function getPreCotizacion($id) {
         $query = PreCotizacion1::query();
         $query->select('koi_precotizacion1.*', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'u.username as username_elaboro', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 'tcontacto_email', DB::raw("CONCAT(u.tercero_nombre1,' ',u.tercero_apellido1) AS usuario_nombre"), 't.tercero_formapago', 'uc.username as username_culminada');
         $query->join('koi_tercero as t', 'precotizacion1_cliente', '=', 't.id');

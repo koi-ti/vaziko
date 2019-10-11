@@ -16,13 +16,12 @@ class Cotizacion5 extends Model
 
     public $timestamps = false;
 
-    public static function getCotizaciones5($productop = null, $cotizacion2 = null)
-    {
+    public static function getCotizaciones5($productop = null, $cotizacion2 = null) {
         $query = Productop6::query();
         $query->select('koi_acabadop.id as id', 'acabadop_nombre', ($cotizacion2 != null ? DB::raw("CASE WHEN koi_cotizacion5.id IS NOT NULL THEN true ELSE false END as activo") : DB::raw('false AS activo')) );
 
         $query->join('koi_acabadop', 'productop6_acabadop', '=', 'koi_acabadop.id');
-        if($cotizacion2 != null) {
+        if ($cotizacion2 != null) {
 	        $query->leftjoin('koi_cotizacion5', function($join) use($cotizacion2) {
 				$join->on('cotizacion5_acabadop', '=', 'koi_acabadop.id')
 					->where('cotizacion5_cotizacion2', '=', $cotizacion2);
@@ -37,8 +36,7 @@ class Cotizacion5 extends Model
     /**
      * Get the attributes for the acabadospName.
      */
-    public function getName()
-    {
+    public function getName() {
         return $this->hasOne('App\Models\Production\Acabadop', 'id' , 'cotizacion5_acabadop');
     }
 }

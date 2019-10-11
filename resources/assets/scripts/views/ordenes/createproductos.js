@@ -22,6 +22,7 @@ app || (app = {});
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
+            'submit #form-transporte-producto': 'onStoreTransporte',
             'change .change-materialp': 'changeMaterialp',
             'change .change-insumo': 'changeInsumo',
             'change #orden6_areap': 'changeAreap',
@@ -44,6 +45,7 @@ app || (app = {});
             this.materialesProductopOrdenList = new app.MaterialesProductopOrdenList();
             this.empaquesProductopOrdenList = new app.EmpaquesProductopOrdenList();
             this.areasProductopOrdenList = new app.AreasProductopOrdenList();
+            this.transportesProductopOrdenList = new app.TransportesProductopOrdenList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -68,6 +70,7 @@ app || (app = {});
             this.$formmaterialp = this.$('#form-materialp-producto');
             this.$formempaque = this.$('#form-empaque-producto');
             this.$formareap = this.$('#form-areap-producto');
+            this.$formtransporte = this.$('#form-transporte-producto');
 
             // reference to Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
@@ -161,6 +164,17 @@ app || (app = {});
                     dataFilter: dataFilter
                }
             });
+
+            // Transportes
+            this.transportesProductopOrdenListView = new app.TransportesProductopOrdenListView( {
+                collection: this.transportesProductopOrdenList,
+                model: this.model,
+                parameters: {
+                    edit: true,
+                    wrapper: $('#transporte-wrapper-producto'),
+                    dataFilter: dataFilter
+                }
+            });
         },
 
         /**
@@ -228,8 +242,9 @@ app || (app = {});
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopOrdenList.toJSON();
-                        data.empaques = this.empaquesProductopOrdenList.toJSON();
                         data.areasp = this.areasProductopOrdenList.toJSON();
+                        data.empaques = this.empaquesProductopOrdenList.toJSON();
+                        data.transportes = this.transportesProductopOrdenList.toJSON();
 
                     this.model.save(data, {silent: true});
 
@@ -240,8 +255,9 @@ app || (app = {});
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopOrdenList);
-                        data.empaques = JSON.stringify(this.empaquesProductopOrdenList);
                         data.areasp = JSON.stringify(this.areasProductopOrdenList);
+                        data.empaques = JSON.stringify(this.empaquesProductopOrdenList);
+                        data.transportes = JSON.stringify(this.transportesProductopOrdenList);
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
@@ -280,6 +296,18 @@ app || (app = {});
         /**
         * Event onStore items
         */
+        onStoreAreap: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopOrdenList.trigger('store' , data, this.$formareap);
+            }
+        },
+
+        /**
+        * Event onStore items
+        */
         onStoreEmpaquep: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
@@ -293,12 +321,13 @@ app || (app = {});
         /**
         * Event onStore items
         */
-        onStoreAreap: function (e) {
+        onStoreTransporte: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.areasProductopOrdenList.trigger('store' , data, this.$formareap);
+                    data.orden10_cantidad = this.$('#orden10_cantidad:disabled').val();
+                this.transportesProductopOrdenList.trigger('store' , data, this.$formtransporte);
             }
         },
 

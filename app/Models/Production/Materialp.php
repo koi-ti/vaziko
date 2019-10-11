@@ -28,17 +28,20 @@ class Materialp extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['materialp_nombre', 'materialp_descripcion'];
+    protected $fillable = [
+        'materialp_nombre', 'materialp_descripcion'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['materialp_empaque'];
+    protected $boolean = [
+        'materialp_empaque', 'materialp_transporte'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'materialp_nombre' => 'required|max:200'
         ];
@@ -51,13 +54,12 @@ class Materialp extends BaseModel
         return false;
     }
 
-    public static function getMateriales()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getMateriales() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Materialp::query();
             $query->orderBy('materialp_nombre', 'asc');
             $collection = $query->lists('materialp_nombre', 'id');
@@ -70,8 +72,7 @@ class Materialp extends BaseModel
     /**
      * Get the attributes for the acabadospName.
      */
-    public function tipomaterial()
-    {
+    public function tipomaterial() {
         return $this->hasOne('App\Models\Production\TipoMaterialp', 'id' , 'materialp_tipomaterial');
     }
 }

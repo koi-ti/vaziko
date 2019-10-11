@@ -21,21 +21,27 @@ class Ordenp extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'];
+    protected $fillable = [
+        'orden_referencia', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_formapago', 'orden_iva', 'orden_suministran', 'orden_observaciones', 'orden_terminado', 'orden_observaciones_imagen', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['orden_estado_recogida1', 'orden_estado_recogida2'];
+    protected $boolean = [
+        'orden_estado_recogida1', 'orden_estado_recogida2'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'];
+    protected $nullable = [
+        'orden_cotizacion', 'orden_formapago', 'orden_fecha_recogida1', 'orden_fecha_recogida2', 'orden_hora_recogida1', 'orden_hora_recogida2'
+    ];
 
     public function isValid ($data) {
         $rules = [

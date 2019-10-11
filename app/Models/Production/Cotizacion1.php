@@ -2,7 +2,6 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\BaseModel;
 use Validator, DB;
 
@@ -22,17 +21,20 @@ class Cotizacion1 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago'];
+    protected $fillable = [
+        'cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['cotizacion1_precotizacion'];
+    protected $nullable = [
+        'cotizacion1_precotizacion'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'cotizacion1_referencia' => 'required|max:200',
             'cotizacion1_cliente' => 'required',
@@ -52,8 +54,7 @@ class Cotizacion1 extends BaseModel
         return false;
     }
 
-    public static function getCotizacion($id)
-    {
+    public static function getCotizacion($id) {
         $query = Cotizacion1::query();
         $query->select('koi_cotizacion1.*', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"),'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio', 'tcontacto_email', 'municipio_nombre', DB::raw("CONCAT(u.tercero_nombre1,' ',u.tercero_apellido1) AS usuario_nombre"));
         $query->join('koi_tercero as t', 'cotizacion1_cliente', '=', 't.id');
@@ -66,8 +67,7 @@ class Cotizacion1 extends BaseModel
         return $query->first();
     }
 
-    public static function getExportCotizacion($codigo)
-    {
+    public static function getExportCotizacion($codigo) {
         $query = Cotizacion1::query();
         $query->select('koi_cotizacion1.*', 't.tercero_telefono1', 't.tercero_telefono2', 't.tercero_celular', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"), 'u.username as username_elaboro', 'ua.username as username_anulo', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_telefono', 't.tercero_nit', DB::raw("(CASE WHEN t.tercero_persona = 'N' THEN CONCAT(t.tercero_nombre1,' ',t.tercero_nombre2,' ',t.tercero_apellido1,' ',t.tercero_apellido2) ELSE t.tercero_razonsocial END) as tercero_nombre"), 't.tercero_direccion', 't.tercero_dir_nomenclatura', 't.tercero_municipio', 'tcontacto_email', 'municipio_nombre', DB::raw("CONCAT(u.tercero_nombre1,' ',u.tercero_apellido1) AS usuario_nombre"));
         $query->join('koi_tercero as t', 'cotizacion1_cliente', '=', 't.id');

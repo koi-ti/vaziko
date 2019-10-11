@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator;
 
 class Traslado2 extends Model
@@ -17,8 +16,7 @@ class Traslado2 extends Model
 
     public $timestamps = false;
 
- 	public function isValid($data)
-    {
+ 	public function isValid($data) {
         $rules = [
             'producto_codigo' => 'required',
             'traslado2_cantidad' => 'required'

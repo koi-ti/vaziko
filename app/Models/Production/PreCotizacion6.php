@@ -21,17 +21,20 @@ class PreCotizacion6 extends Model
     *
     * @var array
     */
-    protected $fillable = ['precotizacion6_tiempo', 'precotizacion6_valor'];
+    protected $fillable = [
+        'precotizacion6_tiempo', 'precotizacion6_valor'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['precotizacion6_areap', 'precotizacion6_nombre'];
+    protected $nullable = [
+        'precotizacion6_areap', 'precotizacion6_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'precotizacion6_horas' => 'required|min:0|max:9999|numeric',
             'precotizacion6_minutos' => 'required|min:0|max:59|numeric',
@@ -45,8 +48,7 @@ class PreCotizacion6 extends Model
         return false;
     }
 
-    public static function getPreCotizaciones6($precotizacion2 = null)
-    {
+    public static function getPreCotizaciones6($precotizacion2 = null) {
         $query = PreCotizacion6::query();
         $query->select('koi_precotizacion6.*', DB::raw("SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1) as precotizacion6_horas, SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) as precotizacion6_minutos"), 'areap_nombre');
         $query->leftJoin('koi_areap', 'precotizacion6_areap', '=', 'koi_areap.id');

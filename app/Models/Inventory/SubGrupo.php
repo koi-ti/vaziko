@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class SubGrupo extends Model
@@ -29,17 +28,18 @@ class SubGrupo extends Model
      *
      * @var array
      */
-    protected $fillable = ['subgrupo_nombre'];
+    protected $fillable = [
+        'subgrupo_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'subgrupo_nombre' => 'required|max:50|unique:koi_subgrupo'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['subgrupo_nombre'] .= ',subgrupo_nombre,' . $this->id;
-        }else{
+        } else {
             $rules['subgrupo_nombre'] .= '|required';
         }
 
@@ -51,13 +51,12 @@ class SubGrupo extends Model
         return false;
     }
 
-    public static function getSubGrupos()
-    {
-        if (Cache::has( self::$key_cache )) {
+    public static function getSubGrupos() {
+        if (Cache::has(self::$key_cache)) {
             return Cache::get( self::$key_cache );
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = SubGrupo::query();
             $query->orderby('subgrupo_nombre', 'asc');
             $collection = $query->lists('subgrupo_nombre', 'id');

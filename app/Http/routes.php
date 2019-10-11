@@ -162,6 +162,7 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\PreCotizacion9Controller', ['only' => ['index', 'store']]);
 			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store']]);
+			Route::resource('transportes', 'Production\PreCotizacion10Controller', ['only' => ['index', 'store']]);
 		});
 		Route::resource('productos', 'Production\PreCotizacion2Controller');
 	});
@@ -182,6 +183,7 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\Cotizacion9Controller', ['only' => ['index', 'store']]);
 			Route::resource('areas', 'Production\Cotizacion6Controller', ['only' => ['index', 'store']]);
+			Route::resource('transportes', 'Production\Cotizacion10Controller', ['only' => ['index', 'store']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
 	});
@@ -205,6 +207,7 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\DetalleEmpaquesController', ['only' => ['index', 'store']]);
 			Route::resource('areas', 'Production\DetalleAreasController', ['only' => ['index', 'store']]);
+			Route::resource('transportes', 'Production\DetalleTransportesController', ['only' => ['index', 'store']]);
 		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 

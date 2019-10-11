@@ -19,7 +19,7 @@ class Notificacion extends Model
     public static function nuevaNotificacion($tercero, $title, $descripcion, $fh) {
         // Recupero instancia de Tercero(Auth::user)
         $tercero = Tercero::find($tercero);
-        if(!$tercero instanceof Tercero) {
+        if (!$tercero instanceof Tercero) {
             return 'No es posible recuperar tercero, verifique información ó por favor consulte al administrador.';
         }
 

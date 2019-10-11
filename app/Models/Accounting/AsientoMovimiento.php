@@ -20,8 +20,7 @@ class AsientoMovimiento extends Model
 
     public $timestamps = false;
 
-    public function store(Asiento2 $asiento2, Array $data)
-    {
+    public function store(Asiento2 $asiento2, Array $data) {
         $response = new \stdClass();
         $response->success = false;
 

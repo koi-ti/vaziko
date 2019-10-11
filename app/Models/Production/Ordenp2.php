@@ -3,7 +3,7 @@
 namespace App\Models\Production;
 
 use App\Models\BaseModel;
-use Validator, DB, Auth;
+use Validator, DB;
 
 class Ordenp2 extends BaseModel
 {
@@ -17,21 +17,25 @@ class Ordenp2 extends BaseModel
     public $timestamps = false;
 
     /**
+    * The attributes that are mass assignable.
+    *
+    * @var array
+    */
+    protected $fillable = [
+        'orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp', 'orden2_margen_empaque'
+    ];
+
+    /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['orden2_tiro', 'orden2_retiro', 'orden2_yellow', 'orden2_magenta', 'orden2_cyan', 'orden2_key', 'orden2_color1', 'orden2_color2', 'orden2_yellow2', 'orden2_magenta2', 'orden2_cyan2', 'orden2_key2', 'orden2_color12', 'orden2_color22'];
+    protected $boolean = [
+        'orden2_tiro', 'orden2_retiro', 'orden2_yellow', 'orden2_magenta', 'orden2_cyan', 'orden2_key', 'orden2_color1', 'orden2_color2', 'orden2_yellow2', 'orden2_magenta2', 'orden2_cyan2', 'orden2_key2', 'orden2_color12', 'orden2_color22'
+    ];
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = ['orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp', 'orden2_margen_empaque'];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'orden2_referencia' => 'required|max:200',
             'orden2_cantidad' => 'required|min:1|integer',
@@ -51,19 +55,16 @@ class Ordenp2 extends BaseModel
         return false;
     }
 
-    public static function calcString($mathString)
-    {
+    public static function calcString($mathString) {
    	 	$cf_DoCalc = @create_function("", "return (" . $mathString . ");" );
         return $cf_DoCalc();
     }
 
-    public static function getOrdenesp2($orden)
-    {
+    public static function getOrdenesp2($orden) {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
-
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -107,8 +108,7 @@ class Ordenp2 extends BaseModel
         return $query->get();
     }
 
-    public static function getOrdenp2($ordenp2)
-    {
+    public static function getOrdenp2($ordenp2) {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.*',
             DB::raw("
@@ -156,12 +156,11 @@ class Ordenp2 extends BaseModel
     }
 
     // Index detail
-    public static function getDetails()
-    {
+    public static function getDetails() {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_cliente', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -208,12 +207,11 @@ class Ordenp2 extends BaseModel
     }
 
     // Search detail
-    public static function getDetail($id)
-    {
+    public static function getDetail($id) {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
-            ( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario') ),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total') ),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN

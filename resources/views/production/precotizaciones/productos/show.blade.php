@@ -462,6 +462,53 @@
 						</table>
 					</div>
 				</div>
+
+				<div class="box box-success">
+					<div class="box-header with-border">
+			            <h3 class="box-title">Transportes de producción</h3>
+			        </div>
+					<div class="box-body table-responsive no-padding">
+						<table id="browse-precotizacion-producto-transportes-list" class="table table-bordered" cellspacing="0" width="100%">
+							<thead>
+								<tr>
+									<th width="25%">Transporte</th>
+									<th width="25%">Insumo</th>
+									<th width="10%">Medidas</th>
+									<th width="10%">Cantidad</th>
+									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										<th width="15%">Valor unidad</th>
+										<th width="15%">Valor</th>
+									@endif
+								</tr>
+							</thead>
+							<tbody>
+								{{--*/ $total = 0; /*--}}
+								@foreach( App\Models\Production\PreCotizacion10::getPreCotizaciones10( $precotizacion2->id ) as $materialp )
+									<tr>
+										<td>{{ isset($materialp->transporte_nombre) ? $materialp->transporte_nombre : '-' }}</td>
+										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
+										<td>{{ $materialp->precotizacion10_medidas }}</td>
+										<td>{{ $materialp->precotizacion10_cantidad }}</td>
+										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+											<td class="text-right">{{ number_format($materialp->precotizacion10_valor_unitario, 2, ',', '.') }}</td>
+											<td class="text-right">{{ number_format($materialp->precotizacion10_valor_total, 2, ',', '.') }}</td>
+										@endif
+									</tr>
+									{{--*/ $total += $materialp->precotizacion10_valor_total; /*--}}
+								@endforeach
+							</tbody>
+							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+								<tfoot>
+									<tr>
+										<td colspan="4"></td>
+										<th class="text-right">Total</th>
+										<th class="text-right" id="total">{{ number_format($total, 2, ',', '.') }}</th>
+									</tr>
+								</tfoot>
+							@endif
+						</table>
+					</div>
+				</div>
 			</div>
 		</div>
 	</section>

@@ -21,17 +21,20 @@ class Ordenp6 extends Model
     *
     * @var array
     */
-    protected $fillable = ['orden6_tiempo', 'orden6_valor'];
+    protected $fillable = [
+        'orden6_tiempo', 'orden6_valor'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['orden6_areap', 'orden6_nombre'];
+    protected $nullable = [
+        'orden6_areap', 'orden6_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'orden6_horas' => 'required|min:0|max:9999|numeric',
             'orden6_minutos' => 'required|min:0|max:59|numeric',
@@ -46,8 +49,7 @@ class Ordenp6 extends Model
         return false;
     }
 
-    public static function getOrdenesp6($ordenp2 = null)
-    {
+    public static function getOrdenesp6($ordenp2 = null) {
         $query = Ordenp6::query();
         $query->select('koi_ordenproduccion6.*', DB::raw("SUBSTRING_INDEX(orden6_tiempo, ':', 1) as orden6_horas, SUBSTRING_INDEX(orden6_tiempo, ':', -1) as orden6_minutos"), 'areap_nombre');
         $query->leftJoin('koi_areap', 'orden6_areap', '=', 'koi_areap.id');

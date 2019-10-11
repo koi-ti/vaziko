@@ -2,8 +2,6 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\BaseModel;
 use Validator, Cache;
 
@@ -30,17 +28,20 @@ class TipoProductop extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['tipoproductop_nombre'];
+    protected $fillable = [
+        'tipoproductop_nombre'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['tipoproductop_activo'];
+    protected $boolean = [
+        'tipoproductop_activo'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'tipoproductop_nombre' => 'required|max:35',
         ];
@@ -53,13 +54,12 @@ class TipoProductop extends BaseModel
         return false;
     }
 
-    public static function getTypeProductsp()
-    {
-        if (Cache::has( self::$key_cache )) {
-            return Cache::get( self::$key_cache );
+    public static function getTypeProductsp() {
+        if (Cache::has(self::$key_cache)) {
+            return Cache::get(self::$key_cache);
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function () {
             $query = TipoProductop::query();
             $query->orderBy('tipoproductop_nombre', 'asc');
             $query->where('tipoproductop_activo', true);

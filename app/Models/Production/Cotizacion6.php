@@ -21,17 +21,20 @@ class Cotizacion6 extends Model
     *
     * @var array
     */
-    protected $fillable = ['cotizacion6_tiempo', 'cotizacion6_valor'];
+    protected $fillable = [
+        'cotizacion6_tiempo', 'cotizacion6_valor'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['cotizacion6_areap', 'cotizacion6_nombre'];
+    protected $nullable = [
+        'cotizacion6_areap', 'cotizacion6_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'cotizacion6_horas' => 'required|min:0|max:9999|numeric',
             'cotizacion6_minutos' => 'required|min:0|max:59|numeric',
@@ -45,8 +48,7 @@ class Cotizacion6 extends Model
         return false;
     }
 
-    public static function getCotizaciones6($cotizacion2 = null)
-    {
+    public static function getCotizaciones6($cotizacion2 = null) {
         $query = Cotizacion6::query();
         $query->select('koi_cotizacion6.*', DB::raw("SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) as cotizacion6_horas, SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1) as cotizacion6_minutos"), 'areap_nombre');
         $query->leftJoin('koi_areap', 'cotizacion6_areap', '=', 'koi_areap.id');

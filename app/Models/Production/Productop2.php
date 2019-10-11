@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator;
 
 class Productop2 extends Model
@@ -22,10 +21,11 @@ class Productop2 extends Model
      *
      * @var array
      */
-    protected $fillable = ['productop2_tip'];
+    protected $fillable = [
+        'productop2_tip'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'productop2_productop' => 'required|integer',
             'productop2_tip' => 'required'
@@ -39,8 +39,7 @@ class Productop2 extends Model
         return false;
     }
 
-    public function setProductop2TipAttribute($tip)
-    {
+    public function setProductop2TipAttribute($tip) {
         $this->attributes['productop2_tip'] = strtoupper($tip);
     }
 }

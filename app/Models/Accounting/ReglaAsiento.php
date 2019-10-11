@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Receivable\Factura1;
 use App\Models\Base\Tercero;
 use Validator, DB;
+
 class ReglaAsiento extends Model
 {
     /**
@@ -17,8 +18,7 @@ class ReglaAsiento extends Model
 
     public $timestamps = false;
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'factura_numero' => 'required|numeric'
         ];
@@ -30,8 +30,8 @@ class ReglaAsiento extends Model
         $this->errors = $validator->errors();
         return false;
     }
-    public static function createAsiento($document, $codigo, $beneficiario, $anular=false)
-    {
+
+    public static function createAsiento($document, $codigo, $beneficiario, $anular=false) {
         $object = new \stdClass();
         $object->data = [];
         $object->dataNif = [];
@@ -44,14 +44,14 @@ class ReglaAsiento extends Model
 
         // Recuperar documento
         $documento = Documento::where('documento_codigo', $codigo)->first();
-        if(!$documento instanceof Documento){
+        if (!$documento instanceof Documento) {
             $object->error = "No es posible recuperar el prefijo $codigo en los documentos contables.";
             return $object;
         }
 
         // Recuperar tercero
         $tercero = Tercero::find($beneficiario);
-        if(!$tercero instanceof Tercero){
+        if (!$tercero instanceof Tercero) {
             $object->error = "No es posible recuperar el tercero.";
             return $object;
         }
@@ -64,7 +64,7 @@ class ReglaAsiento extends Model
             // Factura de venta
             case 'FS':
                 $factura = Factura1::find($document);
-                if(!$factura instanceof Factura1){
+                if (!$factura instanceof Factura1) {
                     $object->error = "No es posible recuperar $documento->documento_nombre.";
                     return $object;
                 }

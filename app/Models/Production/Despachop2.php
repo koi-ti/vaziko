@@ -3,7 +3,6 @@
 namespace App\Models\Production;
 
 use Illuminate\Database\Eloquent\Model;
-
 use DB;
 
 class Despachop2 extends Model
@@ -17,8 +16,7 @@ class Despachop2 extends Model
 
     public $timestamps = false;
 
-    public static function getDespacho2($despacho)
-    {
+    public static function getDespacho2($despacho) {
         $query = Despachop2::query();
         $query->select('koi_despachop2.*',
         	DB::raw("

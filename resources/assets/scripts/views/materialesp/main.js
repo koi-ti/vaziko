@@ -35,7 +35,8 @@ app || (app = {});
                     { data: 'id', name: 'id' },
                     { data: 'materialp_nombre', name: 'materialp_nombre' },
                     { data: 'tipomaterial_nombre', name: 'koi_tipomaterial.tipomaterial_nombre' },
-                    { data: 'materialp_empaque', name: 'materialp_empaque' }
+                    { data: 'materialp_empaque', name: 'materialp_empaque' },
+                    { data: 'materialp_transporte', name: 'materialp_transporte' }
                 ],
 				buttons: [
 					{
@@ -55,7 +56,7 @@ app || (app = {});
                         }
                     },
                     {
-                        targets: 3,
+                        targets: [3, 4],
                         width: '10%',
                         render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';

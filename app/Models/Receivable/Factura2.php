@@ -16,7 +16,7 @@ class Factura2 extends Model
 
     public $timestamps = false;
 
-    public static function getFactura2($factura){
+    public static function getFactura2($factura) {
        	$query = Factura2::query();
         $query->select('koi_factura2.*', 'koi_ordenproduccion2.id as orden2_id', 'orden2_total_valor_unitario', DB::raw("
             CASE

@@ -21,17 +21,20 @@ class Ordenp4 extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['orden4_medidas', 'orden4_cantidad', 'orden4_valor_unitario', 'orden4_valor_total'];
+    protected $fillable = [
+        'orden4_medidas', 'orden4_cantidad', 'orden4_valor_unitario', 'orden4_valor_total'
+    ];
 
     /**
      * The attributes that are mass nullable.
      *
      * @var array
      */
-    protected $nullable = ['orden4_producto'];
+    protected $nullable = [
+        'orden4_producto'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'orden4_materialp' => 'required',
             'orden4_producto' => 'required',
@@ -47,8 +50,7 @@ class Ordenp4 extends BaseModel
         return false;
     }
 
-    public static function getOrdenesp4($ordenp2 = null)
-    {
+    public static function getOrdenesp4($ordenp2 = null) {
         $query = self::query();
         $query->select('koi_ordenproduccion4.*', 'materialp_nombre', 'producto_nombre');
         $query->join('koi_materialp', 'orden4_materialp', '=', 'koi_materialp.id');
@@ -61,8 +63,7 @@ class Ordenp4 extends BaseModel
     /**
     *  Select materiales dependiendo del productop
     **/
-    public static function getMaterials($productop = null)
-    {
+    public static function getMaterials($productop = null) {
         $query = Productop5::query();
         $query->select('koi_materialp.id as id', 'materialp_nombre');
         $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');

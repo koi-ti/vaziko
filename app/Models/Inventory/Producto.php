@@ -2,8 +2,6 @@
 
 namespace App\Models\Inventory;
 
-use Illuminate\Database\Eloquent\Model;
-
 use App\Models\BaseModel;
 use DB, Validator;
 
@@ -23,24 +21,29 @@ class Producto extends BaseModel
      *
      * @var array
      */
-    protected $fillable = ['producto_codigoori', 'producto_nombre', 'producto_vidautil', 'producto_ancho', 'producto_largo'];
+    protected $fillable = [
+        'producto_codigoori', 'producto_nombre', 'producto_vidautil', 'producto_ancho', 'producto_largo'
+    ];
 
     /**
      * The attributes that are mass boolean assignable.
      *
      * @var array
      */
-    protected $boolean = ['producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque'];
+    protected $boolean = [
+        'producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque', 'producto_transporte'
+    ];
 
     /**
      * The attributes that are mass nullable fields to null.
      *
      * @var array
      */
-    protected $nullable = ['producto_unidadmedida', 'producto_vidautil', 'producto_materialp'];
+    protected $nullable = [
+        'producto_unidadmedida', 'producto_vidautil', 'producto_materialp'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'producto_codigoori' => 'required|max:200|min:1',
             'producto_nombre' => 'required|max:200',
@@ -62,8 +65,7 @@ class Producto extends BaseModel
         return false;
     }
 
-    public static function getProduct($id)
-    {
+    public static function getProduct($id) {
         $query = Producto::query();
         $query->select('koi_producto.*', 'referencia.id as referencia_id', 'referencia.producto_codigo as referencia_codigo', 'materialp_nombre', 'grupo_nombre', 'subgrupo_nombre', 'unidadmedida_sigla', 'unidadmedida_nombre');
         $query->join('koi_producto as referencia', 'koi_producto.producto_referencia', '=', 'referencia.id');
@@ -75,8 +77,7 @@ class Producto extends BaseModel
         return $query->first();
     }
 
-    public function serie($serie)
-    {
+    public function serie($serie) {
         $producto = Producto::where('producto_nombre', $serie)->first();
         if ($producto instanceof Producto) {
             return "Ya existe un producto con este número de serie {$producto->producto_codigo}, por favor verifique la información del asiento o consulte al administrador.";
@@ -94,8 +95,7 @@ class Producto extends BaseModel
         return $producto;
     }
 
-    public function costopromedio($costo = 0, $cantidad = 0, $update = true)
-    {
+    public function costopromedio($costo = 0, $cantidad = 0, $update = true) {
         $suma = DB::table('koi_prodbode')->where('prodbode_producto', $this->id)->sum('prodbode_cantidad');
 
         $totalp1 = $suma * $this->producto_costo;
@@ -111,8 +111,7 @@ class Producto extends BaseModel
         return $costopromedio;
     }
 
-    public function available ()
-    {
+    public function available () {
         if ($this->producto_metrado) {
             return $this->hasMany('App\Models\Inventory\ProdbodeRollo', 'prodboderollo_producto', 'id')
                 ->select('koi_prodboderollo.*', DB::raw('SUM(prodboderollo_saldo) AS disponible'), 'sucursal_nombre', 'koi_sucursal.id as sucursal')

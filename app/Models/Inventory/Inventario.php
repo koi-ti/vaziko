@@ -4,7 +4,6 @@ namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Base\Sucursal;
-use Auth;
 
 class Inventario extends Model
 {
@@ -32,7 +31,6 @@ class Inventario extends Model
                 ($uentrada > 0) ? $inventario->inventario_unidad_saldo -= $uentrada : '';
                 $inventario->save();
             }
-
         } else {
             $inventario = new Inventario;
             $inventario->inventario_producto = $producto->id;
@@ -43,7 +41,7 @@ class Inventario extends Model
             $inventario->inventario_unidad_salida = $usalida;
             $inventario->inventario_costo = $costo;
             $inventario->inventario_costo_promedio = $costopromedio;
-            $inventario->inventario_usuario_elaboro = Auth::user()->id;
+            $inventario->inventario_usuario_elaboro = auth()->user()->id;
             $inventario->inventario_fecha_elaboro = date('Y-m-d H:i:s');
             $inventario->save();
         }

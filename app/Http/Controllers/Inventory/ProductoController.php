@@ -65,6 +65,10 @@ class ProductoController extends Controller
                 if ($request->reference == 'empaque') {
                     $query->where('producto_empaque', true);
                 }
+
+                if ($request->reference == 'transporte') {
+                    $query->where('producto_transporte', true);
+                }
             }
             return response()->json($query->get());
 

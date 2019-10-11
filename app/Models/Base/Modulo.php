@@ -15,8 +15,7 @@ class Modulo extends Model
 
     public $timestamps = false;
 
-    public static function getModules()
-    {
+    public static function getModules() {
     	$query = Modulo::query();
         $query->select('koi_modulo.id', 'display_name', 'nivel1');
         $query->where('nivel1', '!=', '0');

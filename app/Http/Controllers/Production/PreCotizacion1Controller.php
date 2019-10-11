@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9;
+use App\Models\Production\PreCotizacion1, App\Models\Production\PreCotizacion2, App\Models\Production\PreCotizacion3, App\Models\Production\PreCotizacion4, App\Models\Production\PreCotizacion6, App\Models\Production\PreCotizacion7, App\Models\Production\PreCotizacion8, App\Models\Production\PreCotizacion9, App\Models\Production\PreCotizacion10, App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10;
 use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
-use App, Auth, DB, Log, Datatables, Storage, Carbon\Carbon;
+use App, DB, Log, Datatables, Storage, Carbon\Carbon;
 
 class PreCotizacion1Controller extends Controller
 {
@@ -55,14 +55,14 @@ class PreCotizacion1Controller extends Controller
             }
 
             // Permisions mostrar botones crear [close, open]
-            if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ) {
+            if( auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']) ) {
                 $query->addSelect(DB::raw('TRUE as precotizacion_create'));
             } else {
                 $query->addSelect(DB::raw('FALSE as precotizacion_create'));
             }
 
             // Permisions mostrar botones opcional2 [complete, clone]
-            if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) ) {
+            if( auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) ) {
                 $query->addSelect(DB::raw('TRUE as precotizacion_opcional'));
             } else {
                 $query->addSelect(DB::raw('FALSE as precotizacion_opcional'));
@@ -184,13 +184,13 @@ class PreCotizacion1Controller extends Controller
                     $precotizacion->precotizacion1_contacto = $contacto->id;
                     $precotizacion->precotizacion1_abierta = true;
                     $precotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:i:s');
-                    $precotizacion->precotizacion1_usuario_elaboro = Auth::user()->id;
+                    $precotizacion->precotizacion1_usuario_elaboro = auth()->user()->id;
                     $precotizacion->save();
 
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $precotizacion->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -218,7 +218,7 @@ class PreCotizacion1Controller extends Controller
             return response()->json($precotizacion);
         }
 
-        if ($precotizacion->precotizacion1_abierta == true && Auth::user()->ability('admin', ['crear', 'edit'], ['module' => 'precotizaciones'])) {
+        if ($precotizacion->precotizacion1_abierta == true && auth()->user()->ability('admin', ['crear', 'edit'], ['module' => 'precotizaciones'])) {
             return redirect()->route('precotizaciones.edit', ['precotizacion' => $precotizacion]);
         }
 
@@ -295,7 +295,7 @@ class PreCotizacion1Controller extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $precotizacion->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -343,7 +343,7 @@ class PreCotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Pre-cotización reabierta con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -378,7 +378,7 @@ class PreCotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Pre-cotización cerrada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -407,13 +407,13 @@ class PreCotizacion1Controller extends Controller
                 $precotizacion->precotizacion1_abierta = false;
                 $precotizacion->precotizacion1_culminada = true;
                 $precotizacion->precotizacion1_fh_culminada = date('Y-m-d H:i:s');
-                $precotizacion->precotizacion1_usuario_culminada = Auth::user()->id;
+                $precotizacion->precotizacion1_usuario_culminada = auth()->user()->id;
                 $precotizacion->save();
 
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Se culmino con exito la pre-cotización.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -459,7 +459,7 @@ class PreCotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_abierta = true;
                 $cotizacion->cotizacion1_suministran = $precotizacion->precotizacion1_suministran;
                 $cotizacion->cotizacion1_observaciones = $precotizacion->precotizacion1_observaciones;
-                $cotizacion->cotizacion1_usuario_elaboro = Auth::user()->id;
+                $cotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
                 $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                 $cotizacion->save();
 
@@ -497,6 +497,7 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2->cotizacion2_3d_profundidad = $precotizacion2->precotizacion2_3d_profundidad;
                     $cotizacion2->cotizacion2_margen_materialp = 30;
                     $cotizacion2->cotizacion2_margen_empaque = 30;
+                    $cotizacion2->cotizacion2_margen_transporte = 30;
                     $cotizacion2->cotizacion2_usuario_elaboro = $cotizacion->cotizacion1_usuario_elaboro;
                     $cotizacion2->cotizacion2_fecha_elaboro = $cotizacion->cotizacion1_fecha_elaboro;
                     $cotizacion2->save();
@@ -526,7 +527,7 @@ class PreCotizacion1Controller extends Controller
                         $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
                         $cotizacion8->cotizacion8_archivo = $precotizacion4->precotizacion4_archivo;
                         $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
-                        $cotizacion8->cotizacion8_usuario_elaboro = Auth::user()->id;
+                        $cotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
                         $cotizacion8->save();
 
                         // Recuperar imagen y copiar
@@ -541,7 +542,7 @@ class PreCotizacion1Controller extends Controller
                     }
 
                     // Recuperar Materiales de pre-cotizacion para generar cotizacion
-                    $totalmaterialesp = $totalempaques = $totalareasp = 0;
+                    $totalmaterialesp  = $totalareasp = $totalempaques = $totaltransportes = 0;
                     $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $precotizacion2->id)->get();
                     foreach ($materiales as $precotizacion3) {
                          $cotizacion4 = new Cotizacion4;
@@ -553,28 +554,10 @@ class PreCotizacion1Controller extends Controller
                          $cotizacion4->cotizacion4_valor_unitario = $precotizacion3->precotizacion3_valor_unitario;
                          $cotizacion4->cotizacion4_valor_total = $precotizacion3->precotizacion3_valor_total;
                          $cotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
-                         $cotizacion4->cotizacion4_usuario_elaboro = Auth::user()->id;
+                         $cotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                          $cotizacion4->save();
 
                          $totalmaterialesp += $precotizacion3->precotizacion3_valor_total;
-                    }
-
-                    // Recuperar Empaques de pre-cotizacion para generar cotizacion
-                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($empaques as $precotizacion9) {
-                         $cotizacion9 = new Cotizacion9;
-                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
-                         $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
-                         $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
-                         $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
-                         $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;
-                         $cotizacion9->cotizacion9_valor_unitario = $precotizacion9->precotizacion9_valor_unitario;
-                         $cotizacion9->cotizacion9_valor_total = $precotizacion9->precotizacion9_valor_total;
-                         $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
-                         $cotizacion9->cotizacion9_usuario_elaboro = Auth::user()->id;
-                         $cotizacion9->save();
-
-                         $totalempaques += $precotizacion9->precotizacion9_valor_total;
                     }
 
                     // Recuperar Areasp de cotizacion para generar precotizacion
@@ -592,11 +575,48 @@ class PreCotizacion1Controller extends Controller
                          $totalareasp += $precotizacion6->total_areap;
                     }
 
+                    // Recuperar Empaques de pre-cotizacion para generar cotizacion
+                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($empaques as $precotizacion9) {
+                         $cotizacion9 = new Cotizacion9;
+                         $cotizacion9->cotizacion9_cotizacion2 = $cotizacion2->id;
+                         $cotizacion9->cotizacion9_materialp = $precotizacion9->precotizacion9_materialp;
+                         $cotizacion9->cotizacion9_producto = $precotizacion9->precotizacion9_producto;
+                         $cotizacion9->cotizacion9_medidas = $precotizacion9->precotizacion9_medidas;
+                         $cotizacion9->cotizacion9_cantidad = $precotizacion9->precotizacion9_cantidad;
+                         $cotizacion9->cotizacion9_valor_unitario = $precotizacion9->precotizacion9_valor_unitario;
+                         $cotizacion9->cotizacion9_valor_total = $precotizacion9->precotizacion9_valor_total;
+                         $cotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
+                         $cotizacion9->cotizacion9_usuario_elaboro = auth()->user()->id;
+                         $cotizacion9->save();
+
+                         $totalempaques += $precotizacion9->precotizacion9_valor_total;
+                    }
+
+                    // Recuperar Transportes de pre-cotizacion para generar cotizacion
+                    $transportes = PreCotizacion10::where('precotizacion10_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($transportes as $precotizacion10) {
+                         $cotizacion10 = new Cotizacion10;
+                         $cotizacion10->cotizacion10_cotizacion2 = $cotizacion2->id;
+                         $cotizacion10->cotizacion10_materialp = $precotizacion10->precotizacion10_materialp;
+                         $cotizacion10->cotizacion10_producto = $precotizacion10->precotizacion10_producto;
+                         $cotizacion10->cotizacion10_medidas = $precotizacion10->precotizacion10_medidas;
+                         $cotizacion10->cotizacion10_cantidad = $precotizacion10->precotizacion10_cantidad;
+                         $cotizacion10->cotizacion10_valor_unitario = $precotizacion10->precotizacion10_valor_unitario;
+                         $cotizacion10->cotizacion10_valor_total = $precotizacion10->precotizacion10_valor_total;
+                         $cotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                         $cotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
+                         $cotizacion10->save();
+
+                         $totaltransportes += $precotizacion10->precotizacion10_valor_total;
+                    }
+
                     // Actualizar precio en cotizacion2;
                     $materiales = round(($totalmaterialesp/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
                     $empaques = round(($totalempaques/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
                     $areasp = round($totalareasp/$precotizacion2->precotizacion2_cantidad);
-                    $subtotal = $materiales + $empaques + $areasp;
+                    $transportes = round(($totaltransportes/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
+                    $subtotal = $materiales  + $areasp + $empaques + $transportes;
 
                     $comision = ($subtotal/((100-0)/100)) * (1-(((100-0)/100)));
                     $total = round($subtotal+$comision);
@@ -612,7 +632,7 @@ class PreCotizacion1Controller extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Se genero con exito la cotizacion', 'cotizacion_id' => $cotizacion->id]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -650,7 +670,7 @@ class PreCotizacion1Controller extends Controller
                 $newprecotizacion->precotizacion1_usuario_culminada = NULL;
                 $newprecotizacion->precotizacion1_ano = date('Y');
                 $newprecotizacion->precotizacion1_numero = $numero;
-                $newprecotizacion->precotizacion1_usuario_elaboro = Auth::user()->id;
+                $newprecotizacion->precotizacion1_usuario_elaboro = auth()->user()->id;
                 $newprecotizacion->precotizacion1_fh_elaboro = date('Y-m-d H:i:s');
                 $newprecotizacion->save();
 
@@ -682,7 +702,7 @@ class PreCotizacion1Controller extends Controller
                     foreach ($imagenes as $precotizacion4) {
                         $newprecotizacion4 = $precotizacion4->replicate();
                         $newprecotizacion4->precotizacion4_precotizacion2 = $newprecotizacion2->id;
-                        $newprecotizacion4->precotizacion4_usuario_elaboro = Auth::user()->id;
+                        $newprecotizacion4->precotizacion4_usuario_elaboro = auth()->user()->id;
                         $newprecotizacion4->precotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $newprecotizacion4->save();
 
@@ -703,18 +723,8 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion3 = $precotizacion3->replicate();
                          $newprecotizacion3->precotizacion3_precotizacion2 = $newprecotizacion2->id;
                          $newprecotizacion3->precotizacion3_fh_elaboro = date('Y-m-d H:i:s');
-                         $newprecotizacion3->precotizacion3_usuario_elaboro = Auth::user()->id;
+                         $newprecotizacion3->precotizacion3_usuario_elaboro = auth()->user()->id;
                          $newprecotizacion3->save();
-                    }
-
-                    // Empaques
-                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
-                    foreach ($empaques as $precotizacion9) {
-                         $newprecotizacion9 = $precotizacion9->replicate();
-                         $newprecotizacion9->precotizacion9_precotizacion2 = $newprecotizacion2->id;
-                         $newprecotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
-                         $newprecotizacion9->precotizacion9_usuario_elaboro = Auth::user()->id;
-                         $newprecotizacion9->save();
                     }
 
                     // Areasp
@@ -725,11 +735,31 @@ class PreCotizacion1Controller extends Controller
                          $newprecotizacion6->save();
                     }
 
+                    // Empaques
+                    $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($empaques as $precotizacion9) {
+                         $newprecotizacion9 = $precotizacion9->replicate();
+                         $newprecotizacion9->precotizacion9_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion9->precotizacion9_fh_elaboro = date('Y-m-d H:i:s');
+                         $newprecotizacion9->precotizacion9_usuario_elaboro = auth()->user()->id;
+                         $newprecotizacion9->save();
+                    }
+
+                    // Transportes
+                    $transportes = PreCotizacion10::where('precotizacion10_precotizacion2', $precotizacion2->id)->get();
+                    foreach ($transportes as $precotizacion10) {
+                         $newprecotizacion10 = $precotizacion10->replicate();
+                         $newprecotizacion10->precotizacion10_precotizacion2 = $newprecotizacion2->id;
+                         $newprecotizacion10->precotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                         $newprecotizacion10->precotizacion10_usuario_elaboro = auth()->user()->id;
+                         $newprecotizacion10->save();
+                    }
                 }
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $newprecotizacion->id, 'msg' => 'Pre-cotización clonada con exito.']);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);

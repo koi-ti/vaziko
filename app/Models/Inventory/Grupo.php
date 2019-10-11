@@ -3,7 +3,6 @@
 namespace App\Models\Inventory;
 
 use Illuminate\Database\Eloquent\Model;
-
 use Validator, Cache;
 
 class Grupo extends Model
@@ -29,20 +28,20 @@ class Grupo extends Model
      *
      * @var array
      */
-    protected $fillable = ['grupo_nombre'];
+    protected $fillable = [
+        'grupo_nombre'
+    ];
 
-    public function isValid($data)
-    {
+    public function isValid($data) {
         $rules = [
             'grupo_nombre' => 'required|max:50|unique:koi_grupo'
         ];
 
-        if ($this->exists){
+        if ($this->exists) {
             $rules['grupo_nombre'] .= ',grupo_nombre,' . $this->id;
-        }else{
+        } else {
             $rules['grupo_nombre'] .= '|required';
         }
-
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
@@ -52,13 +51,12 @@ class Grupo extends Model
         return false;
     }
 
-    public static function getGrupos()
-    {
-        if (Cache::has( self::$key_cache )) {
+    public static function getGrupos() {
+        if (Cache::has(self::$key_cache)) {
             return Cache::get( self::$key_cache );
         }
 
-        return Cache::rememberForever( self::$key_cache , function() {
+        return Cache::rememberForever(self::$key_cache, function() {
             $query = Grupo::query();
             $query->orderby('grupo_nombre', 'asc');
             $collection = $query->lists('grupo_nombre', 'id');
