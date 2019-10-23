@@ -12,7 +12,7 @@ app || (app = {});
     app.CreateOrdenp2View = Backbone.View.extend({
 
         el: '#create-ordenp-producto',
-        template: _.template( ($('#add-orden-producto-tpl').html() || '') ),
+        template: _.template(($('#add-orden-producto-tpl').html() || '')),
         events: {
             'click .submit-ordenp2': 'submitForm',
             'submit #form-orden-producto': 'onStore',
@@ -36,9 +36,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // reference collections
@@ -60,10 +60,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.model.get('id') ? 1 : 0;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             // reference forms
             this.$form = this.$('#form-orden-producto');
@@ -95,17 +95,21 @@ app || (app = {});
             this.$inputround = this.$('#orden2_round');
             this.$inputvolumen = this.$('#orden2_volumen');
             this.$inputmargenmaterialp = this.$('#orden2_margen_materialp');
+            this.$inputmargenareap = this.$('#orden2_margen_areap');
             this.$inputmargenempaque = this.$('#orden2_margen_empaque');
+            this.$inputmargentransporte = this.$('#orden2_margen_transporte');
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
             this.$infoviaticos = this.$('#info-viaticos');
-            this.$infotransporte = this.$('#info-transporte');
             this.$infoprevmateriales = this.$('#info-prev-materiales');
             this.$infomateriales = this.$('#info-materiales');
+            this.$infoprevareasp = this.$('#info-prev-areasp');
+            this.$infoareasp = this.$('#info-areasp');
             this.$infoprevempaques = this.$('#info-prev-empaques');
             this.$infoempaques = this.$('#info-empaques');
-            this.$infoareas = this.$('#info-areas');
+            this.$infoprevtransportes = this.$('#info-prev-transportes');
+            this.$infotransportes = this.$('#info-transportes');
             this.$infosubtotal = this.$('#info-subtotal');
             this.$infocomision = this.$('#info-comision');
             this.$infototal = this.$('#info-total');
@@ -127,13 +131,13 @@ app || (app = {});
             var dataFilter = { productop: this.parameters.data.orden2_productop };
 
             // Model exist
-            if( this.model.id != undefined ) {
+            if (this.model.id != undefined) {
                 dataFilter.orden2 = this.model.get('id');
                 dataFilter.productop = this.model.get('orden2_productop');
             }
 
             // Materiales
-            this.materialesProductopOrdenListView = new app.MaterialesProductopOrdenListView( {
+            this.materialesProductopOrdenListView = new app.MaterialesProductopOrdenListView({
                 collection: this.materialesProductopOrdenList,
                 model: this.model,
                 parameters: {
@@ -144,7 +148,7 @@ app || (app = {});
             });
 
             // Empaques
-            this.empaquesProductopOrdenListView = new app.EmpaquesProductopOrdenListView( {
+            this.empaquesProductopOrdenListView = new app.EmpaquesProductopOrdenListView({
                 collection: this.empaquesProductopOrdenList,
                 model: this.model,
                 parameters: {
@@ -155,7 +159,7 @@ app || (app = {});
             });
 
             // Areas
-            this.areasProductopOrdenListView = new app.AreasProductopOrdenListView( {
+            this.areasProductopOrdenListView = new app.AreasProductopOrdenListView({
                 collection: this.areasProductopOrdenList,
                 model: this.model,
                 parameters: {
@@ -166,7 +170,7 @@ app || (app = {});
             });
 
             // Transportes
-            this.transportesProductopOrdenListView = new app.TransportesProductopOrdenListView( {
+            this.transportesProductopOrdenListView = new app.TransportesProductopOrdenListView({
                 collection: this.transportesProductopOrdenList,
                 model: this.model,
                 parameters: {
@@ -207,7 +211,7 @@ app || (app = {});
                 valor  = '';
 
              for (var i = 0; i <= string.length - 1; i++) {
-                if( reg.test( string.charAt(i) ) ){
+                if (reg.test(string.charAt(i))) {
                     valor += string.charAt(i);
                 }
             }
@@ -235,10 +239,12 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                if( this.model.id != undefined ){
-                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                if (this.model.id != undefined) {
+                    var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                         data.orden2_margen_materialp = this.$inputmargenmaterialp.val();
+                        data.orden2_margen_areap = this.$inputmargenareap.val();
                         data.orden2_margen_empaque = this.$inputmargenempaque.val();
+                        data.orden2_margen_transporte = this.$inputmargentransporte.val();
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopOrdenList.toJSON();
@@ -248,10 +254,12 @@ app || (app = {});
 
                     this.model.save(data, {silent: true});
 
-                }else{
-                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                } else {
+                    var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                         data.orden2_margen_materialp = this.$inputmargenmaterialp.val();
+                        data.orden2_margen_areap = this.$inputmargenareap.val();
                         data.orden2_margen_empaque = this.$inputmargenempaque.val();
+                        data.orden2_margen_transporte = this.$inputmargentransporte.val();
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopOrdenList);
@@ -261,12 +269,12 @@ app || (app = {});
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
-                    _.each(this.$files, function(file, key){
-                        formData.append('imagenes[]', file.file );
+                    _.each(this.$files, function (file, key) {
+                        formData.append('imagenes[]', file.file);
                     });
 
                     // Recorrer archivos para mandarlos texto plano
-                    _.each(data, function(value, key){
+                    _.each(data, function (value, key) {
                         formData.append(key, value);
                     });
 
@@ -287,7 +295,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.orden4_cantidad = this.$('#orden4_cantidad:disabled').val();
                 this.materialesProductopOrdenList.trigger('store' , data, this.$formmaterialp);
             }
@@ -300,7 +308,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                 this.areasProductopOrdenList.trigger('store' , data, this.$formareap);
             }
         },
@@ -312,7 +320,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.orden9_cantidad = this.$('#orden9_cantidad:disabled').val();
                 this.empaquesProductopOrdenList.trigger('store' , data, this.$formempaque);
             }
@@ -325,7 +333,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.orden10_cantidad = this.$('#orden10_cantidad:disabled').val();
                 this.transportesProductopOrdenList.trigger('store' , data, this.$formtransporte);
             }
@@ -345,13 +353,13 @@ app || (app = {});
             this.$selectedinput = this.$('#' + this.$referenceselected.data('valor'));
             this.$selectedhistorial = this.$('#' + this.$referenceselected.data('historial'));
 
-            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
-                window.Misc.setSpinner( this.$referencewrapper );
-                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp, reference: reference}) ), function (resp){
+            if (typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '') {
+                window.Misc.setSpinner(this.$referencewrapper);
+                $.get(window.Misc.urlFull(Route.route('productos.index', {materialp: materialp, reference: reference})), function (resp) {
                     if (resp.length) {
                         _this.$referenceselected.empty().val(0).removeAttr('disabled');
                         _this.$referenceselected.append("<option value=></option>");
-                        _.each(resp, function(item){
+                        _.each(resp, function (item) {
                             _this.$referenceselected.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
                         });
                     } else {
@@ -359,7 +367,7 @@ app || (app = {});
                         _this.$selectedinput.val(0);
                         _this.$selectedhistorial.empty();
                     }
-                    window.Misc.removeSpinner( _this.$referencewrapper );
+                    window.Misc.removeSpinner(_this.$referencewrapper);
                 });
             } else {
                 this.$referenceselected.empty().val(0).prop('disabled', true);
@@ -384,17 +392,17 @@ app || (app = {});
 
             if (insumo) {
                 if (call == 'orden4') {
-                    url = window.Misc.urlFull( Route.route('ordenes.productos.materiales.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('ordenes.productos.materiales.index', {insumo: insumo}));
                     call = 'materialp';
                 } else {
-                    url = window.Misc.urlFull( Route.route('ordenes.productos.empaques.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('ordenes.productos.empaques.index', {insumo: insumo}));
                     call = 'empaque';
                 }
 
                 $.get(url, function (resp) {
                     if (resp) {
                         _this.$inputinsumo.val(resp.valor);
-                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo") ).attr('data-resource', insumo).attr('data-call', call);
+                        _this.$historialinsumo.empty().append($('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-call', call);
                     }
                 });
             } else {
@@ -411,8 +419,8 @@ app || (app = {});
                 areap = this.$(e.currentTarget).val();
 
             // Reference
-            if( typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '' ){
-                $.get(window.Misc.urlFull( Route.route('areasp.show', {areasp: areap}) ), function (resp){
+            if (typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '') {
+                $.get(window.Misc.urlFull(Route.route('areasp.show', {areasp: areap})), function (resp) {
                     if (resp) {
                         _this.$inputarea.val('').attr('readonly', true);
                         _this.$inputvalor.val(resp.areap_valor);
@@ -435,51 +443,37 @@ app || (app = {});
             var viaticos = Math.round(parseFloat(this.$('#orden2_viaticos').inputmask('unmaskedvalue'))/cantidad);
             var materiales = Math.round(parseFloat(this.materialesProductopOrdenList.totalize().total)/cantidad);
             var prevmateriales = materiales;
+            var areasp = Math.round(parseFloat(this.areasProductopOrdenList.totalize().total)/cantidad);
+            var prevareasp = areasp;
             var empaques = Math.round(parseFloat(this.empaquesProductopOrdenList.totalize().total)/cantidad);
             var prevempaques = empaques;
-            var areas = Math.round(parseFloat(this.areasProductopOrdenList.totalize().total)/cantidad);
+            var transportes = Math.round(parseFloat(this.transportesProductopOrdenList.totalize().total)/cantidad);
+            var prevtransportes = transportes;
             var volumen = parseInt(this.$inputvolumen.val());
 
-            if (this.$inputmargenmaterialp.val() >= 100) {
-                this.$inputmargenmaterialp.val(99);
-            } else if (!this.$inputmargenmaterialp.val()) {
-                this.$inputmargenmaterialp.val(0);
-            }
-
-            if (this.$inputmargenempaque.val() >= 100) {
-                this.$inputmargenempaque.val(99);
-            } else if (!this.$inputmargenempaque.val()) {
-                this.$inputmargenempaque.val(0);
-            }
-
-            // Calcular que no pase de 100% y no se undefinde
-            margenmaterial = this.$inputmargenmaterialp.val();
-            if( margenmaterial > 0 && margenmaterial <= 99 && !_.isUndefined(margenmaterial) && !_.isNaN(margenmaterial) ) {
-                materiales = materiales/((100-margenmaterial)/100);
-            }
-
-            // Calcular que no pase de 100% y no se undefinde
-            margenempaque = this.$inputmargenempaque.val();
-            if( margenempaque > 0 && margenempaque <= 99 && !_.isUndefined(margenempaque) && !_.isNaN(margenempaque) ) {
-                empaques = empaques/((100-margenempaque)/100);
-            }
+            materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
+            areasp = this.maxinput(this.$inputmargenareap, areasp, this.$inputmargenareap.val())
+            empaques = this.maxinput(this.$inputmargenempaque, empaques, this.$inputmargenempaque.val())
+            transportes = this.maxinput(this.$inputmargentransporte, transportes, this.$inputmargentransporte.val())
 
             // Cuadros de informacion
             this.$infoprecio.empty().html(window.Misc.currency(precio));
             this.$infoviaticos.empty().html(window.Misc.currency(viaticos));
-            this.$infotransporte.empty().html(window.Misc.currency(tranporte));
-            this.$infoareas.empty().html(window.Misc.currency(areas));
             this.$infoprevmateriales.empty().html(window.Misc.currency(prevmateriales));
             this.$infomateriales.empty().html(window.Misc.currency(materiales));
+            this.$infoprevareasp.empty().html(window.Misc.currency(prevareasp));
+            this.$infoareasp.empty().html(window.Misc.currency(areasp));
             this.$infoprevempaques.empty().html(window.Misc.currency(prevempaques));
             this.$infoempaques.empty().html(window.Misc.currency(empaques));
+            this.$infoprevtransportes.empty().html(window.Misc.currency(prevtransportes));
+            this.$infotransportes.empty().html(window.Misc.currency(transportes));
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotal = precio + tranporte + viaticos + materiales + empaques + areas;
+            subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
             vcomision = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
             total = subtotal + vcomision;
 
-            round = parseInt( this.$inputround.val() );
+            round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
                 // Calcular round decimales
                 var exp = Math.pow(10, round);
@@ -494,9 +488,28 @@ app || (app = {});
         },
 
         /**
+        * Event calculate max input
+        */
+        maxinput: function (input, value, margen) {
+            if (input.val() >= 100) {
+                input.val(99);
+            } else if (!input.val()) {
+                input.val(0);
+            }
+
+            // Calcular que no pase de 100% y no se undefinde
+            margen = input.val();
+            if (margen > 0 && margen <= 99 && !_.isUndefined(margen) && !_.isNaN(margen)) {
+                value = value/((100-margen)/100);
+            }
+
+            return value;
+        },
+
+        /**
         * UploadPictures
         */
-        uploadPictures: function(e) {
+        uploadPictures: function (e) {
             var _this = this,
                 autoUpload = false;
                 session = {};
@@ -504,9 +517,9 @@ app || (app = {});
                 request = {};
 
             // Model exists
-            if( this.model.id != undefined ){
+            if (this.model.id != undefined) {
                 var session = {
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.productos.imagenes.index') ),
+                    endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
                     params: {
                         orden2: this.model.get('id'),
                     },
@@ -517,7 +530,7 @@ app || (app = {});
                     enabled: true,
                     forceConfirm: true,
                     confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.productos.imagenes.index') ),
+                    endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
                     params: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         orden2: this.model.get('id')
@@ -526,7 +539,7 @@ app || (app = {});
 
                 var request = {
                     inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.productos.imagenes.index') ),
+                    endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
                     params: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         orden2: this.model.get('id')
@@ -557,7 +570,7 @@ app || (app = {});
                 },
                 validation: {
                     itemLimit: 10,
-                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                    sizeLimit: (3 * 1024) * 1024, // 3mb,
                     allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
                 },
                 messages: {
@@ -598,7 +611,7 @@ app || (app = {});
         onSessionRequestComplete: function (id, name, resp) {
             this.$uploaderFile.find('.btn-imprimir').remove();
 
-            _.each( id, function (value, key){
+            _.each(id, function (value, key) {
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                 previewLink.attr("href", value.thumbnailUrl);
             }, this);
@@ -609,22 +622,22 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initTimePicker == 'function' )
+            if (typeof window.initComponent.initTimePicker == 'function')
                 window.initComponent.initTimePicker();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
         },
 
@@ -632,28 +645,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to orden
-                window.Misc.redirect( window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id_orden })) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id_orden })));
             }
         }
     });

@@ -250,7 +250,7 @@
 								<h3 class="box-title">Máquinas de producción</h3>
 							</div>
 							<div class="box-body">
-								@foreach( App\Models\Production\Ordenp3::getOrdenesp3($producto->id, $ordenp2->id) as $maquina)
+								@foreach (App\Models\Production\Ordenp3::getOrdenesp3($producto->id, $ordenp2->id) as $maquina)
 									<div class="row">
 										<div class="form-group col-md-12">
 											<label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_{{ $maquina->id }}">
@@ -270,7 +270,7 @@
 								<h3 class="box-title">Acabados de producción</h3>
 							</div>
 							<div class="box-body">
-								@foreach( App\Models\Production\Ordenp5::getOrdenesp5($producto->id, $ordenp2->id) as $acabado)
+								@foreach (App\Models\Production\Ordenp5::getOrdenesp5($producto->id, $ordenp2->id) as $acabado)
 									<div class="row">
 										<div class="form-group col-md-12">
 											<label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_{{ $acabado->id }}">
@@ -284,7 +284,7 @@
 					</div>
 				</div>
 
-				@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+				@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 					<div class="box box-primary">
 						<div class="box-header with-border">
 							<h3 class="box-title">Fórmulas</h3>
@@ -298,16 +298,6 @@
 								<label class="control-label col-md-1">Precio</label>
 								<div class="form-group col-md-4">
 									<div>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.') }}</div>
-								</div>
-							</div>
-							<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-								<div class="form-group col-md-6">
-									<div>{{ $ordenp2->orden2_transporte_formula }}</div>
-								</div>
-								<label class="control-label col-md-1">Transporte</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($ordenp2->orden2_transporte, 2, ',', '.') }}</div>
 								</div>
 							</div>
 							<div class="row">
@@ -345,7 +335,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -353,13 +343,13 @@
 							</thead>
 							<tbody>
 								{{--*/ $totalmaterialesp = 0; /*--}}
-								@foreach( App\Models\Production\Ordenp4::getOrdenesp4( $ordenp2->id ) as $materialp )
+								@foreach (App\Models\Production\Ordenp4::getOrdenesp4($ordenp2->id) as $materialp)
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->orden4_medidas }}</td>
 										<td>{{ $materialp->orden4_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 											<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -367,7 +357,7 @@
 									{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -392,7 +382,7 @@
 										<th>Área</th>
 										<th>Nombre</th>
 										<th>Horas</th>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 											<th>Valor</th>
 											<th>Total</th>
 										@endif
@@ -400,32 +390,31 @@
 								</thead>
 								<tbody>
 									{{-- variables para calcular las areas --}}
-									{{--*/ $area = $sumareap = $totalareap = 0; /*--}}
-									@foreach( App\Models\Production\Ordenp6::getOrdenesp6($ordenp2->id) as $areap)
+									{{--*/ $area = $totalareasp = 0; /*--}}
+									@foreach (App\Models\Production\Ordenp6::getOrdenesp6($ordenp2->id) as $areap)
 										{{--*/
 											$tiempo = explode(':', $areap->orden6_tiempo);
-											$area = round( ($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor );
-											$sumareap += $area;
-											$totalareap = round( $sumareap / $ordenp2->orden2_cantidad );
+											$area = round (($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor);
+											$totalareasp += $area;
 										/*--}}
 
 										<tr>
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 											<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
 											<td class="text-center">{{  $areap->orden6_tiempo }}</td>
-											@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+											@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 												<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
 												<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
 											@endif
 										</tr>
 									@endforeach
 								</tbody>
-								@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+								@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 									<tfoot>
 										<tr>
 											<td colspan="3"></td>
 											<th class="text-right">Total</th>
-											<th class="text-right">{{ number_format($sumareap, 2, ',', '.') }}</th>
+											<th class="text-right">{{ number_format($totalareasp, 2, ',', '.') }}</th>
 										</tr>
 									</tfoot>
 								@endif
@@ -446,7 +435,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -454,13 +443,13 @@
 							</thead>
 							<tbody>
 								{{--*/ $totalempaques = 0; /*--}}
-								@foreach( App\Models\Production\Ordenp9::getOrdenesp9( $ordenp2->id ) as $empaque )
+								@foreach (App\Models\Production\Ordenp9::getOrdenesp9($ordenp2->id) as $empaque)
 									<tr>
 										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
 										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
 										<td>{{ $empaque->orden9_medidas }}</td>
 										<td>{{ $empaque->orden9_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 											<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -468,7 +457,7 @@
 									{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -493,7 +482,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -501,13 +490,13 @@
 							</thead>
 							<tbody>
 								{{--*/ $totaltransportes = 0; /*--}}
-								@foreach( App\Models\Production\Ordenp10::getOrdenesp10( $ordenp2->id ) as $transporte )
+								@foreach (App\Models\Production\Ordenp10::getOrdenesp10($ordenp2->id) as $transporte)
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
 										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
 										<td>{{ $transporte->orden10_medidas }}</td>
 										<td>{{ $transporte->orden10_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -515,7 +504,7 @@
 									{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -530,7 +519,7 @@
 			</div>
 		</div>
 
-		@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+		@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 					<div class="box box-primary">
@@ -538,15 +527,21 @@
 						{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
 
 						{{--*/
-							$transporte = round( $ordenp2->orden2_transporte / $ordenp2->orden2_cantidad );
-							$viaticos = round( $ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad );
-							$totalmaterialesp = round( $totalmaterialesp / $ordenp2->orden2_cantidad );
+							$transporte = round($ordenp2->orden2_transporte / $ordenp2->orden2_cantidad);
+							$viaticos = round($ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad);
+							$totalmaterialesp = round ($totalmaterialesp / $ordenp2->orden2_cantidad);
 							$prevtotalmaterialesp = $totalmaterialesp;
 							$totalmaterialesp = $totalmaterialesp/((100-$ordenp2->orden2_margen_materialp)/100);
-							$totalempaques = round( $totalempaques / $ordenp2->orden2_cantidad );
+							$totalareasp = round ($totalareasp / $ordenp2->orden2_cantidad);
+							$prevtotalareasp = $totalareasp;
+							$totalareasp = $totalareasp/((100-$ordenp2->orden2_margen_areap)/100);
+							$totalempaques = round ($totalempaques / $ordenp2->orden2_cantidad);
 							$prevtotalempaques = $totalempaques;
 							$totalempaques = $totalempaques/((100-$ordenp2->orden2_margen_empaque)/100);
-							$subtotal = $ordenp2->orden2_precio_venta + $transporte + $viaticos + $totalmaterialesp + $totalempaques + $totalareap;
+							$totaltransportes = round ($totaltransportes / $ordenp2->orden2_cantidad);
+							$prevtotaltransportes = $totaltransportes;
+							$totaltransportes = $totaltransportes/((100-$ordenp2->orden2_margen_transporte)/100);
+							$subtotal = $ordenp2->orden2_precio_venta + $viaticos + $totalmaterialesp + $totalareasp + $totalempaques + $totaltransportes;
 						/*--}}
 
 						<div class="box-body">
@@ -555,12 +550,6 @@
 									<div class="row">
 										<div class="col-xs-2 col-sm-2"><b>Precio</b></div>
 										<div class="col-xs-10 col-sm-10 text-right"><b>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</b></div>
-									</div>
-								</div>
-								<div class="list-group-item list-group-item-info">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Transporte</b></div>
-										<div class="col-xs-10 col-sm-10 text-right"><b>{{ number_format($transporte, 2, ',', '.') }}</b></div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">
@@ -580,8 +569,11 @@
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
-										<div class="col-xs-10 col-sm-10 text-right"><b><span>{{ number_format($totalareap, 2, ',', '.') }}</span></b></div>
+										<div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_areap }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalareasp, 2, ',', '.') }}</span></b></div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">
@@ -591,6 +583,15 @@
 										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_empaque }}</div>
 										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
 										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
+									</div>
+								</div>
+								<div class="list-group-item list-group-item-info">
+									<div class="row">
+										<div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_transporte }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totaltransportes, 2, ',', '.') }}</span></b></div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-success">
@@ -623,7 +624,7 @@
 							</div>
 						</div>
 						<div class="box-footer">
-							<p><b>Los campos de transporte, viáticos, materiales y áreas se dividirán por la cantidad ingresada.</b></p>
+							<p><b>Los campos de viáticos, materiales, áreas, empaques y transportes se dividirán por la cantidad ingresada.</b></p>
 						</div>
 					</div>
 				</div>

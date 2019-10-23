@@ -323,16 +323,6 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <label for="cotizacion2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="cotizacion2_transporte_formula" value="<%- cotizacion2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="cotizacion2_transporte_formula" type="text" maxlength="200" data-response="cotizacion2_transporte">
-                                        </div>
-                                        <label for="cotizacion2_transporte" class="col-sm-1 control-label">Transporte</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="cotizacion2_transporte" value="<%- cotizacion2_transporte %>" class="form-control input-sm total-calculate" name="cotizacion2_transporte" type="text" maxlength="30" data-currency>
-                                        </div>
-                                    </div>
-                                    <div class="row">
                                         <label for="cotizacion2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
                                         <div class="form-group col-md-6">
                                             <input id="cotizacion2_viaticos_formula" value="<%- cotizacion2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="cotizacion2_viaticos_formula" type="text" maxlength="200" data-response="cotizacion2_viaticos">
@@ -675,12 +665,6 @@
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Transporte</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-transporte"></span></b></div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
                                             <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
                                             <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-viaticos"></span></b></div>
                                         </div>
@@ -698,8 +682,13 @@
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-areas"></span></b></div>
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="cotizacion2_margen_areap" name="cotizacion2_margen_areap" class="form-control input-sm total-calculate" value="<%- cotizacion2_margen_areap %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-areasp"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">

@@ -650,10 +650,8 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_saldo = $cotizacion2->cotizacion2_saldo;
                     $orden2->orden2_facturado = $cotizacion2->cotizacion2_facturado;
                     $orden2->orden2_precio_formula = $cotizacion2->cotizacion2_precio_formula;
-                    $orden2->orden2_transporte_formula = $cotizacion2->cotizacion2_transporte_formula;
                     $orden2->orden2_viaticos_formula = $cotizacion2->cotizacion2_viaticos_formula;
                     $orden2->orden2_viaticos = $cotizacion2->cotizacion2_viaticos;
-                    $orden2->orden2_transporte = $cotizacion2->cotizacion2_transporte;
                     $orden2->orden2_precio_venta = $cotizacion2->cotizacion2_precio_venta;
                     $orden2->orden2_total_valor_unitario = $cotizacion2->cotizacion2_total_valor_unitario;
                     $orden2->orden2_volumen = $cotizacion2->cotizacion2_volumen;
@@ -661,6 +659,7 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_margen_materialp = $cotizacion2->cotizacion2_margen_materialp;
                     $orden2->orden2_vtotal = $cotizacion2->cotizacion2_vtotal;
                     $orden2->orden2_margen_materialp = $cotizacion2->cotizacion2_margen_materialp;
+                    $orden2->orden2_margen_areap = $cotizacion2->cotizacion2_margen_areap;
                     $orden2->orden2_margen_empaque = $cotizacion2->cotizacion2_margen_empaque;
                     $orden2->orden2_margen_transporte = $cotizacion2->cotizacion2_margen_transporte;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
@@ -824,11 +823,10 @@ class Cotizacion1Controller extends Controller
             $object = new \stdClass();
 
             // Chart productos
-            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
+            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
             $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
             foreach ($cotizaciones2 as $cotizacion2) {
                 $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta;
-                $ttransporte += $transporte = round($cotizacion2->cotizacion2_transporte/$cotizacion2->cotizacion2_cantidad);
                 $tviaticos += $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
 
                 $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
@@ -839,7 +837,7 @@ class Cotizacion1Controller extends Controller
                 $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
                 $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 
-                $subtotal = $precio + $transporte + $viaticos + $materiales + round($areas) + $empaques;
+                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques;
                 $tvolumen += $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
             }
 
@@ -849,7 +847,7 @@ class Cotizacion1Controller extends Controller
                 'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen'
             ];
             $chartproducto->data = [
-                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
+                $tprecio, "200000", $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
             ];
             $object->chartproductos = $chartproducto;
 

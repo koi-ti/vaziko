@@ -65,7 +65,9 @@ app || (app = {});
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.$el.find('tbody').html('');
+            if (this.collection.length) {
+                this.$el.find('tbody').html('');
+            }
             this.collection.forEach( this.addOne, this );
         },
 

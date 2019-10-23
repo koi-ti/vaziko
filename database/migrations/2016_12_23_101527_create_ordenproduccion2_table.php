@@ -23,10 +23,8 @@ class CreateOrdenproduccion2Table extends Migration
             $table->integer('orden2_saldo')->default(0);
             $table->integer('orden2_facturado')->default(0);
             $table->text('orden2_precio_formula');
-            $table->text('orden2_transporte_formula');
             $table->text('orden2_viaticos_formula');
             $table->double('orden2_viaticos')->default(0);
-            $table->integer('orden2_transporte')->default(0);
             $table->double('orden2_precio_venta')->default(0);
             $table->double('orden2_total_valor_unitario')->default(0);
             $table->integer('orden2_entregado')->default(0);
@@ -40,6 +38,7 @@ class CreateOrdenproduccion2Table extends Migration
             $table->double('orden2_vtotal')->default(0);
 
             $table->double('orden2_margen_materialp')->default(0);
+            $table->double('orden2_margen_areap')->default(0);
             $table->double('orden2_margen_empaque')->default(0);
             $table->double('orden2_margen_transporte')->default(0);
 

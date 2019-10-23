@@ -13,8 +13,8 @@
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
                 <li><a href="{{ route('ordenes.index') }}">Orden</a></li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                    <li><a href="<%- window.Misc.urlFull( Route.route('ordenes.show', { ordenes: id}) ) %>"><%- orden_codigo %></a></li>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                    <li><a href="<%- window.Misc.urlFull (Route.route('ordenes.show', { ordenes: id})) %>"><%- orden_codigo %></a></li>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nuevo</li>
@@ -27,10 +27,10 @@
                 <div class="nav-tabs-custom tab-primary tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
-                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                        <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                             <li><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
-                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
                                 <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                                 <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
@@ -38,10 +38,10 @@
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
                                     <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                                    @if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
                                         <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
                                     @endif
-                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                         <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
                                         <a class="btn btn-primary complete-ordenp" title="Culminar orden"><i class="fa fa-handshake-o"></i></a>
                                     @endif
@@ -56,22 +56,22 @@
                                 <div class="box-body">
                                     <form method="POST" accept-charset="UTF-8" id="form-ordenes" data-toggle="validator">
                                         <div class="row">
-                                            <% if( typeof(orden_codigo) !== 'undefined' && !_.isUndefined(orden_codigo) && !_.isNull(orden_codigo) && orden_codigo != '') { %>
+                                            <% if (typeof(orden_codigo) !== 'undefined' && !_.isUndefined(orden_codigo) && !_.isNull(orden_codigo) && orden_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 control-label">Código</label>
                                                 <div class="form-group col-xs-12 col-md-1">
                                                     <%- orden_codigo %>
                                                 </div>
                                             <% } %>
-                                            <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
+                                            <% if (typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 control-label">Pre-cotización</label>
                                                 <div class="form-group col-xs-12 col-md-1">
-                                                    <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion }) ) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
+                                                    <a href="<%- window.Misc.urlFull (Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion })) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
-                                            <% if( typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
+                                            <% if (typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 control-label">Cotización</label>
                                                 <div class="form-group col-xs-12 col-md-1">
-                                                    <a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', {cotizaciones: orden_cotizacion }) ) %>" title="Ir a cotización"><%- cotizacion_codigo %></a>
+                                                    <a href="<%- window.Misc.urlFull (Route.route('cotizaciones.show', {cotizaciones: orden_cotizacion })) %>" title="Ir a cotización"><%- cotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
 
@@ -165,11 +165,11 @@
                                             <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_formapago" name="orden_formapago" placeholder="Forma de pago" class="form-control input-sm" value="<%- orden_formapago %>" maxlength="30" required readonly>
                                             </div>
-                                            <% if( typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
+                                            <% if (typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') { %>
                                                 <label for="orden_iva" class="col-xs-12 col-sm-1 control-label">Iva</label>
                                                 <div class="form-group col-xs-12 col-sm-1">
                                                     <select name="orden_iva" id="orden_iva" class="form-control" required>
-                                                        @foreach( config('koi.contabilidad.iva') as $key => $value)
+                                                        @foreach (config('koi.contabilidad.iva') as $key => $value)
                                                         <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -244,15 +244,15 @@
                                 </div>
                             </div>
                             <div class="box box-whithout-border">
-                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <div class="box box-primary">
                                             <div class="box-body">
-                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('ordenes.productos.create') ) %>">
+                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull (Route.route('ordenes.productos.create')) %>">
                                                     <div class="row">
                                                         <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2 hidden-xs">Tipo </label>
                                                         <div class="form-group col-sm-3 col-xs-12">
                                                             <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear" data-placeholder="Tipo">
-                                                                @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                                                @foreach (App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                     <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
@@ -298,7 +298,7 @@
                                                                 <th width="55%">Nombre</th>
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Facturado</th>
-                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                                 <th width="10%">Precio</th>
                                                                 <th width="10%">Total</th>
                                                                 @endif
@@ -311,23 +311,23 @@
                                                             <tr>
                                                                 <td colspan="3"></td>
                                                                 <th class="text-right">Subtotal</th>
-                                                                <td class="text-center" id="subtotal-cantidad">0</td>
-                                                                <td class="text-center" id="subtotal-facturado">0</td>
-                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-                                                                <td></td>
-                                                                <td class="text-right" id="subtotal-total">0</td>
+                                                                <th class="text-center" id="subtotal-cantidad">0</th>
+                                                                <th class="text-center" id="subtotal-facturado">0</th>
+                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                                                                <th></th>
+                                                                <th class="text-right" id="subtotal-total">0</th>
                                                                 @endif
                                                             </tr>
-                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                             <tr>
-                                                                <td colspan="3"></td>
+                                                                <th colspan="3"></th>
                                                                 <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                <td colspan="4" class="text-right" id="iva-total">0</td>
+                                                                <th colspan="4" class="text-right" id="iva-total">0</th>
                                                             </tr>
                                                             <tr>
-                                                                <td colspan="3"></td>
+                                                                <th colspan="3"></th>
                                                                 <th class="text-right">Total</th>
-                                                                <td colspan="4" class="text-right" id="total-total">0</td>
+                                                                <th colspan="4" class="text-right" id="total-total">0</th>
                                                             </tr>
                                                             @endif
                                                         </tfoot>
@@ -340,7 +340,7 @@
                         </div>
 
                         {{-- Content despachos --}}
-                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                        <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <div class="tab-pane" id="tab_despachos">
                                 <div class="box box-whithout-border">
                                     <div class="box-body">
@@ -398,7 +398,7 @@
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_municipio" class="control-label">Municipio</label>
                                                     <select name="despachop1_municipio" id="despachop1_municipio" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Base\Municipio::getMunicipios() as $key => $value)
+                                                        @foreach (App\Models\Base\Municipio::getMunicipios() as $key => $value)
                                                         <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -454,7 +454,7 @@
                                                     <table id="browse-orden-despachosp-list" class="table table-hover table-bordered" cellspacing="0">
                                                         <thead>
                                                             <tr>
-                                                                @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
+                                                                @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                                                                     <th width="5%"></th>
                                                                 @endif
                                                                 <th width="5%">Código</th>
@@ -499,7 +499,7 @@
                                 </div>
                             </div>
 
-                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                 <div class="tab-pane" id="tab_tiemposp">
                                     <div class="box box-whithout-border">
                                         <div class="box-body table-responsive no-padding">
@@ -551,7 +551,7 @@
     <script type="text/template" id="ordenp-producto-item-list-tpl">
         <% if(edit) { %>
             <td class="text-center">
-                @if( Auth::user()->ability('admin', 'eliminar', ['module' => 'ordenes']) )
+                @if (auth()->user()->ability('admin', 'eliminar', ['module' => 'ordenes']))
                     <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                         <span><i class="fa fa-times"></i></span>
                     </a>
@@ -559,7 +559,7 @@
             </td>
 
             <td class="text-center">
-                @if( Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                @if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
                     <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
@@ -567,20 +567,20 @@
             </td>
         <% } %>
         <td>
-            <a href="<%- window.Misc.urlFull( Route.route('ordenes.productos.show', {productos: id}) ) %>" title="Ver producto"><%- id %></a>
+            <a href="<%- window.Misc.urlFull (Route.route('ordenes.productos.show', {productos: id})) %>" title="Ver producto"><%- id %></a>
         </td>
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
-        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-            <td class="text-right"><%- window.Misc.currency( orden2_total_valor_unitario ) %></td>
-            <td class="text-right"><%- window.Misc.currency( orden2_precio_total ) %></td>
+        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+            <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
         @endif
     </script>
 
     <script type="text/template" id="ordenp-despacho-item-list-tpl">
         <% if(edit) { %>
-            @if( Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']) )
+            @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                 <td class="text-center">
                     <% if (!despachop1_anulado) { %>
                         <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
@@ -597,7 +597,7 @@
             <span class="label <%- despachop1_anulado ? 'label-danger' : 'label-success' %>"><%- despachop1_anulado ? 'Anulado' : 'Finalizado' %></span>
         </td>
         <td>
-            <a href="<%- window.Misc.urlFull( Route.route('ordenes.despachos.exportar', {despachos: id}) ) %>"  target="_blank" class="btn btn-danger btn-xs" data-resource="<%- id %>">
+            <a href="<%- window.Misc.urlFull (Route.route('ordenes.despachos.exportar', {despachos: id})) %>"  target="_blank" class="btn btn-danger btn-xs" data-resource="<%- id %>">
                 <span><i class="fa fa-file-pdf-o"></i></span>
             </a>
         </td>
@@ -612,7 +612,7 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
             <td class="text-center">
                 <a class="btn btn-default btn-xs edit-tiempop" data-tiempop-resource="<%- id %>">
                     <span><i class="fa fa-pencil-square-o"></i></span>
@@ -677,7 +677,7 @@
             <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
             <div class="form-group col-md-4">
                 <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-actividadp" required>
-                    @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+                    @foreach (App\Models\Production\Actividadp::getActividadesp() as $key => $value)
                         <option value="{{ $key }}" <%- tiempop_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                     @endforeach
                 </select>
@@ -696,7 +696,7 @@
             <label for="tiempop_areap" class="control-label col-md-1">Área</label>
             <div class="form-group col-md-4">
                 <select name="tiempop_areap" id="tiempop_areap" class="form-control select2-default-clear" required>
-                    @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                    @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                         <option value="{{ $key }}" <%- tiempop_areap == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                     @endforeach
                 </select>
@@ -814,7 +814,7 @@
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
 
-            @if(Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+            @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -838,7 +838,7 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+                    @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                     @endif
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>

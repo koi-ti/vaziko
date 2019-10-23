@@ -15,7 +15,7 @@
             	<li><a href="{{ route('ordenes.index') }}">Ordenes</a></li>
             	<li><a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}">{{ $orden->orden_codigo }}</a></li>
                 <li class="active">Producto</li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nuevo</li>
@@ -70,7 +70,7 @@
                         <div class="row">
                             <label class="col-sm-2 control-label">Producto</label>
                             <div class="form-group col-sm-10">
-                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <%- productop_nombre %>
                                 <% }else{ %>
                                     {{ $producto->productop_nombre }}
@@ -278,7 +278,7 @@
                                         <h3 class="box-title">Máquinas de producción</h3>
                                     </div>
                                     <div class="box-body">
-                                        @foreach( App\Models\Production\Ordenp3::getOrdenesp3($producto->id, isset($ordenp2) ? $ordenp2->id : null ) as $maquina)
+                                        @foreach (App\Models\Production\Ordenp3::getOrdenesp3($producto->id, isset($ordenp2) ? $ordenp2->id : null) as $maquina)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <label class="checkbox-inline without-padding white-space-normal" for="orden3_maquinap_{{ $maquina->id }}">
@@ -297,7 +297,7 @@
                                         <h3 class="box-title">Acabados de producción</h3>
                                     </div>
                                     <div class="box-body">
-                                        @foreach( App\Models\Production\Ordenp5::getOrdenesp5($producto->id, isset($ordenp2) ? $ordenp2->id : null ) as $acabado)
+                                        @foreach (App\Models\Production\Ordenp5::getOrdenesp5($producto->id, isset($ordenp2) ? $ordenp2->id : null) as $acabado)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <label class="checkbox-inline without-padding white-space-normal" for="orden5_acabadop_{{ $acabado->id }}">
@@ -311,7 +311,7 @@
                             </div>
                         </div>
 
-                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                             <div class="box box-primary">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Fórmulas</h3>
@@ -325,16 +325,6 @@
                                         <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
                                         <div class="form-group col-md-4">
                                             <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm total-calculate" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <label for="orden2_transporte_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="orden2_transporte_formula" value="<%- orden2_transporte_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_transporte_formula" type="text" maxlength="200" data-response="orden2_transporte">
-                                        </div>
-                                        <label for="orden2_transporte" class="col-sm-1 control-label">Transporte</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="orden2_transporte" value="<%- orden2_transporte %>" class="form-control input-sm total-calculate" name="orden2_transporte" type="text" maxlength="30" data-currency>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -369,7 +359,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-materialp-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Ordenp4::getMaterials( $producto->id ) as $materialp )
+                                    @foreach (App\Models\Production\Ordenp4::getMaterials ($producto->id) as $materialp)
                                         <div class="form-group col-md-4">
                                             <label>{{ $materialp }}</label>
                                         </div>
@@ -379,7 +369,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden4_producto" data-wrapper="materialesp-wrapper-producto" data-reference="material" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Ordenp4::getMaterials( $producto->id ) as $key => $value )
+                                            @foreach (App\Models\Production\Ordenp4::getMaterials ($producto->id) as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -450,7 +440,7 @@
                                     <div class="form-group col-sm-5 col-md-offset-1">
                                         <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear" data-placeholder="Áreas de producción">
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                            @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -489,13 +479,13 @@
                                             <th width="30%">Área</th>
                                             <th width="30%">Nombre</th>
                                             <th width="20%" class="text-center">Tiempo</th>
-                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                 <th width="10%">Valor</th>
                                                 <th width="10%">Total</th>
                                             @endif
                                         </tr>
                                     </thead>
-                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5"></td>
@@ -517,7 +507,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
+                                    @foreach (App\Models\Production\Productop5::getPackaging() as $empaque)
                                         <div class="form-group col-md-4">
                                             <label>{{ $empaque }}</label>
                                         </div>
@@ -527,7 +517,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Productop5::getPackaging() as $key => $value )
+                                            @foreach (App\Models\Production\Productop5::getPackaging() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -595,7 +585,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Productop5::getTransportes() as $transporte )
+                                    @foreach (App\Models\Production\Productop5::getTransportes() as $transporte)
                                         <div class="form-group col-md-4">
                                             <label>{{ $transporte }}</label>
                                         </div>
@@ -605,7 +595,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="orden10_materialp" id="orden10_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden10_producto" data-wrapper="transportes-wrapper-producto" data-reference="transporte" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Productop5::getTransportes() as $key => $value )
+                                            @foreach (App\Models\Production\Productop5::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -666,7 +656,7 @@
                 </div>
             </div>
 
-            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-primary">
@@ -676,12 +666,6 @@
                                         <div class="row">
                                             <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
                                             <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-precio"></span></b></div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Transporte</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-transporte"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -703,8 +687,13 @@
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Áreas</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-areas"></span></b></div>
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="orden2_margen_areap" name="orden2_margen_areap" class="form-control input-sm total-calculate" value="<%- orden2_margen_areap %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-areasp"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -716,6 +705,17 @@
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
                                             <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-empaques"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-info">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="orden2_margen_transporte" name="orden2_margen_transporte" class="form-control input-sm total-calculate" value="<%- orden2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-transportes"></span></b></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
@@ -778,7 +778,7 @@
     </script>
 
     <script type="text/template" id="orden-producto-materialp-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-materialp-orden-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -794,8 +794,8 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td><%- orden4_medidas %></td>
         <td><%- orden4_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( orden4_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( orden4_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden4_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden4_valor_total) %></td>
     </script>
 
     <script type="text/template" id="orden-producto-materialp-edit-item-tpl">
@@ -818,7 +818,7 @@
     </script>
 
     <script type="text/template" id="orden-producto-empaque-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-empaque-orden-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -834,8 +834,8 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
         <td><%- orden9_medidas %></td>
         <td><%- orden9_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( orden9_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( orden9_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden9_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden9_valor_total) %></td>
     </script>
 
     <script type="text/template" id="orden-producto-empaque-edit-item-tpl">
@@ -873,9 +873,9 @@
         <td><%- areap_nombre ? areap_nombre : '-' %></td>
         <td><%- orden6_nombre ? orden6_nombre : '-' %></td>
         <td class="text-center"><%- orden6_horas %>:<%- orden6_minutos %></td>
-        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
-            <td class="text-right"><%- window.Misc.currency( orden6_valor ) %></td>
-            <td class="text-right"><%- window.Misc.currency( total ) %></td>
+        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+            <td class="text-right"><%- window.Misc.currency (orden6_valor) %></td>
+            <td class="text-right"><%- window.Misc.currency (total) %></td>
         @endif
     </script>
 
@@ -900,7 +900,7 @@
     </script>
 
     <script type="text/template" id="orden-producto-transporte-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-transporte-orden-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -916,8 +916,8 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
         <td><%- orden10_medidas %></td>
         <td><%- orden10_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( orden10_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( orden10_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden10_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden10_valor_total) %></td>
     </script>
 
     <script type="text/template" id="orden-producto-transporte-edit-item-tpl">

@@ -111,9 +111,9 @@
 <table class="hrtable margin-top-50" border="0" cellspacing="0" cellpadding="0">
 	<tr>
 		<td width="10%">&nbsp;</td>
-		<td width="30%" class="center border-top">Nombre y firma del cliente</td>
-		<td width="20%">&nbsp;</td>
 		<td width="30%" class="center border-top">Autorizado por:</td>
+		<td width="20%">&nbsp;</td>
+		<td width="30%" class="center border-top">Nombre y firma del cliente</td>
 		<td width="10%">&nbsp;</td>
 	</tr>
 </table>

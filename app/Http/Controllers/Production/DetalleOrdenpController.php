@@ -291,10 +291,10 @@ class DetalleOrdenpController extends Controller
                     // Operacion para calcular el total del producto
                     $precio = $orden2->orden2_precio_venta;
                     $viaticos = round($orden2->orden2_viaticos/$orden2->orden2_cantidad);
-                    $materiales = ($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
-                    $areas = round($totalareasp/$orden2->orden2_cantidad);
-                    $empaques = ($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
-                    $transportes = ($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
+                    $materiales = round($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
+                    $areas = round($totalareasp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_areap)/100);
+                    $empaques = round($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
+                    $transportes = round($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
 
                     $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
                     $comision = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
@@ -634,10 +634,10 @@ class DetalleOrdenpController extends Controller
                         // Operacion para recalcular el total del producto
                         $precio = $orden2->orden2_precio_venta;
                         $viaticos = round($orden2->orden2_viaticos/$orden2->orden2_cantidad);
-                        $materiales = ($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
-                        $areas = round($totalareasp/$orden2->orden2_cantidad);
-                        $empaques = ($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
-                        $transportes = ($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
+                        $materiales = round($totalmaterialesp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_materialp)/100);
+                        $areas = round($totalareasp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_areap)/100);
+                        $empaques = round($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
+                        $transportes = round($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
 
                         $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
                         $volumen = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));

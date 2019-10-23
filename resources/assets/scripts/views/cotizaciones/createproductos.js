@@ -36,7 +36,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function(opts) {
             // Initialize
             if( opts !== undefined && _.isObject(opts.parameters) )
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
@@ -95,17 +95,21 @@ app || (app = {});
             this.$inputround = this.$('#cotizacion2_round');
             this.$inputvolumen = this.$('#cotizacion2_volumen');
             this.$inputmargenmaterialp = this.$('#cotizacion2_margen_materialp');
+            this.$inputmargenareap = this.$('#cotizacion2_margen_areap');
             this.$inputmargenempaque = this.$('#cotizacion2_margen_empaque');
+            this.$inputmargentransporte = this.$('#cotizacion2_margen_transporte');
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
             this.$infoviaticos = this.$('#info-viaticos');
-            this.$infotransporte = this.$('#info-transporte');
             this.$infoprevmateriales = this.$('#info-prev-materiales');
             this.$infomateriales = this.$('#info-materiales');
+            this.$infoprevareasp = this.$('#info-prev-areasp');
+            this.$infoareasp = this.$('#info-areasp');
             this.$infoprevempaques = this.$('#info-prev-empaques');
             this.$infoempaques = this.$('#info-empaques');
-            this.$infoareas = this.$('#info-areas');
+            this.$infoprevtransportes = this.$('#info-prev-transportes');
+            this.$infotransportes = this.$('#info-transportes');
             this.$infosubtotal = this.$('#info-subtotal');
             this.$infocomision = this.$('#info-comision');
             this.$infototal = this.$('#info-total');
@@ -234,7 +238,9 @@ app || (app = {});
                 if( this.model.id != undefined ){
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
+                        data.cotizacion2_margen_areap = this.$inputmargenareap.val();
                         data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
+                        data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopCotizacionList.toJSON();
@@ -247,7 +253,9 @@ app || (app = {});
                 }else{
                     var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                         data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
+                        data.cotizacion2_margen_areap = this.$inputmargenareap.val();
                         data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
+                        data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopCotizacionList);
@@ -292,6 +300,18 @@ app || (app = {});
         /**
         * Event Create
         */
+        onStoreAreap: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                this.areasProductopCotizacionList.trigger('store', data, this.$formareap);
+            }
+        },
+
+        /**
+        * Event Create
+        */
         onStoreEmpaquep: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
@@ -299,18 +319,6 @@ app || (app = {});
                 var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
                     data.cotizacion9_cantidad = this.$('#cotizacion9_cantidad:disabled').val();
                 this.empaquesProductopCotizacionList.trigger('store', data, this.$formempaque);
-            }
-        },
-
-        /**
-        * Event Create
-        */
-        onStoreAreap: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
-                this.areasProductopCotizacionList.trigger('store', data, this.$formareap);
             }
         },
 
@@ -407,8 +415,8 @@ app || (app = {});
                 areap = this.$(e.currentTarget).val();
 
             // Reference
-            if( typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '' ){
-                $.get(window.Misc.urlFull( Route.route('areasp.show', {areasp: areap}) ), function (resp){
+            if (typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '') {
+                $.get(window.Misc.urlFull( Route.route('areasp.show', {areasp: areap})), function (resp) {
                     if (resp) {
                         _this.$inputarea.val('').attr('readonly', true);
                         _this.$inputvalor.val(resp.areap_valor);
@@ -427,55 +435,40 @@ app || (app = {});
             // Igualar variables y quitar el inputmask
             var cantidad = parseInt(this.$('#cotizacion2_cantidad').val());
             var precio = parseFloat(this.$('#cotizacion2_precio_venta').inputmask('unmaskedvalue'));
-            var tranporte = Math.round(parseFloat(this.$('#cotizacion2_transporte').inputmask('unmaskedvalue'))/cantidad);
             var viaticos = Math.round(parseFloat(this.$('#cotizacion2_viaticos').inputmask('unmaskedvalue'))/cantidad);
             var materiales = Math.round(parseFloat(this.materialesProductopCotizacionList.totalize().total)/cantidad);
             var prevmateriales = materiales;
+            var areasp = Math.round(parseFloat(this.areasProductopCotizacionList.totalize().total)/cantidad);
+            var prevareasp = areasp
             var empaques = Math.round(parseFloat(this.empaquesProductopCotizacionList.totalize().total)/cantidad);
             var prevempaques = empaques;
-            var areas = Math.round(parseFloat(this.areasProductopCotizacionList.totalize().total)/cantidad);
+            var transportes = Math.round(parseFloat(this.transportesProductopCotizacionList.totalize().total)/cantidad);
+            var prevtransportes = transportes;
             var volumen = parseInt(this.$inputvolumen.val());
 
-            if (this.$inputmargenmaterialp.val() >= 100) {
-                this.$inputmargenmaterialp.val(99);
-            } else if (!this.$inputmargenmaterialp.val()) {
-                this.$inputmargenmaterialp.val(0);
-            }
-
-            if (this.$inputmargenempaque.val() >= 100) {
-                this.$inputmargenempaque.val(99);
-            } else if (!this.$inputmargenempaque.val()) {
-                this.$inputmargenempaque.val(0);
-            }
-
-            // Calcular que no pase de 100% y no se undefinde
-            margenmaterial = this.$inputmargenmaterialp.val();
-            if( margenmaterial > 0 && margenmaterial <= 99 && !_.isUndefined(margenmaterial) && !_.isNaN(margenmaterial) ) {
-                materiales = materiales/((100-margenmaterial)/100);
-            }
-
-            // Calcular que no pase de 100% y no se undefinde
-            margenempaque = this.$inputmargenempaque.val();
-            if( margenempaque > 0 && margenempaque <= 99 && !_.isUndefined(margenempaque) && !_.isNaN(margenempaque) ) {
-                empaques = empaques/((100-margenempaque)/100);
-            }
+            materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
+            areasp = this.maxinput(this.$inputmargenareap, areasp, this.$inputmargenareap.val())
+            empaques = this.maxinput(this.$inputmargenempaque, empaques, this.$inputmargenempaque.val())
+            transportes = this.maxinput(this.$inputmargentransporte, transportes, this.$inputmargentransporte.val())
 
             // Cuadros de informacion
             this.$infoprecio.empty().html(window.Misc.currency(precio));
             this.$infoviaticos.empty().html(window.Misc.currency(viaticos));
-            this.$infotransporte.empty().html(window.Misc.currency(tranporte));
-            this.$infoareas.empty().html(window.Misc.currency(areas));
             this.$infoprevmateriales.empty().html(window.Misc.currency(prevmateriales));
             this.$infomateriales.empty().html(window.Misc.currency(materiales));
+            this.$infoprevareasp.empty().html(window.Misc.currency(prevareasp));
+            this.$infoareasp.empty().html(window.Misc.currency(areasp));
             this.$infoprevempaques.empty().html(window.Misc.currency(prevempaques));
             this.$infoempaques.empty().html(window.Misc.currency(empaques));
+            this.$infoprevtransportes.empty().html(window.Misc.currency(prevtransportes));
+            this.$infotransportes.empty().html(window.Misc.currency(transportes));
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
-            subtotal = precio + tranporte + viaticos + materiales + empaques + areas;
+            subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
             vcomision = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
             total = subtotal + vcomision;
 
-            round = parseInt( this.$inputround.val() );
+            round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
                 // Calcular round decimales
                 var exp = Math.pow(10, round);
@@ -490,9 +483,28 @@ app || (app = {});
         },
 
         /**
+        * Event calculate max input
+        */
+        maxinput: function (input, value, margen) {
+            if (input.val() >= 100) {
+                input.val(99);
+            } else if (!input.val()) {
+                input.val(0);
+            }
+
+            // Calcular que no pase de 100% y no se undefinde
+            margen = input.val();
+            if (margen > 0 && margen <= 99 && !_.isUndefined(margen) && !_.isNaN(margen)) {
+                value = value/((100-margen)/100);
+            }
+
+            return value;
+        },
+
+        /**
         * UploadPictures
         */
-        uploadPictures: function(e) {
+        uploadPictures: function (e) {
            var _this = this,
                autoUpload = false;
                session = {};
@@ -642,7 +654,7 @@ app || (app = {});
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
+        responseServer: function (model, resp, opts) {
             window.Misc.removeSpinner( this.spinner );
             if(!_.isUndefined(resp.success)) {
                 // response success or error

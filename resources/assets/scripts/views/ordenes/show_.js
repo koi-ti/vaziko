@@ -1,5 +1,5 @@
 /**
-* Class ShowOrdenesView
+* Class ShowWithRoleOrdenesView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,7 +9,7 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ShowOrdenesView = Backbone.View.extend({
+    app.ShowWithRoleOrdenesView = Backbone.View.extend({
 
         el: '#ordenes-show',
         templateEmpleado: _.template( ($('#chart-empleado-ordenp').html() || '') ),
@@ -26,82 +26,54 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function () {
+        initialize : function() {
+            _.bindAll(this, 'onSessionRequestComplete');
+
+            this.$iva = this.$('#orden_iva');
+
+            this.productopOrdenList = new app.ProductopOrdenList();
+            this.despachopOrdenList = new app.DespachopOrdenList();
+            this.tiempopList = new app.TiempopList();
+
+            // Render rows charts
+            this.$renderChartEmpleado = this.$('#render-chart-empleado');
+            this.$renderChartAreasp = this.$('#render-chart-areasp');
+            this.$renderChartProductop = this.$('#render-chart-productop');
+            this.$renderChartOrdenp = this.$('#render-chart-ordenp');
+            this.$uploaderFile = this.$('.fine-uploader');
+
             // Reference views && fineuploader container
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        render: function () {
-            if (this.model.get('permission')) {
-                this.tiempopList = new app.TiempopList();
-                this.referenceViews();
-            } else {
-                _.bindAll(this, 'onSessionRequestComplete');
-
-                this.$iva = this.$('#orden_iva');
-
-                this.productopOrdenList = new app.ProductopOrdenList();
-                this.despachopOrdenList = new app.DespachopOrdenList();
-                this.tiempopList = new app.TiempopList();
-
-                // Render rows charts
-                this.$renderChartEmpleado = this.$('#render-chart-empleado');
-                this.$renderChartAreasp = this.$('#render-chart-areasp');
-                this.$renderChartProductop = this.$('#render-chart-productop');
-                this.$renderChartOrdenp = this.$('#render-chart-ordenp');
-                this.$uploaderFile = this.$('.fine-uploader');
-
-                // Reference views && fineuploader container
-                this.referenceViews();
-                this.referenceCharts()
-                this.uploadPictures();
-            }
+            this.referenceViews();
+            this.referenceCharts()
+            this.uploadPictures();
         },
 
         /**
         * reference to views
         */
         referenceViews: function () {
-            // TiempopOrdenesp list
-            this.tiempopListView = new app.TiempopListView( {
-                collection: this.tiempopList,
+            // Productos list
+            this.productopOrdenListView = new app.ProductopOrdenListView( {
+                collection: this.productopOrdenList,
                 parameters: {
+                    wrapper: this.$('#wrapper-productop-orden'),
+                    iva: this.$iva.val(),
                     dataFilter: {
-                        type: 'ordenp',
                         orden2_orden: this.model.get('id')
                     }
                }
             });
-        },
 
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            if (!this.model.get('permission')) {
-                // Productos list
-                this.productopOrdenListView = new app.ProductopOrdenListView( {
-                    collection: this.productopOrdenList,
-                    parameters: {
-                        wrapper: this.$('#wrapper-productop-orden'),
-                        iva: this.$iva.val(),
-                        dataFilter: {
-                            orden2_orden: this.model.get('id')
-                        }
+            // Despachos list
+            this.despachopOrdenListView = new app.DespachopOrdenListView( {
+                collection: this.despachopOrdenList,
+                parameters: {
+                    wrapper: this.$el,
+                    dataFilter: {
+                        despachop1_orden: this.model.get('id')
                     }
-                });
-
-                // Despachos list
-                this.despachopOrdenListView = new app.DespachopOrdenListView( {
-                    collection: this.despachopOrdenList,
-                    parameters: {
-                        wrapper: this.$el,
-                        dataFilter: {
-                            despachop1_orden: this.model.get('id')
-                        }
-                    }
-                });
-            }
+               }
+            });
 
             // TiempopOrdenesp list
             this.tiempopListView = new app.TiempopListView( {
@@ -120,10 +92,6 @@ app || (app = {});
         */
         openOrdenp: function (e) {
             e.preventDefault();
-
-            if (!this.model.get('permission')) {
-                return;
-            }
 
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
@@ -175,10 +143,6 @@ app || (app = {});
         closeOrdenp: function (e) {
             e.preventDefault();
 
-            if (!this.model.get('permission')) {
-                return;
-            }
-
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -228,10 +192,6 @@ app || (app = {});
         */
         cloneOrdenp: function (e) {
             e.preventDefault();
-
-            if (!this.model.get('permission')) {
-                return;
-            }
 
             var _this = this,
                 route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: this.model.get('id') }) );

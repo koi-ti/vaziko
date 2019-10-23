@@ -14,89 +14,89 @@
     </section>
 
    	<section class="content">
-	    <div id="tiempop-main" class="box box-success spinner-main">
-		 	{!! Form::open(['id' => 'form-tiempop', 'data-toggle' => 'validator']) !!}
-                <div class="box-body">
-                    <div class="row">
-                        <label for="tiempop_ordenp" class="col-md-1 control-label">Orden</label>
-                        <div class="form-group col-md-2">
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="tiempop_ordenp">
-                                        <i class="fa fa-building-o"></i>
-                                    </button>
-                                </span>
-                                <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-name="tiempop_ordenp_beneficiario" data-estado="AT">
-                            </div>
-                        </div>
-                        <div class="col-md-5">
-                            <input id="tiempop_ordenp_beneficiario" name="tiempop_ordenp_beneficiario" placeholder="Orden beneficiario" class="form-control input-sm" type="text" readonly>
-                        </div>
-
-                        <label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
-                        <div class="form-group col-md-2">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-calendar"></i>
+        @if(auth()->user()->ability('admin', 'crear', ['module' => 'tiemposp']))
+    	    <div id="tiempop-main" class="box box-success spinner-main">
+    		 	{!! Form::open(['id' => 'form-tiempop', 'data-toggle' => 'validator']) !!}
+                    <div class="box-body">
+                        <div class="row">
+                            <label for="tiempop_ordenp" class="col-md-1 control-label">Orden</label>
+                            <div class="form-group col-md-2">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-orden-component-table" data-field="tiempop_ordenp">
+                                            <i class="fa fa-building-o"></i>
+                                        </button>
+                                    </span>
+                                    <input id="tiempop_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="tiempop_ordenp" type="text" maxlength="15" data-name="tiempop_ordenp_beneficiario" data-estado="AT">
                                 </div>
-                                <input type="text" id="tiempop_fecha" name="tiempop_fecha" placeholder="Fecha inicio" value="{{ date('Y-m-d') }}" class="form-control input-sm datepicker" required>
                             </div>
-                            <div class="help-block with-errors"></div>
+                            <div class="col-md-5">
+                                <input id="tiempop_ordenp_beneficiario" name="tiempop_ordenp_beneficiario" placeholder="Orden beneficiario" class="form-control input-sm" type="text" readonly>
+                            </div>
+
+                            <label for="tiempop_fecha" class="col-md-1 control-label">Fecha</label>
+                            <div class="form-group col-md-2">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" id="tiempop_fecha" name="tiempop_fecha" placeholder="Fecha inicio" value="{{ date('Y-m-d') }}" class="form-control input-sm datepicker" required>
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
+                            <div class="form-group col-md-5">
+                                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
+                                    @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+
+                            <label for="tiempop_subactividadp" class="control-label col-md-1">Subactividad</label>
+                            <div class="form-group col-md-4">
+                                <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required></select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <label for="tiempop_areap" class="control-label col-md-1">Área</label>
+                            <div class="form-group col-md-4">
+                                <select name="tiempop_areap" id="tiempop_areap" class="form-control select2-default-clear" required>
+                                    @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                        <option value="{{ $key }}">{{ $value }}</option>
+                                    @endforeach
+                                </select>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
+                            <div class="form-group col-md-2">
+                                <div class="input-group clockpicker">
+                                    <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" class="form-control" value="{{ date('H:i') }}" required>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                    </span>
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
+                            <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
+                            <div class="form-group col-md-2">
+                                <div class="input-group clockpicker">
+                                    <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control" value="{{ date('H:i') }}" required>
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-time"></span>
+                                    </span>
+                                </div>
+                                <div class="help-block with-errors"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="row">
-                        <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
-                        <div class="form-group col-md-5">
-                            <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
-                                @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            <div class="help-block with-errors"></div>
-                        </div>
-
-                        <label for="tiempop_subactividadp" class="control-label col-md-1">Subactividad</label>
-                        <div class="form-group col-md-4">
-                            <select name="tiempop_subactividadp" id="tiempop_subactividadp" class="form-control select2-default-clear" required></select>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <label for="tiempop_areap" class="control-label col-md-1">Área</label>
-                        <div class="form-group col-md-4">
-                            <select name="tiempop_areap" id="tiempop_areap" class="form-control select2-default-clear" required>
-                                @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
-                                    <option value="{{ $key }}">{{ $value }}</option>
-                                @endforeach
-                            </select>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <label for="tiempop_hora_inicio" class="col-md-1 control-label">H. inicio</label>
-                        <div class="form-group col-md-2">
-                            <div class="input-group clockpicker">
-                                <input type="text" id="tiempop_hora_inicio" name="tiempop_hora_inicio" class="form-control" value="{{ date('H:i') }}" required>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </span>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                        <label for="tiempop_hora_fin" class="col-md-1 control-label">H. fin</label>
-                        <div class="form-group col-md-2">
-                            <div class="input-group clockpicker">
-                                <input type="text" id="tiempop_hora_fin" name="tiempop_hora_fin" placeholder="Fin" class="form-control" value="{{ date('H:i') }}" required>
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-time"></span>
-                                </span>
-                            </div>
-                            <div class="help-block with-errors"></div>
-                        </div>
-                    </div>
-                </div>
-
-                @if( Auth::user()->ability('admin', 'crear', ['module' => 'tiemposp']) )
         			<div class="box-header with-border">
         	        	<div class="row">
         					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
@@ -104,13 +104,13 @@
         					</div>
         				</div>
         			</div>
-                @endif
-            {!! Form::close() !!}
-        </div>
+                {!! Form::close() !!}
+            </div>
+        @endif
 
         <div class="box box-success spinner-main">
             <div class="box-header with-border">
-                <h3 class="box-title">Información adicional del sr(a) <b>{{ Auth::user()->getUsername() }}</b></h3>
+                <h3 class="box-title">Información adicional del sr(a) <b>{{ auth()->user()->getUsername() }}</b></h3>
                 <div class="box-tools pull-right">
                     <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
                     </button>
@@ -145,7 +145,7 @@
         <td><%- tiempop_fecha %></td>
         <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
         <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        @if( Auth::user()->ability('admin', 'editar', ['module' => 'tiemposp']) )
+        @if (auth()->user()->ability('admin', 'editar', ['module' => 'tiemposp']))
             <td class="text-center">
                 <a class="btn btn-default btn-xs edit-tiempop" data-tiempop-resource="<%- id %>">
                     <span><i class="fa fa-pencil-square-o"></i></span>

@@ -18,7 +18,7 @@
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                     <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
-                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                         <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
                         <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                         <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
@@ -26,13 +26,13 @@
                     <li class="pull-right">
                         <div class="btn-group" role="group">
                             <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                            @if (!$orden->orden_abierta && !$orden->orden_anulada && Auth::user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+                            @if (!$orden->orden_abierta && !$orden->orden_anulada && auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
                                 <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
                             @endif
-                            @if( $orden->orden_culminada && Auth::user()->ability('admin', 'crear', ['module' => 'ordenes']) )
+                            @if ($orden->orden_culminada && auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
                                 <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
                             @endif
-                            @if( Auth::user()->ability('opcional2', 'opcional2', ['module' => 'ordenes']) )
+                            @if (auth()->user()->ability('opcional2', 'opcional2', ['module' => 'ordenes']))
                                 <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
                             @endif
                         </div>
@@ -59,7 +59,7 @@
                                             @endif
                                         </div>
 									</div>
-                                    @if( $orden->precotizacion_codigo )
+                                    @if ($orden->precotizacion_codigo)
     									<div class="form-group col-md-2">
     										<label class="control-label">Pre-cotización</label>
     										<div>
@@ -68,7 +68,7 @@
     									</div>
                                     @endif
 
-                                    @if( $orden->cotizacion_codigo )
+                                    @if ($orden->cotizacion_codigo)
     									<div class="form-group col-md-2">
     										<label class="control-label">Cotización</label>
     										<div>
@@ -203,7 +203,7 @@
                                                     <th width="65%">Nombre</th>
                                                     <th width="10%">Cantidad</th>
                                                     <th width="10%">Facturado</th>
-                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                         <th width="10%">Precio</th>
                                                         <th width="10%">Total</th>
                                                     @endif
@@ -217,12 +217,12 @@
                                                     <td></td>
                                                     <th class="text-right">Subtotal</th>
                                                     <td class="text-center" id="subtotal-cantidad">0</td>
-                                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                         <td colspan="2"></td>
                                                         <td class="text-right" id="subtotal-total">0</td>
                                                     @endif
                                                 </tr>
-                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                                     <tr>
                                                         <td></td>
                                                         <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
@@ -266,7 +266,7 @@
                         </div>
                     </div>
 
-                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                         <div class="tab-pane" id="tab_tiemposp">
                             <div class="box box-whithout-border">
                                 <div class="box-body table-responsive no-padding">

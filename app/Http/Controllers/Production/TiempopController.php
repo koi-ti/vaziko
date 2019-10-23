@@ -10,6 +10,15 @@ use DB, Log, Auth;
 class TiempopController extends Controller
 {
     /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,consultar');
+        $this->middleware('ability:admin,crear|editar', ['only' => ['store', 'update']]);
+    }
+    
+    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response

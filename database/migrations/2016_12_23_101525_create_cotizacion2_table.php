@@ -23,10 +23,8 @@ class CreateCotizacion2Table extends Migration
             $table->integer('cotizacion2_saldo')->default(0);
             $table->integer('cotizacion2_facturado')->default(0);
             $table->text('cotizacion2_precio_formula');
-            $table->text('cotizacion2_transporte_formula');
             $table->text('cotizacion2_viaticos_formula');
             $table->double('cotizacion2_viaticos')->default(0);
-            $table->integer('cotizacion2_transporte')->default(0);
             $table->double('cotizacion2_precio_venta')->default(0);
             $table->double('cotizacion2_total_valor_unitario')->default(0);
             $table->integer('cotizacion2_entregado')->default(0);
@@ -40,6 +38,7 @@ class CreateCotizacion2Table extends Migration
             $table->double('cotizacion2_vtotal')->default(0);
 
             $table->double('cotizacion2_margen_materialp')->default(0);
+            $table->double('cotizacion2_margen_areap')->default(0);
             $table->double('cotizacion2_margen_empaque')->default(0);
             $table->double('cotizacion2_margen_transporte')->default(0);
 

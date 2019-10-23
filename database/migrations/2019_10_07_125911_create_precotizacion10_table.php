@@ -18,7 +18,7 @@ class CreatePrecotizacion10Table extends Migration
             $table->increments('id');
             $table->integer('precotizacion10_precotizacion2')->unsigned();
             $table->integer('precotizacion10_materialp')->unsigned()->nullable();
-            $table->integer('precotizacion10_producto')->unsigned();
+            $table->integer('precotizacion10_producto')->unsigned()->nullable();
             $table->string('precotizacion10_medidas', 50);
             $table->double('precotizacion10_cantidad')->default(0);
             $table->double('precotizacion10_valor_unitario')->default(0);

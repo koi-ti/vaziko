@@ -241,14 +241,24 @@ class OrdenpController extends Controller
     public function show(Request $request, $id)
     {
         $orden = Ordenp::getOrden($id);
-        if(!$orden instanceof Ordenp){
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
+
+        // If role is operario
+        $orden->permission = auth()->user()->hasRole('operario');
+
         if ($request->ajax()) {
             return response()->json($orden);
         }
-        if( $orden->orden_abierta == true && $orden->orden_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
+
+        if ($orden->orden_abierta == true && $orden->orden_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
             return redirect()->route('ordenes.edit', ['orden' => $orden]);
+        }
+
+        if (auth()->user()->hasRole('operario')) {
+            $productos = Ordenp2::where('orden2_orden', $orden->id)->get(["id"]);
+            return view('production.ordenes.show_with_role', compact('orden', 'productos'));
         }
         return view('production.ordenes.show', ['orden' => $orden]);
     }
@@ -519,15 +529,17 @@ class OrdenpController extends Controller
                 // Recuperar numero orden
                 $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
                 $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
                 // Orden
                 $neworden = $orden->replicate();
-                if( $orden->orden_culminada ){
+                if ($orden->orden_culminada) {
                     $neworden->orden_abierta = false;
                     $neworden->orden_culminada = true;
-                }else{
+                } else {
                     $neworden->orden_abierta = true;
                     $neworden->orden_culminada = false;
                 }
+
                 $neworden->orden_fecha_inicio = date('Y-m-d');
                 $neworden->orden_anulada = false;
                 $neworden->orden_ano = date('Y');
@@ -574,21 +586,13 @@ class OrdenpController extends Controller
                         $neworden8->save();
 
                         // Recuperar imagen y copiar
-                        if( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                        if (Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
                             $object = new \stdClass();
                             $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
                             $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
 
                             $files[] = $object;
                         }
-                    }
-
-                    // Materiales
-                    $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
-                    foreach ($materiales as $orden4) {
-                         $neworden4 = $orden4->replicate();
-                         $neworden4->orden4_orden2 = $neworden2->id;
-                         $neworden4->save();
                     }
 
                     // Areasp
@@ -599,7 +603,15 @@ class OrdenpController extends Controller
                          $neworden6->save();
                     }
 
-                    // Enmpaques
+                    // Materiales
+                    $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
+                    foreach ($materiales as $orden4) {
+                         $neworden4 = $orden4->replicate();
+                         $neworden4->orden4_orden2 = $neworden2->id;
+                         $neworden4->save();
+                    }
+
+                    // Empaques
                     $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
                     foreach ($empaques as $orden9) {
                          $neworden9 = $orden9->replicate();

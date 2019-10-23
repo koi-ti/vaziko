@@ -18,7 +18,7 @@ class CreateCotizacion10Table extends Migration
             $table->increments('id');
             $table->integer('cotizacion10_cotizacion2')->unsigned();
             $table->integer('cotizacion10_materialp')->unsigned()->nullable();
-            $table->integer('cotizacion10_producto')->unsigned();
+            $table->integer('cotizacion10_producto')->unsigned()->nullable();
             $table->string('cotizacion10_medidas', 50);
             $table->double('cotizacion10_cantidad')->default(0);
             $table->double('cotizacion10_valor_unitario')->default(0);

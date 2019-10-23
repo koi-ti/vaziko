@@ -1733,6 +1733,7 @@ app || (app = {});
             this.showOrdenesView = new app.ShowOrdenesView({
                 model: this.ordenpModel
             });
+            this.ordenpModel.fetch();
         },
 
         /**

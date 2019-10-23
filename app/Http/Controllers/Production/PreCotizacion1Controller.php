@@ -496,6 +496,7 @@ class PreCotizacion1Controller extends Controller
                     $cotizacion2->cotizacion2_3d_alto = $precotizacion2->precotizacion2_3d_alto;
                     $cotizacion2->cotizacion2_3d_profundidad = $precotizacion2->precotizacion2_3d_profundidad;
                     $cotizacion2->cotizacion2_margen_materialp = 30;
+                    $cotizacion2->cotizacion2_margen_areap = 30;
                     $cotizacion2->cotizacion2_margen_empaque = 30;
                     $cotizacion2->cotizacion2_margen_transporte = 30;
                     $cotizacion2->cotizacion2_usuario_elaboro = $cotizacion->cotizacion1_usuario_elaboro;
@@ -613,10 +614,10 @@ class PreCotizacion1Controller extends Controller
 
                     // Actualizar precio en cotizacion2;
                     $materiales = round(($totalmaterialesp/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
+                    $areasp = round($totalareasp/$precotizacion2->precotizacion2_cantidad)/((100-30)/100);
                     $empaques = round(($totalempaques/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
-                    $areasp = round($totalareasp/$precotizacion2->precotizacion2_cantidad);
                     $transportes = round(($totaltransportes/$precotizacion2->precotizacion2_cantidad)/((100-30)/100));
-                    $subtotal = $materiales  + $areasp + $empaques + $transportes;
+                    $subtotal = $materiales + $areasp + $empaques + $transportes;
 
                     $comision = ($subtotal/((100-0)/100)) * (1-(((100-0)/100)));
                     $total = round($subtotal+$comision);
