@@ -67,6 +67,13 @@ class SaldosContables extends Command
                                                 ->whereBetween('saldostercerosn_mes', [$chosenmonth, $this->currentmonth])
                                                 ->delete();
 
+            $xmes = $chosenmonth;
+            $xmes2 = $this->currentmonth;
+            if ($xmes > $xmes2) {
+                $chosenmonth = $xmes2;
+                $this->currentmonth = $xmes;
+            }
+
             $asientos = Asiento::whereBetween('asiento1_ano', [$chosenyear, $this->currentyear])
                                 ->whereBetween('asiento1_mes', [$chosenmonth, $this->currentmonth])
                                 ->get();
@@ -76,59 +83,26 @@ class SaldosContables extends Command
                 // Recorrer detalles del asiento
                 foreach ($asiento->detalle as $asiento2) {
                     $cuenta = PlanCuenta::find( $asiento2->asiento2_cuenta );
-                    if( !$cuenta instanceof PlanCuenta ) {
+                    if (!$cuenta instanceof PlanCuenta) {
                         throw new \Exception('No es posible recuperar el plan de cuentas.');
                     }
 
                     // Recuperar tercero
                     $tercero = Tercero::find( $asiento2->asiento2_beneficiario );
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         throw new \Exception('No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.');
                     }
 
                     // Mayorizacion de saldos x tercero
                     $saldosterceros = $this->saldosTerceros($cuenta, $tercero, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
-                    if($saldosterceros != 'OK') {
+                    if ($saldosterceros != 'OK') {
                         throw new \Exception($saldosterceros);
                     }
 
                     // Mayorizacion de saldos x mes
                     $saldoscontables = $this->saldosContables($cuenta, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
-                    if($saldoscontables != 'OK') {
+                    if ($saldoscontables != 'OK') {
                         throw new \Exception($saldoscontables);
-                    }
-                }
-            }
-
-            $asientosn = AsientoNif::whereBetween('asienton1_ano', [$chosenyear, $this->currentyear])
-                                    ->whereBetween('asienton1_mes', [$chosenmonth, $this->currentmonth])
-                                    ->get();
-
-            // Recorrer asientosn
-            foreach ($asientosn as $asienton) {
-                // Recorrer detalles del $asienton
-                foreach ($asienton->detalle as $asienton2) {
-                    $cuenta = PlanCuentaNif::find( $asienton2->asienton2_cuenta );
-                    if(!$cuenta instanceof PlanCuentaNif) {
-                        throw new \Exception('No es posible recuperar el plan de cuentas.');
-                    }
-
-                    // Recuperar tercero
-                    $tercero = Tercero::find( $asienton2->asienton2_beneficiario );
-                    if(!$tercero instanceof Tercero) {
-                        throw new \Exception('No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.');
-                    }
-
-                    // Mayorizacion de saldos x tercero
-                    $saldostercerosnif = $this->saldosTercerosNif($cuenta, $tercero, $asienton2->asienton2_debito, $asienton2->asienton2_credito, $asienton->asienton1_mes, $asienton->asienton1_ano);
-                    if($saldostercerosnif != 'OK') {
-                        throw new \Exception($saldostercerosnif);
-                    }
-
-                    // Mayorizacion de saldos x mes
-                    $saldoscontablesnif = $this->saldosContablesNif($cuenta, $asienton2->asienton2_debito, $asienton2->asienton2_credito, $asienton->asienton1_mes, $asienton->asienton1_ano);
-                    if($saldoscontablesnif != 'OK') {
-                        throw new \Exception($saldoscontablesnif);
                     }
                 }
             }
@@ -152,7 +126,7 @@ class SaldosContables extends Command
 
         // Recuperar registro saldos terceros
 		$objSaldoTercero = SaldoTercero::where('saldosterceros_cuenta', $cuenta->id)->where('saldosterceros_tercero', $tercero->id)->where('saldosterceros_ano', $xano)->where('saldosterceros_mes', $xmes)->first();
-    	if(!$objSaldoTercero instanceof SaldoTercero) {
+    	if (!$objSaldoTercero instanceof SaldoTercero) {
     		// Crear registro en saldos terceros
     		$objSaldoTercero = new SaldoTercero;
     		$objSaldoTercero->saldosterceros_cuenta = $cuenta->id;
@@ -171,7 +145,7 @@ class SaldosContables extends Command
     		$objSaldoTercero->saldosterceros_credito_mes = $credito ?: 0;
     		$objSaldoTercero->save();
 
-		}else{
+		} else {
 			// Actualizar debito o credito mes si existe
 			$objSaldoTercero->saldosterceros_debito_mes += $debito;
 			$objSaldoTercero->saldosterceros_credito_mes += $credito;
@@ -181,10 +155,10 @@ class SaldosContables extends Command
 
     	// Saldos iniciales
     	while (true) {
-			if($xmes == 1) {
+			if ($xmes == 1) {
 				$xmes2 = 13;
 				$xano2 = $xano - 1;
-			}else{
+			} else {
 				$xmes2 = $xmes - 1;
 				$xano2 = $xano;
 			}
@@ -223,9 +197,9 @@ class SaldosContables extends Command
 
 				FROM koi_saldosterceros as s1, koi_plancuentas
 				WHERE (s1.saldosterceros_mes = $xmes OR s1.saldosterceros_mes = $xmes2)";
-			if($xano == $xano2) {
+			if ($xano == $xano2) {
 				$sql.=" and( s1.saldosterceros_ano = $xano)";
-			}else{
+			} else {
 				$sql.=" and( s1.saldosterceros_ano = $xano OR s1.saldosterceros_ano =".$xano2.")";
 			}
 
@@ -234,17 +208,17 @@ class SaldosContables extends Command
 				and s1.saldosterceros_cuenta = {$cuenta->id}
 				ORDER BY s1.saldosterceros_cuenta ASC, s1.saldosterceros_tercero ASC";
 			$arSaldos = DB::select($sql);
-	        if(!is_array($arSaldos)) {
+	        if (!is_array($arSaldos)) {
 				return "Se genero un error al consultar los saldos tercero, por favor verifique la información del asiento o consulte al administrador.";
 			}
 
 	        foreach ($arSaldos as $saldo) {
 				// Recuperar registro saldos terceros
 				$objSaldoTercero = SaldoTercero::where('saldosterceros_cuenta', $cuenta->id)->where('saldosterceros_tercero', $tercero->id)->where('saldosterceros_tercero', $tercero->id)->where('saldosterceros_ano', $xano)->where('saldosterceros_mes', $xmes)->first();
-				if(!$objSaldoTercero instanceof SaldoTercero) {
+				if (!$objSaldoTercero instanceof SaldoTercero) {
 		            // Recuperar niveles cuenta
 					$niveles = PlanCuenta::getNivelesCuenta($saldo->plancuentas_cuenta);
-			        if(!is_array($niveles)) {
+			        if (!is_array($niveles)) {
 						return "Error al recuperar niveles para la cuenta {$saldo->plancuentas_cuenta}, saldos iniciales.";
 			        }
 
@@ -264,27 +238,27 @@ class SaldosContables extends Command
 				}
 
 				// Actualizo saldo iniciales
-				if($debito) {
+				if ($debito) {
 					$objSaldoTercero->saldosterceros_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
 
-				}else if($credito) {
+				} else if ($credito) {
 					$objSaldoTercero->saldosterceros_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
 
-				}else{
+				} else {
 					return "No se puede definir la naturaleza {$saldo->plancuentas_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 
 				}
 				$objSaldoTercero->save();
 			}
 
-			if($xmes == date('m') && $xano == date('Y')) {
+			if ($xmes == date('m') && $xano == date('Y')) {
 				break;
 			}
 
-			if($xmes == 13) {
+			if ($xmes == 13) {
 				$xmes = 1;
 				$xano++;
-			}else{
+			} else {
 				$xmes++;
 			}
 		}
@@ -303,20 +277,20 @@ class SaldosContables extends Command
 
         // Recuperar cuentas a mayorizar
         $mayorizaciones = $cuenta->getMayorizarCuentas();
-        if(!is_array($mayorizaciones) || count($mayorizaciones) == 0) {
+        if (!is_array($mayorizaciones) || count($mayorizaciones) == 0) {
             return "Error al recuperar cuentas para mayorizar.";
         }
 
         // Recorrer mayorizaciones de hijo a padre
         foreach ($mayorizaciones as $mayorizar) {
             $objCuenta = PlanCuenta::where('plancuentas_cuenta', $mayorizar)->first();
-            if(!$objCuenta instanceof PlanCuenta){
+            if (!$objCuenta instanceof PlanCuenta){
                 return "No es posible recuperar cuenta para mayorización.";
             }
 
             // Guardar en saldoscontables
             $saldoscontables = SaldoContable::where('saldoscontables_ano', $xano)->where('saldoscontables_mes', $xmes)->where('saldoscontables_cuenta', $objCuenta->id)->first();
-            if(!$saldoscontables instanceof SaldoContable){
+            if (!$saldoscontables instanceof SaldoContable){
                 $saldoscontables = new SaldoContable;
                 $saldoscontables->saldoscontables_cuenta = $objCuenta->id;
                 $saldoscontables->saldoscontables_ano = $xano;
@@ -343,10 +317,10 @@ class SaldosContables extends Command
 
             while (true) {
                 // Si asiento mes igual a 1, cierre del año
-                if($xmes == 1) {
+                if ($xmes == 1) {
 					$xmes2 = 13;
 					$xano2 = $xano - 1;
-				}else{
+				} else {
 					$xmes2 = $xmes - 1;
 					$xano2 = $xano;
 				}
@@ -389,17 +363,17 @@ class SaldosContables extends Command
 				    )
 				    and koi_plancuentas.id = {$objCuenta->id} order by plancuentas_cuenta ASC";
 				$arSaldos = DB::select($sql);
-				if(!is_array($arSaldos)) {
+				if (!is_array($arSaldos)) {
 				    return "Se genero un error al consultar los saldos, por favor verifique la información del asiento o consulte al administrador.";
 				}
 
 		        foreach ($arSaldos as $saldo) {
 			        // Recuperar registro saldos contable
 		            $objSaldoContable = SaldoContable::where('saldoscontables_cuenta', $saldo->plancuentas_id)->where('saldoscontables_ano', $xano)->where('saldoscontables_mes', $xmes)->first();
-		        	if(!$objSaldoContable instanceof SaldoContable) {
+		        	if (!$objSaldoContable instanceof SaldoContable) {
 			            // Recuperar niveles cuenta
 						$niveles = PlanCuenta::getNivelesCuenta($saldo->plancuentas_cuenta);
-				        if(!is_array($niveles)) {
+				        if (!is_array($niveles)) {
 							return "Error al recuperar niveles para la cuenta {$saldo->plancuentas_cuenta}, saldos iniciales.";
 				        }
 
@@ -419,24 +393,24 @@ class SaldosContables extends Command
         			}
 
         			// Actualizo saldo iniciales
-					if( $debito ) {
+					if ($debito) {
 						$objSaldoContable->saldoscontables_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
-					}else if( $credito ) {
+					} else if ($credito) {
 						$objSaldoContable->saldoscontables_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
-					}else{
+					} else {
 						return "No se puede definir la naturaleza de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 					}
 					$objSaldoContable->save();
 				}
 
-				if($xmes == date('m') && $xano == date('Y')) {
+				if ($xmes == date('m') && $xano == date('Y')) {
 					break;
 				}
 
-				if($xmes == 13) {
+				if ($xmes == 13) {
 					$xmes = 1;
 					$xano++;
-				}else{
+				} else {
 					$xmes++;
 				}
 			}
@@ -445,313 +419,5 @@ class SaldosContables extends Command
 			$xmes = $asiento_mes;
         }
         return "OK";
-    }
-
-    // Funcion para mayorizar saldos terceros asientos nif {cuenta, tercero, debito, credito, mes, ano}
-    public function saldosTercerosNif(PlanCuentaNif $cuenta, Tercero $tercero, $debito = 0, $credito = 0, $xmes, $xano)
-    {
-        $asiento_mes = $xmes;
-        $asiento_ano = $xano;
-
-        // Recuperar registro saldos terceros
-        $objSaldoTerceroNif = SaldoTerceroNif::where('saldostercerosn_cuenta', $cuenta->id)->where('saldostercerosn_tercero', $tercero->id)->where('saldostercerosn_ano', $xano)->where('saldostercerosn_mes', $xmes)->first();
-        if(!$objSaldoTerceroNif instanceof SaldoTerceroNif) {
-            // Crear registro en saldos terceros
-            $objSaldoTerceroNif = new SaldoTerceroNif;
-            $objSaldoTerceroNif->saldostercerosn_cuenta = $cuenta->id;
-            $objSaldoTerceroNif->saldostercerosn_tercero = $tercero->id;
-            $objSaldoTerceroNif->saldostercerosn_ano = $xano;
-            $objSaldoTerceroNif->saldostercerosn_mes = $xmes;
-            $objSaldoTerceroNif->saldostercerosn_nivel1 = $cuenta->plancuentasn_nivel1;
-            $objSaldoTerceroNif->saldostercerosn_nivel2 = $cuenta->plancuentasn_nivel2;
-            $objSaldoTerceroNif->saldostercerosn_nivel3 = $cuenta->plancuentasn_nivel3;
-            $objSaldoTerceroNif->saldostercerosn_nivel4 = $cuenta->plancuentasn_nivel4;
-            $objSaldoTerceroNif->saldostercerosn_nivel5 = $cuenta->plancuentasn_nivel5;
-            $objSaldoTerceroNif->saldostercerosn_nivel6 = $cuenta->plancuentasn_nivel6;
-            $objSaldoTerceroNif->saldostercerosn_nivel7 = $cuenta->plancuentasn_nivel7;
-            $objSaldoTerceroNif->saldostercerosn_nivel8 = $cuenta->plancuentasn_nivel8;
-            $objSaldoTerceroNif->saldostercerosn_debito_mes = $debito ?: 0;
-            $objSaldoTerceroNif->saldostercerosn_credito_mes = $credito ?: 0;
-            $objSaldoTerceroNif->save();
-
-        }else{
-            // Actualizar debito o credito mes si existe
-            $objSaldoTerceroNif->saldostercerosn_debito_mes += $debito;
-            $objSaldoTerceroNif->saldostercerosn_credito_mes += $credito;
-            $objSaldoTerceroNif->save();
-
-        }
-
-        // Saldos iniciales
-        while (true) {
-            if($xmes == 1) {
-                $xmes2 = 13;
-                $xano2 = $xano - 1;
-            }else{
-                $xmes2 = $xmes - 1;
-                $xano2 = $xano;
-            }
-
-            $sql = "
-                SELECT DISTINCT s1.saldostercerosn_cuenta, s1.saldostercerosn_tercero,
-                (select (s2.saldostercerosn_debito_inicial)
-                    FROM koi_saldostercerosn as s2
-                    WHERE s2.saldostercerosn_mes = $xmes2
-                    and s2.saldostercerosn_ano = $xano2
-                    and s2.saldostercerosn_cuenta = s1.saldostercerosn_cuenta
-                    and s2.saldostercerosn_tercero = s1.saldostercerosn_tercero
-                )as debito_inicial,
-                (select (s2.saldostercerosn_credito_inicial)
-                    FROM koi_saldostercerosn as s2
-                    WHERE s2.saldostercerosn_mes = $xmes2
-                    and s2.saldostercerosn_ano = $xano2
-                    and s2.saldostercerosn_cuenta = s1.saldostercerosn_cuenta
-                    and s2.saldostercerosn_tercero = s1.saldostercerosn_tercero
-                )as credito_inicial,
-                (select SUM(s2.saldostercerosn_debito_mes)
-                    FROM koi_saldostercerosn as s2
-                    WHERE s2.saldostercerosn_mes = $xmes
-                    and s2.saldostercerosn_ano = $xano
-                    and s2.saldostercerosn_cuenta = s1.saldostercerosn_cuenta
-                    and s2.saldostercerosn_tercero = s1.saldostercerosn_tercero
-                )as debitomes,
-                (select SUM(s2.saldostercerosn_credito_mes)
-                    FROM koi_saldostercerosn as s2
-                    WHERE s2.saldostercerosn_mes = $xmes
-                    and s2.saldostercerosn_ano = $xano
-                    and s2.saldostercerosn_cuenta = s1.saldostercerosn_cuenta
-                    and s2.saldostercerosn_tercero = s1.saldostercerosn_tercero
-                )as creditomes,
-                plancuentasn_cuenta, plancuentasn_naturaleza, plancuentasn_nombre
-
-                FROM koi_saldostercerosn as s1, koi_plancuentasn
-                WHERE (s1.saldostercerosn_mes = $xmes OR s1.saldostercerosn_mes = $xmes2)";
-            if($xano == $xano2) {
-                $sql.=" and( s1.saldostercerosn_ano = $xano)";
-            }else{
-                $sql.=" and( s1.saldostercerosn_ano = $xano OR s1.saldostercerosn_ano =".$xano2.")";
-            }
-
-            $sql .= "
-                and s1.saldostercerosn_cuenta = koi_plancuentasn.id
-                and s1.saldostercerosn_cuenta = {$cuenta->id}
-                ORDER BY s1.saldostercerosn_cuenta ASC, s1.saldostercerosn_tercero ASC";
-            $arSaldos = DB::select($sql);
-            if(!is_array($arSaldos)) {
-                return "Se genero un error al consultar los saldos tercero, por favor verifique la información del asiento o consulte al administrador.";
-            }
-
-            foreach ($arSaldos as $saldo) {
-                // Recuperar registro saldos terceros
-                $objSaldoTerceroNif = SaldoTerceroNif::where('saldostercerosn_cuenta', $cuenta->id)->where('saldostercerosn_tercero', $tercero->id)->where('saldostercerosn_tercero', $tercero->id)->where('saldostercerosn_ano', $xano)->where('saldostercerosn_mes', $xmes)->first();
-                if(!$objSaldoTerceroNif instanceof SaldoTerceroNif) {
-
-                    // Recuperar niveles cuenta
-                    $niveles = PlanCuentaNif::getNivelesCuenta($saldo->plancuentasn_cuenta);
-                    if(!is_array($niveles)) {
-                        return "Error al recuperar niveles para la cuenta {$saldo->plancuentasn_cuenta}, saldos iniciales.";
-                    }
-
-                    $objSaldoTerceroNif = new SaldoTerceroNif;
-                    $objSaldoTerceroNif->saldostercerosn_cuenta = $cuenta->id;
-                    $objSaldoTerceroNif->saldostercerosn_tercero = $tercero->id;
-                    $objSaldoTerceroNif->saldostercerosn_ano = $xano;
-                    $objSaldoTerceroNif->saldostercerosn_mes = $xmes;
-                    $objSaldoTerceroNif->saldostercerosn_nivel1 = $niveles['nivel1'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel2 = $niveles['nivel2'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel3 = $niveles['nivel3'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel4 = $niveles['nivel4'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel5 = $niveles['nivel5'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel6 = $niveles['nivel6'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel7 = $niveles['nivel7'] ?: 0;
-                    $objSaldoTerceroNif->saldostercerosn_nivel8 = $niveles['nivel8'] ?: 0;
-                }
-
-                // Actualizo saldo iniciales
-                if($debito) {
-                    $objSaldoTerceroNif->saldostercerosn_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
-
-                }else if($credito) {
-                    $objSaldoTerceroNif->saldostercerosn_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
-
-                }else{
-                    return "No se puede definir la naturaleza {$saldo->plancuentasn_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
-                }
-                $objSaldoTerceroNif->save();
-            }
-
-            if($xmes == date('n') && $xano == date('Y')) {
-                break;
-            }
-
-            if($xmes == 13) {
-                $xmes = 1;
-                $xano++;
-            }else{
-                $xmes++;
-            }
-        }
-
-        $xano = $asiento_ano;
-        $xmes = $asiento_mes;
-
-        // Saldos iniciales
-        return 'OK';
-    }
-
-    // Funcion para mayorizar saldos contables asientos nif {cuenta, debito, credito, mes, ano}
-    public function saldosContablesNif(PlanCuentaNif $cuenta, $debito = 0, $credito = 0, $xmes, $xano)
-    {
-        $asiento_mes = $xmes;
-        $asiento_ano = $xano;
-
-        // Recuperar cuentas a mayorizar
-        $cuentas = $cuenta->getMayorizarCuentas();
-        if(!is_array($cuentas) || count($cuentas) == 0) {
-            return "Error al recuperar cuentas para mayorizar.";
-        }
-
-        foreach ($cuentas as $item) {
-            // Recuperar cuenta
-            $objCuenta = PlanCuentaNif::where('plancuentasn_cuenta', $item)->first();
-            if(!$objCuenta instanceof PlanCuentaNif) {
-                return "No es posible recuperar cuenta, por favor verifique la información del asiento o consulte al administrador (saldosContables).";
-            }
-
-            // Recuperar registro saldos contable
-            $objSaldoContableNif = SaldoContableNif::where('saldoscontablesn_cuenta', $objCuenta->id)->where('saldoscontablesn_ano', $xano)->where('saldoscontablesn_mes', $xmes)->first();
-            if(!$objSaldoContableNif instanceof SaldoContableNif) {
-                // Crear registro en saldos contables
-                $objSaldoContableNif = new SaldoContableNif;
-                $objSaldoContableNif->saldoscontablesn_cuenta = $objCuenta->id;
-                $objSaldoContableNif->saldoscontablesn_ano = $xano;
-                $objSaldoContableNif->saldoscontablesn_mes = $xmes;
-                $objSaldoContableNif->saldoscontablesn_nivel1 = $objCuenta->plancuentas_nivel1;
-                $objSaldoContableNif->saldoscontablesn_nivel2 = $objCuenta->plancuentas_nivel2;
-                $objSaldoContableNif->saldoscontablesn_nivel3 = $objCuenta->plancuentas_nivel3;
-                $objSaldoContableNif->saldoscontablesn_nivel4 = $objCuenta->plancuentas_nivel4;
-                $objSaldoContableNif->saldoscontablesn_nivel5 = $objCuenta->plancuentas_nivel5;
-                $objSaldoContableNif->saldoscontablesn_nivel6 = $objCuenta->plancuentas_nivel6;
-                $objSaldoContableNif->saldoscontablesn_nivel7 = $objCuenta->plancuentas_nivel7;
-                $objSaldoContableNif->saldoscontablesn_nivel8 = $objCuenta->plancuentas_nivel8;
-                $objSaldoContableNif->saldoscontablesn_debito_mes = $debito ?: 0;
-                $objSaldoContableNif->saldoscontablesn_credito_mes = $credito ?: 0;
-                $objSaldoContableNif->save();
-
-            }else{
-                // Actualizar debito o credito si existe
-                $objSaldoContableNif->saldoscontablesn_debito_mes += $debito;
-                $objSaldoContableNif->saldoscontablesn_credito_mes += $credito;
-                $objSaldoContableNif->save();
-            }
-
-            // Saldos iniciales
-            while (true) {
-                if($xmes == 1) {
-                    $xmes2 = 13;
-                    $xano2 = $xano - 1;
-                }else{
-                    $xmes2 = $xmes - 1;
-                    $xano2 = $xano;
-                }
-
-                $sql = "
-                    SELECT koi_plancuentasn.id as plancuentasn_id, plancuentasn_nombre, plancuentasn_cuenta, plancuentasn_naturaleza,
-                    (select (saldoscontablesn_debito_inicial)
-                        FROM koi_saldoscontablesn
-                        WHERE saldoscontablesn_mes = $xmes2
-                        and saldoscontablesn_ano = $xano2
-                        and saldoscontablesn_cuenta = koi_plancuentasn.id
-                    ) as debito_inicial,
-                    (select (saldoscontablesn_credito_inicial)
-                        FROM koi_saldoscontablesn
-                        WHERE saldoscontablesn_mes = $xmes2
-                        and saldoscontablesn_ano = $xano2
-                        and saldoscontablesn_cuenta = koi_plancuentasn.id
-                    ) as credito_inicial,
-                    (select (saldoscontablesn_debito_mes)
-                        FROM koi_saldoscontablesn
-                        WHERE saldoscontablesn_mes = $xmes
-                        and saldoscontablesn_ano = $xano
-                        and saldoscontablesn_cuenta = koi_plancuentasn.id
-                    ) as debitomes,
-                    (select (saldoscontablesn_credito_mes)
-                        FROM koi_saldoscontablesn
-                        WHERE saldoscontablesn_mes = $xmes
-                        and saldoscontablesn_ano = $xano
-                        and saldoscontablesn_cuenta = koi_plancuentasn.id
-                    ) as creditomes
-                    FROM koi_plancuentasn
-                    WHERE koi_plancuentasn.id IN (
-                        SELECT s.saldoscontablesn_cuenta
-                        FROM koi_saldoscontablesn as s
-                        WHERE s.saldoscontablesn_mes = $xmes and s.saldoscontablesn_ano = $xano
-                        UNION
-                        SELECT s.saldoscontablesn_cuenta
-                        FROM koi_saldoscontablesn as s
-                        WHERE s.saldoscontablesn_mes = $xmes2 and s.saldoscontablesn_ano = $xano2
-                    )
-                    and koi_plancuentasn.id = {$objCuenta->id} order by plancuentasn_cuenta ASC";
-                $arSaldos = DB::select($sql);
-                if(!is_array($arSaldos)) {
-                    return "Se genero un error al consultar los saldos, por favor verifique la información del asiento o consulte al administrador.";
-                }
-
-                foreach ($arSaldos as $saldo) {
-                    // Recuperar registro saldos contable
-                    $objSaldoContableNif = SaldoContableNif::where('saldoscontablesn_cuenta', $saldo->plancuentasn_id)->where('saldoscontablesn_ano', $xano)->where('saldoscontablesn_mes', $xmes)->first();
-                    if(!$objSaldoContableNif instanceof SaldoContableNif) {
-
-                        // Recuperar niveles cuenta
-                        $niveles = PlanCuentaNif::getNivelesCuenta($saldo->plancuentasn_cuenta);
-                        if(!is_array($niveles)) {
-                            return "Error al recuperar niveles para la cuenta {$saldo->plancuentasn_cuenta}, saldos iniciales.";
-                        }
-
-                        // Crear registro en saldos contables
-                        $objSaldoContableNif = new SaldoContableNif;
-                        $objSaldoContableNif->saldoscontablesn_cuenta = $saldo->plancuentasn_id;
-                        $objSaldoContableNif->saldoscontablesn_ano = $xano;
-                        $objSaldoContableNif->saldoscontablesn_mes = $xmes;
-                        $objSaldoContableNif->saldoscontablesn_nivel1 = $niveles['nivel1'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel2 = $niveles['nivel2'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel3 = $niveles['nivel3'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel4 = $niveles['nivel4'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel5 = $niveles['nivel5'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel6 = $niveles['nivel6'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel7 = $niveles['nivel7'] ?: 0;
-                        $objSaldoContableNif->saldoscontablesn_nivel8 = $niveles['nivel8'] ?: 0;
-                    }
-
-                    // Actualizo saldo iniciales
-                    if($debito) {
-                        $objSaldoContableNif->saldoscontablesn_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
-
-                    }else if($credito) {
-                        $objSaldoContableNif->saldoscontablesn_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
-
-                    }else{
-                        return "No se puede definir la naturaleza {$saldo->plancuentasn_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
-
-                    }
-                    $objSaldoContableNif->save();
-                }
-
-                if($xmes == date('n') && $xano == date('Y')) {
-                    break;
-                }
-
-                if($xmes == 13) {
-                    $xmes = 1;
-                    $xano++;
-                }else{
-                    $xmes++;
-                }
-            }
-
-            $xano = $asiento_ano;
-            $xmes = $asiento_mes;
-        }
-        return 'OK';
     }
 }

@@ -11,34 +11,28 @@ app || (app = {});
 
     app.AsientoNifCuentasList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('asientosnif.detalle.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('asientosnif.detalle.index'));
         },
         model: app.AsientoNif2Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function() {
-        },
-
-        debitos: function() {
+        debitos: function () {
             return this.reduce(function(sum, model) {
                 return sum + parseFloat(model.get('asienton2_debito'))
             }, 0);
         },
 
-        creditos: function() {
+        creditos: function () {
             return this.reduce(function(sum, model) {
                 return sum + parseFloat(model.get('asienton2_credito'))
             }, 0);
         },
 
-        totalize: function() {
+        totalize: function () {
             var debitos = this.debitos();
             var creditos = this.creditos();
             return { 'debitos': debitos, 'creditos': creditos, 'diferencia': Math.abs(creditos - debitos)}
-        },
+        }
    });
 
 })(this, this.document);

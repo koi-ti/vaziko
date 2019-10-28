@@ -11,16 +11,10 @@ app || (app = {});
 
     app.MaquinasList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productosp.maquinas.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productosp.maquinas.index'));
         },
-        model: app.Productop4Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Productop4Model
    });
 
 })(this, this.document);

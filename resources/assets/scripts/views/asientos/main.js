@@ -21,7 +21,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
             this.$asientosSearchTable = this.$('#asientos-search-table');
             var paginacion = this.$asientosSearchTable.data('paginacion');

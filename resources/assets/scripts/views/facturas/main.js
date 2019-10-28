@@ -17,11 +17,10 @@ app || (app = {});
             'click .btn-clear': 'clear'
         },
 
-
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
 
             // Rerefences
@@ -41,8 +40,8 @@ app || (app = {});
                 language: window.Misc.dataTableES(),
                 pageLength: paginacion,
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('facturas.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('facturas.index')),
+                    data: function (data) {
                         data.persistent = true;
                         data.factura1_numero = _this.$searchfacturaNumero.val();
                         data.tercero_nit = _this.$searchfacturaTercero.val();
@@ -61,8 +60,8 @@ app || (app = {});
                     {
                         targets: 0,
                         width: '5%',
-                        render: function ( data, type, full, row ) {
-                           return '<a href="'+ window.Misc.urlFull( Route.route('facturas.show', {facturas: full.id }) )  +'">' + data + '</a>';
+                        render: function (data, type, full, row) {
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturas.show', {facturas: full.id }))  +'">' + data + '</a>';
                         },
                     },
                     {
@@ -77,7 +76,7 @@ app || (app = {});
                         targets: 4,
                         width: '10%',
                         className: 'text-right',
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return window.Misc.currency(data);
                         },
                     },
@@ -89,11 +88,11 @@ app || (app = {});
                         },
                     },
                 ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.factura1_anulado) ) {
-                        $(row).css( {"color":"red"} );
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.factura1_anulado)) {
+                        $(row).css({"color":"red"});
                     } else {
-                        $(row).css( {"color":"#00a65a"} );
+                        $(row).css({"color":"#00a65a"});
                     }
                 }
             });

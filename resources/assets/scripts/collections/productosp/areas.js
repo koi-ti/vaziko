@@ -11,16 +11,10 @@ app || (app = {});
 
     app.AreasList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productosp.areas.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productosp.areas.index'));
         },
-        model: app.Productop3Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Productop3Model
    });
 
 })(this, this.document);

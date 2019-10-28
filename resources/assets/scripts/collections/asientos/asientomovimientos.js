@@ -16,13 +16,6 @@ app || (app = {});
         },
         model: app.AsientoMovimientoModel,
 
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            //
-        },
-
         totalize: function (valor) {
             _.each(this.models, function(model) {
                 if (model.get('type') == 'FP') {

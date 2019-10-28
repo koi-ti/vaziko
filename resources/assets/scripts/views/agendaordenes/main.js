@@ -77,7 +77,7 @@ app || (app = {});
                         element.css('font-weight', 'bold');
                     }
 
-                    if( event.type == 'R1' || event.type == 'R2') {
+                    if (event.type == 'R1' || event.type == 'R2') {
                         element.css('background-color', '#337AB7');
                         element.css('border-color', 'white');
                     }

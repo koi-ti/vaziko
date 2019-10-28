@@ -10,90 +10,85 @@ app || (app = {});
 (function (window, document, undefined) {
 
     app.DetalleFactura4List = Backbone.Collection.extend({
-        url: function() {
-            return window.Misc.urlFull( Route.route('facturas.detalle.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('facturas.detalle.index'));
         },
         model: app.Factura4Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        },
-
-        valor: function() {
+        valor: function () {
             return this.reduce(function(sum, model) {
                 return sum + parseFloat(model.get('factura4_saldo'))
             }, 0);
         },
 
-        calculate: function(modelos){
+        calculate: function (modelos) {
             var saldo = _.reduce(modelos, function(sum, model) {
                 return sum + parseFloat(model.get('factura4_saldo'))
             }, 0);
 
-            var count = modelos.length;
-
-            return { 'saldo': saldo, 'count': count}
+            return {
+                'saldo': saldo,
+                'count': modelos.length
+            }
         },
 
-        matchPorvencer: function(){
-            var match = _.filter(this.models, function(item){
+        matchPorvencer: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') > 0;
             });
 
             return this.calculate(match);
         },
 
-        matchMayor360: function(){
-            var match = _.filter(this.models, function(item){
+        matchMayor360: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') < -360;
             });
 
             return this.calculate(match);
         },
 
-        matchMenor360: function(){
-            var match = _.filter(this.models, function(item){
+        matchMenor360: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') <= -181 && item.get('days') >= -360;
             });
 
             return this.calculate(match);
         },
 
-        matchMenor180: function(){
-            var match = _.filter(this.models, function(item){
+        matchMenor180: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') <= -91 && item.get('days') >= -180;
             });
 
             return this.calculate(match);
         },
 
-        matchMenor90: function(){
-            var match = _.filter(this.models, function(item){
+        matchMenor90: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') <= -61 && item.get('days') >= -90;
             });
 
             return this.calculate(match);
         },
 
-        matchMenor60: function(){
-            var match = _.filter(this.models, function(item){
+        matchMenor60: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') <= -31 && item.get('days') >= -60;
             });
 
             return this.calculate(match);
         },
 
-        matchMenor30: function(){
-            var match = _.filter(this.models, function(item){
+        matchMenor30: function () {
+            var match = _.filter(this.models, function(item) {
                 return item.get('days') <= 0 && item.get('days') >= -30;
             });
 
             return this.calculate(match);
         },
 
-        totalize: function() {
+        totalize: function () {
             var valor = this.valor();
             var porvencer = this.matchPorvencer();
             var mayor360 = this.matchMayor360();
@@ -104,7 +99,17 @@ app || (app = {});
             var menor30 = this.matchMenor30();
             var tcount = porvencer.count + menor30.count + menor60.count + menor90.count + menor180.count +menor360.count + mayor360.count;
 
-            return { 'valor': valor, 'porvencer': porvencer, 'mayor360': mayor360, 'menor360': menor360, 'menor180': menor180, 'menor90': menor90, 'menor60': menor60, 'menor30': menor30, 'tcount': tcount}
-        },
+            return {
+                'valor': valor,
+                'porvencer': porvencer,
+                'mayor360': mayor360,
+                'menor360': menor360,
+                'menor180': menor180,
+                'menor90': menor90,
+                'menor60': menor60,
+                'menor30': menor30,
+                'tcount': tcount
+            }
+        }
    });
 })(this, this.document);

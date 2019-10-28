@@ -11,16 +11,10 @@ app || (app = {});
 
     app.TipsList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productosp.tips.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productosp.tips.index'));
         },
-        model: app.Productop2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Productop2Model
    });
 
 })(this, this.document);

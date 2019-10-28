@@ -152,7 +152,7 @@ app || (app = {});
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
+        responseServer: function (model, resp, opts) {
             window.Misc.removeSpinner(this.el);
             if (!_.isUndefined(resp.success)) {
 	            // response success or error

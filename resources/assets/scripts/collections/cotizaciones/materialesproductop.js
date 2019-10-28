@@ -11,26 +11,19 @@ app || (app = {});
 
     app.MaterialesProductopCotizacionList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('cotizaciones.productos.materiales.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('cotizaciones.productos.materiales.index'));
         },
         model: app.Cotizacion4Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        },
-
-        totalMaterialp: function( ){
-            _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('cotizacion4_valor_unitario') ) * model.get('cotizacion4_cantidad');
+        totalMaterialp: function () {
+            _.each(this.models, function(model) {
+                var total = parseFloat(model.get('cotizacion4_valor_unitario')) * model.get('cotizacion4_cantidad');
                 model.set('cotizacion4_valor_total', total);
             });
         },
 
-        total: function() {
+        total: function () {
             return this.reduce(function(sum, model){
                 return sum + parseFloat(model.get('cotizacion4_valor_unitario')) * model.get('cotizacion4_cantidad');
             }, 0);
@@ -38,9 +31,12 @@ app || (app = {});
 
         totalize: function () {
             var total = this.total();
-            this.totalMaterialp();
-            return { total: total }
-        },
+                this.totalMaterialp();
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

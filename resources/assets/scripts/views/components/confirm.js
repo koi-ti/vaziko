@@ -23,26 +23,24 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-
+        initialize: function(opts) {
             // extends attributtes
-            if( opts != undefined && _.isObject(opts.parameters) )
-                this.parameters = _.extend({}, this.parameters, opts.parameters );
-
+            if (opts != undefined && _.isObject(opts.parameters))
+                this.parameters = _.extend({}, this.parameters, opts.parameters);
         },
 
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = {};
 
             // Extend attributes confirm window
            	_.extend(attributes, this.parameters.dataFilter);
-            this.$el.find('.content-modal').html( this.parameters.template(attributes) );
+            this.$el.find('.content-modal').html(this.parameters.template(attributes));
 
             // Change modal title
-            this.$el.find('.inner-title-modal').html( this.parameters['titleConfirm'] );
+            this.$el.find('.inner-title-modal').html(this.parameters['titleConfirm']);
 			this.$el.modal('show');
 
             // delegate events
@@ -57,14 +55,13 @@ app || (app = {});
         * Confirm
         */
         onConfirm: function (e) {
-
             e.preventDefault();
             var _this = this;
 
             this.$el.modal('hide');
 
-            if( typeof this.parameters.onConfirm == 'function' ) {
-                this.parameters.onConfirm.call(null, this.parameters.dataFilter );
+            if (typeof this.parameters.onConfirm == 'function') {
+                this.parameters.onConfirm.call(null, this.parameters.dataFilter);
             }
         }
    });

@@ -12,8 +12,7 @@ app || (app = {});
     app.ComponentSearchProductoView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-producto-component-tpl').html() || '') ),
-
+        template: _.template(($('#koi-search-producto-component-tpl').html() || '')),
 		events: {
 			'change input.producto-koi-component': 'productoChanged',
             'click .btn-koi-search-producto-component': 'searchProducto',
@@ -25,17 +24,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-producto-component');
 		},
 
-		searchProducto: function(e) {
+		searchProducto: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchCodigo = this.$('#koi_search_producto_codigo');
@@ -54,8 +53,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('productos.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('productos.index')),
+                    data: function(data) {
                         data.datatables = true;
                         data.asiento = _this.asiento;
                         data.naturaleza = _this.naturaleza;
@@ -73,7 +72,7 @@ app || (app = {});
 						targets: 0,
 						width: '10%',
 						searchable: false,
-						render: function ( data, type, full, row ) {
+						render: function (data, type, full, row) {
 							return '<a href="#" class="a-koi-search-producto-component-table">' + data + '</a>';
 						}
 					},
@@ -82,10 +81,10 @@ app || (app = {});
                         searchable: false,
                         orderable: false,
                         className: 'text-center',
-                        render: function ( data, type, full, row ) {
-                            if( parseInt( parseInt(full.producto_unidades) && parseInt(full.producto_serie) ) ) {
+                        render: function (data, type, full, row) {
+                            if (parseInt(parseInt(full.producto_unidades) && parseInt(full.producto_serie))) {
                                 return '<span class="label label-success">SERIE</span>';
-                            } else if( parseInt(full.producto_unidades) && parseInt(full.producto_metrado) ) {
+                            } else if (parseInt(full.producto_unidades) && parseInt(full.producto_metrado)) {
                                 return '<span class="label label-success">METRADO</span>';
                             } else {
                                 return '<span class="label label-success">UNIDADES</span>';
@@ -100,24 +99,24 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setProducto: function(e) {
+		setProducto: function (e) {
 			e.preventDefault();
 
-	        var data = this.productosSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+	        var data = this.productosSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-			this.$inputContent.val( data.producto_codigo ).trigger('change');
-			this.$inputName.val( data.producto_nombre );
+			this.$inputContent.val(data.producto_codigo).trigger('change');
+			this.$inputName.val(data.producto_nombre);
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.productosSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchCodigo.val('');
@@ -126,7 +125,7 @@ app || (app = {});
             this.productosSearchTable.ajax.reload();
 		},
 
-		productoChanged: function(e) {
+		productoChanged: function (e) {
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
@@ -140,7 +139,7 @@ app || (app = {});
             // Before eval clear data
             this.$inputName.val('');
 
-			if(!_.isUndefined(producto) && !_.isNull(producto) && producto != '') {
+			if (!_.isUndefined(producto) && !_.isNull(producto) && producto != '') {
 				// Get Producto
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('productos.search')),
@@ -150,21 +149,21 @@ app || (app = {});
                         asiento: _this.asiento,
                         naturaleza: _this.naturaleza
                     },
-	                beforeSend: function() {
+	                beforeSend: function () {
 						_this.$inputName.val('');
-	                    window.Misc.setSpinner( _this.$wraperConten );
+	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
 	            .done(function(resp) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                if(resp.success) {
-	                    if(!_.isUndefined(resp.producto_nombre) && !_.isNull(resp.producto_nombre)){
+	                window.Misc.removeSpinner(_this.$wraperConten);
+	                if (resp.success) {
+	                    if (!_.isUndefined(resp.producto_nombre) && !_.isNull(resp.producto_nombre)) {
 							_this.$inputName.val(resp.producto_nombre);
 	                    }
 	                }
 	            })
 	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
+	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });
 	     	}
@@ -175,7 +174,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

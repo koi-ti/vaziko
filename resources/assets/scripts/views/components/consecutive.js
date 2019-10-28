@@ -16,14 +16,7 @@ app || (app = {});
 			'change .change-sucursal-consecutive-koi-component': 'sucursalChange'
 		},
 
-        /**
-        * Constructor Method
-        */
-		initialize: function() {
-			// Initialize
-		},
-
-        sucursalChange: function(e) {
+        sucursalChange: function (e) {
             var _this = this;
         		module = $(e.currentTarget).attr("data-module");
 				sucursal = $(e.currentTarget).val();
@@ -35,26 +28,24 @@ app || (app = {});
             $.ajax({
                 url: window.Misc.urlFull(Route.route('sucursales.show', {sucursales: sucursal})),
                 type: 'GET',
-                beforeSend: function() {
-                    window.Misc.setSpinner( _this.$wrapperContent );
+                beforeSend: function () {
+                    window.Misc.setSpinner(_this.$wrapperContent);
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.$wrapperContent );
-
+                window.Misc.removeSpinner(_this.$wrapperContent);
                 // Eval consecutive
                 var consecutive = 0;
-                if(module == 'traslados') consecutive = resp.sucursal_traslado;
+                if (module == 'traslados') consecutive = resp.sucursal_traslado;
 
                 // Set consecutive
-                _this.$consecutive.val( consecutive + 1 );
+                _this.$consecutive.val(consecutive + 1);
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.$wrapperContent );
+                window.Misc.removeSpinner(_this.$wrapperContent);
                 alertify.error(thrownError);
             });
         },
     });
-
 
 })(jQuery, this, this.document);

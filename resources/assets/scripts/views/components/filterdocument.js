@@ -16,13 +16,6 @@ app || (app = {});
             'change .select-filter-document-koi-component': 'folderChanged'
 		},
 
-        /**
-        * Constructor Method
-        */
-		initialize: function () {
-			// Initialize
-		},
-
 		folderChanged: function (e) {
             e.preventDefault();
 

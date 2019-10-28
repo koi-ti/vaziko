@@ -11,36 +11,32 @@ app || (app = {});
 
     app.EmpaquesProductopCotizacionList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('cotizaciones.productos.empaques.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('cotizaciones.productos.empaques.index'));
         },
         model: app.Cotizacion9Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        },
-
-        totalEmpaque: function( ){
-            _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('cotizacion9_valor_unitario') ) * model.get('cotizacion9_cantidad');
+        totalEmpaque: function () {
+            _.each(this.models, function(model) {
+                var total = parseFloat(model.get('cotizacion9_valor_unitario')) * model.get('cotizacion9_cantidad');
                 model.set('cotizacion9_valor_total', total);
             });
         },
 
-        total: function() {
+        total: function () {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('cotizacion9_valor_unitario') ) * model.get('cotizacion9_cantidad');
+                return sum + parseFloat(model.get('cotizacion9_valor_unitario')) * model.get('cotizacion9_cantidad');
             }, 0);
         },
 
         totalize: function () {
             var total = this.total();
-            this.totalEmpaque();
-            return { total: total }
-        },
+                this.totalEmpaque();
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

@@ -12,8 +12,7 @@ app || (app = {});
     app.ComponentSearchOrdenPView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-ordenp-component-tpl').html() || '') ),
-
+        template: _.template(($('#koi-search-ordenp-component-tpl').html() || '')),
 		events: {
 			'change input.ordenp-koi-component': 'ordenpChanged',
             'click .btn-koi-search-orden-component-table': 'searchOrden',
@@ -25,17 +24,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-ordenp-component');
 		},
 
-		searchOrden: function(e) {
+		searchOrden: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchordenpOrden = this.$('#searchordenp_ordenp_numero');
@@ -54,8 +53,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('ordenes.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('ordenes.index')),
+                    data: function (data) {
                         data.factura = _this.$factura;
                         data.orden_estado = _this.$estado;
                         data.orden_numero = _this.$searchordenpOrden.val();
@@ -77,7 +76,7 @@ app || (app = {});
                     {
                         targets: 0,
                         searchable: false,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                         	return '<a href="#" class="a-koi-search-ordenp-component-table">' + data + '</a>';
                         }
                     },
@@ -87,7 +86,7 @@ app || (app = {});
                     },
                     {
                         targets: 4 ,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return window.moment(data).format('YYYY-MM-DD');
                         }
                     },
@@ -95,26 +94,26 @@ app || (app = {});
                         targets: 5,
                         orderable: false,
                         className: 'text-center',
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.orden_anulada) ) {
+                        render: function (data, type, full, row) {
+                            if (parseInt(full.orden_anulada)) {
                                 return '<span class="label label-danger">ANULADA</span>';
-                            } else if( parseInt(full.orden_abierta) ) {
+                            } else if (parseInt(full.orden_abierta)) {
                                 return '<span class="label label-success">ABIERTA</span>';
-                            } else if( parseInt(full.orden_culminada) ) {
+                            } else if (parseInt(full.orden_culminada)) {
                                 return '<span class="label label-info">CULMINADA</span>';
-                            } else if ( !parseInt(full.orden_abierta) ) {
+                            } else if (!parseInt(full.orden_abierta)) {
                                 return '<span class="label label-warning">CERRADA</span>';
                             }
                         }
                     }
                 ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.orden_abierta) ) {
-                        $(row).css( {"color":"#00A65A"} );
-                    }else if ( parseInt(data.orden_anulada) ) {
-                        $(row).css( {"color":"#DD4B39"} );
-                    }else if ( parseInt(data.orden_culminada) ) {
-                        $(row).css( {"color":"#0073B7"} );
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.orden_abierta)) {
+                        $(row).css({"color":"#00A65A"});
+                    } else if (parseInt(data.orden_anulada)) {
+                        $(row).css({"color":"#DD4B39"});
+                    } else if (parseInt(data.orden_culminada)) {
+                        $(row).css({"color":"#0073B7"});
                     }
                 }
 
@@ -125,27 +124,27 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setOrden: function(e) {
+		setOrden: function (e) {
 			e.preventDefault();
-	        var data = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+	        var data = this.ordersSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-            this.$inputContent.val( data.orden_codigo );
-            this.$inputName.val( data.tercero_nombre );
+            this.$inputContent.val(data.orden_codigo);
+            this.$inputName.val(data.tercero_nombre);
 
-            if(this.$factura == 'true'){
+            if (this.$factura == 'true') {
                 this.$inputContent.trigger('change');
             }
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.ordersSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchordenpOrden.val('');
@@ -155,7 +154,7 @@ app || (app = {});
             this.ordersSearchTable.ajax.reload();
 		},
 
-		ordenpChanged: function(e) {
+		ordenpChanged: function (e) {
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
@@ -169,27 +168,27 @@ app || (app = {});
             // Before eval clear data
             this.$inputName.val('');
 
-			if(!_.isUndefined(orden) && !_.isNull(orden) && orden != '') {
+			if (!_.isUndefined(orden) && !_.isNull(orden) && orden != '') {
 				// Get Orden
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.search')),
 	                type: 'GET',
 	                data: { orden_codigo: orden, orden_estado: estado },
-	                beforeSend: function() {
+	                beforeSend: function () {
 						_this.$inputName.val('');
-	                    window.Misc.setSpinner( _this.$wraperConten );
+	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
 	            .done(function(resp) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                if(resp.success) {
-	                    if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
+	                window.Misc.removeSpinner(_this.$wraperConten);
+	                if (resp.success) {
+	                    if (!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)) {
 							_this.$inputName.val(resp.tercero_nombre);
 	                    }
 	                }
 	            })
 	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
+	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });
 	     	}
@@ -200,7 +199,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

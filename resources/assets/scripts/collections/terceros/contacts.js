@@ -11,16 +11,10 @@ app || (app = {});
 
     app.ContactsList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('terceros.contactos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('terceros.contactos.index'));
         },
-        model: app.ContactoModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.ContactoModel
    });
 
 })(this, this.document);

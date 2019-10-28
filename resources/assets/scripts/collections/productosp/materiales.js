@@ -11,16 +11,10 @@ app || (app = {});
 
     app.MaterialesList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productosp.materiales.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productosp.materiales.index'));
         },
-        model: app.Productop5Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Productop5Model
    });
 
 })(this, this.document);

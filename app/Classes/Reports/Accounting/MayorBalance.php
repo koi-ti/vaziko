@@ -62,7 +62,7 @@ class MayorBalance extends FPDF
         foreach($data as $saldo){
 
             $this->Cell(40,4,$saldo->plancuentas_cuenta,'',0,'',$fill);
-            $this->Cell(100,4,$saldo->plancuentas_nombre,'',0,'',$fill);
+            $this->Cell(100,4,utf8_decode($saldo->plancuentas_nombre),'',0,'',$fill);
             $this->Cell(32,4,number_format($saldo->inicial,2,'.',','),'',0,'R',$fill);
             $this->Cell(32,4,number_format($saldo->debitomes,2,'.',','),'',0,'R',$fill);
             $this->Cell(32,4,number_format($saldo->creditomes,2,'.',','),'',0,'R',$fill);

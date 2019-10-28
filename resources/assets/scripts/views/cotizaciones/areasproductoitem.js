@@ -20,13 +20,13 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             if (this.parameters.action == 'edit') {
-                this.template = _.template( ($('#cotizacion-producto-areas-edit-item-tpl').html() || '') );
+                this.template = _.template(($('#cotizacion-producto-areas-edit-item-tpl').html() || ''));
             }
 
             // Events Listener
@@ -36,10 +36,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.parameters.edit;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             return this;
         }
     });

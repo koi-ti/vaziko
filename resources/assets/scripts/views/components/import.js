@@ -12,7 +12,7 @@ app || (app = {});
     app.ImportDataActionView = Backbone.View.extend({
 
         el: 'body',
-        template: _.template( ($('#import-data-tpl').html() || '') ),
+        template: _.template(($('#import-data-tpl').html() || '')),
         events: {
             'click .btn-import': 'submitForm',
             'submit #form-import-component': 'onStore'
@@ -21,15 +21,15 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function( opts ) {
+        initialize: function(opts) {
             // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Reference fields
             this.$modal = $('#modal-import-file-component');
-            this.$modal.find('.modal-title').text( 'Importando ' + this.parameters.title );
-            this.$modal.find('.content-modal').empty().html( this.template({title: this.parameters.title}) );
+            this.$modal.find('.modal-title').text('Importando ' + this.parameters.title);
+            this.$modal.find('.content-modal').empty().html(this.template({title: this.parameters.title}));
             this.$wrapper = this.$('#modal-wrapper-import-file');
             this.$form = $('#form-import-component');
             this.$modal.modal('show');
@@ -52,7 +52,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var _this = this;
-                    formData =  new FormData( e.target );
+                    formData =  new FormData(e.target);
 
                 $.ajax({
                     url: _this.parameters.url,
@@ -62,20 +62,20 @@ app || (app = {});
                     contentType: false,
                     processData: false,
                     beforeSend: function() {
-                        window.Misc.setSpinner( _this.$wrapper );
+                        window.Misc.setSpinner(_this.$wrapper);
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.$wrapper );
-                    if(!_.isUndefined(resp.success)) {
+                    window.Misc.removeSpinner(_this.$wrapper);
+                    if (!_.isUndefined(resp.success)) {
                         // response success or error
                         var text = resp.success ? '' : resp.errors;
 
-                        if( _.isObject( resp.errors ) ) {
+                        if (_.isObject(resp.errors)) {
                             text = window.Misc.parseErrors(resp.errors);
                         }
 
-                        if( !resp.success ) {
+                        if (!resp.success) {
                             alertify.error(text);
                             return;
                         }
@@ -86,7 +86,7 @@ app || (app = {});
                     }
                 })
                 .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.$wrapper );
+                    window.Misc.removeSpinner(_this.$wrapper);
                     alertify.error(thrownError);
                 });
             }
@@ -97,13 +97,13 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugin
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initSelectFile == 'function' )
+            if (typeof window.initComponent.initSelectFile == 'function')
                 window.initComponent.initSelectFile();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
         },
     });

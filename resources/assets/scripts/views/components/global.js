@@ -21,14 +21,7 @@ app || (app = {});
             'hidden.bs.modal': 'multiModal',
 		},
 
-        /**
-        * Constructor Method
-        */
-		initialize: function() {
-			// Initialize
-		},
-
-		clickSidebar: function(e) {
+		clickSidebar: function (e) {
 			e.preventDefault();
 
 			var expiration = new Date();
@@ -38,35 +31,35 @@ app || (app = {});
 			document.cookie = "sidebar_toggle=" + (this.$el.hasClass('sidebar-collapse') ? '' : 'sidebar-collapse') + "; path=/; expires=" + expiration.toUTCString();
 		},
 
-		clickHistoryBack: function(e) {
+		clickHistoryBack: function (e) {
 			e.preventDefault();
 
 			window.history.back();
 		},
 
-        clickViewNotification: function(e) {
+        clickViewNotification: function (e) {
             var _this = this;
                 notification = this.$(e.currentTarget).attr('data-notification');
 
             // Update machine
             $.ajax({
-                url: window.Misc.urlFull( Route.route('notificaciones.update', {notification: notification}) ),
+                url: window.Misc.urlFull(Route.route('notificaciones.update', {notification: notification})),
                 type: 'PUT',
             })
             .done(function(resp) {
-                if(!_.isUndefined(resp.success)) {
+                if (!_.isUndefined(resp.success)) {
                     // response success or error
                     var text = resp.success ? '' : resp.errors;
-                    if( _.isObject( resp.errors ) ) {
+                    if (_.isObject(resp.errors)) {
                         text = window.Misc.parseErrors(resp.errors);
                     }
 
-                    if( !resp.success ) {
+                    if (!resp.success) {
                         alertify.error(text);
                         return;
                     }
 
-                    window.Misc.redirect( window.Misc.urlFull( Route.route('notificaciones.index') ));
+                    window.Misc.redirect(window.Misc.urlFull(Route.route('notificaciones.index')));
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -108,11 +101,11 @@ app || (app = {});
             var formula = this.$(e.currentTarget).val(),
                 response = this.$(e.currentTarget).data('response');
 
-            this.$('#' + response).val( eval(formula) ).trigger('change');
+            this.$('#' + response).val(eval(formula)).trigger('change');
         },
 
-		multiModal: function(){
-			if( $('.modal.in').length > 0){
+		multiModal: function () {
+			if ($('.modal.in').length > 0) {
                 $('body').addClass('modal-open');
             }
 		},

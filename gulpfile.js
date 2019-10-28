@@ -38,7 +38,7 @@ elixir(function(mix) {
         paths.libs + 'jquery-ui/themes/base/all.css',
         paths.node + 'fine-uploader/jquery.fine-uploader/fine-uploader-new.css',
         paths.libs + 'fullcalendar/dist/fullcalendar.min.css',
-        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.css',
+        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.css'
     ], 'public/css/vendor.min.css');
 
     mix.less('../css/app.less', 'public/css/app.min.css');
@@ -79,7 +79,7 @@ elixir(function(mix) {
         paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.js'
    	], 'public/js/vendor.min.js')
     .scripts([
-        '../scripts/models/*.js',
+        '../scripts/models/**/*.js',
         '../scripts/collections/**/*.js',
         '../scripts/views/**/*.js',
         '../scripts/helpers/misc.js',

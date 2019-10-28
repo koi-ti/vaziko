@@ -12,8 +12,8 @@ app || (app = {});
     app.ComponentAddressView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-address-component-tpl').html() || '') ),
-        templateSelect: _.template( ($('#koi-component-select-tpl').html() || '') ),
+        template: _.template(($('#koi-address-component-tpl').html() || '')),
+        templateSelect: _.template(($('#koi-component-select-tpl').html() || '')),
 		events: {
         	'focus input.address-koi-component': 'addressChanged',
             'click .btn-address-koi-component': 'focusComponent',
@@ -27,22 +27,22 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function() {
+        initialize: function () {
             // Initialize
             this.$modalComponent = this.$('#modal-address-component');
             this.$modalComponentValidacion = this.$('#modal-address-component-validacion');
         },
 
-        focusComponent: function(e) {
+        focusComponent: function (e) {
             $("#"+$(e.currentTarget).attr("data-field")).focus();
         },
 
-        addressChanged: function(e) {
+        addressChanged: function (e) {
             this.inputContent = $(e.currentTarget);
             this.inputContentNm = this.$("#"+this.inputContent.attr("data-nm-name"));
             this.inputContentNmValue = this.$("#"+this.inputContent.attr("data-nm-value"));
 
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$addressField = this.$modalComponent.find('#koi_direccion');
@@ -58,10 +58,10 @@ app || (app = {});
             this.validaciones = ['Agencia','Agrupación','Almacen','Autopista','Avenida','Avenida Carrera','Barrio','Boulevar','Calle','Camino','Carrera','Carretera','Casa','Celula','Centro Comercial','Ciudadela','Conjunto','Conjunto Residencial','Corregimiento','Departamento','Deposito','Edificio','Entrada','Etapa','Finca','Hacienda','Lote','Modulo','Municipio','Parcela','Parque','Parqueadero','Pasaje','Paseo','Predio','Puente','Puesto','Salón','Salón Comunal','Sector','Suite','Terminal','Terraza','Torre','Unidad','Unidad Residencial','Urbanización','Variante','Vereda','Zona','Zona Franca'];
 
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initAlertify == 'function' )
+            if (typeof window.initComponent.initAlertify == 'function')
                 window.initComponent.initAlertify();
 
             this.$formComponent.validator();
@@ -70,77 +70,77 @@ app || (app = {});
             this.$modalComponent.modal('show');
         },
 
-        addAddress: function(e) {
+        addAddress: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                this.inputContent.val( this.$addressField.val() );
-                this.inputContentNm.text( this.$addressNomenclaturaField.val() );
-                this.inputContentNmValue.val( this.$addressNomenclaturaField.val() );
+                this.inputContent.val( this.$addressField.val());
+                this.inputContentNm.text( this.$addressNomenclaturaField.val());
+                this.inputContentNmValue.val( this.$addressNomenclaturaField.val());
                 this.$modalComponent.modal('hide');
             }
         },
 
-        listeningAddress: function(e){
-            if( parseInt($(e.target).text().trim()) > 0 || parseInt($(e.target).text().trim()) < 9 ){
+        listeningAddress: function (e) {
+            if (parseInt($(e.target).text().trim()) > 0 || parseInt($(e.target).text().trim()) < 9) {
                 this.num = $(e.target).text().trim();
-                if( parseInt(this.addressData[this.addressData.length-1]) > 0 || parseInt(this.addressData[this.addressData.length-1]) < 9){
+                if (parseInt(this.addressData[this.addressData.length-1]) > 0 || parseInt(this.addressData[this.addressData.length-1]) < 9) {
                     this.addressData[this.addressData.length-1] += this.num;
                     this.addressDataNm[this.addressDataNm.length-1] += this.num;
-                }else{
-                    this.addressData.push( this.num );
-                    this.addressDataNm.push( this.num );
+                } else {
+                    this.addressData.push( this.num);
+                    this.addressDataNm.push( this.num);
                 }
-            }else{
+            } else {
                 this.num = [];
-                if( this.addressData[this.addressData.length-1] != $(e.target).text().trim() ){
+                if (this.addressData[this.addressData.length-1] != $(e.target).text().trim()) {
                     for (var i = 0; i < this.validaciones.length; i++) {
-                        if($(e.target).text().trim() == this.validaciones[i]){
-                            this.$modalComponentValidacion.find('.modal-content').html( this.templateSelect( { } ));
-                            this.$modalComponentValidacion.find('.modal-title').text( $(e.target).text().trim() );
+                        if ($(e.target).text().trim() == this.validaciones[i]) {
+                            this.$modalComponentValidacion.find('.modal-content').html( this.templateSelect( { }));
+                            this.$modalComponentValidacion.find('.modal-title').text( $(e.target).text().trim());
                             this.$modalComponentValidacion.modal('show');
                         }
                     }
 
-                    if($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-'){
-                        this.addressData.push( $(e.target).text().trim() );
-                        this.addressDataNm.push( ' ' );
-                    }else{
-                        this.addressData.push( $(e.target).text().trim() );
-                        this.addressDataNm.push( $(e.target).attr('data-key') );
+                    if ($(e.target).text().trim() == '#' || $(e.target).text().trim() == '-') {
+                        this.addressData.push( $(e.target).text().trim());
+                        this.addressDataNm.push( ' ');
+                    } else {
+                        this.addressData.push( $(e.target).text().trim());
+                        this.addressDataNm.push( $(e.target).attr('data-key'));
                     }
-                }else{
+                } else {
                     alertify.error('No puede seleccionar dos nomenclaturas iguales ni más de dos letras seguidas');
                 }
             }
             this.buildAddress();
         },
 
-        ChangeSelect: function(e){
+        ChangeSelect: function (e) {
             var _this = this;
             this.$component = this.$('#component-input').hide();
             var valor = '';
 
-            if($(e.target).val() == 'si'){
+            if ($(e.target).val() == 'si') {
                 _this.$component.show();
-                $('input#component-input-text').change(function(){
-                    var dato = $(this).val( $(this).val().toUpperCase() );
+                $('input#component-input-text').change(function () {
+                    var dato = $(this).val( $(this).val().toUpperCase());
                     var reg = /[^A-Za-z0-9&ÑñáéíóúÁÉÍÓÚ/\s/]/i;
-                    for(var i=0; i <= dato.val().length-1; i++){
-                        if( !reg.test(dato.val().charAt(i)) ){
+                    for(var i=0; i <= dato.val().length-1; i++) {
+                        if (!reg.test(dato.val().charAt(i))) {
                             dato.val().replace(reg,'');
                             valor += dato.val().charAt(i);
                         }
                     }
 
-                    _this.addressData.push( valor );
-                    _this.addressDataNm.push( valor );
+                    _this.addressData.push( valor);
+                    _this.addressDataNm.push( valor);
                     _this.buildAddress();
                     _this.$modalComponentValidacion.modal('hide');
                 });
-            }else if($(e.target).val() == 'no'){
+            }else if ($(e.target).val() == 'no') {
                 _this.$modalComponentValidacion.modal('hide');
-            }else{
+            } else {
                 return false;
             }
         },
@@ -148,7 +148,7 @@ app || (app = {});
         /**
         * remove last item
         */
-        removeLastItem: function(e) {
+        removeLastItem: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
                 this.addressData.pop();
@@ -160,7 +160,7 @@ app || (app = {});
         /**
         * remove item
         */
-        removeItem: function(e) {
+        removeItem: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
                 this.addressData.length = 0;
@@ -173,12 +173,12 @@ app || (app = {});
      	/**
         * Built address
         */
-		buildAddress: function() {
+		buildAddress: function () {
             var addreess = $.grep(this.addressData, Boolean).join(' ').trim();
-            this.$addressField.val( addreess );
+            this.$addressField.val( addreess);
 
             var addreessNm = $.grep(this.addressDataNm, Boolean).join(' ').trim();
-            this.$addressNomenclaturaField.val( addreessNm );
+            this.$addressNomenclaturaField.val( addreessNm);
 		}
     });
 })(jQuery, this, this.document);

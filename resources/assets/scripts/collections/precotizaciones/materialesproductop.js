@@ -11,36 +11,32 @@ app || (app = {});
 
     app.MaterialesProductopPreCotizacionList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('precotizaciones.productos.materiales.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.materiales.index'));
         },
         model: app.PreCotizacion3Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        },
-
         totalMaterialp: function () {
-            _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('precotizacion3_valor_unitario') ) * model.get('precotizacion3_cantidad');
+            _.each(this.models, function(model) {
+                var total = parseFloat(model.get('precotizacion3_valor_unitario')) * model.get('precotizacion3_cantidad');
                 model.set('precotizacion3_valor_total', total);
             });
         },
 
         total: function () {
             return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('precotizacion3_valor_unitario') ) * model.get('precotizacion3_cantidad');
+                return sum + parseFloat(model.get('precotizacion3_valor_unitario')) * model.get('precotizacion3_cantidad');
             }, 0);
         },
 
         totalize: function () {
             var total = this.total();
                 this.totalMaterialp();
-            return { total: total }
-        },
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

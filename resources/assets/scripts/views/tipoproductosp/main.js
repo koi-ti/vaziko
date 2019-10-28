@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
 
             this.$tipoproductospSearchTable = this.$('#tipoproductosp-search-table');
             var paginacion = this.$tipoproductospSearchTable.data('paginacion');

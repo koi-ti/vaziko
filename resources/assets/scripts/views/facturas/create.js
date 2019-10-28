@@ -38,7 +38,7 @@ app || (app = {});
         */
         render: function () {
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             // Declare wrappers
             this.$formdetalle = this.$('#form-detalle-factura');
@@ -51,7 +51,7 @@ app || (app = {});
         /**
         * reference to views
         */
-        referenceView: function(){
+        referenceView: function () {
            // Detalle factura list
            this.detalleFacturaView = new app.DetalleFacturaView({
                collection: this.detalleFactura2List,
@@ -62,7 +62,7 @@ app || (app = {});
            });
         },
 
-        changeImpuestos: function(e){
+        changeImpuestos: function (e) {
             var value = $(e.currentTarget).inputmask('unmaskedvalue'),
                 key = $(e.currentTarget).attr('id');
                 total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
@@ -88,7 +88,7 @@ app || (app = {});
         /**
         * Event Create detalle facturas
         */
-        onStoreItem: function(e){
+        onStoreItem: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 

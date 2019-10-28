@@ -7,7 +7,7 @@ var app = app || {};
 
 (function ($, window, document, undefined) {
 
-    var InitComponent = function() {
+    var InitComponent = function () {
 
         //Init Attributes
         $.ajaxSetup({
@@ -18,15 +18,13 @@ var app = app || {};
         });
     }
 
-    String.prototype.replaceAll = function(search, replace)
-    {
-        if(!replace)
+    String.prototype.replaceAll = function(search, replace) {
+        if (!replace)
             return this;
         return this.replace(new RegExp('[' + search + ']', 'g'), replace);
     };
 
     InitComponent.prototype = {
-
         /**
         * Constructor or Initialize Method
         */
@@ -74,7 +72,6 @@ var app = app || {};
         * Init inputMask
         */
         initInputMask: function () {
-
             $("[data-mask]").inputmask();
 
             $("[data-currency]").inputmask({
@@ -98,13 +95,13 @@ var app = app || {};
         * Init initInputFormula
         */
         initInputFormula: function () {
-            $('.input-formula').change(function() {
+            $('.input-formula').change(function () {
                 var reg = /[0-9/\+/\-/\*/\/\/\./\(/\)]/,
                     dato = $(this).val(),
                     valor = '';
 
                 for (var i = 0; i <= dato.length - 1; i++) {
-                    if( reg.test( dato.charAt(i) ) ){
+                    if ( reg.test( dato.charAt(i) ) ) {
                         valor += dato.charAt(i);
                     }
                 }
@@ -149,20 +146,20 @@ var app = app || {};
                 };
 
             // Instance selects to choice plugin
-            for (var selector in config){
+            for (var selector in config) {
                 $(selector).each(function(index, el) {
                     var $el = $(el);
 
-                    if( $el.data('select2') == undefined ){
+                    if ( $el.data('select2') == undefined ) {
                         $el.select2(config[selector]);
 
                         // set default option
-                        if(selector == '.choice-select-autocomplete') {
+                        if (selector == '.choice-select-autocomplete') {
 
                             var initialId = $el.data('initial-value');
                             var $option = null;
 
-                            if(initialId) {
+                            if (initialId) {
                                 var ajaxOptions = $el.data('select2').dataAdapter.ajaxOptions;
 
                                 $option = $('<option selected>Cargando...</option>').val(initialId);
@@ -183,7 +180,7 @@ var app = app || {};
         * Init toUpper
         */
         initSelectFile: function () {
-            $('.selectfile').change(function(){
+            $('.selectfile').change(function () {
                 var filetext = $(this).val().replace(/\\/g, '/').replace(/.*\//, '');
                 var readonly = $(this).parents('.input-group').find(':text');
 
@@ -194,16 +191,16 @@ var app = app || {};
         * Init toUpper
         */
         initToUpper: function () {
-           $('.input-toupper').change(function(){
+           $('.input-toupper').change(function () {
                $(this).val( $(this).val().toUpperCase() );
            });
 
-           $('.input-lower').change(function(){
+           $('.input-lower').change(function () {
                 var dato = $(this).val( $(this).val().toLowerCase() );
                 var reg = /[^a-z0-9]/i;
                 var valor = '';
-                for(var i=0; i <= dato.val().length-1; i++){
-                    if( !reg.test(dato.val().charAt(i)) ){
+                for(var i=0; i <= dato.val().length-1; i++) {
+                    if ( !reg.test(dato.val().charAt(i)) ) {
                         dato.val().replace(reg,'');
                         valor += dato.val().charAt(i);
                     }
@@ -223,8 +220,8 @@ var app = app || {};
                 max: 100,
                 numberFormat: "n",
                 stop: function( event, ui ) {
-                    if(!_.isNull(this.value) && !_.isUndefined(this.value) && !_.isEmpty(this.value)) {
-                        if(!$.isNumeric( this.value ) || this.value > 100 || this.value < 0){
+                    if (!_.isNull(this.value) && !_.isUndefined(this.value) && !_.isEmpty(this.value)) {
+                        if (!$.isNumeric( this.value ) || this.value > 100 || this.value < 0) {
                             $(this).spinner( 'value', 0 );
                         }
                     }
@@ -283,7 +280,7 @@ var app = app || {};
 
     //Init App Components
     //-----------------------
-    $(function() {
+    $(function () {
         window.initComponent = new InitComponent();
         window.initComponent.initialize();
     });

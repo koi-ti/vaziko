@@ -12,8 +12,8 @@ app || (app = {});
     app.TiempopItemView = Backbone.View.extend({
 
         tagName: 'tr',
-        templateTiempop: _.template( ($('#tiempop-item-list-tpl').html() || '') ),
-        templateTiempopOrdenp: _.template( ($('#ordenp-tiempop-item-list-tpl').html() || '') ),
+        templateTiempop: _.template(($('#tiempop-item-list-tpl').html() || '')),
+        templateTiempopOrdenp: _.template(($('#ordenp-tiempop-item-list-tpl').html() || '')),
         parameters: {
             dataFilter: null
         },
@@ -21,29 +21,29 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            if( this.parameters.dataFilter.type == 'tiemposp' ){
+            if (this.parameters.dataFilter.type == 'tiemposp') {
                 this.template = this.templateTiempop;
-            }else if( this.parameters.dataFilter.type == 'ordenp' ){
+            } else if (this.parameters.dataFilter.type == 'ordenp') {
                 this.template = this.templateTiempopOrdenp;
-            }else{
+            } else {
                 return;
             }
 
             // Events Listener
-            this.listenTo( this.model, 'change', this.render );
+            this.listenTo(this.model, 'change', this.render);
         },
 
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             return this;
         },
     });

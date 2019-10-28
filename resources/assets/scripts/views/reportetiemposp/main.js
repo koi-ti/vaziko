@@ -97,7 +97,7 @@ app || (app = {});
             }
         },
 
-        referenceCharts: function(resp) {
+        referenceCharts: function (resp) {
             this.$wrapercharts.html(this.templateCharts());
 
             function formatTime(timeHour) {

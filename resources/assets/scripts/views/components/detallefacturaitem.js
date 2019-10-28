@@ -21,9 +21,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             this.template = this.parameters.template;
@@ -35,27 +35,27 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.parameters.edit;
 
-            if( this.parameters.call == 'tercero' ) {
-                if( attributes.days <= 0 && attributes.days >= -30 ){
+            if (this.parameters.call == 'tercero') {
+                if (attributes.days <= 0 && attributes.days >= -30) {
                     this.$el.addClass('bg-menor30');
-                }else if ( attributes.days <= -31 && attributes.days >= -60 ){
+                } else if (attributes.days <= -31 && attributes.days >= -60) {
                     this.$el.addClass('bg-menor60');
-                }else if ( attributes.days <= -61 && attributes.days >= -90 ){
+                } else if (attributes.days <= -61 && attributes.days >= -90) {
                     this.$el.addClass('bg-menor90');
-                }else if ( attributes.days <= -91 && attributes.days >= -180 ){
+                } else if (attributes.days <= -91 && attributes.days >= -180) {
                     this.$el.addClass('bg-menor180');
-                }else if ( attributes.days <= -181 && attributes.days >= -360 ){
+                } else if (attributes.days <= -181 && attributes.days >= -360) {
                     this.$el.addClass('bg-menor360');
-                }else if ( attributes.days < -360 ){
+                } else if (attributes.days < -360) {
                     this.$el.addClass('bg-mayor360');
                 }
             }
 
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             return this;
         }
     });

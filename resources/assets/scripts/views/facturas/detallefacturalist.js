@@ -43,8 +43,8 @@ app || (app = {});
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
             this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
 
             if (this.parameters.dataFilter.factura) {
                 this.collection.fetch({data: this.parameters.dataFilter, reset: true});
@@ -68,7 +68,7 @@ app || (app = {});
         */
         addAll: function () {
             this.$el.find('tbody').html('');
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -126,9 +126,9 @@ app || (app = {});
             var _this = this
 
             // Validate duplicate store
-            var result = this.collection.validar( data );
-            if( !result.success ){
-                alertify.error( result.error );
+            var result = this.collection.validar(data);
+            if (!result.success){
+                alertify.error(result.error);
                 return;
             }
 
@@ -141,7 +141,7 @@ app || (app = {});
                     success: function (model, resp) {
                         if (!_.isUndefined(resp.success)) {
                             // response success or error
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
                             var text = resp.success ? '' : resp.errors;
                             if (_.isObject(resp.errors)) {
                                 text = window.Misc.parseErrors(resp.errors);
@@ -174,8 +174,6 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-                console.log(model);
-
             if (model instanceof Backbone.Model) {
                 var cancelConfirm = new window.app.ConfirmWindow({
                     parameters: {
@@ -183,7 +181,7 @@ app || (app = {});
                             codigo: model.get('factura2_orden2'),
                             nombre: model.get('factura2_producto_nombre')
                         },
-                        template: _.template( ($('#delete-item-factura-confirm-tpl').html() || '') ),
+                        template: _.template(($('#delete-item-factura-confirm-tpl').html() || '')),
                         titleConfirm: 'Eliminar producto',
                         onConfirm: function () {
                             model.view.remove();
@@ -211,23 +209,23 @@ app || (app = {});
         totalize: function () {
             var data = this.collection.totalize();
 
-            if(this.$facturado.length) {
-                this.$facturado.html( data.facturado );
+            if (this.$facturado.length) {
+                this.$facturado.html(data.facturado);
             }
         },
 
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

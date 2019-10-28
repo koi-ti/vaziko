@@ -17,14 +17,13 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function( opts ) {
-
+        initialize: function (opts) {
             if (opts.parameters.choose) {
-                this.template = _.template( ($('#choose-itemrollo-tpl').html() || '') );
+                this.template = _.template(($('#choose-itemrollo-tpl').html() || ''));
             } else if (!opts.parameters.choose && opts.parameters.show) {
-                this.template = _.template( ($('#itemrollo-tpl').html() || '') );
-            }else{
-                this.template = _.template( ($('#add-itemrollo-tpl').html() || '') );
+                this.template = _.template(($('#itemrollo-tpl').html() || ''));
+            } else {
+                this.template = _.template(($('#add-itemrollo-tpl').html() || ''));
             }
 
             // Events Listener
@@ -34,10 +33,9 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
-
+            this.$el.html(this.template(attributes));
             return this;
         }
     });

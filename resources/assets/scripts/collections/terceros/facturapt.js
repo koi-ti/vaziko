@@ -11,16 +11,10 @@ app || (app = {});
 
     app.FacturaptList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('terceros.facturap') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('terceros.facturap'));
         },
-        model: app.Facturap2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Facturap2Model
    });
 
 })(this, this.document);

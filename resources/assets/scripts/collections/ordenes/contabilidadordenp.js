@@ -11,17 +11,10 @@ app || (app = {});
 
     app.ContabilidadOrdenpList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('ordenes.contabilidad.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('ordenes.contabilidad.index'));
         },
-        model: app.TiempopModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        }
+        model: app.TiempopModel
    });
 
 })(this, this.document);

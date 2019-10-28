@@ -11,16 +11,10 @@ app || (app = {});
 
     app.AcabadosList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productosp.acabados.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productosp.acabados.index'));
         },
-        model: app.Productop6Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.Productop6Model
    });
 
 })(this, this.document);

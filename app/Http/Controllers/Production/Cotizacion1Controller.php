@@ -506,6 +506,7 @@ class Cotizacion1Controller extends Controller
                     $newcotizacion2 = $cotizacion2->replicate();
                     $newcotizacion2->cotizacion2_cotizacion = $newcotizacion->id;
                     $newcotizacion2->cotizacion2_saldo = $newcotizacion2->cotizacion2_cantidad;
+                    $newcotizacion2->cotizacion2_facturado = 0;
                     $newcotizacion2->cotizacion2_entregado = 0;
                     $newcotizacion2->cotizacion2_usuario_elaboro = auth()->user()->id;
                     $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');

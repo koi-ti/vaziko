@@ -11,16 +11,10 @@ app || (app = {});
 
     app.RolList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('terceros.roles.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('terceros.roles.index'));
         },
-        model: app.UsuarioRolModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.UsuarioRolModel
    });
 
 })(this, this.document);

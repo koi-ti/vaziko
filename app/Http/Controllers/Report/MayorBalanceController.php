@@ -36,11 +36,6 @@ class MayorBalanceController extends Controller
                 $ano2 = $ano;
             }
 
-            if ($request->ano == '2018' && $mes == 1) {
-                $mes2 = 1;
-                $ano2 = $ano;
-            }
-
             // Preparar sql
             $sql = "
                 SELECT plancuentas_nombre, plancuentas_cuenta, plancuentas_naturaleza, plancuentas_nivel,
@@ -76,16 +71,16 @@ class MayorBalanceController extends Controller
                     WHERE s.saldoscontables_mes = $mes2 AND s.saldoscontables_ano = $ano2
                 )";
             // Filters
-            if($request->has('cuenta_inicio')) {
-                $sql .= "
-                    AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)";
+            if ($request->has('cuenta_inicio')) {
+                $sql .= "AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)";
             }
-            if($request->has('cuenta_fin')) {
-                $sql .= "
-                    AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) <= RPAD({$request->cuenta_fin}, 15, 0) ";
+            if ($request->has('cuenta_fin')) {
+                $sql .= "AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) <= RPAD({$request->cuenta_fin}, 15, 0) ";
             }
             $sql .= " ORDER BY plancuentas_cuenta ASC";
             $saldos = DB::select($sql);
+
+            // dd($saldos);
 
             // Generate file
             switch ($type) {

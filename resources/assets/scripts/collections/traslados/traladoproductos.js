@@ -11,17 +11,10 @@ app || (app = {});
 
     app.TrasladoProductosList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('traslados.detalle.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('traslados.detalle.index'));
         },
-        model: app.Traslado2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function() {
-
-        }
+        model: app.Traslado2Model
    });
 
 })(this, this.document);

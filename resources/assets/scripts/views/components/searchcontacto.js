@@ -12,8 +12,7 @@ app || (app = {});
     app.ComponentSearchContactoView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-contacto-component-tpl').html() || '') ),
-
+        template: _.template(($('#koi-search-contacto-component-tpl').html() || '')),
 		events: {
             'click .btn-koi-search-contacto-component-table': 'searchOrden',
             'click .btn-search-koi-search-contacto-component': 'search',
@@ -24,17 +23,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-contacto-component');
 		},
 
-		searchOrden: function(e) {
+		searchOrden: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchContactoNombres = this.$('#koi_search_contacto_nombres');
@@ -43,7 +42,7 @@ app || (app = {});
             // Validate tercero
 			this.$resourceTercero = this.$("#"+$(e.currentTarget).attr("data-tercero"));
 			var tercero = this.$resourceTercero.attr("data-tercero");
-            if( _.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
+            if (_.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
                 alertify.error('Por favor ingrese cliente antes agregar contacto.');
                 return;
             }
@@ -65,8 +64,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('terceros.contactos.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('terceros.contactos.index')),
+                    data: function(data) {
                         data.tcontacto_nombres = _this.$searchContactoNombres.val(),
                         data.tcontacto_apellidos = _this.$searchContactoApellidos.val(),
                         data.tcontacto_tercero = tercero
@@ -88,7 +87,7 @@ app || (app = {});
                         targets: 3,
                         width: '40%',
                         searchable: false,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                         	return '<a href="#" class="a-koi-search-contacto-component-table">' + data + '</a>';
                         }
                     },
@@ -104,41 +103,42 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setContacto: function(e) {
+		setContacto: function (e) {
 			e.preventDefault();
 
-	        var data = this.contactoSearchTable.row( $(e.currentTarget).parents('tr') ).data();
-			this.$inputContent.val( data.id );
-			this.$inputName.val( data.tcontacto_nombre );
-			if(this.$inputPhone.length) {
-                this.$inputPhone.val( data.tcontacto_telefono );
+	        var data = this.contactoSearchTable.row($(e.currentTarget).parents('tr')).data();
+			this.$inputContent.val(data.id);
+			this.$inputName.val(data.tcontacto_nombre);
+
+			if (this.$inputPhone.length) {
+                this.$inputPhone.val(data.tcontacto_telefono);
             }
-            if(this.$inputAddress.length) {
-                this.$inputAddress.val( data.tcontacto_direccion );
+            if (this.$inputAddress.length) {
+                this.$inputAddress.val(data.tcontacto_direccion);
             }
-            if(this.$inputNomenclatura.length) {
-                this.$inputNomenclatura.val( data.tcontacto_direccion_nomenclatura );
+            if (this.$inputNomenclatura.length) {
+                this.$inputNomenclatura.val(data.tcontacto_direccion_nomenclatura);
             }
-            if(this.$labelNomenclatura.length) {
-                this.$labelNomenclatura.text( data.tcontacto_direccion_nomenclatura );
+            if (this.$labelNomenclatura.length) {
+                this.$labelNomenclatura.text(data.tcontacto_direccion_nomenclatura);
             }
-            if(this.$inputCity.length) {
-                this.$inputCity.val( data.tcontacto_municipio ).trigger('change');
+            if (this.$inputCity.length) {
+                this.$inputCity.val(data.tcontacto_municipio).trigger('change');
             }
-            if(this.$inputEmail.length) {
-				this.$inputEmail.val( data.tcontacto_email );
+            if (this.$inputEmail.length) {
+				this.$inputEmail.val(data.tcontacto_email);
 			}
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.contactoSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchContactoNombres.val('');
@@ -152,7 +152,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

@@ -54,7 +54,7 @@ app || (app = {});
                 parameters: {
                     wrapper: this.spinner,
                     edit: false,
-                    template: _.template( ($('#add-detalle-factura-tpl').html() || '') ),
+                    template: _.template(($('#add-detalle-factura-tpl').html() || '')),
                     call: 'factura',
                     dataFilter: {
                         factura: this.model.get('id')
@@ -70,7 +70,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull( Route.route('facturas.exportar', { facturas: this.model.get('id') })) );
+            window.open(window.Misc.urlFull(Route.route('facturas.exportar', { facturas: this.model.get('id') })));
         },
 
         /**
@@ -87,7 +87,7 @@ app || (app = {});
                     onConfirm: function () {
                         // Anular factura
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('facturas.anular', {facturas: _this.model.get('id')}) ),
+                            url: window.Misc.urlFull(Route.route('facturas.anular', {facturas: _this.model.get('id')})),
                             type: 'GET',
                             beforeSend: function() {
                                 window.Misc.setSpinner(_this.spinner);

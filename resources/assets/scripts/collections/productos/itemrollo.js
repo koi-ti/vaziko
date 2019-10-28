@@ -11,16 +11,10 @@ app || (app = {});
 
     app.ItemRolloINList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productos.rollos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productos.rollos.index'));
         },
-        model: app.ItemRolloModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.ItemRolloModel
    });
 
 })(this, this.document);

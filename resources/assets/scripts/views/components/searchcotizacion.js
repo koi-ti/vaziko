@@ -12,7 +12,7 @@ app || (app = {});
     app.ComponentSearchCotizacionView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-cotizacion-component-tpl').html() || '') ),
+        template: _.template(($('#koi-search-cotizacion-component-tpl').html() || '')),
 		events: {
             'click .btn-koi-search-cotizacion-component-table': 'searchCotizacion',
             'click .btn-search-koi-search-cotizacion-component': 'search',
@@ -22,17 +22,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-cotizacion-component');
 		},
 
-		searchCotizacion: function(e) {
+		searchCotizacion: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchcotizacionCotizacion = this.$('#searchcotizacion_cotizacion_numero');
@@ -47,8 +47,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('cotizaciones.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('cotizaciones.index')),
+                    data: function (data) {
                         data.cotizacion_numero = _this.$searchcotizacionCotizacion.val();
                         data.cotizacion_tercero_nit = _this.$searchcotizacionTercero.val();
                     }
@@ -70,7 +70,7 @@ app || (app = {});
                     },
                     {
                         targets: 4 ,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return window.moment(data).format('YYYY-MM-DD');
                         }
                     }
@@ -83,13 +83,13 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.cotizacionSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchcotizacionCotizacion.val('');
@@ -104,7 +104,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

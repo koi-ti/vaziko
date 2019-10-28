@@ -11,16 +11,10 @@ app || (app = {});
 
     app.ProductoHistoryList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productos.history.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productos.history.index'));
         },
-        model: app.ProductoHistoryModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.ProductoHistoryModel
    });
 
 })(this, this.document);

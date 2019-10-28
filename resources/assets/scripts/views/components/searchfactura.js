@@ -12,8 +12,7 @@ app || (app = {});
     app.ComponentSearchFacturaView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-factura-component-tpl').html() || '') ),
-
+        template: _.template(($('#koi-search-factura-component-tpl').html() || '')),
 		events: {
 			// 'change input.factura-koi-component': 'facturaChanged',
             'click .btn-koi-search-factura-component-table': 'searchFactura',
@@ -25,17 +24,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-factura-component');
 		},
 
-		searchFactura: function(e) {
+		searchFactura: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchfacturaNumero = this.$('#searchfactura_numero');
@@ -57,7 +56,7 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('facturas.index') ),
+                    url: window.Misc.urlFull(Route.route('facturas.index')),
                     data: function (data) {
                         data.factura1_estado = true;
                         data.factura1_numero = _this.$searchfacturaNumero.val();
@@ -76,16 +75,16 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         searchable: false,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                         	return '<a href="#" class="a-koi-search-factura-component-table">' + data + '</a>';
                         }
                     }
                 ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.factura1_anulado) ) {
-                        $(row).css( {"color":"red"} );
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.factura1_anulado)) {
+                        $(row).css({"color":"red"});
                     } else {
-                        $(row).css( {"color":"#00a65a"} );
+                        $(row).css({"color":"#00a65a"});
                     }
                 }
 			});
@@ -95,29 +94,29 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setFactura: function(e) {
+		setFactura: function (e) {
 			e.preventDefault();
-	        var data = this.facturaSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+	        var data = this.facturaSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-            this.$inputContent.val( data.factura1_numero );
-            this.$inputId.val( data.id );
-            this.$inputNit.val( data.tercero_nit );
-            this.$inputName.val( data.tercero_nombre );
+            this.$inputContent.val(data.factura1_numero);
+            this.$inputId.val(data.id);
+            this.$inputNit.val(data.tercero_nit);
+            this.$inputName.val(data.tercero_nombre);
 
-			if(this.$factura == 'true'){
+			if (this.$factura == 'true') {
                 this.$inputContent.trigger('change');
             }
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.facturaSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchfacturaNumero.val('');
@@ -132,10 +131,9 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });
-
 
 })(jQuery, this, this.document);

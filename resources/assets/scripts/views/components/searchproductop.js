@@ -12,7 +12,7 @@ app || (app = {});
     app.ComponentSearchProductopView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-productop-component-tpl').html() || '') ),
+        template: _.template(($('#koi-search-productop-component-tpl').html() || '')),
 		events: {
             'click .btn-koi-search-productop-component-table': 'searchProducto',
             'click .btn-search-koi-search-productop-component': 'search',
@@ -23,17 +23,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-productop-component');
 		},
 
-		searchProducto: function(e) {
+		searchProducto: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchCodigo = this.$('#koi_search_productop_codigo');
@@ -52,8 +52,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('productosp.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('productosp.index')),
+                    data: function (data) {
                         data.datatables = true;
                         data.id = _this.$searchCodigo.val();
                         data.productop_nombre = _this.$searchNombre.val();
@@ -67,7 +67,7 @@ app || (app = {});
 					{
                         width: '10%',
 						targets: 0,
-						render: function ( data, type, full, row ) {
+						render: function (data, type, full, row) {
 							return '<a href="#" class="a-koi-search-productop-component-table">' + data + '</a>';
 						}
 					}
@@ -79,29 +79,29 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setProducto: function(e) {
+		setProducto: function (e) {
 			e.preventDefault();
 
-	        var data = this.productospSearchTable.row( $(e.currentTarget).parents('tr') ).data(),
+	        var data = this.productospSearchTable.row($(e.currentTarget).parents('tr')).data(),
                 productop = this.$inputContent.attr("data-productop");
 
-            if( productop == 'true'){
+            if (productop == 'true') {
                 this.$inputContent.html('').append("<option value='"+data.id+"' selected>"+data.productop_nombre+"</option>").removeAttr('disabled');
-            }else{
-                this.$inputContent.val( data.id );
-                this.$inputName.val( data.productop_nombre );
+            } else {
+                this.$inputContent.val(data.id);
+                this.$inputName.val(data.productop_nombre);
             }
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.productospSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchCodigo.val('');
@@ -115,7 +115,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

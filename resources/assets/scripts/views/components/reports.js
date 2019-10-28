@@ -18,22 +18,15 @@ app || (app = {});
 			'click .btn-export-xls-koi-component': 'onXls',
 		},
 
-        /**
-        * Constructor Method
-        */
-		initialize: function() {
-			// Initialize
-		},
-
-		onPdf: function(e) {
+		onPdf: function (e) {
 			this.$("#type-report-koi-component").val('pdf');
 		},
 
-		onChart: function(e) {
+		onChart: function (e) {
 			this.$("#type-report-koi-component").val('chart');
 		},
 
-		onXls: function(e) {
+		onXls: function (e) {
 			this.$("#type-report-koi-component").val('xls');
 		},
     });

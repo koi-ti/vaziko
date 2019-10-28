@@ -11,17 +11,10 @@ app || (app = {});
 
     app.ProductopPreCotizacionList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('precotizaciones.productos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.index'));
         },
-        model: app.PreCotizacion2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        },
+        model: app.PreCotizacion2Model
    });
 
 })(this, this.document);

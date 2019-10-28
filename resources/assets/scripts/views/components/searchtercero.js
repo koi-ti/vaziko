@@ -12,8 +12,7 @@ app || (app = {});
     app.ComponentSearchTerceroView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-tercero-component-tpl').html() || '') ),
-
+        template: _.template(($('#koi-search-tercero-component-tpl').html() || '')),
 		events: {
 			'change input.tercero-koi-component': 'terceroChanged',
             'click .btn-koi-search-tercero-component-table': 'searchTercero',
@@ -25,17 +24,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-component');
 		},
 
-		searchTercero: function(e) {
+		searchTercero: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchNit = this.$('#koi_search_tercero_nit');
@@ -57,8 +56,8 @@ app || (app = {});
                 serverSide: true,
                 language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('terceros.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('terceros.index')),
+                    data: function (data) {
                         data.tercero_nit = _this.$searchNit.val();
                         data.tercero_nombre = _this.$searchName.val();
                         data.tercero_tiempop = _this.$inputTiempop;
@@ -79,7 +78,7 @@ app || (app = {});
                         targets: 0,
                         width: '15%',
                         searchable: false,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                             return '<a href="#" class="a-koi-search-tercero-component-table">' + data + '</a>';
                         }
                     },
@@ -101,23 +100,23 @@ app || (app = {});
             this.$modalComponent.modal('show');
         },
 
-        setTercero: function(e) {
+        setTercero: function (e) {
             e.preventDefault();
 
-            var data = this.tercerosSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+            var data = this.tercerosSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-            this.$inputContent.val( data.tercero_nit );
-            this.$inputName.val( data.tercero_nombre );
+            this.$inputContent.val(data.tercero_nit);
+            this.$inputName.val(data.tercero_nombre);
 
-            if(this.$inputOrden.length > 0) {
+            if (this.$inputOrden.length > 0) {
                 this.$inputOrden.attr('data-tercero', data.id);
             }
 
-            if(this.$inputFormapago.length > 0 || _.isNull(data.tercero_formapago) ) {
-                this.$inputFormapago.val( data.tercero_formapago );
+            if (this.$inputFormapago.length > 0 || _.isNull(data.tercero_formapago)) {
+                this.$inputFormapago.val(data.tercero_formapago);
             }
 
-            if(this.$btnContact.length > 0) {
+            if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', data.id);
                 this.$btnContact.attr('data-address-default', data.tercero_direccion);
                 this.$btnContact.attr('data-address-nomenclatura-default', data.tercero_dir_nomenclatura);
@@ -127,13 +126,13 @@ app || (app = {});
             this.$modalComponent.modal('hide');
         },
 
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.tercerosSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchNit.val('');
@@ -142,7 +141,7 @@ app || (app = {});
             this.tercerosSearchTable.ajax.reload();
         },
 
-        terceroChanged: function(e) {
+        terceroChanged: function (e) {
             var _this = this;
 
             this.$inputContent = $(e.currentTarget);
@@ -154,14 +153,14 @@ app || (app = {});
             this.$inputProveedor = this.$inputContent.data("proveedor");
             this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
 
-            if(this.$btnContact.length > 0) {
+            if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
                 this.$btnContact.attr('data-address-default', '');
                 this.$btnContact.attr('ata-address-nomenclatura-default', '');
                 this.$btnContact.attr('data-municipio-default', '');
             }
 
-            if(this.$inputOrden.length > 0) {
+            if (this.$inputOrden.length > 0) {
                 this.$inputOrden.attr('data-tercero', '');
             }
 
@@ -173,7 +172,7 @@ app || (app = {});
             // Before eval clear data
             this.$inputName.val('');
 
-            if(!_.isUndefined(tercero) && !_.isNull(tercero) && tercero != '') {
+            if (!_.isUndefined(tercero) && !_.isNull(tercero) && tercero != '') {
                 // Get tercero
                 $.ajax({
                     url: window.Misc.urlFull(Route.route('terceros.search')),
@@ -183,33 +182,33 @@ app || (app = {});
                         tiempop_tercero: tiempop,
                         tercero_proveedor: proveedor
                     },
-                    beforeSend: function() {
+                    beforeSend: function () {
                         _this.$inputName.val('');
-                        window.Misc.setSpinner( _this.$wraperConten );
+                        window.Misc.setSpinner(_this.$wraperConten);
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.$wraperConten );
-                    if(resp.success) {
-                        if(!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)){
+                    window.Misc.removeSpinner(_this.$wraperConten);
+                    if (resp.success) {
+                        if (!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)) {
                             _this.$inputName.val(resp.tercero_nombre);
                         }
-                        if(_this.$btnContact.length > 0) {
+                        if (_this.$btnContact.length > 0) {
                             _this.$btnContact.attr('data-tercero', resp.id);
                             _this.$btnContact.attr('data-address-default', resp.tercero_direccion);
                             _this.$btnContact.attr('data-address-nomenclatura-default', resp.tercero_dir_nomenclatura);
                             _this.$btnContact.attr('data-municipio-default', resp.tercero_municipio);
                         }
-                        if(_this.$inputOrden.length > 0) {
+                        if (_this.$inputOrden.length > 0) {
                             _this.$inputOrden.attr('data-tercero', resp.id);
                         }
-                        if(_this.$inputFormapago.length > 0 || _.isNull(resp.tercero_formapago ) ) {
-                            _this.$inputFormapago.val( resp.tercero_formapago  );
+                        if (_this.$inputFormapago.length > 0 || _.isNull(resp.tercero_formapago)) {
+                            _this.$inputFormapago.val(resp.tercero_formapago );
                         }
                     }
 	            })
 	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
+	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });
 	     	}
@@ -220,7 +219,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

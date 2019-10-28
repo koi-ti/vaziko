@@ -23,9 +23,9 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Init Attributes
@@ -35,13 +35,13 @@ app || (app = {});
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
 
             // if was passed itemrollo code
-            if( !_.isUndefined(this.parameters.dataFilter.type) && !_.isNull(this.parameters.dataFilter.type) ){
+            if (!_.isUndefined(this.parameters.dataFilter.type) && !_.isNull(this.parameters.dataFilter.type)) {
                 this.confCollection.data = this.parameters.dataFilter;
-                this.collection.fetch( this.confCollection );
+                this.collection.fetch(this.confCollection);
             }
         },
 
@@ -49,7 +49,7 @@ app || (app = {});
         * Render view contact by model
         * @param Object tiempopModel Model instance
         */
-        addOne: function ( tiempopModel ) {
+        addOne: function (tiempopModel) {
             var view = new app.TiempopItemView({
                 model: tiempopModel,
                 parameters: {
@@ -58,7 +58,7 @@ app || (app = {});
             });
 
             tiempopModel.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
         },
 
         /**
@@ -68,20 +68,20 @@ app || (app = {});
             if (this.collection.length) {
                 this.$el.find('tbody').html('');
             }
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
         *  Edit tiempo de produccion
         **/
-        editTiempop: function(e){
+        editTiempop: function(e) {
             e.preventDefault();
 
             var resource = this.$(e.currentTarget).data('tiempop-resource'),
                 model = this.collection.get(resource);
 
             // Open tiempopActionView
-            if ( this.tiempopActionView instanceof Backbone.View ){
+            if (this.tiempopActionView instanceof Backbone.View) {
                this.tiempopActionView.stopListening();
                this.tiempopActionView.undelegateEvents();
             }
@@ -99,30 +99,30 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.$el );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.$el);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.$el );
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.$el);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
-                this.collection.fetch( this.confCollection );
+                this.collection.fetch(this.confCollection);
                 this.$modal.modal('hide');
-                alertify.success( resp.msg );
+                alertify.success(resp.msg);
             }
         }
    });

@@ -11,17 +11,10 @@ app || (app = {});
 
     app.DespachospPendientesOrdenList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('ordenes.despachos.pendientes') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('ordenes.despachos.pendientes'));
         },
-        model: app.Ordenp2Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        }
+        model: app.Ordenp2Model
    });
 
 })(this, this.document);

@@ -11,19 +11,12 @@ app || (app = {});
 
     app.TransportesProductopPreCotizacionList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('precotizaciones.productos.transportes.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
         },
         model: app.PreCotizacion10Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize: function() {
-            //
-        },
-
-        totalTransporte: function() {
+        totalTransporte: function () {
             _.each(this.models, function(model) {
                 var total = parseFloat(model.get('precotizacion10_valor_unitario')) * model.get('precotizacion10_cantidad');
                 model.set('precotizacion10_valor_total', total);
@@ -39,8 +32,11 @@ app || (app = {});
         totalize: function () {
             var total = this.total();
                 this.totalTransporte();
-            return { total: total }
-        },
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

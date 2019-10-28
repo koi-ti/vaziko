@@ -741,6 +741,7 @@ class DetalleOrdenpController extends Controller
             try {
                 $neworden2 = $orden2->replicate();
                 $neworden2->orden2_saldo = $neworden2->orden2_cantidad;
+                $neworden2->orden2_facturado = 0;
                 $neworden2->orden2_entregado = 0;
                 $neworden2->orden2_usuario_elaboro = auth()->user()->id;
                 $neworden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');

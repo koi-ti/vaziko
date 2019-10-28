@@ -12,26 +12,26 @@ app || (app = {});
     app.ProductoHistoryView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template( ($('#producto-history-item-list-tpl').html() || '') ),
+        template: _.template(($('#producto-history-item-list-tpl').html() || '')),
 
         /**
         * Constructor Method
         */
-        initialize: function(opts){
+        initialize: function (opts) {
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listener
-            this.listenTo( this.model, 'change', this.render );
+            this.listenTo(this.model, 'change', this.render);
         },
 
         /*
         * Render View Element
         */
-        render: function(){
+        render: function () {
             var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
             return this;
         }
     });

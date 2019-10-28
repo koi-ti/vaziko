@@ -11,16 +11,10 @@ app || (app = {});
 
     app.PermisosRolList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('roles.permisos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('roles.permisos.index'));
         },
-        model: app.ModuloModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.ModuloModel
    });
 
 })(this, this.document);

@@ -11,17 +11,10 @@ app || (app = {});
 
     app.DespachopOrdenList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('ordenes.despachos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('ordenes.despachos.index'));
         },
-        model: app.DespachopModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        }
+        model: app.DespachopModel
    });
 
 })(this, this.document);

@@ -11,17 +11,10 @@ app || (app = {});
 
     app.TransportesProductopOrdenList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('ordenes.productos.transportes.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('ordenes.productos.transportes.index'));
         },
         model: app.Ordenp10Model,
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            //
-        },
 
         totalTransporte: function () {
             _.each(this.models, function (model) {
@@ -39,8 +32,11 @@ app || (app = {});
         totalize: function () {
             var total = this.total();
                 this.totalTransporte();
-            return { total: total }
-        },
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

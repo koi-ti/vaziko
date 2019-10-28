@@ -11,36 +11,32 @@ app || (app = {});
 
     app.EmpaquesProductopOrdenList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('ordenes.productos.empaques.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('ordenes.productos.empaques.index'));
         },
         model: app.Ordenp9Model,
 
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-
-        },
-
-        totalEmpaque: function( ){
-            _.each( this.models, function( model ) {
-                var total = parseFloat( model.get('orden9_valor_unitario') ) * model.get('orden9_cantidad');
+        totalEmpaque: function () {
+            _.each(this.models, function(model) {
+                var total = parseFloat(model.get('orden9_valor_unitario')) * model.get('orden9_cantidad');
                 model.set('orden9_valor_total', total);
             });
         },
 
-        total: function() {
-            return this.reduce(function(sum, model){
-                return sum + parseFloat( model.get('orden9_valor_unitario') ) * model.get('orden9_cantidad');
+        total: function () {
+            return this.reduce(function(sum, model) {
+                return sum + parseFloat(model.get('orden9_valor_unitario')) * model.get('orden9_cantidad');
             }, 0);
         },
 
         totalize: function () {
             var total = this.total();
                 this.totalEmpaque();
-            return { total: total }
-        },
+
+            return {
+                total: total
+            }
+        }
    });
 
 })(this, this.document);

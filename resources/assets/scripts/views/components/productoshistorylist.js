@@ -21,25 +21,18 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
-
+        initialize: function (opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
 
-            this.collection.fetch({ data: this.parameters.dataFilter, reset: true});
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
 
         /**
@@ -51,7 +44,7 @@ app || (app = {});
                 model: productoHistoryModel,
             });
             productoHistoryModel.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.prepend(view.render().el);
         },
 
         /**
@@ -60,23 +53,23 @@ app || (app = {});
         addAll: function () {
             this.$el.find('tbody').html('');
             if (!this.collection.length) {
-                this.$el.append( $('<tr>').append( $('<th>').addClass('text-center').attr('colspan', 3).append('NO EXISTE HISTORIAL DEL PRODUCTO') ) );
+                this.$el.append($('<tr>').append($('<th>').addClass('text-center').attr('colspan', 3).append('NO EXISTE HISTORIAL DEL PRODUCTO')));
             }
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

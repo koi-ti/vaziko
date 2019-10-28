@@ -9,25 +9,22 @@ app || (app = {});
 (function ($, window, document, undefined) {
 
     app.InventarioActionView = Backbone.View.extend({
-    	el: 'body',
 
+    	el: 'body',
+        templateChooseItemsRollo: _.template(($('#choose-itemrollo-inventory-tpl').html() || '')),
     	events:{
             'submit #form-create-inventario-component-source': 'onStoreInventario',
     	},
-
         parameters: {
-            data: { },
+            data: {},
         },
-
-        templateChooseItemsRollo: _.template( ($('#choose-itemrollo-inventory-tpl').html() || '') ),
 
         /**
         * Constructor Method
         */
-        initialize : function( opts )
-        {
+        initialize: function(opts) {
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             this.$modalIn = this.$('#modal-inventario-component');
@@ -48,29 +45,26 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function()
-        {
+        render: function () {
             var resp = this.parameters,
                 _this = this,
                 stuffToDo = {
-                    'metrado': function() {
+                    'metrado': function () {
                         if (resp.tipo === 'E') {
                             // Code...
-                        }else {
-                            _this.$modalIn.find('.content-modal').empty().html(_this.templateChooseItemsRollo( ) );
+                        } else {
+                            _this.$modalIn.find('.content-modal').empty().html(_this.templateChooseItemsRollo());
                             _this.$modalIn.find('.modal-title').text('Inventario - Salidas de productos metrados');
                         }
 
                         // Reference inventario
                         _this.metrajeReference(resp);
                     },
-                    'series': function() {
-                        console.log('series');
+                    'series': function () {
                         // Reference inventario
                         _this.serieReference(resp);
                     },
-                    unidades: function() {
-                        console.log('unidades');
+                    unidades: function () {
                         // Reference inventario
                         _this.unidadesReference(resp);
                     }
@@ -85,11 +79,10 @@ app || (app = {});
         /**
         * Reference add RolloMetrado
         */
-        metrajeReference: function(attributes)
-        {
+        metrajeReference: function (attributes) {
             if (attributes.tipo === 'E') {
                 // Code..
-            }else {
+            } else {
                 //Salidas
                 this.$wraperItemRollo = this.$('#browse-chooseitemtollo-list');
                 this.itemRolloINList.fetch({ reset: true, data: { producto: attributes.producto,   sucursal: attributes.data.sucursal } });
@@ -98,38 +91,38 @@ app || (app = {});
             // Open modal
             this.$modalIn.modal('show');
         },
+
         /**
         * Reference add Series
         */
-        serieReference: function(attributes)
-        {
+        serieReference: function (attributes) {
             if (attributes.tipo === 'E') {
                 // Code...
-            }else {
+            } else {
                 // Salidas
                 this.parameters.data = $.extend({}, this.parameters.data);
                 this.collection.trigger('store', this.parameters.data);
             }
         },
+
         /**
         * Reference add No series No metros
         */
-        unidadesReference: function(attributes)
-        {
+        unidadesReference: function (attributes) {
             if (attributes.tipo === 'E') {
                 // Code...
-            }else {
+            } else {
                 // Salidas
                 this.parameters.data = $.extend({}, this.parameters.data);
                 this.collection.trigger('store', this.parameters.data);
             }
         },
+
         /**
         * Render view task by model
         * @param Object ItemRolloModel Model instance
         */
-        addOneItemRolloInventario: function (ItemRolloModel, choose)
-        {
+        addOneItemRolloInventario: function (ItemRolloModel, choose) {
             choose || (choose = false);
 
             var view = new app.ItemRolloINListView({
@@ -138,25 +131,24 @@ app || (app = {});
                     choose: choose
                 }
             });
-            this.$wraperItemRollo.append( view.render().el );
+            this.$wraperItemRollo.append(view.render().el);
             this.ready();
         },
 
         /**
         * Render all view tast of the collection
         */
-        addAllItemRolloInventario: function ()
-        {
+        addAllItemRolloInventario: function () {
             var _this = this;
             this.itemRolloINList.forEach(function(model, index) {
                 _this.addOneItemRolloInventario(model, true)
             });
         },
+
         /*
         * Validate Carro temporal
         */
-        onStoreInventario: function (e)
-        {
+        onStoreInventario: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
                 this.parameters.data = $.extend({}, this.parameters.data);
@@ -164,35 +156,34 @@ app || (app = {});
                 this.collection.trigger('store', this.parameters.data);
             }
         },
+
         /**
         * fires libraries js
         */
-        ready: function ()
-        {
+        ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
         },
 
         /**
         * Respose of de server
         */
-        responseServer: function ( model, resp, opts )
-        {
-            if(!_.isUndefined(resp.success)) {
-                if( resp.success ) {
+        responseServer: function (model, resp, opts) {
+            if (!_.isUndefined(resp.success)) {
+                if (resp.success) {
                     // Close modals
                     this.$modalIn.modal('hide');
 

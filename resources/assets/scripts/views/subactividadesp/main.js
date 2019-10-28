@@ -17,7 +17,7 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            
             this.$subactividadespSearchTable = this.$('#subactividadesp-search-table');
             var paginacion = this.$subactividadespSearchTable.data('paginacion');
 

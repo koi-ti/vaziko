@@ -142,7 +142,7 @@
                                     <table id="browse-areas-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="100px">Nombre</th>
+                                                <th>Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -161,7 +161,7 @@
                                     <table id="browse-tips-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="100px">Nombre</th>
+                                                <th>Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -180,8 +180,8 @@
                                     <table id="browse-maquinas-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="5px">Código</th>
-                                                <th width="95px">Nombre</th>
+                                                <th width="5%">Código</th>
+                                                <th width="95%">Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -200,8 +200,8 @@
                                     <table id="browse-materiales-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="5px">Código</th>
-                                                <th width="95px">Nombre</th>
+                                                <th width="5%">Código</th>
+                                                <th width="95%">Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -220,8 +220,8 @@
                                     <table id="browse-acabados-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                <th width="5px">Código</th>
-                                                <th width="95px">Nombre</th>
+                                                <th width="5%">Código</th>
+                                                <th width="95%">Nombre</th>
                                             </tr>
                                         </thead>
                                         <tbody>

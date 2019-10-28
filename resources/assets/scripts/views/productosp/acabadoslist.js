@@ -29,14 +29,12 @@ app || (app = {});
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            this.parameters.wrapper
-
             // Events Listeners
             this.listenTo( this.collection, 'add', this.addOne );
             this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'sync', this.responseServer);
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
 
             this.collection.fetch({ data: {productop_id: this.parameters.dataFilter.productop_id}, reset: true });
         },
@@ -80,7 +78,7 @@ app || (app = {});
             // Add model in collection
             var productop6Model = new app.Productop6Model();
                 productop6Model.save(data, {
-                    succes: function (model, resp) {
+                    success: function (model, resp) {
                         if (!_.isUndefined(resp.success)) {
                             window.Misc.removeSpinner(_this.parameters.wrapper);
                             // response success or error
@@ -129,7 +127,6 @@ app || (app = {});
                         }
                     }
                 });
-
             }
         },
 

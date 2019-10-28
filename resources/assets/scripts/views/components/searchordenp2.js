@@ -12,7 +12,7 @@ app || (app = {});
     app.ComponentSearchOrdenP2View = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template( ($('#koi-search-ordenp2-component-tpl').html() || '') ),
+        template: _.template(($('#koi-search-ordenp2-component-tpl').html() || '')),
 		events: {
 			'change input.ordenp2-koi-component': 'ordenpChanged',
             'click .btn-koi-search-orden2-component-table': 'searchOrden',
@@ -24,17 +24,17 @@ app || (app = {});
         /**
         * Constructor Method
         */
-		initialize: function() {
+		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-ordenp2-component');
 		},
 
-		searchOrden: function(e) {
+		searchOrden: function (e) {
             e.preventDefault();
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html( this.template({ }) );
+            this.$modalComponent.find('.content-modal').html(this.template({}));
 
             // References
             this.$searchOrdenp = this.$('#search_ordenp');
@@ -47,7 +47,7 @@ app || (app = {});
 
             // Validate tercero
             var tercero = this.$inputContent.attr("data-tercero");
-            if( _.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
+            if (_.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
                 alertify.error('Por favor ingrese cliente antes agregar una orden.');
                 return;
             }
@@ -59,8 +59,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull( Route.route('ordenes.productos.index') ),
-                    data: function( data ) {
+                    url: window.Misc.urlFull(Route.route('ordenes.productos.index')),
+                    data: function (data) {
                     	data.datatables = true;
                         data.search_ordenp = _this.$searchOrdenp.val();
                         data.search_ordenpnombre = _this.$searchOrdenpNombre.val();
@@ -84,7 +84,7 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         searchable: false,
-                        render: function ( data, type, full, row ) {
+                        render: function (data, type, full, row) {
                         	return '<a href="#" class="a-koi-search-ordenp2-component-table">' + data + '</a>';
                         }
                     },
@@ -93,13 +93,13 @@ app || (app = {});
                         visible: false,
                     }
                 ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.orden_abierta) ) {
-                        $(row).css( {"color":"#00a65a"} );
-                    }else if ( parseInt(data.orden_anulada) ) {
-                        $(row).css( {"color":"red"} );
-                    }else if ( parseInt(data.orden_culminada) ) {
-                        $(row).css( {"color":"#0073b7"} );
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.orden_abierta)) {
+                        $(row).css({"color":"#00a65a"});
+                    } else if (parseInt(data.orden_anulada)) {
+                        $(row).css({"color":"red"});
+                    } else if (parseInt(data.orden_culminada)) {
+                        $(row).css({"color":"#0073b7"});
                     }
                 }
 			});
@@ -109,23 +109,23 @@ app || (app = {});
 			this.$modalComponent.modal('show');
 		},
 
-		setOrden: function(e) {
+		setOrden: function (e) {
 			e.preventDefault();
-	        var data = this.ordersSearchTable.row( $(e.currentTarget).parents('tr') ).data();
+	        var data = this.ordersSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-            this.$inputContent.val( data.id );
-            this.$inputName.val( data.productop_nombre );
+            this.$inputContent.val(data.id);
+            this.$inputName.val(data.productop_nombre);
 
 			this.$modalComponent.modal('hide');
 		},
 
-		search: function(e) {
+		search: function (e) {
 			e.preventDefault();
 
 		    this.ordersSearchTable.ajax.reload();
 		},
 
-		clear: function(e) {
+		clear: function (e) {
 			e.preventDefault();
 
             this.$searchOrdenp.val('');
@@ -135,7 +135,7 @@ app || (app = {});
             this.ordersSearchTable.ajax.reload();
 		},
 
-		ordenpChanged: function(e) {
+		ordenpChanged: function (e) {
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
@@ -146,7 +146,7 @@ app || (app = {});
 
             // Validate tercero
             var tercero = this.$inputContent.attr("data-tercero");
-            if( _.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
+            if (_.isUndefined(tercero) || _.isNull(tercero) || tercero == '') {
                 alertify.error('Por favor ingrese cliente antes agregar una orden.');
                 return;
             }
@@ -154,7 +154,7 @@ app || (app = {});
             // Before eval clear data
             this.$inputName.val('');
 
-			if(!_.isUndefined(ordenp2) && !_.isNull(ordenp2) && ordenp2 != '') {
+			if (!_.isUndefined(ordenp2) && !_.isNull(ordenp2) && ordenp2 != '') {
 				// Get Orden
 	            $.ajax({
 	                url: window.Misc.urlFull(Route.route('ordenes.productos.search')),
@@ -162,21 +162,21 @@ app || (app = {});
 	                data: {
                         ordenp2: ordenp2
                     },
-	                beforeSend: function() {
+	                beforeSend: function () {
 						_this.$inputName.val('');
-	                    window.Misc.setSpinner( _this.$wraperConten );
+	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
 	            .done(function(resp) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
-	                if(resp.success) {
-	                    if(!_.isUndefined(resp.productop_nombre) && !_.isNull(resp.productop_nombre)){
+	                window.Misc.removeSpinner(_this.$wraperConten);
+	                if (resp.success) {
+	                    if (!_.isUndefined(resp.productop_nombre) && !_.isNull(resp.productop_nombre)){
 							_this.$inputName.val(resp.productop_nombre);
 	                    }
 	                }
 	            })
 	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner( _this.$wraperConten );
+	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });
 	     	}
@@ -187,7 +187,7 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
         }
     });

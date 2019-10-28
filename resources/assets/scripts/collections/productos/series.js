@@ -11,16 +11,10 @@ app || (app = {});
 
     app.ProductoSeriesINList = Backbone.Collection.extend({
 
-        url: function() {
-            return window.Misc.urlFull( Route.route('productos.index') );
+        url: function () {
+            return window.Misc.urlFull(Route.route('productos.index'));
         },
-        model: app.ProductoModel,
-
-        /**
-        * Constructor Method
-        */
-        initialize : function(){
-        }
+        model: app.ProductoModel
    });
 
 })(this, this.document);
