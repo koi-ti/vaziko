@@ -70,6 +70,7 @@ class MayorBalanceController extends Controller
                     FROM koi_saldoscontables as s
                     WHERE s.saldoscontables_mes = $mes2 AND s.saldoscontables_ano = $ano2
                 )";
+
             // Filters
             if ($request->has('cuenta_inicio')) {
                 $sql .= "AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)";
@@ -80,13 +81,11 @@ class MayorBalanceController extends Controller
             $sql .= " ORDER BY plancuentas_cuenta ASC";
             $saldos = DB::select($sql);
 
-            // dd($saldos);
-
             // Generate file
             switch ($type) {
                 case 'xls':
                     Excel::create(sprintf('%s_%s_%s_%s', 'mayor_y_balance', $request->ano, $request->mes, date('Y_m_d H_i_s')), function($excel) use($saldos, $title, $type) {
-                        $excel->sheet('Excel', function($sheet) use($saldos, $title, $type) {
+                        $excel->sheet('Excel', function ($sheet) use ($saldos, $title, $type) {
                             $sheet->loadView('reports.accounting.mayorbalance.report', compact('saldos', 'title', 'type'));
                         });
                     })->download('xls');

@@ -792,6 +792,7 @@ class Cotizacion1Controller extends Controller
                     }
                 }
 
+                $cotizacion->cotizacion1_orden = $orden->id;
                 $cotizacion->cotizacion1_abierta = false;
                 $cotizacion->cotizacion1_anulada = false;
                 $cotizacion->cotizacion1_estado = 'O';

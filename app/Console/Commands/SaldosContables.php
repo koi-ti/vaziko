@@ -51,21 +51,27 @@ class SaldosContables extends Command
             $chosenyear = $this->argument('ano');
 
             // Eliminar saldos contables existentes del rango de fecha seleccionado hasta fecha actual nif y normales
-            $dropsaldoscontables = SaldoContable::whereBetween('saldoscontables_ano', [$chosenyear, $this->currentyear])
-                                                ->whereBetween('saldoscontables_mes', [$chosenmonth, $this->currentmonth])
+            $dropsaldoscontables = SaldoContable::where(function ($q) use ($chosenyear, $chosenmonth) {
+                                                    $q->where('saldoscontables_ano', '>=', $chosenyear)
+                                                        ->where('saldoscontables_mes', '>=', $chosenmonth);
+                                                })
+                                                ->orWhere(function ($q) {
+                                                    $q->where('saldoscontables_ano', '<=', 2018)
+                                                        ->where('saldoscontables_mes', '<=', 1);
+                                                })
                                                 ->delete();
 
-            $dropsaldosterceros = SaldoTercero::whereBetween('saldosterceros_ano', [$chosenyear, $this->currentyear])
-                                                ->whereBetween('saldosterceros_mes', [$chosenmonth, $this->currentmonth])
-                                                ->delete();
-
-            $dropsaldoscontablesnif = SaldoContableNif::whereBetween('saldoscontablesn_ano', [$chosenyear, $this->currentyear])
-                                                ->whereBetween('saldoscontablesn_mes', [$chosenmonth, $this->currentmonth])
-                                                ->delete();
-
-            $dropsaldostercerosnif = SaldoTerceroNif::whereBetween('saldostercerosn_ano', [$chosenyear, $this->currentyear])
-                                                ->whereBetween('saldostercerosn_mes', [$chosenmonth, $this->currentmonth])
-                                                ->delete();
+            // $dropsaldosterceros = SaldoTercero::whereBetween('saldosterceros_ano', [$chosenyear, $this->currentyear])
+            //                                     ->whereBetween('saldosterceros_mes', [$chosenmonth, $this->currentmonth])
+            //                                     ->delete();
+            //
+            // $dropsaldoscontablesnif = SaldoContableNif::whereBetween('saldoscontablesn_ano', [$chosenyear, $this->currentyear])
+            //                                     ->whereBetween('saldoscontablesn_mes', [$chosenmonth, $this->currentmonth])
+            //                                     ->delete();
+            //
+            // $dropsaldostercerosnif = SaldoTerceroNif::whereBetween('saldostercerosn_ano', [$chosenyear, $this->currentyear])
+            //                                     ->whereBetween('saldostercerosn_mes', [$chosenmonth, $this->currentmonth])
+            //                                     ->delete();
 
             $xmes = $chosenmonth;
             $xmes2 = $this->currentmonth;
@@ -74,12 +80,22 @@ class SaldosContables extends Command
                 $this->currentmonth = $xmes;
             }
 
-            $asientos = Asiento::whereBetween('asiento1_ano', [$chosenyear, $this->currentyear])
-                                ->whereBetween('asiento1_mes', [$chosenmonth, $this->currentmonth])
-                                ->get();
+            $query = Asiento::query();
+            $query->where(function ($q) use ($chosenyear, $chosenmonth) {
+                $q->where('asiento1_ano', '>=', $chosenyear)
+                    ->where('asiento1_mes', '>=', $chosenmonth);
+            });
+            $query->orWhere(function ($q) {
+                $q->where('asiento1_ano', '<=', 2018)
+                    ->where('asiento1_mes', '<=', 1);
+            });
+            $asientos = $query->get();
+
+            $ff = count($asientos);
 
             // Recorrer asientos
-            foreach ($asientos as $asiento) {
+            foreach ($asientos as $key => $asiento) {
+                \Log::info("$asiento->id -- $key de $ff -- [$chosenyear|$this->currentyear] -- [$chosenmonth|$this->currentmonth]");
                 // Recorrer detalles del asiento
                 foreach ($asiento->detalle as $asiento2) {
                     $cuenta = PlanCuenta::find( $asiento2->asiento2_cuenta );
@@ -93,11 +109,11 @@ class SaldosContables extends Command
                         throw new \Exception('No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.');
                     }
 
-                    // Mayorizacion de saldos x tercero
-                    $saldosterceros = $this->saldosTerceros($cuenta, $tercero, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
-                    if ($saldosterceros != 'OK') {
-                        throw new \Exception($saldosterceros);
-                    }
+                    // // Mayorizacion de saldos x tercero
+                    // $saldosterceros = $this->saldosTerceros($cuenta, $tercero, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
+                    // if ($saldosterceros != 'OK') {
+                    //     throw new \Exception($saldosterceros);
+                    // }
 
                     // Mayorizacion de saldos x mes
                     $saldoscontables = $this->saldosContables($cuenta, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
@@ -272,6 +288,7 @@ class SaldosContables extends Command
     // Funcion para mayorizar saldos contables asientos {cuenta, debito, credito, mes, ano}
     public function saldosContables(PlanCuenta $cuenta, $debito = 0, $credito = 0, $xmes, $xano)
     {
+        Log::info("C:$credito, D:$debito");
         $asiento_mes = $xmes;
         $asiento_ano = $xano;
 
@@ -395,8 +412,10 @@ class SaldosContables extends Command
         			// Actualizo saldo iniciales
 					if ($debito) {
 						$objSaldoContable->saldoscontables_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
+                        $objSaldoContable->saldoscontables_credito_inicial = 0;
 					} else if ($credito) {
 						$objSaldoContable->saldoscontables_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
+                        $objSaldoContable->saldoscontables_debito_inicial = 0;
 					} else {
 						return "No se puede definir la naturaleza de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
 					}

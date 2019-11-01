@@ -13,10 +13,10 @@
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
                 <li><a href="{{ route('cotizaciones.index') }}">Cotización</a></li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                    <li><a href="<%- window.Misc.urlFull( Route.route('cotizaciones.show', { cotizaciones: id}) ) %>"><%- cotizacion_codigo %></a></li>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                    <li><a href="<%- window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: id})) %>"><%- cotizacion_codigo %></a></li>
                     <li class="active">Editar</li>
-                <% }else{ %>
+                <% } else { %>
                     <li class="active">Nueva</li>
                 <% } %>
             </ol>
@@ -27,13 +27,13 @@
                 <div class="nav-tabs-custom tab-danger tab-whithout-box-shadow">
                     <ul class="nav nav-tabs">
                         <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
-                        <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                            @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                        <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                 <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                             @endif
                             <li class="pull-right">
                                 <div class="btn-group btn-group-sm" role="group">
-                                    @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                                    @if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
                                         <div class="btn-group btn-group-sm">
                                             <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
                                             <ul class="dropdown-menu pull-right">
@@ -42,7 +42,7 @@
                                             </ul>
                                         </div>
                                     @endif
-                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                         <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                                         <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
                                     @endif
@@ -58,16 +58,16 @@
                                 <div class="box-body">
                                     <form method="POST" accept-charset="UTF-8" id="form-cotizaciones" data-toggle="validator">
                                         <div class="row">
-                                            <% if( typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
+                                            <% if (typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 col-md-1 control-label">Código</label>
                                                 <div class="form-group col-xs-12 col-sm-2 col-md-1">
                                                     <%- cotizacion_codigo %>
                                                 </div>
                                             <% } %>
-                                            <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
+                                            <% if (typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 col-md-1 control-label">Pre-cotización</label>
                                                 <div class="form-group col-xs-12 col-sm-2 col-md-1">
-                                                    <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion }) ) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
+                                                    <a href="<%- window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: cotizacion1_precotizacion })) %>" title="Ir a precotización"><%- precotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
 
@@ -178,12 +178,12 @@
                                 <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <div class="box box-danger">
                                         <div class="box-body">
-                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('cotizaciones.productos.create') ) %>">
+                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.create')) %>">
                                                     <div class="row">
                                                         <label for="typeproductop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Tipo </label>
                                                         <div class="form-group col-xs-12 col-sm-6 col-md-3">
                                                             <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
-                                                                @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                                                @foreach(App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                     <option value="{{ $key }}">{{ $value }}</option>
                                                                 @endforeach
                                                             </select>
@@ -229,7 +229,7 @@
                                                                 <th width="60%">Nombre</th>
                                                                 <th width="5%">Cantidad</th>
                                                                 <th width="6%">Facturado</th>
-                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                                     <th width="10%" class="text-right">Precio</th>
                                                                     <th width="10%" class="text-right">Total</th>
                                                                 @endif
@@ -244,12 +244,12 @@
                                                                 <th class="text-right">Subtotal</th>
                                                                 <th class="text-center" id="subtotal-cantidad">0</th>
                                                                 <th class="text-center" id="subtotal-facturado">0</th>
-                                                                @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                                     <th></th>
                                                                     <th class="text-right" id="subtotal-total">0</th>
                                                                 @endif
                                                             </tr>
-                                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                                 <tr>
                                                                     <th colspan="3"></th>
                                                                     <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
@@ -285,9 +285,9 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-item-list-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
-                @if( Auth::user()->ability('admin', 'eliminar', ['module' => 'cotizaciones']) )
+                @if (auth()->user()->ability('admin', 'eliminar', ['module' => 'cotizaciones']))
                     <a class="btn btn-default btn-xs item-cotizacion-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                         <span><i class="fa fa-times"></i></span>
                     </a>
@@ -295,7 +295,7 @@
             </td>
 
             <td class="text-center">
-                @if( Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                @if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
                     <a class="btn btn-default btn-xs item-cotizacion-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
@@ -303,14 +303,14 @@
             </td>
         <% } %>
         <td>
-            <a href="<%- window.Misc.urlFull( Route.route('cotizaciones.productos.show', {productos: id}) ) %>" title="Ver producto"><%- id %></a>
+            <a href="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.show', {productos: id})) %>" title="Ver producto"><%- id %></a>
         </td>
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- cotizacion2_cantidad %></td>
         <td class="text-center"><%- cotizacion2_facturado %></td>
-        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-            <td class="text-right"><%- window.Misc.currency( cotizacion2_total_valor_unitario ) %></td>
-            <td class="text-right"><%- window.Misc.currency( cotizacion2_precio_total ) %></td>
+        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
         @endif
     </script>
 

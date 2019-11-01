@@ -1,6 +1,5 @@
 @extends('production.cotizaciones.main')
 
-
 @section('module')
     <section class="content-header">
         <h1>
@@ -18,15 +17,15 @@
             <div class="nav-tabs-custom tab-danger tab-whithout-box-shadow">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
-                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'ordenes']) )
+                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                         <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                     @endif
                     <li class="pull-right">
                         <div class="btn-group" role="group">
-                            @if( !$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && Auth::user()->ability('admin', 'crear', ['module' => 'cotizaciones']) )
+                            @if (!$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
                                 <a class="btn btn-danger open-cotizacion" title="Reabrir cotización"><i class="fa fa-unlock"></i></a>
                             @endif
-                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                 <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                             @endif
                             <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
@@ -38,13 +37,13 @@
                         <div class="box box-whithout-border">
                             <div class="box-body">
                             	<div class="row">
-									<div class="form-group col-md-3">
+									<div class="form-group col-md-2">
 										<label class="control-label">Código</label>
 										<div>
                                             {{ $cotizacion->cotizacion_codigo }}
-                                            @if($cotizacion->cotizacion1_anulada)
+                                            @if ($cotizacion->cotizacion1_anulada)
                                                 <span class="label label-danger">ANULADA</span>
-                                            @elseif($cotizacion->cotizacion1_abierta)
+                                            @elseif ($cotizacion->cotizacion1_abierta)
                                                 <span class="label label-success">ABIERTA</span>
                                             @else
                                                 @if ($cotizacion->cotizacion1_estado)
@@ -55,7 +54,13 @@
                                             @endif
                                         </div>
 									</div>
-                                    @if( $cotizacion->cotizacion1_precotizacion )
+                                    @if ($cotizacion->cotizacion1_orden)
+                                        <div class="form-group col-md-2">
+                                            <label>Orden de producción</label>
+                                            <div><a href="{{ route('ordenes.show', ['ordenes' => $cotizacion->cotizacion1_orden]) }}" title="Ir a orden de producción">{{ $cotizacion->orden_codigo }}</a></div>
+                                        </div>
+                                    @endif
+                                    @if ($cotizacion->cotizacion1_precotizacion)
     									<div class="form-group col-md-2">
     										<label>Pre-cotización</label>
                                             <div><a href="{{ route('precotizaciones.show', ['precotizaciones' => $cotizacion->cotizacion1_precotizacion]) }}" title="Ir a precotización">{{ $cotizacion->precotizacion_codigo }}</a></div>
@@ -153,7 +158,7 @@
                                             <th width="60%">Nombre</th>
                                             <th width="10%">Cantidad</th>
                                             <th width="10%">Facturado</th>
-                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                 <th width="10%">Precio</th>
                                                 <th width="10%">Total</th>
                                             @endif
@@ -168,12 +173,12 @@
                                             <th class="text-right">Subtotal</th>
                                             <th class="text-center" id="subtotal-cantidad">0</th>
                                             <th class="text-center" id="subtotal-facturado">0</th>
-                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                 <td></td>
                                                 <th class="text-right" id="subtotal-total">0</th>
                                             @endif
                                         </tr>
-                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                             <tr>
                                                 <td></td>
                                                 <th class="text-right">Iva ({{ $cotizacion->cotizacion1_iva }}%)</th>

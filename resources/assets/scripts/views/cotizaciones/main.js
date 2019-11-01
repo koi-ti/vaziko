@@ -102,6 +102,8 @@ app || (app = {});
                             var buttons = '';
                             const exporte = '<a class="btn btn-danger export-cotizacion" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
 
+                            buttons += exporte + ' ';
+
                             if (parseInt(full.cotizacion_create)) {
                                 buttons += parseInt(full.cotizacion1_abierta) ? close : open;
                             }
@@ -111,8 +113,6 @@ app || (app = {});
 
                                 buttons += parseInt(full.cotizacion1_abierta) ? generate : '';
                             }
-
-                            buttons += exporte;
                             return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
                         }
                     },

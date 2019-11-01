@@ -56,7 +56,7 @@
                         <label for="searchcotizacion_productop" class="col-md-1 control-label">Producto</label>
                         <div class="col-md-5">
                             <select name="searchcotizacion_productop" id="searchcotizacion_productop" class="form-control select2-default-clear">
-                                @foreach( App\Models\Production\Productop::getProductos() as $key => $value)
+                                @foreach (App\Models\Production\Productop::getProductos() as $key => $value)
                                     <option value="{{ $key }}" {{ session('searchcotizacion_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
                                 @endforeach
                             </select>
