@@ -43,8 +43,7 @@ class SaldosContables extends Command
     public function handle()
     {
         $this->chosen_date = Carbon::parse("{$this->argument('ano')}-{$this->argument('mes')}-01");
-        $this->current_date = Carbon::parse("2018-01-31")->endOfMonth();
-        // $this->current_date = Carbon::now()->endOfMonth();
+        $this->current_date = Carbon::now()->endOfMonth();
 
         DB::beginTransaction();
         try {
