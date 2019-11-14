@@ -8,6 +8,9 @@ use DB, Auth, Log, Carbon\Carbon;
 
 class SaldosContables extends Command
 {
+    private $chosen_date;
+    private $current_date;
+
     /**
      * The name and signature of the console command.
      *
@@ -30,9 +33,6 @@ class SaldosContables extends Command
     public function __construct()
     {
         parent::__construct();
-
-        $this->currentmonth = Carbon::now()->month;
-        $this->currentyear = Carbon::now()->year;
     }
 
     /**
@@ -42,60 +42,45 @@ class SaldosContables extends Command
      */
     public function handle()
     {
+        $this->chosen_date = Carbon::parse("{$this->argument('ano')}-{$this->argument('mes')}-01");
+        $this->current_date = Carbon::parse("2018-01-31")->endOfMonth();
+        // $this->current_date = Carbon::now()->endOfMonth();
+
         DB::beginTransaction();
         try {
             Log::info("Bienvenido a la rutina de actualizar saldos usuario id {$this->argument('user')}");
 
-            // Mes filtro y mes default ( actual )
-            $chosenmonth = $this->argument('mes');
-            $chosenyear = $this->argument('ano');
-
             // Eliminar saldos contables existentes del rango de fecha seleccionado hasta fecha actual nif y normales
-            $dropsaldoscontables = SaldoContable::where(function ($q) use ($chosenyear, $chosenmonth) {
-                                                    $q->where('saldoscontables_ano', '>=', $chosenyear)
-                                                        ->where('saldoscontables_mes', '>=', $chosenmonth);
+            $dropsaldoscontables = SaldoContable::where(function ($q) {
+                                                    $q->where('saldoscontables_ano', '>=', $this->chosen_date->year)
+                                                        ->where('saldoscontables_mes', '>=', $this->chosen_date->month);
                                                 })
                                                 ->orWhere(function ($q) {
-                                                    $q->where('saldoscontables_ano', '<=', 2018)
-                                                        ->where('saldoscontables_mes', '<=', 1);
+                                                    $q->where('saldoscontables_ano', '<=', $this->current_date->year)
+                                                        ->where('saldoscontables_mes', '<=', $this->current_date->month);
+                                                })
+                                                ->delete();
+            // Eliminar saldos contables existentes del rango de fecha seleccionado hasta fecha actual nif y normales
+            $dropsaldosterceros = SaldoTercero::where(function ($q) {
+                                                    $q->where('saldosterceros_ano', '>=', $this->chosen_date->year)
+                                                        ->where('saldosterceros_mes', '>=', $this->chosen_date->month);
+                                                })
+                                                ->orWhere(function ($q) {
+                                                    $q->where('saldosterceros_ano', '<=', $this->current_date->year)
+                                                        ->where('saldosterceros_mes', '<=', $this->current_date->month);
                                                 })
                                                 ->delete();
 
-            // $dropsaldosterceros = SaldoTercero::whereBetween('saldosterceros_ano', [$chosenyear, $this->currentyear])
-            //                                     ->whereBetween('saldosterceros_mes', [$chosenmonth, $this->currentmonth])
-            //                                     ->delete();
-            //
-            // $dropsaldoscontablesnif = SaldoContableNif::whereBetween('saldoscontablesn_ano', [$chosenyear, $this->currentyear])
-            //                                     ->whereBetween('saldoscontablesn_mes', [$chosenmonth, $this->currentmonth])
-            //                                     ->delete();
-            //
-            // $dropsaldostercerosnif = SaldoTerceroNif::whereBetween('saldostercerosn_ano', [$chosenyear, $this->currentyear])
-            //                                     ->whereBetween('saldostercerosn_mes', [$chosenmonth, $this->currentmonth])
-            //                                     ->delete();
-
-            $xmes = $chosenmonth;
-            $xmes2 = $this->currentmonth;
-            if ($xmes > $xmes2) {
-                $chosenmonth = $xmes2;
-                $this->currentmonth = $xmes;
-            }
-
             $query = Asiento::query();
-            $query->where(function ($q) use ($chosenyear, $chosenmonth) {
-                $q->where('asiento1_ano', '>=', $chosenyear)
-                    ->where('asiento1_mes', '>=', $chosenmonth);
-            });
-            $query->orWhere(function ($q) {
-                $q->where('asiento1_ano', '<=', 2018)
-                    ->where('asiento1_mes', '<=', 1);
-            });
+            $query->whereBetween(DB::raw('CAST(CONCAT(asiento1_ano,"-",asiento1_mes,"-",asiento1_dia) AS DATE)'), [$this->chosen_date, $this->current_date]);
             $asientos = $query->get();
 
             $ff = count($asientos);
 
             // Recorrer asientos
             foreach ($asientos as $key => $asiento) {
-                \Log::info("$asiento->id -- $key de $ff -- [$chosenyear|$this->currentyear] -- [$chosenmonth|$this->currentmonth]");
+                \Log::info("$asiento->id | $key de $ff -- [$this->chosen_date, $this->current_date]");
+
                 // Recorrer detalles del asiento
                 foreach ($asiento->detalle as $asiento2) {
                     $cuenta = PlanCuenta::find( $asiento2->asiento2_cuenta );
@@ -109,11 +94,11 @@ class SaldosContables extends Command
                         throw new \Exception('No es posible recuperar beneficiario, por favor verifique la información del asiento o consulte al administrador.');
                     }
 
-                    // // Mayorizacion de saldos x tercero
-                    // $saldosterceros = $this->saldosTerceros($cuenta, $tercero, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
-                    // if ($saldosterceros != 'OK') {
-                    //     throw new \Exception($saldosterceros);
-                    // }
+                    // Mayorizacion de saldos x tercero
+                    $saldosterceros = $this->saldosTerceros($cuenta, $tercero, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
+                    if ($saldosterceros != 'OK') {
+                        throw new \Exception($saldosterceros);
+                    }
 
                     // Mayorizacion de saldos x mes
                     $saldoscontables = $this->saldosContables($cuenta, $asiento2->asiento2_debito, $asiento2->asiento2_credito, $asiento->asiento1_mes, $asiento->asiento1_ano);
@@ -126,11 +111,11 @@ class SaldosContables extends Command
             // Crear nueva notifiacion (tercero, title, description, fh)
             DB::commit();
             Log::info("Se actualizaron los saldos con exito.");
-            return Notificacion::nuevaNotificacion($this->argument('user'), 'Rutina de saldos', "Se actualizaron con exito los saldos del mes {$chosenmonth} a {$this->currentmonth} y año {$chosenyear}.", Carbon::now());
+            return Notificacion::nuevaNotificacion($this->argument('user'), 'Rutina de saldos', "Se actualizaron con exito los saldos.", Carbon::now());
         } catch (\Exception $e) {
             DB::rollback();
             Log::error("{$e->getMessage()}");
-            return Notificacion::nuevaNotificacion($this->argument('user'), 'Error en la rutina', "Por favor comuníquese con el administrador, mes del {$chosenmonth} a {$this->currentmonth} y año {$chosenyear}.", Carbon::now());
+            return Notificacion::nuevaNotificacion($this->argument('user'), 'Error en la rutina', "Por favor comuníquese con el administrador.", Carbon::now());
         }
     }
 
@@ -166,7 +151,6 @@ class SaldosContables extends Command
 			$objSaldoTercero->saldosterceros_debito_mes += $debito;
 			$objSaldoTercero->saldosterceros_credito_mes += $credito;
 			$objSaldoTercero->save();
-
 		}
 
     	// Saldos iniciales
@@ -254,15 +238,12 @@ class SaldosContables extends Command
 				}
 
 				// Actualizo saldo iniciales
-				if ($debito) {
+				if ($cuenta->plancuentas_naturaleza == 'D') {
 					$objSaldoTercero->saldosterceros_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
-
-				} else if ($credito) {
+				} else if ($cuenta->plancuentas_naturaleza == 'C') {
 					$objSaldoTercero->saldosterceros_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
-
 				} else {
-					return "No se puede definir la naturaleza {$saldo->plancuentas_naturaleza} de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
-
+					continue;
 				}
 				$objSaldoTercero->save();
 			}
@@ -410,14 +391,12 @@ class SaldosContables extends Command
         			}
 
         			// Actualizo saldo iniciales
-					if ($debito) {
+					if ($objCuenta->plancuentas_naturaleza == 'D') {
 						$objSaldoContable->saldoscontables_debito_inicial = $saldo->debito_inicial + ($saldo->debitomes - $saldo->creditomes);
-                        $objSaldoContable->saldoscontables_credito_inicial = 0;
-					} else if ($credito) {
+					} else if ($objCuenta->plancuentas_naturaleza == 'C') {
 						$objSaldoContable->saldoscontables_credito_inicial = $saldo->credito_inicial + ($saldo->creditomes - $saldo->debitomes);
-                        $objSaldoContable->saldoscontables_debito_inicial = 0;
 					} else {
-						return "No se puede definir la naturaleza de la cuenta, por favor verifique la información del asiento o consulte al administrador.";
+                        continue;
 					}
 					$objSaldoContable->save();
 				}

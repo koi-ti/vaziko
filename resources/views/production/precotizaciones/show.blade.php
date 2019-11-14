@@ -20,9 +20,9 @@
 						<label class="control-label">Código</label>
 						<div>
                             {{ $precotizacion->precotizacion_codigo }}
-                            @if( $precotizacion->precotizacion1_culminada )
+                            @if ($precotizacion->precotizacion1_culminada)
                                 <span class="label label-primary">CULMINADA</span>
-                            @elseif( $precotizacion->precotizacion1_abierta )
+                            @elseif ($precotizacion->precotizacion1_abierta)
                                 <span class="label label-success">ABIERTA</span>
                             @else
                                 <span class="label label-warning">CERRADA</span>
@@ -33,13 +33,13 @@
 						<label class="control-label">Fecha</label>
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
-                    @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
+                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
                         <div class="col-md-offset-5 col-md-2">
                             <div class="btn-group btn-group-justified" role="group">
-                                @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
+                                @if (auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                                     <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
                                 @endif
-                                @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
+                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
                                     <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                                     <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                                 @endif

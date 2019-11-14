@@ -13,8 +13,8 @@
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
                 <li><a href="{{ route('precotizaciones.index') }}">Pre-cotización</a></li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
-                    <li><a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', { precotizaciones: id}) ) %>"><%- precotizacion_codigo %></a></li>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                    <li><a href="<%- window.Misc.urlFull( Route.route('precotizaciones.show', { precotizaciones: id})) %>"><%- precotizacion_codigo %></a></li>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nueva</li>
@@ -27,7 +27,7 @@
                 <form method="POST" accept-charset="UTF-8" id="form-precotizaciones" data-toggle="validator">
                     <div class="box-body">
                         <div class="row">
-                            <% if( typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
+                            <% if (typeof(precotizacion_codigo) !== 'undefined' && !_.isUndefined(precotizacion_codigo) && !_.isNull(precotizacion_codigo) && precotizacion_codigo != '') { %>
                                 <label class="col-sm-1 control-label">Código</label>
                                 <div class="form-group col-md-1">
                                     <%- precotizacion_codigo %>
@@ -40,11 +40,11 @@
                             <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                 <div class="col-md-offset-5 col-xs-12 col-md-2">
                                     <div class="btn-group btn-group-justified btn-group-sm">
-                                        @if( Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']) )
+                                        @if (auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                                             <a class="btn btn-success close-precotizacion" title="Cerrar pre-cotizacion"><i class="fa fa-lock"></i></a>
                                             <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
                                         @endif
-                                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+                                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
                                             <a class="btn btn-success complete-precotizacion" title="Culminar pre-cotización"><i class="fa fa-handshake-o"></i></a>
                                             <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
                                         @endif
@@ -116,11 +116,23 @@
                             </div>
                         </div>
                         <div class="row">
-                        <label for="precotizacion1_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
-                        <div class="form-group col-xs-12 col-sm-10">
-                            <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>
+                            <label for="precotizacion1_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
+                            <div class="form-group col-xs-12 col-sm-10">
+                                <textarea id="precotizacion1_observaciones" name="precotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- precotizacion1_observaciones %></textarea>
+                            </div>
                         </div>
-                    </div>
+                        <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                            <div class="row">
+                                <label class="col-sm-1 control-label">Usuario elaboro</label>
+                                <div class="form-group col-sm-2">
+                                    <a href="<%- window.Misc.urlFull(Route.route('terceros.show', {terceros: precotizacion1_usuario_elaboro})) %>" title="Ver tercero"><%- username_elaboro %></a>
+                                </div>
+                                <label class="col-sm-1 control-label">Fecha elaboro</label>
+                                <div class="form-group col-sm-2">
+                                    <div><%- precotizacion1_fh_elaboro %></div>
+                                </div>
+                            </div>
+                        <% } %>
                     </div>
                     <div class="box-footer with-border">
                         <div class="row">
@@ -138,7 +150,7 @@
             <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                 <div class="box box-success spinner-main">
                     <div class="box-body">
-                        <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.create') ) %>">
+                        <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.create')) %>">
                             <div class="row">
                                 <label for="productop" class="control-label col-xs-12 col-sm-1 col-sm-offset-2">Producto</label>
                                 <div class="form-group col-sm-6 col-xs-12">
@@ -167,7 +179,7 @@
                                 <thead>
                                     <tr>
                                         <th width="2%"></th>
-                                        @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
+                                        @if (auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                                             <th width="2%"></th>
                                         @endif
                                         <th width="5%">Código</th>
@@ -218,7 +230,7 @@
                     <span><i class="fa fa-times"></i></span>
                 </a>
             </td>
-            @if (Auth::user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
+            @if (auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
                 <td class="text-center">
                     <a class="btn btn-default btn-xs item-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
@@ -227,7 +239,7 @@
             @endif
         <% } %>
         <td>
-            <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.show', {productos: id}) ) %>" title="Ver producto"><%- id %></a>
+            <a href="<%- window.Misc.urlFull( Route.route('precotizaciones.productos.show', {productos: id})) %>" title="Ver producto"><%- id %></a>
         </td>
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- precotizacion2_cantidad %></td>

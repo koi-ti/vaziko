@@ -26,7 +26,10 @@ app || (app = {});
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',
             'precotizacion1_observaciones': '',
-            'precotizacion1_suministran': ''
+            'precotizacion1_suministran': '',
+            'precotizacion1_usuario_culminada': '',
+            'precotizacion1_fh_culminada': '',
+            'username_culminada': ''
         }
     });
 
