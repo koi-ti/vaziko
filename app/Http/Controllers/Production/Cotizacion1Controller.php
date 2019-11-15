@@ -419,7 +419,7 @@ class Cotizacion1Controller extends Controller
             abort(404);
         }
 
-        $cotizaciones2 = Cotizacion2::getCotizaciones2($cotizacion->id);
+        $cotizaciones2 = Cotizacion2::getExportCotizaciones2($cotizacion->id);
         $title = "Cotización {$cotizacion->cotizacion_codigo}";
 
         $data = [];

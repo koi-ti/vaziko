@@ -36,13 +36,15 @@ class MayorBalanceController extends Controller
                 $ano2 = $ano;
             }
 
+            // (select (CASE when plancuentas_naturaleza = 'D'
+            //         THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
+            //         ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial)
+            //         END)
+
             // Preparar sql
             $sql = "
                 SELECT plancuentas_nombre, plancuentas_cuenta, plancuentas_naturaleza, plancuentas_nivel,
-                (select (CASE when plancuentas_naturaleza = 'D'
-                        THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
-                        ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial)
-                        END)
+                (select (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
                     FROM koi_saldoscontables
                     WHERE saldoscontables_mes = $mes2
                     and saldoscontables_ano = $ano2

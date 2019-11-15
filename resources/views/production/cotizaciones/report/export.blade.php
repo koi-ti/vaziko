@@ -78,6 +78,7 @@
 						<td colspan="3" class="border-cell">
 							<br>
 							{{ $cotizacion2->productop_nombre }}<br>
+							Medidas: {{ $cotizacion2->medidas }}<br>
 							{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
 							{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
 							{!! isset($cotizacion2->empaque_nombre) ? "Empaque: $cotizacion2->empaque_nombre <br>" : ""  !!}
