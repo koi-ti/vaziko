@@ -252,15 +252,15 @@ class OrdenpController extends Controller
             return response()->json($orden);
         }
 
-        if ($orden->orden_abierta == true && $orden->orden_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
-            return redirect()->route('ordenes.edit', ['orden' => $orden]);
+        if ($orden->orden_abierta && !$orden->orden_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
+            return redirect()->route('ordenes.edit', compact('orden'));
         }
 
         if (auth()->user()->hasRole('operario')) {
-            $productos = Ordenp2::where('orden2_orden', $orden->id)->get(["id"]);
+            $productos = Ordenp2::getOrdenesp2($orden->id);
             return view('production.ordenes.show_with_role', compact('orden', 'productos'));
         }
-        return view('production.ordenes.show', ['orden' => $orden]);
+        return view('production.ordenes.show', compact('orden'));
     }
 
     /**

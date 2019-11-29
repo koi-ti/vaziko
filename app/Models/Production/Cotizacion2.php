@@ -100,7 +100,7 @@ class Cotizacion2 extends BaseModel
 
     public static function getExportCotizaciones2($cotizacion) {
         $query = self::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_referencia', 'productop_nombre', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario',
             DB::raw("CASE WHEN cotizacion2_tiro != 0 THEN ( cotizacion2_yellow + cotizacion2_magenta + cotizacion2_cyan + cotizacion2_key + cotizacion2_color1 + cotizacion2_color2) ELSE '0' END AS tiro"),
             DB::raw("CASE WHEN cotizacion2_retiro != 0 THEN ( cotizacion2_yellow2 + cotizacion2_magenta2 + cotizacion2_cyan2 + cotizacion2_key2 + cotizacion2_color12 + cotizacion2_color22) ELSE '0' END AS retiro"),
             (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) ? 'cotizacion2_total_valor_unitario' : DB::raw('0 as cotizacion2_total_valor_unitario')),
@@ -124,8 +124,7 @@ class Cotizacion2 extends BaseModel
                             'C(',
                             COALESCE(cotizacion2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
                             COALESCE(cotizacion2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
-                        END as medidas,
-                    CONCAT(COALESCE(cotizacion2_referencia,'') ,' (', COALESCE(productop_nombre,'') ,')') AS productop_nombre")
+                        END as medidas")
         );
         $query->join('koi_productop', 'cotizacion2_productop', '=', 'koi_productop.id');
         $query->join('koi_cotizacion1', 'cotizacion2_cotizacion', '=', 'koi_cotizacion1.id');

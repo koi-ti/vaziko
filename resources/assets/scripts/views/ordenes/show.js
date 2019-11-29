@@ -49,29 +49,14 @@ app || (app = {});
                 this.$renderChartAreasp = this.$('#render-chart-areasp');
                 this.$renderChartProductop = this.$('#render-chart-productop');
                 this.$renderChartOrdenp = this.$('#render-chart-ordenp');
-                this.$uploaderFile = this.$('.fine-uploader');
 
                 // Reference views && fineuploader container
                 this.referenceViews();
                 this.referenceCharts()
-                this.uploadPictures();
             }
-        },
 
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // TiempopOrdenesp list
-            this.tiempopListView = new app.TiempopListView( {
-                collection: this.tiempopList,
-                parameters: {
-                    dataFilter: {
-                        type: 'ordenp',
-                        orden2_orden: this.model.get('id')
-                    }
-               }
-            });
+            this.$uploaderFile = this.$('.fine-uploader');
+            this.uploadPictures();
         },
 
         /**

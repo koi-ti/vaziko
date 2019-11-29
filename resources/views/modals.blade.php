@@ -1198,19 +1198,19 @@
 					<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- parseInt(tercero_autoretenedor_ica) ? 'checked': ''%>> Autorretenedor ICA
 				</label>
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_responsable_iva">
 					<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- parseInt(tercero_responsable_iva) ? 'checked': ''%>> Responsable de IVA
 				</label>
 			</div>
-		</div>
-
-		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_empleado">
 					<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" <%- parseInt(tercero_empleado) ? 'checked': ''%> class="change_employee"> Empleado
 				</label>
 			</div>
+		</div>
+
+		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_interno">
 					<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" <%- parseInt(tercero_interno) ? 'checked': ''%> class="change_employee"> Interno
@@ -1226,14 +1226,11 @@
 					<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" <%- parseInt(tercero_afiliado) ? 'checked': ''%>> Afiliado
 				</label>
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_autoretenedor_cree">
 					<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- parseInt(tercero_autoretenedor_cree) ? 'checked': ''%>> Autorretenedor CREE
 				</label>
 			</div>
-		</div>
-
-		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_socio">
 					<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" <%- parseInt(tercero_socio) ? 'checked': ''%>> Socio
@@ -1244,6 +1241,9 @@
 					<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" <%- parseInt(tercero_mandatario) ? 'checked': ''%>> Mandatario
 				</label>
 			</div>
+		</div>
+
+		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_gran_contribuyente">
 					<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- parseInt(tercero_gran_contribuyente) ? 'checked': ''%>> Gran contribuyente
@@ -1255,11 +1255,15 @@
 				</label>
 			</div>
 			<div class="form-group col-md-2">
+				<label class="checkbox-inline" for="tercero_vendedor">
+					<input type="checkbox" id="tercero_vendedor" name="tercero_vendedor" value="tercero_vendedor" <%- parseInt(tercero_vendedor) ? 'checked': ''%>> Vendedor
+				</label>
+			</div>
+			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_otro">
 					<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- parseInt(tercero_otro) ? 'checked': ''%>> Otro
 				</label>
 			</div>
-
 			<div class="form-group col-md-2">
 				<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
 			</div>

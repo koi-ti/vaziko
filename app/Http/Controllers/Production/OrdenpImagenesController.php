@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Production\OrdenpImagen, App\Models\Production\Ordenp;
-use Storage, Auth, DB;
+use Storage, DB;
 
 class OrdenpImagenesController extends Controller
 {
@@ -77,7 +77,7 @@ class OrdenpImagenesController extends Controller
                     $imagen->ordenimagen_archivo = $name;
                     $imagen->ordenimagen_orden = $orden->id;
                     $imagen->ordenimagen_fh_elaboro = date('Y-m-d H:i:s');
-                    $imagen->ordenimagen_usuario_elaboro = Auth::user()->id;
+                    $imagen->ordenimagen_usuario_elaboro = auth()->user()->id;
                     $imagen->save();
 
                     // Commit Transaction

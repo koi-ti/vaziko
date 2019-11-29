@@ -26,10 +26,10 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts){
+        initialize: function (opts) {
 
             // extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             // References
@@ -46,13 +46,6 @@ app || (app = {});
             this.listenTo( this.collection, 'sync', this.responseServer);
 
             this.collection.fetch({ data: {orden2_orden: this.parameters.dataFilter.orden2_orden}, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
         },
 
         /**

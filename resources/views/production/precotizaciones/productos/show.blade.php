@@ -8,7 +8,7 @@
 		<ol class="breadcrumb">
 			<li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
 			<li><a href="{{ route('precotizaciones.index') }}">Pre-cotizacion</a></li>
-			<li><a href="{{ route('precotizaciones.edit', ['precotizacion' => $precotizacion->id]) }}">{{ $precotizacion->precotizacion_codigo }}</a></li>
+			<li><a href="{{ route('precotizaciones.show', ['precotizacion' => $precotizacion->id]) }}">{{ $precotizacion->precotizacion_codigo }}</a></li>
 			<li class="active">Producto</li>
 		</ol>
 	</section>
@@ -327,7 +327,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -341,7 +341,7 @@
 										<td>{!! isset($materialp->producto_nombre) ? $materialp->producto_nombre : "-" !!}</td>
 										<td>{{ $materialp->precotizacion3_medidas }}</td>
 										<td>{{ $materialp->precotizacion3_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 											<td class="text-right">{{ number_format($materialp->precotizacion3_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->precotizacion3_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -349,7 +349,7 @@
 									{{--*/ $total += $materialp->precotizacion3_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -374,7 +374,7 @@
 										<th>Área</th>
 										<th>Nombre</th>
 										<th>Horas</th>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 											<th>Valor</th>
 											<th>Total</th>
 										@endif
@@ -395,14 +395,14 @@
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 								            <td>{{ $areap->precotizacion6_nombre == '' ? '-': $areap->precotizacion6_nombre }}</td>
 								            <td class="text-left">{{  $areap->precotizacion6_tiempo }}</td>
-											@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+											@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 												<td class="text-right">{{ number_format($areap->precotizacion6_valor, 2, ',', '.') }}</td>
 									            <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
 											@endif
 										</tr>
 									@endforeach
 								</tbody>
-								@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+								@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 									<tfoot>
 										<tr>
 											<td colspan="3"></td>
@@ -428,7 +428,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -442,7 +442,7 @@
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->precotizacion9_medidas }}</td>
 										<td>{{ $materialp->precotizacion9_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 											<td class="text-right">{{ number_format($materialp->precotizacion9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->precotizacion9_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -450,7 +450,7 @@
 									{{--*/ $total += $materialp->precotizacion9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -475,7 +475,7 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endif
@@ -489,7 +489,7 @@
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->precotizacion10_medidas }}</td>
 										<td>{{ $materialp->precotizacion10_cantidad }}</td>
-										@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 											<td class="text-right">{{ number_format($materialp->precotizacion10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->precotizacion10_valor_total, 2, ',', '.') }}</td>
 										@endif
@@ -497,7 +497,7 @@
 									{{--*/ $total += $materialp->precotizacion10_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if( Auth::user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']) )
+							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>

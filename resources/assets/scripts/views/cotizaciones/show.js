@@ -22,10 +22,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
+            _.bindAll(this, 'onSessionRequestComplete');
+
             // Recuperar iva && cotizacion codigo
             this.$iva = this.$('#cotizacion1_iva');
             this.codigo = this.$('#cotizacion_codigo').val();
             this.$renderChartProductos = this.$('#render-chart-cotizacion');
+            this.$uploaderFile = this.$('.fine-uploader');
 
             // Attributes
             this.productopCotizacionList = new app.ProductopCotizacionList();
@@ -33,6 +36,7 @@ app || (app = {});
             // Reference views
             this.referenceCharts();
             this.referenceViews();
+            this.uploadPictures();
         },
 
         /**
@@ -225,6 +229,48 @@ app || (app = {});
                     },
                 });
             }
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-cotizacion',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.archivos.index')),
+                    params: {
+                        cotizacion: _this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        /**
+        * onSessionRequestComplete
+        */
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
     });
 

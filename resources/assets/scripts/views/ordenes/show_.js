@@ -26,7 +26,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             _.bindAll(this, 'onSessionRequestComplete');
 
             this.$iva = this.$('#orden_iva');

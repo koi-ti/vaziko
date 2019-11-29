@@ -168,12 +168,8 @@ app || (app = {});
             'productosp/:producto/edit(/)': 'getProductospEdit',
 
             'precotizaciones(/)': 'getPreCotizacionesMain',
-            'precotizaciones/create(/)': 'getPreCotizacionesCreate',
             'precotizaciones/:precotizaciones(/)': 'getPreCotizacionesShow',
-            'precotizaciones/:precotizaciones/edit(/)': 'getPreCotizacionesEdit',
-            'precotizaciones/productos/create(/)(?*queryString)': 'getPreCotizacionesProductoCreate',
             'precotizaciones/productos/:producto(/)': 'getPreCotizacionesProductoShow',
-            'precotizaciones/productos/:producto/edit(/)': 'getPreCotizacionesProductoEdit',
 
             'cotizaciones(/)': 'getCotizacionesMain',
             'cotizaciones/create(/)': 'getCotizacionesCreate',
@@ -1903,23 +1899,6 @@ app || (app = {});
         },
 
         /**
-        * show view create precotizacion
-        */
-        getPreCotizacionesCreate: function () {
-            this.precotizacionModel = new app.PreCotizacionModel();
-
-            if (this.createPreCotizacionView instanceof Backbone.View) {
-                this.createPreCotizacionView.stopListening();
-                this.createPreCotizacionView.undelegateEvents();
-            }
-
-            this.createPreCotizacionView = new app.CreatePreCotizacionView({
-                model: this.precotizacionModel
-            });
-            this.createPreCotizacionView.render();
-        },
-
-        /**
         * show view show precotizaicon
         */
         getPreCotizacionesShow: function (precotizacion) {
@@ -1937,53 +1916,6 @@ app || (app = {});
         },
 
         /**
-        * show view edit precotizacion produccion
-        */
-        getPreCotizacionesEdit: function (precotizacion) {
-            this.precotizacionModel = new app.PreCotizacionModel();
-            this.precotizacionModel.set({id: precotizacion}, {silent: true});
-
-            if (this.editPreCotizacionView instanceof Backbone.View) {
-                this.editPreCotizacionView.stopListening();
-                this.editPreCotizacionView.undelegateEvents();
-            }
-
-            if (this.createPreCotizacionView instanceof Backbone.View) {
-                this.createPreCotizacionView.stopListening();
-                this.createPreCotizacionView.undelegateEvents();
-            }
-
-            this.editPreCotizacionView = new app.EditPreCotizacionView({
-                model: this.precotizacionModel
-            });
-            this.precotizacionModel.fetch();
-        },
-
-        /**
-        * show view create productos en precotizaciones
-        */
-        getPreCotizacionesProductoCreate: function (queryString) {
-            var queries = this.parseQueryString(queryString);
-            this.precotizacion2Model = new app.PreCotizacion2Model();
-
-            if (this.createPreCotizacion2View instanceof Backbone.View) {
-                this.createPreCotizacion2View.stopListening();
-                this.createPreCotizacion2View.undelegateEvents();
-            }
-
-            this.createPreCotizacion2View = new app.CreatePreCotizacion2View({
-                model: this.precotizacion2Model,
-                parameters: {
-                    data : {
-                        precotizacion: queries.precotizacion,
-                        precotizacion2_productop: queries.productop
-                    }
-                }
-            });
-            this.createPreCotizacion2View.render();
-        },
-
-        /**
         * show view edit cotizaciones
         */
         getPreCotizacionesProductoShow: function (producto) {
@@ -1998,24 +1930,6 @@ app || (app = {});
             this.showPreCotizacion2View = new app.ShowPreCotizacion2View({
                 model: this.precotizacion2Model
             });
-        },
-
-        /**
-        * show view edit cotizaciones
-        */
-        getPreCotizacionesProductoEdit: function (producto) {
-            this.precotizacion2Model = new app.PreCotizacion2Model();
-            this.precotizacion2Model.set({id: producto}, {silent: true});
-
-            if (this.createPreCotizacion2View instanceof Backbone.View) {
-                this.createPreCotizacion2View.stopListening();
-                this.createPreCotizacion2View.undelegateEvents();
-            }
-
-            this.createPreCotizacion2View = new app.CreatePreCotizacion2View({
-                model: this.precotizacion2Model
-            });
-            this.precotizacion2Model.fetch();
         },
 
         /**

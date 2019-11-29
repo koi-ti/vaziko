@@ -22,7 +22,7 @@ class Cotizacion1 extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago'
+        'cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago', 'cotizacion1_observaciones_archivo'
     ];
 
     /**

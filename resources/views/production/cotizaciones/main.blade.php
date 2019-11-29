@@ -31,6 +31,7 @@
                             @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                 <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                             @endif
+                            <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
                             <li class="pull-right">
                                 <div class="btn-group btn-group-sm" role="group">
                                     @if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
@@ -44,7 +45,11 @@
                                     @endif
                                     @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                         <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
-                                        <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
+                                        <% if (parseInt(cotizacion1_pre)) { %>
+                                            <a class="btn btn-success approved-cotizacion" title="Aprobar a cotización"><i class="fa fa-check"></i></a>
+                                        <% } else { %>
+                                            <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
+                                        <% } %>
                                     @endif
                                     <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                                 </div>
@@ -57,6 +62,16 @@
                             <div class="box box-whithout-border">
                                 <div class="box-body">
                                     <form method="POST" accept-charset="UTF-8" id="form-cotizaciones" data-toggle="validator">
+                                        <div class="row">
+                                            <label class="col-xs-12 col-sm-1 col-md-1 control-label">Estado</label>
+                                            <div class="form-group col-xs-12 col-sm-2 col-md-1">
+                                                <% if(parseInt(cotizacion1_pre)) { %>
+                                                    <span class="label label-warning">PRE-COTIZACIÓN</span>
+                                                <% } else { %>
+                                                    <span class="label label-success">COTIZACIÓN</span>
+                                                <% } %>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <% if (typeof(cotizacion_codigo) !== 'undefined' && !_.isUndefined(cotizacion_codigo) && !_.isNull(cotizacion_codigo) && cotizacion_codigo != '') { %>
                                                 <label class="col-xs-12 col-sm-1 col-md-1 control-label">Código</label>
@@ -174,100 +189,100 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="box box-whithout-border">
-                                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                            <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                <div class="box box-whithout-border">
                                     <div class="box box-danger">
                                         <div class="box-body">
-                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.create')) %>">
-                                                    <div class="row">
-                                                        <label for="typeproductop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Tipo </label>
-                                                        <div class="form-group col-xs-12 col-sm-6 col-md-3">
-                                                            <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
-                                                                @foreach(App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
-                                                                    <option value="{{ $key }}">{{ $value }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
-                                                        <label for="subtypeproductop" class="col-xs-12 col-sm-2 col-md-1 control-label">Subtipo </label>
-                                                        <div class="form-group col-xs-12 col-sm-6 col-md-3">
-                                                            <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" disabled>
-                                                                <option value=""></option>
-                                                            </select>
-                                                        </div>
+                                            <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.create')) %>">
+                                                <div class="row">
+                                                    <label for="typeproductop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Tipo </label>
+                                                    <div class="form-group col-xs-12 col-sm-6 col-md-3">
+                                                        <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
+                                                            @foreach(App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                                                <option value="{{ $key }}">{{ $value }}</option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
 
-                                                    <div class="row">
-                                                        <label for="productop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Producto</label>
-                                                        <div class="form-group col-xs-12 col-sm-6 col-md-6">
-                                                            <div class="input-group input-group-sm">
-                                                                <span class="input-group-btn">
-                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
-                                                                        <i class="fa fa-search"></i>
-                                                                    </button>
-                                                                </span>
-                                                                <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
-                                                                <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required></select>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="form-group col-xs-12 col-sm-2 col-md-1">
-                                                            <button type="submit" class="btn btn-danger btn-sm btn-block">
-                                                                <i class="fa fa-plus"></i>
-                                                            </button>
-                                                        </div>
+                                                    <label for="subtypeproductop" class="col-xs-12 col-sm-2 col-md-1 control-label">Subtipo </label>
+                                                    <div class="form-group col-xs-12 col-sm-6 col-md-3">
+                                                        <select name="subtypeproductop" id="subtypeproductop" class="form-control select2-default" disabled>
+                                                            <option value=""></option>
+                                                        </select>
                                                     </div>
-                                                </form>
-                                                <!-- table table-bordered table-striped -->
-                                                <div class="box-body table-responsive no-padding">
-                                                    <table id="browse-cotizacion-productop-list" class="table table-hover table-bordered" cellspacing="0">
-                                                        <thead>
-                                                            <tr>
-                                                                <th width="2%"></th>
-                                                                <th width="2%"></th>
-                                                                <th width="5%">Código</th>
-                                                                <th width="60%">Nombre</th>
-                                                                <th width="5%">Cantidad</th>
-                                                                <th width="6%">Facturado</th>
-                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                                                    <th width="10%" class="text-right">Precio</th>
-                                                                    <th width="10%" class="text-right">Total</th>
-                                                                @endif
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            {{-- Render content productos --}}
-                                                        </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <td colspan="3"></td>
-                                                                <th class="text-right">Subtotal</th>
-                                                                <th class="text-center" id="subtotal-cantidad">0</th>
-                                                                <th class="text-center" id="subtotal-facturado">0</th>
-                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                                                    <th></th>
-                                                                    <th class="text-right" id="subtotal-total">0</th>
-                                                                @endif
-                                                            </tr>
-                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                                                <tr>
-                                                                    <th colspan="3"></th>
-                                                                    <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
-                                                                    <th colspan="5" class="text-right" id="iva-total">0</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th colspan="3"></th>
-                                                                    <th class="text-right">Total</th>
-                                                                    <th colspan="5" class="text-right" id="total-total">0</th>
-                                                                </tr>
-                                                            @endif
-                                                        </tfoot>
-                                                    </table>
                                                 </div>
+
+                                                <div class="row">
+                                                    <label for="productop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Producto</label>
+                                                    <div class="form-group col-xs-12 col-sm-6 col-md-6">
+                                                        <div class="input-group input-group-sm">
+                                                            <span class="input-group-btn">
+                                                                <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
+                                                                    <i class="fa fa-search"></i>
+                                                                </button>
+                                                            </span>
+                                                            <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
+                                                            <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required></select>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group col-xs-12 col-sm-2 col-md-1">
+                                                        <button type="submit" class="btn btn-danger btn-sm btn-block">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- table table-bordered table-striped -->
+                                            <div class="box-body table-responsive no-padding">
+                                                <table id="browse-cotizacion-productop-list" class="table table-hover table-bordered" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th width="2%"></th>
+                                                            <th width="2%"></th>
+                                                            <th width="5%">Código</th>
+                                                            <th width="60%">Nombre</th>
+                                                            <th width="5%">Cantidad</th>
+                                                            <th width="6%">Facturado</th>
+                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                                                <th width="10%" class="text-right">Precio</th>
+                                                                <th width="10%" class="text-right">Total</th>
+                                                            @endif
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{-- Render content productos --}}
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3"></td>
+                                                            <th class="text-right">Subtotal</th>
+                                                            <th class="text-center" id="subtotal-cantidad">0</th>
+                                                            <th class="text-center" id="subtotal-facturado">0</th>
+                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                                                <th></th>
+                                                                <th class="text-right" id="subtotal-total">0</th>
+                                                            @endif
+                                                        </tr>
+                                                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
+                                                                <th colspan="5" class="text-right" id="iva-total">0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Total</th>
+                                                                <th colspan="5" class="text-right" id="total-total">0</th>
+                                                            </tr>
+                                                        @endif
+                                                    </tfoot>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
-                                <% } %>
-                            </div>
+                                </div>
+                            <% } %>
                         </div>
                         <div class="tab-pane" id="tab_charts">
                             <div class="box box-solid">
@@ -275,6 +290,18 @@
                                     <div class="chart-container">
                                         <canvas id="chart_producto" width="500" height="200"></canvas>
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tab_files">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <div class="fine-uploader"></div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <textarea id="cotizacion1_observaciones_archivo" name="cotizacion1_observaciones_archivo" class="form-control" rows="10" placeholder="Observaciones"><%- cotizacion1_observaciones_archivo %></textarea>
                                 </div>
                             </div>
                         </div>
@@ -326,6 +353,10 @@
         <p>¿Está seguro que desea clonar la cotización <b><%- cotizacion_codigo %></b>?</p>
     </script>
 
+    <script type="text/template" id="cotizacion-approved-confirm-tpl">
+        <p>¿Está seguro que desea aprobar la cotización <b><%- cotizacion_codigo %></b>?</p>
+    </script>
+
     <script type="text/template" id="cotizacion-generate-confirm-tpl">
         <p>¿Está seguro que desea generar una orden de producción del producto <b><%- cotizacion_codigo %> - <%- cotizacion_referencia %></b>?</p>
     </script>
@@ -336,5 +367,71 @@
 
     <script type="text/template" id="cotizacion-productop-delete-confirm-tpl">
         <p>¿Está seguro que desea eliminar el producto <b><%- producto_id %> - <%- producto_nombre %></b>?</p>
+    </script>
+
+    <script type="text/template" id="qq-template-cotizacion">
+        <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ trans('app.files.drop') }}">
+            <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+                <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+            </div>
+            <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+                <span class="qq-upload-drop-area-text-selector"></span>
+            </div>
+
+            @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+                <div class="buttons">
+                    <div class="qq-upload-button-selector qq-upload-button">
+                        <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
+                    </div>
+                </div>
+                <span class="qq-drop-processing-selector qq-drop-processing">
+                    <span>{{ trans('app.files.process') }}</span>
+                    <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
+                </span>
+            @endif
+            <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+                <li>
+                    <div class="qq-progress-bar-container-selector">
+                        <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                    </div>
+                    <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                    <a class="preview-link" target="_blank">
+                        <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                    </a>
+                    <span class="qq-upload-file-selector qq-upload-file"></span>
+                    <span class="qq-upload-size-selector qq-upload-size"></span>
+                    <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
+                    <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
+                    @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
+                    @endif
+                    <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
+                </li>
+            </ul>
+
+            <dialog class="qq-alert-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">Cerrar</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-confirm-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">No</button>
+                    <button type="button" class="qq-ok-button-selector">Si</button>
+                </div>
+            </dialog>
+
+            <dialog class="qq-prompt-dialog-selector">
+                <div class="qq-dialog-message-selector"></div>
+                <input type="text">
+                <div class="qq-dialog-buttons">
+                    <button type="button" class="qq-cancel-button-selector">{{ trans('app.cancel') }}</button>
+                    <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
+                </div>
+            </dialog>
+        </div>
     </script>
 @stop

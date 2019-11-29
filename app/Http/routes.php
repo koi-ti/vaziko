@@ -150,23 +150,12 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
 
 	Route::group(['prefix' => 'precotizaciones'], function(){
-		Route::get('cerrar/{precotizaciones}', ['as' => 'precotizaciones.cerrar', 'uses' => 'Production\PreCotizacion1Controller@cerrar']);
-		Route::get('generar/{precotizaciones}', ['as' => 'precotizaciones.generar', 'uses' => 'Production\PreCotizacion1Controller@generar']);
-		Route::get('terminar/{precotizaciones}', ['as' => 'precotizaciones.terminar', 'uses' => 'Production\PreCotizacion1Controller@terminar']);
-		Route::get('abrir/{precotizaciones}', ['as' => 'precotizaciones.abrir', 'uses' => 'Production\PreCotizacion1Controller@abrir']);
-		Route::get('clonar/{precotizaciones}', ['as' => 'precotizaciones.clonar', 'uses' => 'Production\PreCotizacion1Controller@clonar']);
-
 		Route::group(['prefix' => 'productos'], function(){
-			Route::get('clonar/{productos}', ['as' => 'precotizaciones.productos.clonar', 'uses' => 'Production\PreCotizacion2Controller@clonar']);
-			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index', 'store', 'destroy']]);
-			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index', 'store']]);
-			Route::resource('empaques', 'Production\PreCotizacion9Controller', ['only' => ['index', 'store']]);
-			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index', 'store']]);
-			Route::resource('transportes', 'Production\PreCotizacion10Controller', ['only' => ['index', 'store']]);
+			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index']]);
 		});
-		Route::resource('productos', 'Production\PreCotizacion2Controller');
+		Route::resource('productos', 'Production\PreCotizacion2Controller', ['only' => ['index', 'show']]);
 	});
-	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['except' => ['destroy']]);
+	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['only' => ['index', 'show']]);
 
 	Route::group(['prefix' => 'cotizaciones'], function(){
 		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
@@ -176,6 +165,8 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
 		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
 		Route::get('charts/{cotizaciones}', ['as' => 'cotizaciones.charts', 'uses' => 'Production\Cotizacion1Controller@charts']);
+		Route::get('aprobar/{cotizaciones}', ['as' => 'cotizaciones.aprobar', 'uses' => 'Production\Cotizacion1Controller@aprobar']);
+		Route::resource('archivos', 'Production\CotizacionArchivosController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function(){
 			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);

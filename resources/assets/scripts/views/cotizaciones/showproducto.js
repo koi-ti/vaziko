@@ -16,7 +16,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
 

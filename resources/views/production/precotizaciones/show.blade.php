@@ -33,19 +33,6 @@
 						<label class="control-label">Fecha</label>
 						<div>{{ $precotizacion->precotizacion1_fecha }}</div>
 					</div>
-                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
-                        <div class="col-md-offset-5 col-md-2">
-                            <div class="btn-group btn-group-justified" role="group">
-                                @if (auth()->user()->ability('admin', 'crear', ['module' => 'precotizaciones']))
-                                    <a class="btn btn-success open-precotizacion" title="Reabrir pre-cotización"><i class="fa fa-unlock"></i></a>
-                                @endif
-                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'precotizaciones']))
-                                    <a class="btn btn-success clone-precotizacion" title="Clonar pre-cotización"><i class="fa fa-clone"></i></a>
-                                    <a class="btn btn-success generate-precotizacion" title="Generar cotización"><i class="fa fa-envelope-o"></i></a>
-                                @endif
-                            </div>
-                        </div>
-                    @endif
 				</div>
                 <div class="row">
                     <div class="form-group col-md-8">
@@ -134,21 +121,14 @@
                                 <th width="10%">Cantidad</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            <tr>
+                                <th colspan="3" class="text-center">No existen registros.</th>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
        </div>
     </section>
-
-    <script type="text/template" id="precotizaciones-open-confirm-tpl">
-        <p>¿Está seguro que desea reabrir la pre-cotizacion <b>{{ $precotizacion->precotizacion_codigo }}</b>?</p>
-    </script>
-
-    <script type="text/template" id="precotizacion-generate-confirm-tpl">
-        <p>¿Está seguro que desea generar la cotización <b>{{ $precotizacion->precotizacion_codigo }} - {{ $precotizacion->precotizacion1_referencia }}</b>?</p>
-    </script>
-
-    <script type="text/template" id="precotizacion-clone-confirm-tpl">
-        <p>¿Está seguro que desea clonar la pre-cotización <b>{{ $precotizacion->precotizacion_codigo }} - {{ $precotizacion->precotizacion1_referencia }}</b>?</p>
-    </script>
 @stop

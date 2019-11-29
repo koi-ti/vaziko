@@ -63,16 +63,11 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-xs-12 col-sm-3 col-md-2">
+                        <div class="col-md-offset-4 col-xs-12 col-sm-3 col-md-2">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
                         <div class="col-xs-12 col-sm-3 col-md-2">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
-                        </div>
-                        <div class="col-xs-12 col-sm-3 col-md-2">
-                            <a href="{{ route('precotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nueva pre-cotización
-                            </a>
                         </div>
                     </div>
                 {!! Form::close() !!}
@@ -82,7 +77,6 @@
                         <thead>
                             <tr>
                                 <th>Código</th>
-                                <th>Acciones</th>
                                 <th>Ano</th>
                                 <th>Numero</th>
                                 <th>Tercero</th>

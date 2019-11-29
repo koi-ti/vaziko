@@ -20,6 +20,7 @@
                     @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                         <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                     @endif
+                    <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
                     <li class="pull-right">
                         <div class="btn-group" role="group">
                             @if (!$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
@@ -36,6 +37,16 @@
                     <div class="tab-pane active" id="tab_cotizacion">
                         <div class="box box-whithout-border">
                             <div class="box-body">
+                                <div class="row">
+                                    <div class="form-group col-xs-12 col-sm-2 col-md-1">
+                                        <label class="control-label">Estado</label>
+                                        @if ($cotizacion->cotizacion1_pre)
+                                            <span class="label label-warning">PRE-COTIZACIÓN</span>
+                                        @else
+                                            <span class="label label-success">COTIZACIÓN</span>
+                                        @endif
+                                    </div>
+                                </div>
                             	<div class="row">
 									<div class="form-group col-md-2">
 										<label class="control-label">Código</label>
@@ -201,6 +212,18 @@
                                 <div class="chart-container">
                                     <canvas id="chart_producto" width="500" height="200"></canvas>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_files">
+                        <div class="row">
+                            <div class="form-group col-sm-12">
+                                <div class="fine-uploader"></div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-12">
+                                <textarea class="form-control" rows="10" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
                             </div>
                         </div>
                     </div>

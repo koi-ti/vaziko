@@ -22,7 +22,7 @@ app || (app = {});
         */
         initialize: function(opts){
 	        // Extends parameters
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
             if (this.parameters.action == 'edit') {

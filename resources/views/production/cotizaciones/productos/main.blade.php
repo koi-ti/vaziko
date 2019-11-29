@@ -54,6 +54,17 @@
                         </div>
 
                         <div class="row">
+                            <label class="col-md-2 control-label">Estado</label>
+                            <div class="form-group col-md-10">
+                                @if ($cotizacion->cotizacion1_pre)
+                                    <span class="label label-warning">PRE-COTIZACIÓN</span>
+                                @else
+                                    <span class="label label-success">COTIZACIÓN</span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <label class="col-md-2 control-label">Cotización</label>
                             <div class="form-group col-md-10">
                                 {{ $cotizacion->cotizacion_codigo }}

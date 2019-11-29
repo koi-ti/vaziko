@@ -17,6 +17,7 @@ app || (app = {});
             'click .submit-cotizacion': 'submitCotizacion',
             'click .close-cotizacion': 'closeCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
+            'click .approved-cotizacion': 'approvedCotizacion',
             'click .generate-cotizacion': 'generateCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
@@ -28,10 +29,12 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+                
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             this.productopCotizacionList = new app.ProductopCotizacionList();
 
@@ -55,9 +58,14 @@ app || (app = {});
             this.spinner = this.$('#spinner-main');
             this.$renderChartProductos = this.$('#render-chart-cotizacion');
 
+            // Initialize fineuploader && textarea tab imagenes
+            this.$inputObservaciones = this.$('#cotizacion1_observaciones_archivo');
+            this.$uploaderFile = this.$('.fine-uploader');
+
             // Reference views and ready
             this.referenceCharts();
             this.referenceViews();
+            this.uploadPictures();
             this.ready();
         },
 
@@ -94,7 +102,8 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson( e.target );
-                this.model.save( data, {patch: true, silent: true} );
+                    data.cotizacion1_observaciones_archivo = this.$inputObservaciones.val();
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -270,6 +279,41 @@ app || (app = {});
         },
 
         /**
+        * approved cotizacion
+        */
+        approvedCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                route =  window.Misc.urlFull(Route.route('cotizaciones.aprobar', {cotizaciones: this.model.get('id')})),
+                data = {
+                    cotizacion_codigo: _this.model.get('cotizacion_codigo')
+                };
+
+            var approvedConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#cotizacion-approved-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Aprobar la cotización',
+                    onConfirm: function () {
+                        // Approved cotizacion
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.spinner,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: _this.model.get('id') })));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            approvedConfirm.render();
+        },
+
+        /**
         * Generate cotizacion
         */
         generateCotizacion: function (e) {
@@ -397,13 +441,97 @@ app || (app = {});
                         tooltips: {
                             callbacks: {
                                 label: function(item, data) {
-                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                    return data.labels[item.index];
                                 }
                             }
                         }
                     },
                 });
             }
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function(e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-cotizacion',
+                multiple: true,
+                autoUpload: true,
+                session: {
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.archivos.index')),
+                    params: {
+                        cotizacion: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                request: {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.archivos.index')),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion: this.model.get('id')
+                    }
+                },
+                retry: {
+                    maxAutoAttempts: 3,
+                },
+                deleteFile: {
+                    enabled: true,
+                    forceConfirm: true,
+                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                    endpoint: window.Misc.urlFull( Route.route('cotizaciones.archivos.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion: this.model.get('id')
+                    }
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                validation: {
+                    itemLimit: 10,
+                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
+                },
+                messages: {
+                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+                },
+                callbacks: {
+                    onComplete: _this.onCompleteLoadFile,
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+        },
+
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
+        onCompleteLoadFile: function (id, name, resp) {
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
+            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
+            this.$uploaderFile.fineUploader('setName', id, resp.name);
+
+            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
+                previewLink.attr("href", resp.url);
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
         },
 
         /**

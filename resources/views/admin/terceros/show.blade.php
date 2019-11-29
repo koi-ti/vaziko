@@ -201,76 +201,72 @@
 								</label>
 							</div>
 
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_responsable_iva">
 									<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" disabled {{ $tercero->tercero_responsable_iva ? 'checked': '' }}> Responsable de IVA
 								</label>
 							</div>
-						</div>
-
-						<div class="row">
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_empleado">
 									<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" disabled {{ $tercero->tercero_empleado ? 'checked': '' }}> Empleado
 								</label>
 							</div>
+						</div>
 
+						<div class="row">
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_interno">
 									<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" disabled {{ $tercero->tercero_interno ? 'checked': '' }}> Interno
 								</label>
 							</div>
-
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_extranjero">
 									<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero" disabled {{ $tercero->tercero_extranjero ? 'checked': '' }}> Extranjero
 								</label>
 							</div>
-
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_afiliado">
 									<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" disabled {{ $tercero->tercero_afiliado ? 'checked': '' }}> Afiliado
 								</label>
 							</div>
-
-							<div class="form-group col-md-3">
+							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_autoretenedor_cree">
 									<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" disabled {{ $tercero->tercero_autoretenedor_cree ? 'checked': '' }}> Autorretenedor CREE
+								</label>
+							</div>
+							<div class="form-group col-md-2">
+								<label class="checkbox-inline" for="tercero_socio">
+									<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" disabled {{ $tercero->tercero_socio ? 'checked': '' }}> Socio
+								</label>
+							</div>
+							<div class="form-group col-md-2">
+								<label class="checkbox-inline" for="tercero_mandatario">
+									<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" disabled {{ $tercero->tercero_mandatario ? 'checked': '' }}> Mandatario
 								</label>
 							</div>
 						</div>
 
 						<div class="row">
 							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_socio">
-									<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" disabled {{ $tercero->tercero_socio ? 'checked': '' }}> Socio
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
-								<label class="checkbox-inline" for="tercero_mandatario">
-									<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" disabled {{ $tercero->tercero_mandatario ? 'checked': '' }}> Mandatario
-								</label>
-							</div>
-
-							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_gran_contribuyente">
 									<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" disabled {{ $tercero->tercero_gran_contribuyente ? 'checked': '' }}> Gran contribuyente
 								</label>
 							</div>
-
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_autoretenedor_renta">
 									<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" disabled {{ $tercero->tercero_autoretenedor_renta ? 'checked': '' }}> Autorretenedor renta
 								</label>
 							</div>
-
+							<div class="form-group col-md-2">
+								<label class="checkbox-inline" for="tercero_vendedor">
+									<input type="checkbox" id="tercero_vendedor" name="tercero_vendedor" value="tercero_vendedor" disabled {{ $tercero->tercero_vendedor ? 'checked': '' }}> Vendedor
+								</label>
+							</div>
 							<div class="form-group col-md-2">
 								<label class="checkbox-inline" for="tercero_otro">
 									<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" disabled {{ $tercero->tercero_otro ? 'checked': '' }}> Otro
 								</label>
 							</div>
-
 							<div class="form-group col-md-2">
 								<div>{{ $tercero->tercero_cual }}</div>
 							</div>

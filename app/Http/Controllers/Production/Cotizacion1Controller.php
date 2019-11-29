@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\CotizacionArchivo, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\OrdenpImagen;
 use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
 use App, View, DB, Log, Datatables, Storage;
 
@@ -30,7 +30,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $query = Cotizacion1::query();
-            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
+            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', 'cotizacion1_pre', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -154,32 +154,32 @@ class Cotizacion1Controller extends Controller
                 try {
                     // Recuperar empresa
                     $empresa = Empresa::getEmpresa();
-                    if(!$empresa instanceof Empresa) {
+                    if (!$empresa instanceof Empresa) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar empresa, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->cotizacion1_cliente)->first();
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar contacto
                     $contacto = Contacto::find($request->cotizacion1_contacto);
-                    if(!$contacto instanceof Contacto) {
+                    if (!$contacto instanceof Contacto) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
                     // Validar tercero contacto
-                    if($contacto->tcontacto_tercero != $tercero->id) {
+                    if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
                     }
 
                     // Actualizar telefono del contacto
-                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                    if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
                     }
@@ -188,15 +188,16 @@ class Cotizacion1Controller extends Controller
                     $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
-                    // cotizacion
+                    // Cotizacion
                     $cotizacion->fill($data);
                     $cotizacion->cotizacion1_cliente = $tercero->id;
                     $cotizacion->cotizacion1_ano = date('Y');
                     $cotizacion->cotizacion1_numero = $numero;
                     $cotizacion->cotizacion1_contacto = $contacto->id;
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
-                    $cotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
+                    $cotizacion->cotizacion1_pre = true;
                     $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
+                    $cotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
                     $cotizacion->save();
 
                     // Commit Transaction
@@ -222,7 +223,7 @@ class Cotizacion1Controller extends Controller
     public function show(Request $request, $id)
     {
         $cotizacion = Cotizacion1::getCotizacion($id);
-        if(!$cotizacion instanceof Cotizacion1){
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
@@ -231,11 +232,11 @@ class Cotizacion1Controller extends Controller
         }
 
         // Permisions
-        if( !auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_abierta == false) {
+        if ( !auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_abierta == false) {
             abort(403);
         }
 
-        if( $cotizacion->cotizacion1_abierta == true && $cotizacion->cotizacion1_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
+        if ( $cotizacion->cotizacion1_abierta == true && $cotizacion->cotizacion1_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
             return redirect()->route('cotizaciones.edit', ['cotizacion' => $cotizacion]);
         }
 
@@ -251,11 +252,11 @@ class Cotizacion1Controller extends Controller
     public function edit($id)
     {
         $cotizacion = Cotizacion1::getCotizacion($id);
-        if(!$cotizacion instanceof Cotizacion1) {
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
-        if($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
+        if ($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
             return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
         }
 
@@ -279,25 +280,25 @@ class Cotizacion1Controller extends Controller
                 try {
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->cotizacion1_cliente)->first();
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
 
                     // Validar contacto
                     $contacto = Contacto::find($request->cotizacion1_contacto);
-                    if(!$contacto instanceof Contacto) {
+                    if (!$contacto instanceof Contacto) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
                     // Validar tercero contacto
-                    if($contacto->tcontacto_tercero != $tercero->id) {
+                    if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
                     }
 
                     // Actualizar telefono del contacto
-                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                    if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
                     }
@@ -342,7 +343,7 @@ class Cotizacion1Controller extends Controller
     public function cerrar(Request $request, $id)
     {
         if ($request->ajax()) {
-            if( !in_array($request->state, array_keys(config('koi.close.state'))) ){
+            if ( !in_array($request->state, array_keys(config('koi.close.state'))) ) {
                 return response()->json(['success' => false, 'errors' => 'El estado de cerrar no es valido.']);
             }
 
@@ -377,13 +378,13 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
-            if(!$cotizacion instanceof Cotizacion1){
+            if (!$cotizacion instanceof Cotizacion1) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
             // Comprobar que no exita orden de produccion
             $orden = Ordenp::where('orden_cotizacion', $cotizacion->id)->first();
-            if($orden instanceof Ordenp){
+            if ($orden instanceof Ordenp) {
                 return response()->json(['success' => false, 'errors' => 'No se puede reabrir la cotización, porque tiene una orden de produccion en proceso.']);
             }
 
@@ -415,7 +416,7 @@ class Cotizacion1Controller extends Controller
     public function exportar($codigo)
     {
         $cotizacion = Cotizacion1::getExportCotizacion($codigo);
-        if(!$cotizacion instanceof Cotizacion1){
+        if (!$cotizacion instanceof Cotizacion1) {
             abort(404);
         }
 
@@ -443,7 +444,7 @@ class Cotizacion1Controller extends Controller
             $query->where('cotizacion8_imprimir', true);
             $cotizacion8 = $query->get();
             foreach ($cotizacion8 as $imagen) {
-                $imagenes[] = "storage/cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$imagen->cotizacion8_archivo";
+                $imagenes[] = "storage/cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$imagen->cotizacion8_archivo}";
             }
 
             $query = Cotizacion9::query();
@@ -478,7 +479,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
-            if(!$cotizacion instanceof Cotizacion1){
+            if (!$cotizacion instanceof Cotizacion1) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
             }
 
@@ -533,15 +534,14 @@ class Cotizacion1Controller extends Controller
                     foreach ($imagenes as $cotizacion8) {
                         $newcotizacion8 = $cotizacion8->replicate();
                         $newcotizacion8->cotizacion8_cotizacion2 = $newcotizacion2->id;
-                        $newcotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
                         $newcotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
+                        $newcotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
                         $newcotizacion8->save();
 
                         // Recuperar imagen y copiar
-                        if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
-
-                            $oldfile = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
-                            $newfile = "cotizaciones/cotizacion_$newcotizacion2->cotizacion2_cotizacion/producto_$newcotizacion2->id/$newcotizacion8->cotizacion8_archivo";
+                        if (Storage::has("cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}")) {
+                            $oldfile = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}";
+                            $newfile = "cotizaciones/cotizacion_{$newcotizacion2->cotizacion2_cotizacion}/producto_{$newcotizacion2->id}/{$newcotizacion8->cotizacion8_archivo}";
 
                             // Copy file storege laravel
                             Storage::copy($oldfile, $newfile);
@@ -553,8 +553,8 @@ class Cotizacion1Controller extends Controller
                     foreach ($materiales as $cotizacion4) {
                          $newcotizacion4 = $cotizacion4->replicate();
                          $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                          $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
+                         $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                          $newcotizacion4->save();
                     }
 
@@ -571,8 +571,8 @@ class Cotizacion1Controller extends Controller
                     foreach ($empaques as $cotizacion9) {
                          $newcotizacion9 = $cotizacion9->replicate();
                          $newcotizacion9->cotizacion9_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion9->cotizacion9_usuario_elaboro = auth()->user()->id;
                          $newcotizacion9->cotizacion9_fh_elaboro = date('Y-m-d H:i:s');
+                         $newcotizacion9->cotizacion9_usuario_elaboro = auth()->user()->id;
                          $newcotizacion9->save();
                     }
 
@@ -581,9 +581,28 @@ class Cotizacion1Controller extends Controller
                     foreach ($transportes as $cotizacion10) {
                          $newcotizacion10 = $cotizacion10->replicate();
                          $newcotizacion10->cotizacion10_cotizacion2 = $newcotizacion2->id;
-                         $newcotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
                          $newcotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
+                         $newcotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
                          $newcotizacion10->save();
+                    }
+                }
+
+                // Archivos
+                $archivos = CotizacionArchivo::where('cotizacionarchivo_cotizacion', $cotizacion->id)->get();
+                foreach ($archivos as $archivo) {
+                    $newarchivo = $archivo->replicate();
+                    $newarchivo->cotizacionarchivo_cotizacion = $newcotizacion->id;
+                    $newarchivo->cotizacionarchivo_fh_elaboro = date('Y-m-d H:i:s');
+                    $newarchivo->cotizacionarchivo_usuario_elaboro = auth()->user()->id;
+                    $newarchivo->save();
+
+                    // Recuperar archivos
+                    if (Storage::has("cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}")) {
+                        $oldfile = "cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}";
+                        $newfile = "cotizaciones/cotizacion_{$newcotizacion->id}/archivos/{$newarchivo->cotizacionarchivo_archivo}";
+
+                        // Copy file storege laravel
+                        Storage::copy($oldfile, $newfile);
                     }
                 }
 
@@ -609,8 +628,12 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::findOrFail($id);
-            if(!$cotizacion instanceof Cotizacion1){
+            if (!$cotizacion instanceof Cotizacion1) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            if ($cotizacion->cotizacion1_pre) {
+                return response()->json(['success' => false, 'errors' => 'La cotización no se encuentra aprobada, por favor verifique la información o consulte al adminitrador.']);
             }
 
             DB::beginTransaction();
@@ -721,10 +744,9 @@ class Cotizacion1Controller extends Controller
                         $orden8->save();
 
                         // Recuperar imagen y copiar
-                        if( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
-
-                            $oldfile = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
-                            $newfile = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
+                        if (Storage::has("cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}")) {
+                            $oldfile = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}";
+                            $newfile = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}";
 
                             // Copy file storege laravel
                             Storage::copy($oldfile, $newfile);
@@ -792,6 +814,26 @@ class Cotizacion1Controller extends Controller
                     }
                 }
 
+                // Archivos
+                $archivos = CotizacionArchivo::where('cotizacionarchivo_cotizacion', $cotizacion->id)->get();
+                foreach ($archivos as $archivo) {
+                    $ordenparchivo = new OrdenpImagen;
+                    $ordenparchivo->ordenimagen_archivo = $archivo->cotizacionarchivo_archivo;
+                    $ordenparchivo->ordenimagen_orden = $orden->id;
+                    $ordenparchivo->ordenimagen_fh_elaboro = date('Y-m-d H:i:s');
+                    $ordenparchivo->ordenimagen_usuario_elaboro = auth()->user()->id;
+                    $ordenparchivo->save();
+
+                    // Recuperar archivos
+                    if (Storage::has("cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}")) {
+                        $oldfile = "cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}";
+                        $newfile = "ordenes/orden_{$orden->id}/imagenes/{$ordenparchivo->ordenimagen_archivo}";
+
+                        // Copy file storege laravel
+                        Storage::copy($oldfile, $newfile);
+                    }
+                }
+
                 $cotizacion->cotizacion1_orden = $orden->id;
                 $cotizacion->cotizacion1_abierta = false;
                 $cotizacion->cotizacion1_anulada = false;
@@ -825,7 +867,7 @@ class Cotizacion1Controller extends Controller
             $object = new \stdClass();
 
             // Chart productos
-            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
+            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = 0;
             $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
             foreach ($cotizaciones2 as $cotizacion2) {
                 $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta;
@@ -834,22 +876,26 @@ class Cotizacion1Controller extends Controller
                 $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
                 $tmateriales += $materiales = ($materiales/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 
-                $tareas += $areas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
+                $areas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
+                $tareas += $areas = $areas/((100-$cotizacion2->cotizacion2_margen_areap)/100);
 
                 $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
                 $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
 
-                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques;
+                $transportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->sum('cotizacion10_valor_total');
+                $ttransportes += $transportes = ($transportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+
+                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
                 $tvolumen += $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
             }
 
             // Make object
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
-                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen'
+                'Precio ' . number_format($tprecio,2,',','.',), 'Viáticos ' . number_format($tviaticos,2,',','.',), 'Materiales de producción ' . number_format($tmateriales,2,',','.',), 'Áreas de producción ' . number_format($tareas,2,',','.',), 'Empaques de producción ' . number_format($tempaques,2,',','.',), 'Transportes de producción ' . number_format($ttransportes,2,',','.'), 'Volumen ' . number_format($tvolumen,2,',','.')
             ];
             $chartproducto->data = [
-                $tprecio, "200000", $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
+                $tprecio, $tviaticos, $tmateriales, $tareas, $tempaques, $ttransportes, $tvolumen
             ];
             $object->chartproductos = $chartproducto;
 
@@ -857,5 +903,41 @@ class Cotizacion1Controller extends Controller
             return response()->json($object);
         }
         return response()->json(['success' => false]);
+    }
+
+    /**
+     * Abrir the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function aprobar(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $cotizacion = Cotizacion1::find($id);
+            if (!$cotizacion instanceof Cotizacion1) {
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            if (!$cotizacion->cotizacion1_pre) {
+                return response()->json(['success' => false, 'errors' => 'La cotización ya se encuentra aprobada, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            DB::beginTransaction();
+            try {
+                // Cotizacion
+                $cotizacion->cotizacion1_pre = false;
+                $cotizacion->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Cotización aprobada con exito.']);
+            } catch(\Exception $e) {
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(403);
     }
 }

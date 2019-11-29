@@ -63,6 +63,7 @@ class CreateTerceroTable extends Migration
             $table->boolean('tercero_afiliado')->default(false);
             $table->boolean('tercero_tecnico')->default(false);
             $table->boolean('tercero_coordinador')->default(false);
+            $table->boolean('tercero_vendedor')->default(false);
             $table->boolean('tercero_otro')->default(false);
             $table->string('tercero_cual', 200)->nullable();
             $table->integer('tercero_coordinador_por')->unsigned()->nullable();

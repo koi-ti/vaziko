@@ -17,6 +17,7 @@ app || (app = {});
             'click .btn-clear': 'clear',
             'click .close-cotizacion': 'closeCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
+            'click .approved-cotizacion': 'approvedCotizacion',
             'click .generate-cotizacion': 'generateCotizacion',
             'click .open-cotizacion': 'openCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
@@ -26,7 +27,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function() {
+        initialize: function () {
             var _this = this;
 
             // Rerefences
@@ -98,21 +99,32 @@ app || (app = {});
 
                             const open = '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
                             const clone = '<a class="btn btn-danger btn-xs clone-cotizacion" title="Clonar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
-                            const generate = '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-sticky-note"></i></a>';
+                            var generate = '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-sticky-note"></i></a>';
                             var buttons = '';
                             const exporte = '<a class="btn btn-danger export-cotizacion" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
-
-                            buttons += exporte + ' ';
 
                             if (parseInt(full.cotizacion_create)) {
                                 buttons += parseInt(full.cotizacion1_abierta) ? close : open;
                             }
 
+                            if (parseInt(full.cotizacion1_pre)) {
+                                var generate = '<a class="btn btn-success btn-xs approved-cotizacion" title="Aprobar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-check"></i></a>';
+                            }
+
                             if (parseInt(full.cotizacion_opcional)) {
                                 buttons += ' ' + clone + ' ';
 
-                                buttons += parseInt(full.cotizacion1_abierta) ? generate : '';
+                                if (parseInt(full.cotizacion1_abierta) && !parseInt(full.cotizacion1_pre)) {
+                                    buttons += generate;
+                                }
+
+                                if (parseInt(full.cotizacion1_pre)) {
+                                    buttons += generate;
+                                }
                             }
+
+                            buttons += exporte + ' ';
+
                             return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
                         }
                     },
@@ -126,7 +138,11 @@ app || (app = {});
                     },
                     {
                         targets: 5,
-                        width: '63%'
+                        width: '63%',
+                        render: function (data, type, full, row) {
+                            var state = parseInt(full.cotizacion1_pre) ? ' <span class="label label-warning">PRE-COTIZACIÓN</span>' : ' <span class="label label-success">COTIZACIÓN</span>';
+                            return data + state;
+                        }
                     },
                     {
                         targets: 6,
@@ -272,6 +288,42 @@ app || (app = {});
             });
 
             cloneConfirm.render();
+        },
+
+        /**
+        * approved cotizacion
+        */
+        approvedCotizacion: function (e) {
+            e.preventDefault();
+
+            var _this = this,
+                model = this.$(e.currentTarget).data(),
+                route =  window.Misc.urlFull(Route.route('cotizaciones.aprobar', { cotizaciones: model.resource })),
+                data = {
+                    cotizacion_codigo: model.code
+                };
+
+            var approvedConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    dataFilter: data,
+                    template: _.template( ($('#cotizacion-approved-confirm-tpl').html() || '') ),
+                    titleConfirm: 'Aprobar la cotización',
+                    onConfirm: function () {
+                        // Approved cotizacion
+                        window.Misc.cloneModule({
+                            'url': route,
+                            'wrap': _this.spinner,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: model.resource})));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+
+            approvedConfirm.render();
         },
 
         /**

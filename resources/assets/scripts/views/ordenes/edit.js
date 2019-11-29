@@ -34,12 +34,12 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize : function(opts) {
-            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
-
+        initialize: function (opts) {
             // Initialize
-            if( opts !== undefined && _.isObject(opts.parameters) )
+            if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             this.productopOrdenList = new app.ProductopOrdenList();
             this.despachopOrdenList = new app.DespachopOrdenList();
