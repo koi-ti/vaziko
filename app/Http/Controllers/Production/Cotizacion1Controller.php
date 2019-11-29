@@ -886,15 +886,16 @@ class Cotizacion1Controller extends Controller
                 $ttransportes += $transportes = ($transportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
 
                 $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
-                $tvolumen += $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                $tvolumen += $comision;
             }
 
             // Make object
-            $tprecio = number_format($tprecio,2,',','.',);
-            $tviaticos = number_format($tviaticos,2,',','.',);
-            $tmateriales = number_format($tmateriales,2,',','.',);
-            $tareas = number_format($tareas,2,',','.',);
-            $tempaques = number_format($tempaques,2,',','.',);
+            $tprecio = number_format($tprecio,2,',','.');
+            $tviaticos = number_format($tviaticos,2,',','.');
+            $tmateriales = number_format($tmateriales,2,',','.');
+            $tareas = number_format($tareas,2,',','.');
+            $tempaques = number_format($tempaques,2,',','.');
             $ttransportes = number_format($ttransportes,2,',','.');
             $tvolumen = number_format($tvolumen,2,',','.');
 
