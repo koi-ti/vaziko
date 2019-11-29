@@ -890,9 +890,17 @@ class Cotizacion1Controller extends Controller
             }
 
             // Make object
+            $tprecio = number_format($tprecio,2,',','.',);
+            $tviaticos = number_format($tviaticos,2,',','.',);
+            $tmateriales = number_format($tmateriales,2,',','.',);
+            $tareas = number_format($tareas,2,',','.',);
+            $tempaques = number_format($tempaques,2,',','.',);
+            $ttransportes = number_format($ttransportes,2,',','.');
+            $tvolumen = number_format($tvolumen,2,',','.');
+
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
-                'Precio ' . number_format($tprecio,2,',','.',), 'Viáticos ' . number_format($tviaticos,2,',','.',), 'Materiales de producción ' . number_format($tmateriales,2,',','.',), 'Áreas de producción ' . number_format($tareas,2,',','.',), 'Empaques de producción ' . number_format($tempaques,2,',','.',), 'Transportes de producción ' . number_format($ttransportes,2,',','.'), 'Volumen ' . number_format($tvolumen,2,',','.')
+                "Precio {$tprecio}", "Viáticos {$tviaticos}", "Materiales de producción {$tmateriales}", "Áreas de producción {$tareas}", "Empaques de producción {$tempaques}", "Transportes de producción {$ttransportes}", "Volumen {$tvolumen}"
             ];
             $chartproducto->data = [
                 $tprecio, $tviaticos, $tmateriales, $tareas, $tempaques, $ttransportes, $tvolumen
