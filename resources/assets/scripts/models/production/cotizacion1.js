@@ -32,7 +32,7 @@ app || (app = {});
             'cotizacion1_suministran': '',
             'cotizacion1_formapago': '',
             'cotizacion1_observaciones': '',
-            'cotizacion1_pre': 0,
+            'cotizacion1_pre': 1,
             'cotizacion1_terminado': '',
             'cotizacion1_observaciones_archivo': ''
         }
