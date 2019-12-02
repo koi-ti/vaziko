@@ -162,19 +162,36 @@
                                                 <input id="cotizacion1_suministran" placeholder="Suministran" class="form-control" name="cotizacion1_suministran" type="text" value="<%- cotizacion1_suministran %>" required maxlength="200">
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="cotizacion1_observaciones" class="col-xs-12 col-sm-1 col-md-1 control-label">Detalle</label>
                                             <div class="form-group col-xs-12 col-sm-11 col-md-11">
                                                 <textarea id="cotizacion1_observaciones" name="cotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- cotizacion1_observaciones %></textarea>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="cotizacion1_terminado" class="col-xs-12 col-sm-1 col-md-1 control-label">Terminado</label>
                                             <div class="form-group col-xs-12 col-sm-11 col-md-11">
                                                 <textarea id="cotizacion1_terminado" name="cotizacion1_terminado" class="form-control" rows="2" placeholder="Terminado"><%- cotizacion1_terminado %></textarea>
                                             </div>
+                                        </div>
+                                        <div class="row">
+                                            <label for="cotizacion1_vendedor" class="col-xs-12 col-sm-1 col-md-1 control-label">Vendedor</label>
+                                            <div class="form-group col-xs-12 col-sm-4 col-md-3">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="cotizacion1_vendedor">
+                                                            <i class="fa fa-user"></i>
+                                                        </button>
+                                                    </span>
+                                                    <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <input id="cotizacion1_vendedor_nombre" name="cotizacion1_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly required>
+                                            </div>
+                                            <div class="form-group col-sm-1">
+                                    			<input type="text" id="cotizacion1_vendedor_porcentaje" name="cotizacion1_vendedor_porcentaje" value="<%- cotizacion1_vendedor_porcentaje %>" placeholder="%" class="form-control input-sm spinner-percentage" maxlength="4" required>
+                                    		</div>
                                         </div>
                                     </form>
                                 </div>

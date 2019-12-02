@@ -107,18 +107,13 @@ app || (app = {});
                                 buttons += parseInt(full.cotizacion1_abierta) ? close : open;
                             }
 
-                            if (parseInt(full.cotizacion1_pre)) {
-                                var generate = '<a class="btn btn-success btn-xs approved-cotizacion" title="Aprobar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-check"></i></a>';
-                            }
-
                             if (parseInt(full.cotizacion_opcional)) {
                                 buttons += ' ' + clone + ' ';
 
-                                if (parseInt(full.cotizacion1_abierta) && !parseInt(full.cotizacion1_pre)) {
-                                    buttons += generate;
-                                }
-
-                                if (parseInt(full.cotizacion1_pre)) {
+                                if (parseInt(full.cotizacion1_abierta)) {
+                                    if (parseInt(full.cotizacion1_pre)) {
+                                        var generate = '<a class="btn btn-success btn-xs approved-cotizacion" title="Aprobar cotización" data-resource="'+ full.id +'" data-code="'+ full.cotizacion_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-check"></i></a>';
+                                    }
                                     buttons += generate;
                                 }
                             }

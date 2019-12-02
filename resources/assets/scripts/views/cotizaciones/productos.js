@@ -107,10 +107,10 @@ app || (app = {});
                         if ( model instanceof Backbone.Model ) {
                             model.destroy({
                                 success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
+                                    if (!_.isUndefined(resp.success)) {
                                         window.Misc.removeSpinner( _this.parameters.wrapper );
 
-                                        if( !resp.success ) {
+                                        if ( !resp.success ) {
                                             alertify.error(resp.errors);
                                             return;
                                         }
@@ -172,26 +172,26 @@ app || (app = {});
         totalize: function () {
             var data = this.collection.totalize();
 
-            if(this.$unidades.length) {
-                this.$unidades.html( data.unidades );
+            if (this.$unidades.length) {
+                this.$unidades.html(data.unidades);
             }
 
-            if(this.$facturado.length) {
-                this.$facturado.html( data.facturado );
+            if (this.$facturado.length) {
+                this.$facturado.html(data.facturado);
             }
 
-            if(this.$subtotal.length) {
-                this.$subtotal.html( window.Misc.currency(data.subtotal) );
+            if (this.$subtotal.length) {
+                this.$subtotal.html(window.Misc.currency(data.subtotal));
             }
 
-            var iva = data.subtotal * ( this.parameters.iva / 100);
-            if(this.$iva.length) {
-                this.$iva.html( window.Misc.currency(iva) );
+            var iva = Math.round(data.subtotal * (this.parameters.iva / 100));
+            if (this.$iva.length) {
+                this.$iva.html(window.Misc.currency(iva));
             }
 
             var total = data.subtotal + iva;
-            if(this.$total.length) {
-                this.$total.html( window.Misc.currency(total) );
+            if (this.$total.length) {
+                this.$total.html(window.Misc.currency(total));
             }
         },
 

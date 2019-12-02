@@ -60,7 +60,13 @@ class TerceroController extends Controller
                     }
 
                     if ($request->has('tercero_proveedor')) {
+                        $query->where('tercero_activo', true);
                         $query->where('tercero_proveedor', true);
+                    }
+
+                    if ($request->has('tercero_vendedor')) {
+                        $query->where('tercero_vendedor', true);
+                        $query->where('tercero_activo', true);
                     }
                 })
                 ->make(true);
@@ -270,6 +276,12 @@ class TerceroController extends Controller
 
             if ($request->has('tercero_proveedor')) {
                 $query->where('tercero_proveedor', true);
+                $query->where('tercero_activo', true);
+            }
+
+            if ($request->has('tercero_vendedor')) {
+                $query->where('tercero_vendedor', true);
+                $query->where('tercero_activo', true);
             }
 
             $tercero = $query->first();

@@ -83,6 +83,9 @@ app || (app = {});
 
             if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initSpinner == 'function')
+                window.initComponent.initSpinner();
         },
 
         /**

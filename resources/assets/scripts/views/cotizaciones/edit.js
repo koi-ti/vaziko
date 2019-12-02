@@ -33,7 +33,7 @@ app || (app = {});
             // Initialize
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-                
+
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             this.productopCotizacionList = new app.ProductopCotizacionList();
@@ -539,23 +539,26 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initTimePicker == 'function' )
+            if (typeof window.initComponent.initTimePicker == 'function')
                 window.initComponent.initTimePicker();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initSpinner == 'function')
+                window.initComponent.initSpinner();
         },
 
         /**

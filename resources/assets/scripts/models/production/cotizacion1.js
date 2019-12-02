@@ -19,22 +19,25 @@ app || (app = {});
             'cotizacion1_codigo': '',
             'cotizacion1_referencia': '',
             'cotizacion1_cliente': '',
-            'tercero_nit': '',
-            'tercero_nombre': '',
-            'tercero_direccion': '',
-            'tercero_dir_nomenclatura': '',
-            'tercero_municipio': '',
             'cotizacion1_fecha_inicio': moment().format('YYYY-MM-DD'),
             'cotizacion1_iva': '',
             'cotizacion1_contacto': '',
-            'tcontacto_nombre': '',
-            'tcontacto_telefono': '',
             'cotizacion1_suministran': '',
             'cotizacion1_formapago': '',
             'cotizacion1_observaciones': '',
             'cotizacion1_pre': 1,
             'cotizacion1_terminado': '',
-            'cotizacion1_observaciones_archivo': ''
+            'cotizacion1_observaciones_archivo': '',
+            'cotizacion1_vendedor_porcentaje': 0,
+            'tercero_nit': '',
+            'tercero_nombre': '',
+            'tercero_direccion': '',
+            'tercero_dir_nomenclatura': '',
+            'tercero_municipio': '',
+            'tcontacto_nombre': '',
+            'tcontacto_telefono': '',
+            'vendedor_nit': '',
+            'vendedor_nombre': ''
         }
     });
 

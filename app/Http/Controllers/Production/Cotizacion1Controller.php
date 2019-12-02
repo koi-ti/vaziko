@@ -184,6 +184,17 @@ class Cotizacion1Controller extends Controller
                         $contacto->save();
                     }
 
+                    // Validar que exista el tercero con check vendedor
+                    if ($request->has('cotizacion1_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor', true)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $cotizacion->cotizacion1_vendedor = $vendedor->id;
+                    }
+
                     // Recuperar numero cotizacion
                     $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
@@ -301,6 +312,17 @@ class Cotizacion1Controller extends Controller
                     if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
+                    }
+
+                    // Validar que exista el tercero con check vendedor
+                    if ($request->has('cotizacion1_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor', true)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $cotizacion->cotizacion1_vendedor = $vendedor->id;
                     }
 
                     // Cotizacion

@@ -97,13 +97,11 @@
 											</a>- {{ $cotizacion->tercero_nombre }}
 										</div>
 									</div>
-
 									<div class="form-group col-md-3">
 										<label class="control-label">Forma de pago</label>
 										<div>{{ $cotizacion->cotizacion1_formapago }}</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-6">
 										<label class="control-label">Contacto</label>
@@ -114,21 +112,18 @@
 										<div>{{ $cotizacion->tcontacto_telefono }}</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-12">
 										<label class="control-label">Suministran</label>
 										<div>{{ $cotizacion->cotizacion1_suministran }}</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-12">
 										<label class="control-label">Detalle</label>
 										<div>{{ $cotizacion->cotizacion1_observaciones }}</div>
 									</div>
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-12">
 										<label class="control-label">Terminado</label>
@@ -137,7 +132,6 @@
                                     <input type="hidden" id="cotizacion1_iva" value="{{ $cotizacion->cotizacion1_iva }}">
                                     <input type="hidden" id="cotizacion_codigo" value="{{ $cotizacion->cotizacion_codigo }}">
 								</div>
-
 								<div class="row">
 									<div class="form-group col-md-2">
 										<label class="control-label">Usuario elaboro</label>
@@ -149,6 +143,19 @@
 									<div class="form-group col-md-2">
 										<label class="control-label">Fecha elaboro</label>
 										<div>{{ $cotizacion->cotizacion1_fecha_elaboro }}</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="form-group col-md-6">
+										<label class="control-label">Vendedor</label>
+										<div>
+											<a href="{{ route('terceros.show', ['terceros' =>  $cotizacion->cotizacion1_vendedor ]) }}" title="Ver vendedor">
+                                            {{ $cotizacion->vendedor_nit }}</a> - {{ $cotizacion->vendedor_nombre }}
+										</div>
+									</div>
+									<div class="form-group col-md-2">
+										<label class="control-label">Porcentaje</label>
+										<div>{{ $cotizacion->cotizacion1_vendedor_porcentaje }}</div>
 									</div>
 								</div>
 							</div>

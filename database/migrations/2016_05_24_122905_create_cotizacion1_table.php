@@ -33,6 +33,8 @@ class CreateCotizacion1Table extends Migration
             $table->string('cotizacion1_estado', 1)->nullable()->comment = 'R:REASIGNAR N:NO ACEPTADA O:AL ABRIR ORDEN';
             $table->boolean('cotizacion1_pre')->default(false);
             $table->text('cotizacion1_observaciones_archivo')->nullable();
+            $table->integer('cotizacion1_vendedor')->unsigned()->nullable();
+            $table->double('cotizacion1_vendedor_porcentaje')->default(0);
             $table->datetime('cotizacion1_fecha_elaboro');
             $table->integer('cotizacion1_usuario_elaboro')->unsigned();
             $table->datetime('cotizacion1_fecha_anulo')->nullable();
