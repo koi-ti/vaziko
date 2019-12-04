@@ -1329,3 +1329,20 @@
         </div>
     </div>
 </script>
+
+{{-- Bitacora --}}
+<script type="text/template" id="bitacora-item-list-tpl">
+    <td><%- bitacora_modulo %></td>
+    <td>
+        <% if (bitacora_accion == 'C') { %>
+            <span class='label label-success'>CREAR</span>
+        <% } else if (bitacora_accion == 'U') { %>
+            <span class='label label-warning'>MODIFICAR</span>
+        <% } else if (bitacora_accion == 'D') { %>
+            <span class='label label-danger'>ELIMINAR</span>
+        <% } %>
+    </td>
+    <td class="pre"><%- bitacora_cambios %></td>
+    <td><%- bitacora_usuario_elaboro %></td>
+    <td><%- bitacora_fh_elaboro %></td>
+</script>

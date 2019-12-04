@@ -32,6 +32,7 @@ app || (app = {});
 
             // Attributes
             this.productopCotizacionList = new app.ProductopCotizacionList();
+            this.bitacoraCotizacionList = new app.BitacoraCotizacionList();
 
             // Reference views
             this.referenceCharts();
@@ -51,6 +52,16 @@ app || (app = {});
                     iva: this.$iva.val(),
                     dataFilter: {
                         'cotizacion2_cotizacion': this.model.get('id')
+                    }
+               }
+            });
+
+            // Bitacora list
+            this.bitacoraListView = new app.BitacoraListView( {
+                collection: this.bitacoraCotizacionList,
+                parameters: {
+                    dataFilter: {
+                        cotizacion: this.model.get('id')
                     }
                }
             });

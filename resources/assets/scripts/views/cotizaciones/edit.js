@@ -37,6 +37,7 @@ app || (app = {});
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
             this.productopCotizacionList = new app.ProductopCotizacionList();
+            this.bitacoraCotizacionList = new app.BitacoraCotizacionList();
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -82,6 +83,17 @@ app || (app = {});
                     wrapper: this.spinner,
                     dataFilter: {
                         'cotizacion2_cotizacion': this.model.get('id')
+                    }
+               }
+            });
+
+            // Bitacora list
+            this.bitacoraListView = new app.BitacoraListView({
+                collection: this.bitacoraCotizacionList,
+                parameters: {
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        cotizacion: this.model.get('id')
                     }
                }
             });

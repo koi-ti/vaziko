@@ -45,6 +45,7 @@ app || (app = {});
             this.despachopOrdenList = new app.DespachopOrdenList();
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
             this.asientoCuentasList = new app.AsientoCuentasList();
+            this.bitacoraOrdenList = new app.BitacoraOrdenList();
 
             // Tiempop general
             this.tiempopList = new app.TiempopList();
@@ -144,6 +145,16 @@ app || (app = {});
                     edit: false,
                     dataFilter: {
                         orden2_orden: this.model.get('id')
+                    }
+                }
+            });
+
+            // Bitacora list
+            this.bitacoraListView = new app.BitacoraListView({
+                collection: this.bitacoraOrdenList,
+                parameters: {
+                    dataFilter: {
+                        ordenp: this.model.get('id')
                     }
                 }
             });

@@ -21,6 +21,7 @@
                         <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                     @endif
                     <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
+                    <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
                     <li class="pull-right">
                         <div class="btn-group" role="group">
                             @if (!$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
@@ -231,6 +232,29 @@
                         <div class="row">
                             <div class="form-group col-sm-12">
                                 <textarea class="form-control" rows="10" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane" id="tab_bitacora">
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="table-responsive">
+                                        <table id="browse-bitacora-list" class="table no-padding" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="10%"><small>Módulo</small></th>
+                                                    <th width="10%"><small>Acción</small></th>
+                                                    <th width="50%"><small>Descripción</small></th>
+                                                    <th width="15%"><small>Usuario cambio</small></th>
+                                                    <th width="15%"><small>Fecha cambio</small></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

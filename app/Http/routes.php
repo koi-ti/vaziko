@@ -177,6 +177,7 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('transportes', 'Production\Cotizacion10Controller', ['only' => ['index', 'store']]);
 		});
 		Route::resource('productos', 'Production\Cotizacion2Controller');
+		Route::resource('bitacora', 'Admin\BitacoraController', ['only' => ['index']]);
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
 
@@ -189,7 +190,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
 		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
-		Route::resource('imagenes', 'Production\OrdenpImagenesController', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('archivos', 'Production\OrdenpArchivosController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function() {
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
@@ -201,6 +202,7 @@ Route::group(['middleware' => 'auth'], function() {
 			Route::resource('transportes', 'Production\DetalleTransportesController', ['only' => ['index', 'store']]);
 		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
+		Route::resource('bitacora', 'Admin\BitacoraController', ['only' => ['index']]);
 
 		Route::group(['prefix' => 'despachos'], function() {
 			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);

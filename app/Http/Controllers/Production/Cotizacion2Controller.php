@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp;
-use App\Models\Base\Tercero;
+use App\Models\Base\Tercero, App\Models\Base\Bitacora;
 use App\Models\Inventory\Producto;
 use DB, Log, Datatables, Storage;
 
@@ -287,6 +287,9 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->cotizacion2_total_valor_unitario = $total;
                     $cotizacion2->save();
 
+                    // Si hay cambios en la cotizacion
+                    Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'C');
+
                     // Guardar imagenes si todo sale bien
                     if (count($files)) {
                         foreach ($files as $file) {
@@ -408,11 +411,17 @@ class Cotizacion2Controller extends Controller
                 if ($cotizacion2->isValid($data)) {
                     DB::beginTransaction();
                     try {
+                        // Original
+                        $original = $cotizacion2->getOriginal();
+
                         // Cotizacion2
                         $cotizacion2->fill($data);
                         $cotizacion2->fillBoolean($data);
                         $cotizacion2->cotizacion2_cantidad = $request->cotizacion2_cantidad;
                         $cotizacion2->cotizacion2_saldo = $request->cotizacion2_cantidad;
+                        // Cambios
+                        $changes = $cotizacion2->getDirty();
+                        // Guardar
                         $cotizacion2->save();
 
                         // Maquinas
@@ -632,6 +641,11 @@ class Cotizacion2Controller extends Controller
                         $cotizacion2->cotizacion2_total_valor_unitario = $total;
                         $cotizacion2->save();
 
+                        // Si hay cambios en la cotizacion
+                        if ($changes) {
+                            Bitacora::createBitacora($cotizacion, $original, $changes, 'Productos', 'U');
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
@@ -663,7 +677,13 @@ class Cotizacion2Controller extends Controller
                 $cotizacion2 = Cotizacion2::find($id);
                 if (!$cotizacion2 instanceof Cotizacion2) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle la cotizacion, por favor verifique la información del asiento o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle la cotizacion, por favor verifique la información o consulte al administrador.']);
+                }
+
+                $cotizacion = Cotizacion1::find($cotizacion2->cotizacion2_cotizacion);
+                if (!$cotizacion instanceof Cotizacion1) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotizacion, por favor verifique la información o consulte al administrador.']);
                 }
 
                 // Maquinas
@@ -687,11 +707,14 @@ class Cotizacion2Controller extends Controller
                 // Transportes
                 DB::table('koi_cotizacion10')->where('cotizacion10_cotizacion2', $cotizacion2->id)->delete();
 
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'D');
+
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
 
-                if ( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id") ) {
-                    Storage::deleteDirectory("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id");
+                if (Storage::has("cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}")) {
+                    Storage::deleteDirectory("cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}");
                 }
 
                 DB::commit();
@@ -715,6 +738,7 @@ class Cotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $cotizacion2 = Cotizacion2::findOrFail($id);
+            $cotizacion = Cotizacion1::findOrFail($cotizacion2->cotizacion2_cotizacion);
             DB::beginTransaction();
             try {
                 $newcotizacion2 = $cotizacion2->replicate();
@@ -752,10 +776,10 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion8->save();
 
                      // Recuperar imagen y copiar
-                     if ( Storage::has("cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo") ) {
+                     if ( Storage::has("cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}") ) {
                          $object = new \stdClass();
-                         $object->copy = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$cotizacion8->cotizacion8_archivo";
-                         $object->paste = "cotizaciones/cotizacion_$newcotizacion2->cotizacion2_cotizacion/producto_$newcotizacion2->id/$newcotizacion8->cotizacion8_archivo";
+                         $object->copy = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$cotizacion8->cotizacion8_archivo}";
+                         $object->paste = "cotizaciones/cotizacion_{$newcotizacion2->cotizacion2_cotizacion}/producto_{$newcotizacion2->id}/{$newcotizacion8->cotizacion8_archivo}";
 
                          $files[] = $object;
                      }
@@ -798,6 +822,9 @@ class Cotizacion2Controller extends Controller
                      $newcotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
                      $newcotizacion10->save();
                 }
+
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], "Se clono el producto {$cotizacion2->id}", 'Productos', 'U');
 
                 if (count($files)) {
                     foreach ($files as $file) {

@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Base\Tercero, App\Models\Base\Bitacora;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Production\Materialp;
-use App\Models\Base\Tercero;
 use App\Models\Inventory\Producto;
 use DB, Log, Datatables, Storage;
 
@@ -22,31 +22,30 @@ class DetalleOrdenpController extends Controller
             $data = [];
             if ($request->has('datatables')) {
                 $query = Ordenp2::getDetails();
-
                 return Datatables::of($query)
-                ->filter(function($query) use($request) {
-                    // Orden
-                    if ($request->has('search_ordenp')) {
-                        $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
-                    }
+                            ->filter(function($query) use($request) {
+                                // Orden
+                                if ($request->has('search_ordenp')) {
+                                    $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
+                                }
 
-                    if ($request->has('search_ordenpestado')) {
-                        if ($request->search_ordenpestado == 'A') {
-                            $query->where('orden_abierta', true);
-                        }
-                        if ($request->search_ordenpestado == 'C') {
-                            $query->where('orden_abierta', false);
-                            $query->where('orden_culminada', false);
-                        }
-                        if ($request->search_ordenpestado == 'N') {
-                            $query->where('orden_anulada', true);
-                        }
-                        if ($request->search_ordenpestado == 'T') {
-                            $query->where('orden_culminada', true);
-                        }
-                    }
-                })
-                ->make(true);
+                                if ($request->has('search_ordenpestado')) {
+                                    if ($request->search_ordenpestado == 'A') {
+                                        $query->where('orden_abierta', true);
+                                    }
+                                    if ($request->search_ordenpestado == 'C') {
+                                        $query->where('orden_abierta', false);
+                                        $query->where('orden_culminada', false);
+                                    }
+                                    if ($request->search_ordenpestado == 'N') {
+                                        $query->where('orden_anulada', true);
+                                    }
+                                    if ($request->search_ordenpestado == 'T') {
+                                        $query->where('orden_culminada', true);
+                                    }
+                                }
+                            })
+                            ->make(true);
             }
 
             if ($request->has('orden2_orden')) {
@@ -80,7 +79,7 @@ class DetalleOrdenpController extends Controller
         $producto->load('tips');
 
         if (!$orden->orden_abierta || $orden->orden_anulada) {
-            return redirect()->route('ordenes.show', ['orden' => $orden]);
+            return redirect()->route('ordenes.show', compact('orden'));
         }
 
         return view('production.ordenes.productos.create', compact('orden', 'producto'));
@@ -312,6 +311,9 @@ class DetalleOrdenpController extends Controller
                         }
                     }
 
+                    // Actualizar Bitacora
+                    Bitacora::createBitacora($orden, [], "Código: {$orden2->id}\r\nReferencia: {$orden2->orden2_referencia}\r\nCantidad: {$orden2->orden2_saldo}", 'Productos', 'C');
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id_orden' => $orden->id]);
@@ -398,10 +400,10 @@ class DetalleOrdenpController extends Controller
         $producto->load('tips');
 
         // Validar orden
-        if ($orden->orden_abierta == false) {
+        if (!$orden->orden_abierta) {
             return redirect()->route('ordenes.productos.show', ['productos' => $ordenp2->id]);
         }
-        return view('production.ordenes.productos.create', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
+        return view('production.ordenes.productos.create', compact('orden', 'producto', 'ordenp2'));
     }
 
     /**
@@ -422,7 +424,6 @@ class DetalleOrdenpController extends Controller
             // Recuperar orden
             $orden = Ordenp::findOrFail($orden2->orden2_orden);
             if ($orden->orden_abierta) {
-
                 if ($orden2->isValid($data)) {
                     DB::beginTransaction();
                     try {
@@ -436,14 +437,20 @@ class DetalleOrdenpController extends Controller
 
                         if ($request->orden2_cantidad < $despacho->despachadas) {
                             DB::rollback();
-                            return response()->json(['success' => false, 'errors' => "No es posible actualizar unidades, cantidad mínima despachos ($despacho->despachadas), por favor verifique la información del asiento o consulte al administrador."]);
+                            return response()->json(['success' => false, 'errors' => "No es posible actualizar unidades, cantidad mínima despachos ($despacho->despachadas), por favor verifique la información o consulte al administrador."]);
                         }
+
+                        // Traer datos originales
+                        $original = $orden2->getOriginal();
 
                         // Orden2
                         $orden2->fill($data);
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
+                        // Cambios
+                        $changes = $orden2->getDirty();
+                        // Guardar
                         $orden2->save();
 
                         // Maquinas
@@ -648,6 +655,11 @@ class DetalleOrdenpController extends Controller
                         $orden2->orden2_total_valor_unitario = $total;
                         $orden2->save();
 
+                        // Si hay cambios en la ordenp
+                        if ($changes) {
+                            Bitacora::createBitacora($orden, $original, $changes, 'Productos', 'U');
+                        }
+
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $orden2->id, 'id_orden' => $orden->id]);
@@ -678,14 +690,20 @@ class DetalleOrdenpController extends Controller
                 $orden2 = Ordenp2::find($id);
                 if (!$orden2 instanceof Ordenp2) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle orden, por favor verifique la información del asiento o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar detalle orden, por favor verifique la información o consulte al administrador.']);
+                }
+
+                $orden = Ordenp::find($orden2->orden2_orden);
+                if (!$orden instanceof Ordenp) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar orden, por favor verifique la información o consulte al administrador.']);
                 }
 
                 // Validar despachos
                 $despacho = Despachop2::where('despachop2_orden2', $orden2->id)->first();
                 if ($despacho instanceof Despachop2) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar producto, contiene despachos asociados, por favor verifique la información del asiento o consulte al administrador.']);
+                    return response()->json(['success' => false, 'errors' => 'No es posible eliminar producto, contiene despachos asociados, por favor verifique la información o consulte al administrador.']);
                 }
 
                 // Maquinas
@@ -709,11 +727,14 @@ class DetalleOrdenpController extends Controller
                 // Transportes
                 DB::table('koi_ordenproduccion10')->where('orden10_orden2', $orden2->id)->delete();
 
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($orden, [], "Código: {$orden2->id}\r\nReferencia: {$orden2->orden2_referencia}\r\nCantidad: {$orden2->orden2_saldo}", 'Productos', 'D');
+
                 // Eliminar item orden2
                 $orden2->delete();
 
-                if ( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id") ) {
-                    Storage::deleteDirectory("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id");
+                if (Storage::has("ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}")) {
+                    Storage::deleteDirectory("ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}");
                 }
 
                 DB::commit();
@@ -737,6 +758,7 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $orden2 = Ordenp2::findOrFail($id);
+            $orden = Ordenp::findOrFail($orden2->orden2_orden);
             DB::beginTransaction();
             try {
                 $neworden2 = $orden2->replicate();
@@ -773,10 +795,10 @@ class DetalleOrdenpController extends Controller
                      $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
                      $neworden8->save();
 
-                     if ( Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                     if (Storage::has("ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}")) {
                          $object = new \stdClass();
-                         $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
-                         $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
+                         $object->copy = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}";
+                         $object->paste = "ordenes/orden_{$neworden2->orden2_orden}/producto_{$neworden2->id}/{$neworden8->orden8_archivo}";
 
                          $files[] = $object;
                      }
@@ -826,6 +848,9 @@ class DetalleOrdenpController extends Controller
                         Storage::copy($file->copy, $file->paste);
                     }
                 }
+
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($orden, [], "Se clono el producto {$orden2->id}", 'Productos', 'U');
 
                 // Commit Transaction
                 DB::commit();

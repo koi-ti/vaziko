@@ -33,7 +33,8 @@
                             @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
                                 <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
-                                <li><a href="#tab_imagenes" data-toggle="tab">Imágenes de producción</a></li>
+                                <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
+                                <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
                             @endif
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
@@ -528,7 +529,7 @@
                                     @include('production.ordenes.charts.charts')
                                 </div>
 
-                                <div class="tab-pane" id="tab_imagenes">
+                                <div class="tab-pane" id="tab_files">
                                     <div class="row">
                                         <div class="form-group col-sm-12">
                                             <div class="fine-uploader"></div>
@@ -537,6 +538,30 @@
                                     <div class="row">
                                         <div class="form-group col-sm-12">
                                             <textarea id="orden_observaciones_imagen" name="orden_observaciones_imagen" class="form-control" rows="8" placeholder="Observaciones"><%- orden_observaciones_imagen %></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="tab-pane" id="tab_bitacora">
+                                    <div class="box-body">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="table-responsive">
+                                                    <table id="browse-bitacora-list" class="table no-padding" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th width="10%"><small>Módulo</small></th>
+                                                                <th width="10%"><small>Acción</small></th>
+                                                                <th width="50%"><small>Descripción</small></th>
+                                                                <th width="15%"><small>Usuario cambio</small></th>
+                                                                <th width="15%"><small>Fecha cambio</small></th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

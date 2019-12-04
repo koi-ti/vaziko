@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\CotizacionArchivo, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\OrdenpImagen;
-use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\CotizacionArchivo, App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\OrdenpArchivo;
+use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Base\Bitacora;
 use App, View, DB, Log, Datatables, Storage;
 
 class Cotizacion1Controller extends Controller
@@ -17,7 +17,7 @@ class Cotizacion1Controller extends Controller
     {
         $this->middleware('ability:admin,consultar');
         $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'cerrar']]);
-        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar']]);
+        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar', 'aprobar']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
     }
 
@@ -243,15 +243,15 @@ class Cotizacion1Controller extends Controller
         }
 
         // Permisions
-        if ( !auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && $cotizacion->cotizacion1_abierta == false) {
+        if (!auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && !$cotizacion->cotizacion1_abierta) {
             abort(403);
         }
 
-        if ( $cotizacion->cotizacion1_abierta == true && $cotizacion->cotizacion1_anulada == false && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones']) ) {
-            return redirect()->route('cotizaciones.edit', ['cotizacion' => $cotizacion]);
+        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
+            return redirect()->route('cotizaciones.edit', compact('cotizacion'));
         }
 
-        return view('production.cotizaciones.show', ['cotizacion' => $cotizacion]);
+        return view('production.cotizaciones.show', compact('cotizacion'));
     }
 
     /**
@@ -267,11 +267,11 @@ class Cotizacion1Controller extends Controller
             abort(404);
         }
 
-        if ($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
-            return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
+        if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada) {
+            return redirect()->route('cotizaciones.show', compact('cotizacion'));
         }
 
-        return view('production.cotizaciones.create', ['cotizacion' => $cotizacion]);
+        return view('production.cotizaciones.create', compact('cotizacion'));
     }
 
     /**
@@ -325,11 +325,22 @@ class Cotizacion1Controller extends Controller
                         $cotizacion->cotizacion1_vendedor = $vendedor->id;
                     }
 
+                    // Traer datos originales
+                    $original = $cotizacion->getOriginal();
+
                     // Cotizacion
                     $cotizacion->fill($data);
                     $cotizacion->cotizacion1_cliente = $tercero->id;
                     $cotizacion->cotizacion1_contacto = $contacto->id;
+                    // Traer cambios en el modelo
+                    $changes = $cotizacion->getDirty();
+                    // Guardar el modelo
                     $cotizacion->save();
+
+                    // Si hay cambios en la cotizacion
+                    if ($changes) {
+                        Bitacora::createBitacora($cotizacion, $original, $changes, 'Cotización', 'U');
+                    }
 
                     // Commit Transaction
                     DB::commit();
@@ -365,7 +376,7 @@ class Cotizacion1Controller extends Controller
     public function cerrar(Request $request, $id)
     {
         if ($request->ajax()) {
-            if ( !in_array($request->state, array_keys(config('koi.close.state'))) ) {
+            if (!in_array($request->state, array_keys(config('koi.close.state')))) {
                 return response()->json(['success' => false, 'errors' => 'El estado de cerrar no es valido.']);
             }
 
@@ -373,10 +384,12 @@ class Cotizacion1Controller extends Controller
             DB::beginTransaction();
             try {
                 // Cotización
-
                 $cotizacion->cotizacion1_abierta = false;
                 $cotizacion->cotizacion1_estado = $request->state;
                 $cotizacion->save();
+
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], 'Se cerro la cotización', 'Cotización', 'U');
 
                 // Commit Transaction
                 DB::commit();
@@ -417,6 +430,9 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_estado = '';
                 $cotizacion->save();
 
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], 'Se abrió la cotización', 'Cotización', 'U');
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Cotización reabierta con exito.']);
@@ -446,7 +462,7 @@ class Cotizacion1Controller extends Controller
         $title = "Cotización {$cotizacion->cotizacion_codigo}";
 
         $data = [];
-        foreach ( $cotizaciones2 as $cotizacion2 ) {
+        foreach ($cotizaciones2 as $cotizacion2) {
             $query = Cotizacion4::query();
             $query->select(DB::raw("GROUP_CONCAT(materialp_nombre SEPARATOR ', ') AS materialp_nombre"));
             $query->join('koi_materialp', 'cotizacion4_materialp', '=', 'koi_materialp.id');
@@ -487,7 +503,7 @@ class Cotizacion1Controller extends Controller
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('production.cotizaciones.report.export',  compact('cotizacion', 'data' ,'title'))->render());
+        $pdf->loadHTML(View::make('production.cotizaciones.report.export', compact('cotizacion', 'data' ,'title'))->render());
         return $pdf->stream("cotización_$export.pdf");
     }
 
@@ -500,7 +516,7 @@ class Cotizacion1Controller extends Controller
     public function clonar(Request $request, $id)
     {
         if ($request->ajax()) {
-            $cotizacion = Cotizacion1::findOrFail($id);
+            $cotizacion = Cotizacion1::find($id);
             if (!$cotizacion instanceof Cotizacion1) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
             }
@@ -628,6 +644,9 @@ class Cotizacion1Controller extends Controller
                     }
                 }
 
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], 'Se clono la cotización', 'Cotización', 'U');
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $newcotizacion->id, 'msg' => 'Cotización clonada con exito.']);
@@ -649,7 +668,7 @@ class Cotizacion1Controller extends Controller
     public function generar(Request $request, $id)
     {
         if ($request->ajax()) {
-            $cotizacion = Cotizacion1::findOrFail($id);
+            $cotizacion = Cotizacion1::find($id);
             if (!$cotizacion instanceof Cotizacion1) {
                 return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
             }
@@ -839,17 +858,17 @@ class Cotizacion1Controller extends Controller
                 // Archivos
                 $archivos = CotizacionArchivo::where('cotizacionarchivo_cotizacion', $cotizacion->id)->get();
                 foreach ($archivos as $archivo) {
-                    $ordenparchivo = new OrdenpImagen;
-                    $ordenparchivo->ordenimagen_archivo = $archivo->cotizacionarchivo_archivo;
-                    $ordenparchivo->ordenimagen_orden = $orden->id;
-                    $ordenparchivo->ordenimagen_fh_elaboro = date('Y-m-d H:i:s');
-                    $ordenparchivo->ordenimagen_usuario_elaboro = auth()->user()->id;
+                    $ordenparchivo = new OrdenpArchivo;
+                    $ordenparchivo->ordenarchivo_archivo = $archivo->cotizacionarchivo_archivo;
+                    $ordenparchivo->ordenarchivo_orden = $orden->id;
+                    $ordenparchivo->ordenarchivo_fh_elaboro = date('Y-m-d H:i:s');
+                    $ordenparchivo->ordenarchivo_usuario_elaboro = auth()->user()->id;
                     $ordenparchivo->save();
 
                     // Recuperar archivos
                     if (Storage::has("cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}")) {
                         $oldfile = "cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$archivo->cotizacionarchivo_archivo}";
-                        $newfile = "ordenes/orden_{$orden->id}/imagenes/{$ordenparchivo->ordenimagen_archivo}";
+                        $newfile = "ordenes/orden_{$orden->id}/archivos/{$ordenparchivo->ordenarchivo_archivo}";
 
                         // Copy file storege laravel
                         Storage::copy($oldfile, $newfile);
@@ -861,6 +880,9 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_anulada = false;
                 $cotizacion->cotizacion1_estado = 'O';
                 $cotizacion->save();
+
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], 'Se genero una orden de producción', 'Cotización', 'U');
 
                 // Commit Transaction
                 DB::commit();
@@ -959,6 +981,9 @@ class Cotizacion1Controller extends Controller
                 // Cotizacion
                 $cotizacion->cotizacion1_pre = false;
                 $cotizacion->save();
+
+                // Si hay cambios en la cotizacion
+                Bitacora::createBitacora($cotizacion, [], 'Se aprobo la cotización', 'Cotización', 'U');
 
                 // Commit Transaction
                 DB::commit();

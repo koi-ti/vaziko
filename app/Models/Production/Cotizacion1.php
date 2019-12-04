@@ -95,4 +95,8 @@ class Cotizacion1 extends BaseModel
     public function productos () {
         return $this->hasMany('App\Models\Production\Cotizacion2', 'cotizacion2_cotizacion', 'id');
     }
+
+    public function bitacora () {
+        return $this->morphMany('App\Models\Base\Bitacora', 'bitacora');
+    }
 }

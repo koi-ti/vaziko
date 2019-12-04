@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Base\Bitacora;
 use App\Models\Production\CotizacionArchivo, App\Models\Production\Cotizacion1;
 use Storage, DB;
 
@@ -81,6 +82,9 @@ class CotizacionArchivosController extends Controller
                     $archivo->cotizacionarchivo_usuario_elaboro = auth()->user()->id;
                     $archivo->save();
 
+                    // Crear bitacora
+                    Bitacora::createBitacora($cotizacion, [], "Se agrego un archivo {$name}", 'Archivos', 'C');
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $archivo->id, 'name' => $archivo->cotizacionarchivo_archivo, 'url' => $url]);
@@ -121,6 +125,9 @@ class CotizacionArchivosController extends Controller
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'El archivo que esta intentando eliminar no corresponde a la cotización, por favor verifique la información o consulte al administrador.']);
                 }
+
+                // Crear bitacora
+                Bitacora::createBitacora($cotizacion, [], "Se elimino el archivo {$cotizacionarchivo->cotizacionarchivo_archivo}", 'Archivos', 'D');
 
                 // Eliminar item detallepedido
                 if (Storage::has("cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$cotizacionarchivo->cotizacionarchivo_archivo}")) {

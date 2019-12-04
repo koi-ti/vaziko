@@ -4,7 +4,8 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Production\Tiempop;
+use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Base\Bitacora;
+use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\Tiempop;
 use App, View, DB, Log, Datatables, Storage;
 
 class OrdenpController extends Controller
@@ -178,35 +179,37 @@ class OrdenpController extends Controller
                 try {
                     // Recuperar empresa
                     $empresa = Empresa::getEmpresa();
-                    if(!$empresa instanceof Empresa) {
+                    if (!$empresa instanceof Empresa) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar empresa, por favor verifique la información o consulte al administrador.']);
                     }
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
                     // Validar contacto
                     $contacto = Contacto::find($request->orden_contacto);
-                    if(!$contacto instanceof Contacto) {
+                    if (!$contacto instanceof Contacto) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
                     // Validar tercero contacto
-                    if($contacto->tcontacto_tercero != $tercero->id) {
+                    if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
                     }
                     // Actualizar telefono del contacto
-                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                    if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
                     }
+
                     // Recuperar numero orden
                     $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
+
                     // Orden de produccion
                     $orden->fill($data);
                     $orden->fillBoolean($data);
@@ -218,6 +221,7 @@ class OrdenpController extends Controller
                     $orden->orden_usuario_elaboro = auth()->user()->id;
                     $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
                     $orden->save();
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id]);
@@ -272,13 +276,13 @@ class OrdenpController extends Controller
     public function edit($id)
     {
         $orden = Ordenp::getOrden($id);
-        if(!$orden instanceof Ordenp) {
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
-        if($orden->orden_abierta == false || $orden->orden_anulada == true) {
-            return redirect()->route('ordenes.show', ['orden' => $orden]);
+        if (!$orden->orden_abierta || $orden->orden_anulada) {
+            return redirect()->route('ordenes.show', compact('orden'));
         }
-        return view('production.ordenes.create', ['orden' => $orden]);
+        return view('production.ordenes.create', compact('orden'));
     }
 
     /**
@@ -298,32 +302,47 @@ class OrdenpController extends Controller
                 try {
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
-                    if(!$tercero instanceof Tercero) {
+                    if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Validar contacto
                     $contacto = Contacto::find($request->orden_contacto);
-                    if(!$contacto instanceof Contacto) {
+                    if (!$contacto instanceof Contacto) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Validar tercero contacto
-                    if($contacto->tcontacto_tercero != $tercero->id) {
+                    if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
                     }
+
                     // Actualizar telefono del contacto
-                    if($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
+                    if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
                     }
+
+                    // Traer datos originales
+                    $original = $orden->getOriginal();
+
                     // Orden
                     $orden->fill($data);
                     $orden->fillBoolean($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_contacto = $contacto->id;
+                    // Traer modificaciones
+                    $changes = $orden->getDirty();
+                    // Guardar
                     $orden->save();
+
+                    // Validar si vienen cambios
+                    if ($changes) {
+                        Bitacora::createBitacora($orden, $original, $changes, 'Orden', 'U');
+                    }
 
                     // Commit Transaction
                     DB::commit();
@@ -424,6 +443,9 @@ class OrdenpController extends Controller
                 $orden->orden_culminada = false;
                 $orden->save();
 
+                // Actualizar Bitacora
+                Bitacora::createBitacora($orden, [], "Se abrió la orden de producción", 'Orden', 'U');
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
@@ -452,6 +474,10 @@ class OrdenpController extends Controller
                 $orden->orden_abierta = false;
                 $orden->orden_culminada = false;
                 $orden->save();
+
+                // Actualizar Bitacora
+                Bitacora::createBitacora($orden, [], "Se cerro la orden de producción", 'Orden', 'U');
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden cerrada con exito.']);
@@ -482,6 +508,9 @@ class OrdenpController extends Controller
                 $orden->orden_abierta = false;
                 $orden->save();
 
+                // Actualizar Bitacora
+                Bitacora::createBitacora($orden, [], "Se culmino la orden de producción", 'Orden', 'U');
+
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Culmino la orden de producción con exito.']);
@@ -503,11 +532,13 @@ class OrdenpController extends Controller
     public function exportar($id)
     {
         $orden = Ordenp::getOrden($id);
-        if(!$orden instanceof Ordenp){
+        if (!$orden instanceof Ordenp){
             abort(404);
         }
+
         $detalle = Ordenp2::getOrdenesp2($orden->id);
         $title = sprintf('Orden de producción %s', $orden->orden_codigo);
+
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle' ,'title'))->render());
@@ -635,6 +666,9 @@ class OrdenpController extends Controller
                         Storage::copy($file->copy, $file->paste);
                     }
                 }
+
+                // Actualizar Bitacora
+                Bitacora::createBitacora($orden, [], "Se clono la orden de producción", 'Orden', 'U');
 
                 // Commit Transaction
                 DB::commit();

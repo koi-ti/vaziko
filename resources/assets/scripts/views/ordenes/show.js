@@ -43,6 +43,7 @@ app || (app = {});
                 this.productopOrdenList = new app.ProductopOrdenList();
                 this.despachopOrdenList = new app.DespachopOrdenList();
                 this.tiempopList = new app.TiempopList();
+                this.bitacoraOrdenList = new app.BitacoraOrdenList();
 
                 // Render rows charts
                 this.$renderChartEmpleado = this.$('#render-chart-empleado');
@@ -83,6 +84,16 @@ app || (app = {});
                         wrapper: this.$el,
                         dataFilter: {
                             despachop1_orden: this.model.get('id')
+                        }
+                    }
+                });
+
+                // Bitacora list
+                this.bitacoraListView = new app.BitacoraListView({
+                    collection: this.bitacoraOrdenpList,
+                    parameters: {
+                        dataFilter: {
+                            ordenp: this.model.get('id')
                         }
                     }
                 });

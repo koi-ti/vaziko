@@ -263,4 +263,8 @@ class Ordenp extends BaseModel
     public function detalle () {
         return $this->hasMany(Ordenp2::class, 'orden2_orden', 'id');
     }
+
+    public function bitacora () {
+        return $this->morphMany('App\Models\Base\Bitacora', 'bitacora');
+    }
 }
