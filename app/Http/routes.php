@@ -211,10 +211,6 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::resource('despachos', 'Production\DespachopController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'tiemposp'], function() {
-		Route::resource('detalle', 'Production\DetalleTiempospController', ['only' => ['index', 'update']]);
-	});
 	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
 
 	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);

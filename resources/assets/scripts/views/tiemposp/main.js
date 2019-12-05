@@ -11,9 +11,9 @@ app || (app = {});
 
     app.MainTiempopView = Backbone.View.extend({
 
-        el: '#tiempop-main',
+        el: '#tiemposp-main',
+        template: _.template(($('#add-tiempop-tpl').html() || '')),
         events: {
-            'click .submit-tiempop': 'submitForm',
             'submit #form-tiempop': 'onStore',
             'change #tiempop_actividadp': 'changeActividadp'
         },
@@ -26,83 +26,32 @@ app || (app = {});
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
-            // collection && Attributes
+            // Collection
             this.tiempopList = new app.TiempopList();
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.ordenp = this.parameters.data.ordenp;
+
+            // Render in wrapper
+            this.$el.html(this.template(attributes));
+
+            // Rerence wrappers for render
+            this.spinner = this.$('.spinner-main');
             this.$form = this.$('#form-tiempop');
             this.$subactividadesp = this.$('#tiempop_subactividadp');
 
-            // Events
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
+            // If exists ordnep
+            if (this.parameters.data.ordenp)
+                this.$('#tiempop_ordenp').val(attributes.ordenp).trigger('change');
 
-            // Reference views and ready
-            this.spinner = $('.spinner-main');
-
-            if (this.parameters.data.ordenp) {
-                $('#tiempop_ordenp').val(this.parameters.data.ordenp).trigger('change');
-            }
-
+            // Reference views
             this.referenceViews();
             this.ready();
-        },
-
-        /**
-        * Event change select actividadp
-        */
-        changeActividadp: function (e) {
-            var actividadesp = this.$(e.currentTarget).val(),
-                _this = this;
-
-            if (typeof(actividadesp) !== 'undefined' && !_.isUndefined(actividadesp) && !_.isNull(actividadesp) && actividadesp != '') {
-                $.ajax({
-                    url: window.Misc.urlFull( Route.route('subactividadesp.index', {actividadesp: actividadesp}) ),
-                    type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner(_this.spinner);
-                    }
-                })
-                .done(function (resp) {
-                    window.Misc.removeSpinner(_this.spinner);
-                    if (resp.length > 0) {
-                        _this.$subactividadesp.empty().val(0).attr('required', 'required');
-                        _this.$subactividadesp.append("<option value=></option>");
-                        _.each(resp, function (item) {
-                            _this.$subactividadesp.append("<option value=" + item.id + ">" + item.subactividadp_nombre + "</option>");
-                        });
-                    } else {
-                        _this.$subactividadesp.empty().val(0).removeAttr('required');
-                    }
-                })
-                .fail(function (jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner(_this.spinner);
-                    alertify.error(thrownError);
-                });
-            } else {
-                this.$subactividadesp.empty().val(0);
-            }
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Despachos pendientes list
-            this.tiempopListView = new app.TiempopListView( {
-                collection: this.tiempopList,
-                parameters: {
-                    wrapper: this.spinner,
-                    dataFilter: {
-                        type: 'tiemposp'
-                    }
-                }
-            });
-        },
-
-        /**
-        * Event submit productop
-        */
-        submitForm: function (e) {
-            this.$form.submit();
         },
 
         /**
@@ -112,9 +61,51 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
+                var data = window.Misc.formToJson(e.target);
+                this.tiempopList.trigger('store', data, this.$form);
             }
+        },
+
+        /**
+        * Event change select actividadp
+        */
+        changeActividadp: function(e) {
+            var selected = this.$(e.currentTarget).val(),
+                _this = this;
+
+            if (selected) {
+                window.Misc.setSpinner(_this.spinner);
+                $.get(window.Misc.urlFull(Route.route('subactividadesp.index', {actividadesp: selected})), function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
+                    if (resp.length > 0) {
+                        _this.$subactividadesp.empty().val(0).prop('required', true).removeAttr('disabled');
+                        _this.$subactividadesp.append("<option value></option>");
+                        _.each(resp, function (item) {
+                            _this.$subactividadesp.append("<option value=" + item.id + ">" + item.subactividadp_nombre + "</option>");
+                        });
+                    } else {
+                        _this.$subactividadesp.empty().prop('disabled', true);
+                    }
+                });
+            } else {
+                this.$subactividadesp.empty().val(0).prop('disabled', true);
+            }
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Despachos pendientes list
+            this.tiempopListView = new app.TiempopListView({
+                collection: this.tiempopList,
+                parameters: {
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        call: 'tiemposp'
+                    }
+                }
+            });
         },
 
         /**
@@ -138,33 +129,33 @@ app || (app = {});
                 window.initComponent.initSelect2();
         },
 
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner( this.spinner);
-            if(!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('tiemposp.index')));
-            }
-        }
+        // /**
+        // * Load spinner on the request
+        // */
+        // loadSpinner: function (model, xhr, opts) {
+        //     window.Misc.setSpinner(this.spinner);
+        // },
+        //
+        // /**
+        // * response of the server
+        // */
+        // responseServer: function (model, resp, opts) {
+        //     window.Misc.removeSpinner( this.spinner);
+        //     if(!_.isUndefined(resp.success)) {
+        //         // response success or error
+        //         var text = resp.success ? '' : resp.errors;
+        //         if (_.isObject(resp.errors)) {
+        //             text = window.Misc.parseErrors(resp.errors);
+        //         }
+        //
+        //         if (!resp.success) {
+        //             alertify.error(text);
+        //             return;
+        //         }
+        //
+        //         window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('tiemposp.index')));
+        //     }
+        // }
     });
 
 })(jQuery, this, this.document);

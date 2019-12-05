@@ -27,7 +27,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function (opts) {
-
             // extends parameters
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
@@ -45,7 +44,7 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {orden2_orden: this.parameters.dataFilter.orden2_orden}, reset: true });
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
         },
 
         /**
@@ -60,7 +59,7 @@ app || (app = {});
                 }
             });
             ordenp2Model.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
 
             // Update total
             this.totalize();
@@ -70,7 +69,7 @@ app || (app = {});
         * Render all view Marketplace of the collection
         */
         addAll: function () {
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
         },
 
         /**
@@ -83,29 +82,22 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            // function confirm delete item
-            this.confirmDelete(model);
-        },
-
-        /**
-        * modal confirm delete area
-        */
-        confirmDelete: function( model ) {
-            var _this = this;
-
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { producto_nombre: model.get('productop_nombre'), producto_id: model.get('id')},
+                    dataFilter: {
+                        producto_nombre: model.get('productop_nombre'),
+                        producto_id: model.get('id')
+                    },
                     template: _.template( ($('#ordenp-productop-delete-confirm-tpl').html() || '') ),
                     titleConfirm: 'Eliminar producto',
                     onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
+                        if (model instanceof Backbone.Model) {
                             model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
+                                wait: true,
+                                success: function(model, resp) {
+                                    if (!_.isUndefined(resp.success)) {
+                                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                                        if (!resp.success) {
                                             alertify.error(resp.errors);
                                             return;
                                         }
@@ -122,7 +114,6 @@ app || (app = {});
                     }
                 }
             });
-
             cancelConfirm.render();
         },
 
@@ -135,29 +126,31 @@ app || (app = {});
             var _this = this,
                 resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource),
-                route = window.Misc.urlFull( Route.route('ordenes.productos.clonar', { productos: model.get('id') }) ),
-                data = { orden2_codigo: model.get('id'), productop_nombre: model.get('productop_nombre') };
+                route = window.Misc.urlFull(Route.route('ordenes.productos.clonar', {productos: model.get('id')})),
+                data = {
+                    orden2_codigo: model.get('id'),
+                    productop_nombre: model.get('productop_nombre')
+                };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: data,
-                    template: _.template( ($('#ordenp-productop-clone-confirm-tpl').html() || '') ),
+                    template: _.template(($('#ordenp-productop-clone-confirm-tpl').html() || '')),
                     titleConfirm: 'Clonar producto orden de producción',
                     onConfirm: function () {
                         // Clonar producto
                         window.Misc.cloneModule({
                             'url': route,
                             'wrap': _this.parameters.wrapper,
-                            'callback': (function(_this){
-                                return function(resp){
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', { productos: resp.id })) );
+                            'callback': (function(_this) {
+                                return function(resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.productos.show', {productos: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         },
 
@@ -167,41 +160,41 @@ app || (app = {});
         totalize: function () {
             var data = this.collection.totalize();
 
-            if(this.$unidades.length) {
-                this.$unidades.html( data.unidades );
+            if (this.$unidades.length) {
+                this.$unidades.html(data.unidades);
             }
 
-            if(this.$facturado.length) {
-                this.$facturado.html( data.facturado );
+            if (this.$facturado.length) {
+                this.$facturado.html(data.facturado);
             }
 
-            if(this.$subtotal.length) {
-                this.$subtotal.html( window.Misc.currency(data.subtotal) );
+            if (this.$subtotal.length) {
+                this.$subtotal.html(window.Misc.currency(data.subtotal));
             }
 
-            var iva = data.subtotal * (this.parameters.iva / 100);
-            if(this.$iva.length) {
-                this.$iva.html( window.Misc.currency(iva) );
+            var iva = Math.round(data.subtotal * (this.parameters.iva / 100));
+            if (this.$iva.length) {
+                this.$iva.html(window.Misc.currency(iva));
             }
 
             var total = data.subtotal + iva;
-            if(this.$total.length) {
-                this.$total.html( window.Misc.currency(total) );
+            if (this.$total.length) {
+                this.$total.html(window.Misc.currency(total));
             }
         },
 
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

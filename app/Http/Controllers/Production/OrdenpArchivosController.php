@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Base\Bitacora;
 use App\Models\Production\OrdenpArchivo, App\Models\Production\Ordenp;
 use Storage, DB;
 
@@ -81,6 +82,9 @@ class OrdenpArchivosController extends Controller
                     $archivo->ordenarchivo_usuario_elaboro = auth()->user()->id;
                     $archivo->save();
 
+                    // Crear bitacora
+                    Bitacora::createBitacora($orden, [], "Se agrego un archivo {$name}", 'Archivos', 'C');
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $archivo->id, 'name' => $archivo->ordenarchivo_archivo, 'url' => $url]);
@@ -121,6 +125,9 @@ class OrdenpArchivosController extends Controller
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'El archivo que esta intentando eliminar no corresponde a la orden de producción, por favor verifique la información o consulte al administrador.']);
                 }
+
+                // Crear bitacora
+                Bitacora::createBitacora($orden, [], "Se elimino el archivo {$ordenarchivo->ordenarchivo_archivo}", 'Archivos', 'D');
 
                 // Eliminar item detallepedido
                 if (Storage::has("ordenes/orden_{$orden->id}/archivos/{$ordenarchivo->ordenarchivo_archivo}")) {

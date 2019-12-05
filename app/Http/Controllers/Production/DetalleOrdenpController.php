@@ -370,7 +370,7 @@ class DetalleOrdenpController extends Controller
         if ($orden->orden_abierta == true && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes'])) {
             return redirect()->route('ordenes.productos.edit', ['productos' => $ordenp2->id]);
         }
-        return view('production.ordenes.productos.show', ['orden' => $orden, 'producto' => $producto, 'ordenp2' => $ordenp2]);
+        return view('production.ordenes.productos.show', compact('orden', 'producto', 'ordenp2'));
     }
 
     /**

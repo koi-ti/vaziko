@@ -95,10 +95,9 @@
 						$tunidades += $ordenp2->orden2_cantidad;
 						$tsubtotal += $ordenp2->orden2_precio_total;
 						$tfacturado += $ordenp2->orden2_facturado;
-						//$tdebito += $ordenp2->ordenp2_debito;
 					/*--}}
 				@endforeach
-				{{--*/ $tiva = $tsubtotal * ($orden->orden_iva / 100); /*--}}
+				{{--*/ $tiva = round($tsubtotal * ($orden->orden_iva / 100)); /*--}}
 				<tr>
 					<td colspan="2" class="right bold">Subtotal</td>
 					<td class="center bold">{{ $tunidades }}</td>

@@ -159,19 +159,19 @@
 
                                         <div class="row">
                                             <label for="cotizacion1_suministran" class="col-xs-12 col-sm-1 col-md-1 control-label">Suministran</label>
-                                            <div class="form-group col-xs-12 col-sm-11 col-md-11">
+                                            <div class="form-group col-xs-12 col-sm-11 col-md-10">
                                                 <input id="cotizacion1_suministran" placeholder="Suministran" class="form-control" name="cotizacion1_suministran" type="text" value="<%- cotizacion1_suministran %>" required maxlength="200">
                                             </div>
                                         </div>
                                         <div class="row">
                                             <label for="cotizacion1_observaciones" class="col-xs-12 col-sm-1 col-md-1 control-label">Detalle</label>
-                                            <div class="form-group col-xs-12 col-sm-11 col-md-11">
+                                            <div class="form-group col-xs-12 col-sm-11 col-md-10">
                                                 <textarea id="cotizacion1_observaciones" name="cotizacion1_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- cotizacion1_observaciones %></textarea>
                                             </div>
                                         </div>
                                         <div class="row">
                                             <label for="cotizacion1_terminado" class="col-xs-12 col-sm-1 col-md-1 control-label">Terminado</label>
-                                            <div class="form-group col-xs-12 col-sm-11 col-md-11">
+                                            <div class="form-group col-xs-12 col-sm-11 col-md-10">
                                                 <textarea id="cotizacion1_terminado" name="cotizacion1_terminado" class="form-control" rows="2" placeholder="Terminado"><%- cotizacion1_terminado %></textarea>
                                             </div>
                                         </div>
@@ -187,12 +187,9 @@
                                                     <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>" required>
                                                 </div>
                                             </div>
-                                            <div class="col-sm-6">
+                                            <div class="col-sm-7">
                                                 <input id="cotizacion1_vendedor_nombre" name="cotizacion1_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly required>
                                             </div>
-                                            <div class="form-group col-sm-1">
-                                    			<input type="text" id="cotizacion1_vendedor_porcentaje" name="cotizacion1_vendedor_porcentaje" value="<%- cotizacion1_vendedor_porcentaje %>" placeholder="%" class="form-control input-sm spinner-percentage" maxlength="4" required>
-                                    		</div>
                                         </div>
                                     </form>
                                 </div>
@@ -314,12 +311,12 @@
                         <div class="tab-pane" id="tab_files">
                             <div class="row">
                                 <div class="form-group col-sm-12">
-                                    <div class="fine-uploader"></div>
+                                    <textarea id="cotizacion1_observaciones_archivo" name="cotizacion1_observaciones_archivo" class="form-control" rows="25" placeholder="Observaciones"><%- cotizacion1_observaciones_archivo %></textarea>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="form-group col-sm-12">
-                                    <textarea id="cotizacion1_observaciones_archivo" name="cotizacion1_observaciones_archivo" class="form-control" rows="10" placeholder="Observaciones"><%- cotizacion1_observaciones_archivo %></textarea>
+                                    <div class="fine-uploader"></div>
                                 </div>
                             </div>
                         </div>

@@ -57,7 +57,7 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = window.Misc.formToJson(e.target);
-                this.model.save(data, {patch: true, silent: true});
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -119,7 +119,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit cotizaciones
-                Backbone.history.navigate(Route.route('cotizaciones.edit', { cotizaciones: resp.id}), { trigger:true });
+                Backbone.history.navigate(Route.route('cotizaciones.edit', {cotizaciones: resp.id}), {trigger: true});
             }
         }
     });

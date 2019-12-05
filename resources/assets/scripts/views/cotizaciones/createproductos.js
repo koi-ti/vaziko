@@ -12,7 +12,7 @@ app || (app = {});
     app.CreateCotizacion2View = Backbone.View.extend({
 
         el: '#cotizaciones-productos-create',
-        template: _.template( ($('#add-cotizacion-producto-tpl').html() || '') ),
+        template: _.template( ($('#add-cotizacion-producto-tpl').html() || '')),
         events: {
             'click .submit-cotizacion2': 'submitForm',
             'submit #form-cotizacion-producto': 'onStore',
@@ -36,7 +36,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function(opts) {
+        initialize: function (opts) {
             // Initialize
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
@@ -60,10 +60,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.model.get('id') ? 1 : 0;
-            this.$el.html( this.template(attributes) );
+            this.$el.html( this.template(attributes));
 
             // reference forms
             this.$form = this.$('#form-cotizacion-producto');
@@ -92,12 +92,14 @@ app || (app = {});
             this.$inputvalor = this.$('#cotizacion6_valor');
 
             // Inputs cuadro de informacion
-            this.$inputround = this.$('#cotizacion2_round');
-            this.$inputvolumen = this.$('#cotizacion2_volumen');
             this.$inputmargenmaterialp = this.$('#cotizacion2_margen_materialp');
             this.$inputmargenareap = this.$('#cotizacion2_margen_areap');
             this.$inputmargenempaque = this.$('#cotizacion2_margen_empaque');
             this.$inputmargentransporte = this.$('#cotizacion2_margen_transporte');
+            this.$inputcomision = this.$('#cotizacion2_comision');
+            this.$inputdescuento = this.$('#cotizacion2_descuento');
+            this.$inputvolumen = this.$('#cotizacion2_volumen');
+            this.$inputround = this.$('#cotizacion2_round');
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
@@ -111,7 +113,11 @@ app || (app = {});
             this.$infoprevtransportes = this.$('#info-prev-transportes');
             this.$infotransportes = this.$('#info-transportes');
             this.$infosubtotal = this.$('#info-subtotal');
+            this.$infoprevcomision = this.$('#info-prev-comision');
             this.$infocomision = this.$('#info-comision');
+            this.$infoprevdescuento = this.$('#info-prev-descuento');
+            this.$infodescuento = this.$('#info-descuento');
+            this.$infovolumen = this.$('#info-volumen');
             this.$infototal = this.$('#info-total');
 
             // Variables globales
@@ -131,7 +137,7 @@ app || (app = {});
             var dataFilter = { productop: this.parameters.data.cotizacion2_productop };
 
             // Model exist
-            if( this.model.id != undefined ) {
+            if (this.model.id != undefined) {
                 dataFilter.cotizacion2 = this.model.get('id');
                 dataFilter.productop = this.model.get('cotizacion2_productop');
             }
@@ -207,7 +213,7 @@ app || (app = {});
                 valor  = '';
 
              for (var i = 0; i <= string.length - 1; i++) {
-                if( reg.test( string.charAt(i) ) ){
+                if (reg.test( string.charAt(i))) {
                     valor += string.charAt(i);
                 }
             }
@@ -235,12 +241,14 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                if( this.model.id != undefined ){
-                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                if (this.model.id != undefined) {
+                    var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
                         data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
                         data.cotizacion2_margen_areap = this.$inputmargenareap.val();
                         data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
                         data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
+                        data.cotizacion2_comision = this.$inputcomision.val();
+                        data.cotizacion2_descuento = this.$inputdescuento.val();
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopCotizacionList.toJSON();
@@ -248,14 +256,16 @@ app || (app = {});
                         data.empaques = this.empaquesProductopCotizacionList.toJSON();
                         data.transportes = this.transportesProductopCotizacionList.toJSON();
 
-                    this.model.save(data, {silent: true});
+                    this.model.save(data, {wait: true, patch: true, silent: true});
 
-                }else{
-                    var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                } else {
+                    var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
                         data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
                         data.cotizacion2_margen_areap = this.$inputmargenareap.val();
                         data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
                         data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
+                        data.cotizacion2_comision = this.$inputcomision.val();
+                        data.cotizacion2_descuento = this.$inputdescuento.val();
                         data.cotizacion2_volumen = this.$inputvolumen.val();
                         data.cotizacion2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopCotizacionList);
@@ -265,12 +275,12 @@ app || (app = {});
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
-                    _.each(this.$files, function(file, key){
+                    _.each(this.$files, function(file, key) {
                         formData.append('imagenes[]', file.file, file.file.name + '('+ this.$('#cotizacion8_imprimir_'+key).is(':checked') +')');
                     });
 
                     // Recorrer archivos para mandarlos texto plano
-                    _.each(data, function(value, key){
+                    _.each(data, function(value, key) {
                         formData.append(key, value);
                     });
 
@@ -291,7 +301,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
                     data.cotizacion4_cantidad = this.$('#cotizacion4_cantidad:disabled').val();
                 this.materialesProductopCotizacionList.trigger('store', data, this.$formmaterialp);
             }
@@ -304,7 +314,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
                 this.areasProductopCotizacionList.trigger('store', data, this.$formareap);
             }
         },
@@ -316,7 +326,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
                     data.cotizacion9_cantidad = this.$('#cotizacion9_cantidad:disabled').val();
                 this.empaquesProductopCotizacionList.trigger('store', data, this.$formempaque);
             }
@@ -349,13 +359,13 @@ app || (app = {});
             this.$selectedinput = this.$('#' + this.$referenceselected.data('valor'));
             this.$selectedhistorial = this.$('#' + this.$referenceselected.data('historial'));
 
-            if( typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '' ){
-                window.Misc.setSpinner( this.$referencewrapper );
-                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp, reference: reference}) ), function (resp){
+            if (typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '') {
+                window.Misc.setSpinner( this.$referencewrapper);
+                $.get(window.Misc.urlFull( Route.route('productos.index', {materialp: materialp, reference: reference})), function (resp) {
                     if (resp.length) {
                         _this.$referenceselected.empty().val(0).removeAttr('disabled');
                         _this.$referenceselected.append("<option value=></option>");
-                        _.each(resp, function(item){
+                        _.each(resp, function(item) {
                             _this.$referenceselected.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
                         });
                     } else {
@@ -363,7 +373,7 @@ app || (app = {});
                         _this.$selectedinput.val(0);
                         _this.$selectedhistorial.empty();
                     }
-                    window.Misc.removeSpinner( _this.$referencewrapper );
+                    window.Misc.removeSpinner( _this.$referencewrapper);
                 });
             } else {
                 this.$referenceselected.empty().val(0).prop('disabled', true);
@@ -398,7 +408,7 @@ app || (app = {});
                 $.get(url, function (resp) {
                     if (resp) {
                         _this.$inputinsumo.val(resp.valor);
-                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo") ).attr('data-resource', insumo).attr('data-call', call);
+                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-call', call);
                     }
                 });
             } else {
@@ -465,20 +475,22 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
-            vcomision = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
-            total = subtotal + vcomision;
+            tvolumen = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
+            total = subtotal + tvolumen;
 
+            // Calcular round decimales
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
-                // Calcular round decimales
                 var exp = Math.pow(10, round);
                 total = Math.round(total*exp)/exp;
             } else {
                 this.$inputround.val(0);
             }
 
+            this.$infoprevcomision.html(window.Misc.currency(subtotal));
+            this.$infoprevdescuento.html(window.Misc.currency(subtotal));
             this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal));
-            this.$infocomision.html('$ ' + window.Misc.currency(vcomision));
+            this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
             this.$infototal.html('$ ' + window.Misc.currency(total));
         },
 
@@ -513,9 +525,9 @@ app || (app = {});
 
 
            // Model exists
-           if( this.model.id != undefined ){
+           if (this.model.id != undefined) {
                var session = {
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
                    params: {
                        cotizacion2: this.model.get('id'),
                    },
@@ -526,7 +538,7 @@ app || (app = {});
                    enabled: true,
                    forceConfirm: true,
                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
                    params: {
                        _token: $('meta[name="csrf-token"]').attr('content'),
                        cotizacion2: this.model.get('id')
@@ -535,7 +547,7 @@ app || (app = {});
 
                var request = {
                    inputName: 'file',
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index') ),
+                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
                    params: {
                        _token: $('meta[name="csrf-token"]').attr('content'),
                        cotizacion2: this.model.get('id')
@@ -566,7 +578,7 @@ app || (app = {});
                },
                validation: {
                    itemLimit: 10,
-                   sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                   sizeLimit: (3 * 1024) * 1024, // 3mb,
                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
                },
                messages: {
@@ -587,7 +599,7 @@ app || (app = {});
         * @param Strinf name
         */
         onSubmitted: function (id, name) {
-           if( typeof window.initComponent.initICheck == 'function' )
+           if (typeof window.initComponent.initICheck == 'function')
                window.initComponent.initICheck();
 
            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.qq-imprimir');
@@ -602,10 +614,10 @@ app || (app = {});
         * @param Object resp
         */
         onSessionRequestComplete: function (id, name, resp) {
-           if( typeof window.initComponent.initICheck == 'function' )
+           if (typeof window.initComponent.initICheck == 'function')
                window.initComponent.initICheck();
 
-           _.each( id, function (value, key){
+           _.each( id, function (value, key) {
                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                    previewLink.attr("href", value.thumbnailUrl);
 
@@ -613,10 +625,8 @@ app || (app = {});
                    imprimir.attr('name', 'cotizacion8_imprimir_'+value.uuid);
                    imprimir.attr('id', 'cotizacion8_imprimir_'+value.uuid);
 
-               if( value.imprimir ){
+               if (value.imprimir)
                    imprimir.iCheck('check');
-               }
-
            }, this);
         },
 
@@ -625,22 +635,22 @@ app || (app = {});
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initTimePicker == 'function' )
+            if (typeof window.initComponent.initTimePicker == 'function')
                 window.initComponent.initTimePicker();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
         },
 
@@ -648,28 +658,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
         responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner( this.spinner );
-            if(!_.isUndefined(resp.success)) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to cotizacion
-                window.Misc.redirect( window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id_cotizacion })) );
+                window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.id_cotizacion})));
             }
         }
     });

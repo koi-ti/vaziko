@@ -914,20 +914,20 @@ class Cotizacion1Controller extends Controller
             $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = 0;
             $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
             foreach ($cotizaciones2 as $cotizacion2) {
-                $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta;
-                $tviaticos += $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
+                $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta * $cotizacion2->cotizacion2_cantidad;
+                $tviaticos += $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad) * $cotizacion2->cotizacion2_cantidad;
 
                 $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
-                $tmateriales += $materiales = ($materiales/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                $tmateriales += $materiales = ($materiales/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100) * $cotizacion2->cotizacion2_cantidad;
 
                 $areas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
-                $tareas += $areas = $areas/((100-$cotizacion2->cotizacion2_margen_areap)/100);
+                $tareas += $areas = $areas/((100-$cotizacion2->cotizacion2_margen_areap)/100) * $cotizacion2->cotizacion2_cantidad;
 
                 $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
-                $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100) * $cotizacion2->cotizacion2_cantidad;
 
                 $transportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->sum('cotizacion10_valor_total');
-                $ttransportes += $transportes = ($transportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+                $ttransportes += $transportes = ($transportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100) * $cotizacion2->cotizacion2_cantidad;
 
                 $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
                 $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));

@@ -90,7 +90,7 @@ app || (app = {});
 
                 // Bitacora list
                 this.bitacoraListView = new app.BitacoraListView({
-                    collection: this.bitacoraOrdenpList,
+                    collection: this.bitacoraOrdenList,
                     parameters: {
                         dataFilter: {
                             ordenp: this.model.get('id')
@@ -100,11 +100,11 @@ app || (app = {});
             }
 
             // TiempopOrdenesp list
-            this.tiempopListView = new app.TiempopListView( {
+            this.tiempopListView = new app.TiempopListView({
                 collection: this.tiempopList,
                 parameters: {
                     dataFilter: {
-                        type: 'ordenp',
+                        call: 'ordenp',
                         orden2_orden: this.model.get('id')
                     }
                }
@@ -117,51 +117,50 @@ app || (app = {});
         openOrdenp: function (e) {
             e.preventDefault();
 
-            if (!this.model.get('permission')) {
-                return;
-            }
+            // if (!this.model.get('permission'))
+            //     return;
 
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
+                    dataFilter: {
+                        orden_codigo: _this.model.get('orden_codigo')
+                    },
                     template: _.template( ($('#ordenp-open-confirm-tpl').html() || '') ),
                     titleConfirm: 'Reabir orden de producción',
                     onConfirm: function () {
                         // Open orden
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.abrir', { ordenes: _this.model.get('id') }) ),
+                            url: window.Misc.urlFull(Route.route('ordenes.abrir', {ordenes: _this.model.get('id')})),
                             type: 'GET',
                             beforeSend: function() {
-                                window.Misc.setSpinner( _this.el );
+                                window.Misc.setSpinner(_this.el);
                             }
                         })
                         .done(function(resp) {
-                            window.Misc.removeSpinner( _this.el );
-
-                            if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.el);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: _this.model.get('id') })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: _this.model.get('id')})));
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.el );
+                            window.Misc.removeSpinner(_this.el);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
             cancelConfirm.render();
         },
 
@@ -171,51 +170,50 @@ app || (app = {});
         closeOrdenp: function (e) {
             e.preventDefault();
 
-            if (!this.model.get('permission')) {
-                return;
-            }
+            // if (!this.model.get('permission'))
+            //     return;
 
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
-                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
+                    dataFilter: {
+                        orden_codigo: _this.model.get('orden_codigo')
+                    },
+                    template: _.template(($('#ordenp-close-confirm-tpl').html() || '')),
                     titleConfirm: 'Cerrar orden de producción',
                     onConfirm: function () {
                         // Close orden
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: _this.model.get('id') }) ),
+                            url: window.Misc.urlFull(Route.route('ordenes.cerrar', {ordenes: _this.model.get('id')})),
                             type: 'GET',
                             beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
+                                window.Misc.setSpinner(_this.spinner);
                             }
                         })
                         .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: _this.model.get('id')})));
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
+                            window.Misc.removeSpinner(_this.spinner);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
             cancelConfirm.render();
         },
 
@@ -225,16 +223,15 @@ app || (app = {});
         cloneOrdenp: function (e) {
             e.preventDefault();
 
-            if (!this.model.get('permission')) {
-                return;
-            }
+            // if (!this.model.get('permission'))
+            //     return;
 
-            var _this = this,
-                route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: this.model.get('id') }) );
+            var route = window.Misc.urlFull(Route.route('ordenes.clonar', {ordenes: this.model.get('id')})),
+                _this = this;
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
+                    template: _.template(($('#ordenp-clone-confirm-tpl').html() || '')),
                     titleConfirm: 'Clonar orden de producción',
                     onConfirm: function () {
                         // Clone orden
@@ -242,16 +239,14 @@ app || (app = {});
                             'url': route,
                             'wrap': _this.$el,
                             'callback': (function (_this) {
-                                return function ( resp )
-                                {
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         },
 
@@ -266,7 +261,7 @@ app || (app = {});
                 template: 'qq-template-ordenp',
                 dragDrop: false,
                 session: {
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.archivos.index') ),
                     params: {
                         ordenp: _this.model.get('id'),
                     },
@@ -293,9 +288,9 @@ app || (app = {});
         onSessionRequestComplete: function (id, name, resp) {
             this.$uploaderFile.find('.btn-imprimir').remove();
 
-            _.each( id, function (value, key){
+            _.each(id, function (value, key) {
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
             }, this);
         },
 
@@ -306,7 +301,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
+            window.open(window.Misc.urlFull(Route.route('ordenes.exportar', {ordenes: this.model.get('id')})), '_blank');
         },
 
         /**
@@ -317,31 +312,32 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull( Route.route('ordenes.charts', { ordenes: _this.model.get('id') }) ),
+                url: window.Misc.urlFull(Route.route('ordenes.charts', {ordenes: _this.model.get('id')})),
                 type: 'GET',
                 beforeSend: function() {
-                    window.Misc.setSpinner( _this.spinner );
+                    window.Misc.setSpinner(_this.spinner);
                 }
             })
             .done(function(resp) {
-                window.Misc.removeSpinner( _this.spinner );
-                if(!_.isUndefined(resp.success)) {
+                window.Misc.removeSpinner(_this.spinner);
+                if (!_.isUndefined(resp.success)) {
                     // response success or error
                     var text = resp.success ? '' : resp.errors;
-                    if( _.isObject( resp.errors ) ) {
+                    if (_.isObject(resp.errors)) {
                         text = window.Misc.parseErrors(resp.errors);
                     }
-                    if( !resp.success ) {
+
+                    if (!resp.success) {
                         alertify.error(text);
                         return;
                     }
 
                     // Render calendar
-                    _this.charts( resp );
+                    _this.charts(resp);
                 }
             })
             .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner( _this.spinner );
+                window.Misc.removeSpinner(_this.spinner);
                 alertify.error(thrownError);
             });
 

@@ -148,7 +148,6 @@ return [
             'SC' => 'Salón Comunal',
 
             'SEC' => 'Sector',
-            'SS' => 'Semisotano',
             'SL' => 'Solar',
             'ST' => 'Sotano',
             'SU' => 'Suite',
@@ -164,6 +163,7 @@ return [
             'URB' => 'Urbanización',
             'VTE' => 'Variante',
             'VDA' => 'Vereda',
+            'V' => 'Via',
             'ZN' => 'Zona',
             'ZF' => 'Zona Franca',
             '#' => '#',

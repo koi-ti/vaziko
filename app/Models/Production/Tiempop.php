@@ -36,10 +36,15 @@ class Tiempop extends BaseModel
 
     public function isValid($data) {
         $rules = [
-            'tiempop_areap' => 'required|integer',
-            'tiempop_actividadp' => 'required|integer',
             'tiempop_fecha' => 'required|date_format:Y-m-d'
         ];
+
+        if (!$this->exists) {
+            $rules = array_merge($rules, [
+                'tiempop_areap' => 'required|integer',
+                'tiempop_actividadp' => 'required|integer'
+            ]);
+        }
 
         // Validar que hora final no sea menor o igual a la inicial
         $data['tiempop_hora_inicio'] = Carbon::parse("{$data['tiempop_hora_inicio']}:00")->toTimeString();
@@ -79,7 +84,6 @@ class Tiempop extends BaseModel
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
         $query->where('tiempop_tercero', auth()->user()->id);
         $query->orderBy('koi_tiempop.id', 'desc');
-
         return $query->get();
     }
 
@@ -99,7 +103,6 @@ class Tiempop extends BaseModel
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
         $query->where('tiempop_ordenp', $ordenp2);
         $query->orderBy('koi_tiempop.id', 'desc');
-
         return $query->get();
     }
 }

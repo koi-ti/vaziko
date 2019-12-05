@@ -126,7 +126,7 @@ app || (app = {});
             var _this = this;
                 typeproduct = this.$(e.currentTarget).val();
 
-            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+            if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
                     url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
                     type: 'GET',
@@ -163,7 +163,7 @@ app || (app = {});
                 subtypeproduct = this.$(e.currentTarget).val();
                 typeproduct = this.$('#typeproductop').val();
 
-            if( typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '' ){
+            if (typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '') {
                 $.ajax({
                     url: window.Misc.urlFull( Route.route('productosp.index') ),
                     data: {
@@ -199,7 +199,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: this.model.get('cotizacion_codigo') })), '_blank');
+            window.open( window.Misc.urlFull(Route.route('cotizaciones.exportar', {cotizaciones: this.model.get('cotizacion_codigo')})), '_blank');
         },
 
         /**
@@ -233,11 +233,11 @@ app || (app = {});
                             if(!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject( resp.errors ) ) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success ) {
                                     alertify.error(text);
                                     return;
                                 }
@@ -263,8 +263,10 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                route =  window.Misc.urlFull( Route.route('cotizaciones.clonar', { cotizaciones: this.model.get('id') }) ),
-                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo') };
+                route =  window.Misc.urlFull(Route.route('cotizaciones.clonar', {cotizaciones: this.model.get('id')})),
+                data = {
+                    cotizacion_codigo: _this.model.get('cotizacion_codigo')
+                };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -277,16 +279,14 @@ app || (app = {});
                             'url': route,
                             'wrap': _this.spinner,
                             'callback': (function (_this) {
-                                return function ( resp )
-                                {
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id })) );
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         },
 
@@ -332,8 +332,11 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this,
-                route =  window.Misc.urlFull( Route.route('cotizaciones.generar', { cotizaciones: this.model.get('id') }) ),
-                data = { cotizacion_codigo: _this.model.get('cotizacion_codigo'), cotizacion_referencia: _this.model.get('cotizacion1_referencia') };
+                route =  window.Misc.urlFull(Route.route('cotizaciones.generar', {cotizaciones: this.model.get('id')})),
+                data = {
+                    cotizacion_codigo: _this.model.get('cotizacion_codigo'),
+                    cotizacion_referencia: _this.model.get('cotizacion1_referencia')
+                };
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -355,11 +358,11 @@ app || (app = {});
                             if(!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject( resp.errors ) ) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success ) {
                                     alertify.error(text);
                                     return;
                                 }

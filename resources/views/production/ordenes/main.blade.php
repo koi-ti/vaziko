@@ -532,16 +532,16 @@
                                 <div class="tab-pane" id="tab_files">
                                     <div class="row">
                                         <div class="form-group col-sm-12">
-                                            <div class="fine-uploader"></div>
+                                            <textarea id="orden_observaciones_imagen" name="orden_observaciones_imagen" class="form-control" rows="25" placeholder="Observaciones"><%- orden_observaciones_imagen %></textarea>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="form-group col-sm-12">
-                                            <textarea id="orden_observaciones_imagen" name="orden_observaciones_imagen" class="form-control" rows="8" placeholder="Observaciones"><%- orden_observaciones_imagen %></textarea>
+                                            <div class="fine-uploader"></div>
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="tab-pane" id="tab_bitacora">
                                     <div class="box-body">
                                         <div class="row">
@@ -629,21 +629,23 @@
     </script>
 
     <script type="text/template" id="ordenp-tiempop-item-list-tpl">
-        <td><%- id %></td>
-        <td><%- tercero_nombre %></td>
-        <td><%- actividadp_nombre %></td>
-        <td><%- !_.isNull(subactividadp_nombre) ? subactividadp_nombre : ' - ' %></td>
-        <td><%- areap_nombre %></td>
-        <td><%- tiempop_fecha %></td>
-        <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
-        <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-            <td class="text-center">
-                <a class="btn btn-default btn-xs edit-tiempop" data-tiempop-resource="<%- id %>">
-                    <span><i class="fa fa-pencil-square-o"></i></span>
-                </a>
-            </td>
-        @endif
+        <tr>
+            <td><%- id %></td>
+            <td><%- tercero_nombre %></td>
+            <td><%- actividadp_nombre %></td>
+            <td><%- !_.isNull(subactividadp_nombre) ? subactividadp_nombre : ' - ' %></td>
+            <td><%- areap_nombre %></td>
+            <td><%- tiempop_fecha %></td>
+            <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
+            <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
+            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
+                        <span><i class="fa fa-pencil-square-o"></i></span>
+                    </a>
+                </td>
+            @endif
+        </tr>
     </script>
 
     <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">

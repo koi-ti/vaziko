@@ -42,6 +42,9 @@ class CreateCotizacion2Table extends Migration
             $table->double('cotizacion2_margen_empaque')->default(0);
             $table->double('cotizacion2_margen_transporte')->default(0);
 
+            $table->double('cotizacion2_comision')->default(0);
+            $table->double('cotizacion2_descuento')->default(0);
+
             $table->boolean('cotizacion2_yellow')->default(false);
             $table->boolean('cotizacion2_magenta')->default(false);
             $table->boolean('cotizacion2_cyan')->default(false);

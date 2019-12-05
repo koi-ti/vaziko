@@ -22,7 +22,7 @@ class Cotizacion1 extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago', 'cotizacion1_observaciones_archivo', 'cotizacion1_vendedor_porcentaje'
+        'cotizacion1_referencia', 'cotizacion1_fecha_inicio', 'cotizacion1_iva', 'cotizacion1_suministran', 'cotizacion1_observaciones', 'cotizacion1_terminado', 'cotizacion1_formapago', 'cotizacion1_observaciones_archivo'
     ];
 
     /**
@@ -43,8 +43,7 @@ class Cotizacion1 extends BaseModel
             'cotizacion1_iva' => 'integer|min:0|max:19',
             'cotizacion1_formapago' => "required|exists:koi_tercero,tercero_formapago,tercero_nit,{$data['cotizacion1_cliente']}",
   	        'cotizacion1_fecha_inicio' => 'required|date_format:Y-m-d',
-  	        'cotizacion1_suministran' => 'max:200',
-  	        'cotizacion1_vendedor_porcentaje' => 'numeric|min:0|max:100'
+  	        'cotizacion1_suministran' => 'max:200'
         ];
 
         $validator = Validator::make($data, $rules);

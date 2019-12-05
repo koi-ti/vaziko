@@ -154,10 +154,6 @@
                                             {{ $cotizacion->vendedor_nit }}</a> - {{ $cotizacion->vendedor_nombre }}
 										</div>
 									</div>
-									<div class="form-group col-md-2">
-										<label class="control-label">Porcentaje</label>
-										<div>{{ $cotizacion->cotizacion1_vendedor_porcentaje }}</div>
-									</div>
 								</div>
 							</div>
 							<div class="box-footer">
@@ -226,12 +222,12 @@
                     <div class="tab-pane" id="tab_files">
                         <div class="row">
                             <div class="form-group col-sm-12">
-                                <div class="fine-uploader"></div>
+                                <textarea class="form-control" rows="25" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
                             </div>
                         </div>
                         <div class="row">
                             <div class="form-group col-sm-12">
-                                <textarea class="form-control" rows="10" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
+                                <div class="fine-uploader"></div>
                             </div>
                         </div>
                     </div>

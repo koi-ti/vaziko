@@ -22,7 +22,7 @@ class Cotizacion2 extends BaseModel
     * @var array
     */
     protected $fillable = [
-        'cotizacion2_referencia', 'cotizacion2_observaciones', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round', 'cotizacion2_margen_materialp', 'cotizacion2_margen_areap', 'cotizacion2_margen_empaque', 'cotizacion2_margen_transporte'
+        'cotizacion2_referencia', 'cotizacion2_observaciones', 'cotizacion2_transporte_formula', 'cotizacion2_viaticos_formula', 'cotizacion2_precio_formula', 'cotizacion2_precio_venta', 'cotizacion2_ancho', 'cotizacion2_alto', 'cotizacion2_c_ancho', 'cotizacion2_c_alto', 'cotizacion2_3d_ancho', 'cotizacion2_3d_alto', 'cotizacion2_3d_profundidad', 'cotizacion2_nota_tiro', 'cotizacion2_nota_retiro', 'cotizacion2_transporte', 'cotizacion2_viaticos', 'cotizacion2_volumen', 'cotizacion2_vtotal', 'cotizacion2_total_valor_unitario', 'cotizacion2_round', 'cotizacion2_margen_materialp', 'cotizacion2_margen_areap', 'cotizacion2_margen_empaque', 'cotizacion2_margen_transporte', 'cotizacion2_comision', 'cotizacion2_descuento'
     ];
 
     /**
@@ -45,7 +45,9 @@ class Cotizacion2 extends BaseModel
             'cotizacion2_margen_materialp' => 'min:0|max:100|numeric',
             'cotizacion2_margen_areap' => 'min:0|max:100|numeric',
             'cotizacion2_margen_empaque' => 'min:0|max:100|numeric',
-            'cotizacion2_margen_transporte' => 'min:0|max:100|numeric'
+            'cotizacion2_margen_transporte' => 'min:0|max:100|numeric',
+            'cotizacion2_comision' => 'min:0|max:100|numeric',
+            'cotizacion2_descuento' => 'min:0|max:100|numeric'
         ];
 
         $validator = Validator::make($data, $rules);

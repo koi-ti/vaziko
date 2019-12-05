@@ -12,8 +12,7 @@ app || (app = {});
     app.DespachospPendientesOrdenListView = Backbone.View.extend({
 
         el: '#browse-orden-despachosp-pendientes-list',
-        events: {
-        },
+        events: {},
         parameters: {
         	wrapper: null,
             dataFilter: {}
@@ -23,7 +22,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function (opts) {
-
             // extends parameters
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
@@ -34,14 +32,7 @@ app || (app = {});
             this.listenTo( this.collection, 'request', this.loadSpinner);
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {orden2_orden: this.parameters.dataFilter.orden2_orden}, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -53,7 +44,7 @@ app || (app = {});
                 model: ordenp2Model
             });
             ordenp2Model.view = view;
-            this.$el.prepend( view.render().el );
+            this.$el.prepend(view.render().el);
         },
 
         /**

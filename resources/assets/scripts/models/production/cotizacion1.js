@@ -28,7 +28,6 @@ app || (app = {});
             'cotizacion1_pre': 1,
             'cotizacion1_terminado': '',
             'cotizacion1_observaciones_archivo': '',
-            'cotizacion1_vendedor_porcentaje': 0,
             'tercero_nit': '',
             'tercero_nombre': '',
             'tercero_direccion': '',

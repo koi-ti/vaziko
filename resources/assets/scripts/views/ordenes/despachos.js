@@ -26,7 +26,6 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function (opts) {
-
             // extends parameters
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
@@ -38,14 +37,7 @@ app || (app = {});
             this.listenTo( this.collection, 'store', this.storeOne );
             this.listenTo( this.collection, 'sync', this.responseServer);
 
-            this.collection.fetch({ data: {despachop1_orden: this.parameters.dataFilter.despachop1_orden}, reset: true });
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-
+            this.collection.fetch({ data: this.parameters.dataFilter, reset: true });
         },
 
         /**
@@ -67,6 +59,7 @@ app || (app = {});
         * Render all view Marketplace of the collection
         */
         addAll: function () {
+            this.$el.find('tbody').html('');
             this.collection.forEach( this.addOne, this );
         },
 
@@ -82,33 +75,33 @@ app || (app = {});
 
             // Add model in collection
             var despachopModel = new app.DespachopModel();
-            despachopModel.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
+                despachopModel.save(data, {
+                    wait: true,
+                    success: function(model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
+                            _this.parameters.collectionPendientes.fetch({data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true});
+                        }
+                    },
+                    error: function(model, error) {
                         window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
-                        }
-
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        // Add model in collection
-                        _this.collection.add(model);
-                        // Refresh other collection
-                        _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
         /**
@@ -121,49 +114,34 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            // Function confirm delete item
-            this.confirmDelete( model );
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: { tcontacto_nombre: model.get('tcontacto_nombre'), despachop1_fecha: model.get('despachop1_fecha') },
+                        template: _.template( ($('#ordenp-despacho-delete-confirm-tpl').html() || '') ),
+                        titleConfirm: 'Eliminar despacho',
+                        onConfirm: function () {
+                            if ( model instanceof Backbone.Model ) {
+                                model.destroy({
+                                    success : function(model, resp) {
+                                        if (!_.isUndefined(resp.success)) {
+                                            window.Misc.removeSpinner( _this.parameters.wrapper );
 
+                                            if ( !resp.success ) {
+                                                alertify.error(resp.errors);
+                                                return;
+                                            }
 
-        },
-
-        /**
-        * modal confirm delete area
-        */
-        confirmDelete: function( model ) {
-            var _this = this;
-
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { tcontacto_nombre: model.get('tcontacto_nombre'), despachop1_fecha: model.get('despachop1_fecha') },
-                    template: _.template( ($('#ordenp-despacho-delete-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Eliminar despacho',
-                    onConfirm: function () {
-                        if ( model instanceof Backbone.Model ) {
-                            model.destroy({
-                                success : function(model, resp) {
-                                    if(!_.isUndefined(resp.success)) {
-                                        window.Misc.removeSpinner( _this.parameters.wrapper );
-
-                                        if( !resp.success ) {
-                                            alertify.error(resp.errors);
-                                            return;
+                                            // Refresh other collection
+                                            _this.collection.fetch({data: _this.parameters.dataFilter, reset: true});
+                                            _this.parameters.collectionPendientes.fetch({data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true});
                                         }
-
-                                        model.view.remove();
-                                        _this.collection.remove(model);
-
-                                        // Refresh other collection
-                                        _this.parameters.collectionPendientes.fetch({ data: {orden2_orden: _this.parameters.dataFilter.despachop1_orden}, reset: true });
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
                     }
-                }
-            });
-
-            cancelConfirm.render();
+                });
+                cancelConfirm.render();
         },
 
         /**

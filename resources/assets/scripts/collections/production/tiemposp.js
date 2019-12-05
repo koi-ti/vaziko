@@ -12,9 +12,9 @@ app || (app = {});
     app.TiempopList = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('tiemposp.detalle.index'));
+            return window.Misc.urlFull(Route.route('tiemposp.index'));
         },
-        model: app.DetalleTiempopModel
+        model: app.TiempopModel
    });
 
 })(this, this.document);

@@ -1232,10 +1232,11 @@ app || (app = {});
                 model: this.tiempopModel,
                 parameters: {
                     data : {
-                        ordenp: queries.ordenp,
+                        ordenp: queries.ordenp
                     }
                 }
             });
+            this.mainTiempopView.render();
         },
 
         getReporteTiempospMain: function () {

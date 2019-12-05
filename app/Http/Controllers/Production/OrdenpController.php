@@ -755,32 +755,43 @@ class OrdenpController extends Controller
             $object->tiempototal = $hours;
 
             // Chart productos
-            $tprecio = $ttransporte = $tviaticos = $tmateriales = $tareas = $tempaques = $tvolumen = 0;
+            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = 0;
             $ordenesp2 = Ordenp2::where('orden2_orden', $ordenp->id)->get();
             foreach ($ordenesp2 as $ordenp2) {
-                $tprecio += $precio = $ordenp2->orden2_precio_venta;
-                $ttransporte += $transporte = round($ordenp2->orden2_transporte/$ordenp2->orden2_cantidad);
-                $tviaticos += $viaticos = round($ordenp2->orden2_viaticos/$ordenp2->orden2_cantidad);
+                $tprecio += $precio = $ordenp2->orden2_precio_venta * $ordenp2->orden2_cantidad;
+                $tviaticos += $viaticos = round($ordenp2->orden2_viaticos/$ordenp2->orden2_cantidad) * $ordenp2->orden2_cantidad;
 
                 $materiales = Ordenp4::where('orden4_orden2', $ordenp2->id)->sum('orden4_valor_total');
-                $tmateriales += $materiales = ($materiales/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
+                $tmateriales += $materiales = ($materiales/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100) * $ordenp2->orden2_cantidad;
 
-                $tareas += $areas = Ordenp6::select(DB::raw("SUM(((SUBSTRING_INDEX(orden6_tiempo, ':', 1) + (SUBSTRING_INDEX(orden6_tiempo, ':', -1)/60)) * orden6_valor)/$ordenp2->orden2_cantidad) as total"))->where('orden6_orden2', $ordenp2->id)->value('total');
+                $areas = Ordenp6::select(DB::raw("SUM(((SUBSTRING_INDEX(orden6_tiempo, ':', 1) + (SUBSTRING_INDEX(orden6_tiempo, ':', -1)/60)) * orden6_valor)/$ordenp2->orden2_cantidad) as total"))->where('orden6_orden2', $ordenp2->id)->value('total');
+                $tareas += $areas = $areas/((100-$ordenp2->orden2_margen_areap)/100) * $ordenp2->orden2_cantidad;
 
                 $empaques = Ordenp9::where('orden9_orden2', $ordenp2->id)->sum('orden9_valor_total');
-                $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100);
+                $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100) * $ordenp2->orden2_cantidad;
 
-                $subtotal = $precio + $transporte + $viaticos + $materiales + round($areas) + $empaques;
+                $transportes = Ordenp10::where('orden10_orden2', $ordenp2->id)->sum('orden10_valor_total');
+                $ttransportes += $transportes = ($transportes/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_transporte)/100) * $ordenp2->orden2_cantidad;
+
+                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
                 $tvolumen += $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
             }
 
             // Make object
+            $labelprecio = 'Precio ' . number_format($tprecio,2,',','.');
+            $labelviaticos = 'Viáticos ' . number_format($tviaticos,2,',','.');
+            $labelmateriales = 'Materiales de producción ' . number_format($tmateriales,2,',','.');
+            $labelareas = 'Áreas de producción ' . number_format($tareas,2,',','.');
+            $labelempaques = 'Empaques de producción ' . number_format($tempaques,2,',','.');
+            $labeltransportes = 'Transportes de producción ' . number_format($ttransportes,2,',','.');
+            $labelvolumen = 'Volumen ' . number_format($tvolumen,2,',','.');
+
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
-                'Precio', 'Transporte', 'Viáticos', 'Materiales de producción', 'Áreas de producción', 'Empaques de producción', 'Volumen'
+                $labelprecio, $labelviaticos, $labelmateriales, $labelareas, $labelempaques, $labeltransportes, $labelvolumen
             ];
             $chartproducto->data = [
-                $tprecio, $ttransporte, $tviaticos, $tmateriales, $tareas, $tempaques, $tvolumen
+                $tprecio, $tviaticos, $tmateriales, $tareas, $tempaques, $ttransportes, $tvolumen
             ];
             $object->chartproductos = $chartproducto;
 

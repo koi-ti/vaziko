@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Bitacora;
 use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Models\Production\Ordenp, App\Models\Production\Ordenp2;
-use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto;
 use Auth, DB, Log, App, View;
 
 class DespachopController extends Controller
@@ -77,6 +77,7 @@ class DespachopController extends Controller
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Validar tercero contacto
                     if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
@@ -102,13 +103,15 @@ class DespachopController extends Controller
 
                     // Recuperar items pendientes
                     $pendientes = $orden->pendintesDespacho();
+
                     // Validar carrito
                     $items = 0;
                     foreach ($pendientes as $orden2) {
                         if ($request->has("despachop2_cantidad_$orden2->id") && $request->get("despachop2_cantidad_$orden2->id") > 0) {
-                            $items ++;
+                            $items++;
                         }
                     }
+
                     if ($items == 0) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => "Por favor ingrese unidades a despachar."]);
@@ -142,6 +145,9 @@ class DespachopController extends Controller
                         }
                     }
 
+                    // Crear bitacora
+                    Bitacora::createBitacora($orden, [], "Se creo el despacho {$despacho->id}", 'Distribución por clientes', 'C');
+
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $despacho->id, 'tcontacto_nombre' => "$contacto->tcontacto_nombres $contacto->tcontacto_apellidos", 'despachop1_fecha' => $despacho->despachop1_fecha]);
@@ -173,6 +179,13 @@ class DespachopController extends Controller
                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar despacho, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
+                // Recuperar orden
+                $orden = Ordenp::find($despacho->despachop1_orden);
+                if (!$orden instanceof Ordenp) {
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la orden de producción.']);
+                }
+
                 if ($despacho->despachop1_anulado) {
                     DB::rollback();
                     return response()->json(['success' => false, 'errors' => 'El despacho que intenta eliminar ya esta anulado.']);
@@ -199,8 +212,11 @@ class DespachopController extends Controller
                     $orden2->save();
                 }
 
+                // Crear bitacora
+                Bitacora::createBitacora($orden, [], "Se anulo el despacho {$despacho->id}", 'Distribución por clientes', 'D');
+
                 DB::commit();
-                return response()->json(['success' => true]);
+                return response()->json(['success' => true, 'id' => $despacho->id]);
             } catch(\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DespachopController', 'destroy', $e->getMessage()));

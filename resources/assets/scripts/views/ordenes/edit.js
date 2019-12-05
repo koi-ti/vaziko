@@ -118,7 +118,7 @@ app || (app = {});
                 collection: this.tiempopList,
                 parameters: {
                     dataFilter: {
-                        type: 'ordenp',
+                        call: 'ordenp',
                         orden2_orden: this.model.get('id')
                     }
                }
@@ -684,7 +684,7 @@ app || (app = {});
                         tooltips: {
                             callbacks: {
                                 label: function(item, data) {
-                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                    return data.labels[item.index]
                                 }
                             }
                         }
@@ -708,7 +708,7 @@ app || (app = {});
                 multiple: true,
                 autoUpload: true,
                 session: {
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.archivos.index') ),
                     params: {
                         ordenp: this.model.get('id'),
                     },
@@ -716,7 +716,7 @@ app || (app = {});
                 },
                 request: {
                     inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.archivos.index') ),
                     params: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         ordenp: this.model.get('id')
@@ -729,7 +729,7 @@ app || (app = {});
                     enabled: true,
                     forceConfirm: true,
                     confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                    endpoint: window.Misc.urlFull( Route.route('ordenes.imagenes.index') ),
+                    endpoint: window.Misc.urlFull( Route.route('ordenes.archivos.index') ),
                     params: {
                         _token: $('meta[name="csrf-token"]').attr('content'),
                         ordenp: this.model.get('id')
@@ -772,7 +772,7 @@ app || (app = {});
             this.$uploaderFile.fineUploader('setName', id, resp.name);
 
             var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
-            previewLink.attr("href", resp.url);
+                previewLink.attr("href", resp.url);
         },
 
         onSessionRequestComplete: function (id, name, resp) {
@@ -780,7 +780,7 @@ app || (app = {});
 
             _.each( id, function (value, key){
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                previewLink.attr("href", value.thumbnailUrl);
+                    previewLink.attr("href", value.thumbnailUrl);
             }, this);
         },
 
