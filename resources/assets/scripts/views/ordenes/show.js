@@ -20,44 +20,77 @@ app || (app = {});
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
-            'click .clone-ordenp': 'cloneOrdenp'
+            'click .clone-ordenp': 'cloneOrdenp',
+            'click .producto-prev': 'productoPrev',
+            'click .producto-next': 'productoNext'
         },
 
         /**
         * Constructor Method
         */
         initialize: function () {
+            // Reference attributes and wrappers
+            this.current = 0;
+            this.positions = [];
+            this.$prev = $('.producto-prev');
+            this.$next = $('.producto-next');
+
             // Reference views && fineuploader container
             this.listenTo( this.model, 'change', this.render );
         },
 
         render: function () {
-            if (this.model.get('permission')) {
-                this.tiempopList = new app.TiempopList();
-                this.referenceViews();
-            } else {
-                _.bindAll(this, 'onSessionRequestComplete');
+            var attributes = this.model.toJSON();
 
-                this.$iva = this.$('#orden_iva');
+            // Asignar posiciones
+            this.positions = attributes.items;
 
-                this.productopOrdenList = new app.ProductopOrdenList();
-                this.despachopOrdenList = new app.DespachopOrdenList();
-                this.tiempopList = new app.TiempopList();
-                this.bitacoraOrdenList = new app.BitacoraOrdenList();
+            // if (this.model.get('permission')) {
+            //     this.tiempopList = new app.TiempopList();
+            //     this.referenceViews();
+            // } else {
+            //     _.bindAll(this, 'onSessionRequestComplete');
+            //
+            //     this.$iva = this.$('#orden_iva');
+            //
+            //     this.productopOrdenList = new app.ProductopOrdenList();
+            //     this.despachopOrdenList = new app.DespachopOrdenList();
+            //     this.tiempopList = new app.TiempopList();
+            //     this.bitacoraOrdenList = new app.BitacoraOrdenList();
+            //
+            //     // Render rows charts
+            //     this.$renderChartEmpleado = this.$('#render-chart-empleado');
+            //     this.$renderChartAreasp = this.$('#render-chart-areasp');
+            //     this.$renderChartProductop = this.$('#render-chart-productop');
+            //     this.$renderChartOrdenp = this.$('#render-chart-ordenp');
+            //
+            //     // Reference views && fineuploader container
+            //     this.referenceViews();
+            //     this.referenceCharts()
+            // }
+            //
+            // this.$uploaderFile = this.$('.fine-uploader');
+            // this.uploadPictures();
+        },
 
-                // Render rows charts
-                this.$renderChartEmpleado = this.$('#render-chart-empleado');
-                this.$renderChartAreasp = this.$('#render-chart-areasp');
-                this.$renderChartProductop = this.$('#render-chart-productop');
-                this.$renderChartOrdenp = this.$('#render-chart-ordenp');
+        productoPrev: function (e) {
+            e.preventDefault();
 
-                // Reference views && fineuploader container
-                this.referenceViews();
-                this.referenceCharts()
-            }
+            // if (this.current < 0) {
+            //     this.current = 0;
+            //     return;
+            // }
+        },
 
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.uploadPictures();
+        productoNext: function (e) {
+            e.preventDefault();
+
+            // this.current++;
+            // if (this.current >= this.positions.length) {
+            //     this.current = this.positions.length;
+            //     return;
+            // }
+            console.log('next', this.positions, this.current);
         },
 
         /**

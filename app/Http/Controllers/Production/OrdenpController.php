@@ -251,6 +251,7 @@ class OrdenpController extends Controller
 
         // If role is operario
         $orden->permission = auth()->user()->hasRole('operario');
+        $orden->items = $orden->detalle->pluck('id');
 
         if ($request->ajax()) {
             return response()->json($orden);
@@ -258,11 +259,6 @@ class OrdenpController extends Controller
 
         if ($orden->orden_abierta && !$orden->orden_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
             return redirect()->route('ordenes.edit', compact('orden'));
-        }
-
-        if (auth()->user()->hasRole('operario')) {
-            $productos = Ordenp2::getOrdenesp2($orden->id);
-            return view('production.ordenes.show_with_role', compact('orden', 'productos'));
         }
         return view('production.ordenes.show', compact('orden'));
     }
