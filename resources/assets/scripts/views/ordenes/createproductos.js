@@ -98,6 +98,8 @@ app || (app = {});
             this.$inputmargenareap = this.$('#orden2_margen_areap');
             this.$inputmargenempaque = this.$('#orden2_margen_empaque');
             this.$inputmargentransporte = this.$('#orden2_margen_transporte');
+            this.$inputdescuento = this.$('#orden2_descuento');
+            this.$inputcomision = this.$('#orden2_comision');
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
@@ -111,7 +113,11 @@ app || (app = {});
             this.$infoprevtransportes = this.$('#info-prev-transportes');
             this.$infotransportes = this.$('#info-transportes');
             this.$infosubtotal = this.$('#info-subtotal');
+            this.$infoprevcomision = this.$('#info-prev-comision');
             this.$infocomision = this.$('#info-comision');
+            this.$infoprevdescuento = this.$('#info-prev-descuento');
+            this.$infodescuento = this.$('#info-descuento');
+            this.$infovolumen = this.$('#info-volumen');
             this.$infototal = this.$('#info-total');
 
             // Variables globales
@@ -245,6 +251,8 @@ app || (app = {});
                         data.orden2_margen_areap = this.$inputmargenareap.val();
                         data.orden2_margen_empaque = this.$inputmargenempaque.val();
                         data.orden2_margen_transporte = this.$inputmargentransporte.val();
+                        data.orden2_descuento = this.$inputdescuento.val();
+                        data.orden2_comision = this.$inputcomision.val();
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = this.materialesProductopOrdenList.toJSON();
@@ -260,6 +268,8 @@ app || (app = {});
                         data.orden2_margen_areap = this.$inputmargenareap.val();
                         data.orden2_margen_empaque = this.$inputmargenempaque.val();
                         data.orden2_margen_transporte = this.$inputmargentransporte.val();
+                        data.orden2_descuento = this.$inputdescuento.val();
+                        data.orden2_comision = this.$inputcomision.val();
                         data.orden2_volumen = this.$inputvolumen.val();
                         data.orden2_round = this.$inputround.val();
                         data.materialesp = JSON.stringify(this.materialesProductopOrdenList);
@@ -449,6 +459,8 @@ app || (app = {});
             var prevempaques = empaques;
             var transportes = Math.round(parseFloat(this.transportesProductopOrdenList.totalize().total)/cantidad);
             var prevtransportes = transportes;
+            var descuento = parseFloat(this.$inputdescuento.val());
+            var comision = parseFloat(this.$inputcomision.val());
             var volumen = parseInt(this.$inputvolumen.val());
 
             materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
@@ -470,8 +482,8 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
-            vcomision = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
-            total = subtotal + vcomision;
+            tvolumen = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
+            total = subtotal + tvolumen;
 
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
@@ -482,8 +494,18 @@ app || (app = {});
                 this.$inputround.val(0);
             }
 
+            var pocentajedescuento = subtotal*(descuento/100);
+            var totaldescuento = subtotal-pocentajedescuento;
+            var porcentajecomision = totaldescuento*(comision/100);
+            var totalcomision = porcentajecomision;
+
+            this.$infoprevdescuento.html(window.Misc.currency(subtotal));
+            this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));
+            this.$infoprevcomision.html(window.Misc.currency(totaldescuento));
+            this.$infocomision.html('$ ' + window.Misc.currency(totalcomision));
+
             this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal));
-            this.$infocomision.html('$ ' + window.Misc.currency(vcomision));
+            this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
             this.$infototal.html('$ ' + window.Misc.currency(total));
         },
 

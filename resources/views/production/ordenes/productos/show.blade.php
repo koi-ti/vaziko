@@ -542,6 +542,10 @@
 							$prevtotaltransportes = $totaltransportes;
 							$totaltransportes = $totaltransportes/((100-$ordenp2->orden2_margen_transporte)/100);
 							$subtotal = $ordenp2->orden2_precio_venta + $viaticos + $totalmaterialesp + $totalareasp + $totalempaques + $totaltransportes;
+							$prevtotaldescuento = $subtotal;
+							$totaldescuento = $subtotal-($subtotal*($ordenp2->orden2_descuento/100));
+							$prevtotalcomision = $totaldescuento;
+							$totalcomision = $totaldescuento*($ordenp2->orden2_comision/100);
 						/*--}}
 
 						<div class="box-body">
@@ -600,6 +604,24 @@
 										<div class="col-xs-10 col-sm-10 text-right">
 											<span class="pull-right badge bg-red">$ {{ number_format($subtotal, 2, ',', '.') }}</span>
 										</div>
+									</div>
+								</div>
+								<div class="list-group-item list-group-item-success">
+									<div class="row">
+										<div class="col-xs-6 col-sm-2 text-left"><b>Descuento</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotaldescuento, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_descuento }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totaldescuento, 2, ',', '.') }}</span></b></div>
+									</div>
+								</div>
+								<div class="list-group-item list-group-item-success">
+									<div class="row">
+										<div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
+										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalcomision, 2, ',', '.') }}</small></div>
+										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_comision }}</div>
+										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalcomision, 2, ',', '.') }}</span></b></div>
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-success">

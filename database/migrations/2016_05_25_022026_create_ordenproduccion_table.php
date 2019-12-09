@@ -39,7 +39,8 @@ class CreateOrdenproduccionTable extends Migration
             $table->boolean('orden_estado_recogida2')->default(true);
             $table->text('orden_observaciones')->nullable();
             $table->text('orden_terminado')->nullable();
-            $table->text('orden_observaciones_imagen')->nullable();
+            $table->text('orden_observaciones_archivo')->nullable();
+            $table->integer('orden_vendedor')->unsigned()->nullable();
             $table->datetime('orden_fecha_elaboro');
             $table->integer('orden_usuario_elaboro')->unsigned();
             $table->datetime('orden_fecha_anulo')->nullable();
@@ -48,6 +49,7 @@ class CreateOrdenproduccionTable extends Migration
             $table->foreign('orden_cliente')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('orden_contacto')->references('id')->on('koi_tcontacto')->onDelete('restrict');
             $table->foreign('orden_cotizacion')->references('id')->on('koi_cotizacion1')->onDelete('restrict');
+            $table->foreign('orden_vendedor')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('orden_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('orden_usuario_anulo')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->unique(['orden_numero', 'orden_ano']);

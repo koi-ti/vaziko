@@ -42,6 +42,7 @@ class CreateCotizacion1Table extends Migration
             $table->foreign('cotizacion1_cliente')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('cotizacion1_contacto')->references('id')->on('koi_tcontacto')->onDelete('restrict');
             $table->foreign('cotizacion1_precotizacion')->references('id')->on('koi_precotizacion1')->onDelete('restrict');
+            $table->foreign('cotizacion1_vendedor')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('cotizacion1_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('cotizacion1_usuario_anulo')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->unique(['cotizacion1_numero', 'cotizacion1_ano']);

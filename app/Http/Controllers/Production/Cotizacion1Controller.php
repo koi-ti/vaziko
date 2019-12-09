@@ -699,6 +699,7 @@ class Cotizacion1Controller extends Controller
                 $orden->orden_suministran = $cotizacion->cotizacion1_suministran;
                 $orden->orden_abierta = true;
                 $orden->orden_observaciones = $cotizacion->cotizacion1_observaciones;
+                $orden->orden_vendedor = $cotizacion->cotizacion1_vendedor;
                 $orden->orden_terminado = $cotizacion->cotizacion1_terminado;
                 $orden->orden_usuario_elaboro = auth()->user()->id;
                 $orden->orden_fecha_elaboro = date('Y-m-d H:i:s');
@@ -727,6 +728,8 @@ class Cotizacion1Controller extends Controller
                     $orden2->orden2_margen_areap = $cotizacion2->cotizacion2_margen_areap;
                     $orden2->orden2_margen_empaque = $cotizacion2->cotizacion2_margen_empaque;
                     $orden2->orden2_margen_transporte = $cotizacion2->cotizacion2_margen_transporte;
+                    $orden2->orden2_descuento = $cotizacion2->cotizacion2_descuento;
+                    $orden2->orden2_comision = $cotizacion2->cotizacion2_comision;
                     $orden2->orden2_entregado = $cotizacion2->cotizacion2_entregado;
                     $orden2->orden2_observaciones = $cotizacion2->cotizacion2_observaciones;
                     $orden2->orden2_tiro = $cotizacion2->cotizacion2_tiro;

@@ -22,7 +22,7 @@ class Ordenp2 extends BaseModel
     * @var array
     */
     protected $fillable = [
-        'orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp', 'orden2_margen_areap', 'orden2_margen_empaque', 'orden2_margen_transporte'
+        'orden2_referencia', 'orden2_observaciones', 'orden2_transporte_formula', 'orden2_viaticos_formula', 'orden2_precio_formula', 'orden2_precio_venta', 'orden2_ancho', 'orden2_alto', 'orden2_c_ancho', 'orden2_c_alto', 'orden2_3d_ancho', 'orden2_3d_alto', 'orden2_3d_profundidad', 'orden2_nota_tiro', 'orden2_nota_retiro', 'orden2_transporte', 'orden2_viaticos', 'orden2_volumen', 'orden2_vtotal', 'orden2_total_valor_unitario', 'orden2_round', 'orden2_margen_materialp', 'orden2_margen_areap', 'orden2_margen_empaque', 'orden2_margen_transporte', 'orden2_descuento', 'orden2_comision'
     ];
 
     /**
@@ -46,7 +46,9 @@ class Ordenp2 extends BaseModel
             'orden2_margen_materialp' => 'min:0|max:100|numeric',
             'orden2_margen_areap' => 'min:0|max:100|numeric',
             'orden2_margen_empaque' => 'min:0|max:100|numeric',
-            'orden2_margen_transporte' => 'min:0|max:100|numeric'
+            'orden2_margen_transporte' => 'min:0|max:100|numeric',
+            'orden2_descuento' => 'min:0|max:100|numeric',
+            'orden2_comision' => 'min:0|max:100|numeric'
         ];
 
         $validator = Validator::make($data, $rules);
@@ -55,11 +57,6 @@ class Ordenp2 extends BaseModel
         }
         $this->errors = $validator->errors();
         return false;
-    }
-
-    public static function calcString($mathString) {
-   	 	$cf_DoCalc = @create_function("", "return (" . $mathString . ");" );
-        return $cf_DoCalc();
     }
 
     public static function getOrdenesp2($orden) {

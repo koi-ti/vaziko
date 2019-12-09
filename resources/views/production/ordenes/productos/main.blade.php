@@ -728,6 +728,28 @@
                                     </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Descuento</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-descuento" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="orden2_descuento" name="orden2_descuento" class="form-control input-sm total-calculate" value="<%- orden2_descuento %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-descuento"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
+                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
+                                            <div class="col-xs-4 col-sm-2 text-left">
+                                                <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- orden2_comision %>" type="number" min="0" max="100" step="0.1">
+                                            </div>
+                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
                                             <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>
                                             <div class="col-xs-3 col-sm-2">
                                                 <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" max="99">

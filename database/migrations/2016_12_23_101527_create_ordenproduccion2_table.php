@@ -42,6 +42,9 @@ class CreateOrdenproduccion2Table extends Migration
             $table->double('orden2_margen_empaque')->default(0);
             $table->double('orden2_margen_transporte')->default(0);
 
+            $table->double('orden2_comision')->default(0);
+            $table->double('orden2_descuento')->default(0);
+
             $table->boolean('orden2_yellow')->default(false);
             $table->boolean('orden2_magenta')->default(false);
             $table->boolean('orden2_cyan')->default(false);

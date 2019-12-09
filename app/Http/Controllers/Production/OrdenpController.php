@@ -183,27 +183,42 @@ class OrdenpController extends Controller
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar empresa, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Recuperar tercero
                     $tercero = Tercero::where('tercero_nit', $request->orden_cliente)->first();
                     if (!$tercero instanceof Tercero) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar cliente, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Validar contacto
                     $contacto = Contacto::find($request->orden_contacto);
                     if (!$contacto instanceof Contacto) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'No es posible recuperar contacto, por favor verifique la información o consulte al administrador.']);
                     }
+
                     // Validar tercero contacto
                     if ($contacto->tcontacto_tercero != $tercero->id) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => 'El contacto seleccionado no corresponde al tercero, por favor seleccione de nuevo el contacto o consulte al administrador.']);
                     }
+
                     // Actualizar telefono del contacto
                     if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
+                    }
+
+                    // Validar que exista el tercero con check vendedor
+                    if ($request->has('orden_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor', true)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $orden->orden_vendedor = $vendedor->id;
                     }
 
                     // Recuperar numero orden
@@ -320,6 +335,17 @@ class OrdenpController extends Controller
                     if ($contacto->tcontacto_telefono != $request->tcontacto_telefono) {
                         $contacto->tcontacto_telefono = $request->tcontacto_telefono;
                         $contacto->save();
+                    }
+
+                    // Validar que exista el tercero con check vendedor
+                    if ($request->has('orden_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor', true)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
+                        }
+
+                        $orden->orden_vendedor = $vendedor->id;
                     }
 
                     // Traer datos originales

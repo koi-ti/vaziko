@@ -231,6 +231,22 @@
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                         </div>
+                                        <div class="row">
+                                            <label for="orden_vendedor" class="col-xs-12 col-sm-1 col-md-1 control-label">Vendedor</label>
+                                            <div class="form-group col-xs-12 col-sm-4 col-md-3">
+                                                <div class="input-group input-group-sm">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="orden_vendedor">
+                                                            <i class="fa fa-user"></i>
+                                                        </button>
+                                                    </span>
+                                                    <input id="orden_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="orden_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-7">
+                                                <input id="orden_vendedor_nombre" name="orden_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly required>
+                                            </div>
+                                        </div>
                                     </form>
                                 </div>
                                 <div class="box-footer with-border">
@@ -532,7 +548,7 @@
                                 <div class="tab-pane" id="tab_files">
                                     <div class="row">
                                         <div class="form-group col-sm-12">
-                                            <textarea id="orden_observaciones_imagen" name="orden_observaciones_imagen" class="form-control" rows="25" placeholder="Observaciones"><%- orden_observaciones_imagen %></textarea>
+                                            <textarea id="orden_observaciones_archivo" name="orden_observaciones_archivo" class="form-control" rows="25" placeholder="Observaciones"><%- orden_observaciones_archivo %></textarea>
                                         </div>
                                     </div>
                                     <div class="row">

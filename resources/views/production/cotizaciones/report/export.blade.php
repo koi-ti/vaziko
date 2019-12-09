@@ -63,10 +63,12 @@
 				<td colspan="2" align="right" class="border">I.V.A</td>
 				<td colspan="2" align="right" class="border">Total</td>
 			</tr>
-			{{--*/ $iva = $ivaunitario = $ivatotal = $totalproducto = $subtotalcotizacion = $ivacotizacion = $totalcotizacion = 0 /*--}}
-			{{--*/ $imagenes = []; /*--}}
+			{{--*/
+				$iva = $ivaunitario = $ivatotal = $totalproducto = $subtotalcotizacion = $ivacotizacion = $totalcotizacion = 0;
+				$imagenes = [];
+			/*--}}
 
-			@foreach( $data as $cotizacion2 )
+			@foreach ($data as $cotizacion2)
 					{{--*/
 						$iva = $cotizacion->cotizacion1_iva / 100;
 						$ivaunitario = $cotizacion2->cotizacion2_total_valor_unitario * $iva;
@@ -76,25 +78,29 @@
 					/*--}}
 					<tr>
 						<td colspan="3" class="border-cell">
-							<br>
-							Producto: <b>{{ $cotizacion2->productop_nombre }}</b><br>
-							Referencia: {{ $cotizacion2->cotizacion2_referencia }}<br>
-							Medidas: {{ $cotizacion2->medidas }}<br>
-							{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
-							{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
-							{!! isset($cotizacion2->empaque_nombre) ? "Empaque: $cotizacion2->empaque_nombre <br>" : ""  !!}
-							@if( $cotizacion2->tiro || $cotizacion2->retiro )
-								{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }}
-							@endif
-
-							@if ( $cotizacion2->imagenes != [] )
-								<div class="row">
-									<div class="col-md-5">
-										@foreach($cotizacion2->imagenes as $imagen)
-											<img src="{{ $imagen }}" alt="" style="width:150px; height: 100px;">
-										@endforeach
-									</div>
-								</div><br>
+							<p>
+								Producto: <b>{{ $cotizacion2->productop_nombre }}</b><br>
+								Referencia: <b>{{ $cotizacion2->cotizacion2_referencia }}</b><br>
+								Medidas: {{ $cotizacion2->medidas }}<br>
+								{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
+								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
+								{!! isset($cotizacion2->empaque_nombre) ? "Empaque: $cotizacion2->empaque_nombre <br>" : ""  !!}
+								@if( $cotizacion2->tiro || $cotizacion2->retiro )
+									{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }}
+								@endif
+							</p>
+							@if ($cotizacion2->imagenes != [])
+								<table width="100%">
+									@foreach(array_chunk($cotizacion2->imagenes, 2) as $chunk)
+										<tr>
+											@foreach($chunk as $imagen)
+												<td>
+													<img src="{{ $imagen }}" alt="cotizacion" style="width:150px; height: 100px;">
+												</td>
+											@endforeach
+										</tr>
+									@endforeach
+								</table>
 							@endif
 						</td>
 						<td class="border-cell" align="center">{{ $cotizacion2->cotizacion2_cantidad }}</td>

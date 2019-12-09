@@ -154,6 +154,16 @@
                                 </div>
 							</div>
 
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label class="control-label">Vendedor</label>
+                                    <div>
+                                        <a href="{{ route('terceros.show', ['terceros' =>  $orden->orden_vendedor ]) }}" title="Ver vendedor">
+                                        {{ $orden->vendedor_nit }}</a> - {{ $orden->vendedor_nombre }}
+                                    </div>
+                                </div>
+                            </div>
+
 							<div class="row">
 								<div class="form-group col-md-2">
 									<label class="control-label">Usuario elaboro</label>
@@ -285,7 +295,7 @@
                     <div class="tab-pane" id="tab_files">
                         <div class="row">
                             <div class="form-group col-md-12">
-                                <textarea name="orden_observaciones_imagen" rows="25" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_imagen }}</textarea>
+                                <textarea name="orden_observaciones_archivo" rows="25" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_archivo }}</textarea>
                             </div>
                         </div>
                         <div class="row">

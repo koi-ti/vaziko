@@ -76,7 +76,7 @@ app || (app = {});
             this.$renderChartOrdenp = this.$('#render-chart-ordenp');
 
             // Initialize fineuploader && textarea tab imagenes
-            this.$observacionesimagen = this.$('#orden_observaciones_imagen');
+            this.$observacionesarchivo = this.$('#orden_observaciones_archivo');
             this.$uploaderFile = this.$('.fine-uploader');
 
             // Reference views and ready
@@ -179,7 +179,7 @@ app || (app = {});
                     data.orden_fecha_recogida2 = this.$('#orden_fecha_recogida2').val();
                     data.orden_hora_recogida1 = this.$('#orden_hora_recogida1').val();
                     data.orden_hora_recogida2 = this.$('#orden_hora_recogida2').val();
-                    data.orden_observaciones_imagen = this.$observacionesimagen.val();
+                    data.orden_observaciones_archivo = this.$observacionesarchivo.val();
 
                 this.model.save( data, {patch: true, silent: true} );
             }

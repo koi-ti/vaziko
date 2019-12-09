@@ -96,8 +96,8 @@ app || (app = {});
             this.$inputmargenareap = this.$('#cotizacion2_margen_areap');
             this.$inputmargenempaque = this.$('#cotizacion2_margen_empaque');
             this.$inputmargentransporte = this.$('#cotizacion2_margen_transporte');
-            this.$inputcomision = this.$('#cotizacion2_comision');
             this.$inputdescuento = this.$('#cotizacion2_descuento');
+            this.$inputcomision = this.$('#cotizacion2_comision');
             this.$inputvolumen = this.$('#cotizacion2_volumen');
             this.$inputround = this.$('#cotizacion2_round');
 
@@ -454,6 +454,8 @@ app || (app = {});
             var prevempaques = empaques;
             var transportes = Math.round(parseFloat(this.transportesProductopCotizacionList.totalize().total)/cantidad);
             var prevtransportes = transportes;
+            var descuento = parseFloat(this.$inputdescuento.val());
+            var comision = parseFloat(this.$inputcomision.val());
             var volumen = parseInt(this.$inputvolumen.val());
 
             materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
@@ -487,8 +489,16 @@ app || (app = {});
                 this.$inputround.val(0);
             }
 
-            this.$infoprevcomision.html(window.Misc.currency(subtotal));
+            var pocentajedescuento = subtotal*(descuento/100);
+            var totaldescuento = subtotal-pocentajedescuento;
+            var porcentajecomision = totaldescuento*(comision/100);
+            var totalcomision = porcentajecomision;
+
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));
+            this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));
+            this.$infoprevcomision.html(window.Misc.currency(totaldescuento));
+            this.$infocomision.html('$ ' + window.Misc.currency(totalcomision));
+
             this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal));
             this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
             this.$infototal.html('$ ' + window.Misc.currency(total));

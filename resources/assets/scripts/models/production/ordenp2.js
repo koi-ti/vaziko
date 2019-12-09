@@ -27,6 +27,8 @@ app || (app = {});
             'orden2_margen_areap': 30,
             'orden2_margen_empaque': 30,
             'orden2_margen_transporte': 30,
+            'orden2_descuento': 0,
+            'orden2_comision': 0,
             'orden2_vtotal': 0,
             'orden2_observaciones': '',
             'orden2_ancho': 0,
