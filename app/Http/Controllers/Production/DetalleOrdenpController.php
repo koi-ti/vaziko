@@ -347,16 +347,6 @@ class DetalleOrdenpController extends Controller
             $ordenp2->continue = true;
         }
 
-        if ($request->ajax()) {
-            return response()->json($ordenp2);
-        }
-
-        // Recuperar orden
-        $orden = Ordenp::getOrden($ordenp2->orden2_orden);
-        if (!$orden instanceof Ordenp) {
-            abort(404);
-        }
-
         // Recuperar producto
         $producto = Productop::getProduct($ordenp2->orden2_productop);
         if (!$producto instanceof Productop) {
@@ -365,6 +355,19 @@ class DetalleOrdenpController extends Controller
 
         // Lazy Eager Loading
         $producto->load('tips');
+
+        if ($request->ajax()) {
+            if (auth()->user()->hasRole('operario')) {
+                $ordenp2->producto = $producto;
+            }
+            return response()->json($ordenp2);
+        }
+
+        // Recuperar orden
+        $orden = Ordenp::getOrden($ordenp2->orden2_orden);
+        if (!$orden instanceof Ordenp) {
+            abort(404);
+        }
 
         // Validar orden
         if ($orden->orden_abierta == true && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes'])) {

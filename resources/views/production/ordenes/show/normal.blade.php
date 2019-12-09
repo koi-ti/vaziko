@@ -1,4 +1,3 @@
-
 <section class="content">
     <div class="box box-solid" id="ordenes-show">
         <div class="nav-tabs-custom tab-primary tab-whithout-box-shadow">

@@ -21,8 +21,7 @@ app || (app = {});
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
-            'click .producto-prev': 'productoPrev',
-            'click .producto-next': 'productoNext'
+            'click .producto-pagination': 'productoPagination'
         },
 
         /**
@@ -45,52 +44,79 @@ app || (app = {});
             // Asignar posiciones
             this.positions = attributes.items;
 
-            // if (this.model.get('permission')) {
-            //     this.tiempopList = new app.TiempopList();
-            //     this.referenceViews();
-            // } else {
-            //     _.bindAll(this, 'onSessionRequestComplete');
-            //
-            //     this.$iva = this.$('#orden_iva');
-            //
-            //     this.productopOrdenList = new app.ProductopOrdenList();
-            //     this.despachopOrdenList = new app.DespachopOrdenList();
-            //     this.tiempopList = new app.TiempopList();
-            //     this.bitacoraOrdenList = new app.BitacoraOrdenList();
-            //
-            //     // Render rows charts
-            //     this.$renderChartEmpleado = this.$('#render-chart-empleado');
-            //     this.$renderChartAreasp = this.$('#render-chart-areasp');
-            //     this.$renderChartProductop = this.$('#render-chart-productop');
-            //     this.$renderChartOrdenp = this.$('#render-chart-ordenp');
-            //
-            //     // Reference views && fineuploader container
-            //     this.referenceViews();
-            //     this.referenceCharts()
-            // }
-            //
-            // this.$uploaderFile = this.$('.fine-uploader');
-            // this.uploadPictures();
+            if (this.model.get('permission')) {
+                this.tiempopList = new app.TiempopList();
+
+                this.showItem(this.positions[this.current]);
+            } else {
+                _.bindAll(this, 'onSessionRequestComplete');
+
+                this.$iva = this.$('#orden_iva');
+
+                this.productopOrdenList = new app.ProductopOrdenList();
+                this.despachopOrdenList = new app.DespachopOrdenList();
+                this.tiempopList = new app.TiempopList();
+                this.bitacoraOrdenList = new app.BitacoraOrdenList();
+
+                // Render rows charts
+                this.$renderChartEmpleado = this.$('#render-chart-empleado');
+                this.$renderChartAreasp = this.$('#render-chart-areasp');
+                this.$renderChartProductop = this.$('#render-chart-productop');
+                this.$renderChartOrdenp = this.$('#render-chart-ordenp');
+
+                // Reference views && fineuploader container
+                this.referenceViews();
+                this.referenceCharts()
+            }
+
+            this.$uploaderFile = this.$('.fine-uploader');
+            this.uploadPictures();
         },
 
-        productoPrev: function (e) {
+        productoPagination: function (e) {
             e.preventDefault();
 
-            // if (this.current < 0) {
-            //     this.current = 0;
-            //     return;
-            // }
+            var action = $(e.currentTarget).attr('data-action');
+
+            if (action == 'N') {
+                this.current++;
+
+                if (this.current >= this.positions.length) {
+                    this.current = this.positions.length-1;
+                    return;
+                }
+
+                if (_.isUndefined(this.positions[this.current]))
+                    return;
+            } else {
+                this.current--;
+
+                if (this.current <= -1) {
+                    this.current = 0;
+                    return;
+                }
+
+                if (_.isUndefined(this.positions[this.current]))
+                    return
+            }
+
+            this.showItem(this.positions[this.current]);
         },
 
-        productoNext: function (e) {
-            e.preventDefault();
+        showItem: function (id) {
+            this.ordenp2Model = new app.Ordenp2Model();
+            this.ordenp2Model.set({id: id}, {silent: true});
 
-            // this.current++;
-            // if (this.current >= this.positions.length) {
-            //     this.current = this.positions.length;
-            //     return;
-            // }
-            console.log('next', this.positions, this.current);
+            if (this.componentProductView instanceof Backbone.View) {
+                this.componentProductView.stopListening();
+                this.componentProductView.undelegateEvents();
+            }
+
+            this.componentProductView = new app.ComponentProductView({
+                el: '#render-show-producto',
+                model: this.ordenp2Model
+            });
+            this.ordenp2Model.fetch();
         },
 
         /**
