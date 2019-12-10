@@ -18,6 +18,32 @@ class PreCotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $data = [];
+            if ($request->has('datatables')) {
+                $query = PreCotizacion2::getPreCotizaciones2();
+                return Datatables::of($query)
+                            ->filter(function($query) use ($request) {
+                                // Cotizacion
+                                if ($request->has('search_precotizacion')) {
+                                    $query->whereRaw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) LIKE '%{$request->search_precotizacion}%'");
+                                }
+
+                                if ($request->has('search_precotizacion_estado')) {
+                                    if ($request->search_precotizacion_estado == 'A') {
+                                        $query->where('precotizacion1_abierta', true);
+                                    }
+
+                                    if ($request->search_precotizacion_estado == 'C') {
+                                        $query->where('precotizacion1_abierta', false);
+                                    }
+
+                                    if ($request->search_precotizacion_estado == 'T') {
+                                        $query->where('precotizacion1_anulada', true);
+                                    }
+                                }
+                            })
+                            ->make(true);
+            }
+
             if ($request->has('precotizacion')) {
                 $data = PreCotizacion2::getPreCotizaciones2($request->precotizacion);
             }
@@ -79,7 +105,7 @@ class PreCotizacion2Controller extends Controller
 
         // Lazy Eager Loading
         $producto->load('tips');
-        
+
         return view('production.precotizaciones.productos.show', compact('precotizacion', 'producto', 'precotizacion2'));
     }
 

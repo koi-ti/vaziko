@@ -29,18 +29,18 @@ class DetalleOrdenpController extends Controller
                                     $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->search_ordenp}%'");
                                 }
 
-                                if ($request->has('search_ordenpestado')) {
-                                    if ($request->search_ordenpestado == 'A') {
+                                if ($request->has('search_ordenp_estado')) {
+                                    if ($request->search_ordenp_estado == 'A') {
                                         $query->where('orden_abierta', true);
                                     }
-                                    if ($request->search_ordenpestado == 'C') {
+                                    if ($request->search_ordenp_estado == 'C') {
                                         $query->where('orden_abierta', false);
                                         $query->where('orden_culminada', false);
                                     }
-                                    if ($request->search_ordenpestado == 'N') {
+                                    if ($request->search_ordenp_estado == 'N') {
                                         $query->where('orden_anulada', true);
                                     }
-                                    if ($request->search_ordenpestado == 'T') {
+                                    if ($request->search_ordenp_estado == 'T') {
                                         $query->where('orden_culminada', true);
                                     }
                                 }
@@ -874,8 +874,8 @@ class DetalleOrdenpController extends Controller
      */
     public function search(Request $request)
     {
-        if ($request->has('ordenp2')) {
-            $ordenp2 = Ordenp2::getDetail($request->ordenp2);
+        if ($request->has('producto')) {
+            $ordenp2 = Ordenp2::getDetail($request->producto);
             if ($ordenp2 instanceof Ordenp2) {
                 return response()->json(['success' => true, 'productop_nombre' => $ordenp2->productop_nombre, 'id' => $ordenp2->id]);
             }

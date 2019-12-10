@@ -232,12 +232,20 @@
                                                     <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                                         <div class="input-group input-group-sm">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
+                                                                <button type="button" class="btn btn-danger btn-koi-search-productop-component-table" data-field="productop">
                                                                     <i class="fa fa-search"></i>
                                                                 </button>
+                                                                <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                    <span class="caret"></span>
+                                                                </button>
+                                                                <ul class="dropdown-menu">
+                                                                    <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table" data-render="productop">Pre-cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table" data-render="productop">Cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-orden-component-table" data-render="productop">Orden de producción</a></li>
+                                                                </ul>
                                                             </span>
                                                             <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
-                                                            <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required></select>
+                                                            <select id="productop" name="productop" class="form-control select2-default" data-productop="true" required></select>
                                                         </div>
                                                     </div>
 

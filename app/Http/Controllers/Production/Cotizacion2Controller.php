@@ -20,6 +20,32 @@ class Cotizacion2Controller extends Controller
     {
         if ($request->ajax()) {
             $detalle = [];
+            if ($request->has('datatables')) {
+                $query = Cotizacion2::getCotizaciones2();
+                return Datatables::of($query)
+                            ->filter(function($query) use ($request) {
+                                // Cotizacion
+                                if ($request->has('search_cotizacion')) {
+                                    $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) LIKE '%{$request->search_cotizacion}%'");
+                                }
+
+                                if ($request->has('search_cotizacion_estado')) {
+                                    if ($request->search_cotizacion_estado == 'A') {
+                                        $query->where('cotizacion1_abierta', true);
+                                    }
+
+                                    if ($request->search_cotizacion_estado == 'C') {
+                                        $query->where('cotizacion1_abierta', false);
+                                    }
+
+                                    if ($request->search_cotizacion_estado == 'N') {
+                                        $query->where('cotizacion1_anulada', true);
+                                    }
+                                }
+                            })
+                            ->make(true);
+            }
+
             if ($request->has('cotizacion2_cotizacion')) {
                 $detalle = Cotizacion2::getCotizaciones2($request->cotizacion2_cotizacion);
             }

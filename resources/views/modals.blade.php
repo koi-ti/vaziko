@@ -121,8 +121,26 @@
 	</div>
 </div>
 
-<!-- Modal search ordenp2 -->
-<div class="modal fade" id="modal-search-ordenp2-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+<!-- Modal search productos pre-cotizacion -->
+<div class="modal fade" id="modal-search-productos-precotizacion-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-xlg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal search productos cotizacion -->
+<div class="modal fade" id="modal-search-productos-cotizacion-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+	<div class="modal-dialog modal-xlg" role="document">
+		<div class="modal-content">
+			<div class="content-modal"></div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal search productos orden -->
+<div class="modal fade" id="modal-search-productos-orden-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
 	<div class="modal-dialog modal-xlg" role="document">
 		<div class="modal-content">
 			<div class="content-modal"></div>
@@ -516,14 +534,147 @@
 	{!! Form::close() !!}
 </script>
 
-<script type="text/template" id="koi-search-ordenp2-component-tpl">
+<!-- Script productos -->
+<script type="text/template" id="koi-search-productos-precotizacion-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador productos de pre-cotizaciones</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-producto-precotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="row">
+                <label for="search_precotizacion" class="col-md-1 control-label">Pre-cotizacón</label>
+                <div class="form-group col-md-3 col-sm-8 col-xs-8">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-flat btn-koi-search-precotizacion-component-table" data-field="search_precotizacion">
+                                <i class="fa fa-building-o"></i>
+                            </button>
+                        </span>
+                        <input id="search_precotizacion" placeholder="Pre-cotización" class="form-control precotizacion-koi-component precotizacion-change-koi" name="search_precotizacion" type="text" maxlength="15" data-factura="true" data-name="search_precotizacion_nombre">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-8 col-xs-10">
+                    <input id="search_precotizacion_nombre" name="search_precotizacion_nombre" placeholder="Cliente" class="form-control input-sm" type="text" readonly>
+                </div>
+            </div>
+			<div class="row">
+                <label for="search_precotizacion_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
+				<div class="col-md-5">
+					<select name="search_precotizacion_estado" id="search_precotizacion_estado" class="form-control">
+						<option value="" selected>Todas</option>
+						<option value="A">Abiertas</option>
+						<option value="C">Cerradas</option>
+						<option value="T">Culminadas</option>
+					</select>
+				</div>
+            </div><br>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-producto-precotizacion-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-producto-precotizacion-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-productos-precotizacion-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="10%">Código</th>
+			                	<th width="10%">Pre-cotización</th>
+			                	<th width="75%">Producto</th>
+								<th>Ano</th>
+				                <th>Numero</th>
+				                <th width="5%"></th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<script type="text/template" id="koi-search-productos-cotizacion-component-tpl">
+	<div class="modal-header small-box {{ config('koi.template.bg') }}">
+		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		</button>
+		<h4 class="inner-title-modal modal-title">Buscador productos de cotizaciones</h4>
+	</div>
+	{!! Form::open(['id' => 'form-koi-search-producto-cotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+		<div class="modal-body">
+			<div class="row">
+                <label for="search_cotizacion" class="col-md-1 control-label">Cotización</label>
+                <div class="form-group col-md-3 col-sm-8 col-xs-8">
+                    <div class="input-group input-group-sm">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-default btn-flat btn-koi-search-cotizacion-component-table" data-field="search_cotizacion">
+                                <i class="fa fa-building-o"></i>
+                            </button>
+                        </span>
+                        <input id="search_cotizacion" name="search_cotizacion" placeholder="Cotización" class="form-control cotizacion-koi-component cotizacion-change-koi" type="text" maxlength="15" data-name="search_cotizacion_nombre">
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-8 col-xs-10">
+                    <input id="search_cotizacion_nombre" name="search_cotizacion_nombre" placeholder="Cliente" class="form-control input-sm" type="text" readonly>
+                </div>
+            </div>
+			<div class="row">
+                <label for="search_cotizacion_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
+				<div class="col-md-5">
+					<select name="search_cotizacion_estado" id="search_cotizacion_estado" class="form-control">
+						<option value="" selected>Todas</option>
+						<option value="A">Abiertas</option>
+						<option value="C">Cerradas</option>
+						<option value="N">Anuladas</option>
+					</select>
+				</div>
+            </div><br>
+
+			<div class="form-group">
+				<div class="col-md-offset-4 col-md-2 col-xs-6">
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-producto-cotizacion-component">Buscar</button>
+				</div>
+				<div class="col-md-2 col-xs-6">
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-producto-cotizacion-component">Limpiar</button>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<div class="col-md-12 table-responsive">
+					<table id="koi-search-productos-cotizacion-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+		                <thead>
+				            <tr>
+				                <th width="10%">Código</th>
+			                	<th width="10%">Cotización</th>
+			                	<th width="75%">Producto</th>
+								<th>Ano</th>
+				                <th>Numero</th>
+				                <th width="5%"></th>
+				            </tr>
+				        </thead>
+		            </table>
+	           	</div>
+	     	</div>
+		</div>
+	{!! Form::close() !!}
+</script>
+
+<script type="text/template" id="koi-search-productos-orden-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
 		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
 		<h4 class="inner-title-modal modal-title">Buscador productos de ordenes</h4>
 	</div>
-	{!! Form::open(['id' => 'form-koi-search-ordenp2-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+	{!! Form::open(['id' => 'form-koi-search-producto-orden-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 		<div class="modal-body">
 			<div class="row">
                 <label for="search_ordenp" class="col-md-1 control-label">Orden</label>
@@ -534,17 +685,17 @@
                                 <i class="fa fa-building-o"></i>
                             </button>
                         </span>
-                        <input id="search_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="search_ordenp" type="text" maxlength="15" data-factura="true" data-name="search_ordenpnombre">
+                        <input id="search_ordenp" placeholder="Orden" class="form-control ordenp-koi-component orden-change-koi" name="search_ordenp" type="text" maxlength="15" data-factura="true" data-name="search_ordenp_nombre">
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-8 col-xs-10">
-                    <input id="search_ordenpnombre" name="search_ordenpnombre" placeholder="Tercero" class="form-control input-sm" type="text" readonly>
+                    <input id="search_ordenp_nombre" name="search_ordenp_nombre" placeholder="Tercero" class="form-control input-sm" type="text" readonly>
                 </div>
             </div>
 			<div class="row">
                 <label for="search_ordenp_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
 				<div class="col-md-5">
-					<select name="searchordenp_ordenp_estado" id="searchordenp_ordenp_estado" class="form-control">
+					<select name="search_ordenp_estado" id="search_ordenp_estado" class="form-control">
 						<option value="" selected>Todas</option>
 						<option value="A">Abiertas</option>
 						<option value="N">Anuladas</option>
@@ -556,25 +707,24 @@
 
 			<div class="form-group">
 				<div class="col-md-offset-4 col-md-2 col-xs-6">
-					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-ordenp2-component">Buscar</button>
+					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-producto-orden-component">Buscar</button>
 				</div>
 				<div class="col-md-2 col-xs-6">
-					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-ordenp2-component">Limpiar</button>
+					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-producto-orden-component">Limpiar</button>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<div class="col-md-12 table-responsive">
-					<table id="koi-search-ordenp2-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
+					<table id="koi-search-productos-orden-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
 		                <thead>
 				            <tr>
 				                <th width="10%">Código</th>
 			                	<th width="10%">Orden</th>
-				                <th>Año</th>
+			                	<th width="75%">Producto</th>
+								<th>Ano</th>
 				                <th>Numero</th>
-			                	<th width="60%">Producto</th>
-			                	<th width="10%">Saldo</th>
-			                	<th width="10%">Facturadas</th>
+				                <th width="5%"></th>
 				            </tr>
 				        </thead>
 		            </table>
@@ -584,6 +734,7 @@
 	{!! Form::close() !!}
 </script>
 
+<!-- Script producto -->
 <script type="text/template" id="koi-search-producto-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
 		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">

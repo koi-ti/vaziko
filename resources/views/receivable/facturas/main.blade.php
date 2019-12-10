@@ -97,11 +97,11 @@
                             <div class="form-group col-md-2">
                                 <div class="input-group input-group-sm">
                                     <span class="input-group-btn">
-                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-orden2-component-table" data-field="factura1_orden">
+                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-producto-orden-component-table" data-field="factura1_orden">
                                             <i class="fa fa-building-o"></i>
                                         </button>
                                     </span>
-                                    <input id="factura1_orden" placeholder="Orden" class="form-control ordenp2-koi-component orden2-change-koi" name="factura1_orden" type="text" maxlength="15" data-name="factura1_orden_beneficiario" required>
+                                    <input id="factura1_orden" placeholder="Orden" class="form-control producto-orden-koi-component" name="factura1_orden" type="text" maxlength="15" data-name="factura1_orden_beneficiario" required>
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -130,7 +130,8 @@
                                     <th class="text-center" width="10%">V. Unitario</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody>
+                            </tbody>
                             <tfoot>
                                 <tr>
                                     <th class="text-right" colspan="6">SUBTOTAL</th>
