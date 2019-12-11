@@ -13,6 +13,9 @@ app || (app = {});
 
         template: _.template(($('#producto-item-show-tpl').html() || '')),
 		events: {},
+        parameters: {
+            modal: null
+        },
 
         /**
         * Constructor Method
@@ -21,14 +24,18 @@ app || (app = {});
             // Initialize
             _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
 
-            // Reference title
-            this.$title = $('.title-producto-show');
+            if (!_.isUndefined(this.parameters.modal)) {
+                this.$modal = this.parameters.modal;
+            }
 
-            // reference collections
-            this.materialesProductopOrdenList = new app.MaterialesProductopOrdenList();
-            this.empaquesProductopOrdenList = new app.EmpaquesProductopOrdenList();
-            this.areasProductopOrdenList = new app.AreasProductopOrdenList();
-            this.transportesProductopOrdenList = new app.TransportesProductopOrdenList();
+            // // Reference title
+            // this.$title = $('.title-producto-show');
+            //
+            // // reference collections
+            // this.materialesProductopOrdenList = new app.MaterialesProductopOrdenList();
+            // this.empaquesProductopOrdenList = new app.EmpaquesProductopOrdenList();
+            // this.areasProductopOrdenList = new app.AreasProductopOrdenList();
+            // this.transportesProductopOrdenList = new app.TransportesProductopOrdenList();
 
             this.listenTo( this.model, 'change', this.render );
         },
@@ -36,26 +43,24 @@ app || (app = {});
         render: function () {
             var attributes = this.model.toJSON();
 
-            this.$el.html(this.template(attributes));
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.spinner = $('.spinner-main');
+            this.$el.find('.content-modal').html(this.template(attributes));
 
-            if (this.$title.length)
-                this.$title.text(attributes.productop_nombre)
-
-            this.uploadPictures(attributes);
-            this.referenceViews();
-            this.ready();
+            // this.$uploaderFile = this.$('.fine-uploader');
+            // this.spinner = $('.spinner-main');
+            //
+            // if (this.$title.length)
+            //     this.$title.text(attributes.productop_nombre)
+            //
+            // this.uploadPictures(attributes);
+            // this.referenceViews();
+            // this.ready();
         },
 
         /**
         * reference to views
         */
         referenceViews: function () {
-            var dataFilter = {
-                orden2: this.model.get('id'),
-                productop: this.model.get('orden2_productop')
-            };
+            var dataFilter = this.parameters.dataFilter;
 
             // Materiales
             this.materialesProductopOrdenListView = new app.MaterialesProductopOrdenListView({

@@ -355,11 +355,9 @@ class DetalleOrdenpController extends Controller
 
         // Lazy Eager Loading
         $producto->load('tips');
+        $ordenp2->producto = $producto;
 
         if ($request->ajax()) {
-            if (auth()->user()->hasRole('operario')) {
-                $ordenp2->producto = $producto;
-            }
             return response()->json($ordenp2);
         }
 

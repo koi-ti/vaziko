@@ -18,7 +18,8 @@ app || (app = {});
             'click .btn-koi-search-producto-orden-component-table': 'searchProducto',
             'click .btn-search-koi-search-producto-orden-component': 'search',
             'click .btn-clear-koi-search-producto-orden-component': 'clear',
-            'click .a-koi-search-producto-orden-component-table': 'setProducto'
+            'click .a-koi-search-producto-orden-component-table': 'setProducto',
+            'click .a-koi-search-producto-orden-show-component-table': 'showProducto'
 		},
 
         /**
@@ -27,6 +28,7 @@ app || (app = {});
 		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-productos-orden-component');
+            this.$modalProductShowComponent = this.$('#modal-show-productos-component');
 		},
 
 		searchProducto: function (e) {
@@ -34,7 +36,7 @@ app || (app = {});
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html(this.template({}));
+            this.$modalComponent.find('.content-modal').html(this.template);
 
             // References
             this.$searchOrdenp = this.$('#search_ordenp');
@@ -90,7 +92,7 @@ app || (app = {});
                         searchable: false,
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            return '<a class="btn btn-default btn-xs"><i class="fa fa-search"></i></a>';
+                            return '<a class="btn btn-default btn-xs a-koi-search-producto-orden-show-component-table" data-resource="' + data + '" data-producto="' + full.orden2_productop + '"><i class="fa fa-search"></i></a>';
                         }
                     }
                 ],
@@ -179,6 +181,38 @@ app || (app = {});
 	            });
 	     	}
 		},
+
+        showProducto: function (e) {
+            e.preventDefault();
+
+            var dataFilter = {
+                orden2: $(e.currentTarget).attr('data-resource'),
+                producto: $(e.currentTarget).attr('data-producto')
+            }
+
+            // this.ordenp2Model = new app.Ordenp2Model();
+            // this.ordenp2Model.set({id: resource}, {silent: true});
+            //
+            // if (this.componentProductView instanceof Backbone.View) {
+            //     this.componentProductView.stopListening();
+            //     this.componentProductView.undelegateEvents();
+            // }
+            //
+            // this.componentProductView = new app.ComponentProductView({
+            //     el: '#modal-wrapper-show-productos',
+            //     model: this.ordenp2Model,
+            //     parameters: {
+            //         modal: this.$modalProductShowComponent,
+            //         dataFilter: {
+            //             orden2: this.model.get('id'),
+            //             productop: this.model.get('orden2_productop')
+            //         }
+            //     }
+            // });
+            // this.ordenp2Model.fetch();
+            //
+            // this.$modalProductShowComponent.modal('show');
+        },
 
         /**
         * fires libraries js

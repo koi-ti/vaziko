@@ -67,7 +67,7 @@ app || (app = {});
                     { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'orden_fecha', name: 'orden_fecha' },
-                    { data: 'orden_abierta', name: 'orden_abierta' }
+                    { data: 'id', name: 'id' }
                 ],
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]

@@ -1,5 +1,5 @@
 /**
-* Class ComponentSearchCotizacionView of Backbone
+* Class ComponentSearchPreCotizacionView of Backbone
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,15 +9,15 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ComponentSearchCotizacionView = Backbone.View.extend({
+    app.ComponentSearchPreCotizacionView = Backbone.View.extend({
 
       	el: 'body',
-        template: _.template(($('#koi-search-cotizacion-component-tpl').html() || '')),
+        template: _.template(($('#koi-search-precotizacion-component-tpl').html() || '')),
 		events: {
-            'click .btn-koi-search-cotizacion-component-table': 'searchCotizacion',
-            'click .btn-search-koi-search-cotizacion-component': 'search',
-            'click .btn-clear-koi-search-cotizacion-component': 'clear',
-            'click .a-koi-search-cotizacion-component-table': 'setCotizacion'
+            'click .btn-koi-search-precotizacion-component-table': 'searchCotizacion',
+            'click .btn-search-koi-search-precotizacion-component': 'search',
+            'click .btn-clear-koi-search-precotizacion-component': 'clear',
+            'click .a-koi-search-precotizacion-component-table': 'setCotizacion'
 		},
 
         /**
@@ -25,7 +25,7 @@ app || (app = {});
         */
 		initialize: function () {
 			// Initialize
-            this.$modalComponent = this.$('#modal-search-cotizacion-component');
+            this.$modalComponent = this.$('#modal-search-precotizacion-component');
 		},
 
 		searchCotizacion: function (e) {
@@ -39,30 +39,30 @@ app || (app = {});
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
 
             // References
-            this.$searchCotizacion = this.$('#search_cotizacion_numero');
-            this.$searchCotizacionTercero = this.$('#search_cotizacion_tercero');
-            this.$searchCotizacionTerceroNombre = this.$('#search_cotizacion_tercero_nombre');
+            this.$searchPreCotizacion = this.$('#search_precotizacion_numero');
+            this.$searchPreCotizacionTercero = this.$('#search_precotizacion_tercero');
+            this.$searchPreCotizacionTerceroNombre = this.$('#search_precotizacion_tercero_nombre');
 
-            this.$cotizacionesSearchTable = this.$modalComponent.find('#koi-search-cotizacion-component-table');
-			this.cotizacionesSearchTable = this.$cotizacionesSearchTable.DataTable({
+            this.$precotizacionesSearchTable = this.$modalComponent.find('#koi-search-precotizacion-component-table');
+			this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
 				processing: true,
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('cotizaciones.index')),
+                    url: window.Misc.urlFull(Route.route('precotizaciones.index')),
                     data: function (data) {
-                        data.cotizacion_numero = _this.$searchCotizacion.val();
-                        data.cotizacion_tercero_nit = _this.$searchCotizacionTercero.val();
+                        data.precotizacion_numero = _this.$searchPreCotizacion.val();
+                        data.precotizacion_tercero_nit = _this.$searchPreCotizacionTercero.val();
                     }
                 },
                 columns: [
-                    { data: 'cotizacion_codigo', name: 'cotizacion_codigo' },
-                    { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
-                    { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
+                    { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
+                    { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
+                    { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'cotizacion1_fecha', name: 'cotizacion1_fecha' },
+                    { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
                     { data: 'id', name: 'id' }
                 ],
                 order: [
@@ -73,7 +73,7 @@ app || (app = {});
                         targets: 0,
                         searchable: false,
                         render: function (data, type, full, row) {
-                        	return '<a href="#" class="a-koi-search-cotizacion-component-table">' + data + '</a>';
+                        	return '<a href="#" class="a-koi-search-precotizacion-component-table">' + data + '</a>';
                         }
                     },
                     {
@@ -91,23 +91,23 @@ app || (app = {});
                         orderable: false,
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            if (parseInt(full.cotizacion1_anulada)) {
-                                return '<span class="label label-danger">ANULADA</span>';
-                            } else if (parseInt(full.cotizacion1_abierta)) {
+                            if (parseInt(full.precotizacion1_culminada)) {
+                                return '<span class="label label-primary">CULMINADA</span>';
+                            } else if (parseInt(full.precotizacion1_abierta)) {
                                 return '<span class="label label-success">ABIERTA</span>';
                             } else {
-                                return '<span class="label label-warning">CERRADA</span>';
+                                return '<span class="label label-danger">CERRADA</span>';
                             }
                         }
                     }
                 ],
-                fnRowCallback: function(row, data) {
-                    if (parseInt(data.cotizacion1_anulada)) {
-                        $(row).css({color: "#DD4B39"});
-                    } else if (parseInt(data.cotizacion1_abierta)) {
+                fnRowCallback: function (row, data) {
+                    if (parseInt(data.precotizacion1_culminada)) {
+                        $(row).css({color: "#3C8DBC"});
+                    } else if (parseInt(data.precotizacion1_abierta)) {
                         $(row).css({color: "#00A65A"});
                     } else {
-                        $(row).css({color: "black"});
+                        $(row).css({color: "#DD4B39"});
                     }
                 }
 			});
@@ -120,24 +120,24 @@ app || (app = {});
 		search: function (e) {
 			e.preventDefault();
 
-		    this.cotizacionesSearchTable.ajax.reload();
+		    this.precotizacionesSearchTable.ajax.reload();
 		},
 
 		clear: function (e) {
 			e.preventDefault();
 
-            this.$searchCotizacion.val('');
-            this.$searchCotizacionTercero.val('');
-            this.$searchCotizacionTerceroNombre.val('');
+            this.$searchPreCotizacion.val('');
+            this.$searchPreCotizacionTercero.val('');
+            this.$searchPreCotizacionTerceroNombre.val('');
 
-            this.cotizacionesSearchTable.ajax.reload();
+            this.precotizacionesSearchTable.ajax.reload();
 		},
 
         setCotizacion: function (e) {
             e.preventDefault();
-            var data = this.cotizacionesSearchTable.row($(e.currentTarget).parents('tr')).data();
+            var data = this.precotizacionesSearchTable.row($(e.currentTarget).parents('tr')).data();
 
-            this.$inputContent.val(data.cotizacion_codigo);
+            this.$inputContent.val(data.precotizacion_codigo);
             this.$inputName.val(data.tercero_nombre);
 
             this.$modalComponent.modal('hide');

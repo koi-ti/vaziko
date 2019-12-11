@@ -225,6 +225,8 @@ app || (app = {});
             this.componentReportView = new app.ComponentReportView();
             this.componentTerceroView = new app.ComponentTerceroView();
             this.componentSearchFacturaView = new app.ComponentSearchFacturaView();
+            this.componentSearchPreCotizacionView = new app.ComponentSearchPreCotizacionView();
+            this.componentSearchCotizacionView = new app.ComponentSearchCotizacionView();
             this.componentSearchOrdenPView = new app.ComponentSearchOrdenPView();
             this.componentSearchProductosPreCotizacionView = new app.ComponentSearchProductosPreCotizacionView();
             this.componentSearchProductosCotizacionView = new app.ComponentSearchProductosCotizacionView();
@@ -232,7 +234,6 @@ app || (app = {});
             this.componentSearchProductoView = new app.ComponentSearchProductoView();
             this.componentSearchProductopView = new app.ComponentSearchProductopView();
             this.componentSearchContactoView = new app.ComponentSearchContactoView();
-            this.componentSearchCotizacionView = new app.ComponentSearchCotizacionView();
             this.componentConsecutiveView = new app.ComponentConsecutiveView();
       	},
 

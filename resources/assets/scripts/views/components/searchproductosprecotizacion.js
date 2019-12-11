@@ -34,7 +34,7 @@ app || (app = {});
             var _this = this;
 
             // Render template
-            this.$modalComponent.find('.content-modal').html(this.template({}));
+            this.$modalComponent.find('.content-modal').html(this.template);
 
             // References
             this.$searchPreCotizacion = this.$('#search_precotizacion');
@@ -90,7 +90,7 @@ app || (app = {});
                         searchable: false,
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            return '<a class="btn btn-default btn-xs"><i class="fa fa-search"></i></a>';
+                            return '<a class="btn btn-default btn-xs" data-resource="' + data + '"><i class="fa fa-search"></i></a>';
                         }
                     }
                 ],
