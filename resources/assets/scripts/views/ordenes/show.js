@@ -76,12 +76,19 @@ app || (app = {});
         productoPagination: function (e) {
             e.preventDefault();
 
-            var action = $(e.currentTarget).attr('data-action');
+            var action = $(e.currentTarget).attr('data-action'),
+                $prev = $('a[data-action="P"]'),
+                $next = $('a[data-action="N"]');
 
             if (action == 'N') {
                 this.current++;
 
+                // Remove hidden
+                $prev.removeAttr('disabled');
+
                 if (this.current >= this.positions.length) {
+                    // Add hidden
+                    $next.attr('disabled', 'disabled');
                     this.current = this.positions.length-1;
                     return;
                 }
@@ -91,7 +98,10 @@ app || (app = {});
             } else {
                 this.current--;
 
+                $next.removeAttr('disabled');
+
                 if (this.current <= -1) {
+                    $prev.attr('disabled', 'disabled');
                     this.current = 0;
                     return;
                 }
@@ -104,17 +114,44 @@ app || (app = {});
         },
 
         showItem: function (id) {
-            this.ordenp2Model = new app.Ordenp2Model();
-            this.ordenp2Model.set({id: id}, {silent: true});
+            // Declare variables
+            var resource = id,
+                producto = null;
 
+            // Delegate view in case exists
             if (this.componentProductView instanceof Backbone.View) {
                 this.componentProductView.stopListening();
                 this.componentProductView.undelegateEvents();
             }
 
+            // Instance new model of products
+            this.ordenp2Model = new app.Ordenp2Model();
+            this.ordenp2Model.set({id: resource}, {silent: true});
+
+            // Instance new component
             this.componentProductView = new app.ComponentProductView({
-                el: '#render-show-producto',
-                model: this.ordenp2Model
+                el: '#wrapper-show-producto',
+                model: this.ordenp2Model,
+                parameters: {
+                    collections: {
+                        maquinas: new app.MaquinasProductopOrdenList(),
+                        acabados: new app.AcabadosProductopOrdenList(),
+                        materiales: new app.MaterialesProductopOrdenList(),
+                        areas: new app.AreasProductopOrdenList(),
+                        empaques: new app.EmpaquesProductopOrdenList(),
+                        tranportes: new app.TransportesProductopOrdenList(),
+                    },
+                    dataFilter: {
+                        orden2: resource,
+                        producto: producto
+                    },
+                    fineUploader: {
+                        endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
+                        params: {
+                            orden2: resource
+                        }
+                    }
+                }
             });
             this.ordenp2Model.fetch();
         },

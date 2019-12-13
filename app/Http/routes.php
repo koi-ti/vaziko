@@ -151,7 +151,13 @@ Route::group(['middleware' => 'auth'], function() {
 
 	Route::group(['prefix' => 'precotizaciones'], function(){
 		Route::group(['prefix' => 'productos'], function(){
+			Route::resource('maquinas', 'Production\PreCotizacion8Controller', ['only' => ['index']]);
+			Route::resource('acabados', 'Production\PreCotizacion7Controller', ['only' => ['index']]);
 			Route::resource('imagenes', 'Production\PreCotizacion4Controller', ['only' => ['index']]);
+			Route::resource('materiales', 'Production\PreCotizacion3Controller', ['only' => ['index']]);
+			Route::resource('empaques', 'Production\PreCotizacion9Controller', ['only' => ['index']]);
+			Route::resource('areas', 'Production\PreCotizacion6Controller', ['only' => ['index']]);
+			Route::resource('transportes', 'Production\PreCotizacion10Controller', ['only' => ['index']]);
 		});
 		Route::resource('productos', 'Production\PreCotizacion2Controller', ['only' => ['index', 'show']]);
 	});
@@ -170,6 +176,9 @@ Route::group(['middleware' => 'auth'], function() {
 
 		Route::group(['prefix' => 'productos'], function(){
 			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
+			Route::post('producto', ['as' => 'cotizaciones.productos.producto', 'uses' => 'Production\Cotizacion2Controller@producto']);
+			Route::resource('maquinas', 'Production\Cotizacion3Controller', ['only' => ['index']]);
+			Route::resource('acabados', 'Production\Cotizacion5Controller', ['only' => ['index']]);
 			Route::resource('imagenes', 'Production\Cotizacion8Controller', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('materiales', 'Production\Cotizacion4Controller', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\Cotizacion9Controller', ['only' => ['index', 'store']]);
@@ -195,6 +204,8 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::group(['prefix' => 'productos'], function() {
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
 			Route::get('search', ['as' => 'ordenes.productos.search', 'uses' => 'Production\DetalleOrdenpController@search']);
+			Route::resource('maquinas', 'Production\DetalleMaquinaController', ['only' => ['index']]);
+			Route::resource('acabados', 'Production\DetalleAcabadoController', ['only' => ['index']]);
 			Route::resource('imagenes', 'Production\DetalleImagenespController', ['only' => ['index', 'store', 'destroy']]);
 			Route::resource('materiales', 'Production\DetalleMaterialesController', ['only' => ['index', 'store']]);
 			Route::resource('empaques', 'Production\DetalleEmpaquesController', ['only' => ['index', 'store']]);

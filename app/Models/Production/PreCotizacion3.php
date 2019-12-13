@@ -3,7 +3,7 @@
 namespace App\Models\Production;
 
 use App\Models\BaseModel;
-use DB, Validator;
+use DB;
 
 class PreCotizacion3 extends BaseModel
 {
@@ -15,40 +15,6 @@ class PreCotizacion3 extends BaseModel
     protected $table = 'koi_precotizacion3';
 
     public $timestamps = false;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
-    protected $fillable = [
-        'precotizacion3_medidas', 'precotizacion3_cantidad', 'precotizacion3_valor_unitario', 'precotizacion3_valor_total'
-    ];
-
-    /**
-     * The attributes that are mass nullable.
-     *
-     * @var array
-     */
-    protected $nullable = [
-        'precotizacion3_producto'
-    ];
-
-    public function isValid($data) {
-        $rules = [
-            'precotizacion3_materialp' => 'required',
-            'precotizacion3_producto' => 'required',
-            'precotizacion3_medidas' => 'required',
-            'precotizacion3_valor_unitario' => 'required',
-        ];
-
-        $validator = Validator::make($data, $rules);
-        if ($validator->passes()) {
-            return true;
-        }
-        $this->errors = $validator->errors();
-        return false;
-    }
 
     public static function getPreCotizaciones3($precotizacion2 = null) {
         $query = PreCotizacion3::query();

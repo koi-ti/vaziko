@@ -22,7 +22,10 @@ app || (app = {});
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
             'change #subtypeproductop': 'changeSubtypeProduct',
-            'submit #form-cotizaciones': 'onStore'
+            'submit #form-cotizaciones': 'onStore',
+            'click .change-producto': 'changeProducto',
+            'change .change-producto': 'changeProducto',
+            'submit #form-productosp3': 'onStoreProducto'
         },
         parameters: {},
 
@@ -547,6 +550,54 @@ app || (app = {});
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                     previewLink.attr("href", value.thumbnailUrl);
             }, this);
+        },
+
+        changeProducto: function (e) {
+            this.option = $(e.currentTarget).attr('data-call');
+        },
+
+        onStoreProducto: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target),
+                    _this;
+
+                if (this.option) {
+                    data.option = this.option;
+
+                    // Ajax charts
+                    $.ajax({
+                        url: window.Misc.urlFull(Route.route('cotizaciones.productos.producto')),
+                        data: data,
+                        type: 'POST'
+                    })
+                    .done(function(resp) {
+                        window.Misc.removeSpinner(this.el);
+                        if (!_.isUndefined(resp.success)) {
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.productos.edit', {productos: resp.id})));
+                        }
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        window.Misc.removeSpinner(this.el);
+                        alertify.error(thrownError);
+                    });
+                } else {
+                    var data = window.Misc.formToJson(e.target);
+                    window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.productos.create', data)));
+                }
+            }
         },
 
         /**

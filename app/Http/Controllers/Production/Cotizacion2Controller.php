@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\PreCotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp;
 use App\Models\Base\Tercero, App\Models\Base\Bitacora;
 use App\Models\Inventory\Producto;
 use DB, Log, Datatables, Storage;
@@ -356,6 +356,16 @@ class Cotizacion2Controller extends Controller
             $cotizacion2->continue = true;
         }
 
+        // Recuperar producto
+        $producto = Productop::getProduct($cotizacion2->cotizacion2_productop);
+        if (!$producto instanceof Productop) {
+            abort(404);
+        }
+
+        // Lazy Eager Loading
+        $producto->load('tips');
+        $cotizacion2->producto = $producto;
+
         if ($request->ajax()) {
             return response()->json($cotizacion2);
         }
@@ -366,20 +376,11 @@ class Cotizacion2Controller extends Controller
             abort(404);
         }
 
-        // Recuperar producto
-        $producto = Productop::getProduct($cotizacion2->cotizacion2_productop);
-        if (!$producto instanceof Productop) {
-            abort(404);
-        }
-
-        // Lazy Eager Loading
-        $producto->load('tips');
-
         // Validar cotizacion
         if ($cotizacion->cotizacion1_abierta == true && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
         }
-        return view('production.cotizaciones.productos.show', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
+        return view('production.cotizaciones.productos.show', compact('cotizacion', 'producto', 'cotizacion2'));
     }
 
     /**
@@ -412,7 +413,7 @@ class Cotizacion2Controller extends Controller
         if ($cotizacion->cotizacion1_abierta == false) {
             return redirect()->route('cotizaciones.productos.show', ['productos' => $cotizacion2->id]);
         }
-        return view('production.cotizaciones.productos.create', ['cotizacion' => $cotizacion, 'producto' => $producto, 'cotizacion2' => $cotizacion2]);
+        return view('production.cotizaciones.productos.create', compact('cotizacion', 'producto', 'cotizacion2'));
     }
 
     /**
@@ -868,5 +869,68 @@ class Cotizacion2Controller extends Controller
             }
         }
         abort(403);
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function producto(Request $request)
+    {
+        if ($request->ajax()) {
+            $cotizacion = Cotizacion1::find($request->cotizacion);
+            if (!$cotizacion instanceof Cotizacion1) {
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización']);
+            }
+
+            if (!in_array($request->option, ['P', 'C', 'O'])) {
+                return response()->json(['success' => false, 'errors' => 'La opción no es valida.']);
+            }
+
+            DB::beginTransaction();
+            try {
+                switch ($request->option) {
+                    case 'P':
+                        $precotizacion2 = PreCotizacion2::find($request->productop);
+                        if (!$precotizacion2 instanceof PreCotizacion2) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la precotización']);
+                        }
+
+                        $producto = $precotizacion2->crear($cotizacion->id);
+                        break;
+
+                    case 'C':
+                        $cotizacion2 = Cotizacion2::find($request->productop);
+                        if (!$cotizacion2 instanceof Cotizacion2) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
+                        }
+
+                        $producto = $cotizacion2->crear($cotizacion->id);
+                        break;
+
+                    case 'O':
+                        $ordenp2 = Ordenp2::find($request->productop);
+                        if (!$ordenp2 instanceof Ordenp2) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
+                        }
+
+                        $producto = $ordenp2->crear($cotizacion->id);
+                        break;
+                }
+
+                DB::commit();
+                return response()->json(['success' => 'true', 'id' => $producto->id]);
+            } catch (\Exception $e) {
+                DB::rollback();
+                Log::error(sprintf('%s -> %s: %s', 'Cotizacion2Controller', 'producto', $e->getMessage()));
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
+        }
+        abort(404);
     }
 }

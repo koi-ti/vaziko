@@ -185,33 +185,50 @@ app || (app = {});
         showProducto: function (e) {
             e.preventDefault();
 
-            var dataFilter = {
-                orden2: $(e.currentTarget).attr('data-resource'),
-                producto: $(e.currentTarget).attr('data-producto')
+            // Declare variables
+            var resource = $(e.currentTarget).attr('data-resource'),
+                producto = $(e.currentTarget).attr('data-producto');
+
+            // Delegate view in case exists
+            if (this.componentProductView instanceof Backbone.View) {
+                this.componentProductView.stopListening();
+                this.componentProductView.undelegateEvents();
             }
 
-            // this.ordenp2Model = new app.Ordenp2Model();
-            // this.ordenp2Model.set({id: resource}, {silent: true});
-            //
-            // if (this.componentProductView instanceof Backbone.View) {
-            //     this.componentProductView.stopListening();
-            //     this.componentProductView.undelegateEvents();
-            // }
-            //
-            // this.componentProductView = new app.ComponentProductView({
-            //     el: '#modal-wrapper-show-productos',
-            //     model: this.ordenp2Model,
-            //     parameters: {
-            //         modal: this.$modalProductShowComponent,
-            //         dataFilter: {
-            //             orden2: this.model.get('id'),
-            //             productop: this.model.get('orden2_productop')
-            //         }
-            //     }
-            // });
-            // this.ordenp2Model.fetch();
-            //
-            // this.$modalProductShowComponent.modal('show');
+            // Instance new model of products
+            this.ordenp2Model = new app.Ordenp2Model();
+            this.ordenp2Model.set({id: resource}, {silent: true});
+
+            // Instance new component
+            this.componentProductView = new app.ComponentProductView({
+                el: '#modal-show-productos-component',
+                model: this.ordenp2Model,
+                parameters: {
+                    modal: this.$modalProductShowComponent,
+                    collections: {
+                        maquinas: new app.MaquinasProductopOrdenList(),
+                        acabados: new app.AcabadosProductopOrdenList(),
+                        materiales: new app.MaterialesProductopOrdenList(),
+                        areas: new app.AreasProductopOrdenList(),
+                        empaques: new app.EmpaquesProductopOrdenList(),
+                        tranportes: new app.TransportesProductopOrdenList(),
+                    },
+                    dataFilter: {
+                        orden2: resource,
+                        producto: producto
+                    },
+                    fineUploader: {
+                        endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
+                        params: {
+                            orden2: resource
+                        }
+                    }
+                }
+            });
+            this.ordenp2Model.fetch();
+
+            // Open modal
+            this.$modalProductShowComponent.modal('show');
         },
 
         /**

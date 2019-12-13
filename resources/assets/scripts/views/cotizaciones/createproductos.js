@@ -455,7 +455,6 @@ app || (app = {});
             var transportes = Math.round(parseFloat(this.transportesProductopCotizacionList.totalize().total)/cantidad);
             var prevtransportes = transportes;
             var descuento = parseFloat(this.$inputdescuento.val());
-            var comision = parseFloat(this.$inputcomision.val());
             var volumen = parseInt(this.$inputvolumen.val());
 
             materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
@@ -491,8 +490,7 @@ app || (app = {});
 
             var pocentajedescuento = subtotal*(descuento/100);
             var totaldescuento = subtotal-pocentajedescuento;
-            var porcentajecomision = totaldescuento*(comision/100);
-            var totalcomision = porcentajecomision;
+            var totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
 
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));
             this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));

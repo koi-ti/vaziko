@@ -208,7 +208,7 @@
                                 <div class="box box-whithout-border">
                                     <div class="box box-danger">
                                         <div class="box-body">
-                                            <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.create')) %>">
+                                            <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator">
                                                 <div class="row">
                                                     <label for="typeproductop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Tipo </label>
                                                     <div class="form-group col-xs-12 col-sm-6 col-md-3">
@@ -232,20 +232,20 @@
                                                     <div class="form-group col-xs-12 col-sm-6 col-md-6">
                                                         <div class="input-group input-group-sm">
                                                             <span class="input-group-btn">
-                                                                <button type="button" class="btn btn-danger btn-koi-search-productop-component-table" data-field="productop">
+                                                                <button type="button" class="btn btn-danger btn-koi-search-productop-component-table change-producto" data-field="productop">
                                                                     <i class="fa fa-search"></i>
                                                                 </button>
                                                                 <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
-                                                                    <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table" data-render="productop">Pre-cotización</a></li>
-                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table" data-render="productop">Cotización</a></li>
-                                                                    <li><a href="#" class="btn-koi-search-producto-orden-component-table" data-render="productop">Orden de producción</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table change-producto" data-render="productop" data-call="P">Pre-cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-call="C">Cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-call="O">Orden de producción</a></li>
                                                                 </ul>
                                                             </span>
                                                             <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>
-                                                            <select id="productop" name="productop" class="form-control select2-default" data-productop="true" required></select>
+                                                            <select id="productop" name="productop" class="form-control select2-default change-producto" data-productop="true" required></select>
                                                         </div>
                                                     </div>
 

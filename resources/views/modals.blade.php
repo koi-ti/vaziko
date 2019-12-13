@@ -183,7 +183,7 @@
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 				<h4 class="inner-title-modal modal-title"></h4>
 			</div>
-			<div class="modal-body" id="modal-wrapper-show-productos">
+			<div class="modal-body">
 				<div class="content-modal"></div>
 			</div>
 			<div class="modal-footer">
@@ -1537,4 +1537,398 @@
 	<% } %>
 	<td><%- moment(fecha).format('YYYY-MM-DD') %></td>
 	<td class="text-right"><%- window.Misc.currency(valor) %></td>
+</script>
+
+<script type="text/template" id="add-producto-component-tpl">
+    <div class="box box-primary">
+        <div class="box-body">
+            <div class="row">
+                <label class="col-sm-2 control-label">Referencia</label>
+                <div class="form-group col-md-6">
+                    <%- producto_referencia %>
+                </div>
+                <label class="col-sm-1 control-label">Cantidad</label>
+                <div class="form-group col-sm-1">
+                    <%- producto_cantidad %>
+                </div>
+                <label class="col-sm-1 control-label">Saldo</label>
+                <div class="form-group col-sm-1">
+                    <%- producto_saldo %>
+                </div>
+            </div>
+            <div class="row">
+                <label class="col-sm-2 control-label">Observaciones</label>
+                <div class="form-group col-sm-10">
+                    <textarea class="form-control" rows="3" disabled><%- producto_observaciones %></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <% if (producto.productop_abierto || producto.productop_cerrado) { %>
+        <div class="box box-primary">
+            <div class="box-body">
+                <% if (producto.productop_abierto) { %>
+                    <div class="row">
+                        <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
+                        <label class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                        <div class="form-group col-xs-10 col-sm-3">
+                            <div class="col-xs-10 col-sm-9">
+								<%- producto_ancho %>
+							</div>
+                            <div class="col-xs-2 col-sm-3 text-left"><%- producto.m1_sigla %></div>
+                        </div>
+                        <label class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                        <div class="form-group col-xs-10 col-sm-3">
+                            <div class="col-xs-10 col-sm-9">
+								<%- producto_alto %>
+							</div>
+                            <div class="col-xs-2 col-sm-3 text-left"><%- producto.m2_sigla %></div>
+                        </div>
+                    </div>
+                <% } %>
+                <% if (producto.productop_cerrado) { %>
+                    <div class="row">
+                        <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
+                        <label class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                        <div class="form-group col-xs-10 col-sm-3">
+                            <div class="col-xs-10 col-sm-9">
+								<%- producto_c_ancho %>
+							</div>
+                            <div class="col-xs-2 col-sm-3 text-left"><%- producto.m3_sigla %></div>
+                        </div>
+                        <label class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                        <div class="form-group col-xs-10 col-sm-3">
+                            <div class="col-xs-10 col-sm-9">
+								<%- producto_c_alto %>
+							</div>
+                            <div class="col-xs-2 col-sm-3 text-left"><%- producto.m4_sigla %></div>
+                        </div>
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    <% } %>
+    <% if (producto.productop_3d) { %>
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">3D</label>
+                    <label class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
+                    <div class="form-group col-xs-10 col-sm-2">
+                        <div class="col-xs-10 col-sm-9">
+                            <%- producto_3d_ancho %>
+                        </div>
+                        <div class="col-xs-2 col-sm-3 text-left"><%- producto.m5_sigla %></div>
+                    </div>
+                    <label class="col-xs-2 col-sm-1 control-label text-right">Alto</label>
+                    <div class="form-group col-xs-10 col-sm-2">
+                        <div class="col-xs-10 col-sm-9">
+                            <%- producto_3d_alto %>
+                        </div>
+                        <div class="col-xs-2 col-sm-3 text-left"><%- producto.m6_sigla %></div>
+                    </div>
+                    <label class="col-xs-2 col-sm-1 control-label text-right">Profundidad</label>
+                    <div class="form-group col-xs-10 col-sm-2">
+                        <div class="col-xs-10 col-sm-9">
+                            <%- producto_3d_profundidad %>
+                        </div>
+                        <div class="col-xs-2 col-sm-3 text-left"><%- producto.m7_sigla %></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <% if (producto.productop_tiro || producto.productop_retiro) { %>
+        <div class="box box-primary">
+            <div class="box-body">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 col-xs-12">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th class="text-center"></th>
+                                    <th class="text-center">C</th>
+                                    <th class="text-center">M</th>
+                                    <th class="text-center">Y</th>
+                                    <th class="text-center">K</th>
+                                    <th class="text-center">P1</th>
+                                    <th class="text-center">P2</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if (producto.productop_tiro) { %>
+                                    <tr>
+                                        <th class="text-center">T <input type="checkbox" disabled <%- parseInt(producto_tiro) ? 'checked': ''%>></th>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_yellow) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_magenta) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_cyan) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_key) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_color1) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_color2) ? 'checked': ''%>></td>
+                                    </tr>
+                                <% } %>
+                                <% if (producto.productop_retiro) { %>
+                                    <tr>
+                                        <th class="text-center">R <input type="checkbox" disabled <%- parseInt(producto_retiro) ? 'checked': ''%>></th>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_yellow2) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_magenta2) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_cyan2) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_key2) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_color12) ? 'checked': ''%>></td>
+                                        <td class="text-center"><input type="checkbox" disabled <%- parseInt(producto_color22) ? 'checked': ''%>></td>
+                                    </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <% if (producto.productop_tiro) { %>
+                        <div class="form-group <%- (producto.productop_tiro && producto.productop_retiro) ? 'col-sm-6' : 'col-sm-12' %>">
+                            <label class="control-label">Nota tiro</label>
+                            <textarea class="form-control" rows="2" placeholder="Nota tiro" disabled><%- producto_nota_tiro %></textarea>
+                        </div>
+                    <% } %>
+
+                    <% if (producto.productop_retiro) { %>
+                        <div class="form-group <%- (producto.productop_tiro && producto.productop_retiro) ? 'col-sm-6' : 'col-sm-12' %>">
+                            <label class="control-label">Nota retiro</label>
+                            <textarea class="form-control" rows="2" placeholder="Nota retiro" disabled><%- producto_nota_retiro %></textarea>
+                        </div>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    <% } %>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Imágenes</h3>
+        </div>
+        <div class="box-body table-responsive no-padding">
+            <div class="fine-uploader"></div>
+        </div>
+    </div>
+	<div class="box box-primary">
+		<div class="box-header with-border">
+			<h3 class="box-title">Máquinas de producción</h3>
+		</div>
+		<div class="box-body">
+			<table id="browse-component-producto-maquinas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Nombre</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+	<div class="box box-primary">
+		<div class="box-header with-border">
+			<h3 class="box-title">Acabados de producción</h3>
+		</div>
+		<div class="box-body">
+			<table id="browse-component-producto-acabados-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+				<thead>
+					<tr>
+						<th>Nombre</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Materiales de producción</h3>
+        </div>
+        <div class="box-body">
+            <table id="browse-component-producto-materiales-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="25%">Insumo</th>
+                        <th width="10%">Medidas</th>
+                        <th width="10%">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr>
+						<th colspan="3" class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Áreas de producción</h3>
+        </div>
+        <div class="box-body">
+            <table id="browse-component-producto-areas-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="30%">Área</th>
+                        <th width="30%">Nombre</th>
+                        <th width="20%">Tiempo</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr>
+						<th colspan="3" class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Empaques de producción</h3>
+        </div>
+        <div class="box-body">
+            <table id="browse-component-producto-empaques-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="25%">Empaque</th>
+                        <th width="25%">Insumo</th>
+                        <th width="15%">Medidas</th>
+                        <th width="15%">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr>
+						<th colspan="4" class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">Transportes de producción</h3>
+        </div>
+        <div class="box-body">
+            <table id="browse-component-producto-transportes-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
+                <thead>
+                    <tr>
+                        <th width="25%">Transporte</th>
+                        <th width="25%">Insumo</th>
+                        <th width="15%">Medidas</th>
+                        <th width="15%">Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody>
+					<tr>
+						<th colspan="4" class="text-center">Ningún dato disponible en esta tabla.</th>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</script>
+
+<script type="text/template" id="qq-template-component-producto">
+    <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="{{ trans('app.files.drop') }}">
+        <div class="qq-total-progress-bar-container-selector qq-total-progress-bar-container">
+            <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-total-progress-bar-selector qq-progress-bar qq-total-progress-bar"></div>
+        </div>
+        <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
+            <span class="qq-upload-drop-area-text-selector"></span>
+        </div>
+        <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
+            <li>
+                <div class="qq-progress-bar-container-selector">
+                    <div role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" class="qq-progress-bar-selector qq-progress-bar"></div>
+                </div>
+                <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
+                <a class="preview-link" target="_blank">
+                    <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
+                </a>
+                <span class="qq-upload-file-selector qq-upload-file"></span>
+                <span class="qq-upload-size-selector qq-upload-size"></span>
+            </li>
+        </ul>
+
+        <dialog class="qq-alert-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">Cerrar</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-confirm-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">No</button>
+                <button type="button" class="qq-ok-button-selector">Si</button>
+            </div>
+        </dialog>
+
+        <dialog class="qq-prompt-dialog-selector">
+            <div class="qq-dialog-message-selector"></div>
+            <input type="text">
+            <div class="qq-dialog-buttons">
+                <button type="button" class="qq-cancel-button-selector">{{ trans('app.cancel') }}</button>
+                <button type="button" class="qq-ok-button-selector">{{ trans('app.continue') }}</button>
+            </div>
+        </dialog>
+    </div>
+</script>
+
+<script type="text/template" id=add-producto-component-maquinas-item-tpl>
+	<% if (parseInt(activo)) { %>
+		<tr>
+			<td><%- maquinap_nombre %></td>
+		</tr>
+	<% } %>
+</script>
+
+<script type="text/template" id=add-producto-component-acabados-item-tpl>
+	<% if (parseInt(activo)) { %>
+		<tr>
+			<td><%- acabadop_nombre %></td>
+		</tr>
+	<% } %>
+</script>
+
+<script type="text/template" id=add-producto-component-materiales-item-tpl>
+	<tr>
+		<td><%- producto_nombre || '-' %></td>
+	    <td><%- material_medidas %></td>
+	    <td><%- material_cantidad %></td>
+	</tr>
+</script>
+
+<script type="text/template" id=add-producto-component-areas-item-tpl>
+	<tr>
+		<td><%- areap_nombre || '-' %></td>
+		<td><%- area_nombre || '-' %></td>
+		<td class="text-center"><%- area_horas %>:<%- area_minutos %></td>
+	</tr>
+</script>
+
+<script type="text/template" id=add-producto-component-empaques-item-tpl>
+	<tr>
+		<td><%- empaque_nombre || '-' %></td>
+		<td><%- producto_nombre || '-' %></td>
+		<td><%- empaque_medidas %></td>
+		<td><%- empaque_cantidad %></td>
+	</tr>
+</script>
+
+<script type="text/template" id=add-producto-component-transportes-item-tpl>
+	<tr>
+		<td><%- transporte_nombre || '-' %></td>
+	    <td><%- producto_nombre || '-' %></td>
+	    <td><%- transporte_medidas %></td>
+	    <td><%- transporte_cantidad %></td>
+	</tr>
 </script>

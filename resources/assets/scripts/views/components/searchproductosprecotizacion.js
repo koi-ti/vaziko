@@ -18,7 +18,8 @@ app || (app = {});
             'click .btn-koi-search-producto-precotizacion-component-table': 'searchPreCotizacion',
             'click .btn-search-koi-search-producto-precotizacion-component': 'search',
             'click .btn-clear-koi-search-producto-precotizacion-component': 'clear',
-            'click .a-koi-search-producto-precotizacion-component-table': 'setPreCotizacion'
+            'click .a-koi-search-producto-precotizacion-component-table': 'setPreCotizacion',
+            'click .a-koi-search-producto-precotizacion-show-component-table': 'showProducto'
 		},
 
         /**
@@ -27,6 +28,7 @@ app || (app = {});
 		initialize: function () {
 			// Initialize
             this.$modalComponent = this.$('#modal-search-productos-precotizacion-component');
+            this.$modalProductShowComponent = this.$('#modal-show-productos-component');
 		},
 
 		searchPreCotizacion: function (e) {
@@ -90,7 +92,7 @@ app || (app = {});
                         searchable: false,
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            return '<a class="btn btn-default btn-xs" data-resource="' + data + '"><i class="fa fa-search"></i></a>';
+                            return '<a class="btn btn-default btn-xs a-koi-search-producto-precotizacion-show-component-table" data-resource="' + data + '" data-producto="' + full.precotizacion2_productop + '"><i class="fa fa-search"></i></a>';
                         }
                     }
                 ],
@@ -179,6 +181,55 @@ app || (app = {});
 	            });
 	     	}
 		},
+
+        showProducto: function (e) {
+            e.preventDefault();
+
+            // Declare variables
+            var resource = $(e.currentTarget).attr('data-resource'),
+                producto = $(e.currentTarget).attr('data-producto');
+
+            // Delegate view in case exists
+            if (this.componentProductView instanceof Backbone.View) {
+                this.componentProductView.stopListening();
+                this.componentProductView.undelegateEvents();
+            }
+
+            // Instance new model of products
+            this.precotizacion2Model = new app.PreCotizacion2Model();
+            this.precotizacion2Model.set({id: resource}, {silent: true});
+
+            // Instance new component
+            this.componentProductView = new app.ComponentProductView({
+                el: '#modal-show-productos-component',
+                model: this.precotizacion2Model,
+                parameters: {
+                    modal: this.$modalProductShowComponent,
+                    collections: {
+                        maquinas: new app.MaquinasProductopPreCotizacionList(),
+                        acabados: new app.AcabadosProductopPreCotizacionList(),
+                        materiales: new app.MaterialesProductopPreCotizacionList(),
+                        areas: new app.AreasProductopPreCotizacionList(),
+                        empaques: new app.EmpaquesProductopPreCotizacionList(),
+                        tranportes: new app.TransportesProductopPreCotizacionList(),
+                    },
+                    dataFilter: {
+                        precotizacion2: resource,
+                        producto: producto
+                    },
+                    fineUploader: {
+                        endpoint: window.Misc.urlFull(Route.route('precotizaciones.productos.imagenes.index')),
+                        params: {
+                            precotizacion2: resource
+                        }
+                    }
+                }
+            });
+            this.precotizacion2Model.fetch();
+
+            // Open modal
+            this.$modalProductShowComponent.modal('show');
+        },
 
         /**
         * fires libraries js
