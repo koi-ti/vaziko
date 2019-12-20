@@ -15,7 +15,7 @@ class Bitacora extends Model
 
     public $timestamps = false;
 
-    public static function createBitacora($morph, $original = [], $changes, $module, $action) {
+    public static function createBitacora($morph, $original = [], $changes, $module, $action, $ip) {
         if (is_array($changes)) {
             $cambios = '';
             foreach ($changes as $key => $value) {
@@ -31,10 +31,11 @@ class Bitacora extends Model
         if ($cambios) {
             $bitacora = new self;
             $bitacora->bitacora_accion = $action;
-            $bitacora->bitacora_usuario_elaboro = auth()->user()->id;
-            $bitacora->bitacora_fh_elaboro = date('Y-m-d H:i:s');
             $bitacora->bitacora_modulo = $module;
             $bitacora->bitacora_cambios = $cambios;
+            $bitacora->bitacora_ip = $ip;
+            $bitacora->bitacora_usuario_elaboro = auth()->user()->id;
+            $bitacora->bitacora_fh_elaboro = date('Y-m-d H:i:s');
 
             $morph->bitacora()->save($bitacora);
         }
@@ -45,6 +46,12 @@ class Bitacora extends Model
     }
 
     public function tercero () {
-        return $this->hasOne('App\Models\Base\Tercero', 'id', 'bitacora_usuario_elaboro');
+        return $this->belongsTo('App\Models\Base\Tercero', 'bitacora_usuario_elaboro', 'id');
+    }
+
+    public function scopeInformacion ($query) {
+        return $query->with(['tercero' => function ($tercero) {
+            $tercero->select('id', 'username');
+        }]);
     }
 }

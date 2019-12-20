@@ -339,7 +339,7 @@ class Cotizacion1Controller extends Controller
 
                     // Si hay cambios en la cotizacion
                     if ($changes) {
-                        Bitacora::createBitacora($cotizacion, $original, $changes, 'Cotización', 'U');
+                        Bitacora::createBitacora($cotizacion, $original, $changes, 'Cotización', 'U', $request->ip());
                     }
 
                     // Commit Transaction
@@ -389,7 +389,7 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se cerro la cotización', 'Cotización', 'U');
+                Bitacora::createBitacora($cotizacion, [], 'Se cerro la cotización', 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -431,7 +431,7 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se abrió la cotización', 'Cotización', 'U');
+                Bitacora::createBitacora($cotizacion, [], 'Se abrió la cotización', 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -645,7 +645,7 @@ class Cotizacion1Controller extends Controller
                 }
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se clono la cotización', 'Cotización', 'U');
+                Bitacora::createBitacora($cotizacion, [], 'Se clono la cotización', 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -885,7 +885,7 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se genero una orden de producción', 'Cotización', 'U');
+                Bitacora::createBitacora($cotizacion, [], 'Se genero una orden de producción', 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -986,7 +986,7 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se aprobo la cotización', 'Cotización', 'U');
+                Bitacora::createBitacora($cotizacion, [], 'Se aprobo la cotización', 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();

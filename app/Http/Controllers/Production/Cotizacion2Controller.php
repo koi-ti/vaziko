@@ -314,7 +314,7 @@ class Cotizacion2Controller extends Controller
                     $cotizacion2->save();
 
                     // Si hay cambios en la cotizacion
-                    Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'C');
+                    Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'C', $request->ip());
 
                     // Guardar imagenes si todo sale bien
                     if (count($files)) {
@@ -670,7 +670,7 @@ class Cotizacion2Controller extends Controller
 
                         // Si hay cambios en la cotizacion
                         if ($changes) {
-                            Bitacora::createBitacora($cotizacion, $original, $changes, 'Productos', 'U');
+                            Bitacora::createBitacora($cotizacion, $original, $changes, 'Productos', 'U', $request->ip());
                         }
 
                         // Commit Transaction
@@ -735,7 +735,7 @@ class Cotizacion2Controller extends Controller
                 DB::table('koi_cotizacion10')->where('cotizacion10_cotizacion2', $cotizacion2->id)->delete();
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'D');
+                Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'D', $request->ip());
 
                 // Eliminar item cotizacion2
                 $cotizacion2->delete();
@@ -851,7 +851,7 @@ class Cotizacion2Controller extends Controller
                 }
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], "Se clono el producto {$cotizacion2->id}", 'Productos', 'U');
+                Bitacora::createBitacora($cotizacion, [], "Se clono el producto {$cotizacion2->id}", 'Productos', 'U', $request->ip());
 
                 if (count($files)) {
                     foreach ($files as $file) {
@@ -899,7 +899,7 @@ class Cotizacion2Controller extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la precotización']);
                         }
 
-                        $producto = $precotizacion2->crear($cotizacion->id);
+                        $producto = $precotizacion2->crearProductoCotizacion($cotizacion->id);
                         break;
 
                     case 'C':
@@ -909,7 +909,7 @@ class Cotizacion2Controller extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
                         }
 
-                        $producto = $cotizacion2->crear($cotizacion->id);
+                        $producto = $cotizacion2->crearProductoCotizacion($cotizacion->id);
                         break;
 
                     case 'O':
@@ -919,7 +919,7 @@ class Cotizacion2Controller extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
                         }
 
-                        $producto = $ordenp2->crear($cotizacion->id);
+                        $producto = $ordenp2->crearProductoCotizacion($cotizacion->id);
                         break;
                 }
 

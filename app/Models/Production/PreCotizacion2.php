@@ -74,7 +74,7 @@ class PreCotizacion2 extends BaseModel
                         ->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
     }
 
-    public function crear ($cotizacion) {
+    public function crearProductoCotizacion ($cotizacion) {
         $cotizacion2 = new Cotizacion2;
         $cotizacion2->cotizacion2_cotizacion = $cotizacion;
         $cotizacion2->cotizacion2_productop = $this->precotizacion2_productop;
@@ -232,5 +232,165 @@ class PreCotizacion2 extends BaseModel
         $cotizacion2->save();
 
         return $cotizacion2;
+    }
+
+    public function crearProductoOrden ($orden) {
+        $orden2 = new Ordenp2;
+        $orden2->orden2_orden = $orden;
+        $orden2->orden2_productop = $this->precotizacion2_productop;
+        $orden2->orden2_observaciones = $this->precotizacion2_observaciones;
+        $orden2->orden2_cantidad = $this->precotizacion2_cantidad;
+        $orden2->orden2_saldo = $this->precotizacion2_cantidad;
+        $orden2->orden2_referencia = $this->precotizacion2_referencia;
+        $orden2->orden2_tiro = $this->precotizacion2_tiro;
+        $orden2->orden2_retiro = $this->precotizacion2_retiro;
+        $orden2->orden2_yellow = $this->precotizacion2_yellow;
+        $orden2->orden2_magenta = $this->precotizacion2_magenta;
+        $orden2->orden2_cyan = $this->precotizacion2_cyan;
+        $orden2->orden2_key = $this->precotizacion2_key;
+        $orden2->orden2_color1 = $this->precotizacion2_color1;
+        $orden2->orden2_color2 = $this->precotizacion2_color2;
+        $orden2->orden2_nota_tiro = $this->precotizacion2_nota_tiro;
+        $orden2->orden2_yellow2 = $this->precotizacion2_yellow2;
+        $orden2->orden2_magenta2 = $this->precotizacion2_magenta2;
+        $orden2->orden2_cyan2 = $this->precotizacion2_cyan2;
+        $orden2->orden2_key2 = $this->precotizacion2_key2;
+        $orden2->orden2_color12 = $this->precotizacion2_color12;
+        $orden2->orden2_color22 = $this->precotizacion2_color22;
+        $orden2->orden2_nota_retiro = $this->precotizacion2_nota_retiro;
+        $orden2->orden2_ancho = $this->precotizacion2_ancho;
+        $orden2->orden2_alto = $this->precotizacion2_alto;
+        $orden2->orden2_c_ancho = $this->precotizacion2_c_ancho;
+        $orden2->orden2_c_alto = $this->precotizacion2_c_alto;
+        $orden2->orden2_3d_ancho = $this->precotizacion2_3d_ancho;
+        $orden2->orden2_3d_alto = $this->precotizacion2_3d_alto;
+        $orden2->orden2_3d_profundidad = $this->precotizacion2_3d_profundidad;
+        $orden2->orden2_margen_materialp = 30;
+        $orden2->orden2_margen_areap = 30;
+        $orden2->orden2_margen_empaque = 30;
+        $orden2->orden2_margen_transporte = 30;
+        $orden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
+        $orden2->orden2_usuario_elaboro = auth()->user()->id;
+        $orden2->save();
+
+        // Recuperar Acabados de cotizacion para generar cotizacion
+        $acabados = PreCotizacion7::where('precotizacion7_precotizacion2', $this->id)->get();
+        foreach ($acabados as $acabado) {
+             $orden5 = new Ordenp5;
+             $orden5->orden5_acabadop = $acabado->precotizacion7_acabadop;
+             $orden5->orden5_orden2 = $orden2->id;
+             $orden5->save();
+        }
+
+        // Recuperar Maquinas de cotizacion para generar cotizacion
+        $maquinas = PreCotizacion8::where('precotizacion8_precotizacion2', $this->id)->get();
+        foreach ($maquinas as $maquina) {
+             $orden3 = new Ordenp3;
+             $orden3->orden3_maquinap = $maquina->precotizacion8_maquinap;
+             $orden3->orden3_orden2 = $orden2->id;
+             $orden3->save();
+        }
+
+        // Recuperar Imagenes de pre-cotizacion para generar cotizacion
+        $imagenes = PreCotizacion4::where('precotizacion4_precotizacion2', $this->id)->get();
+        foreach ($imagenes as $imagen) {
+            $orden8 = new Ordenp8;
+            $orden8->orden8_orden2 = $orden2->id;
+            $orden8->orden8_archivo = $imagen->precotizacion4_archivo;
+            $orden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
+            $orden8->orden8_usuario_elaboro = auth()->user()->id;
+            $orden8->save();
+
+            // Recuperar imagen y copiar
+            if (Storage::has("pre-cotizaciones/precotizacion_{$this->precotizacion2_precotizacion1}/producto_{$imagen->precotizacion4_precotizacion2}/{$imagen->precotizacion4_archivo}")) {
+                $oldfile = "pre-cotizaciones/precotizacion_{$this->precotizacion2_precotizacion1}/producto_{$imagen->precotizacion4_precotizacion2}/{$imagen->precotizacion4_archivo}";
+                $newfile = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden8->orden8_orden2}/{$orden8->orden8_archivo}";
+
+                // Copy file storege laravel
+                Storage::copy($oldfile, $newfile);
+            }
+        }
+
+        // Recuperar Materiales de pre-cotizacion para generar cotizacion
+        $totalmaterialesp  = $totalareasp = $totalempaques = $totaltransportes = 0;
+        $materiales = PreCotizacion3::where('precotizacion3_precotizacion2', $this->id)->get();
+        foreach ($materiales as $material) {
+             $orden4 = new Ordenp4;
+             $orden4->orden4_orden2 = $orden2->id;
+             $orden4->orden4_materialp = $material->precotizacion3_materialp;
+             $orden4->orden4_producto = $material->precotizacion3_producto;
+             $orden4->orden4_medidas = $material->precotizacion3_medidas;
+             $orden4->orden4_cantidad = $material->precotizacion3_cantidad;
+             $orden4->orden4_valor_unitario = $material->precotizacion3_valor_unitario;
+             $orden4->orden4_valor_total = $material->precotizacion3_valor_total;
+             $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
+             $orden4->orden4_usuario_elaboro = auth()->user()->id;
+             $orden4->save();
+
+             $totalmaterialesp += $material->precotizacion3_valor_total;
+        }
+
+        // Recuperar Areasp de cotizacion para generar precotizacion
+        $areasp = PreCotizacion6::select('koi_precotizacion6.*', DB::raw("((SUBSTRING_INDEX(precotizacion6_tiempo, ':', -1) / 60) + SUBSTRING_INDEX(precotizacion6_tiempo, ':', 1)) * precotizacion6_valor as total_areap"))->where('precotizacion6_precotizacion2', $this->id)->get();
+        foreach ($areasp as $area) {
+             $orden6 = new Ordenp6;
+             $orden6->orden6_orden2 = $orden2->id;
+             $orden6->orden6_areap = $area->precotizacion6_areap;
+             $orden6->orden6_nombre = $area->precotizacion6_nombre;
+             $orden6->orden6_tiempo = $area->precotizacion6_tiempo;
+             $orden6->orden6_valor = $area->precotizacion6_valor;
+             $orden6->save();
+
+             $totalareasp += $area->total_areap;
+        }
+
+        // Recuperar Empaques de pre-cotizacion para generar cotizacion
+        $empaques = PreCotizacion9::where('precotizacion9_precotizacion2', $this->id)->get();
+        foreach ($empaques as $empaque) {
+             $orden9 = new Ordenp9;
+             $orden9->orden9_orden2 = $orden2->id;
+             $orden9->orden9_materialp = $empaque->precotizacion9_materialp;
+             $orden9->orden9_producto = $empaque->precotizacion9_producto;
+             $orden9->orden9_medidas = $empaque->precotizacion9_medidas;
+             $orden9->orden9_cantidad = $empaque->precotizacion9_cantidad;
+             $orden9->orden9_valor_unitario = $empaque->precotizacion9_valor_unitario;
+             $orden9->orden9_valor_total = $empaque->precotizacion9_valor_total;
+             $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+             $orden9->orden9_usuario_elaboro = auth()->user()->id;
+             $orden9->save();
+
+             $totalempaques += $empaque->precotizacion9_valor_total;
+        }
+
+        // Recuperar Transportes de pre-cotizacion para generar cotizacion
+        $transportes = PreCotizacion10::where('precotizacion10_precotizacion2', $this->id)->get();
+        foreach ($transportes as $transporte) {
+             $orden10 = new Ordenp10;
+             $orden10->orden10_orden2 = $orden2->id;
+             $orden10->orden10_materialp = $transporte->precotizacion10_materialp;
+             $orden10->orden10_producto = $transporte->precotizacion10_producto;
+             $orden10->orden10_medidas = $transporte->precotizacion10_medidas;
+             $orden10->orden10_cantidad = $transporte->precotizacion10_cantidad;
+             $orden10->orden10_valor_unitario = $transporte->precotizacion10_valor_unitario;
+             $orden10->orden10_valor_total = $transporte->precotizacion10_valor_total;
+             $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
+             $orden10->orden10_usuario_elaboro = auth()->user()->id;
+             $orden10->save();
+
+             $totaltransportes += $transporte->precotizacion10_valor_total;
+        }
+
+        // Actualizar precio en cotizacion2;
+        $materiales = round(($totalmaterialesp/$this->precotizacion2_cantidad)/((100-30)/100));
+        $areasp = round($totalareasp/$this->precotizacion2_cantidad)/((100-30)/100);
+        $empaques = round(($totalempaques/$this->precotizacion2_cantidad)/((100-30)/100));
+        $transportes = round(($totaltransportes/$this->precotizacion2_cantidad)/((100-30)/100));
+        $subtotal = $materiales + $areasp + $empaques + $transportes;
+        $comision = ($subtotal/((100-0)/100)) * (1-(((100-0)/100)));
+
+        $orden2->orden2_total_valor_unitario = round($subtotal+$comision);
+        $orden2->save();
+
+        return $orden2;
     }
 }

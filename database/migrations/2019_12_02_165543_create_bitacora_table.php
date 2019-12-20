@@ -18,6 +18,7 @@ class CreateBitacoraTable extends Migration
              $table->enum('bitacora_accion', ['C', 'U', 'D']);
              $table->string('bitacora_modulo', 100);
              $table->longText('bitacora_cambios');
+             $table->string('bitacora_ip', 20)->nullable();
              $table->datetime('bitacora_fh_elaboro');
              $table->unsignedInteger('bitacora_usuario_elaboro');
 

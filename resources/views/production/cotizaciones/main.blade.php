@@ -339,6 +339,7 @@
                                                         <th width="10%"><small>Módulo</small></th>
                                                         <th width="10%"><small>Acción</small></th>
                                                         <th width="50%"><small>Descripción</small></th>
+                                                        <th width="15%"><small>IP</small></th>
                                                         <th width="15%"><small>Usuario cambio</small></th>
                                                         <th width="15%"><small>Fecha cambio</small></th>
                                                     </tr>

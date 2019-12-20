@@ -1343,6 +1343,7 @@
         <% } %>
     </td>
     <td class="pre"><%- bitacora_cambios %></td>
-    <td><%- bitacora_usuario_elaboro %></td>
+    <td><%- bitacora_ip %></td>
+    <td><%- tercero.username %></td>
     <td><%- bitacora_fh_elaboro %></td>
 </script>

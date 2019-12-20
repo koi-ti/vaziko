@@ -149,7 +149,7 @@ class Ordenp2 extends BaseModel
                     ->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
     }
 
-    public function crear ($cotizacion) {
+    public function crearProductoCotizacion ($cotizacion) {
         $cotizacion2 = new Cotizacion2;
         $cotizacion2->cotizacion2_cotizacion = $cotizacion;
         $cotizacion2->cotizacion2_productop = $this->orden2_productop;
@@ -300,5 +300,89 @@ class Ordenp2 extends BaseModel
         }
 
         return $cotizacion2;
+    }
+
+    public function crearProductoOrden ($orden) {
+        $orden2 = $this->replicate();
+        $orden2->orden2_orden = $orden;
+        $orden2->orden2_saldo = $this->orden2_cantidad;
+        $orden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
+        $orden2->orden2_usuario_elaboro = auth()->user()->id;
+        $orden2->save();
+
+        // Recuperar Acabados de orden para generar orden
+        $acabados = Ordenp5::where('orden5_orden2', $this->id)->get();
+        foreach ($acabados as $acabado) {
+             $orden5 = $acabado->replicate();
+             $orden5->orden5_orden2 = $orden2->id;
+             $orden5->save();
+        }
+
+        // Recuperar Maquinas de orden para generar orden
+        $maquinas = Ordenp3::where('orden3_orden2', $this->id)->get();
+        foreach ($maquinas as $maquina) {
+             $orden3 = $maquina->replicate();
+             $orden3->orden3_orden2 = $orden2->id;
+             $orden3->save();
+        }
+
+        // Recuperar Imagenes de pre-orden para generar orden
+        $imagenes = Ordenp8::where('orden8_orden2', $this->id)->get();
+        foreach ($imagenes as $imagen) {
+            $orden8 = $imagen->replicate();
+            $orden8->orden8_orden2 = $orden2->id;
+            $orden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
+            $orden8->orden8_usuario_elaboro = auth()->user()->id;
+            $orden8->save();
+
+            // Recuperar imagen y copiar
+            if (Storage::has("ordenes/orden_{$this->orden2_orden}/producto_{$imagen->orden8_orden2}/{$imagen->orden8_archivo}")) {
+                $oldfile = "ordenes/orden_{$this->orden2_orden}/producto_{$imagen->orden8_orden2}/{$imagen->orden8_archivo}";
+                $newfile = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden8->orden8_orden2}/{$orden8->orden8_archivo}";
+
+                // Copy file storege laravel
+                Storage::copy($oldfile, $newfile);
+            }
+        }
+
+        // Recuperar Materiales de cotizacion para generar cotizacion
+        $materiales = Ordenp4::where('orden4_orden2', $this->id)->get();
+        foreach ($materiales as $material) {
+             $orden4 = $material->replicate();
+             $orden4->orden4_orden2 = $orden2->id;
+             $orden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
+             $orden4->orden4_usuario_elaboro = auth()->user()->id;
+             $orden4->save();
+        }
+
+        // Recuperar Areasp de orden para generar orden
+        $areasp = Ordenp6::where('orden6_orden2', $this->id)->get();
+        foreach ($areasp as $area) {
+             $orden6 = $area->replicate();
+             $orden6->orden6_orden2 = $orden2->id;
+             $orden6->save();
+        }
+
+        // Recuperar Empaques de pre-orden para generar orden
+        $empaques = Ordenp9::where('orden9_orden2', $this->id)->get();
+        foreach ($empaques as $empaque) {
+             $orden9 = $empaque->replicate();
+             $orden9->orden9_orden2 = $orden2->id;
+             $orden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+             $orden9->orden9_usuario_elaboro = auth()->user()->id;
+             $orden9->save();
+        }
+
+        // Recuperar Transportes de pre-orden para generar orden
+        $transportes = Ordenp10::where('orden10_orden2', $this->id)->get();
+        foreach ($transportes as $transporte) {
+             $orden10 = $transporte->replicate();
+             $orden10->orden10_orden2 = $orden2->id;
+             $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
+             $orden10->orden10_usuario_elaboro = auth()->user()->id;
+             $orden10->save();
+        }
+
+        return $orden2;
     }
 }

@@ -22,6 +22,7 @@
                         @if (auth()->user()->ability('opcional2', 'opcional2', ['module' => 'ordenes']))
                             <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
                         @endif
+                        <a class="btn btn-primary resume-ordenp" title="Orden de producción resumida"><i class="fa fa-list"></i></a>
                     </div>
                 </li>
             </ul>
@@ -316,6 +317,7 @@
                                                     <th width="10%"><small>Módulo</small></th>
                                                     <th width="10%"><small>Acción</small></th>
                                                     <th width="50%"><small>Descripción</small></th>
+                                                    <th width="15%"><small>IP</small></th>
                                                     <th width="15%"><small>Usuario cambio</small></th>
                                                     <th width="15%"><small>Fecha cambio</small></th>
                                                 </tr>

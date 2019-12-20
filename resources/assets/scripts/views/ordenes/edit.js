@@ -27,6 +27,9 @@ app || (app = {});
             'change #subtypeproductop': 'changeSubtypeProduct',
             'submit #form-ordenes': 'onStore',
             'submit #form-despachosp': 'onStoreDespacho',
+            'click .change-producto': 'changeProducto',
+            'change .change-producto': 'changeProducto',
+            'submit #form-productosp3': 'onStoreProducto',
             'ifChanged .change-recogida': 'changeRecogidas'
         },
         parameters: {},
@@ -91,7 +94,7 @@ app || (app = {});
         */
         referenceViews: function () {
             // Productos list
-            this.productopOrdenListView = new app.ProductopOrdenListView( {
+            this.productopOrdenListView = new app.ProductopOrdenListView({
                 collection: this.productopOrdenList,
                 parameters: {
                     edit: true,
@@ -104,7 +107,7 @@ app || (app = {});
             });
 
             // Despachos pendientes list
-            this.despachospPendientesOrdenListView = new app.DespachospPendientesOrdenListView( {
+            this.despachospPendientesOrdenListView = new app.DespachospPendientesOrdenListView({
                 collection: this.despachospPendientesOrdenList,
                 parameters: {
                     dataFilter: {
@@ -114,7 +117,7 @@ app || (app = {});
             });
 
             // Tiemposp  list
-            this.tiempopListView = new app.TiempopListView( {
+            this.tiempopListView = new app.TiempopListView({
                 collection: this.tiempopList,
                 parameters: {
                     dataFilter: {
@@ -125,7 +128,7 @@ app || (app = {});
             });
 
             // Despachos list
-            this.despachopOrdenListView = new app.DespachopOrdenListView( {
+            this.despachopOrdenListView = new app.DespachopOrdenListView({
                 collection: this.despachopOrdenList,
                 parameters: {
                     edit: true,
@@ -174,14 +177,14 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
+                var data = window.Misc.formToJson(e.target);
                     data.orden_fecha_recogida1 = this.$('#orden_fecha_recogida1').val();
                     data.orden_fecha_recogida2 = this.$('#orden_fecha_recogida2').val();
                     data.orden_hora_recogida1 = this.$('#orden_hora_recogida1').val();
                     data.orden_hora_recogida2 = this.$('#orden_hora_recogida2').val();
                     data.orden_observaciones_archivo = this.$observacionesarchivo.val();
 
-                this.model.save( data, {patch: true, silent: true} );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },
 
@@ -192,30 +195,31 @@ app || (app = {});
             var selected = $(e.target).is(':checked'),
                 estado = $(e.target).data('change');
 
-                if( selected ){
-                    if(estado == 'R1') {
-                        this.$('#orden_fecha_recogida1').removeAttr('disabled');
-                        this.$('#orden_hora_recogida1').parent().parent().removeAttr('hidden');
-                        this.$('#orden_hora_recogida1').removeAttr('disabled');
-                    }
-
-                    if(estado == 'R2') {
-                        this.$('#orden_fecha_recogida2').removeAttr('disabled');
-                        this.$('#orden_hora_recogida2').parent().parent().removeAttr('hidden');
-                        this.$('#orden_hora_recogida2').removeAttr('disabled');
-                    }
-                }else{
-                    if(estado == 'R1') {
-                        this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled');
-                        this.$('#orden_hora_recogida1').parent().parent().attr('hidden', 'hidden');
-                        this.$('#orden_hora_recogida1').val('').attr('disabled', 'disabled');
-                    }
-                    if(estado == 'R2') {
-                        this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled');
-                        this.$('#orden_hora_recogida2').parent().parent().attr('hidden', 'hidden');
-                        this.$('#orden_hora_recogida2').val('').attr('disabled', 'disabled');
-                    }
+            if (selected) {
+                if (estado == 'R1') {
+                    this.$('#orden_fecha_recogida1').removeAttr('disabled');
+                    this.$('#orden_hora_recogida1').parent().parent().removeAttr('hidden');
+                    this.$('#orden_hora_recogida1').removeAttr('disabled');
                 }
+
+                if (estado == 'R2') {
+                    this.$('#orden_fecha_recogida2').removeAttr('disabled');
+                    this.$('#orden_hora_recogida2').parent().parent().removeAttr('hidden');
+                    this.$('#orden_hora_recogida2').removeAttr('disabled');
+                }
+            } else {
+                if (estado == 'R1') {
+                    this.$('#orden_fecha_recogida1').val('').attr('disabled', 'disabled');
+                    this.$('#orden_hora_recogida1').parent().parent().attr('hidden', 'hidden');
+                    this.$('#orden_hora_recogida1').val('').attr('disabled', 'disabled');
+                }
+
+                if (estado == 'R2') {
+                    this.$('#orden_fecha_recogida2').val('').attr('disabled', 'disabled');
+                    this.$('#orden_hora_recogida2').parent().parent().attr('hidden', 'hidden');
+                    this.$('#orden_hora_recogida2').val('').attr('disabled', 'disabled');
+                }
+            }
         },
 
         /**
@@ -225,43 +229,44 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = window.Misc.formToJson( e.target );
-                data.despachop1_orden = this.model.get('id');
-                this.despachopOrdenList.trigger( 'store', data );
+                var data = window.Misc.formToJson(e.target);
+                    data.despachop1_orden = this.model.get('id');
+
+                this.despachopOrdenList.trigger('store', data);
             }
         },
 
         /**
         *   Event change select2 type orden
         **/
-        changeTypeProduct: function(e) {
-            var _this = this,
-                typeproduct = this.$(e.currentTarget).val();
+        changeTypeProduct: function (e) {
+            var typeproduct = this.$(e.currentTarget).val(),
+                _this = this;
 
-            if( typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '' ){
+            if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    url: window.Misc.urlFull(Route.route('subtipoproductosp.index', {typeproduct: typeproduct})),
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
 
                     _this.$product.empty().val(0).attr('disabled', 'disabled');
                     _this.$subtypeproduct.empty().val(0).removeAttr('disabled');
                     _this.$subtypeproduct.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    _.each(resp, function (item) {
+                        _this.$subtypeproduct.append("<option value=" + item.id + ">" + item.subtipoproductop_nombre + "</option>");
                     });
 
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
-            }else{
+            } else {
                 this.$subtypeproduct.empty().val(0).attr('disabled', 'disabled');
                 this.$product.empty().val(0).attr('disabled', 'disabled');
             }
@@ -270,35 +275,35 @@ app || (app = {});
         /**
         *   Event change select2 subtype orden
         **/
-        changeSubtypeProduct: function(e) {
-            var _this = this,
-                subtypeproduct = this.$(e.currentTarget).val(),
-                typeproduct = this.$('#typeproductop').val();
+        changeSubtypeProduct: function (e) {
+            var subtypeproduct = this.$(e.currentTarget).val(),
+                typeproduct = this.$('#typeproductop').val(),
+                _this = this;
 
-            if( typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '' ){
+            if (typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('productosp.index') ),
+                    url: window.Misc.urlFull(Route.route('productosp.index')),
                     data: {
                         subtypeproduct: subtypeproduct,
                         typeproduct: typeproduct
                     },
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
                 .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
+                    window.Misc.removeSpinner(_this.spinner);
 
                     _this.$product.empty().val(0).removeAttr('disabled');
                     _this.$product.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
+                    _.each(resp, function (item) {
+                        _this.$product.append("<option value=" + item.id + ">" + item.productop_nombre + "</option>");
                     });
 
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
             }
@@ -311,7 +316,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open( window.Misc.urlFull(Route.route('ordenes.exportar', { ordenes: this.model.get('id') })), '_blank');
+            window.open(window.Misc.urlFull(Route.route('ordenes.exportar', {ordenes: this.model.get('id')})), '_blank');
         },
 
         /**
@@ -321,47 +326,47 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this;
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var closeConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
-                    template: _.template( ($('#ordenp-close-confirm-tpl').html() || '') ),
+                    dataFilter: {
+                        orden_codigo: _this.model.get('orden_codigo')
+                    },
+                    template: _.template(($('#ordenp-close-confirm-tpl').html() || '')),
                     titleConfirm: 'Cerrar orden de producción',
                     onConfirm: function () {
                         // Close orden
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.cerrar', { ordenes: _this.model.get('id') }) ),
+                            url: window.Misc.urlFull(Route.route('ordenes.cerrar', {ordenes: _this.model.get('id')})),
                             type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
+                            beforeSend: function () {
+                                window.Misc.setSpinner(_this.spinner);
                             }
                         })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
+                        .done(function (resp) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
 
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: _this.model.get('id')})));
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner(_this.spinner);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
-            cancelConfirm.render();
+            closeConfirm.render();
         },
 
         /**
@@ -371,47 +376,46 @@ app || (app = {});
             e.preventDefault();
 
             var _this = this;
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var completeConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: _this.model.get('orden_codigo') },
-                    template: _.template( ($('#ordenp-complete-confirm-tpl').html() || '') ),
+                    dataFilter: {
+                        orden_codigo: _this.model.get('orden_codigo')
+                    },
+                    template: _.template(($('#ordenp-complete-confirm-tpl').html() || '')),
                     titleConfirm: 'Completar orden de producción',
                     onConfirm: function () {
                         // Close orden
                         $.ajax({
-                            url: window.Misc.urlFull( Route.route('ordenes.completar', { ordenes: _this.model.get('id') }) ),
+                            url: window.Misc.urlFull(Route.route('ordenes.completar', {ordenes: _this.model.get('id')})),
                             type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
+                            beforeSend: function () {
+                                window.Misc.setSpinner(_this.spinner);
                             }
                         })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
-
-                            if(!_.isUndefined(resp.success)) {
+                        .done(function (resp) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
-                                if( _.isObject( resp.errors ) ) {
+                                if (_.isObject(resp.errors)) {
                                     text = window.Misc.parseErrors(resp.errors);
                                 }
 
-                                if( !resp.success ) {
+                                if (!resp.success) {
                                     alertify.error(text);
                                     return;
                                 }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: _this.model.get('id') })) );
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: _this.model.get('id')})));
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner(_this.spinner);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
-            cancelConfirm.render();
+            completeConfirm.render();
         },
 
         /**
@@ -420,14 +424,15 @@ app || (app = {});
         cloneOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                route = window.Misc.urlFull( Route.route('ordenes.clonar', { ordenes: this.model.get('id') }) ),
-                data = { orden_codigo: this.model.get('orden_codigo') };
+            var route = window.Misc.urlFull(Route.route('ordenes.clonar', {ordenes: this.model.get('id')})),
+                _this = this;
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: data,
-                    template: _.template( ($('#ordenp-clone-confirm-tpl').html() || '') ),
+                    dataFilter: {
+                        orden_codigo: this.model.get('orden_codigo')
+                    },
+                    template: _.template(($('#ordenp-clone-confirm-tpl').html() || '')),
                     titleConfirm: 'Clonar orden de producción',
                     onConfirm: function () {
                         // Clone orden
@@ -435,16 +440,14 @@ app || (app = {});
                             'url': route,
                             'wrap': _this.spinner,
                             'callback': (function (_this) {
-                                return function ( resp )
-                                {
-                                    window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })) );
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         },
 
@@ -459,7 +462,7 @@ app || (app = {});
                     window.Misc.setSpinner(_this.spinner);
                 }
             })
-            .done(function(resp) {
+            .done(function (resp) {
                 window.Misc.removeSpinner(_this.spinner);
                 if (!_.isUndefined(resp.success)) {
                     // response success or error
@@ -472,12 +475,10 @@ app || (app = {});
                         alertify.error(text);
                         return;
                     }
-
-                    // Render calendar
                     _this.charts(resp);
                 }
             })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
                 window.Misc.removeSpinner(_this.spinner);
                 alertify.error(thrownError);
             });
@@ -491,11 +492,11 @@ app || (app = {});
             Chart.defaults.global.title.fontSize=14;
 
             function formatTime (timeHour) {
-                var dias = Math.floor( timeHour / 24);
-                var horas = Math.floor( timeHour - ( dias * 24 ) );
-                var minutos = Math.floor( ( timeHour - (dias * 24) - (horas) ) * 60 );
+                var dias = Math.floor(timeHour / 24);
+                var horas = Math.floor(timeHour - (dias * 24));
+                var minutos = Math.floor((timeHour - (dias * 24) - (horas)) * 60);
 
-                return dias+"d "+horas+"h "+minutos+"m";
+                return dias + "d " + horas + "h " + minutos + "m";
             }
 
             // Chart empleado
@@ -699,7 +700,7 @@ app || (app = {});
         /**
         * UploadPictures
         */
-        uploadPictures: function(e) {
+        uploadPictures: function (e) {
             var _this = this;
 
             this.$uploaderFile.fineUploader({
@@ -784,33 +785,80 @@ app || (app = {});
             }, this);
         },
 
+        changeProducto: function (e) {
+            this.option = $(e.currentTarget).attr('data-call');
+        },
+
+        onStoreProducto: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target),
+                    _this;
+
+                if (this.option) {
+                    data.option = this.option;
+
+                    // Ajax charts
+                    $.ajax({
+                        url: window.Misc.urlFull(Route.route('ordenes.productos.producto')),
+                        data: data,
+                        type: 'POST'
+                    })
+                    .done(function(resp) {
+                        window.Misc.removeSpinner(this.el);
+                        if (!_.isUndefined(resp.success)) {
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.productos.edit', {productos: resp.id})));
+                        }
+                    })
+                    .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        window.Misc.removeSpinner(this.el);
+                        alertify.error(thrownError);
+                    });
+                } else {
+                    var data = window.Misc.formToJson(e.target);
+                    window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.productos.create', data)));
+                }
+            }
+        },
+
         /**
         * fires libraries js
         */
         ready: function () {
             // to fire plugins
-            if( typeof window.initComponent.initToUpper == 'function' )
+            if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
 
-            if( typeof window.initComponent.initTimePicker == 'function' )
+            if (typeof window.initComponent.initTimePicker == 'function')
                 window.initComponent.initTimePicker();
 
-            if( typeof window.initComponent.initSelect2 == 'function' )
+            if (typeof window.initComponent.initSelect2 == 'function')
                 window.initComponent.initSelect2();
 
-            if( typeof window.initComponent.initValidator == 'function' )
+            if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
 
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initDatePicker == 'function' )
+            if (typeof window.initComponent.initDatePicker == 'function')
                 window.initComponent.initDatePicker();
 
-            if( typeof window.initComponent.initICheck == 'function' )
+            if (typeof window.initComponent.initICheck == 'function')
                 window.initComponent.initICheck();
 
-            if( typeof window.initComponent.initClockPicker == 'function' )
+            if (typeof window.initComponent.initClockPicker == 'function')
                 window.initComponent.initClockPicker();
         },
 
@@ -818,29 +866,28 @@ app || (app = {});
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner( this.spinner );
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( model, resp, opts ) {
-            window.Misc.removeSpinner( this.spinner );
-
-            if(!_.isUndefined(resp.success)) {
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
-                if( _.isObject( resp.errors ) ) {
+                if (_.isObject(resp.errors)) {
                     text = window.Misc.parseErrors(resp.errors);
                 }
 
-                if( !resp.success ) {
+                if (!resp.success) {
                     alertify.error(text);
                     return;
                 }
 
                 // Redirect to edit orden
-                window.Misc.redirect( window.Misc.urlFull( Route.route('ordenes.edit', { ordenes: resp.id}), { trigger:true } ));
+                window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id}), {trigger: true}));
             }
         }
     });

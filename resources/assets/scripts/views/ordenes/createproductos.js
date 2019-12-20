@@ -493,8 +493,8 @@ app || (app = {});
                 this.$inputround.val(0);
             }
 
-            var pocentajedescuento = subtotal*(descuento/100);
-            var totaldescuento = subtotal-pocentajedescuento;
+            var porcentajedescuento = subtotal*(descuento/100);
+            var totaldescuento = descuento == 0 ? 0 : (subtotal-porcentajedescuento);
             var totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
 
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));

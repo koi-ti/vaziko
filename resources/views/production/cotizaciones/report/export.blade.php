@@ -110,7 +110,7 @@
 					</tr>
 				@endforeach
 			{{--*/
-				$ivacotizacion = $subtotalcotizacion * $iva;
+				$ivacotizacion = round($subtotalcotizacion * $iva);
 				$totalcotizacion = $ivacotizacion + $subtotalcotizacion;
 			/*--}}
 			<tr>

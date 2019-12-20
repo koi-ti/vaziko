@@ -264,7 +264,7 @@
                                 <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <div class="box box-primary">
                                             <div class="box-body">
-                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator" action="<%- window.Misc.urlFull (Route.route('ordenes.productos.create')) %>">
+                                                <form method="GET" accept-charset="UTF-8" id="form-productosp3" data-toggle="validator">
                                                     <div class="row">
                                                         <label for="typeproductop" class="control-label col-sm-1 col-md-offset-2 hidden-xs">Tipo </label>
                                                         <div class="form-group col-sm-3 col-xs-12">
@@ -288,9 +288,17 @@
                                                         <div class="form-group col-xs-12 col-sm-6">
                                                             <div class="input-group input-group-sm">
                                                                 <span class="input-group-btn">
-                                                                    <button type="button" class="btn btn-default btn-flat btn-koi-search-productop-component-table" data-field="productop">
+                                                                    <button type="button" class="btn btn-primary btn-koi-search-productop-component-table change-producto" data-field="productop">
                                                                         <i class="fa fa-search"></i>
                                                                     </button>
+                                                                    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                        <span class="caret"></span>
+                                                                    </button>
+                                                                    <ul class="dropdown-menu">
+                                                                        <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table change-producto" data-render="productop" data-call="P">Pre-cotización</a></li>
+                                                                        <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-call="C">Cotización</a></li>
+                                                                        <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-call="O">Orden de producción</a></li>
+                                                                    </ul>
                                                                 </span>
                                                                 <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>
                                                                 <select name="productop" id="productop" class="form-control select2-default" data-productop="true" required data-placeholder="Producto"></select>
@@ -316,8 +324,8 @@
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Facturado</th>
                                                                 @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                                <th width="10%">Precio</th>
-                                                                <th width="10%">Total</th>
+                                                                    <th width="10%">Precio</th>
+                                                                    <th width="10%">Total</th>
                                                                 @endif
                                                             </tr>
                                                         </thead>
@@ -331,21 +339,21 @@
                                                                 <th class="text-center" id="subtotal-cantidad">0</th>
                                                                 <th class="text-center" id="subtotal-facturado">0</th>
                                                                 @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                                <th></th>
-                                                                <th class="text-right" id="subtotal-total">0</th>
+                                                                    <th></th>
+                                                                    <th class="text-right" id="subtotal-total">0</th>
                                                                 @endif
                                                             </tr>
                                                             @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                <th colspan="4" class="text-right" id="iva-total">0</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Total</th>
-                                                                <th colspan="4" class="text-right" id="total-total">0</th>
-                                                            </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Iva (<%- orden_iva %>%)</th>
+                                                                    <th colspan="4" class="text-right" id="iva-total">0</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Total</th>
+                                                                    <th colspan="4" class="text-right" id="total-total">0</th>
+                                                                </tr>
                                                             @endif
                                                         </tfoot>
                                                     </table>
@@ -569,6 +577,7 @@
                                                                 <th width="10%"><small>Módulo</small></th>
                                                                 <th width="10%"><small>Acción</small></th>
                                                                 <th width="50%"><small>Descripción</small></th>
+                                                                <th width="15%"><small>IP</small></th>
                                                                 <th width="15%"><small>Usuario cambio</small></th>
                                                                 <th width="15%"><small>Fecha cambio</small></th>
                                                             </tr>

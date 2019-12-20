@@ -21,13 +21,18 @@ app || (app = {});
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
-            'click .producto-pagination': 'productoPagination'
+            'click .resume-ordenp': 'resumeOrdenp',
+            'click .producto-pagination': 'productoPagination',
         },
 
         /**
         * Constructor Method
         */
-        initialize: function () {
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
             // Reference attributes and wrappers
             this.current = 0;
             this.positions = [];
@@ -44,7 +49,7 @@ app || (app = {});
             // Asignar posiciones
             this.positions = attributes.items;
 
-            if (this.model.get('permission')) {
+            if (this.model.get('permission') || this.parameters.resumido == 'true') {
                 this.tiempopList = new app.TiempopList();
 
                 this.showItem(this.positions[this.current]);
@@ -398,6 +403,16 @@ app || (app = {});
 
             // Redirect to pdf
             window.open(window.Misc.urlFull(Route.route('ordenes.exportar', {ordenes: this.model.get('id')})), '_blank');
+        },
+
+        /**
+        * Resumen orden de produccion
+        */
+        resumeOrdenp: function (e) {
+            e.preventDefault();
+
+            // Redirect to pdf
+            window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.show', {ordenes: this.model.get('id'), resumido: true})));
         },
 
         /**

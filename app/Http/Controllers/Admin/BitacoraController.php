@@ -18,11 +18,15 @@ class BitacoraController extends Controller
         if ($request->ajax()) {
             $data = [];
             if ($request->has('cotizacion')) {
-                $cotizacion = Cotizacion1::with('bitacora')->find($request->cotizacion);
+                $cotizacion = Cotizacion1::with(['bitacora' => function ($bitacora) {
+                    $bitacora->informacion();
+                }])->find($request->cotizacion);
                 $data = $cotizacion->bitacora;
             }
             if ($request->has('ordenp')) {
-                $ordenp = Ordenp::with('bitacora')->find($request->ordenp);
+                $ordenp = Ordenp::with(['bitacora' => function ($bitacora) {
+                    $bitacora->informacion();
+                }])->find($request->ordenp);
                 $data = $ordenp->bitacora;
             }
             return response()->json($data);

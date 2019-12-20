@@ -1721,7 +1721,9 @@ app || (app = {});
         /**
         * show view show orden
         */
-        getOrdenesShow: function (orden) {
+        getOrdenesShow: function (orden, queryString) {
+            var queries = this.parseQueryString(queryString);
+
             this.ordenpModel = new app.OrdenpModel();
             this.ordenpModel.set({id: orden}, {silent: true});
 
@@ -1731,7 +1733,10 @@ app || (app = {});
             }
 
             this.showOrdenesView = new app.ShowOrdenesView({
-                model: this.ordenpModel
+                model: this.ordenpModel,
+                parameters: {
+                    resumido: queries.resumido
+                }
             });
             this.ordenpModel.fetch();
         },

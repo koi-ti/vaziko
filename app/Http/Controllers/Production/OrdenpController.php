@@ -265,7 +265,7 @@ class OrdenpController extends Controller
         }
 
         // If role is operario
-        $orden->permission = auth()->user()->hasRole('operario');
+        $orden->permission = (auth()->user()->hasRole('operario') || $request->has('resumido')) ? true : false;
         $orden->items = $orden->detalle->pluck('id');
 
         if ($request->ajax()) {
@@ -363,7 +363,7 @@ class OrdenpController extends Controller
 
                     // Validar si vienen cambios
                     if ($changes) {
-                        Bitacora::createBitacora($orden, $original, $changes, 'Orden', 'U');
+                        Bitacora::createBitacora($orden, $original, $changes, 'Orden', 'U', $request->ip());
                     }
 
                     // Commit Transaction
@@ -466,7 +466,7 @@ class OrdenpController extends Controller
                 $orden->save();
 
                 // Actualizar Bitacora
-                Bitacora::createBitacora($orden, [], "Se abrió la orden de producción", 'Orden', 'U');
+                Bitacora::createBitacora($orden, [], "Se abrió la orden de producción", 'Orden', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -498,7 +498,7 @@ class OrdenpController extends Controller
                 $orden->save();
 
                 // Actualizar Bitacora
-                Bitacora::createBitacora($orden, [], "Se cerro la orden de producción", 'Orden', 'U');
+                Bitacora::createBitacora($orden, [], "Se cerro la orden de producción", 'Orden', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -531,7 +531,7 @@ class OrdenpController extends Controller
                 $orden->save();
 
                 // Actualizar Bitacora
-                Bitacora::createBitacora($orden, [], "Se culmino la orden de producción", 'Orden', 'U');
+                Bitacora::createBitacora($orden, [], "Se culmino la orden de producción", 'Orden', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -690,7 +690,7 @@ class OrdenpController extends Controller
                 }
 
                 // Actualizar Bitacora
-                Bitacora::createBitacora($orden, [], "Se clono la orden de producción", 'Orden', 'U');
+                Bitacora::createBitacora($orden, [], "Se clono la orden de producción", 'Orden', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();

@@ -12,7 +12,7 @@
         </ol>
     </section>
 
-    @if (auth()->user()->hasRole('operario'))
+    @if ($orden->permission)
         @include("production.ordenes.show.operario")
     @else
         @include("production.ordenes.show.normal")

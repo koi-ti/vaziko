@@ -755,7 +755,7 @@
                                                 <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" max="99">
                                             </div>
                                             <div class="col-xs-12 col-sm-8 text-right">
-                                                <span class="pull-right badge bg-red" id="info-comision"></span>
+                                                <span class="pull-right badge bg-red" id="info-volumen"></span>
                                             </div>
                                         </div>
                                     </div>

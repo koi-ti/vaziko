@@ -556,9 +556,9 @@
 								$totaltransportes = $totaltransportes/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
 			                    $subtotal = $cotizacion2->cotizacion2_precio_venta + $viaticos + $totalmaterialesp + $totalareasp + $totalempaques + $totaltransportes;
 								$prevtotaldescuento = $subtotal;
-								$totaldescuento = $subtotal-($subtotal*($cotizacion2->cotizacion2_descuento/100));
+								$totaldescuento = $cotizacion2->cotizacion2_descuento == 0 ? 0 : ($subtotal-($subtotal*($cotizacion2->cotizacion2_descuento/100)));
 								$prevtotalcomision = $totaldescuento;
-								$totalcomision = $totaldescuento*($cotizacion2->cotizacion2_comision/100);
+								$totalcomision = $totaldescuento/((100-$cotizacion2->cotizacion2_comision)/100);
 			                /*--}}
 
 							<div class="box-body">
