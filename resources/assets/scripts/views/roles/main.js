@@ -33,7 +33,6 @@ app || (app = {});
                 lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 columns: [
                     { data: 'display_name', name: 'display_name' },
-                    { data: 'name', name: 'name' },
                     { data: 'description', name: 'description' }
                 ],
                 buttons: [
@@ -48,7 +47,7 @@ app || (app = {});
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '25%',
+                        width: '30%',
                         render: function (data, type, full, row) {
                             return '<a href="'+ window.Misc.urlFull(Route.route('roles.show', {roles: full.id }))  +'">' + data + '</a>';
                         }

@@ -137,7 +137,7 @@ app || (app = {});
             this.contactsListView.trigger('createOne',
                 this.model.get('id'),
                 this.model.get('tercero_direccion'),
-                this.model.get('tercero_dir_nomenclatura'),
+                this.model.get('tercero_direccion_nomenclatura'),
                 this.model.get('tercero_municipio')
             );
         },

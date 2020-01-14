@@ -37,7 +37,7 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
      * @var array
      */
     protected $fillable = [
-        'tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion','tercero_dir_nomenclatura', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'tercero_coordinador_por', 'tercero_formapago', 'tercero_sigla', 'tercero_codigopostal'
+        'tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'tercero_coordinador_por', 'tercero_formapago', 'tercero_sigla', 'tercero_codigopostal', 'tercero_nombre_comercial', 'tercero_email_factura1', 'tercero_email_factura2'
     ];
 
     /**
@@ -78,14 +78,16 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
             'tercero_direccion' => 'required',
             'tercero_municipio' => 'required',
             'tercero_actividad' => 'required',
+            'tercero_email' => 'email',
+            'tercero_email_factura1' => 'email',
+            'tercero_email_factura2' => 'email',
             'tercero_sigla' => 'max:200',
+            'tercero_nombre_comercial' => 'max:200',
             'tercero_codigopostal' => 'numeric'
         ];
 
         if ($this->exists) {
             $rules['tercero_nit'] .= ',tercero_nit,' . $this->id;
-        } else {
-            $rules['tercero_nit'] .= '|required';
         }
 
         $validator = Validator::make($data, $rules);

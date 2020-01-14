@@ -141,7 +141,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-xs-2 col-sm-1 col-md-1">
-                                                <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="cotizacion1_contacto" data-name="tcontacto_nombre" data-tercero="<%- cotizacion1_cliente %>" data-phone="tcontacto_telefono" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_dir_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
+                                                <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="cotizacion1_contacto" data-name="tcontacto_nombre" data-tercero="<%- cotizacion1_cliente %>" data-phone="tcontacto_telefono" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_direccion_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
@@ -311,7 +311,8 @@
                             <div class="box box-solid">
                                 <div class="box-body">
                                     <div class="chart-container">
-                                        <canvas id="chart_producto" width="500" height="200"></canvas>
+                                        <div id="chart_producto" style="width: 600px; height: 600px"></div>
+                                        <!-- <canvas id="chart_producto" width="500" height="200"></canvas> -->
                                     </div>
                                 </div>
                             </div>

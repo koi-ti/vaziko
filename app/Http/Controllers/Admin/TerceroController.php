@@ -18,7 +18,7 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_formapago', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_dir_nomenclatura', 'tercero_municipio',
+            $query->select('id', 'tercero_formapago', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -260,7 +260,7 @@ class TerceroController extends Controller
     {
         if ($request->has('tercero_nit')) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_dir_nomenclatura', 'tercero_municipio', 'tercero_formapago',
+            $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -287,7 +287,7 @@ class TerceroController extends Controller
             $tercero = $query->first();
 
             if ($tercero instanceof Tercero) {
-                return response()->json(['success' => true, 'id' => $tercero->id, 'tercero_nombre' => $tercero->tercero_nombre, 'tercero_direccion' => $tercero->tercero_direccion, 'tercero_dir_nomenclatura' => $tercero->tercero_dir_nomenclatura, 'tercero_municipio' => $tercero->tercero_municipio, 'tercero_formapago' => $tercero->tercero_formapago]);
+                return response()->json(['success' => true, 'id' => $tercero->id, 'tercero_nombre' => $tercero->tercero_nombre, 'tercero_direccion' => $tercero->tercero_direccion, 'tercero_direccion_nomenclatura' => $tercero->tercero_direccion_nomenclatura, 'tercero_municipio' => $tercero->tercero_municipio, 'tercero_formapago' => $tercero->tercero_formapago]);
             }
         }
         return response()->json(['success' => false]);

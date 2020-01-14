@@ -46,7 +46,7 @@ app || (app = {});
                 attributes.edit = true;
             this.$el.html(this.template(attributes));
 
-            this.spinner = this.$('#spinner-main');
+            this.spinner = this.$('.spinner-main');
         },
 
         /**

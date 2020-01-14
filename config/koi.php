@@ -43,7 +43,8 @@ return [
         'regimen' => [
             1 => 'Simplificado',
             2 => 'Común',
-            3 => 'Especial'
+            3 => 'Especial',
+            4 => 'Simple'
         ],
 
         'persona' => [
@@ -211,6 +212,7 @@ return [
         ],
 
         'iva' => [
+            '0' => '0%',
             '16' => '16%',
             '19' => '19%'
         ]

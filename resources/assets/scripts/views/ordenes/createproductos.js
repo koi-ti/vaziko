@@ -47,6 +47,10 @@ app || (app = {});
             this.areasProductopOrdenList = new app.AreasProductopOrdenList();
             this.transportesProductopOrdenList = new app.TransportesProductopOrdenList();
 
+            // Declare previes values materiales, empaques
+            this.prevmateriales = 0;
+            this.prevempaques = 0;
+
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
@@ -103,15 +107,21 @@ app || (app = {});
 
             // Informacion Cotizacion
             this.$infoprecio = this.$('#info-precio');
+            this.$percentageprecio = this.$('#percentage-precio');
             this.$infoviaticos = this.$('#info-viaticos');
+            this.$percentageviaticos = this.$('#percentage-viaticos');
             this.$infoprevmateriales = this.$('#info-prev-materiales');
             this.$infomateriales = this.$('#info-materiales');
+            this.$percentagemateriales = this.$('#percentage-materiales');
             this.$infoprevareasp = this.$('#info-prev-areasp');
             this.$infoareasp = this.$('#info-areasp');
+            this.$percentageareasp = this.$('#percentage-areasp');
             this.$infoprevempaques = this.$('#info-prev-empaques');
             this.$infoempaques = this.$('#info-empaques');
+            this.$percentageempaques = this.$('#percentage-empaques');
             this.$infoprevtransportes = this.$('#info-prev-transportes');
             this.$infotransportes = this.$('#info-transportes');
+            this.$percentagetransportes = this.$('#percentage-transportes');
             this.$infosubtotal = this.$('#info-subtotal');
             this.$infoprevcomision = this.$('#info-prev-comision');
             this.$infocomision = this.$('#info-comision');
@@ -307,6 +317,7 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.orden4_cantidad = this.$('#orden4_cantidad:disabled').val();
+                    data.previo = this.prevmateriales;
                 this.materialesProductopOrdenList.trigger('store' , data, this.$formmaterialp);
             }
         },
@@ -332,6 +343,7 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.orden9_cantidad = this.$('#orden9_cantidad:disabled').val();
+                    data.previo = this.prevempaques;
                 this.empaquesProductopOrdenList.trigger('store' , data, this.$formempaque);
             }
         },
@@ -390,10 +402,10 @@ app || (app = {});
         * Event change insumo
         */
         changeInsumo: function (e) {
-            var _this = this;
-                insumo = this.$(e.currentTarget).val();
-                call = this.$(e.currentTarget).data('historial').split('_')[1];
-                url = '';
+            var insumo = this.$(e.currentTarget).val(),
+                call = this.$(e.currentTarget).data('historial').split('_')[1],
+                url = '',
+                _this = this;
 
             // Reference
             this.$selectinsumo = this.$(e.currentTarget);
@@ -411,6 +423,12 @@ app || (app = {});
 
                 $.get(url, function (resp) {
                     if (resp) {
+                        if (call == 'materialp') {
+                            _this.prevmateriales = resp.valor;
+                        } else {
+                            _this.prevempaques = resp.valor;
+                        }
+
                         _this.$inputinsumo.val(resp.valor);
                         _this.$historialinsumo.empty().append($('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-call', call);
                     }
@@ -483,6 +501,13 @@ app || (app = {});
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
             tvolumen = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
             total = subtotal + tvolumen;
+
+            this.$percentageprecio.empty().html(((precio/subtotal)*100).toFixed(2) + '%');
+            this.$percentageviaticos.empty().html(((viaticos/subtotal)*100).toFixed(2) + '%');
+            this.$percentagemateriales.empty().html(((materiales/subtotal)*100).toFixed(2) + '%');
+            this.$percentageareasp.empty().html(((areasp/subtotal)*100).toFixed(2) + '%');
+            this.$percentageempaques.empty().html(((empaques/subtotal)*100).toFixed(2) + '%');
+            this.$percentagetransportes.empty().html(((transportes/subtotal)*100).toFixed(2) + '%');
 
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {

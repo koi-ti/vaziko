@@ -121,7 +121,7 @@ app || (app = {});
             if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', data.id);
                 this.$btnContact.attr('data-address-default', data.tercero_direccion);
-                this.$btnContact.attr('data-address-nomenclatura-default', data.tercero_dir_nomenclatura);
+                this.$btnContact.attr('data-address-nomenclatura-default', data.tercero_direccion_nomenclatura);
                 this.$btnContact.attr('data-municipio-default', data.tercero_municipio);
             }
 
@@ -199,7 +199,7 @@ app || (app = {});
                         if (_this.$btnContact.length > 0) {
                             _this.$btnContact.attr('data-tercero', resp.id);
                             _this.$btnContact.attr('data-address-default', resp.tercero_direccion);
-                            _this.$btnContact.attr('data-address-nomenclatura-default', resp.tercero_dir_nomenclatura);
+                            _this.$btnContact.attr('data-address-nomenclatura-default', resp.tercero_direccion_nomenclatura);
                             _this.$btnContact.attr('data-municipio-default', resp.tercero_municipio);
                         }
                         if (_this.$inputOrden.length > 0) {

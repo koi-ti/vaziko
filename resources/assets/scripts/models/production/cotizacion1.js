@@ -31,7 +31,7 @@ app || (app = {});
             'tercero_nit': '',
             'tercero_nombre': '',
             'tercero_direccion': '',
-            'tercero_dir_nomenclatura': '',
+            'tercero_direccion_nomenclatura': '',
             'tercero_municipio': '',
             'tcontacto_nombre': '',
             'tcontacto_telefono': '',

@@ -427,45 +427,78 @@ app || (app = {});
         * charts
         */
         charts: function (resp) {
-            // Definir opciones globales para graficas del modulo
-            Chart.defaults.global.defaultFontColor="black";
-            Chart.defaults.global.defaultFontSize=12;
-            Chart.defaults.global.title.fontSize=14;
 
-            // Charts productos
-            if (!_.isEmpty(resp.chartproductos.data)) {
-                var ctx = this.$('#chart_producto').get(0).getContext('2d');
+            // // console.log(resp.chartproductos);
+            //
+            // var data = [
+            //     { label: 'Hola 1021', data: 3, background: '#000' },
+            //     { label: 'Bye 2021', data: 3, background: '#FFF' },
+            //     { label: 'MacBook 3021', data: 3, background: '#000' }
+            // ]
+            //
+            // $.plot('#chart_producto', data, {
+            //     series: {
+            //         pie: {
+            //             show: true,
+            //             radius: 1,
+            //             label: {
+            //                 show: true,
+            //                 radius: 3/4,
+            //                 background: {
+            //                     opacity: 0.7,
+            //                     color: '#FFF'
+            //                 }
+            //             }
+            //         }
+            //     },
+            //     legend: {
+            //         show: false
+            //     }
+            // });
 
-                new Chart(ctx, {
-                    type: 'pie',
-                    data: {
-                        datasets: [{
-                            backgroundColor: [
-                                '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C'
-                            ],
-                            data: resp.chartproductos.data
-                        }],
-                        labels: resp.chartproductos.labels
-                    },
-                    options: {
-                        responsive: true,
-                        title: {
-                            display: false,
-                        },
-                        legend: {
-                            display: true,
-                            position: 'right',
-                        },
-                        tooltips: {
-                            callbacks: {
-                                label: function(item, data) {
-                                    return data.labels[item.index];
-                                }
-                            }
-                        }
-                    },
-                });
-            }
+            console.log('asdasdasdas');
+
+
+
+            // // Definir opciones globales para graficas del modulo
+            // Chart.defaults.global.defaultFontColor="black";
+            // Chart.defaults.global.defaultFontSize=12;
+            // Chart.defaults.global.title.fontSize=14;
+            //
+            // // Charts productos
+            // if (!_.isEmpty(resp.chartproductos.data)) {
+            //     var ctx = this.$('#chart_producto').get(0).getContext('2d');
+            //
+            //     new Chart(ctx, {
+            //         type: 'pie',
+            //         data: {
+            //             datasets: [{
+            //                 backgroundColor: [
+            //                     '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C'
+            //                 ],
+            //                 data: resp.chartproductos.data
+            //             }],
+            //             labels: resp.chartproductos.labels
+            //         },
+            //         options: {
+            //             responsive: true,
+            //             title: {
+            //                 display: false,
+            //             },
+            //             legend: {
+            //                 display: true,
+            //                 position: 'right',
+            //             },
+            //             tooltips: {
+            //                 callbacks: {
+            //                     label: function(item, data) {
+            //                         return data.labels[item.index];
+            //                     }
+            //                 }
+            //             }
+            //         }
+            //     });
+            // }
         },
 
         /**

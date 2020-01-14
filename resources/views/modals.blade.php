@@ -1232,7 +1232,6 @@
 					</div>
 				</div>
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_tipo" class="control-label">Tipo</label>
 				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
@@ -1242,7 +1241,6 @@
 					@endforeach
 				</select>
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_persona" class="control-label">Persona</label>
 				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
@@ -1252,7 +1250,6 @@
 					@endforeach
 				</select>
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_regimen" class="control-label">Regimen</label>
 				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
@@ -1263,42 +1260,46 @@
 				</select>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="form-group col-md-3">
 				<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
 				<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
 				<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
 				<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
 			</div>
-
 			<div class="form-group col-md-3">
 				<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
 				<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="form-group col-md-12">
 				<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
 				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
 			</div>
 		</div>
-
 		<div class="row">
-			<div class="form-group col-md-3">
-				<label for="tercero_direccion" class="control-label">Dirección</label> <small id="tercero_nomenclatura"><%- tercero_dir_nomenclatura %></small>
+			<div class="form-group col-md-6">
+				<label for="tercero_nombre_comercial" class="control-label">Nombre Comercial</label>
+				<input id="tercero_nombre_comercial" value="<%- tercero_nombre_comercial %>" placeholder="Nombre Comercial" class="form-control input-sm input-toupper" name="tercero_nombre_comercial" type="text">
+			</div>
+			<div class="form-group col-md-6">
+				<label for="tercero_sigla" class="control-label">Sigla</label>
+				<input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="200">
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
+				<label for="tercero_direccion" class="control-label">Dirección</label> <small id="tercero_nomenclatura"><%- tercero_direccion_nomenclatura %></small>
 	      		<div class="input-group input-group-sm">
-      		 		<input type="hidden" id="tercero_dir_nomenclatura" name="tercero_dir_nomenclatura" value="<%- tercero_dir_nomenclatura %>">
-					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" data-nm-name="tercero_nomenclatura" data-nm-value="tercero_dir_nomenclatura" required>
+      		 		<input type="hidden" id="tercero_direccion_nomenclatura" name="tercero_direccion_nomenclatura" value="<%- tercero_direccion_nomenclatura %>">
+					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" data-nm-name="tercero_nomenclatura" data-nm-value="tercero_direccion_nomenclatura" required>
 					<span class="input-group-btn">
 						<button type="button" class="btn btn-default btn-flat btn-address-koi-component" data-field="tercero_direccion">
 							<i class="fa fa-map-signs"></i>
@@ -1306,26 +1307,29 @@
 					</span>
 				</div>
 			</div>
-
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
 				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
 				</select>
 			</div>
-
-			<div class="form-group col-md-3">
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
 				<label for="tercero_email" class="control-label">Email</label>
 				<input id="tercero_email" value="<%- tercero_email %>" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
 			    <div class="help-block with-errors"></div>
 			</div>
+			<div class="form-group col-md-3">
+				<label for="tercero_email_factura1" class="control-label">Email Factura 1</label>
+				<input id="tercero_email_factura1" value="<%- tercero_email_factura1 %>" placeholder="Email Factura 1" class="form-control input-sm" name="tercero_email_factura1" type="email">
+			    <div class="help-block with-errors"></div>
+			</div>
+			<div class="form-group col-md-3">
+				<label for="tercero_email_factura2" class="control-label">Email Factura 2</label>
+				<input id="tercero_email_factura2" value="<%- tercero_email_factura2 %>" placeholder="Email Factura 2" class="form-control input-sm" name="tercero_email_factura2" type="email">
+			    <div class="help-block with-errors"></div>
+			</div>
 	    </div>
-
-        <div class="row">
-            <div class="form-group col-md-12">
-                <label for="tercero_sigla" class="control-label">Sigla</label>
-                <input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="200">
-            </div>
-        </div>
 		<div class="row">
             <div class="form-group col-md-3">
                 <label for="tercero_codigopostal" class="control-label">Código postal</label>

@@ -56,7 +56,7 @@ app || (app = {});
                 }
             });
             ordenp10Model.view = view;
-            this.$el.append( view.render().el );
+            this.$el.append(view.render().el);
         },
 
         /**
@@ -64,7 +64,7 @@ app || (app = {});
         */
         addAll: function () {
             this.$el.find('tbody').html('');
-            this.collection.forEach( this.addOne, this );
+            this.collection.forEach(this.addOne, this);
 
             this.totalize();
         },
@@ -77,35 +77,35 @@ app || (app = {});
             var _this = this;
 
             // Set Spinner
-            window.Misc.setSpinner( this.parameters.wrapper );
+            window.Misc.setSpinner(this.parameters.wrapper);
 
             // Add model in collection
             var ordenp10Model = new app.Ordenp10Model();
-            ordenp10Model.save(data, {
-                success : function(model, resp) {
-                    if(!_.isUndefined(resp.success)) {
-                        window.Misc.removeSpinner( _this.parameters.wrapper );
-                        var text = resp.success ? '' : resp.errors;
-                        if( _.isObject( resp.errors ) ) {
-                            text = window.Misc.parseErrors(resp.errors);
-                        }
+                ordenp10Model.save(data, {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
 
-                        if( !resp.success ) {
-                            alertify.error(text);
-                            return;
-                        }
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
 
-                        // Add model in collection
-                        window.Misc.clearForm(form);
-                        _this.collection.add(model);
-                        _this.totalize();
+                            // Add model in collection
+                            window.Misc.clearForm(form);
+                            _this.collection.add(model);
+                            _this.totalize();
+                        }
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
                     }
-                },
-                error : function(model, error) {
-                    window.Misc.removeSpinner( _this.parameters.wrapper );
-                    alertify.error(error.statusText)
-                }
-            });
+                });
         },
 
         /**
@@ -118,10 +118,12 @@ app || (app = {});
                 model = this.collection.get(resource),
                 _this = this;
 
-            if ( model instanceof Backbone.Model ) {
-                var cancelConfirm = new window.app.ConfirmWindow({
+            if (model instanceof Backbone.Model) {
+                var removeConfirm = new window.app.ConfirmWindow({
                     parameters: {
-                        dataFilter: { transporte_nombre: model.get('producto_nombre')},
+                        dataFilter: {
+                            transporte_nombre: model.get('producto_nombre')
+                        },
                         template: _.template( ($('#orden-delete-transporte-confirm-tpl').html() || '') ),
                         titleConfirm: 'Eliminar transporte de producción',
                         onConfirm: function () {
@@ -131,8 +133,7 @@ app || (app = {});
                         }
                     }
                 });
-
-                cancelConfirm.render();
+                removeConfirm.render();
             }
         },
 
@@ -145,7 +146,7 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
                 this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Transporte<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.TransportesProductopOrdenItemView({
                     model: model,
@@ -153,7 +154,7 @@ app || (app = {});
                         action: 'edit',
                     }
                 });
-                model.view.$el.replaceWith( view.render().el );
+                model.view.$el.replaceWith(view.render().el);
                 this.ready();
             }
         },
@@ -167,7 +168,7 @@ app || (app = {});
             var resource = $(e.currentTarget).attr("data-resource"),
                 model = this.collection.get(resource);
 
-            if ( model instanceof Backbone.Model ) {
+            if (model instanceof Backbone.Model) {
                 var medidas = this.$('#orden10_medidas_' + model.get('id')).val(),
                     cantidad = this.$('#orden10_cantidad_' + model.get('id')).val(),
                     valor = this.$('#orden10_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
@@ -197,21 +198,21 @@ app || (app = {});
         * Event success edit item
         */
         ready: function () {
-            if( typeof window.initComponent.initInputMask == 'function' )
+            if (typeof window.initComponent.initInputMask == 'function')
                 window.initComponent.initInputMask();
 
-            if( typeof window.initComponent.initInputFormula == 'function' )
+            if (typeof window.initComponent.initInputFormula == 'function')
                 window.initComponent.initInputFormula();
         },
 
         /**
         *Render totales the collection
         */
-        totalize: function(){
+        totalize: function () {
             var data = this.collection.totalize();
 
             if (this.$total.length) {
-                this.$total.empty().html( window.Misc.currency( data.total ) );
+                this.$total.empty().html(window.Misc.currency(data.total));
 
                 this.model.trigger('totalize');
             }
@@ -220,15 +221,15 @@ app || (app = {});
         /**
         * Load spinner on the request
         */
-        loadSpinner: function ( target, xhr, opts ) {
-            window.Misc.setSpinner( this.parameters.wrapper );
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
         },
 
         /**
         * response of the server
         */
-        responseServer: function ( target, resp, opts ) {
-            window.Misc.removeSpinner( this.parameters.wrapper );
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
    });
 

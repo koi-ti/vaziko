@@ -76,7 +76,9 @@ elixir(function(mix) {
         paths.node + 'fine-uploader/jquery.fine-uploader/jquery.fine-uploader.js',
         paths.libs + 'fullcalendar/dist/fullcalendar.min.js',
         paths.libs + 'fullcalendar/dist/locale/es.js',
-        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.js'
+        paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.js',
+        paths.node + 'jquery.flot/jquery.flot.js',
+        paths.node + 'jquery.flot/jquery.flot.**.js',
    	], 'public/js/vendor.min.js')
     .scripts([
         '../scripts/models/**/*.js',

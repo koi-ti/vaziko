@@ -19,9 +19,8 @@
                         <table id="roles-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
                             <thead>
                                 <tr>
-                                    <th width="25%">Nombre</th>
-                                    <th width="25%">Key</th>
-                                    <th width="50%">Descripcion</th>
+                                    <th width="30%">Nombre</th>
+                                    <th width="70%">Descripcion</th>
                                 </tr>
                             </thead>
                         </table>

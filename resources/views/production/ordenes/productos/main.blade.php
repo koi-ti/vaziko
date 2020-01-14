@@ -665,13 +665,15 @@
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-precio"></span></b></div>
+                                            <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-precio"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-precio" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right"><b><span id="info-viaticos"></span></b></div>
+                                            <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-viaticos"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-viaticos" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -682,7 +684,8 @@
                                                 <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm total-calculate" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-materiales"></span></b></div>
+                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-materiales"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-materiales" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -693,7 +696,8 @@
                                                 <input id="orden2_margen_areap" name="orden2_margen_areap" class="form-control input-sm total-calculate" value="<%- orden2_margen_areap %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-areasp"></span></b></div>
+                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-areasp"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-areasp" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -704,7 +708,8 @@
                                                 <input id="orden2_margen_empaque" name="orden2_margen_empaque" class="form-control input-sm total-calculate" value="<%- orden2_margen_empaque %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-empaques"></span></b></div>
+                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-empaques"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-empaques" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
@@ -715,7 +720,8 @@
                                                 <input id="orden2_margen_transporte" name="orden2_margen_transporte" class="form-control input-sm total-calculate" value="<%- orden2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-transportes"></span></b></div>
+                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-transportes"></span></b></div>
+                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-transportes" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
