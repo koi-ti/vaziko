@@ -36,23 +36,36 @@
                             <li class="pull-right">
                                 <div class="btn-group btn-group-sm" role="group">
                                     @if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
-                                        <div class="btn-group btn-group-sm">
-                                            <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>
-                                            <ul class="dropdown-menu pull-right">
-                                                <li><a href="#" class="close-cotizacion" data-state="R">RECOTIZAR</a></li>
-                                                <li><a href="#" class="close-cotizacion" data-state="N">NO ACEPTADA</a></li>
-                                            </ul>
-                                        </div>
-                                    @endif
-                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                        <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
-                                        <% if (parseInt(cotizacion1_pre)) { %>
-                                            <a class="btn btn-success approved-cotizacion" title="Aprobar a cotización"><i class="fa fa-check"></i></a>
-                                        <% } else { %>
-                                            <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
+                                        <% if (['CC' , 'CF', 'CS'].indexOf(cotizacion1_estados) !== -1) { %>
+                                            <div class="btn-group btn-group-sm">
+                                                <a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button">
+                                                    <i class="fa fa-lock"></i> <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li><a href="#" class="state-cotizacion" data-state="CR">RECOTIZAR</a></li>
+                                                    <li><a href="#" class="state-cotizacion" data-state="CN">NO ACEPTADA</a></li>
+                                                </ul>
+                                            </div>
                                         <% } %>
                                     @endif
-                                    <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                    <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
+                                    <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
+                                        <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                    <% } %>
+                                    @if (auth()->user()->hasRole('admin'))
+                                        <% if (cotizacion1_estados != 'PC') { %>
+                                            <a class="btn btn-success state-cotizacion" title="Estado anterior de la cotización" data-state="<%- cotizacion1_estados %>" data-method="prev">
+                                                <i class="fa fa-arrow-left"></i>
+                                            </a>
+                                        <% } %>
+                                    @endif
+                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                        <% if (cotizacion1_estados != 'CS') { %>
+                                            <a class="btn btn-success state-cotizacion" title="Siguiente estado de la cotización" data-state="<%- cotizacion1_estados %>" data-method="next">
+                                                <i class="fa fa-arrow-right"></i>
+                                            </a>
+                                        <% } %>
+                                    @endif
                                 </div>
                             </li>
                         <% } %>
@@ -66,11 +79,7 @@
                                         <div class="row">
                                             <label class="col-xs-12 col-sm-1 col-md-1 control-label">Estado</label>
                                             <div class="form-group col-xs-12 col-sm-2 col-md-1">
-                                                <% if(parseInt(cotizacion1_pre)) { %>
-                                                    <span class="label label-warning">PRE-COTIZACIÓN</span>
-                                                <% } else { %>
-                                                    <span class="label label-success">COTIZACIÓN</span>
-                                                <% } %>
+                                                <span class="label label-<%- window.Misc.stateProduction(cotizacion1_estados).color %>"><%- window.Misc.stateProduction(cotizacion1_estados).nombre %></span>
                                             </div>
                                         </div>
                                         <div class="row">
@@ -393,8 +402,8 @@
         <p>¿Está seguro que desea reabrir la cotizacion de producción <b><%- cotizacion_codigo %></b>?</p>
     </script>
 
-    <script type="text/template" id="cotizacion-close-confirm-tpl">
-        <p>¿Está seguro que desea cerrar <span class="label label-warning"><%- cotizacion_state %></span> la cotización <b><%- cotizacion_codigo %></b>?</p>
+    <script type="text/template" id="cotizacion-state-confirm-tpl">
+        <p>¿Está seguro que desea cambiar el estado a <b><span class="label label-<%- estado.color %>"><%- estado.nombre %></span> <%- codigo %></b>?</p>
     </script>
 
     <script type="text/template" id="cotizacion-clone-confirm-tpl">

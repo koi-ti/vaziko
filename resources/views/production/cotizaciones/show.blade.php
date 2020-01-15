@@ -41,11 +41,7 @@
                                 <div class="row">
                                     <div class="form-group col-xs-12 col-sm-2 col-md-1">
                                         <label class="control-label">Estado</label>
-                                        @if ($cotizacion->cotizacion1_pre)
-                                            <span class="label label-warning">PRE-COTIZACIÓN</span>
-                                        @else
-                                            <span class="label label-success">COTIZACIÓN</span>
-                                        @endif
+                                        <span class="label label-warning">{{ config('koi.produccion.estados')[$cotizacion->cotizacion1_estados] }}</span>
                                     </div>
                                 </div>
                             	<div class="row">

@@ -16,9 +16,9 @@ class Cotizacion1Controller extends Controller
     public function __construct()
     {
         $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'cerrar']]);
+        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'estados']]);
         $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar', 'aprobar']]);
-        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'estados']]);
     }
 
     /**
@@ -30,7 +30,7 @@ class Cotizacion1Controller extends Controller
     {
         if ($request->ajax()) {
             $query = Cotizacion1::query();
-            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', 'cotizacion1_pre', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
+            $query->select('koi_cotizacion1.id', 'cotizacion1_precotizacion', 'cotizacion1_estados', DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'cotizacion1_numero', 'cotizacion1_ano', 'cotizacion1_fecha_elaboro as cotizacion1_fecha', 'cotizacion1_fecha_inicio', 'cotizacion1_anulada', 'cotizacion1_abierta', 'cotizacion1_iva',
                 DB::raw("
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
@@ -206,7 +206,7 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_numero = $numero;
                     $cotizacion->cotizacion1_contacto = $contacto->id;
                     $cotizacion->cotizacion1_iva = $empresa->empresa_iva;
-                    $cotizacion->cotizacion1_pre = true;
+                    $cotizacion->cotizacion1_estados = 'PC';
                     $cotizacion->cotizacion1_fecha_elaboro = date('Y-m-d H:i:s');
                     $cotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
                     $cotizacion->save();
@@ -368,32 +368,40 @@ class Cotizacion1Controller extends Controller
     }
 
     /**
-     * Cerrar the specified resource.
+     * Cambiar estado the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function cerrar(Request $request, $id)
+    public function estados(Request $request, $id)
     {
         if ($request->ajax()) {
-            if (!in_array($request->state, array_keys(config('koi.close.state')))) {
-                return response()->json(['success' => false, 'errors' => 'El estado de cerrar no es valido.']);
+            if (!in_array($request->state, array_keys(config('koi.produccion.estados')))) {
+                return response()->json(['success' => false, 'errors' => 'El estado no es valido.']);
             }
 
             $cotizacion = Cotizacion1::findOrFail($id);
             DB::beginTransaction();
             try {
                 // Cotización
-                $cotizacion->cotizacion1_abierta = false;
-                $cotizacion->cotizacion1_estado = $request->state;
+                if (in_array($request->state, ['CN', 'CR'])) {
+                    $cotizacion->cotizacion1_abierta = false;
+                    $cotizacion->cotizacion1_estados = $request->state;
+                } else {
+                    $cotizacion->cotizacion1_abierta = true;
+                    $cotizacion->cotizacion1_estados = $cotizacion->estados($request->method);
+                }
                 $cotizacion->save();
 
+                $prev = config('koi.produccion.estados')[$request->state];
+                $next = config('koi.produccion.estados')[$cotizacion->cotizacion1_estados];
+
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se cerro la cotización', 'Cotización', 'U', $request->ip());
+                Bitacora::createBitacora($cotizacion, [], "Se cambio el estado de la cotización $prev a $next", 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
-                return response()->json(['success' => true, 'msg' => 'Cotización cerrada con exito.']);
+                return response()->json(['success' => true, 'msg' => 'Cambio de estado con exito.']);
             } catch(\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
@@ -427,7 +435,7 @@ class Cotizacion1Controller extends Controller
             try {
                 // Cotizacion
                 $cotizacion->cotizacion1_abierta = true;
-                $cotizacion->cotizacion1_estado = '';
+                $cotizacion->cotizacion1_estados = 'CC';
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
@@ -532,7 +540,7 @@ class Cotizacion1Controller extends Controller
                 $newcotizacion->cotizacion1_fecha_inicio = date('Y-m-d');
                 $newcotizacion->cotizacion1_abierta = true;
                 $newcotizacion->cotizacion1_anulada = false;
-                $newcotizacion->cotizacion1_estado = '';
+                $newcotizacion->cotizacion1_estados = 'PC';
                 $newcotizacion->cotizacion1_ano = date('Y');
                 $newcotizacion->cotizacion1_numero = $numero;
                 $newcotizacion->cotizacion1_usuario_elaboro = auth()->user()->id;
@@ -881,7 +889,7 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_orden = $orden->id;
                 $cotizacion->cotizacion1_abierta = false;
                 $cotizacion->cotizacion1_anulada = false;
-                $cotizacion->cotizacion1_estado = 'O';
+                $cotizacion->cotizacion1_estados = 'CO';
                 $cotizacion->save();
 
                 // Si hay cambios en la cotizacion
@@ -959,44 +967,5 @@ class Cotizacion1Controller extends Controller
             return response()->json($object);
         }
         return response()->json(['success' => false]);
-    }
-
-    /**
-     * Abrir the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function aprobar(Request $request, $id)
-    {
-        if ($request->ajax()) {
-            $cotizacion = Cotizacion1::find($id);
-            if (!$cotizacion instanceof Cotizacion1) {
-                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la cotización, por favor verifique la información o consulte al adminitrador.']);
-            }
-
-            if (!$cotizacion->cotizacion1_pre) {
-                return response()->json(['success' => false, 'errors' => 'La cotización ya se encuentra aprobada, por favor verifique la información o consulte al adminitrador.']);
-            }
-
-            DB::beginTransaction();
-            try {
-                // Cotizacion
-                $cotizacion->cotizacion1_pre = false;
-                $cotizacion->save();
-
-                // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se aprobo la cotización', 'Cotización', 'U', $request->ip());
-
-                // Commit Transaction
-                DB::commit();
-                return response()->json(['success' => true, 'msg' => 'Cotización aprobada con exito.']);
-            } catch(\Exception $e) {
-                DB::rollback();
-                Log::error($e->getMessage());
-                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
-            }
-        }
-        abort(403);
     }
 }

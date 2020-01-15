@@ -525,6 +525,57 @@
                 alertify.error(thrownError);
             });
         },
+
+        stateProduction: function (value) {
+            var response = {
+                nombre: 'COTIZACIÓN',
+                color: 'success'
+            }
+
+            switch (value) {
+                case 'PC':
+                    response.nombre = 'PRE-COTIZACIÓN';
+                    response.color = 'warning';
+                    break;
+                case 'PF':
+                    response.nombre = 'PRE-COTIZACIÓN TERMINADA';
+                    response.color = 'warning';
+                    break;
+                case 'CC':
+                    response.nombre = 'COTIZACIÓN';
+                    break;
+                case 'CF':
+                    response.nombre = 'COTIZACIÓN TERMINADA';
+                    break;
+                case 'CS':
+                    response.nombre = 'COTIZACIÓN ENVIADA';
+                    break;
+                case 'CN':
+                    response.nombre = 'COTIZACIÓN (NO ACEPTADA)';
+                    break;
+                case 'CR':
+                    response.nombre = 'COTIZACIÓN (RECOTIZAR)';
+                    break;
+                case 'CO':
+                    response.nombre = 'COTIZACIÓN (AL ABRIR ORDEN)';
+                    break;
+            }
+
+            return response;
+        },
+
+        previewState: function (value, method) {
+            var states = ['PC', 'PF', 'CC', 'CF', 'CS'],
+                preview = '';
+
+            if (method == 'prev') {
+                preview = states[states.indexOf(value)-1];
+            } else {
+                preview = states[states.indexOf(value)+1];
+            }
+            
+            return _.isUndefined(preview) ? value : preview;
+        }
     };
 
     window.Misc = new Misc();

@@ -222,18 +222,20 @@ return [
         'formaspago' => [
             'CO' => 'Contado',
             'CT' => 'Crédito'
+        ],
+        'estados' => [
+            'PC' => 'PRE-COTIZACIÓN',
+            'PF' => 'PRE-COTIZACIÓN TERMINADA',
+            'CC' => 'COTIZACIÓN',
+            'CF' => 'COTIZACIÓN TERMINADA',
+            'CS' => 'COTIZACIÓN ENVIADA',
+            'CN' => 'COTIZACIÓN (NO ACEPTADA)',
+            'CR' => 'COTIZACIÓN (RECOTIZAR)',
+            'CO' => 'COTIZACIÓN (AL ABRIR ORDEN)'
         ]
     ],
 
     'template' => [
         'bg' => 'bg-green'
-    ],
-
-    'close' => [
-        'state' => [
-            'R' => 'RECOTIZAR',
-            'N' => 'NO ACEPTADA',
-            'O' => 'AL ABRIR ORDEN'
-        ]
     ]
 ];

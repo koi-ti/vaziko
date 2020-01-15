@@ -15,9 +15,8 @@ app || (app = {});
         template: _.template( ($('#add-cotizacion-tpl').html() || '') ),
         events: {
             'click .submit-cotizacion': 'submitCotizacion',
-            'click .close-cotizacion': 'closeCotizacion',
+            'click .state-cotizacion': 'stateCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
-            'click .approved-cotizacion': 'approvedCotizacion',
             'click .generate-cotizacion': 'generateCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
             'change #typeproductop': 'changeTypeProduct',
@@ -126,8 +125,8 @@ app || (app = {});
         * Event change type
         */
         changeTypeProduct: function(e) {
-            var _this = this;
-                typeproduct = this.$(e.currentTarget).val();
+            var typeproduct = this.$(e.currentTarget).val(),
+                _this = this;
 
             if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
@@ -162,9 +161,9 @@ app || (app = {});
         * Event change subtupe
         */
         changeSubtypeProduct: function(e) {
-            var _this = this;
-                subtypeproduct = this.$(e.currentTarget).val();
-                typeproduct = this.$('#typeproductop').val();
+            var subtypeproduct = this.$(e.currentTarget).val(),
+                typeproduct = this.$('#typeproductop').val(),
+                _this = this;
 
             if (typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '') {
                 $.ajax({
@@ -208,55 +207,69 @@ app || (app = {});
         /**
         * Close cotizacion
         */
-        closeCotizacion: function (e) {
+        stateCotizacion: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                state = this.$(e.currentTarget).data(),
-                name_state = this.$(e.currentTarget).text();
+            var state = this.$(e.currentTarget).data('state'),
+                method = this.$(e.currentTarget).data('method'),
+                name = this.$(e.currentTarget).text(),
+                new_state = window.Misc.previewState(state, method),
+                _this = this;
 
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { cotizacion_codigo: _this.model.get('cotizacion_codigo'), cotizacion_state: name_state },
-                    template: _.template( ($('#cotizacion-close-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Cerrar cotización',
-                    onConfirm: function () {
-                        // Close cotizacion
-                        $.ajax({
-                            url: window.Misc.urlFull( Route.route('cotizaciones.cerrar', { cotizaciones: _this.model.get('id')}) ),
-                            data: state,
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner( _this.spinner );
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner( _this.spinner );
 
-                            if(!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject( resp.errors ) ) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if (!resp.success ) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect( resp.msg, window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: _this.model.get('id') })) );
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner( _this.spinner );
-                            alertify.error(thrownError);
-                        });
-                    }
+            if (state != new_state) {
+                if (['CN', 'CR', 'CO'].indexOf(state) !== -1) {
+                    new_state = state;
                 }
-            });
 
-            cancelConfirm.render();
+                var stateConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            estado: window.Misc.stateProduction(new_state),
+                            codigo: _this.model.get('cotizacion_codigo'),
+                            nombre: name
+                        },
+                        template: _.template(($('#cotizacion-state-confirm-tpl').html() || '')),
+                        titleConfirm: 'Estado cotización',
+                        onConfirm: function () {
+                            // State cotizacion
+                            $.ajax({
+                                url: window.Misc.urlFull(Route.route('cotizaciones.estados', {cotizaciones: _this.model.get('id')})),
+                                data: {
+                                    state: state,
+                                    method: method
+                                },
+                                type: 'GET',
+                                beforeSend: function () {
+                                    window.Misc.setSpinner(_this.spinner);
+                                }
+                            })
+                            .done(function (resp) {
+                                window.Misc.removeSpinner(_this.spinner);
+                                if (!_.isUndefined(resp.success)) {
+                                    // response success or error
+                                    var text = resp.success ? '' : resp.errors;
+                                    if (_.isObject(resp.errors)) {
+                                        text = window.Misc.parseErrors(resp.errors);
+                                    }
+
+                                    if (!resp.success) {
+                                        alertify.error(text);
+                                        return;
+                                    }
+
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: _this.model.get('id')})));
+                                }
+                            })
+                            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                                window.Misc.removeSpinner(_this.spinner);
+                                alertify.error(thrownError);
+                            });
+                        }
+                    }
+                });
+                stateConfirm.render();
+            }
         },
 
         /**
@@ -293,40 +306,39 @@ app || (app = {});
             cloneConfirm.render();
         },
 
-        /**
-        * approved cotizacion
-        */
-        approvedCotizacion: function (e) {
-            e.preventDefault();
-
-            var _this = this,
-                route =  window.Misc.urlFull(Route.route('cotizaciones.aprobar', {cotizaciones: this.model.get('id')})),
-                data = {
-                    cotizacion_codigo: _this.model.get('cotizacion_codigo')
-                };
-
-            var approvedConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: data,
-                    template: _.template( ($('#cotizacion-approved-confirm-tpl').html() || '') ),
-                    titleConfirm: 'Aprobar la cotización',
-                    onConfirm: function () {
-                        // Approved cotizacion
-                        window.Misc.cloneModule({
-                            'url': route,
-                            'wrap': _this.spinner,
-                            'callback': (function (_this) {
-                                return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: _this.model.get('id') })));
-                                }
-                            })(_this)
-                        });
-                    }
-                }
-            });
-
-            approvedConfirm.render();
-        },
+        // /**
+        // * approved cotizacion
+        // */
+        // approvedCotizacion: function (e) {
+        //     e.preventDefault();
+        //
+        //     var _this = this,
+        //         route =  window.Misc.urlFull(Route.route('cotizaciones.aprobar', {cotizaciones: this.model.get('id')})),
+        //         data = {
+        //             cotizacion_codigo: _this.model.get('cotizacion_codigo')
+        //         };
+        //
+        //     var approvedConfirm = new window.app.ConfirmWindow({
+        //         parameters: {
+        //             dataFilter: data,
+        //             template: _.template( ($('#cotizacion-approved-confirm-tpl').html() || '') ),
+        //             titleConfirm: 'Aprobar la cotización',
+        //             onConfirm: function () {
+        //                 // Approved cotizacion
+        //                 window.Misc.cloneModule({
+        //                     'url': route,
+        //                     'wrap': _this.spinner,
+        //                     'callback': (function (_this) {
+        //                         return function (resp) {
+        //                             window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: _this.model.get('id') })));
+        //                         }
+        //                     })(_this)
+        //                 });
+        //             }
+        //         }
+        //     });
+        //     approvedConfirm.render();
+        // },
 
         /**
         * Generate cotizacion

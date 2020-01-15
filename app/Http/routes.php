@@ -166,12 +166,11 @@ Route::group(['middleware' => 'auth'], function() {
 	Route::group(['prefix' => 'cotizaciones'], function(){
 		Route::get('search', ['as' => 'cotizaciones.search', 'uses' => 'Production\Cotizacion1Controller@search']);
 		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
-		Route::get('cerrar/{cotizaciones}', ['as' => 'cotizaciones.cerrar', 'uses' => 'Production\Cotizacion1Controller@cerrar']);
+		Route::get('estados/{cotizaciones}', ['as' => 'cotizaciones.estados', 'uses' => 'Production\Cotizacion1Controller@estados']);
 		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
 		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
 		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
 		Route::get('charts/{cotizaciones}', ['as' => 'cotizaciones.charts', 'uses' => 'Production\Cotizacion1Controller@charts']);
-		Route::get('aprobar/{cotizaciones}', ['as' => 'cotizaciones.aprobar', 'uses' => 'Production\Cotizacion1Controller@aprobar']);
 		Route::resource('archivos', 'Production\CotizacionArchivosController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function(){

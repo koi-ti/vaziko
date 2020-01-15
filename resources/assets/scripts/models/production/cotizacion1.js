@@ -25,7 +25,7 @@ app || (app = {});
             'cotizacion1_suministran': '',
             'cotizacion1_formapago': '',
             'cotizacion1_observaciones': '',
-            'cotizacion1_pre': 1,
+            'cotizacion1_estados': 'PC',
             'cotizacion1_terminado': '',
             'cotizacion1_observaciones_archivo': '',
             'tercero_nit': '',

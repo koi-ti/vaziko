@@ -30,8 +30,7 @@ class CreateCotizacion1Table extends Migration
             $table->boolean('cotizacion1_abierta')->default(true);
             $table->text('cotizacion1_observaciones')->nullable();
             $table->text('cotizacion1_terminado')->nullable();
-            $table->string('cotizacion1_estado', 1)->nullable()->comment = 'R:REASIGNAR N:NO ACEPTADA O:AL ABRIR ORDEN';
-            $table->boolean('cotizacion1_pre')->default(false);
+            $table->enum('cotizacion1_estados', ['PC', 'PF', 'CC', 'CF', 'CS', 'CN', 'CR', 'CO'])->nullable();
             $table->text('cotizacion1_observaciones_archivo')->nullable();
             $table->integer('cotizacion1_vendedor')->unsigned()->nullable();
             $table->datetime('cotizacion1_fecha_elaboro');

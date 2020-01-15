@@ -98,4 +98,19 @@ class Cotizacion1 extends BaseModel
     public function bitacora () {
         return $this->morphMany('App\Models\Base\Bitacora', 'bitacora');
     }
+
+    public function estados ($method) {
+        switch ($this->cotizacion1_estados) {
+            case 'PC':
+                return $this->cotizacion1_estados = 'PF';
+            case 'PF':
+                return $this->cotizacion1_estados = ($method == 'prev') ? 'PC' : 'CC';
+            case 'CC':
+                return $this->cotizacion1_estados = ($method == 'prev') ? 'PF' : 'CF';
+            case 'CF':
+                return $this->cotizacion1_estados = ($method == 'prev') ? 'CC' : 'CS';
+            case 'CS':
+                return $this->cotizacion1_estados = ($method == 'prev') ? 'CF' : 'CS';
+        }
+    }
 }

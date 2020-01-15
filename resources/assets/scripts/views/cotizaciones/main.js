@@ -15,9 +15,8 @@ app || (app = {});
         events: {
             'click .btn-search': 'search',
             'click .btn-clear': 'clear',
-            'click .close-cotizacion': 'closeCotizacion',
+            'click .state-cotizacion': 'stateCotizacion',
             'click .clone-cotizacion': 'cloneCotizacion',
-            'click .approved-cotizacion': 'approvedCotizacion',
             'click .generate-cotizacion': 'generateCotizacion',
             'click .open-cotizacion': 'openCotizacion',
             'click .export-cotizacion': 'exportCotizacion',
@@ -135,7 +134,7 @@ app || (app = {});
                         targets: 5,
                         width: '63%',
                         render: function (data, type, full, row) {
-                            var state = parseInt(full.cotizacion1_pre) ? ' <span class="label label-warning">PRE-COTIZACIÓN</span>' : ' <span class="label label-success">COTIZACIÓN</span>';
+                            var state = parseInt(full.cotizacion1_estados) ? ' <span class="label label-warning">PRE-COTIZACIÓN</span>' : ' <span class="label label-success">COTIZACIÓN</span>';
                             return data + state;
                         }
                     },
@@ -200,55 +199,54 @@ app || (app = {});
         /**
         * Close cotizacion
         */
-        closeCotizacion: function (e) {
+        stateCotizacion: function (e) {
             e.preventDefault();
-            var _this = this,
-                model = this.$(e.currentTarget).data(),
-                state = this.$(e.currentTarget).text();
+            var model = this.$(e.currentTarget).data(),
+                state = this.$(e.currentTarget).text(),
+                _this = this;
 
-            var cancelConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    dataFilter: { cotizacion_codigo: model.code, cotizacion_state: state },
-                    template: _.template(($('#cotizacion-close-confirm-tpl').html() || '')),
-                    titleConfirm: 'Cerrar cotización',
-                    onConfirm: function () {
-                        // Close cotizacion
-                        $.ajax({
-                            url: window.Misc.urlFull(Route.route('cotizaciones.cerrar', { cotizaciones: model.resource })),
-                            type: 'GET',
-                            data: {state: model.state},
-                            beforeSend: function() {
-                                window.Misc.setSpinner(_this.el);
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner(_this.el);
-
-                            if (!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject(resp.errors)) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if (!resp.success) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                alertify.success(resp.msg);
-                                _this.cotizacionesSearchTable.ajax.reload();
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner(_this.el);
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-
-            cancelConfirm.render();
+            // var stateConfirm = new window.app.ConfirmWindow({
+            //     parameters: {
+            //         dataFilter: { cotizacion_codigo: model.code, cotizacion_state: state },
+            //         template: _.template(($('#cotizacion-close-confirm-tpl').html() || '')),
+            //         titleConfirm: 'Cerrar cotización',
+            //         onConfirm: function () {
+            //             // Close cotizacion
+            //             $.ajax({
+            //                 url: window.Misc.urlFull(Route.route('cotizaciones.cerrar', { cotizaciones: model.resource })),
+            //                 type: 'GET',
+            //                 data: {state: model.state},
+            //                 beforeSend: function() {
+            //                     window.Misc.setSpinner(_this.el);
+            //                 }
+            //             })
+            //             .done(function(resp) {
+            //                 window.Misc.removeSpinner(_this.el);
+            //
+            //                 if (!_.isUndefined(resp.success)) {
+            //                     // response success or error
+            //                     var text = resp.success ? '' : resp.errors;
+            //                     if (_.isObject(resp.errors)) {
+            //                         text = window.Misc.parseErrors(resp.errors);
+            //                     }
+            //
+            //                     if (!resp.success) {
+            //                         alertify.error(text);
+            //                         return;
+            //                     }
+            //
+            //                     alertify.success(resp.msg);
+            //                     _this.cotizacionesSearchTable.ajax.reload();
+            //                 }
+            //             })
+            //             .fail(function(jqXHR, ajaxOptions, thrownError) {
+            //                 window.Misc.removeSpinner(_this.el);
+            //                 alertify.error(thrownError);
+            //             });
+            //         }
+            //     }
+            // });
+            // stateConfirm.render();
         },
 
         /**
@@ -317,7 +315,6 @@ app || (app = {});
                     }
                 }
             });
-
             approvedConfirm.render();
         },
 
