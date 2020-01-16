@@ -558,6 +558,14 @@ app || (app = {});
                                 }
                             }
                         },
+                        plugins: {
+                            labels: {
+                                render: 'precentage',
+                                precision: 2,
+                                position: 'outside',
+                                arc: false
+                            }
+                        }
                     }
                 });
             }
@@ -656,6 +664,14 @@ app || (app = {});
                                 label: function(item, data) {
                                     return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
                                 }
+                            }
+                        },
+                        plugins: {
+                            labels: {
+                                render: 'precentage',
+                                precision: 2,
+                                position: 'outside',
+                                arc: false
                             }
                         }
                     },

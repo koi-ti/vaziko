@@ -236,6 +236,14 @@ app || (app = {});
                                     return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
                                 }
                             }
+                        },
+                        plugins: {
+                            labels: {
+                                render: 'precentage',
+                                precision: 2,
+                                position: 'outside',
+                                arc: false
+                            }
                         }
                     },
                 });

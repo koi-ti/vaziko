@@ -79,6 +79,7 @@ elixir(function(mix) {
         paths.libs + 'clockpicker/dist/bootstrap-clockpicker.min.js',
         paths.node + 'jquery.flot/jquery.flot.js',
         paths.node + 'jquery.flot/jquery.flot.**.js',
+        paths.libs + 'chartjs-plugin-labels/src/chartjs-plugin-labels.js'
    	], 'public/js/vendor.min.js')
     .scripts([
         '../scripts/models/**/*.js',

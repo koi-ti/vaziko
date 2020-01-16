@@ -434,9 +434,18 @@ app || (app = {});
                         },
                         tooltips: {
                             callbacks: {
+                                enabled: false,
                                 label: function(item, data) {
                                     return data.labels[item.index];
                                 }
+                            }
+                        },
+                        plugins: {
+                            labels: {
+                                render: 'precentage',
+                                precision: 2,
+                                position: 'outside',
+                                arc: false
                             }
                         }
                     }
