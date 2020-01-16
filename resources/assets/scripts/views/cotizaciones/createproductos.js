@@ -398,10 +398,10 @@ app || (app = {});
         * Event change insumo
         */
         changeInsumo: function (e) {
-            var _this = this;
-                insumo = this.$(e.currentTarget).val();
-                call = this.$(e.currentTarget).data('historial').split('_')[1];
-                url = '';
+            var insumo = this.$(e.currentTarget).val(),
+                call = this.$(e.currentTarget).data('historial').split('_')[1],
+                url = '',
+                _this = this;
 
             // Reference
             this.$selectinsumo = this.$(e.currentTarget);

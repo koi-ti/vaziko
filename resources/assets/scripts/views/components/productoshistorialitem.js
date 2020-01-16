@@ -1,5 +1,5 @@
 /**
-* Class ProductoHistoryView  of Backbone Router
+* Class ProductoHistorialView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ProductoHistoryView = Backbone.View.extend({
+    app.ProductoHistorialView = Backbone.View.extend({
 
         tagName: 'tr',
-        template: _.template(($('#producto-history-item-list-tpl').html() || '')),
+        template: _.template(($('#producto-historial-item-list-tpl').html() || '')),
 
         /**
         * Constructor Method

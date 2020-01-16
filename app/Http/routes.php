@@ -265,7 +265,7 @@ Route::group(['middleware' => 'auth'], function() {
 		Route::post('evaluate',['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate'] );
 		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
 		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
-		Route::resource('history', 'Inventory\ProductoHistoryController', ['only' => ['index']]);
+		Route::resource('historial', 'Inventory\ProductoHistorialController', ['only' => ['index']]);
 	});
 	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
 

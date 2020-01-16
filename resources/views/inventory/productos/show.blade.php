@@ -232,7 +232,7 @@
                 </div>
                 <div class="box-body">
                     <div class=" table-responsive">
-                        <table id="browse-history-producto-list" class="table table-striped table-condensed table-bordered" cellspacing="0">
+                        <table id="browse-historial-producto-list" class="table table-striped table-condensed table-bordered" cellspacing="0">
                             <thead>
                                 <tr>
                                     <th width="40%">Producción</th>

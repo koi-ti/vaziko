@@ -310,7 +310,7 @@
 			<div class="modal-body">
 				<div class="content-modal">
 					<div class=" table-responsive">
-						<table id="browse-history-producto-list" class="table table-striped table-condensed" cellspacing="0">
+						<table id="browse-historial-producto-list" class="table table-striped table-condensed" cellspacing="0">
 							<thead>
 								<tr>
 									<th width="30%"></th>
@@ -1502,7 +1502,7 @@
 					<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- parseInt(tercero_otro) ? 'checked': ''%>> Otro
 				</label>
 			</div>
-			<div class="form-group col-md-2">
+			<div class="form-group col-md-4">
 				<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
 			</div>
 		</div>
@@ -1531,7 +1531,7 @@
 	</div>
 </div>
 
-<script type="text/template" id="producto-history-item-list-tpl">
+<script type="text/template" id="producto-historial-item-list-tpl">
 	<% if (type == 'PRE') { %>
 		<td><span class="label label-success">PRECOTIZACIÓN</span></td>
 	<% } else if (type == 'COT') { %>

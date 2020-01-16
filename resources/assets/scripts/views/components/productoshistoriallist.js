@@ -1,5 +1,5 @@
 /**
-* Class ProductoHistoryListView  of Backbone Router
+* Class ProductoHistorialListView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,9 +9,9 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.ProductoHistoryListView = Backbone.View.extend({
+    app.ProductoHistorialListView = Backbone.View.extend({
 
-        el: '#browse-history-producto-list',
+        el: '#browse-historial-producto-list',
         parameters: {
         	wrapper: null,
             edit: false,
@@ -37,13 +37,13 @@ app || (app = {});
 
         /**
         * Render view contact by model
-        * @param Object productoHistoryModel Model instance
+        * @param Object productoHistorialModel Model instance
         */
-        addOne: function (productoHistoryModel) {
-            var view = new app.ProductoHistoryView({
-                model: productoHistoryModel,
+        addOne: function (productoHistorialModel) {
+            var view = new app.ProductoHistorialView({
+                model: productoHistorialModel,
             });
-            productoHistoryModel.view = view;
+            productoHistorialModel.view = view;
             this.$el.prepend(view.render().el);
         },
 

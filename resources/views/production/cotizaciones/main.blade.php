@@ -320,8 +320,7 @@
                             <div class="box box-solid">
                                 <div class="box-body">
                                     <div class="chart-container">
-                                        <div id="chart_producto" style="width: 600px; height: 600px"></div>
-                                        <!-- <canvas id="chart_producto" width="500" height="200"></canvas> -->
+                                        <canvas id="chart_producto" width="500" height="200"></canvas>
                                     </div>
                                 </div>
                             </div>

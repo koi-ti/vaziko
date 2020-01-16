@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Production\PreCotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Ordenp4, App\Models\Production\PreCotizacion9, App\Models\Production\Cotizacion9, App\Models\Production\Ordenp9;
 use DB;
 
-class ProductoHistoryController extends Controller
+class ProductoHistorialController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -33,7 +33,6 @@ class ProductoHistoryController extends Controller
                     $detalle = Ordenp9::select('id', 'orden9_valor_unitario as valor', 'orden9_fh_elaboro as fecha', DB::raw("'ORD' as type"))->where('orden9_producto', $request->producto_id)->limit(10)->union($unioinpre)->union($unioncot)->orderBy('fecha', 'asc')->get();
                 }
             }
-            return response()->json($detalle);
         }
         return response()->json($detalle);
     }

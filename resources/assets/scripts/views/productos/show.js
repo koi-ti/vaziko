@@ -29,7 +29,7 @@ app || (app = {});
             // Collection
             this.itemRolloINList = new app.ItemRolloINList();
             this.prodbodeList = new app.ProdBodeList();
-            this.productoHistoryList = new app.ProductoHistoryList();
+            this.productoHistorialList = new app.ProductoHistorialList();
 
             this.referenceViews();
         },
@@ -89,9 +89,9 @@ app || (app = {});
                 }
             });
 
-            // Detalle item rollo list
-            this.productoHistoryListView = new app.ProductoHistoryListView({
-                collection: this.productoHistoryList,
+            // Detalle item historial list
+            this.productoHistorialListView = new app.ProductoHistorialListView({
+                collection: this.productoHistorialList,
                 parameters: {
                     dataFilter: {
                         producto_id: this.model.get('id'),

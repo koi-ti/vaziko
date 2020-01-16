@@ -1,5 +1,5 @@
 /**
-* Class ProductoHistoryModel extend of Backbone Model
+* Class ProductoHistorialModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9,10 +9,10 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.ProductoHistoryModel = Backbone.Model.extend({
+    app.ProductoHistorialModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('productos.history.index'));
+            return window.Misc.urlFull(Route.route('productos.historial.index'));
         },
         idAttribute: 'id',
         defaults: {}

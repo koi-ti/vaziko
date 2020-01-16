@@ -42,7 +42,7 @@ class ActualizarEstadosProduccion extends Command
         $this->info('Rutina para actualizar estados de cotización');
         DB::beginTransaction();
         try {
-            $cotizaciones = Cotizacion1::whereNotNull('cotizacion1_estado')->get();
+            $cotizaciones = Cotizacion1::all();
             foreach ($cotizaciones as $cotizacion) {
                 if ($cotizacion->cotizacion1_estado == 'N') {
                     $cotizacion->cotizacion1_estados = 'CN';
@@ -50,6 +50,8 @@ class ActualizarEstadosProduccion extends Command
                     $cotizacion->cotizacion1_estados = 'CR';
                 } else if ($cotizacion->cotizacion1_estado == 'O') {
                     $cotizacion->cotizacion1_estados = 'CO';
+                } else {
+                    $cotizacion->cotizacion1_estados = 'CC';
                 }
                 $cotizacion->save();
             }

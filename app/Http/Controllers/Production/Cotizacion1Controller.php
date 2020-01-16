@@ -17,7 +17,7 @@ class Cotizacion1Controller extends Controller
     {
         $this->middleware('ability:admin,consultar');
         $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'estados']]);
-        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar', 'aprobar']]);
+        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar', 'estados']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'estados']]);
     }
 
@@ -50,25 +50,18 @@ class Cotizacion1Controller extends Controller
                                 ->groupBy('cotizacion2_cotizacion');
             }]);
 
-            // Permisions mostrar botones crear [close, open]
-            if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones'])) {
-                $query->addSelect(DB::raw('TRUE as cotizacion_create'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as cotizacion_create'));
-            }
-
             if (auth()->user()->hasRole('admin')) {
-                $query->addSelect(DB::raw('TRUE as admin'));
+                $query->addSelect(DB::raw('TRUE as isAdmin'));
             } else {
-                $query->addSelect(DB::raw('FALSE as admin'));
+                $query->addSelect(DB::raw('FALSE as isAdmin'));
             }
 
             // Permisions mostrar botones opcional2 [complete, clone]
             if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones'])) {
-                $query->addSelect(DB::raw('TRUE as cotizacion_opcional'));
+                $query->addSelect(DB::raw('TRUE as isOptional'));
             } else {
                 $query->where('cotizacion1_abierta', true);
-                $query->addSelect(DB::raw('FALSE as cotizacion_opcional'));
+                $query->addSelect(DB::raw('FALSE as isOptional'));
             }
 
             // Persistent data filter
@@ -378,6 +371,12 @@ class Cotizacion1Controller extends Controller
         if ($request->ajax()) {
             if (!in_array($request->state, array_keys(config('koi.produccion.estados')))) {
                 return response()->json(['success' => false, 'errors' => 'El estado no es valido.']);
+            }
+
+            if (!auth()->user()->hasRole('admin')) {
+                if ($request->method == 'prev') {
+                    return response()->json(['success' => false, 'errors' => 'No posee los permisos necesarios para realizar esta acción.']);
+                }
             }
 
             $cotizacion = Cotizacion1::findOrFail($id);

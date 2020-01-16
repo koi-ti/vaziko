@@ -14,7 +14,7 @@ app || (app = {});
       	el: 'body',
 		events: {
             'click .sidebar-toggle': 'clickSidebar',
-            'click .history-back': 'clickHistoryBack',
+            'click .history-back': 'clickHistorialBack',
             'click .view-notification': 'clickViewNotification',
             'click .historial-insumo': 'clickHistorialInsumo',
             'change .calculate-formula': 'calculateFormula',
@@ -31,7 +31,7 @@ app || (app = {});
 			document.cookie = "sidebar_toggle=" + (this.$el.hasClass('sidebar-collapse') ? '' : 'sidebar-collapse') + "; path=/; expires=" + expiration.toUTCString();
 		},
 
-		clickHistoryBack: function (e) {
+		clickHistorialBack: function (e) {
 			e.preventDefault();
 
 			window.history.back();
@@ -85,8 +85,8 @@ app || (app = {});
                 this.$modal.modal('show');
 
                 // Detalle item rollo list
-                this.productoHistoryListView = new app.ProductoHistoryListView({
-                    collection: new app.ProductoHistoryList(),
+                this.productoHistorialListView = new app.ProductoHistorialListView({
+                    collection: new app.ProductoHistorialList(),
                     parameters: {
                         dataFilter: {
                             producto_id: insumo,
