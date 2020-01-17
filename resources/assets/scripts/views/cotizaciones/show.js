@@ -239,7 +239,7 @@ app || (app = {});
                         },
                         plugins: {
                             labels: {
-                                render: 'precentage',
+                                render: 'percentage',
                                 precision: 2,
                                 position: 'outside',
                                 arc: false

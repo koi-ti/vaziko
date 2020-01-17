@@ -523,6 +523,9 @@ app || (app = {});
                                     return data.datasets[item.datasetIndex].label+": "+formatTime(data.datasets[item.datasetIndex].data[item.index]);
                                 }
                             }
+                        },
+                        plugins: {
+                            labels: 'percentage'
                         }
                     }
                 });
@@ -560,7 +563,7 @@ app || (app = {});
                         },
                         plugins: {
                             labels: {
-                                render: 'precentage',
+                                render: 'percentage',
                                 precision: 2,
                                 position: 'outside',
                                 arc: false
@@ -630,6 +633,13 @@ app || (app = {});
                                 }
                             }
                         },
+                        plugins: {
+                            labels: {
+                                render: function (args) {
+                                    return '';
+                                }
+                            }
+                        }
                     }
                 });
             }

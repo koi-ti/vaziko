@@ -717,13 +717,13 @@ class OrdenpController extends Controller
 
             // Construir object con graficas
             $object = new \stdClass();
-            $sentencia = "(
+            $sql = "(
                     SELECT CONCAT(tercero_nombre1, ' ',tercero_apellido1) AS tercero_nombre, SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)))/3600 as tiempo_x_empleado
                     FROM koi_tiempop
                     INNER JOIN koi_tercero ON tiempop_tercero = koi_tercero.id
                     WHERE tiempop_ordenp = $ordenp->id
                     GROUP BY tercero_nombre)";
-            $empleados = DB::select($sentencia);
+            $empleados = DB::select($sql);
 
             // Armar objecto para la grafica
             $chartempleado = new \stdClass();
@@ -731,13 +731,14 @@ class OrdenpController extends Controller
             $chartempleado->data = array_pluck($empleados, 'tiempo_x_empleado');
             $object->chartempleado = $chartempleado;
 
-            $sentencia = "(
+            $sql = "(
                     SELECT areap_nombre, SUM(TIME_TO_SEC(TIMEDIFF(tiempop_hora_fin, tiempop_hora_inicio)))/3600 as tiempo_x_area
                     FROM koi_tiempop
                     INNER JOIN koi_areap ON tiempop_areap = koi_areap.id
+                    INNER JOIN koi_ordenproduccion2 ON tiempop_ordenp = koi_ordenproduccion2.id
                     WHERE tiempop_ordenp = $ordenp->id
                     GROUP BY areap_nombre)";
-            $areasp = DB::select($sentencia);
+            $areasp = DB::select($sql);
 
             // Armar objecto para la grafica
             $chartareap = new \stdClass();
@@ -745,7 +746,7 @@ class OrdenpController extends Controller
             $chartareap->data = array_pluck($areasp, 'tiempo_x_area');
             $object->chartareap = $chartareap;
 
-            $sentencia = "
+            $sql = "
             SELECT areap_nombre, SUM(tiempo_x_areasp) as tiempo_areasp, SUM(tiempo_x_producto) as tiempo_producto
             FROM (
                 SELECT (CASE WHEN orden6_areap THEN areap_nombre ELSE orden6_nombre END) AS areap_nombre, SUM(0) as tiempo_x_areasp, SUM(TIME_TO_SEC(orden6_tiempo))/3600 as tiempo_x_producto
@@ -762,7 +763,7 @@ class OrdenpController extends Controller
                 GROUP BY areap_nombre
             ) x
             GROUP BY areap_nombre";
-            $ordenes = DB::select($sentencia);
+            $ordenes = DB::select($sql);
 
             $chartcomparativa = new \stdClass();
             $chartcomparativa->labels = array_pluck($ordenes, 'areap_nombre');

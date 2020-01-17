@@ -554,6 +554,11 @@ app || (app = {});
                                     return data.datasets[item.datasetIndex].label+": "+formatTime(data.datasets[item.datasetIndex].data[item.index]);
                                 }
                             }
+                        },
+                        plugins: {
+                            labels: {
+                                render: 'percentage'
+                            }
                         }
                     }
                 });
@@ -591,7 +596,7 @@ app || (app = {});
                         },
                         plugins: {
                             labels: {
-                                render: 'precentage',
+                                render: 'percentage',
                                 precision: 2,
                                 position: 'outside',
                                 arc: false
@@ -661,6 +666,13 @@ app || (app = {});
                                 }
                             }
                         },
+                        plugins: {
+                            labels: {
+                                render: function (args) {
+                                    return '';
+                                }
+                            }
+                        }
                     }
                 });
             }
@@ -699,9 +711,10 @@ app || (app = {});
                         },
                         plugins: {
                             labels: {
-                                render: 'precentage',
+                                render: 'percentage',
                                 precision: 2,
                                 position: 'outside',
+                                fontStyle: 'bold',
                                 arc: false
                             }
                         }
@@ -709,8 +722,8 @@ app || (app = {});
                 });
             }
 
-            this.$('.tiempo-total').text( formatTime(resp.tiempototal) );
-            this.$('.orden-codigo').text( resp.orden_codigo );
+            this.$('.tiempo-total').text(formatTime(resp.tiempototal));
+            this.$('.orden-codigo').text(resp.orden_codigo);
         },
 
         /**
