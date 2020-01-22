@@ -594,12 +594,12 @@ class AsientoController extends Controller
             $excel = new \stdClass();
             $excel->success =  true;
 
-            Excel::filter('chunk')->load($request->file->getRealPath())->chunk(250, function($results) use (&$excel, &$cuentas, $tercero){
+            Excel::filter('chunk')->load($request->file->getRealPath())->chunk(250, function($results) use (&$excel, &$cuentas, $tercero) {
                 $headers = $results->getHeading();
                 $defaultHeaders = array_combine($headers, $headers);
                 $validator = \Validator::make($defaultHeaders, [
                     'cuenta' => 'required',
-                    'centrocosto' => 'required',
+                    'centro_costo' => 'required',
                     'beneficiario' => 'required',
                     'debito' => 'required',
                     'credito' => 'required',
@@ -621,14 +621,14 @@ class AsientoController extends Controller
                     $arCuenta['Tercero'] = !intval($row->beneficiario) ? $tercero->tercero_nit : intval($row->beneficiario);
                     $arCuenta['Detalle'] = $row->detalle;
                     $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
-                    $arCuenta['CentroCosto'] = intval($row->centrocosto) > 0 ? intval($row->centrocosto) : '';
+                    $arCuenta['CentroCosto'] = intval($row->centro_costo) > 0 ? intval($row->centro_costo) : '';
                     $arCuenta['Base'] = $row->base;
                     $arCuenta['Credito'] = $row->credito;
                     $arCuenta['Debito'] = $row->debito;
                     $arCuenta['Orden'] = '';
                     $cuentas[] = $arCuenta;
                 }
-            },false);
+            }, false);
 
             if ($documento->documento_actual) {
                 $asiento = new Asiento;
@@ -668,6 +668,7 @@ class AsientoController extends Controller
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
             }
+            
             if ($documento->documento_nif) {
                 $asientoNif = new AsientoNif;
                 $consecutive++;

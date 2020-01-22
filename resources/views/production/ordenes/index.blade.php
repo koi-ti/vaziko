@@ -93,6 +93,7 @@
                                 <th>Tercero</th>
                                 <th>Valor</th>
                                 <th>Estado</th>
+                                <th></th>
                             </tr>
                         </thead>
                     </table>

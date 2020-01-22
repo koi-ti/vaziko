@@ -73,14 +73,18 @@ class Cotizacion2Controller extends Controller
             abort(404);
         }
 
+        // // Recuperar comision vendedor
+        // $vendedor = Tercero::find($cotizacion->cotizacion1_vendedor);
+        // if ($vendedor instanceof Tercero) {
+        // }
+
         // Lazy Eager Loading
         $producto->load('tips');
 
-        if ($cotizacion->cotizacion1_abierta == false || $cotizacion->cotizacion1_anulada == true) {
-            return redirect()->route('cotizaciones.show', ['cotizacion' => $cotizacion]);
+        if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada) {
+            return redirect()->route('cotizaciones.show', compact('cotizacion'));
         }
-
-        return view('production.cotizaciones.productos.create', ['cotizacion' => $cotizacion, 'producto' => $producto]);
+        return view('production.cotizaciones.productos.create', compact('cotizacion', 'producto'));
     }
 
     /**
@@ -377,7 +381,7 @@ class Cotizacion2Controller extends Controller
         }
 
         // Validar cotizacion
-        if ($cotizacion->cotizacion1_abierta == true && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
+        if ($cotizacion->cotizacion1_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.show', compact('cotizacion', 'producto', 'cotizacion2'));
@@ -410,7 +414,7 @@ class Cotizacion2Controller extends Controller
         $producto->load('tips');
 
         // Validar cotizacion
-        if ($cotizacion->cotizacion1_abierta == false) {
+        if (!$cotizacion->cotizacion1_abierta) {
             return redirect()->route('cotizaciones.productos.show', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.create', compact('cotizacion', 'producto', 'cotizacion2'));

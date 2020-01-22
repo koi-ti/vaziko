@@ -271,10 +271,6 @@ class OrdenpController extends Controller
         if ($request->ajax()) {
             return response()->json($orden);
         }
-
-        if ($orden->orden_abierta && !$orden->orden_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes']) ) {
-            return redirect()->route('ordenes.edit', compact('orden'));
-        }
         return view('production.ordenes.show', compact('orden'));
     }
 
@@ -289,9 +285,6 @@ class OrdenpController extends Controller
         $orden = Ordenp::getOrden($id);
         if (!$orden instanceof Ordenp) {
             abort(404);
-        }
-        if (!$orden->orden_abierta || $orden->orden_anulada) {
-            return redirect()->route('ordenes.show', compact('orden'));
         }
         return view('production.ordenes.create', compact('orden'));
     }

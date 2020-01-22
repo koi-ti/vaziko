@@ -193,11 +193,11 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>" required>
+                                                    <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>">
                                                 </div>
                                             </div>
                                             <div class="col-sm-7">
-                                                <input id="cotizacion1_vendedor_nombre" name="cotizacion1_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly required>
+                                                <input id="cotizacion1_vendedor_nombre" name="cotizacion1_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly>
                                             </div>
                                         </div>
                                     </form>

@@ -104,7 +104,7 @@ class Ordenp2 extends BaseModel
     }
 
     public function scopeDetalle ($query) {
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden_cliente', 'orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("(orden2_cantidad-orden2_facturado)*orden2_total_valor_unitario as total"));
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', 'orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("(orden2_cantidad-orden2_facturado)*orden2_total_valor_unitario as total"));
         $query->whereRaw('orden2_total_valor_unitario <> 0');
         return $query;
     }

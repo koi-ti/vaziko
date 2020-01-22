@@ -63,9 +63,13 @@ app || (app = {});
             'tercero_coordinador': false,
             'tercero_coordinador_por': '',
             'tercero_vendedor': false,
+            'tercero_vendedor_estado': false,
+            'tercero_comision': 0,
             'tercero_cual': '',
             'username': '',
-            'actividad_tarifa' : ''
+            'actividad_tarifa' : '',
+            'vendedor_nit': '',
+            'vendedor_nombre': ''
         }
     });
 

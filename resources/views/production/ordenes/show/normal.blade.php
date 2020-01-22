@@ -182,9 +182,14 @@
 
 						<div class="box-footer with-border">
 							<div class="row">
-                                <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
+                                <div class="col-md-2 col-md-offset-{{ $orden->orden_abierta ? '4' : '5' }} col-sm-6 col-xs-6">
                                     <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                                 </div>
+                                @if ($orden->orden_abierta)
+                                    <div class="col-md-2 col-sm-6 col-xs-6">
+                                        <a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>

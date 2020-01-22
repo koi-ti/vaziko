@@ -65,7 +65,7 @@ class TerceroController extends Controller
                     }
 
                     if ($request->has('tercero_vendedor')) {
-                        $query->where('tercero_vendedor', true);
+                        $query->where('tercero_vendedor_estado', true);
                         $query->where('tercero_activo', true);
                     }
                 })
@@ -98,6 +98,17 @@ class TerceroController extends Controller
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Validar vendedor
+                    if ($request->has('tercero_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->tercero_vendedor)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor.']);
+                        }
+
+                        $tercero->tercero_vendedor = $vendedor->id;
+                    }
+
                     // Tercero
                     $tercero->fill($data);
                     $tercero->fillBoolean($data);
@@ -162,6 +173,17 @@ class TerceroController extends Controller
             if ($tercero->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Validar vendedor
+                    if ($request->has('tercero_vendedor')) {
+                        $vendedor = Tercero::where('tercero_nit', $request->tercero_vendedor)->first();
+                        if (!$vendedor instanceof Tercero) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor.']);
+                        }
+
+                        $tercero->tercero_vendedor = $vendedor->id;
+                    }
+
                     // Tercero
                     $tercero->fill($data);
                     $tercero->fillBoolean($data);
@@ -260,7 +282,7 @@ class TerceroController extends Controller
     {
         if ($request->has('tercero_nit')) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago',
+            $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago', 'tercero_comision',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -280,7 +302,7 @@ class TerceroController extends Controller
             }
 
             if ($request->has('tercero_vendedor')) {
-                $query->where('tercero_vendedor', true);
+                $query->where('tercero_vendedor_estado', true);
                 $query->where('tercero_activo', true);
             }
 

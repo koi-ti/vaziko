@@ -188,7 +188,7 @@ class Ordenp extends BaseModel
     }
 
     public static function getOrdenp ($codigo) {
-        $query = Ordenp::query();
+        $query = self::query();
         $query->select('koi_ordenproduccion.id as id', 'orden_culminada', 'orden_anulada', 'orden_abierta', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), DB::raw("
             CONCAT(
                 (CASE WHEN tercero_persona = 'N'

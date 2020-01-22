@@ -115,7 +115,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson( this.$formAccounting ), window.Misc.formToJson( this.$formEmployee ));
+                var data = $.extend({}, window.Misc.formToJson(e.target), window.Misc.formToJson(this.$formAccounting), window.Misc.formToJson(this.$formEmployee));
                 this.model.save(data, {wait: true, patch: true, silent: true});
             }
         },

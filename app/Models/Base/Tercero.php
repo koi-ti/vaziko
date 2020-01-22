@@ -37,7 +37,7 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
      * @var array
      */
     protected $fillable = [
-        'tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'tercero_coordinador_por', 'tercero_formapago', 'tercero_sigla', 'tercero_codigopostal', 'tercero_nombre_comercial', 'tercero_email_factura1', 'tercero_email_factura2'
+        'tercero_nit', 'tercero_digito', 'tercero_tipo', 'tercero_regimen', 'tercero_persona', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_razonsocial', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_direccion', 'tercero_email', 'tercero_representante', 'tercero_cc_representante', 'tercero_telefono1', 'tercero_telefono2', 'tercero_fax', 'tercero_celular', 'tercero_actividad', 'tercero_cual', 'tercero_coordinador_por', 'tercero_formapago', 'tercero_sigla', 'tercero_codigopostal', 'tercero_nombre_comercial', 'tercero_email_factura1', 'tercero_email_factura2', 'tercero_comision'
     ];
 
     /**
@@ -46,7 +46,7 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
      * @var array
      */
     protected $boolean = [
-        'tercero_activo', 'tercero_responsable_iva', 'tercero_autoretenedor_cree', 'tercero_gran_contribuyente', 'tercero_autoretenedor_renta', 'tercero_autoretenedor_ica', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_tecnico', 'tercero_coordinador', 'tercero_vendedor', 'tercero_otro'
+        'tercero_activo', 'tercero_responsable_iva', 'tercero_autoretenedor_cree', 'tercero_gran_contribuyente', 'tercero_autoretenedor_renta', 'tercero_autoretenedor_ica', 'tercero_socio', 'tercero_cliente', 'tercero_acreedor', 'tercero_interno', 'tercero_mandatario', 'tercero_empleado', 'tercero_proveedor', 'tercero_extranjero', 'tercero_afiliado', 'tercero_tecnico', 'tercero_coordinador', 'tercero_vendedor_estado', 'tercero_otro'
     ];
 
     /**
@@ -133,15 +133,21 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
 
     public static function getTercero($id) {
         $query = Tercero::query();
-        $query->select('koi_tercero.*', 'actividad_nombre', 'actividad_tarifa', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), DB::raw("(CASE WHEN tc.tercero_persona = 'N'
+        $query->select('koi_tercero.*', 'actividad_nombre', 'actividad_tarifa', 'tv.tercero_nit as vendedor_nit', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre, (CASE WHEN tc.tercero_persona = 'N'
                     THEN CONCAT(tc.tercero_nombre1,' ',tc.tercero_nombre2,' ',tc.tercero_apellido1,' ',tc.tercero_apellido2,
                             (CASE WHEN (tc.tercero_razonsocial IS NOT NULL AND tc.tercero_razonsocial != '') THEN CONCAT(' - ', tc.tercero_razonsocial) ELSE '' END)
                         )
                     ELSE tc.tercero_razonsocial END)
-                AS nombre_coordinador"));
+                AS nombre_coordinador, (CASE WHEN tv.tercero_persona = 'N'
+                            THEN CONCAT(tv.tercero_nombre1,' ',tv.tercero_nombre2,' ',tv.tercero_apellido1,' ',tv.tercero_apellido2,
+                                    (CASE WHEN (tv.tercero_razonsocial IS NOT NULL AND tv.tercero_razonsocial != '') THEN CONCAT(' - ', tv.tercero_razonsocial) ELSE '' END)
+                                )
+                            ELSE tv.tercero_razonsocial END)
+                        AS vendedor_nombre"));
         $query->leftJoin('koi_actividad', 'tercero_actividad', '=', 'koi_actividad.id');
         $query->leftJoin('koi_municipio', 'tercero_municipio', '=', 'koi_municipio.id');
         $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+        $query->leftJoin('koi_tercero as tv', 'koi_tercero.tercero_vendedor', '=', 'tv.id');
         $query->leftJoin('koi_tercero as tc', 'koi_tercero.tercero_coordinador_por', '=', 'tc.id');
         $query->where('koi_tercero.id', $id);
         return $query->first();

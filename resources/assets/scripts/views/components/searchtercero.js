@@ -41,11 +41,12 @@ app || (app = {});
             this.$searchName = this.$('#koi_search_tercero_nombre');
 
             this.$tercerosSearchTable = this.$modalComponent.find('#koi-search-tercero-component-table');
-			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
-            this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
-            this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
-            this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
-            this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
+			this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
+            this.$inputName = this.$("#" + this.$inputContent.attr("data-name"));
+            this.$btnContact = this.$("#" + this.$inputContent.attr("data-contacto"));
+            this.$inputOrden = this.$("#" + this.$inputContent.attr("data-orden2"));
+            this.$inputFormapago = this.$("#" + this.$inputContent.attr("data-formapago"));
+            this.$inputComision = this.$("#" + this.$inputContent.attr("data-comision"));
             this.$inputTiempop = this.$inputContent.data("tiempop");
             this.$inputProveedor = this.$inputContent.data("proveedor");
             this.checkVendedor = this.$inputContent.data("vendedor");
@@ -114,6 +115,10 @@ app || (app = {});
                 this.$inputOrden.attr('data-tercero', data.id);
             }
 
+            if (this.$inputComision.length > 0) {
+                this.$inputComision.val(data.tercero_comision);
+            }
+
             if (this.$inputFormapago.length > 0 || _.isNull(data.tercero_formapago)) {
                 this.$inputFormapago.val(data.tercero_formapago);
             }
@@ -147,14 +152,15 @@ app || (app = {});
             var _this = this;
 
             this.$inputContent = $(e.currentTarget);
-            this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-            this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
-            this.$btnContact = this.$("#"+this.$inputContent.attr("data-contacto"));
-            this.$inputOrden = this.$("#"+this.$inputContent.attr("data-orden2"));
+            this.$inputName = this.$("#" + $(e.currentTarget).attr("data-name"));
+            this.$wraperConten = this.$("#" + $(e.currentTarget).attr("data-wrapper"));
+            this.$btnContact = this.$("#" + this.$inputContent.attr("data-contacto"));
+            this.$inputOrden = this.$("#" + this.$inputContent.attr("data-orden2"));
             this.$inputTiempop = this.$inputContent.data("tiempop");
             this.$inputProveedor = this.$inputContent.data("proveedor");
             this.checkVendedor = this.$inputContent.data("vendedor");
-            this.$inputFormapago = this.$("#"+this.$inputContent.attr("data-formapago"));
+            this.$inputFormapago = this.$("#" + this.$inputContent.attr("data-formapago"));
+            this.$inputComision = this.$("#" + this.$inputContent.attr("data-comision"));
 
             if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
@@ -165,6 +171,10 @@ app || (app = {});
 
             if (this.$inputOrden.length > 0) {
                 this.$inputOrden.attr('data-tercero', '');
+            }
+
+            if (this.$inputComision.length > 0) {
+                this.$inputComision.val('');
             }
 
             var tercero = this.$inputContent.val();
@@ -196,15 +206,22 @@ app || (app = {});
                         if (!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)) {
                             _this.$inputName.val(resp.tercero_nombre);
                         }
+
                         if (_this.$btnContact.length > 0) {
                             _this.$btnContact.attr('data-tercero', resp.id);
                             _this.$btnContact.attr('data-address-default', resp.tercero_direccion);
                             _this.$btnContact.attr('data-address-nomenclatura-default', resp.tercero_direccion_nomenclatura);
                             _this.$btnContact.attr('data-municipio-default', resp.tercero_municipio);
                         }
+
                         if (_this.$inputOrden.length > 0) {
                             _this.$inputOrden.attr('data-tercero', resp.id);
                         }
+
+                        if (_this.$inputComision.length > 0) {
+                            _this.$inputComision.val(resp.tercero_comision);
+                        }
+
                         if (_this.$inputFormapago.length > 0 || _.isNull(resp.tercero_formapago)) {
                             _this.$inputFormapago.val(resp.tercero_formapago );
                         }

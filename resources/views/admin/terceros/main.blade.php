@@ -38,7 +38,6 @@
                 					</div>
                 				</div>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_tipo" class="control-label">Tipo</label>
                 				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
@@ -48,7 +47,6 @@
                 					@endforeach
                 				</select>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_persona" class="control-label">Persona</label>
                 				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
@@ -58,7 +56,6 @@
                 					@endforeach
                 				</select>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_regimen" class="control-label">Regimen</label>
                 				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
@@ -75,17 +72,14 @@
                 				<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
                 				<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
                 				<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
                 				<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
                 				<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
@@ -163,7 +157,6 @@
                 					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
                 				</div>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_telefono2" class="control-label">2do. Teléfono</label>
                 				<div class="input-group">
@@ -173,7 +166,6 @@
                 					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
                 				</div>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_fax" class="control-label">Fax</label>
                 				<div class="input-group">
@@ -183,7 +175,6 @@
                 					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
                 				</div>
                 			</div>
-
                 			<div class="form-group col-md-3">
                 				<label for="tercero_celular" class="control-label">Celular</label>
                 				<div class="input-group">
@@ -194,7 +185,26 @@
                 				</div>
                 			</div>
                 		</div>
-
+                        <div class="row">
+                            <div class="form-group col-xs-12 col-sm-4 col-md-3">
+                                <label for="tercero_vendedor" class="control-label">Vendedor</label>
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero_vendedor">
+                                            <i class="fa fa-user"></i>
+                                        </button>
+                                    </span>
+                                    <input id="tercero_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="tercero_vendedor" type="text" maxlength="15" data-name="tercero_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>">
+                                </div>
+                            </div>
+                            <div class="col-sm-6"><br>
+                                <input id="tercero_vendedor_nombre" name="tercero_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="tercero_comision" class="control-label">Comisión Vendedor</label>
+                                <input type="number" id="tercero_comision" name="tercero_comision" value="<%- tercero_comision %>" placeholder="Vendedor" class="form-control input-sm" min="0" step="0.1" max="100">
+                            </div>
+                        </div>
                 	    <div class="row">
                 			<div class="form-group col-md-6">
                 				<label for="tercero_representante" class="control-label">Representante Legal</label>
@@ -205,7 +215,6 @@
                 	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
                 	    	</div>
                 		</div>
-
                         <div class="row">
                             <div class="col-md-offset-4 col-md-2 col-sm-6 col-xs-6">
                                 <a href="<%- window.Misc.urlFull( (typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') ? Route.route('terceros.show', { terceros: id}) : Route.route('terceros.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
@@ -323,8 +332,8 @@
     									</label>
     								</div>
     								<div class="form-group col-md-2">
-    									<label class="checkbox-inline" for="tercero_vendedor">
-    										<input type="checkbox" id="tercero_vendedor" name="tercero_vendedor" value="tercero_vendedor" <%- parseInt(tercero_vendedor) ? 'checked': ''%>> Vendedor
+    									<label class="checkbox-inline" for="tercero_vendedor_estado">
+    										<input type="checkbox" id="tercero_vendedor_estado" name="tercero_vendedor_estado" value="tercero_vendedor_estado" <%- parseInt(tercero_vendedor_estado) ? 'checked': ''%>> Vendedor
     									</label>
     								</div>
     								<div class="form-group col-md-2">
@@ -332,7 +341,7 @@
     										<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- parseInt(tercero_otro) ? 'checked': ''%>> Otro
     									</label>
     								</div>
-    								<div class="form-group col-md-2">
+    								<div class="form-group col-md-4">
     									<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
     								</div>
     						    </div>

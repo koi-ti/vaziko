@@ -18,7 +18,8 @@ app || (app = {});
             'click .close-ordenp': 'closeOrdenp',
             'click .complete-ordenp': 'completeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
-            'click .open-ordenp': 'openOrdenp'
+            'click .open-ordenp': 'openOrdenp',
+            'click .resume-ordenp': 'resumeOrdenp'
         },
 
         /**
@@ -66,7 +67,8 @@ app || (app = {});
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
                     { data: 'detalle[0].total', name: 'detalle[0].total' },
-                    { data: 'orden_abierta', name: 'orden_abierta' }
+                    { data: 'orden_abierta', name: 'orden_abierta' },
+                    { data: 'id', name: 'id' }
                 ],
                 rowReorder: {
                    selector: 'td:nth-child(1)'
@@ -80,11 +82,13 @@ app || (app = {});
                         width: '13%',
                         searchable: false,
                         render: function (data, type, full, row) {
-                            const pre = '<a href="'+ window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion}))+'" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
-                            const cot = '<a href="'+ window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion}))+'" title="Ir a cotización"><span class="label label-danger">' + full.cotizacion_codigo + '</span></a>';
-                            const nor = '<a href="'+ window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id }))  +'">' + data + '</a>';
-                            var badges = nor + " ";
+                            const pre = '<a href="' + window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion})) + '" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
 
+                            const cot = '<a href="' + window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion})) + '" title="Ir a cotización"><span class="label label-danger">' + full.cotizacion_codigo + '</span></a>';
+
+                            const nor = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id})) + '">' + data + '</a>';
+
+                            var badges = nor + " ";
                             if (full.cotizacion1_precotizacion) {
                                 badges += pre + " ";
                             }
@@ -92,7 +96,6 @@ app || (app = {});
                             if (full.orden_cotizacion) {
                                 badges += cot;
                             }
-
                             return badges
                         }
                     },
@@ -102,10 +105,14 @@ app || (app = {});
                         width: '13%',
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            const close = '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-lock"></i></a>';
-                            const open = '<a class="btn btn-info btn-xs open-ordenp" title="Reabrir orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-unlock"></i></a>';
-                            const clone = '<a class="btn btn-info btn-xs clone-ordenp" title="Clonar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-clone"></i></a>';
-                            const complete = '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="'+ full.id +'" data-code="'+ full.orden_codigo +'" data-refer="'+ full.tercero_nombre+'"><i class="fa fa-handshake-o"></i></a>';
+                            const close = '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-lock"></i></a>';
+
+                            const open = '<a class="btn btn-info btn-xs open-ordenp" title="Reabrir orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-unlock"></i></a>';
+
+                            const clone = '<a class="btn btn-info btn-xs clone-ordenp" title="Clonar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-clone"></i></a>';
+
+                            const complete = '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-handshake-o"></i></a>';
+
                             var buttons = '';
 
                             if (parseInt(full.orden_create) && parseInt(full.orden_opcional)) {
@@ -120,7 +127,6 @@ app || (app = {});
                                 // Verificar que este alguno de estos activos para continuar agregando botones
                                 if (parseInt(full.orden_anulada) ||  parseInt(full.orden_culminada) || parseInt(full.orden_abierta)) {
                                     buttons += parseInt(full.orden_abierta) ? ' ' + clone + ' ' + complete : '';
-
                                     buttons += parseInt(full.orden_culminada) ? ' ' + close : '';
                                 }
                             }
@@ -171,6 +177,15 @@ app || (app = {});
                                 return '<span class="label label-warning">CERRADA</span>';
                             }
                         }
+                    },
+                    {
+                        width: '5%',
+                        targets: 10,
+                        orderable: false,
+                        searchable: false,
+                        render: function (data, type, full, row) {
+                            return '<a class="btn btn-primary btn-xs resume-ordenp" title="Orden de producción resumida" data-resource="' + data + '"><i class="fa fa-list"></i></a>';
+                        }
                     }
                 ],
                 fnRowCallback: function(row, data) {
@@ -185,13 +200,19 @@ app || (app = {});
 			});
         },
 
-        search: function(e) {
+        /**
+        * Search table filters
+        */
+        search: function (e) {
             e.preventDefault();
 
             this.ordersSearchTable.ajax.reload();
         },
 
-        clear: function(e) {
+        /**
+        * Clear table filters
+        */
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchordenpOrden.val('');
@@ -210,24 +231,26 @@ app || (app = {});
         closeOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                model = this.$(e.currentTarget).data();
+            var model = this.$(e.currentTarget).data(),
+                _this = this;
 
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var closeConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: model.code },
+                    dataFilter: {
+                        orden_codigo: model.code
+                    },
                     template: _.template(($('#ordenp-close-confirm-tpl').html() || '')),
                     titleConfirm: 'Cerrar orden de producción',
                     onConfirm: function () {
                         // Close orden
                         $.ajax({
-                            url: window.Misc.urlFull(Route.route('ordenes.cerrar', { ordenes: model.resource })),
+                            url: window.Misc.urlFull(Route.route('ordenes.cerrar', {ordenes: model.resource})),
                             type: 'GET',
-                            beforeSend: function() {
+                            beforeSend: function () {
                                 window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function(resp) {
+                        .done(function (resp) {
                             window.Misc.removeSpinner(_this.el);
                             if (!_.isUndefined(resp.success)) {
                                 // response success or error
@@ -245,15 +268,14 @@ app || (app = {});
                                 _this.ordersSearchTable.ajax.reload();
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
                             window.Misc.removeSpinner(_this.el);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
-            cancelConfirm.render();
+            closeConfirm.render();
         },
 
         /**
@@ -262,26 +284,27 @@ app || (app = {});
         completeOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                model = this.$(e.currentTarget).data();
+            var model = this.$(e.currentTarget).data(),
+                _this = this;
 
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var completeConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: model.code },
+                    dataFilter: {
+                        orden_codigo: model.code
+                    },
                     template: _.template(($('#ordenp-complete-confirm-tpl').html() || '')),
                     titleConfirm: 'Completar orden de producción',
                     onConfirm: function () {
-                        // Close orden
+                        // Complete orden
                         $.ajax({
-                            url: window.Misc.urlFull(Route.route('ordenes.completar', { ordenes: model.resource })),
+                            url: window.Misc.urlFull(Route.route('ordenes.completar', {ordenes: model.resource})),
                             type: 'GET',
-                            beforeSend: function() {
+                            beforeSend: function () {
                                 window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function(resp) {
+                        .done(function (resp) {
                             window.Misc.removeSpinner(_this.el);
-
                             if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
@@ -294,18 +317,17 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', { ordenes: model.resource })));
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: model.resource})));
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
                             window.Misc.removeSpinner(_this.el);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
-
-            cancelConfirm.render();
+            completeConfirm.render();
         },
 
         /**
@@ -314,10 +336,10 @@ app || (app = {});
         cloneOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                model = this.$(e.currentTarget).data(),
-                route = window.Misc.urlFull(Route.route('ordenes.clonar', { ordenes: model.resource })),
-                data = { orden_codigo: model.code };
+            var model = this.$(e.currentTarget).data(),
+                route = window.Misc.urlFull(Route.route('ordenes.clonar', {ordenes: model.resource})),
+                data = {orden_codigo: model.code},
+                _this = this;
 
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -331,14 +353,13 @@ app || (app = {});
                             'wrap': _this.el,
                             'callback': (function (_this) {
                                 return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id })));
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });
                     }
                 }
             });
-
             cloneConfirm.render();
         },
 
@@ -348,26 +369,27 @@ app || (app = {});
         openOrdenp: function (e) {
             e.preventDefault();
 
-            var _this = this,
-                model = this.$(e.currentTarget).data();
+            var model = this.$(e.currentTarget).data(),
+                _this = this;
 
-            var cancelConfirm = new window.app.ConfirmWindow({
+            var openConfirm = new window.app.ConfirmWindow({
                 parameters: {
-                    dataFilter: { orden_codigo: model.code },
+                    dataFilter: {
+                        orden_codigo: model.code
+                    },
                     template: _.template(($('#ordenp-open-confirm-tpl').html() || '')),
                     titleConfirm: 'Reabir orden de producción',
                     onConfirm: function () {
                         // Open orden
                         $.ajax({
-                            url: window.Misc.urlFull(Route.route('ordenes.abrir', { ordenes: model.resource })),
+                            url: window.Misc.urlFull(Route.route('ordenes.abrir', {ordenes: model.resource})),
                             type: 'GET',
-                            beforeSend: function() {
+                            beforeSend: function () {
                                 window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function(resp) {
+                        .done(function (resp) {
                             window.Misc.removeSpinner(_this.el);
-
                             if (!_.isUndefined(resp.success)) {
                                 // response success or error
                                 var text = resp.success ? '' : resp.errors;
@@ -380,19 +402,30 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: model.resource })));
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: model.resource})));
                             }
                         })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                        .fail(function (jqXHR, ajaxOptions, thrownError) {
                             window.Misc.removeSpinner(_this.el);
                             alertify.error(thrownError);
                         });
                     }
                 }
             });
+            openConfirm.render();
+        },
 
-            cancelConfirm.render();
-        }
+        /**
+        * Resumen orden de produccion
+        */
+        resumeOrdenp: function (e) {
+            e.preventDefault();
+
+            var resource = this.$(e.currentTarget).data('resource');
+
+            // Redirect show view
+            window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.show', {ordenes: resource, resumido: true})));
+        },
     });
 
 })(jQuery, this, this.document);
