@@ -240,11 +240,11 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="orden_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="orden_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>" required>
+                                                    <input id="orden_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="orden_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>">
                                                 </div>
                                             </div>
                                             <div class="col-sm-7">
-                                                <input id="orden_vendedor_nombre" name="orden_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly required>
+                                                <input id="orden_vendedor_nombre" name="orden_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly>
                                             </div>
                                         </div>
                                     </form>
@@ -295,9 +295,9 @@
                                                                         <span class="caret"></span>
                                                                     </button>
                                                                     <ul class="dropdown-menu">
-                                                                        <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table change-producto" data-render="productop" data-call="P">Pre-cotización</a></li>
-                                                                        <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-call="C">Cotización</a></li>
-                                                                        <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-call="O">Orden de producción</a></li>
+                                                                        <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-state="P">Pre-cotización</a></li>
+                                                                        <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-state="C">Cotización</a></li>
+                                                                        <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-state="O">Orden de producción</a></li>
                                                                     </ul>
                                                                 </span>
                                                                 <input type="hidden" id="ordenp" name="ordenp" value="<%- id %>" required>

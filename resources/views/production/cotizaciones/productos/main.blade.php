@@ -15,7 +15,7 @@
                 <li><a href="{{ route('cotizaciones.index') }}">Cotización</a></li>
                 <li><a href="{{ route('cotizaciones.edit', ['cotizaciones' => $cotizacion->id]) }}">{{ $cotizacion->cotizacion_codigo }}</a></li>
                 <li class="active">Producto</li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                     <li class="active">Editar</li>
                 <% }else{ %>
                     <li class="active">Nuevo</li>
@@ -56,11 +56,7 @@
                         <div class="row">
                             <label class="col-md-2 control-label">Estado</label>
                             <div class="form-group col-md-10">
-                                @if ($cotizacion->cotizacion1_pre)
-                                    <span class="label label-warning">PRE-COTIZACIÓN</span>
-                                @else
-                                    <span class="label label-success">COTIZACIÓN</span>
-                                @endif
+                                <span class="label label-{{ in_array($cotizacion->cotizacion1_estados, ['PC', 'PF']) ? 'warning' : 'success' }}">{{ config('koi.produccion.estados')[$cotizacion->cotizacion1_estados] }}</span>
                             </div>
                         </div>
 
@@ -81,7 +77,7 @@
                         <div class="row">
                             <label class="col-md-2 control-label">Producto</label>
                             <div class="form-group col-md-10">
-                                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                                     <%- productop_nombre %>
                                 <% }else{ %>
                                     {{ $producto->productop_nombre }}
@@ -112,10 +108,10 @@
                             </div>
                         </div>
 
-                        @if($producto->productop_abierto || $producto->productop_cerrado)
+                        @if ($producto->productop_abierto || $producto->productop_cerrado)
                             <div class="box box-danger">
                                 <div class="box-body">
-                                    @if($producto->productop_abierto)
+                                    @if ($producto->productop_abierto)
                                         <div class="row">
                                             <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
                                             <label for="cotizacion2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -136,7 +132,7 @@
                                         </div>
                                     @endif
 
-                                    @if($producto->productop_cerrado)
+                                    @if ($producto->productop_cerrado)
                                         <div class="row">
                                             <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
                                             <label for="cotizacion2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -160,7 +156,7 @@
                             </div>
                         @endif
 
-                        @if($producto->productop_3d)
+                        @if ($producto->productop_3d)
                             <div class="box box-danger">
                                 <div class="box-body">
                                     <div class="row">
@@ -193,7 +189,7 @@
                             </div>
                         @endif
 
-                        @if($producto->productop_tiro || $producto->productop_retiro)
+                        @if ($producto->productop_tiro || $producto->productop_retiro)
                             <div class="box box-danger">
                                 <div class="box-body">
                                     <div class="row">
@@ -211,7 +207,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if($producto->productop_tiro)
+                                                    @if ($producto->productop_tiro)
                                                         <tr>
                                                             <th class="text-center">T <input type="checkbox" id="cotizacion2_tiro" name="cotizacion2_tiro" class="check-type" value="cotizacion2_tiro" <%- parseInt(cotizacion2_tiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="cotizacion2_yellow" name="cotizacion2_yellow" value="cotizacion2_yellow" <%- parseInt(cotizacion2_yellow) ? 'checked': ''%>></td>
@@ -222,7 +218,7 @@
                                                             <td class="text-center"><input type="checkbox" id="cotizacion2_color2" name="cotizacion2_color2" value="cotizacion2_color2" <%- parseInt(cotizacion2_color2) ? 'checked': ''%>></td>
                                                         </tr>
                                                     @endif
-                                                    @if($producto->productop_retiro)
+                                                    @if ($producto->productop_retiro)
                                                         <tr>
                                                             <th class="text-center">R <input type="checkbox" id="cotizacion2_retiro" name="cotizacion2_retiro" class="check-type" value="cotizacion2_retiro" <%- parseInt(cotizacion2_retiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="cotizacion2_yellow2" name="cotizacion2_yellow2" value="cotizacion2_yellow2" <%- parseInt(cotizacion2_yellow2) ? 'checked': ''%>></td>
@@ -239,15 +235,15 @@
                                     </div>
 
                                     <div class="row">
-                                        @if($producto->productop_tiro)
-                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                        @if ($producto->productop_tiro)
+                                            <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
                                                 <label for="cotizacion2_nota_tiro" class="control-label">Nota tiro</label>
                                                 <textarea id="cotizacion2_nota_tiro" name="cotizacion2_nota_tiro" class="form-control" rows="2" placeholder="Nota tiro"><%- cotizacion2_nota_tiro %></textarea>
                                             </div>
                                         @endif
 
-                                        @if($producto->productop_retiro)
-                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                        @if ($producto->productop_retiro)
+                                            <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
                                                 <label for="cotizacion2_nota_retiro" class="control-label">Nota retiro</label>
                                                 <textarea id="cotizacion2_nota_retiro" name="cotizacion2_nota_retiro" class="form-control" rows="2" placeholder="Nota retiro"><%- cotizacion2_nota_retiro %></textarea>
                                             </div>
@@ -284,7 +280,7 @@
                                         <h3 class="box-title">Máquinas de producción</h3>
                                     </div>
                                     <div class="box-body">
-                                        @foreach( App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, isset($cotizacion2) ? $cotizacion2->id : null ) as $maquina)
+                                        @foreach (App\Models\Production\Cotizacion3::getCotizaciones3($producto->id, isset($cotizacion2) ? $cotizacion2->id : null) as $maquina)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <label class="checkbox-inline without-padding white-space-normal" for="cotizacion3_maquinap_{{ $maquina->id }}">
@@ -303,7 +299,7 @@
                                         <h3 class="box-title">Acabados de producción</h3>
                                     </div>
                                     <div class="box-body">
-                                        @foreach( App\Models\Production\Cotizacion5::getCotizaciones5($producto->id, isset($cotizacion2) ? $cotizacion2->id : null ) as $acabado)
+                                        @foreach (App\Models\Production\Cotizacion5::getCotizaciones5($producto->id, isset($cotizacion2) ? $cotizacion2->id : null) as $acabado)
                                             <div class="row">
                                                 <div class="form-group col-md-12">
                                                     <label class="checkbox-inline without-padding white-space-normal" for="cotizacion5_acabadop_{{ $acabado->id }}">
@@ -317,7 +313,7 @@
                             </div>
                         </div>
 
-                        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                             <div class="box box-danger">
                                 <div class="box-header with-border">
                                     <h3 class="box-title">Fórmulas</h3>
@@ -346,7 +342,6 @@
                                 </div>
                             </div>
                         @endif
-
                         <div class="box box-danger">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Imágenes</h3>
@@ -365,7 +360,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-materialp-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Cotizacion4::getMaterials( $producto->id ) as $materialp )
+                                    @foreach (App\Models\Production\Cotizacion4::getMaterials($producto->id) as $materialp)
                                         <div class="form-group col-md-4">
                                             <label>{{ $materialp }}</label>
                                         </div>
@@ -375,7 +370,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="cotizacion4_materialp" id="cotizacion4_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="cotizacion4_producto" data-wrapper="materialesp-wrapper-producto" data-reference="material" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Cotizacion4::getMaterials( $producto->id ) as $key => $value )
+                                            @foreach (App\Models\Production\Cotizacion4::getMaterials($producto->id) as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -446,7 +441,7 @@
                                     <div class="form-group col-sm-5 col-md-offset-1">
                                         <select name="cotizacion6_areap" id="cotizacion6_areap" class="form-control select2-default-clear" data-placeholder="Áreas de producción">
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                            @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -485,13 +480,13 @@
                                             <th width="30%">Área</th>
                                             <th width="30%">Nombre</th>
                                             <th width="20%" class="text-center">Tiempo</th>
-                                            @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                                 <th width="10%">Valor</th>
                                                 <th width="10%">Total</th>
                                             @endif
                                         </tr>
                                     </thead>
-                                    @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
+                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5"></td>
@@ -513,7 +508,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-empaque-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Productop5::getPackaging() as $empaque )
+                                    @foreach (App\Models\Production\Productop5::getPackaging() as $empaque)
                                         <div class="form-group col-md-4">
                                             <label>{{ $empaque }}</label>
                                         </div>
@@ -523,7 +518,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="cotizacion9_materialp" id="cotizacion9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="cotizacion9_producto" data-wrapper="materialesp-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Productop5::getPackaging() as $key => $value )
+                                            @foreach (App\Models\Production\Productop5::getPackaging() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -591,7 +586,7 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach( App\Models\Production\Productop5::getTransportes() as $transporte )
+                                    @foreach (App\Models\Production\Productop5::getTransportes() as $transporte)
                                         <div class="form-group col-md-4">
                                             <label>{{ $transporte }}</label>
                                         </div>
@@ -601,7 +596,7 @@
                                     <div class="form-group col-sm-6">
                                         <select name="cotizacion10_materialp" id="cotizacion10_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="cotizacion10_producto" data-wrapper="materialesp-wrapper-producto" data-reference="transporte" required>
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach( App\Models\Production\Productop5::getTransportes() as $key => $value )
+                                            @foreach (App\Models\Production\Productop5::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -662,7 +657,7 @@
                 </div>
             </div>
 
-            @if (Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-danger">
@@ -779,14 +774,31 @@
                                             </div>
                                             <div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
                                             <div class="col-xs-10 col-sm-4 text-right">
-                                                <span class="pull-right badge bg-red" id="info-total"></span>
+                                                <span class="pull-right badge bg-red" id="info-pretotal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-danger">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-sm-2"><b>IVA ({{ $cotizacion->cotizacion1_iva }}%)</b></div>
+                                            <input type="hidden" id="iva_cotizacion" name="iva_cotizacion" value="{{ $cotizacion->cotizacion1_iva }}">
+                                            <div class="col-xs-10 col-sm-10 text-right">
+                                                <span class="pull-right badge bg-green" id="info-iva"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-danger">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-sm-2"><b>Total</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right">
+                                                <span class="pull-right badge bg-green" id="info-total"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <p><b>Los campos de transporte, viáticos, materiales y áreas se dividirán por la cantidad ingresada.</b></p>
+                                <p><b>Los campos de viáticos, materiales, áreas, empaques y transportes se dividirán por la cantidad ingresada.</b></p>
                             </div>
                         </div>
                     </div>
@@ -812,7 +824,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-materialp-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-materialp-cotizacion-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -825,11 +837,11 @@
             </td>
         <% } %>
         <td><%- materialp_nombre %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td><%- cotizacion4_medidas %></td>
         <td><%- cotizacion4_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion4_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion4_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion4_valor_total) %></td>
     </script>
 
     <script type="text/template" id="cotizacion-producto-materialp-edit-item-tpl">
@@ -838,7 +850,7 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="cotizacion4_medidas_<%- id %>" name="cotizacion4_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion4_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion4_medidas %>" required>
@@ -852,7 +864,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-empaque-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-empaque-cotizacion-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -864,12 +876,12 @@
                 </a>
             </td>
         <% } %>
-        <td><%- !_.isUndefined(empaque_nombre) && !_.isNull(empaque_nombre) ? empaque_nombre : '-' %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
+        <td><%- empaque_nombre || '-' %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td><%- cotizacion9_medidas %></td>
         <td><%- cotizacion9_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion9_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion9_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion9_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion9_valor_total) %></td>
     </script>
 
     <script type="text/template" id="cotizacion-producto-empaque-edit-item-tpl">
@@ -878,7 +890,7 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="cotizacion9_medidas_<%- id %>" name="cotizacion9_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion9_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion9_medidas %>" required>
@@ -892,7 +904,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-areas-item-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-areap-cotizacion-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -904,12 +916,12 @@
                 </a>
             </td>
         <% } %>
-        <td><%- areap_nombre ? areap_nombre : '-' %></td>
-        <td><%- cotizacion6_nombre ? cotizacion6_nombre : '-' %></td>
+        <td><%- areap_nombre || '-' %></td>
+        <td><%- cotizacion6_nombre || '-' %></td>
         <td class="text-center"><%- cotizacion6_horas %>:<%- cotizacion6_minutos %></td>
-        @if( Auth::user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) )
-            <td class="text-right"><%- window.Misc.currency( cotizacion6_valor ) %></td>
-            <td class="text-right"><%- window.Misc.currency( total ) %></td>
+        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+            <td class="text-right"><%- window.Misc.currency(cotizacion6_valor) %></td>
+            <td class="text-right"><%- window.Misc.currency(total) %></td>
         @endif
     </script>
 
@@ -919,8 +931,8 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- areap_nombre ? areap_nombre : '-' %></td>
-        <td><%- cotizacion6_nombre ? cotizacion6_nombre : '-' %></td>
+        <td><%- areap_nombre || '-' %></td>
+        <td><%- cotizacion6_nombre || '-' %></td>
         <td colspan="3">
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
@@ -934,7 +946,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-producto-transporte-item-tpl">
-        <% if( edit ) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-transporte-cotizacion-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -946,12 +958,12 @@
                 </a>
             </td>
         <% } %>
-        <td><%- !_.isUndefined(transporte_nombre) && !_.isNull(transporte_nombre) ? transporte_nombre : '-' %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
+        <td><%- transporte_nombre || '-' %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td><%- cotizacion10_medidas %></td>
         <td><%- cotizacion10_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion10_valor_unitario ) %></td>
-        <td class="text-right"><%- window.Misc.currency( cotizacion10_valor_total ) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion10_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion10_valor_total) %></td>
     </script>
 
     <script type="text/template" id="cotizacion-producto-transporte-edit-item-tpl">
@@ -960,7 +972,7 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="cotizacion10_medidas_<%- id %>" name="cotizacion10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="cotizacion10_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion10_medidas %>" required>

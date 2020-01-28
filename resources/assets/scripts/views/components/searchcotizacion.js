@@ -32,11 +32,14 @@ app || (app = {});
             e.preventDefault();
             var _this = this;
 
-            // Render template
-            this.$modalComponent.find('.content-modal').html(this.template);
+            // Reference state
+            this.state = $(e.currentTarget).attr("data-state");
 
-            this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
-            this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
+            // Render template
+            this.$modalComponent.find('.content-modal').html(this.template({state: this.state}));
+
+            this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
+            this.$inputName = this.$("#" + this.$inputContent.attr("data-name"));
 
             // References
             this.$searchCotizacion = this.$('#search_cotizacion_numero');
@@ -53,6 +56,7 @@ app || (app = {});
                 ajax: {
                     url: window.Misc.urlFull(Route.route('cotizaciones.index')),
                     data: function (data) {
+                        data.cotizacion_estado = _this.state;
                         data.cotizacion_numero = _this.$searchCotizacion.val();
                         data.cotizacion_tercero_nit = _this.$searchCotizacionTercero.val();
                     }
@@ -62,8 +66,7 @@ app || (app = {});
                     { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
                     { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'cotizacion1_fecha', name: 'cotizacion1_fecha' },
-                    { data: 'id', name: 'id' }
+                    { data: 'cotizacion1_fecha', name: 'cotizacion1_fecha' }
                 ],
                 order: [
                 	[ 1, 'desc' ], [ 2, 'desc' ]
@@ -81,23 +84,16 @@ app || (app = {});
                         visible: false
                     },
                     {
-                        targets: 4 ,
+                        targets: 3,
                         render: function (data, type, full, row) {
-                            return window.moment(data).format('YYYY-MM-DD');
+                            var estado = window.Misc.stateProduction(full.cotizacion1_estados);
+                            return data + ' <span class="label label-' + estado.color + '">' + estado.nombre + '</span>';
                         }
                     },
                     {
-                        targets: 5,
-                        orderable: false,
-                        className: 'text-center',
+                        targets: 4 ,
                         render: function (data, type, full, row) {
-                            if (parseInt(full.cotizacion1_anulada)) {
-                                return '<span class="label label-danger">ANULADA</span>';
-                            } else if (parseInt(full.cotizacion1_abierta)) {
-                                return '<span class="label label-success">ABIERTA</span>';
-                            } else {
-                                return '<span class="label label-warning">CERRADA</span>';
-                            }
+                            return window.moment(data).format('YYYY-MM-DD');
                         }
                     }
                 ],

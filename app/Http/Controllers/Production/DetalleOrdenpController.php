@@ -900,36 +900,20 @@ class DetalleOrdenpController extends Controller
 
             DB::beginTransaction();
             try {
-                switch ($request->option) {
-                    case 'P':
-                        $precotizacion2 = PreCotizacion2::find($request->productop);
-                        if (!$precotizacion2 instanceof PreCotizacion2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la precotización']);
-                        }
-
-                        $producto = $precotizacion2->crearProductoOrden($orden->id);
-                        break;
-
-                    case 'C':
-                        $cotizacion2 = Cotizacion2::find($request->productop);
-                        if (!$cotizacion2 instanceof Cotizacion2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
-                        }
-
-                        $producto = $cotizacion2->crearProductoOrden($orden->id);
-                        break;
-
-                    case 'O':
-                        $ordenp2 = Ordenp2::find($request->productop);
-                        if (!$ordenp2 instanceof Ordenp2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
-                        }
-
-                        $producto = $ordenp2->crearProductoOrden($orden->id);
-                        break;
+                if ($request->option == 'O') {
+                    $ordenp2 = Ordenp2::find($request->productop);
+                    if (!$ordenp2 instanceof Ordenp2) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
+                    }
+                    $producto = $ordenp2->crearProductoOrden($orden->id);
+                } else {
+                    $cotizacion2 = Cotizacion2::find($request->productop);
+                    if (!$cotizacion2 instanceof Cotizacion2) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
+                    }
+                    $producto = $cotizacion2->crearProductoOrden($orden->id);
                 }
 
                 DB::commit();

@@ -90,12 +90,12 @@
 								@endif
 							</p>
 							@if ($cotizacion2->imagenes != [])
-								<table width="100%">
-									@foreach(array_chunk($cotizacion2->imagenes, 2) as $chunk)
-										<tr>
+								<table class="rtable" border="0">
+									@foreach(array_chunk($cotizacion2->imagenes, 3) as $chunk)
+										<tr style="height: 100%;">
 											@foreach($chunk as $imagen)
-												<td>
-													<img src="{{ $imagen }}" alt="cotizacion" style="width:150px; height: 100px;">
+												<td style="text-align: center;">
+													<img src="{{ $imagen }}" alt="cotizacion" style="max-width: 900%; height: 120px;">
 												</td>
 											@endforeach
 										</tr>

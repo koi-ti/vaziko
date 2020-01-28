@@ -212,7 +212,7 @@ class OrdenpController extends Controller
 
                     // Validar que exista el tercero con check vendedor
                     if ($request->has('orden_vendedor')) {
-                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor', true)->first();
+                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor_estado', true)->first();
                         if (!$vendedor instanceof Tercero) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
@@ -222,7 +222,7 @@ class OrdenpController extends Controller
                     }
 
                     // Recuperar numero orden
-                    $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
+                    $numero = Ordenp::where('orden_ano', date('Y'))->max('orden_numero');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // Orden de produccion
@@ -332,7 +332,7 @@ class OrdenpController extends Controller
 
                     // Validar que exista el tercero con check vendedor
                     if ($request->has('orden_vendedor')) {
-                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor', true)->first();
+                        $vendedor = Tercero::where('tercero_nit', $request->orden_vendedor)->where('tercero_vendedor_estado', true)->first();
                         if (!$vendedor instanceof Tercero) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
@@ -349,8 +349,10 @@ class OrdenpController extends Controller
                     $orden->fillBoolean($data);
                     $orden->orden_cliente = $tercero->id;
                     $orden->orden_contacto = $contacto->id;
+
                     // Traer modificaciones
                     $changes = $orden->getDirty();
+
                     // Guardar
                     $orden->save();
 
@@ -573,7 +575,7 @@ class OrdenpController extends Controller
             DB::beginTransaction();
             try {
                 // Recuperar numero orden
-                $numero = DB::table('koi_ordenproduccion')->where('orden_ano', date('Y'))->max('orden_numero');
+                $numero = Ordenp::where('orden_ano', date('Y'))->max('orden_numero');
                 $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                 // Orden

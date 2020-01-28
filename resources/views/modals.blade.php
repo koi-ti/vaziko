@@ -502,69 +502,12 @@
 	{!! Form::close() !!}
 </script>
 
-<script type="text/template" id="koi-search-precotizacion-component-tpl">
-	<div class="modal-header small-box {{ config('koi.template.bg') }}">
-		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-		<h4 class="inner-title-modal modal-title">Buscador de pre-cotizaciones</h4>
-	</div>
-	{!! Form::open(['id' => 'form-koi-search-precotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-		<div class="modal-body">
-			<div class="form-group">
-				<label for="search_precotizacion_numero" class="col-md-1 control-label">Codigo</label>
-				<div class="col-md-2">
-					<input id="search_precotizacion_numero" placeholder="Codigo" class="form-control input-sm" name="search_precotizacion_numero" type="text" maxlength="15">
-				</div>
-				<label for="search_precotizacion_tercero" class="col-sm-1 control-label">Tercero</label>
-				<div class="form-group col-sm-3">
-		      		<div class="input-group input-group-sm">
-						<span class="input-group-btn">
-							<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="search_precotizacion_tercero">
-								<i class="fa fa-user"></i>
-							</button>
-						</span>
-						<input id="search_precotizacion_tercero" placeholder="Tercero" class="form-control tercero-koi-component input-sm" name="search_precotizacion_tercero" type="text" maxlength="15" data-wrapper="modal-asiento-wrapper-precotizacion" data-name="search_precotizacion_tercero_nombre">
-					</div>
-				</div>
-				<div class="col-sm-5">
-					<input id="search_precotizacion_tercero_nombre" name="search_precotizacion_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-offset-4 col-md-2 col-xs-6">
-					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-precotizacion-component">Buscar</button>
-				</div>
-				<div class="col-md-2 col-xs-6">
-					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-precotizacion-component">Limpiar</button>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-md-12 table-responsive">
-					<table id="koi-search-precotizacion-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
-		                <thead>
-				            <tr>
-				                <th width="10%">Código</th>
-			                	<th>Ano</th>
-				                <th>Numero</th>
-			                	<th width="70%">Tercero</th>
-			                	<th width="10%">Fecha</th>
-			                	<th width="10%">Estado</th>
-				            </tr>
-				        </thead>
-		            </table>
-	           	</div>
-	     	</div>
-		</div>
-	{!! Form::close() !!}
-</script>
-
 <script type="text/template" id="koi-search-cotizacion-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
 		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-		<h4 class="inner-title-modal modal-title">Buscador de cotizaciones</h4>
+		<h4 class="inner-title-modal modal-title">Buscador de <%- state == 'P' ? 'pre-' : '' %>cotizaciones</h4>
 	</div>
 	{!! Form::open(['id' => 'form-koi-search-cotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 		<div class="modal-body">
@@ -606,7 +549,6 @@
 				                <th>Numero</th>
 			                	<th width="70%">Tercero</th>
 			                	<th width="10%">Fecha</th>
-			                	<th width="10%">Estado</th>
 				            </tr>
 				        </thead>
 		            </table>
@@ -676,109 +618,31 @@
 </script>
 
 <!-- Script productos -->
-<script type="text/template" id="koi-search-productos-precotizacion-component-tpl">
-	<div class="modal-header small-box {{ config('koi.template.bg') }}">
-		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-		</button>
-		<h4 class="inner-title-modal modal-title">Buscador productos de pre-cotizaciones</h4>
-	</div>
-	{!! Form::open(['id' => 'form-koi-search-producto-precotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-		<div class="modal-body">
-			<div class="row">
-                <label for="search_precotizacion" class="col-md-1 control-label">Pre-cotización</label>
-                <div class="form-group col-md-3 col-sm-8 col-xs-8">
-                    <div class="input-group input-group-sm">
-                        <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-flat btn-koi-search-precotizacion-component-table" data-field="search_precotizacion">
-                                <i class="fa fa-building-o"></i>
-                            </button>
-                        </span>
-                        <input id="search_precotizacion" name="search_cotizacion" placeholder="Cotización" class="form-control precotizacion-koi-component" type="text" maxlength="15" data-name="search_precotizacion_nombre">
-                    </div>
-                </div>
-                <div class="col-sm-6 col-md-8 col-xs-10">
-                    <input id="search_precotizacion_nombre" name="search_precotizacion_nombre" placeholder="Cliente" class="form-control input-sm" type="text" readonly>
-                </div>
-            </div>
-			<div class="row">
-                <label for="search_precotizacion_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
-				<div class="col-md-5">
-					<select name="search_precotizacion_estado" id="search_precotizacion_estado" class="form-control">
-						<option value="" selected>Todas</option>
-						<option value="A">Abiertas</option>
-						<option value="C">Cerradas</option>
-						<option value="T">Culminadas</option>
-					</select>
-				</div>
-            </div><br>
-
-			<div class="form-group">
-				<div class="col-md-offset-4 col-md-2 col-xs-6">
-					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-producto-precotizacion-component">Buscar</button>
-				</div>
-				<div class="col-md-2 col-xs-6">
-					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-producto-precotizacion-component">Limpiar</button>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-md-12 table-responsive">
-					<table id="koi-search-productos-precotizacion-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
-		                <thead>
-				            <tr>
-				                <th width="10%">Código</th>
-			                	<th width="10%">Pre-cotización</th>
-			                	<th width="75%">Producto</th>
-								<th>Ano</th>
-				                <th>Numero</th>
-				                <th width="5%"></th>
-				            </tr>
-				        </thead>
-		            </table>
-	           	</div>
-	     	</div>
-		</div>
-	{!! Form::close() !!}
-</script>
-
 <script type="text/template" id="koi-search-productos-cotizacion-component-tpl">
 	<div class="modal-header small-box {{ config('koi.template.bg') }}">
 		<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		</button>
-		<h4 class="inner-title-modal modal-title">Buscador productos de cotizaciones</h4>
+		<h4 class="inner-title-modal modal-title">Buscador productos de <%- state == 'P' ? 'pre-' : '' %>cotizaciones</h4>
 	</div>
 	{!! Form::open(['id' => 'form-koi-search-producto-cotizacion-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
 		<div class="modal-body">
 			<div class="row">
-                <label for="search_cotizacion" class="col-md-1 control-label">Cotización</label>
+                <label for="search_cotizacion" class="col-md-1 control-label"><%- state == 'P' ? 'Pre-c' : 'C' %>otización</label>
                 <div class="form-group col-md-3 col-sm-8 col-xs-8">
                     <div class="input-group input-group-sm">
                         <span class="input-group-btn">
-                            <button type="button" class="btn btn-default btn-flat btn-koi-search-cotizacion-component-table" data-field="search_cotizacion">
+                            <button type="button" class="btn btn-default btn-flat btn-koi-search-cotizacion-component-table" data-field="search_cotizacion" data-state="<%- state %>">
                                 <i class="fa fa-building-o"></i>
                             </button>
                         </span>
-                        <input id="search_cotizacion" name="search_cotizacion" placeholder="Cotización" class="form-control cotizacion-koi-component" type="text" maxlength="15" data-name="search_cotizacion_nombre">
+                        <input id="search_cotizacion" name="search_cotizacion" placeholder="Código" class="form-control cotizacion-koi-component" type="text" maxlength="15" data-name="search_cotizacion_nombre">
                     </div>
                 </div>
                 <div class="col-sm-6 col-md-8 col-xs-10">
                     <input id="search_cotizacion_nombre" name="search_cotizacion_nombre" placeholder="Cliente" class="form-control input-sm" type="text" readonly>
                 </div>
             </div>
-			<div class="row">
-                <label for="search_cotizacion_estado" class="col-md-1 control-label col-md-offset-3">Estado</label>
-				<div class="col-md-5">
-					<select name="search_cotizacion_estado" id="search_cotizacion_estado" class="form-control">
-						<option value="" selected>Todas</option>
-						<option value="A">Abiertas</option>
-						<option value="C">Cerradas</option>
-						<option value="N">Anuladas</option>
-					</select>
-				</div>
-            </div><br>
-
 			<div class="form-group">
 				<div class="col-md-offset-4 col-md-2 col-xs-6">
 					<button type="button" class="btn btn-primary btn-block btn-sm btn-search-koi-search-producto-cotizacion-component">Buscar</button>
@@ -787,7 +651,6 @@
 					<button type="button" class="btn btn-default btn-block btn-sm btn-clear-koi-search-producto-cotizacion-component">Limpiar</button>
 				</div>
 			</div>
-
 			<div class="form-group">
 				<div class="col-md-12 table-responsive">
 					<table id="koi-search-productos-cotizacion-component-table" class="table table-bordered table-striped" cellspacing="0" width="100%">
@@ -1935,4 +1798,8 @@
 	    <td><%- transporte_medidas %></td>
 	    <td><%- transporte_cantidad %></td>
 	</tr>
+</script>
+
+<script type="text/template" id="producto-materialp-validate-confirm-tpl">
+	<p><%- message %></p>
 </script>

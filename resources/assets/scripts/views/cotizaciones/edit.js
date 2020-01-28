@@ -50,10 +50,10 @@ app || (app = {});
         /*
         * Render View Element
         */
-        render: function() {
+        render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = true;
-            this.$el.html( this.template(attributes) );
+            this.$el.html(this.template(attributes));
 
             this.$product = this.$('#productop');
             this.$subtypeproduct = this.$('#subtypeproductop');
@@ -77,14 +77,14 @@ app || (app = {});
         */
         referenceViews: function () {
             // Productos list
-            this.productopCotizacionListView = new app.ProductopCotizacionListView( {
+            this.productopCotizacionListView = new app.ProductopCotizacionListView({
                 collection: this.productopCotizacionList,
                 parameters: {
                     edit: true,
                     iva: this.model.get('cotizacion1_iva'),
                     wrapper: this.spinner,
                     dataFilter: {
-                        'cotizacion2_cotizacion': this.model.get('id')
+                        cotizacion2_cotizacion: this.model.get('id')
                     }
                }
             });
@@ -130,28 +130,27 @@ app || (app = {});
 
             if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('subtipoproductosp.index', {typeproduct: typeproduct}) ),
+                    url: window.Misc.urlFull(Route.route('subtipoproductosp.index', {typeproduct: typeproduct})),
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
                     _this.$product.empty().val(0).attr('disabled', 'disabled');
                     _this.$subtypeproduct.empty().val(0).removeAttr('disabled');
                     _this.$subtypeproduct.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$subtypeproduct.append("<option value="+item.id+">"+item.subtipoproductop_nombre+"</option>");
+                    _.each(resp, function (item) {
+                        _this.$subtypeproduct.append("<option value=" + item.id + ">" + item.subtipoproductop_nombre + "</option>");
                     });
 
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
-            }else{
+            } else {
                 this.$subtypeproduct.empty().val(0).attr('disabled', 'disabled');
                 this.$product.empty().val(0).attr('disabled', 'disabled');
             }
@@ -160,35 +159,33 @@ app || (app = {});
         /**
         * Event change subtupe
         */
-        changeSubtypeProduct: function(e) {
+        changeSubtypeProduct: function (e) {
             var subtypeproduct = this.$(e.currentTarget).val(),
                 typeproduct = this.$('#typeproductop').val(),
                 _this = this;
 
             if (typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull( Route.route('productosp.index') ),
+                    url: window.Misc.urlFull(Route.route('productosp.index')),
                     data: {
                         subtypeproduct: subtypeproduct,
                         typeproduct: typeproduct
                     },
                     type: 'GET',
-                    beforeSend: function() {
-                        window.Misc.setSpinner( _this.spinner );
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.spinner);
                     }
                 })
-                .done(function(resp) {
-                    window.Misc.removeSpinner( _this.spinner );
-
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
                     _this.$product.empty().val(0).removeAttr('disabled');
                     _this.$product.append("<option value=></option>");
-                    _.each(resp, function(item){
-                        _this.$product.append("<option value="+item.id+">"+item.productop_nombre+"</option>");
+                    _.each(resp, function (item) {
+                        _this.$product.append("<option value=" + item.id + ">" + item.productop_nombre + "</option>");
                     });
-
                 })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.spinner );
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
                     alertify.error(thrownError);
                 });
             }
@@ -538,7 +535,7 @@ app || (app = {});
         },
 
         changeProducto: function (e) {
-            this.option = $(e.currentTarget).attr('data-call');
+            this.option = $(e.currentTarget).attr('data-state');
         },
 
         onStoreProducto: function (e) {

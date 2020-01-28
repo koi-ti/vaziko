@@ -107,7 +107,7 @@
 		</div>
 
         <div class="row">
-            <% if ( type == 'R1' ) { %>
+            <% if (type == 'R1') { %>
                 <div class="col-sm-3">
                     <label class="control-label">F. Recogida #1</label>
                     <div><%- orden_fecha_recogida1 %></div>
@@ -117,7 +117,7 @@
                     <div><%- orden_hora_recogida1 %></div>
                 </div>
             <% } %>
-            <% if ( type == 'R2' ) { %>
+            <% if (type == 'R2') { %>
                 <div class="col-sm-3">
                     <label class="control-label">F. Recogida #2</label>
                     <div><%- orden_fecha_recogida2 %></div>

@@ -248,9 +248,9 @@
                                                                     <span class="caret"></span>
                                                                 </button>
                                                                 <ul class="dropdown-menu">
-                                                                    <li><a href="#" class="btn-koi-search-producto-precotizacion-component-table change-producto" data-render="productop" data-call="P">Pre-cotización</a></li>
-                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-call="C">Cotización</a></li>
-                                                                    <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-call="O">Orden de producción</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-state="P">Pre-cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-cotizacion-component-table change-producto" data-render="productop" data-state="C">Cotización</a></li>
+                                                                    <li><a href="#" class="btn-koi-search-producto-orden-component-table change-producto" data-render="productop" data-state="O">Orden de producción</a></li>
                                                                 </ul>
                                                             </span>
                                                             <input type="hidden" id="cotizacion" name="cotizacion" value="<%- id %>" required>

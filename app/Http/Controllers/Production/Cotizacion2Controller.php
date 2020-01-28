@@ -23,23 +23,15 @@ class Cotizacion2Controller extends Controller
             if ($request->has('datatables')) {
                 $query = Cotizacion2::getCotizaciones2();
                 return Datatables::of($query)
-                            ->filter(function($query) use ($request) {
+                            ->filter(function ($query) use ($request) {
                                 // Cotizacion
                                 if ($request->has('search_cotizacion')) {
                                     $query->whereRaw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) LIKE '%{$request->search_cotizacion}%'");
                                 }
 
                                 if ($request->has('search_cotizacion_estado')) {
-                                    if ($request->search_cotizacion_estado == 'A') {
-                                        $query->where('cotizacion1_abierta', true);
-                                    }
-
-                                    if ($request->search_cotizacion_estado == 'C') {
-                                        $query->where('cotizacion1_abierta', false);
-                                    }
-
-                                    if ($request->search_cotizacion_estado == 'N') {
-                                        $query->where('cotizacion1_anulada', true);
+                                    if ($request->search_cotizacion_estado == 'P') {
+                                        $query->whereIn('cotizacion1_estados', ['PC', 'PF']);
                                     }
                                 }
                             })
@@ -72,11 +64,6 @@ class Cotizacion2Controller extends Controller
         if (!$producto instanceof Productop) {
             abort(404);
         }
-
-        // // Recuperar comision vendedor
-        // $vendedor = Tercero::find($cotizacion->cotizacion1_vendedor);
-        // if ($vendedor instanceof Tercero) {
-        // }
 
         // Lazy Eager Loading
         $producto->load('tips');
@@ -895,36 +882,20 @@ class Cotizacion2Controller extends Controller
 
             DB::beginTransaction();
             try {
-                switch ($request->option) {
-                    case 'P':
-                        $precotizacion2 = PreCotizacion2::find($request->productop);
-                        if (!$precotizacion2 instanceof PreCotizacion2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la precotización']);
-                        }
-
-                        $producto = $precotizacion2->crearProductoCotizacion($cotizacion->id);
-                        break;
-
-                    case 'C':
-                        $cotizacion2 = Cotizacion2::find($request->productop);
-                        if (!$cotizacion2 instanceof Cotizacion2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
-                        }
-
-                        $producto = $cotizacion2->crearProductoCotizacion($cotizacion->id);
-                        break;
-
-                    case 'O':
-                        $ordenp2 = Ordenp2::find($request->productop);
-                        if (!$ordenp2 instanceof Ordenp2) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
-                        }
-
-                        $producto = $ordenp2->crearProductoCotizacion($cotizacion->id);
-                        break;
+                if ($request->option == 'O') {
+                    $ordenp2 = Ordenp2::find($request->productop);
+                    if (!$ordenp2 instanceof Ordenp2) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la orden de producción']);
+                    }
+                    $producto = $ordenp2->crearProductoCotizacion($cotizacion->id);
+                } else {
+                    $cotizacion2 = Cotizacion2::find($request->productop);
+                    if (!$cotizacion2 instanceof Cotizacion2) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el producto de la cotización']);
+                    }
+                    $producto = $cotizacion2->crearProductoCotizacion($cotizacion->id);
                 }
 
                 DB::commit();

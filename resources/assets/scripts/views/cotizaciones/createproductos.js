@@ -128,6 +128,9 @@ app || (app = {});
             this.$infoprevdescuento = this.$('#info-prev-descuento');
             this.$infodescuento = this.$('#info-descuento');
             this.$infovolumen = this.$('#info-volumen');
+            this.$infopretotal = this.$('#info-pretotal');
+            this.iva = $('#iva_cotizacion').val();
+            this.$infoiva = this.$('#info-iva');
             this.$infototal = this.$('#info-total');
 
             // Variables globales
@@ -496,7 +499,7 @@ app || (app = {});
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
             tvolumen = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
-            total = subtotal + tvolumen;
+            pretotal = subtotal + tvolumen;
 
             this.$percentageprecio.empty().html(((precio/subtotal)*100).toFixed(2) + '%');
             this.$percentageviaticos.empty().html(((viaticos/subtotal)*100).toFixed(2) + '%');
@@ -509,7 +512,7 @@ app || (app = {});
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
                 var exp = Math.pow(10, round);
-                total = Math.round(total*exp)/exp;
+                pretotal = Math.round(pretotal*exp)/exp;
             } else {
                 this.$inputround.val(0);
             }
@@ -525,6 +528,12 @@ app || (app = {});
 
             this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal));
             this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
+            this.$infopretotal.html('$ ' + window.Misc.currency(pretotal));
+
+            var iva = Math.round(pretotal * (this.iva/100)),
+                total = pretotal + iva;
+
+            this.$infoiva.html('$ ' + window.Misc.currency(iva));
             this.$infototal.html('$ ' + window.Misc.currency(total));
         },
 

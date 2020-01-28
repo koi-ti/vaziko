@@ -14,7 +14,6 @@ app || (app = {});
       	el: 'body',
         template: _.template(($('#koi-search-productos-cotizacion-component-tpl').html() || '')),
 		events: {
-			'change input.producto-cotizacion-koi-component': 'cotizacionChanged',
             'click .btn-koi-search-producto-cotizacion-component-table': 'searchCotizacion',
             'click .btn-search-koi-search-producto-cotizacion-component': 'search',
             'click .btn-clear-koi-search-producto-cotizacion-component': 'clear',
@@ -35,19 +34,23 @@ app || (app = {});
             e.preventDefault();
             var _this = this;
 
+            // Reference state
+            this.state = $(e.currentTarget).attr("data-state");
+
             // Render template
-            this.$modalComponent.find('.content-modal').html(this.template);
+            this.$modalComponent.find('.content-modal').html(this.template({state: this.state}));
 
             // References
             this.$searchCotizacion = this.$('#search_cotizacion');
             this.$searchCotizacionNombre = this.$('#search_cotizacion_nombre');
-            this.$searchCotizacionEstado = this.$('#search_cotizacion_estado');
 
+            // References more dates
             this.$productsCotizacionSearchTable = this.$modalComponent.find('#koi-search-productos-cotizacion-component-table');
-            this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
-            this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
-            this.$inputRender = this.$("#"+$(e.currentTarget).attr("data-render"));
+            this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
+            this.$inputName = this.$("#" + this.$inputContent.attr("data-name"));
+            this.$inputRender = this.$("#" + $(e.currentTarget).attr("data-render"));
 
+            // Prepare dataTable
 			this.productsCotizacionSearchTable = this.$productsCotizacionSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
@@ -59,7 +62,7 @@ app || (app = {});
                     data: function (data) {
                     	data.datatables = true;
                         data.search_cotizacion = _this.$searchCotizacion.val();
-                        data.search_cotizacion_estado = _this.$searchCotizacionEstado.val();
+                        data.search_cotizacion_estado = _this.state;
                     }
                 },
                 columns: [
@@ -80,6 +83,13 @@ app || (app = {});
                         searchable: false,
                         render: function (data, type, full, row) {
                         	return '<a href="#" class="a-koi-search-producto-cotizacion-component-table">' + data + '</a>';
+                        }
+                    },
+                    {
+                        targets: 2,
+                        render: function (data, type, full, row) {
+                            var estado = window.Misc.stateProduction(full.cotizacion1_estados);
+                            return data + ' <span class="label label-' + estado.color + '">' + estado.nombre + '</span>';
                         }
                     },
                     {
@@ -137,49 +147,8 @@ app || (app = {});
 
             this.$searchCotizacion.val('');
             this.$searchCotizacionNombre.val('');
-            this.$searchCotizacionEstado.val('');
 
             this.productsCotizacionSearchTable.ajax.reload();
-		},
-
-		cotizacionChanged: function (e) {
-			var _this = this;
-
-			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
-
-			var producto = this.$inputContent.val();
-
-            // Before eval clear data
-            this.$inputName.val('');
-
-			if (!_.isUndefined(producto) && !_.isNull(producto) && producto != '') {
-				// Get Orden
-	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('cotizaciones.productos.search')),
-	                type: 'GET',
-	                data: {
-                        producto: producto
-                    },
-	                beforeSend: function () {
-						_this.$inputName.val('');
-	                    window.Misc.setSpinner(_this.$wraperConten);
-	                }
-	            })
-	            .done(function(resp) {
-	                window.Misc.removeSpinner(_this.$wraperConten);
-	                if (resp.success) {
-	                    if (!_.isUndefined(resp.productop_nombre) && !_.isNull(resp.productop_nombre)){
-							_this.$inputName.val(resp.productop_nombre);
-	                    }
-	                }
-	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
-	                window.Misc.removeSpinner(_this.$wraperConten);
-	                alertify.error(thrownError);
-	            });
-	     	}
 		},
 
         showProducto: function (e) {

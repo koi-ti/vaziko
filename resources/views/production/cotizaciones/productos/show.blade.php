@@ -42,11 +42,7 @@
 					<div class="row">
 						<label class="col-md-2 control-label">Estado</label>
 						<div class="form-group col-md-10">
-							@if ($cotizacion->cotizacion1_pre)
-							<span class="label label-warning">PRE-COTIZACIÓN</span>
-							@else
-							<span class="label label-success">COTIZACIÓN</span>
-							@endif
+							<span class="label label-{{ in_array($cotizacion->cotizacion1_estados, ['PC', 'PF']) ? 'warning' : 'success' }}">{{ config('koi.produccion.estados')[$cotizacion->cotizacion1_estados] }}</span>
 						</div>
 					</div>
 
@@ -565,6 +561,8 @@
 								$totaldescuento = $cotizacion2->cotizacion2_descuento == 0 ? 0 : ($subtotal-($subtotal*($cotizacion2->cotizacion2_descuento/100)));
 								$prevtotalcomision = $totaldescuento;
 								$totalcomision = $totaldescuento/((100-$cotizacion2->cotizacion2_comision)/100);
+								$iva = round($cotizacion2->cotizacion2_total_valor_unitario * ($cotizacion->cotizacion1_iva/100));
+								$total = $cotizacion2->cotizacion2_total_valor_unitario + $iva;
 			                /*--}}
 
 							<div class="box-body">
@@ -665,6 +663,22 @@
 											<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
 											<div class="col-xs-10 col-sm-4 text-right">
 												<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span>
+											</div>
+										</div>
+									</div>
+									<div class="list-group-item list-group-item-danger">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>IVA ({{ $cotizacion->cotizacion1_iva }}%)</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<span class="pull-right badge bg-green">{{ number_format($iva, 2, ',', '.') }}</span>
+											</div>
+										</div>
+									</div>
+									<div class="list-group-item list-group-item-danger">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<span class="pull-right badge bg-green">{{ number_format($total, 2, ',', '.') }}</span>
 											</div>
 										</div>
 									</div>

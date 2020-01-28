@@ -773,14 +773,31 @@
                                             </div>
                                             <div class="col-xs-3 col-sm-2 col-sm-offset-2"><b>Total</b></div>
                                             <div class="col-xs-3 col-sm-4 text-right">
-                                                <span class="pull-right badge bg-red" id="info-total"></span>
+                                                <span class="pull-right badge bg-red" id="info-pretotal"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-danger">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-sm-2"><b>IVA ({{ $orden->orden_iva }}%)</b></div>
+                                            <input type="hidden" id="iva_orden" name="iva_orden" value="{{ $orden->orden_iva }}">
+                                            <div class="col-xs-10 col-sm-10 text-right">
+                                                <span class="pull-right badge bg-green" id="info-iva"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="list-group-item list-group-item-danger">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-sm-2"><b>Total</b></div>
+                                            <div class="col-xs-10 col-sm-10 text-right">
+                                                <span class="pull-right badge bg-green" id="info-total"></span>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="box-footer">
-                                <p><b>Los campos de transporte, viáticos, materiales y áreas se dividirán por la cantidad ingresada.</b></p>
+                                <p><b>Los campos de viáticos, materiales, áreas, empaques y transportes se dividirán por la cantidad ingresada.</b></p>
                             </div>
                         </div>
                     </div>

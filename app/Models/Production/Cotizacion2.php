@@ -60,7 +60,7 @@ class Cotizacion2 extends BaseModel
 
     public static function getCotizaciones2($cotizacion = null) {
         $query = self::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion','cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario', 'cotizacion1_ano', 'cotizacion1_numero', 'cotizacion1_abierta', 'cotizacion1_anulada',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion', 'cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario', 'cotizacion1_ano', 'cotizacion1_numero', 'cotizacion1_abierta', 'cotizacion1_anulada', 'cotizacion1_estados',
             DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"),
             DB::raw("CASE WHEN cotizacion2_tiro != 0 THEN ( cotizacion2_yellow + cotizacion2_magenta + cotizacion2_cyan + cotizacion2_key + cotizacion2_color1 + cotizacion2_color2) ELSE '0' END AS tiro"),
             DB::raw("CASE WHEN cotizacion2_retiro != 0 THEN ( cotizacion2_yellow2 + cotizacion2_magenta2 + cotizacion2_cyan2 + cotizacion2_key2 + cotizacion2_color12 + cotizacion2_color22) ELSE '0' END AS retiro"),

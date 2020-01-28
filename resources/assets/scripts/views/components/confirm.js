@@ -23,7 +23,7 @@ app || (app = {});
         /**
         * Constructor Method
         */
-        initialize: function(opts) {
+        initialize: function (opts) {
             // extends attributtes
             if (opts != undefined && _.isObject(opts.parameters))
                 this.parameters = _.extend({}, this.parameters, opts.parameters);
@@ -56,7 +56,6 @@ app || (app = {});
         */
         onConfirm: function (e) {
             e.preventDefault();
-            var _this = this;
 
             this.$el.modal('hide');
 

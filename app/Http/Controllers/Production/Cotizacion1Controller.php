@@ -75,7 +75,7 @@ class Cotizacion1Controller extends Controller
             }
 
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
 
                     // Cotizacion codigo
                     if ($request->has('cotizacion_numero')) {
@@ -92,20 +92,6 @@ class Cotizacion1Controller extends Controller
                         $query->where('cotizacion1_cliente', $request->cotizacion_cliente);
                     }
 
-                    // Estado
-                    if ($request->has('cotizacion_estado')) {
-                        if ($request->cotizacion_estado == 'A') {
-                            $query->where('cotizacion1_abierta', true);
-                        }
-                        if ($request->cotizacion_estado == 'C') {
-                            $query->where('cotizacion1_abierta', false);
-                            $query->where('cotizacion1_anulada', false);
-                        }
-                        if ($request->cotizacion_estado == 'N') {
-                            $query->where('cotizacion1_anulada', true);
-                        }
-                    }
-
                     // Referencia
                     if ($request->has('cotizacion_referencia')) {
                         $query->whereRaw("cotizacion1_referencia LIKE '%{$request->cotizacion_referencia}%'");
@@ -114,6 +100,15 @@ class Cotizacion1Controller extends Controller
                     // Producto
                     if ($request->has('cotizacion_productop')) {
                         $query->whereRaw("$request->cotizacion_productop IN ( SELECT cotizacion2_productop FROM koi_cotizacion2 WHERE cotizacion2_cotizacion = koi_cotizacion1.id) ");
+                    }
+
+                    // Estados
+                    if ($request->has('cotizacion_estado')) {
+                        $query->where('cotizacion1_estados', $request->cotizacion_estado);
+
+                        if ($request->cotizacion_estado == 'P') {
+                            $query->whereIn('cotizacion1_estados', ['PC', 'PF']);
+                        }
                     }
                 })
                 ->make(true);
@@ -179,7 +174,7 @@ class Cotizacion1Controller extends Controller
 
                     // Validar que exista el tercero con check vendedor
                     if ($request->has('cotizacion1_vendedor')) {
-                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor', true)->first();
+                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor_estado', true)->first();
                         if (!$vendedor instanceof Tercero) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
@@ -189,7 +184,7 @@ class Cotizacion1Controller extends Controller
                     }
 
                     // Recuperar numero cotizacion
-                    $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
+                    $numero = Cotizacion1::where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
                     $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                     // Cotizacion
@@ -309,7 +304,7 @@ class Cotizacion1Controller extends Controller
 
                     // Validar que exista el tercero con check vendedor
                     if ($request->has('cotizacion1_vendedor')) {
-                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor', true)->first();
+                        $vendedor = Tercero::where('tercero_nit', $request->cotizacion1_vendedor)->where('tercero_vendedor_estado', true)->first();
                         if (!$vendedor instanceof Tercero) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
@@ -531,7 +526,7 @@ class Cotizacion1Controller extends Controller
             DB::beginTransaction();
             try {
                 // Recuperar numero cotizacion
-                $numero = DB::table('koi_cotizacion1')->where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
+                $numero = Cotizacion1::where('cotizacion1_ano', date('Y'))->max('cotizacion1_numero');
                 $numero = !is_integer(intval($numero)) ? 1 : ($numero + 1);
 
                 // Cotizacion
