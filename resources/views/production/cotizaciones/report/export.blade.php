@@ -79,8 +79,8 @@
 					<tr>
 						<td colspan="3" class="border-cell">
 							<p>
-								Producto: <b>{{ $cotizacion2->productop_nombre }}</b><br>
 								Referencia: <b>{{ $cotizacion2->cotizacion2_referencia }}</b><br>
+								Producto: {{ $cotizacion2->productop_nombre }}<br>
 								Medidas: {{ $cotizacion2->medidas }}<br>
 								{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
 								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}

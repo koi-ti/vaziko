@@ -68,6 +68,48 @@ class Ordenp2 extends BaseModel
         return $query->get();
     }
 
+    public static function getOrdenespSpecial2($orden) {
+        $query = Ordenp2::query();
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_referencia', 'productop_nombre', 'orden2_orden', 'orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario',
+            DB::raw("CASE WHEN orden2_tiro IS TRUE THEN (orden2_yellow + orden2_magenta + orden2_cyan + orden2_key + orden2_color1 + orden2_color2) ELSE '0' END AS tiro"),
+            DB::raw("CASE WHEN orden2_retiro IS TRUE THEN (orden2_yellow2 + orden2_magenta2 + orden2_cyan2 + orden2_key2 + orden2_color12 + orden2_color22) ELSE '0' END AS retiro"),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario')),
+            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total')),
+            DB::raw("
+                CASE
+                WHEN productop_3d != 0 THEN
+                        CONCAT('3D(',
+                        COALESCE(orden2_3d_ancho,0), COALESCE(me6.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_3d_alto,0), COALESCE(me7.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_3d_profundidad,0), COALESCE(me5.unidadmedida_sigla,''),')' )
+                WHEN productop_abierto != 0 AND productop_cerrado != 0 THEN
+                        CONCAT('A(',
+                        COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ') C(',
+                        COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
+                WHEN productop_abierto != 0 AND productop_cerrado = 0 THEN
+                        CONCAT('A(',
+                        COALESCE(orden2_ancho,0), COALESCE(me1.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_alto,0), COALESCE(me2.unidadmedida_sigla,''), ')')
+                WHEN productop_abierto = 0 AND productop_cerrado != 0 THEN
+                        CONCAT('C(',
+                        COALESCE(orden2_c_ancho,0), COALESCE(me3.unidadmedida_sigla,''),' x ',
+                        COALESCE(orden2_c_alto,0), COALESCE(me4.unidadmedida_sigla,''),')')
+                END AS medidas
+            "));
+        $query->join('koi_productop', 'orden2_productop', '=', 'koi_productop.id');
+        $query->leftJoin('koi_unidadmedida as me1', 'productop_ancho_med', '=', 'me1.id');
+        $query->leftJoin('koi_unidadmedida as me2', 'productop_alto_med', '=', 'me2.id');
+        $query->leftJoin('koi_unidadmedida as me3', 'productop_c_med_ancho', '=', 'me3.id');
+        $query->leftJoin('koi_unidadmedida as me4', 'productop_c_med_alto', '=', 'me4.id');
+        $query->leftJoin('koi_unidadmedida as me5', 'productop_3d_profundidad_med', '=', 'me5.id');
+        $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
+        $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
+        $query->where('orden2_orden', $orden);
+        return $query->get();
+    }
+
     public static function getOrdenp2($ordenp2) {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.*');

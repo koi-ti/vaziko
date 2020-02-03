@@ -140,21 +140,102 @@
         </div>
     </div>
 
-    <div class="box box-primary spinner-main">
-        <div class="box-header with-border">
-            <h3 class="box-title title-producto-show"></b></h3>
-            <div class="box-tools pull-right">
-                <a href="#" class="btn btn-md btn-primary producto-pagination" data-action="P" disabled>
-                    <i class="fa fa-chevron-circle-left"></i>
-                </a>
-                <a href="#" class="btn btn-md btn-primary producto-pagination" data-action="N">
-                    <i class="fa fa-chevron-circle-right"></i>
-                </a>
+    @foreach ($data as $producto)
+        <div class="box box-primary spinner-main">
+            <div class="box-body">
+                <p>
+                    Referencia: <b>{{ $producto->orden2_referencia }}</b><br>
+                    Producto: {{ $producto->productop_nombre }}<br>
+                    Medidas: {{ $producto->medidas }}<br>
+                    Tinta: {{ $producto->tiro }} / {{ $producto->retiro }}
+                </p>
+
+                @if (count($producto->maquinas))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Maquinas</div>
+                        <table class="table">
+                            @foreach ($producto->maquinas as $maquina)
+                                <tr>
+                                    <td>{{ $maquina->maquina->maquinap_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+
+                @if (count($producto->acabados))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Acabados</div>
+                        <table class="table">
+                            @foreach ($producto->acabados as $acabado)
+                                <tr>
+                                    <td>{{ $acabado->acabado->acabadop_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+
+                @if (count($producto->materiales))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Materiales</div>
+                        <table class="table">
+                            @foreach ($producto->materiales as $material)
+                                <tr>
+                                    <td>{{ $material->orden4_medidas }}</td>
+                                    <td>{{ $material->material->materialp_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+
+                @if (count($producto->areas))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Áreas</div>
+                        <table class="table">
+                            @foreach ($producto->areas as $area)
+                                <tr>
+                                    <td>{{ $area->orden6_tiempo }}</td>
+                                    <td>{{ $area->orden6_nombre ?  $area->orden6_nombre : $area->area->areap_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+
+                @if (count($producto->empaques))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Empaques</div>
+                        <table class="table">
+                            @foreach ($producto->empaques as $empaque)
+                                <tr>
+                                    <td>{{ $empaque->orden9_medidas }}</td>
+                                    <td>{{ $empaque->empaque->materialp_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
+
+                @if (count($producto->transportes))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Transportes</div>
+                        <table class="table">
+                            @foreach ($producto->transportes as $transporte)
+                                <tr>
+                                    <td>{{ $transporte->orden10_medidas }}</td>
+                                    <td>{{ $transporte->transporte->materialp_nombre }}</td>
+                                </tr>
+                            @endforeach
+                        </table>
+                    </div>
+                @endif
             </div>
         </div>
-        <div class="box-body" id="wrapper-show-producto">
-        </div>
-    </div>
+    @endforeach
+
+
     <div class="box box-primary">
         <div class="box-header with-border">
             <h3 class="box-title">Quienes trabajaron en esta orden</h3>

@@ -57,4 +57,8 @@ class Ordenp6 extends Model
         $query->orderBy('areap_nombre', 'asc');
         return $query->get();
     }
+
+    public function area () {
+        return $this->belongsTo(Areap::class, 'orden6_areap', 'id');
+    }
 }

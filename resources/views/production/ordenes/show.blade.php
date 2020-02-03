@@ -12,7 +12,7 @@
         </ol>
     </section>
 
-    @if ($orden->permission)
+    @if (isset($data))
         @include("production.ordenes.show.operario")
     @else
         @include("production.ordenes.show.normal")

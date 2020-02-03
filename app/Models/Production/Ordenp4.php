@@ -73,4 +73,8 @@ class Ordenp4 extends BaseModel
         $collection = $query->lists('materialp_nombre', 'id');
         return $collection;
     }
+
+    public function material () {
+        return $this->belongsTo(Materialp::class, 'orden4_materialp', 'id');
+    }
 }

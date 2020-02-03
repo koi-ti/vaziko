@@ -32,4 +32,8 @@ class Ordenp5 extends Model
         $query->orderBy('acabadop_nombre', 'asc');
         return $query->get();
     }
+
+    public function acabado () {
+        return $this->belongsTo(Acabadop::class, 'orden5_acabadop', 'id');
+    }
 }

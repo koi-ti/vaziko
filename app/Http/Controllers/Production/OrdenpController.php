@@ -264,9 +264,30 @@ class OrdenpController extends Controller
             abort(404);
         }
 
-        // If role is operario
-        $orden->permission = (auth()->user()->hasRole('operario') || $request->has('resumido')) ? true : false;
-        $orden->items = $orden->detalle->pluck('id');
+        // If show all products
+        if (auth()->user()->hasRole('operario') || $request->has('resumido')) {
+            $data = [];
+
+            $productos = Ordenp2::getOrdenespSpecial2($orden->id);
+            foreach ($productos as $producto) {
+                // Maquina -> 3
+                $producto->maquinas = Ordenp3::with('maquina')->where('orden3_orden2', $producto->id)->get();
+                // Acabados -> 5
+                $producto->acabados = Ordenp5::with('acabado')->where('orden5_orden2', $producto->id)->get();
+                // Materiales -> 4
+                $producto->materiales = Ordenp4::with('material')->where('orden4_orden2', $producto->id)->get();
+                // Areas -> 6
+                $producto->areas = Ordenp6::with('area')->where('orden6_orden2', $producto->id)->get();
+                // Empaques -> 9
+                $producto->empaques = Ordenp9::with('empaque')->where('orden9_orden2', $producto->id)->get();
+                // Transportes -> 10
+                $producto->transportes = Ordenp10::with('transporte')->where('orden10_orden2', $producto->id)->get();
+
+                $data[] = $producto;
+            }
+            return view('production.ordenes.show', compact('orden', 'data'));
+        }
+
 
         if ($request->ajax()) {
             return response()->json($orden);

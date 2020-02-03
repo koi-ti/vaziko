@@ -59,4 +59,8 @@ class Ordenp9 extends BaseModel
         $query->orderBy('empaque_nombre', 'asc');
         return $query->get();
     }
+
+    public function empaque () {
+        return $this->belongsTo(Materialp::class, 'orden9_materialp', 'id');
+    }
 }

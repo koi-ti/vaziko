@@ -59,4 +59,8 @@ class Ordenp10 extends BaseModel
         $query->orderBy('transporte_nombre', 'asc');
         return $query->get();
     }
+
+    public function transporte () {
+        return $this->belongsTo(Materialp::class, 'orden10_maquinap', 'id');
+    }
 }

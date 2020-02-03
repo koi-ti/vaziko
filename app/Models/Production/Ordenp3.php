@@ -32,4 +32,8 @@ class Ordenp3 extends Model
         $query->orderBy('maquinap_nombre', 'asc');
         return $query->get();
     }
+
+    public function maquina () {
+        return $this->belongsTo(Maquinap::class, 'orden3_maquinap', 'id');
+    }
 }

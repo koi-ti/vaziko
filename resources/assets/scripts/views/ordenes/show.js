@@ -21,8 +21,7 @@ app || (app = {});
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
-            'click .resume-ordenp': 'resumeOrdenp',
-            'click .producto-pagination': 'productoPagination',
+            'click .resume-ordenp': 'resumeOrdenp'
         },
 
         /**
@@ -33,12 +32,6 @@ app || (app = {});
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            // Reference attributes and wrappers
-            this.current = 0;
-            this.positions = [];
-            this.$prev = $('.producto-prev');
-            this.$next = $('.producto-next');
-
             // Reference views && fineuploader container
             this.listenTo( this.model, 'change', this.render );
         },
@@ -46,13 +39,8 @@ app || (app = {});
         render: function () {
             var attributes = this.model.toJSON();
 
-            // Asignar posiciones
-            this.positions = attributes.items;
-
             if (this.model.get('permission') || this.parameters.resumido == 'true') {
                 this.tiempopList = new app.TiempopList();
-
-                this.showItem(this.positions[this.current]);
             } else {
                 _.bindAll(this, 'onSessionRequestComplete');
 
@@ -68,97 +56,14 @@ app || (app = {});
                 this.$renderChartAreasp = this.$('#render-chart-areasp');
                 this.$renderChartProductop = this.$('#render-chart-productop');
                 this.$renderChartOrdenp = this.$('#render-chart-ordenp');
+                this.$uploaderFile = this.$('.fine-uploader');
 
                 // Reference views && fineuploader container
                 this.referenceViews();
                 this.referenceCharts()
+                this.uploadPictures();
             }
 
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.uploadPictures();
-        },
-
-        productoPagination: function (e) {
-            e.preventDefault();
-
-            var action = $(e.currentTarget).attr('data-action'),
-                $prev = $('a[data-action="P"]'),
-                $next = $('a[data-action="N"]');
-
-            if (action == 'N') {
-                this.current++;
-
-                // Remove hidden
-                $prev.removeAttr('disabled');
-
-                if (this.current >= this.positions.length) {
-                    // Add hidden
-                    $next.attr('disabled', 'disabled');
-                    this.current = this.positions.length-1;
-                    return;
-                }
-
-                if (_.isUndefined(this.positions[this.current]))
-                    return;
-            } else {
-                this.current--;
-
-                $next.removeAttr('disabled');
-
-                if (this.current <= -1) {
-                    $prev.attr('disabled', 'disabled');
-                    this.current = 0;
-                    return;
-                }
-
-                if (_.isUndefined(this.positions[this.current]))
-                    return
-            }
-
-            this.showItem(this.positions[this.current]);
-        },
-
-        showItem: function (id) {
-            // Declare variables
-            var resource = id,
-                producto = null;
-
-            // Delegate view in case exists
-            if (this.componentProductView instanceof Backbone.View) {
-                this.componentProductView.stopListening();
-                this.componentProductView.undelegateEvents();
-            }
-
-            // Instance new model of products
-            this.ordenp2Model = new app.Ordenp2Model();
-            this.ordenp2Model.set({id: resource}, {silent: true});
-
-            // Instance new component
-            this.componentProductView = new app.ComponentProductView({
-                el: '#wrapper-show-producto',
-                model: this.ordenp2Model,
-                parameters: {
-                    collections: {
-                        maquinas: new app.MaquinasProductopOrdenList(),
-                        acabados: new app.AcabadosProductopOrdenList(),
-                        materiales: new app.MaterialesProductopOrdenList(),
-                        areas: new app.AreasProductopOrdenList(),
-                        empaques: new app.EmpaquesProductopOrdenList(),
-                        tranportes: new app.TransportesProductopOrdenList(),
-                    },
-                    dataFilter: {
-                        orden2: resource,
-                        producto: producto
-                    },
-                    fineUploader: {
-                        endpoint: window.Misc.urlFull(Route.route('ordenes.productos.imagenes.index')),
-                        params: {
-                            orden2: resource
-                        }
-                    }
-                }
-            });
-            this.ordenp2Model.fetch();
         },
 
         /**
