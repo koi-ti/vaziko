@@ -112,13 +112,13 @@ app || (app = {});
                                 if (['CC' , 'CF', 'CS'].indexOf(full.cotizacion1_estados) !== -1 && parseInt(full.cotizacion1_abierta)) {
                                     buttons += close;
                                 } else if (!parseInt(full.cotizacion1_abierta)) {
+                                    buttons += generate;
                                     buttons += open;
                                 }
                                 buttons += clone;
                             }
 
                             if (['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
-                                buttons += generate;
                                 buttons += exportar;
                             }
 
