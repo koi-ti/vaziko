@@ -118,6 +118,7 @@ app || (app = {});
                             }
 
                             if (['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
+                                buttons += generate;
                                 buttons += exportar;
                             }
 
