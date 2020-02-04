@@ -24,7 +24,12 @@ class BitacoraController extends Controller
                 $data = $cotizacion->bitacora;
             }
             if ($request->has('ordenp')) {
-                $ordenp = Ordenp::with(['bitacora' => function ($bitacora) {
+                $ordenp = Ordenp::with(['bitacora' => function ($bitacora) use ($request) {
+                    if ($request->has('estado')) {
+                        $bitacora->where('bitacora_modulo', 'Estados');
+                    } else {
+                        $bitacora->where('bitacora_modulo', '!=', 'Estados');
+                    }
                     $bitacora->informacion();
                 }])->find($request->ordenp);
                 $data = $ordenp->bitacora;

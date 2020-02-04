@@ -82,12 +82,13 @@
 								Referencia: <b>{{ $cotizacion2->cotizacion2_referencia }}</b><br>
 								Producto: {{ $cotizacion2->productop_nombre }}<br>
 								Medidas: {{ $cotizacion2->medidas }}<br>
+								@if( $cotizacion2->tiro || $cotizacion2->retiro )
+									{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }} <br>
+								@endif
 								{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
 								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
 								{!! isset($cotizacion2->empaque_nombre) ? "Empaque: $cotizacion2->empaque_nombre <br>" : ""  !!}
-								@if( $cotizacion2->tiro || $cotizacion2->retiro )
-									{{ "Tintas: {$cotizacion2->tiro} / {$cotizacion2->retiro}" }}
-								@endif
+								{!! isset($cotizacion2->transporte_nombre) ? "Transporte: $cotizacion2->transporte_nombre <br>" : ""  !!}
 							</p>
 							@if ($cotizacion2->imagenes != [])
 								<table class="rtable" border="0">

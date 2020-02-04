@@ -49,6 +49,7 @@ app || (app = {});
             this.despachospPendientesOrdenList = new app.DespachospPendientesOrdenList();
             this.asientoCuentasList = new app.AsientoCuentasList();
             this.bitacoraOrdenList = new app.BitacoraOrdenList();
+            this.estadoOrdenList = new app.BitacoraOrdenList();
 
             // Tiempop general
             this.tiempopList = new app.TiempopList();
@@ -158,6 +159,17 @@ app || (app = {});
                 parameters: {
                     dataFilter: {
                         ordenp: this.model.get('id')
+                    }
+                }
+            });
+
+            // Estados list
+            this.estadoListView = new app.EstadoListView({
+                collection: this.estadoOrdenList,
+                parameters: {
+                    dataFilter: {
+                        ordenp: this.model.get('id'),
+                        estado: true
                     }
                 }
             });

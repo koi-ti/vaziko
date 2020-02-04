@@ -9,6 +9,7 @@
                     <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                     <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
                     <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
+                    <li><a href="#tab_estados" data-toggle="tab">Estados</a></li>
                 @endif
                 <li class="pull-right">
                     <div class="btn-group" role="group">
@@ -335,6 +336,30 @@
                             </div>
                         </div>
                     </div>
+                    @if ($orden->orden_cotizacion)
+                        <div class="tab-pane" id="tab_estados">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table id="browse-estados-list" class="table no-padding" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="60%"><small>Descripción</small></th>
+                                                        <th width="15%"><small>IP</small></th>
+                                                        <th width="15%"><small>Usuario cambio</small></th>
+                                                        <th width="15%"><small>Fecha cambio</small></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
                 @endif
            	</div>
     	</div>

@@ -391,7 +391,7 @@ class Cotizacion1Controller extends Controller
                 $next = config('koi.produccion.estados')[$cotizacion->cotizacion1_estados];
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], "Se cambio el estado de la cotización $prev a $next", 'Cotización', 'U', $request->ip());
+                Bitacora::createBitacora($cotizacion, [], "Se cambio el estado de la cotización $prev a $next", 'Estados', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
@@ -493,10 +493,17 @@ class Cotizacion1Controller extends Controller
             $query->where('cotizacion9_cotizacion2', $cotizacion2->id);
             $empaques = $query->first();
 
+            $query = Cotizacion10::query();
+            $query->select(DB::raw("GROUP_CONCAT(materialp_nombre SEPARATOR ', ') AS transporte_nombre"));
+            $query->leftJoin('koi_materialp', 'cotizacion10_materialp', '=', 'koi_materialp.id');
+            $query->where('cotizacion10_cotizacion2', $cotizacion2->id);
+            $transportes = $query->first();
+
+            $cotizacion2->imagenes = $imagenes;
             $cotizacion2->materialp_nombre = $materialesp->materialp_nombre;
             $cotizacion2->acabadop_nombre = $acabadosp->acabadop_nombre;
             $cotizacion2->empaque_nombre = $empaques->empaque_nombre;
-            $cotizacion2->imagenes = $imagenes;
+            $cotizacion2->transporte_nombre = $transportes->transporte_nombre;
 
             $data[] = $cotizacion2;
         }
@@ -885,6 +892,12 @@ class Cotizacion1Controller extends Controller
                 $cotizacion->cotizacion1_anulada = false;
                 $cotizacion->cotizacion1_estados = 'CO';
                 $cotizacion->save();
+
+                // Guardar bitacora
+                $estados = $cotizacion->bitacora->where('bitacora_modulo', 'Estados');
+                foreach ($estados as $estado) {
+                    $orden->bitacora()->save($estado);
+                }
 
                 // Si hay cambios en la cotizacion
                 Bitacora::createBitacora($cotizacion, [], 'Se genero una orden de producción', 'Cotización', 'U', $request->ip());

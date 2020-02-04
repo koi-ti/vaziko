@@ -50,6 +50,7 @@ app || (app = {});
                 this.despachopOrdenList = new app.DespachopOrdenList();
                 this.tiempopList = new app.TiempopList();
                 this.bitacoraOrdenList = new app.BitacoraOrdenList();
+                this.estadoOrdenList = new app.BitacoraOrdenList();
 
                 // Render rows charts
                 this.$renderChartEmpleado = this.$('#render-chart-empleado');
@@ -100,6 +101,17 @@ app || (app = {});
                     parameters: {
                         dataFilter: {
                             ordenp: this.model.get('id')
+                        }
+                    }
+                });
+
+                // Estados list
+                this.estadoListView = new app.EstadoListView({
+                    collection: this.estadoOrdenList,
+                    parameters: {
+                        dataFilter: {
+                            ordenp: this.model.get('id'),
+                            estado: true
                         }
                     }
                 });

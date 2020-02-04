@@ -81,7 +81,6 @@ app || (app = {});
             var valid = this.collection.validar(data);
             if (!valid.success) {
                 alertify.error(valid.message);
-                return;
             }
 
             // Set Spinner
