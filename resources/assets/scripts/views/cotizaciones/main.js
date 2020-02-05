@@ -234,7 +234,8 @@ app || (app = {});
                                 url: window.Misc.urlFull(Route.route('cotizaciones.estados', {cotizaciones: data.resource})),
                                 type: 'GET',
                                 data: {
-                                    state: data.state
+                                    state: data.state,
+                                    method: method
                                 },
                                 beforeSend: function () {
                                     window.Misc.setSpinner(_this.el);
