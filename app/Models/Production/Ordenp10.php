@@ -61,6 +61,6 @@ class Ordenp10 extends BaseModel
     }
 
     public function transporte () {
-        return $this->belongsTo(Materialp::class, 'orden10_maquinap', 'id');
+        return $this->belongsTo(Materialp::class, 'orden10_materialp', 'id');
     }
 }

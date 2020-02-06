@@ -17,6 +17,7 @@
     "datatables.net-buttons-bs": "~1.1.2",
     "datatables.net-responsive-dt": "^2.2.0",
     "fullcalendar": "^3.9.0",
-    "clockpicker": "^0.0.7"
+    "clockpicker": "^0.0.7",
+    "chartjs-plugin-labels": "^1.1.0"
   }
 }

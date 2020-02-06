@@ -225,7 +225,7 @@
                             @foreach ($producto->transportes as $transporte)
                                 <tr>
                                     <td>{{ $transporte->orden10_medidas }}</td>
-                                    <td>{{ $transporte->transporte->materialp_nombre }}</td>
+                                    <td>{{$transporte->transporte->materialp_nombre}}</td>
                                 </tr>
                             @endforeach
                         </table>
@@ -233,6 +233,7 @@
                 @endif
             </div>
         </div>
+        <hr class="divider-red">
     @endforeach
 
 
