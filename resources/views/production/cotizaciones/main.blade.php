@@ -49,8 +49,10 @@
                                         <% } %>
                                     @endif
                                     <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
-                                    <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
+                                    <% if (cotizacion1_estados == 'CS') { %>
                                         <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                    <% } %>
+                                    <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
                                         <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
                                     <% } %>
                                     @if (auth()->user()->hasRole('admin'))

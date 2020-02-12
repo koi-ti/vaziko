@@ -118,12 +118,15 @@ app || (app = {});
                             }
 
                             if (['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
-                                buttons += exportar;
                                 if (parseInt(full.cotizacion1_abierta)) {
                                     buttons += generate;
                                 }
                             }
 
+                            if (full.cotizacion1_estados == 'CS') {
+                                buttons += exportar;
+                            }
+                            
                             if (parseInt(full.cotizacion1_abierta)) {
                                 if (parseInt(full.isAdmin)) {
                                     if (full.cotizacion1_estados != 'PC') {

@@ -30,7 +30,9 @@
                             @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
                                 <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                             @endif
-                            <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                            @if ($cotizacion->cotizacion1_estados == 'CS')
+                                <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                            @endif
                         </div>
                     </li>
                 </ul>
