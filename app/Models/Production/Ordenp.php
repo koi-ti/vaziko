@@ -261,6 +261,10 @@ class Ordenp extends BaseModel
         return $query;
     }
 
+    public function vendedor () {
+        return $this->belongsTo('App\Models\Base\Tercero', 'orden_vendedor', 'id');
+    }
+
     public function detalle () {
         return $this->hasMany(Ordenp2::class, 'orden2_orden', 'id');
     }

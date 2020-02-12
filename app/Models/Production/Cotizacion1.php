@@ -91,6 +91,10 @@ class Cotizacion1 extends BaseModel
         return $query->where('cotizacion1_abierta', true);
     }
 
+    public function vendedor () {
+        return $this->belongsTo('App\Models\Base\Tercero', 'cotizacion1_vendedor', 'id');
+    }
+
     public function productos () {
         return $this->hasMany('App\Models\Production\Cotizacion2', 'cotizacion2_cotizacion', 'id');
     }

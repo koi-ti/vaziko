@@ -250,6 +250,13 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
+                imagenesProducto = [];
+                $('.incluir-cotizacion').each(function (i, item) {
+                    if ($(item).is(':checked')) {
+                        imagenesProducto.push($(item).data('resource'));
+                    }
+                });
+
                 /**
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
@@ -268,6 +275,7 @@ app || (app = {});
                         data.areasp = this.areasProductopCotizacionList.toJSON();
                         data.empaques = this.empaquesProductopCotizacionList.toJSON();
                         data.transportes = this.transportesProductopCotizacionList.toJSON();
+                        data.productop_imagenes = imagenesProducto;
 
                     this.model.save(data, {wait: true, patch: true, silent: true});
 
@@ -285,11 +293,12 @@ app || (app = {});
                         data.areasp = JSON.stringify(this.areasProductopCotizacionList);
                         data.empaques = JSON.stringify(this.empaquesProductopCotizacionList);
                         data.transportes = JSON.stringify(this.transportesProductopCotizacionList);
+                        data.productop_imagenes = imagenesProducto;
 
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
                     _.each(this.$files, function(file, key) {
-                        formData.append('imagenes[]', file.file, file.file.name + '('+ this.$('#cotizacion8_imprimir_'+key).is(':checked') +')');
+                        formData.append('imagenes[]', file.file, file.file.name + '(' + this.$('#cotizacion8_imprimir_' + key).is(':checked') + ')');
                     });
 
                     // Recorrer archivos para mandarlos texto plano

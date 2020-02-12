@@ -150,6 +150,23 @@
                     Tinta: {{ $producto->tiro }} / {{ $producto->retiro }}
                 </p>
 
+                @if (count($producto->imagenes))
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">Imágenes</div>
+                        <div class="panel-body">
+                            <div class="row">
+                                @foreach ($producto->imagenes as $imagen)
+                                    <div class="col-md-6">
+                                        <a href="{{ asset($imagen->producto_archivo) }}" target="_blank">
+                                            <img src="{{ asset($imagen->producto_archivo) }}" alt="Orden de producción" style="max-width: 500px; height: auto;">
+                                        </a>
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if (count($producto->maquinas))
                     <div class="panel panel-primary">
                         <div class="panel-heading">Maquinas</div>

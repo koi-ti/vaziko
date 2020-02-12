@@ -18,7 +18,7 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_formapago', 'tercero_nit', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio',
+            $query->select('id', 'tercero_formapago', 'tercero_nit', 'tercero_vendedor', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -31,6 +31,12 @@ class TerceroController extends Controller
             if ($request->has('persistent') && $request->persistent) {
                 session(['search_tercero_nit' => $request->has('tercero_nit') ? $request->tercero_nit : '']);
                 session(['search_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
+            }
+
+            if ($request->has('search_vendedor') && $request->search_vendedor) {
+                $query->with(['vendedor' => function ($q) {
+                    $q->select('id', 'tercero_nit')->vendedornombre();
+                }]);
             }
 
             return Datatables::of($query)
@@ -64,7 +70,7 @@ class TerceroController extends Controller
                         $query->where('tercero_proveedor', true);
                     }
 
-                    if ($request->has('tercero_vendedor')) {
+                    if ($request->has('tercero_vendedor_estado')) {
                         $query->where('tercero_vendedor_estado', true);
                         $query->where('tercero_activo', true);
                     }
@@ -282,7 +288,7 @@ class TerceroController extends Controller
     {
         if ($request->has('tercero_nit')) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago', 'tercero_comision',
+            $query->select('id', 'tercero_nit', 'tercero_vendedor', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago', 'tercero_comision',
                 DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
@@ -301,7 +307,13 @@ class TerceroController extends Controller
                 $query->where('tercero_activo', true);
             }
 
-            if ($request->has('tercero_vendedor')) {
+            if ($request->has('search_vendedor') && $request->search_vendedor) {
+                $query->with(['vendedor' => function ($q) {
+                    $q->select('id', 'tercero_nit')->vendedornombre();
+                }]);
+            }
+
+            if ($request->has('tercero_vendedor_estado')) {
                 $query->where('tercero_vendedor_estado', true);
                 $query->where('tercero_activo', true);
             }
@@ -309,7 +321,8 @@ class TerceroController extends Controller
             $tercero = $query->first();
 
             if ($tercero instanceof Tercero) {
-                return response()->json(['success' => true, 'id' => $tercero->id, 'tercero_nombre' => $tercero->tercero_nombre, 'tercero_direccion' => $tercero->tercero_direccion, 'tercero_direccion_nomenclatura' => $tercero->tercero_direccion_nomenclatura, 'tercero_municipio' => $tercero->tercero_municipio, 'tercero_formapago' => $tercero->tercero_formapago]);
+                $tercero->success = true;
+                return response()->json($tercero);
             }
         }
         return response()->json(['success' => false]);

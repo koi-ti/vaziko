@@ -117,4 +117,8 @@ class Productop extends BaseModel
     public function tips() {
         return $this->hasMany('App\Models\Production\Productop2', 'productop2_productop', 'id');
     }
+
+    public function images () {
+        return $this->hasMany('App\Models\Production\ProductopImagen', 'productopimagen_productop', 'id');
+    }
 }

@@ -278,6 +278,8 @@ class OrdenpController extends Controller
                 $producto->materiales = Ordenp4::with('material')->where('orden4_orden2', $producto->id)->get();
                 // Areas -> 6
                 $producto->areas = Ordenp6::with('area')->where('orden6_orden2', $producto->id)->get();
+                // Imagenes -> 8
+                $producto->imagenes = Ordenp8::selectRaw("CONCAT('storage/ordenes/orden_', $orden->id, '/producto_', orden8_orden2, '/', orden8_archivo) AS producto_archivo")->where('orden8_orden2', $producto->id)->get();
                 // Empaques -> 9
                 $producto->empaques = Ordenp9::with('empaque')->where('orden9_orden2', $producto->id)->get();
                 // Transportes -> 10
@@ -794,7 +796,7 @@ class OrdenpController extends Controller
             $object->tiempototal = $hours;
 
             // Chart productos
-            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = 0;
+            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = $total = 0;
             $ordenesp2 = Ordenp2::where('orden2_orden', $ordenp->id)->get();
             foreach ($ordenesp2 as $ordenp2) {
                 $tprecio += $precio = $ordenp2->orden2_precio_venta * $ordenp2->orden2_cantidad;
@@ -814,16 +816,18 @@ class OrdenpController extends Controller
 
                 $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
                 $tvolumen += $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
+
+                $total += ($subtotal + $comision);
             }
 
             // Make object
-            $labelprecio = 'Precio ' . number_format($tprecio,2,',','.');
-            $labelviaticos = 'Viáticos ' . number_format($tviaticos,2,',','.');
-            $labelmateriales = 'Materiales de producción ' . number_format($tmateriales,2,',','.');
-            $labelareas = 'Áreas de producción ' . number_format($tareas,2,',','.');
-            $labelempaques = 'Empaques de producción ' . number_format($tempaques,2,',','.');
-            $labeltransportes = 'Transportes de producción ' . number_format($ttransportes,2,',','.');
-            $labelvolumen = 'Volumen ' . number_format($tvolumen,2,',','.');
+            $labelprecio =  round($tprecio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($tprecio,2,',','.');
+            $labelviaticos = round($tviaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($tviaticos,2,',','.');
+            $labelmateriales = round($tmateriales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($tmateriales,2,',','.');
+            $labelareas = round($tareas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($tareas,2,',','.');
+            $labelempaques = round($tempaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($tempaques,2,',','.');
+            $labeltransportes = round($ttransportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($ttransportes,2,',','.');
+            $labelvolumen = round($tvolumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($tvolumen,2,',','.');
 
             $chartproducto = new \stdClass();
             $chartproducto->labels = [

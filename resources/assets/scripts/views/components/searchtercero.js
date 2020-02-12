@@ -49,7 +49,11 @@ app || (app = {});
             this.$inputComision = this.$("#" + this.$inputContent.attr("data-comision"));
             this.$inputTiempop = this.$inputContent.data("tiempop");
             this.$inputProveedor = this.$inputContent.data("proveedor");
-            this.checkVendedor = this.$inputContent.data("vendedor");
+            this.checkVendedor = this.$inputContent.data("vendedor-estado");
+
+            // Render vendedor in input
+            this.$inputVendedor = this.$("#" + this.$inputContent.attr("data-vendedor"));
+            this.$inputVendedorName = this.$("#" + this.$inputVendedor.attr("data-name"));
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -64,7 +68,8 @@ app || (app = {});
                         data.tercero_nombre = _this.$searchName.val();
                         data.tercero_tiempop = _this.$inputTiempop;
                         data.tercero_proveedor = _this.$inputProveedor;
-                        data.tercero_vendedor = _this.checkVendedor;
+                        data.tercero_vendedor_estado = _this.checkVendedor;
+                        data.search_vendedor = _this.$inputVendedor.length;
                     }
                 },
                 columns: [
@@ -123,6 +128,11 @@ app || (app = {});
                 this.$inputFormapago.val(data.tercero_formapago);
             }
 
+            if (this.$inputVendedor.length > 0) {
+                this.$inputVendedor.val(!_.isNull(data.vendedor) ? data.vendedor.tercero_nit : '');
+                this.$inputVendedorName.val(!_.isNull(data.vendedor) ? data.vendedor.tercero_nombre : '');
+            }
+
             if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', data.id);
                 this.$btnContact.attr('data-address-default', data.tercero_direccion);
@@ -158,9 +168,13 @@ app || (app = {});
             this.$inputOrden = this.$("#" + this.$inputContent.attr("data-orden2"));
             this.$inputTiempop = this.$inputContent.data("tiempop");
             this.$inputProveedor = this.$inputContent.data("proveedor");
-            this.checkVendedor = this.$inputContent.data("vendedor");
+            this.checkVendedor = this.$inputContent.data("vendedor-estado");
             this.$inputFormapago = this.$("#" + this.$inputContent.attr("data-formapago"));
             this.$inputComision = this.$("#" + this.$inputContent.attr("data-comision"));
+
+            // Render vendedor in input
+            this.$inputVendedor = this.$("#" + this.$inputContent.attr("data-vendedor"));
+            this.$inputVendedorName = this.$("#" + this.$inputVendedor.attr("data-name"));
 
             if (this.$btnContact.length > 0) {
                 this.$btnContact.attr('data-tercero', '');
@@ -183,7 +197,8 @@ app || (app = {});
                 tercero_nit: tercero,
                 tiempop_tercero: this.$inputTiempop,
                 tercero_proveedor: this.$inputProveedor,
-                tercero_vendedor: this.checkVendedor
+                tercero_vendedor_estado: this.checkVendedor,
+                search_vendedor: this.$inputVendedor.length
             }
 
             // Before eval clear data
@@ -220,6 +235,11 @@ app || (app = {});
 
                         if (_this.$inputComision.length > 0) {
                             _this.$inputComision.val(resp.tercero_comision);
+                        }
+
+                        if (_this.$inputVendedor.length > 0) {
+                            _this.$inputVendedor.val(!_.isNull(resp.vendedor) ? resp.vendedor.tercero_nit : '');
+                            _this.$inputVendedorName.val(!_.isNull(resp.vendedor) ? resp.vendedor.tercero_nombre : '');
                         }
 
                         if (_this.$inputFormapago.length > 0 || _.isNull(resp.tercero_formapago)) {

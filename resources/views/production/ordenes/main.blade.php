@@ -117,7 +117,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" data-formapago="orden_formapago" value="<%- tercero_nit %>" required>
+                                                    <input id="orden_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="orden_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_cliente_nombre" data-contacto="btn-add-contact" data-formapago="orden_formapago" data-vendedor="orden_vendedor" value="<%- tercero_nit %>" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-5 col-xs-10">
@@ -243,7 +243,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="orden_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="orden_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>">
+                                                    <input id="orden_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="orden_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="orden_vendedor_nombre" data-vendedor-estado="true" value="<%- vendedor_nit %>">
                                                 </div>
                                             </div>
                                             <div class="col-sm-7">

@@ -340,4 +340,17 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
     public function notifications() {
         return $this->hasMany('App\Models\Base\Notificacion', 'notificacion_tercero', 'id')->orderby('notificacion_fh', 'desc');
     }
+
+    public function vendedor () {
+        return $this->belongsTo(self::class, 'tercero_vendedor', 'id');
+    }
+
+    public function scopeVendedorNombre ($query) {
+        return $query->addSelect(DB::raw("(CASE WHEN tercero_persona = 'N'
+                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
+                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
+                        )
+                    ELSE tercero_razonsocial END)
+                AS tercero_nombre"));
+    }
 }

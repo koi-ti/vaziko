@@ -748,7 +748,7 @@
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
                                             <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
                                             <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- orden2_comision %>" type="number" min="0" max="100" step="0.1">
+                                                <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- (!edit) ? '{{ ($orden->vendedor) ? $orden->vendedor->tercero_comision : 0 }}' : orden2_comision %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
                                             <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>

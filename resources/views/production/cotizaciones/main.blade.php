@@ -124,7 +124,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="cotizacion1_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="cotizacion1_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_cliente_nombre" data-contacto="btn-add-contact" data-formapago="cotizacion1_formapago" value="<%- tercero_nit %>" required>
+                                                    <input id="cotizacion1_cliente" placeholder="Cliente" class="form-control tercero-koi-component" name="cotizacion1_cliente" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_cliente_nombre" data-contacto="btn-add-contact" data-formapago="cotizacion1_formapago" data-vendedor="cotizacion1_vendedor" value="<%- tercero_nit %>" required>
                                                 </div>
                                             </div>
                                             <div class="col-xs-10 col-sm-6 col-md-7">
@@ -194,7 +194,7 @@
                                                             <i class="fa fa-user"></i>
                                                         </button>
                                                     </span>
-                                                    <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor="true" value="<%- vendedor_nit %>">
+                                                    <input id="cotizacion1_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="cotizacion1_vendedor" type="text" maxlength="15" data-wrapper="spinner-main" data-name="cotizacion1_vendedor_nombre" data-vendedor-estado="true" value="<%- vendedor_nit %>">
                                                 </div>
                                             </div>
                                             <div class="col-sm-7">

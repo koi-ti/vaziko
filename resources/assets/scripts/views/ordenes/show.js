@@ -589,7 +589,7 @@ app || (app = {});
                         tooltips: {
                             callbacks: {
                                 label: function(item, data) {
-                                    return data.labels[item.index] + ": " + window.Misc.currency(data.datasets[item.datasetIndex].data[item.index]);
+                                    return data.labels[item.index];
                                 }
                             }
                         },

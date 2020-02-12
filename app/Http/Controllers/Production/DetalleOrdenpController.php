@@ -76,6 +76,10 @@ class DetalleOrdenpController extends Controller
         }
 
         // Lazy Eager Loading
+        $orden->load(['vendedor' => function ($q) {
+            $q->select('id', 'tercero_comision');
+        }]);
+
         $producto->load('tips');
 
         if (!$orden->orden_abierta || $orden->orden_anulada) {

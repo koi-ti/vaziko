@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\PreCotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\PreCotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp, App\Models\Production\ProductopImagen;
 use App\Models\Base\Tercero, App\Models\Base\Bitacora;
 use App\Models\Inventory\Producto;
 use DB, Log, Datatables, Storage;
@@ -66,7 +66,11 @@ class Cotizacion2Controller extends Controller
         }
 
         // Lazy Eager Loading
-        $producto->load('tips');
+        $cotizacion->load(['vendedor' => function ($q) {
+            $q->select('id', 'tercero_comision');
+        }]);
+
+        $producto->load(['tips', 'images']);
 
         if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada) {
             return redirect()->route('cotizaciones.show', compact('cotizacion'));
@@ -141,21 +145,55 @@ class Cotizacion2Controller extends Controller
                         }
                     }
 
+                    // If exists incluir
+                    $copyfiles = [];
+                    if ($request->has('productop_imagenes')) {
+                        $imagenes = explode(',', $request->productop_imagenes);
+                        foreach ($imagenes as $imagen) {
+                            // Recuperar imagen del producto
+                            $productopimagen = ProductopImagen::find($imagen);
+                            if (!$productopimagen instanceof ProductopImagen) {
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen del producto.']);
+                            }
+
+                            $name = str_random(4)."_{$productopimagen->productopimagen_archivo}";
+
+                            // Copiar imagen
+                            $cotizacion8 = new Cotizacion8;
+                            $cotizacion8->cotizacion8_archivo = $name;
+                            $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
+                            $cotizacion8->cotizacion8_imprimir = 1;
+                            $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
+                            $cotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
+                            $cotizacion8->save();
+
+                            // Recuperar imagen y copiar
+                            if (Storage::has("productosp/productop_{$productopimagen->productopimagen_productop}/{$productopimagen->productopimagen_archivo}")) {
+                                $object = new \stdClass();
+                                $object->copy = "productosp/productop_{$productopimagen->productopimagen_productop}/{$productopimagen->productopimagen_archivo}";
+                                $object->paste = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$name}";
+
+                                $copyfiles[] = $object;
+                            }
+                        }
+                    }
+
                     // Recuperar imagenes y almacenar en storage/app/cotizacines
                     $files = [];
-                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    $images = isset($data['imagenes']) ? $data['imagenes'] : [];
                     foreach ($images as $key => $image) {
                         // Validar si viene check para imprimir
                         $filename = $image->getClientOriginalName();
-                        if ( strpos($filename, '(true)') ) {
+                        if (strpos($filename, '(true)')) {
                             $explode = explode('(true)', $filename);
                             $name = str_random(4)."_{$explode[0]}";
-                            $imprimir = true;
+                            $imprimir = 1;
 
                         } else if (strpos($filename, '(false)')) {
                             $explode = explode('(false)', $filename);
                             $name = str_random(4)."_{$explode[0]}";
-                            $imprimir = false;
+                            $imprimir = 0;
                         }
 
                         // Insertar imagen
@@ -169,7 +207,7 @@ class Cotizacion2Controller extends Controller
 
                         // Crear objecto para mantener la imagen para guardar cuando se complete la transaccion, de lo contrario guardara la imagen asi no se complete la transaccion
                         $object = new \stdClass();
-                        $object->route = "cotizaciones/cotizacion_$cotizacion2->cotizacion2_cotizacion/producto_$cotizacion2->id/$name";
+                        $object->route = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$name}";
                         $object->file = file_get_contents($image->getRealPath());
 
                         $files[] = $object;
@@ -311,6 +349,13 @@ class Cotizacion2Controller extends Controller
                     if (count($files)) {
                         foreach ($files as $file) {
                             Storage::put($file->route, $file->file);
+                        }
+                    }
+
+                    // Copy files
+                    if (count($copyfiles)) {
+                        foreach ($copyfiles as $file) {
+                            Storage::copy($file->copy, $file->paste);
                         }
                     }
 
@@ -474,6 +519,40 @@ class Cotizacion2Controller extends Controller
                             } else {
                                 if ($cotizacion5 instanceof Cotizacion5) {
                                     $cotizacion5->delete();
+                                }
+                            }
+                        }
+
+                        // If exists incluir
+                        $copyfiles = [];
+                        if ($request->has('productop_imagenes')) {
+                            $imagenes = $request->productop_imagenes;
+                            foreach ($imagenes as $imagen) {
+                                // Recuperar imagen del producto
+                                $productopimagen = ProductopImagen::find($imagen);
+                                if (!$productopimagen instanceof ProductopImagen) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar la imagen del producto.']);
+                                }
+
+                                $name = str_random(4)."_{$productopimagen->productopimagen_archivo}";
+
+                                // Copiar imagen
+                                $cotizacion8 = new Cotizacion8;
+                                $cotizacion8->cotizacion8_archivo = $name;
+                                $cotizacion8->cotizacion8_cotizacion2 = $cotizacion2->id;
+                                $cotizacion8->cotizacion8_imprimir = true;
+                                $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
+                                $cotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
+                                $cotizacion8->save();
+
+                                // Recuperar imagen y copiar
+                                if (Storage::has("productosp/productop_{$productopimagen->productopimagen_productop}/{$productopimagen->productopimagen_archivo}")) {
+                                    $object = new \stdClass();
+                                    $object->copy = "productosp/productop_{$productopimagen->productopimagen_productop}/{$productopimagen->productopimagen_archivo}";
+                                    $object->paste = "cotizaciones/cotizacion_{$cotizacion2->cotizacion2_cotizacion}/producto_{$cotizacion2->id}/{$name}";
+
+                                    $copyfiles[] = $object;
                                 }
                             }
                         }
@@ -662,6 +741,13 @@ class Cotizacion2Controller extends Controller
                         // Si hay cambios en la cotizacion
                         if ($changes) {
                             Bitacora::createBitacora($cotizacion, $original, $changes, 'Productos', 'U', $request->ip());
+                        }
+
+                        // Copy files
+                        if (count($copyfiles)) {
+                            foreach ($copyfiles as $file) {
+                                Storage::copy($file->copy, $file->paste);
+                            }
                         }
 
                         // Commit Transaction

@@ -272,6 +272,28 @@
                             </div>
                         @endif
 
+                        @if ($producto->images->count())
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="box box-danger">
+                                        <div class="box-header with-border">
+                                            <h3 class="box-title">Imágenes del producto</h3>
+                                        </div>
+                                        <div class="box-body">
+                                            <ul class="list-group">
+                                                @foreach ($producto->images as $image)
+                                                    <li class="list-group-item">
+                                                        <img src='{{ asset("storage/productosp/productop_{$image->productopimagen_productop}/{$image->productopimagen_archivo}") }}' style="max-width: 500px; height: 200px;">
+                                                        <label class="control-label">Incluir en la cotización <input type="checkbox" class="incluir-cotizacion" data-resource="{{ $image->id }}"></label>
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
                         {{-- Content produccion --}}
                         <div class="row">
                             <div class="col-sm-6">
@@ -749,7 +771,7 @@
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
                                             <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
                                             <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="cotizacion2_comision" name="cotizacion2_comision" class="form-control input-sm total-calculate" value="<%- cotizacion2_comision %>" type="number" min="0" max="100" step="0.1">
+                                                <input id="cotizacion2_comision" name="cotizacion2_comision" class="form-control input-sm total-calculate" value="<%- (!edit) ? '{{ ($cotizacion->vendedor) ? $cotizacion->vendedor->tercero_comision : 0 }}' : cotizacion2_comision %>" type="number" min="0" max="100" step="0.1">
                                             </div>
                                             <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
                                             <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>

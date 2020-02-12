@@ -83,7 +83,7 @@ class CotizacionArchivosController extends Controller
                     $archivo->save();
 
                     // Crear bitacora
-                    Bitacora::createBitacora($cotizacion, [], "Se agrego un archivo {$name}", 'Archivos', 'C');
+                    Bitacora::createBitacora($cotizacion, [], "Se agrego un archivo {$name}", 'Archivos', 'C', $request->ip());
 
                     // Commit Transaction
                     DB::commit();
