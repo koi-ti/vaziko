@@ -9,7 +9,9 @@
                     <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
                     <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
                     <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
-                    <li><a href="#tab_estados" data-toggle="tab">Estados</a></li>
+                    @if ($orden->orden_cotizacion)
+                        <li><a href="#tab_estados" data-toggle="tab">Estados</a></li>
+                    @endif
                 @endif
                 <li class="pull-right">
                     <div class="btn-group" role="group">

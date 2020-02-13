@@ -83,7 +83,7 @@ class OrdenpArchivosController extends Controller
                     $archivo->save();
 
                     // Crear bitacora
-                    Bitacora::createBitacora($orden, [], "Se agrego un archivo {$name}", 'Archivos', 'C');
+                    Bitacora::createBitacora($orden, [], "Se agrego un archivo {$name}", 'Archivos', 'C', $request->ip());
 
                     // Commit Transaction
                     DB::commit();
@@ -127,7 +127,7 @@ class OrdenpArchivosController extends Controller
                 }
 
                 // Crear bitacora
-                Bitacora::createBitacora($orden, [], "Se elimino el archivo {$ordenarchivo->ordenarchivo_archivo}", 'Archivos', 'D');
+                Bitacora::createBitacora($orden, [], "Se elimino el archivo {$ordenarchivo->ordenarchivo_archivo}", 'Archivos', 'D', $request->ip());
 
                 // Eliminar item detallepedido
                 if (Storage::has("ordenes/orden_{$orden->id}/archivos/{$ordenarchivo->ordenarchivo_archivo}")) {

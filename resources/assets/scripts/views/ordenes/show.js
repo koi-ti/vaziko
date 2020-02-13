@@ -105,16 +105,18 @@ app || (app = {});
                     }
                 });
 
-                // Estados list
-                this.estadoListView = new app.EstadoListView({
-                    collection: this.estadoOrdenList,
-                    parameters: {
-                        dataFilter: {
-                            ordenp: this.model.get('id'),
-                            estado: true
+                if (this.model.get('orden_cotizacion')) {
+                    // Estados list
+                    this.estadoListView = new app.EstadoListView({
+                        collection: this.estadoOrdenList,
+                        parameters: {
+                            dataFilter: {
+                                ordenp: this.model.get('id'),
+                                estado: true
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
 
             // TiempopOrdenesp list

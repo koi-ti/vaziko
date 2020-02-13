@@ -146,7 +146,7 @@ class DespachopController extends Controller
                     }
 
                     // Crear bitacora
-                    Bitacora::createBitacora($orden, [], "Se creo el despacho {$despacho->id}", 'Distribución por clientes', 'C');
+                    Bitacora::createBitacora($orden, [], "Se creo el despacho {$despacho->id}", 'Distribución por clientes', 'C', $request->ip());
 
                     // Commit Transaction
                     DB::commit();
@@ -213,7 +213,7 @@ class DespachopController extends Controller
                 }
 
                 // Crear bitacora
-                Bitacora::createBitacora($orden, [], "Se anulo el despacho {$despacho->id}", 'Distribución por clientes', 'D');
+                Bitacora::createBitacora($orden, [], "Se anulo el despacho {$despacho->id}", 'Distribución por clientes', 'D', $request->ip());
 
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $despacho->id]);

@@ -237,7 +237,7 @@ class TiempopController extends Controller
                             }
 
                             // Crear bitacora
-                            Bitacora::createBitacora($orden, $original, $changes, 'Tiempos de producción', 'U');
+                            Bitacora::createBitacora($orden, $original, $changes, 'Tiempos de producción', 'U', $request->ip());
                         }
                     }
 
