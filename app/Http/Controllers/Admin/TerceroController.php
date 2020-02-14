@@ -18,14 +18,7 @@ class TerceroController extends Controller
     {
         if ($request->ajax()) {
             $query = Tercero::query();
-            $query->select('id', 'tercero_formapago', 'tercero_nit', 'tercero_vendedor', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio',
-                DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
-            );
+            $query->buscador();
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
@@ -33,14 +26,8 @@ class TerceroController extends Controller
                 session(['search_tercero_nombre' => $request->has('tercero_nombre') ? $request->tercero_nombre : '']);
             }
 
-            if ($request->has('search_vendedor') && $request->search_vendedor) {
-                $query->with(['vendedor' => function ($q) {
-                    $q->select('id', 'tercero_nit')->vendedornombre();
-                }]);
-            }
-
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Documento
                     if ($request->has('tercero_nit')) {
                         $query->whereRaw("tercero_nit LIKE '%{$request->tercero_nit}%'");
@@ -57,22 +44,6 @@ class TerceroController extends Controller
                             $query->orWhereRaw("tercero_sigla LIKE '%{$request->tercero_nombre}%'");
                             $query->orWhereRaw("CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2) LIKE '%{$request->tercero_nombre}%'");
                         });
-                    }
-
-                    // funcionario = tiemposp
-                    if ($request->has('tercero_tiempop')) {
-                        $query->where('tercero_activo', true);
-                        $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
-                    }
-
-                    if ($request->has('tercero_proveedor')) {
-                        $query->where('tercero_activo', true);
-                        $query->where('tercero_proveedor', true);
-                    }
-
-                    if ($request->has('tercero_vendedor_estado')) {
-                        $query->where('tercero_vendedor_estado', true);
-                        $query->where('tercero_activo', true);
                     }
                 })
                 ->make(true);
@@ -277,55 +248,6 @@ class TerceroController extends Controller
             $rcree = $actividad->actividad_tarifa;
         }
         return response()->json(['success' => true, 'rcree' => $rcree]);
-    }
-
-    /**
-     * Search tercero.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->has('tercero_nit')) {
-            $query = Tercero::query();
-            $query->select('id', 'tercero_nit', 'tercero_vendedor', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio', 'tercero_formapago', 'tercero_comision',
-                DB::raw("(CASE WHEN tercero_persona = 'N'
-                    THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        )
-                    ELSE tercero_razonsocial END)
-                AS tercero_nombre")
-            );
-            $query->where('tercero_nit', $request->tercero_nit);
-
-            if ($request->has('tiempop_tercero')) {
-                $query->whereIn('koi_tercero.id', DB::table('koi_tiempop')->select('tiempop_tercero'));
-            }
-
-            if ($request->has('tercero_proveedor')) {
-                $query->where('tercero_proveedor', true);
-                $query->where('tercero_activo', true);
-            }
-
-            if ($request->has('search_vendedor') && $request->search_vendedor) {
-                $query->with(['vendedor' => function ($q) {
-                    $q->select('id', 'tercero_nit')->vendedornombre();
-                }]);
-            }
-
-            if ($request->has('tercero_vendedor_estado')) {
-                $query->where('tercero_vendedor_estado', true);
-                $query->where('tercero_activo', true);
-            }
-
-            $tercero = $query->first();
-
-            if ($tercero instanceof Tercero) {
-                $tercero->success = true;
-                return response()->json($tercero);
-            }
-        }
-        return response()->json(['success' => false]);
     }
 
     /**

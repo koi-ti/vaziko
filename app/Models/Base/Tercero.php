@@ -345,7 +345,11 @@ class Tercero extends BaseModel implements AuthenticatableContract, CanResetPass
         return $this->belongsTo(self::class, 'tercero_vendedor', 'id');
     }
 
-    public function scopeVendedorNombre ($query) {
+    public function scopeBuscador ($query) {
+        return $query->select('id', 'tercero_nit', 'tercero_formapago', 'tercero_vendedor', 'tercero_razonsocial', 'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', 'tercero_direccion', 'tercero_direccion_nomenclatura', 'tercero_municipio')->nombre();
+    }
+
+    public function scopeNombre ($query) {
         return $query->addSelect(DB::raw("(CASE WHEN tercero_persona = 'N'
                     THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                             (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)

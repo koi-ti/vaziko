@@ -58,9 +58,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('cotizaciones.productos.index')),
+                    url: window.Misc.urlFull(Route.route('search.productoscotizacion')),
                     data: function (data) {
-                    	data.datatables = true;
                         data.search_cotizacion = _this.$searchCotizacion.val();
                         data.search_cotizacion_estado = _this.state;
                     }
@@ -106,7 +105,7 @@ app || (app = {});
                         }
                     }
                 ],
-                fnRowCallback: function(row, data) {
+                fnRowCallback: function (row, data) {
                     if (parseInt(data.cotizacion1_abierta)) {
                         $(row).css({color: "#00a65a"});
                     } else if (!parseInt(data.cotizacion1_abierta)) {

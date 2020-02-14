@@ -52,9 +52,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('productosp.index')),
+                    url: window.Misc.urlFull(Route.route('search.productosp')),
                     data: function (data) {
-                        data.datatables = true;
+                        data.search = true;
                         data.id = _this.$searchCodigo.val();
                         data.productop_nombre = _this.$searchNombre.val();
                     }
@@ -86,7 +86,7 @@ app || (app = {});
                 productop = this.$inputContent.attr("data-productop");
 
             if (productop == 'true') {
-                this.$inputContent.html('').append("<option value='"+data.id+"' selected>"+data.productop_nombre+"</option>").removeAttr('disabled');
+                this.$inputContent.html('').append("<option value='" + data.id + "' selected>" + data.productop_nombre + "</option>").removeAttr('disabled');
             } else {
                 this.$inputContent.val(data.id);
                 this.$inputName.val(data.productop_nombre);

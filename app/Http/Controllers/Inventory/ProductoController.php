@@ -19,18 +19,16 @@ class ProductoController extends Controller
     {
         if ($request->ajax()) {
             $query = Producto::query();
-            $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre', 'producto_unidades', 'producto_serie', 'producto_metrado');
+            $query->select('koi_producto.id as id', 'producto_codigo', 'producto_nombre', 'materialp_nombre');
+            $query->leftJoin('koi_materialp', 'producto_materialp', '=', 'koi_materialp.id');
 
-            if ($request->has('datatables')) {
-                // Persistent data filter
-                if ($request->has('persistent') && $request->persistent) {
-                    session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
-                    session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
-                }
-                $query->leftJoin('koi_materialp', 'producto_materialp', '=', 'koi_materialp.id');
-                $query->addSelect('materialp_nombre');
+            // Persistent data filter
+            if ($request->has('persistent') && $request->persistent) {
+                session(['search_producto_codigo' => $request->has('producto_codigo') ? $request->producto_codigo : '']);
+                session(['search_producto_nombre' => $request->has('producto_nombre') ? $request->producto_nombre : '']);
+            }
 
-                return Datatables::of($query)
+            return Datatables::of($query)
                 ->filter(function ($query) use ($request) {
                     // Codigo
                     if ($request->has('producto_codigo')) {
@@ -41,37 +39,7 @@ class ProductoController extends Controller
                     if ($request->has('producto_nombre')) {
                         $query->whereRaw("producto_nombre LIKE '%{$request->producto_nombre}%'");
                     }
-
-                    // Nombre
-                    if ($request->has('asiento') && $request->asiento) {
-                        if ($request->has('naturaleza')) {
-                            if ($request->naturaleza == 'D') {
-                                $query->where(function ($query) {
-                                    $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo = producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
-                                });
-                            } else {
-                                $query->where(function ($query) {
-                                    $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo <> producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
-                                });
-                            }
-                        }
-                    }
                 })->make(true);
-            }
-
-            if ($request->has('materialp') && $request->has('reference')) {
-                $query->where('producto_materialp', $request->materialp);
-
-                if ($request->reference == 'empaque') {
-                    $query->where('producto_empaque', true);
-                }
-
-                if ($request->reference == 'transporte') {
-                    $query->where('producto_transporte', true);
-                }
-            }
-            return response()->json($query->get());
-
         }
         return view('inventory.productos.index', ['empresa' => parent::getPaginacion()]);
     }
@@ -284,37 +252,6 @@ class ProductoController extends Controller
         //
     }
 
-    /**
-     * Search producto.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->has('producto_codigo')) {
-            $query = Producto::query();
-            $query->select('id', 'producto_nombre', 'producto_metrado', 'producto_serie', 'producto_unidades');
-            $query->where('producto_codigo', $request->producto_codigo);
-            if ($request->has('asiento') && $request->asiento) {
-                if ($request->has('naturaleza')) {
-                    if ($request->naturaleza == 'D') {
-                        $query->where(function ($query) {
-                            $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo = producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
-                        });
-                    } else {
-                        $query->where(function ($query) {
-                            $query->whereRaw("IF(producto_unidades = true, IF(producto_serie = true,(producto_codigo <> producto_referencia), producto_metrado = true) OR (producto_metrado = false AND producto_serie = false), 0)");
-                        });
-                    }
-                }
-            }
-            $producto = $query->first();
-            if ($producto instanceof Producto) {
-                return response()->json(['success' => true, 'id' => $producto->id, 'producto_nombre' => $producto->producto_nombre, 'producto_metrado' => $producto->producto_metrado, 'producto_serie' => $producto->producto_serie, 'producto_unidades' => $producto->producto_unidades]);
-            }
-        }
-        return response()->json(['success' => false]);
-    }
     /**
      * Evaluate actions inventory.
      *

@@ -41,7 +41,7 @@ app || (app = {});
             this.$searchNombre = this.$('#koi_search_producto_nombre');
 
             this.$productosSearchTable = this.$modalComponent.find('#koi-search-producto-component-table');
-			this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
+			this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
 			this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
 			this.asiento = this.$inputContent.attr("data-asiento");
 			this.naturaleza = this.$inputContent.attr("data-naturaleza");
@@ -53,9 +53,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('productos.index')),
-                    data: function(data) {
-                        data.datatables = true;
+                    url: window.Misc.urlFull(Route.route('search.productos')),
+                    data: function (data) {
+                        data.search = 'datatable';
                         data.asiento = _this.asiento;
                         data.naturaleza = _this.naturaleza;
                         data.producto_codigo = _this.$searchCodigo.val();
@@ -129,8 +129,8 @@ app || (app = {});
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+			this.$inputName = this.$("#" + $(e.currentTarget).attr("data-name"));
+			this.$wraperConten = this.$("#" + $(e.currentTarget).attr("data-wrapper"));
             this.asiento = this.$inputContent.attr("data-asiento");
 			this.naturaleza = this.$inputContent.attr("data-naturaleza");
 
@@ -142,9 +142,10 @@ app || (app = {});
 			if (!_.isUndefined(producto) && !_.isNull(producto) && producto != '') {
 				// Get Producto
 	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('productos.search')),
+	                url: window.Misc.urlFull(Route.route('search.productos')),
 	                type: 'GET',
 	                data: {
+                        search: 'input',
                         producto_codigo: producto,
                         asiento: _this.asiento,
                         naturaleza: _this.naturaleza
@@ -154,7 +155,7 @@ app || (app = {});
 	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
-	            .done(function(resp) {
+	            .done(function (resp) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                if (resp.success) {
 	                    if (!_.isUndefined(resp.producto_nombre) && !_.isNull(resp.producto_nombre)) {
@@ -162,7 +163,7 @@ app || (app = {});
 	                    }
 	                }
 	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
+	            .fail(function (jqXHR, ajaxOptions, thrownError) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });

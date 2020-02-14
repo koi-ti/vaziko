@@ -20,16 +20,7 @@ class SubActividadpController extends Controller
              $query = SubActividadp::query();
              $query->select('koi_subactividadp.*', 'actividadp_nombre');
              $query->join('koi_actividadp', 'subactividadp_actividadp', '=', 'koi_actividadp.id');
-
-             if ($request->has('datatables')) {
-                 return Datatables::of($query)->make(true);
-             }
-
-             if ($request->has('actividadesp')) {
-                 $query->where('subactividadp_actividadp', $request->actividadesp);
-                 $query->where('subactividadp_activo', true);
-             }
-             return response()->json($query->get());
+             return Datatables::of($query)->make(true);
          }
          return view('production.subactividadesp.index', ['empresa' => parent::getPaginacion()]);
      }

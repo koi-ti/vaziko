@@ -16,8 +16,7 @@ app || (app = {});
         templateTiempopOrdenp: _.template(($('#edit-tiempop-ordenp-tpl').html() || '')),
         events: {
             'click .submit-modal-tiempop': 'submitForm',
-            'submit #form-edit-tiempop-component': 'updateModel',
-            'change .change-actividadp': 'changeActividadp',
+            'submit #form-edit-tiempop-component': 'updateModel'
         },
         parameters: {
             data: null,
@@ -31,8 +30,6 @@ app || (app = {});
             // extends parameters
             if (opts !== undefined && _.isObject(opts.parameters))
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            console.log(this.parameters);
 
             this.$modal = $('#modal-tiempop-edit-component');
             this.$wraper = this.$('#modal-tiempop-wrapper');
@@ -54,8 +51,6 @@ app || (app = {});
             if (this.parameters.call == 'ordenp') {
                 this.$modal.find('.content-modal').empty().html(this.templateTiempopOrdenp(attributes));
 
-                // Recuperar input subactividad
-                this.$subactividadesp = this.$('#tiempop_subactividadp');
             } else if (this.parameters.call == 'tiemposp') {
                 this.$modal.find('.content-modal').empty().html(this.templateTiempop(attributes));
             } else {
@@ -67,33 +62,6 @@ app || (app = {});
             this.$modal.modal('show');
 
             this.ready();
-        },
-
-        /**
-        * Event change select actividadp
-        */
-        changeActividadp: function(e) {
-            var selected = this.$(e.currentTarget).val(),
-                _this = this;
-
-            if (selected) {
-                this.$wraperError.hide().empty();
-                window.Misc.setSpinner(_this.$wraper);
-                $.get(window.Misc.urlFull(Route.route('subactividadesp.index', {actividadesp: selected})), function (resp) {
-                    window.Misc.removeSpinner(_this.$wraper);
-                    if (resp.length > 0) {
-                        _this.$subactividadesp.empty().val(0).prop('required', true).removeAttr('disabled');
-                        _this.$subactividadesp.append("<option value></option>");
-                        _.each(resp, function (item) {
-                            _this.$subactividadesp.append("<option value=" + item.id + ">" + item.subactividadp_nombre + "</option>");
-                        });
-                    } else {
-                        _this.$subactividadesp.empty().prop('disabled', true);
-                    }
-                });
-            } else {
-                this.$subactividadesp.empty().val(0).prop('disabled', true);
-            }
         },
 
         /**

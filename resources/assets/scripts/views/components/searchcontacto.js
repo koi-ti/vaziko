@@ -64,8 +64,8 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('terceros.contactos.index')),
-                    data: function(data) {
+                    url: window.Misc.urlFull(Route.route('search.contactos')),
+                    data: function (data) {
                         data.tcontacto_nombres = _this.$searchContactoNombres.val(),
                         data.tcontacto_apellidos = _this.$searchContactoApellidos.val(),
                         data.tcontacto_tercero = tercero
@@ -113,18 +113,23 @@ app || (app = {});
 			if (this.$inputPhone.length) {
                 this.$inputPhone.val(data.tcontacto_telefono);
             }
+            
             if (this.$inputAddress.length) {
                 this.$inputAddress.val(data.tcontacto_direccion);
             }
+            
             if (this.$inputNomenclatura.length) {
                 this.$inputNomenclatura.val(data.tcontacto_direccion_nomenclatura);
             }
+            
             if (this.$labelNomenclatura.length) {
                 this.$labelNomenclatura.text(data.tcontacto_direccion_nomenclatura);
             }
+            
             if (this.$inputCity.length) {
                 this.$inputCity.val(data.tcontacto_municipio).trigger('change');
             }
+            
             if (this.$inputEmail.length) {
 				this.$inputEmail.val(data.tcontacto_email);
 			}

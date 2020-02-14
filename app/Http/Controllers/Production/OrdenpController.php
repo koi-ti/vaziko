@@ -410,63 +410,6 @@ class OrdenpController extends Controller
     }
 
     /**
-     * Search orden.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->ajax()) {
-            // Orden de produccion
-            $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', 'orden_numero', 'orden_ano', DB::raw("CONCAT((CASE WHEN tercero_persona = 'N'
-                        THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
-                            (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
-                        ) ELSE tercero_razonsocial END),
-                ' (', orden_referencia ,')'
-                ) AS tercero_nombre"));
-            $query->join('koi_tercero', 'orden_cliente', '=', 'koi_tercero.id');
-
-            // If exists codigo
-            if ($request->has('orden_codigo')) {
-                $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '$request->orden_codigo'");
-            }
-
-            // If exists estados
-            if ($request->has('orden_estado')) {
-                if ($request->orden_estado == 'A') {
-                    $query->where('orden_abierta', true);
-                }
-
-                if ($request->orden_estado == 'C') {
-                    $query->where('orden_abierta', false);
-                    $query->where('orden_culminada', false);
-                }
-
-                if ($request->orden_estado == 'N') {
-                    $query->where('orden_anulada', true);
-                }
-
-                if ($request->orden_estado == 'T') {
-                    $query->where('orden_culminada', true);
-                }
-
-                if ($request->orden_estado == 'AT') {
-                    $query->where('orden_abierta', true);
-                    $query->where('orden_anulada', false);
-                }
-            }
-            $ordenp = $query->first();
-
-            if ($ordenp instanceof Ordenp) {
-                return response()->json(['success' => true, 'tercero_nombre' => $ordenp->tercero_nombre, 'id' => $ordenp->id]);
-            }
-            return response()->json(['success' => false]);
-        }
-        abort(404);
-    }
-
-    /**
      * Abrir the specified resource.
      *
      * @param  int  $id

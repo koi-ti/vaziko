@@ -17,12 +17,16 @@ class Productop3Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Productop3::query();
-            $query->where('productop3_productop', $request->productop_id);
-            $query->select('koi_productop3.*', 'areap_nombre');
-            $query->join('koi_areap', 'productop3_areap', '=', 'koi_areap.id');
-            $query->orderBy('koi_productop3.id', 'asc');
-            return response()->json($query->get());
+            $data = [];
+            if ($request->has('productop_id')) {
+                $query = Productop3::query();
+                $query->where('productop3_productop', $request->productop_id);
+                $query->select('koi_productop3.*', 'areap_nombre');
+                $query->join('koi_areap', 'productop3_areap', '=', 'koi_areap.id');
+                $query->orderBy('koi_productop3.id', 'asc');
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }

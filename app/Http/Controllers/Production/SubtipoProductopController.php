@@ -19,18 +19,8 @@ class SubtipoProductopController extends Controller
          if ($request->ajax()) {
              $query = SubtipoProductop::query();
              $query->join('koi_tipoproductop', 'subtipoproductop_tipoproductop', '=', 'koi_tipoproductop.id');
-
-             if ($request->has('datatables')) {
-                 $query->select('koi_subtipoproductop.*', 'tipoproductop_nombre');
-                 return Datatables::of($query)->make(true);
-             }
-
-             if ($request->has('typeproduct')) {
-                 $query->select('koi_subtipoproductop.*');
-                 $query->where('subtipoproductop_tipoproductop', $request->typeproduct);
-                 $query->where('subtipoproductop_activo', true);
-             }
-             return response()->json($query->get());
+             $query->select('koi_subtipoproductop.*', 'tipoproductop_nombre');
+             return Datatables::of($query)->make(true);
          }
          return view('production.subtipoproductosp.index', ['empresa' => parent::getPaginacion()]);
      }

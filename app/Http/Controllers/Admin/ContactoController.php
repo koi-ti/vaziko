@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Tercero, App\Models\Base\Contacto;
-use DB, Log, Datatables;
+use DB, Log;
 
 class ContactoController extends Controller
 {
@@ -17,37 +17,14 @@ class ContactoController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
+            $data = [];
             if ($request->has('tercero_id')) {
                 $query = Contacto::query();
                 $query->select('koi_tcontacto.*');
                 $query->where('tcontacto_tercero', $request->tercero_id);
-                return response()->json($query->get());
-            } else {
-                // Search datatables
-                $query = Contacto::query();
-                $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', 'tcontacto_direccion_nomenclatura', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_municipio', 'tcontacto_email');
-                $query->leftJoin('koi_municipio', 'tcontacto_municipio', '=', 'koi_municipio.id');
-                $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
-
-                return Datatables::of($query)
-                    ->filter(function($query) use($request) {
-                        // Tercero
-                        if ($request->has('tcontacto_tercero')) {
-                            $query->where('tcontacto_tercero', $request->tcontacto_tercero);
-                        }
-
-                        // Nombres
-                        if ($request->has('tcontacto_nombres')) {
-                            $query->whereRaw("tcontacto_nombres LIKE '%{$request->tcontacto_nombres}%'");
-                        }
-
-                        // Apellidos
-                        if ($request->has('tcontacto_apellidos')) {
-                            $query->whereRaw("tcontacto_apellidos LIKE '%{$request->tcontacto_apellidos}%'");
-                        }
-                    })
-                    ->make(true);
+                $data = $query->get();
             }
+            return response()->json($data);
         }
         abort(404);
     }

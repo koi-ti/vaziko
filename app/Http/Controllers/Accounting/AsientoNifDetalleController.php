@@ -17,11 +17,11 @@ class AsientoNifDetalleController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $detalle = [];
+            $data = [];
             if($request->has('asiento')) {
-                $detalle = AsientoNif2::getAsientoNif2($request->asiento);
+                $data = AsientoNif2::getAsientoNif2($request->asiento);
             }
-            return response()->json($detalle);
+            return response()->json($data);
         }
     }
 

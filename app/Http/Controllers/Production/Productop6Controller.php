@@ -17,12 +17,16 @@ class Productop6Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Productop6::query();
-            $query->where('productop6_productop', $request->productop_id);
-            $query->select('koi_productop6.*', 'koi_acabadop.id as acabadop_id', 'acabadop_nombre');
-            $query->join('koi_acabadop', 'productop6_acabadop', '=', 'koi_acabadop.id');
-            $query->orderBy('koi_productop6.id', 'asc');
-            return response()->json( $query->get() );
+            $data = [];
+            if ($request->has('productop_id')) {
+                $query = Productop6::query();
+                $query->where('productop6_productop', $request->productop_id);
+                $query->select('koi_productop6.*', 'koi_acabadop.id as acabadop_id', 'acabadop_nombre');
+                $query->join('koi_acabadop', 'productop6_acabadop', '=', 'koi_acabadop.id');
+                $query->orderBy('koi_productop6.id', 'asc');
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }

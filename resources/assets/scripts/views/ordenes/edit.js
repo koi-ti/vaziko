@@ -257,7 +257,7 @@ app || (app = {});
 
             if (typeof(typeproduct) !== 'undefined' && !_.isUndefined(typeproduct) && !_.isNull(typeproduct) && typeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull(Route.route('subtipoproductosp.index', {typeproduct: typeproduct})),
+                    url: window.Misc.urlFull(Route.route('search.subtipoproductosp', {typeproduct: typeproduct})),
                     type: 'GET',
                     beforeSend: function () {
                         window.Misc.setSpinner(_this.spinner);
@@ -294,7 +294,7 @@ app || (app = {});
 
             if (typeof(subtypeproduct) !== 'undefined' && !_.isUndefined(subtypeproduct) && !_.isNull(subtypeproduct) && subtypeproduct != '') {
                 $.ajax({
-                    url: window.Misc.urlFull(Route.route('productosp.index')),
+                    url: window.Misc.urlFull(Route.route('search.productosp')),
                     data: {
                         subtypeproduct: subtypeproduct,
                         typeproduct: typeproduct

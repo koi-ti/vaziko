@@ -44,9 +44,9 @@ app || (app = {});
             this.$searchOrdenpEstado = this.$('#search_ordenp_estado');
 
             this.$productsOrderSearchTable = this.$modalComponent.find('#koi-search-productos-orden-component-table');
-            this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
+            this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
-            this.$inputRender = this.$("#"+$(e.currentTarget).attr("data-render"));
+            this.$inputRender = this.$("#" + $(e.currentTarget).attr("data-render"));
 
 			this.productsOrderSearchTable = this.$productsOrderSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -55,9 +55,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('ordenes.productos.index')),
+                    url: window.Misc.urlFull(Route.route('search.productosorden')),
                     data: function (data) {
-                    	data.datatables = true;
+                    	data.search = true;
                         data.search_ordenp = _this.$searchOrdenp.val();
                         data.search_ordenp_estado = _this.$searchOrdenpEstado.val();
                     }
@@ -96,7 +96,7 @@ app || (app = {});
                         }
                     }
                 ],
-                fnRowCallback: function(row, data) {
+                fnRowCallback: function (row, data) {
                     if (parseInt(data.orden_abierta)) {
                         $(row).css({color: "#00a65a"});
                     } else if (parseInt(data.orden_anulada)) {
@@ -146,8 +146,8 @@ app || (app = {});
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+			this.$inputName = this.$("#" + $(e.currentTarget).attr("data-name"));
+			this.$wraperConten = this.$("#" + $(e.currentTarget).attr("data-wrapper"));
 
 			var producto = this.$inputContent.val();
 
@@ -157,7 +157,7 @@ app || (app = {});
 			if (!_.isUndefined(producto) && !_.isNull(producto) && producto != '') {
 				// Get Orden
 	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('ordenes.productos.search')),
+	                url: window.Misc.urlFull(Route.route('search.productosorden')),
 	                type: 'GET',
 	                data: {
                         producto: producto
@@ -167,7 +167,7 @@ app || (app = {});
 	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
-	            .done(function(resp) {
+	            .done(function (resp) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                if (resp.success) {
 	                    if (!_.isUndefined(resp.productop_nombre) && !_.isNull(resp.productop_nombre)){
@@ -175,7 +175,7 @@ app || (app = {});
 	                    }
 	                }
 	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
+	            .fail(function (jqXHR, ajaxOptions, thrownError) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });

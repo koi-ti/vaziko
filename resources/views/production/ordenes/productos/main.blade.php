@@ -207,7 +207,7 @@
                                                 <tbody>
                                                     @if($producto->productop_tiro)
                                                         <tr>
-                                                            <th class="text-center">T <input type="checkbox" id="orden2_tiro" name="orden2_tiro" class="check-type" value="orden2_tiro" <%- parseInt(orden2_tiro) ? 'checked': ''%>></th>
+                                                            <th class="text-center">T <input type="checkbox" id="orden2_tiro" name="orden2_tiro" class="production-check-measurements" value="orden2_tiro" data-resource="orden2" <%- parseInt(orden2_tiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>></td>
                                                             <td class="text-center"><input type="checkbox" id="orden2_magenta" name="orden2_magenta" value="orden2_magenta" <%- parseInt(orden2_magenta) ? 'checked': ''%>></td>
                                                             <td class="text-center"><input type="checkbox" id="orden2_cyan" name="orden2_cyan" value="orden2_cyan" <%- parseInt(orden2_cyan) ? 'checked': ''%>></td>
@@ -218,7 +218,7 @@
                                                     @endif
                                                     @if($producto->productop_retiro)
                                                         <tr>
-                                                            <th class="text-center">R <input type="checkbox" id="orden2_retiro" name="orden2_retiro" class="check-type" value="orden2_retiro" <%- parseInt(orden2_retiro) ? 'checked': ''%>></th>
+                                                            <th class="text-center">R <input type="checkbox" id="orden2_retiro" name="orden2_retiro" class="production-check-measurements" value="orden2_retiro" data-resource="orden2" <%- parseInt(orden2_retiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>></td>
                                                             <td class="text-center"><input type="checkbox" id="orden2_magenta2" name="orden2_magenta2" value="orden2_magenta2" <%- parseInt(orden2_magenta2) ? 'checked': ''%>></td>
                                                             <td class="text-center"><input type="checkbox" id="orden2_cyan2" name="orden2_cyan2" value="orden2_cyan2" <%- parseInt(orden2_cyan2) ? 'checked': ''%>></td>
@@ -320,7 +320,7 @@
                                     <div class="row">
                                         <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
                                         <div class="form-group col-md-6">
-                                            <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_precio_formula" type="text" maxlength="200" data-response="orden2_precio_venta">
+                                            <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_precio_formula" type="text" maxlength="200" data-response="orden2_precio_venta">
                                         </div>
                                         <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
                                         <div class="form-group col-md-4">
@@ -330,7 +330,7 @@
                                     <div class="row">
                                         <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
                                         <div class="form-group col-md-6">
-                                            <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm calculate_formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-response="orden2_viaticos">
+                                            <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-response="orden2_viaticos">
                                         </div>
                                         <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
                                         <div class="form-group col-md-4">
@@ -367,7 +367,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Material de producción" data-field="orden4_producto" data-wrapper="materialesp-wrapper-producto" data-reference="material" required>
+                                        <select name="orden4_materialp" id="orden4_materialp" class="form-control select2-default-clear change-production-materialp" data-placeholder="Material de producción" data-field="orden4_producto" data-wrapper="materialesp-wrapper-producto" data-reference="material" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Ordenp4::getMaterials ($producto->id) as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -385,7 +385,7 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="orden4_medidas" name="orden4_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden4_cantidad" maxlength="50" required>
+                                            <input type="text" id="orden4_medidas" name="orden4_medidas" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden4_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
                                             <input type="text" id="orden4_cantidad" name="orden4_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
@@ -438,7 +438,7 @@
                             <form method="POST" accept-charset="UTF-8" id="form-areap-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-5 col-md-offset-1">
-                                        <select name="orden6_areap" id="orden6_areap" class="form-control select2-default-clear" data-placeholder="Áreas de producción">
+                                        <select id="orden6_areap" name="orden6_areap" class="form-control select2-default-clear change-production-areap" data-wrapper="areasp-wrapper-producto" data-placeholder="Áreas de producción">
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -515,7 +515,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
+                                        <select name="orden9_materialp" id="orden9_materialp" class="form-control select2-default-clear change-production-materialp" data-placeholder="Empaque de producción" data-field="orden9_producto" data-wrapper="empaques-wrapper-producto" data-reference="empaque" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Productop5::getPackaging() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -533,7 +533,7 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="orden9_medidas" name="orden9_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden9_cantidad" maxlength="50" required>
+                                            <input type="text" id="orden9_medidas" name="orden9_medidas" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden9_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
                                             <input type="text" id="orden9_cantidad" name="orden9_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
@@ -593,7 +593,7 @@
                                 </div><br>
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden10_materialp" id="orden10_materialp" class="form-control select2-default-clear change-materialp" data-placeholder="Empaque de producción" data-field="orden10_producto" data-wrapper="transportes-wrapper-producto" data-reference="transporte" required>
+                                        <select name="orden10_materialp" id="orden10_materialp" class="form-control select2-default-clear change-production-materialp" data-placeholder="Empaque de producción" data-field="orden10_producto" data-wrapper="transportes-wrapper-producto" data-reference="transporte" required>
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Productop5::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -611,7 +611,7 @@
                                 <div class="row">
                                     <div class="form-group col-sm-8">
                                         <div class="input-group">
-                                            <input type="text" id="orden10_medidas" name="orden10_medidas" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden10_cantidad" maxlength="50" required>
+                                            <input type="text" id="orden10_medidas" name="orden10_medidas" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden10_cantidad" maxlength="50" required>
                                             <span class="input-group-addon">=</span>
                                             <input type="text" id="orden10_cantidad" name="orden10_cantidad" placeholder="Total" class="form-control text-right" disabled>
                                         </div>
@@ -656,7 +656,7 @@
                 </div>
             </div>
 
-            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+            @if (auth()->user()->ability('admin', 'opcional4', ['module' => 'ordenes']))
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-primary">
@@ -852,7 +852,7 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td colspan="4">
             <div class="input-group">
-                <input type="text" id="orden4_medidas_<%- id %>" name="orden4_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden4_cantidad_<%- id %>" maxlength="50" value="<%- orden4_medidas %>" required>
+                <input type="text" id="orden4_medidas_<%- id %>" name="orden4_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden4_cantidad_<%- id %>" maxlength="50" value="<%- orden4_medidas %>" required>
                 <span class="input-group-addon">=</span>
                 <input type="text" id="orden4_cantidad_<%- id %>" name="orden4_cantidad_<%- id %>" placeholder="Total" value="<%- orden4_cantidad %>" class="form-control text-right" disabled>
             </div>
@@ -892,7 +892,7 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td colspan="4">
             <div class="input-group">
-                <input type="text" id="orden9_medidas_<%- id %>" name="orden9_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden9_cantidad_<%- id %>" maxlength="50" value="<%- orden9_medidas %>" required>
+                <input type="text" id="orden9_medidas_<%- id %>" name="orden9_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden9_cantidad_<%- id %>" maxlength="50" value="<%- orden9_medidas %>" required>
                 <span class="input-group-addon">=</span>
                 <input type="text" id="orden9_cantidad_<%- id %>" name="orden9_cantidad_<%- id %>" placeholder="Total" value="<%- orden9_cantidad %>" class="form-control text-right" disabled>
             </div>
@@ -974,7 +974,7 @@
         <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
         <td colspan="4">
             <div class="input-group">
-                <input type="text" id="orden10_medidas_<%- id %>" name="orden10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula calculate-formula" data-response="orden10_cantidad_<%- id %>" maxlength="50" value="<%- orden10_medidas %>" required>
+                <input type="text" id="orden10_medidas_<%- id %>" name="orden10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden10_cantidad_<%- id %>" maxlength="50" value="<%- orden10_medidas %>" required>
                 <span class="input-group-addon">=</span>
                 <input type="text" id="orden10_cantidad_<%- id %>" name="orden10_cantidad_<%- id %>" placeholder="Total" value="<%- orden10_cantidad %>" class="form-control text-right" disabled>
             </div>

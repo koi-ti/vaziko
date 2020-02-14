@@ -16,16 +16,12 @@ app || (app = {});
         events: {
             'click .submit-cotizacion2': 'submitForm',
             'submit #form-cotizacion-producto': 'onStore',
-            'ifChanged .check-type': 'checkType',
-            'change .total-calculate': 'totalCalculate',
-            'change .calculate_formula': 'changeFormula',
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
             'submit #form-transporte-producto': 'onStoreTransporte',
-            'change .change-materialp': 'changeMaterialp',
-            'change .change-insumo': 'changeInsumo',
-            'change #cotizacion6_areap': 'changeAreap',
+            'change .total-calculate': 'totalCalculate',
+            'change .change-insumo': 'changeInsumo'
         },
         parameters: {
             data: {
@@ -78,22 +74,6 @@ app || (app = {});
 
             // reference to Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
-
-            // Tiro
-            this.$inputyellow = this.$('#cotizacion2_yellow');
-            this.$inputmagenta = this.$('#cotizacion2_magenta');
-            this.$inputcyan = this.$('#cotizacion2_cyan');
-            this.$inputkey = this.$('#cotizacion2_key');
-
-            // Retiro
-            this.$inputyellow2 = this.$('#cotizacion2_yellow2');
-            this.$inputmagenta2 = this.$('#cotizacion2_magenta2');
-            this.$inputcyan2 = this.$('#cotizacion2_cyan2');
-            this.$inputkey2 = this.$('#cotizacion2_key2');
-
-            // Rerence inputs areasp
-            this.$inputarea = this.$('#cotizacion6_nombre');
-            this.$inputvalor = this.$('#cotizacion6_valor');
 
             // Inputs cuadro de informacion
             this.$inputmargenmaterialp = this.$('#cotizacion2_margen_materialp');
@@ -194,46 +174,6 @@ app || (app = {});
                     dataFilter: dataFilter
                 }
             });
-        },
-
-        /**
-        * Event change check tiro \\ retiro
-        */
-        checkType: function (e) {
-            var selected = this.$(e.currentTarget).is(':checked');
-                type = this.$(e.currentTarget).val();
-
-            if (type == 'cotizacion2_tiro') {
-                this.$inputyellow.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputmagenta.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputcyan.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputkey.iCheck(selected ? 'check' : 'uncheck');
-            } else {
-                this.$inputyellow2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputmagenta2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputcyan2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputkey2.iCheck(selected ? 'check' : 'uncheck');
-            }
-        },
-
-        /**
-        * Event change formulas
-        */
-        changeFormula: function (e) {
-            var reg = /[0-9/\+/\-/\*/\/\/\./\(/\)/]/,
-                string = this.$(e.currentTarget).val(),
-                response = this.$(e.currentTarget).data('response'),
-                valor  = '';
-
-             for (var i = 0; i <= string.length - 1; i++) {
-                if (reg.test( string.charAt(i))) {
-                    valor += string.charAt(i);
-                }
-            }
-
-            // remplazar campos no validos y hacer operacion matematica
-            this.$(e.currentTarget).val(valor);
-            this.$('#' + response).val(eval(valor)).trigger('change');
         },
 
         /**
@@ -370,43 +310,6 @@ app || (app = {});
         },
 
         /**
-        * Event change materialp
-        */
-        changeMaterialp: function (e) {
-            var materialp = this.$(e.currentTarget).val(),
-                reference = this.$(e.currentTarget).data('reference'),
-                _this = this;
-
-            // Reference
-            this.$referenceselected = this.$('#' + this.$(e.currentTarget).data('field'));
-            this.$referencewrapper = this.$('#' + this.$(e.currentTarget).data('wrapper'));
-            this.$selectedinput = this.$('#' + this.$referenceselected.data('valor'));
-            this.$selectedhistorial = this.$('#' + this.$referenceselected.data('historial'));
-
-            if (typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '') {
-                window.Misc.setSpinner( this.$referencewrapper);
-                $.get(window.Misc.urlFull(Route.route('productos.index', {materialp: materialp, reference: reference})), function (resp) {
-                    if (resp.length) {
-                        _this.$referenceselected.empty().val(0).removeAttr('disabled');
-                        _this.$referenceselected.append("<option value=></option>");
-                        _.each(resp, function(item) {
-                            _this.$referenceselected.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
-                        });
-                    } else {
-                        _this.$referenceselected.empty().val(0).prop('disabled', true);
-                        _this.$selectedinput.val(0);
-                        _this.$selectedhistorial.empty();
-                    }
-                    window.Misc.removeSpinner( _this.$referencewrapper);
-                });
-            } else {
-                this.$referenceselected.empty().val(0).prop('disabled', true);
-                this.$selectedinput.val(0);
-                this.$selectedhistorial.empty();
-            }
-        },
-
-        /**
         * Event change insumo
         */
         changeInsumo: function (e) {
@@ -444,27 +347,6 @@ app || (app = {});
             } else {
                 this.$inputinsumo.val(0);
                 this.$historialinsumo.empty();
-            }
-        },
-
-        /**
-        * Event change areap
-        */
-        changeAreap: function (e) {
-            var _this = this;
-                areap = this.$(e.currentTarget).val();
-
-            // Reference
-            if (typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '') {
-                $.get(window.Misc.urlFull( Route.route('areasp.show', {areasp: areap})), function (resp) {
-                    if (resp) {
-                        _this.$inputarea.val('').attr('readonly', true);
-                        _this.$inputvalor.val(resp.areap_valor);
-                    }
-                });
-            } else {
-                this.$inputarea.val('').attr('readonly', false);
-                this.$inputvalor.val('');
             }
         },
 
@@ -570,10 +452,10 @@ app || (app = {});
         */
         uploadPictures: function (e) {
            var _this = this,
-               autoUpload = false;
-               session = {};
-               deleteFile = {};
-               request = {};
+                autoUpload = false,
+                session = {};
+                deleteFile = {};
+                request = {};
 
 
            // Model exists
@@ -606,7 +488,7 @@ app || (app = {});
                    }
                }
 
-               var autoUpload = true;
+               autoUpload = true;
            }
 
            this.$uploaderFile.fineUploader({
@@ -640,7 +522,7 @@ app || (app = {});
                },
                callbacks: {
                    onSubmitted: _this.onSubmitted,
-                   onSessionRequestComplete: _this.onSessionRequestComplete,
+                   onSessionRequestComplete: _this.onSessionRequestComplete
                },
            });
         },
@@ -655,8 +537,8 @@ app || (app = {});
                window.initComponent.initICheck();
 
            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.qq-imprimir');
-               itemFile.attr('name', 'cotizacion8_imprimir_'+id);
-               itemFile.attr('id', 'cotizacion8_imprimir_'+id);
+               itemFile.attr('name', 'cotizacion8_imprimir_' + id);
+               itemFile.attr('id', 'cotizacion8_imprimir_' + id);
         },
 
         /**
@@ -674,8 +556,8 @@ app || (app = {});
                    previewLink.attr("href", value.thumbnailUrl);
 
                var imprimir = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.qq-imprimir');
-                   imprimir.attr('name', 'cotizacion8_imprimir_'+value.uuid);
-                   imprimir.attr('id', 'cotizacion8_imprimir_'+value.uuid);
+                   imprimir.attr('name', 'cotizacion8_imprimir_' + value.uuid);
+                   imprimir.attr('id', 'cotizacion8_imprimir_' + value.uuid);
 
                if (value.imprimir)
                    imprimir.iCheck('check');

@@ -51,7 +51,7 @@
                         <div class="row">
                             <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
                             <div class="form-group col-md-5">
-                                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear" required>
+                                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-production-actividadp" data-wrapper=".spinner-main" data-reference="tiempop_subactividadp" required>
                                     @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach

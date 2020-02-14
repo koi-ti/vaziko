@@ -17,10 +17,14 @@ class Productop2Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Productop2::query();
-            $query->where('productop2_productop', $request->productop_id);
-            $query->orderBy('id', 'asc');
-            return response()->json($query->get());
+            $data = [];
+            if ($request->has('productop_id')) {
+                $query = Productop2::query();
+                $query->where('productop2_productop', $request->productop_id);
+                $query->orderBy('id', 'asc');
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }

@@ -755,7 +755,7 @@
         <div class="row">
             <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
             <div class="form-group col-md-4">
-                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-actividadp" required>
+                <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-production-actividadp" data-reference="tiempop_subactividadp" required>
                     @foreach (App\Models\Production\Actividadp::getActividadesp() as $key => $value)
                         <option value="{{ $key }}" <%- tiempop_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                     @endforeach

@@ -217,6 +217,7 @@ app || (app = {});
         initialize: function (opts) {
             // Initialize resources
             this.componentGlobalView = new app.ComponentGlobalView();
+            this.componentProductionView = new app.ComponentProductionView();
             this.componentAddressView = new app.ComponentAddressView();
             this.componentCreateResourceView = new app.ComponentCreateResourceView();
             this.componentSearchTerceroView = new app.ComponentSearchTerceroView();

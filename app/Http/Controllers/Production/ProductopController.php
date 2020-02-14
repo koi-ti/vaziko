@@ -20,14 +20,13 @@ class ProductopController extends Controller
             $query = Productop::query();
             $query->select('koi_productop.id as id', 'koi_productop.id as productop_codigo', 'productop_nombre');
 
-            if ($request->has('datatables')) {
-                // Persistent data filter
-                if ($request->has('persistent') && $request->persistent) {
-                    session(['search_productop_codigo' => $request->has('productop_codigo') ? $request->productop_codigo : '']);
-                    session(['search_productop_nombre' => $request->has('productop_nombre') ? $request->productop_nombre : '']);
-                }
+            // Persistent data filter
+            if ($request->has('persistent') && $request->persistent) {
+                session(['search_productop_codigo' => $request->has('productop_codigo') ? $request->productop_codigo : '']);
+                session(['search_productop_nombre' => $request->has('productop_nombre') ? $request->productop_nombre : '']);
+            }
 
-                return Datatables::of($query)
+            return Datatables::of($query)
                 ->filter(function($query) use($request) {
                     // Codigo
                     if ($request->has('id')) {
@@ -40,14 +39,6 @@ class ProductopController extends Controller
                     }
                 })
                 ->make(true);
-            }
-
-            // TypeProduct
-            if ($request->has('typeproduct') && $request->has('subtypeproduct'))  {
-                $query->where('productop_subtipoproductop', $request->subtypeproduct);
-                $query->where('productop_tipoproductop', $request->typeproduct);
-            }
-            return response()->json($query->get());
         }
         return view('production.productos.index', ['empresa' => parent::getPaginacion()]);
     }

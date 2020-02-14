@@ -62,8 +62,9 @@ app || (app = {});
                 serverSide: true,
                 language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('terceros.index')),
+                    url: window.Misc.urlFull(Route.route('search.terceros')),
                     data: function (data) {
+                        data.search = true;
                         data.tercero_nit = _this.$searchNit.val();
                         data.tercero_nombre = _this.$searchName.val();
                         data.tercero_tiempop = _this.$inputTiempop;
@@ -207,7 +208,7 @@ app || (app = {});
             if (!_.isUndefined(tercero) && !_.isNull(tercero) && tercero != '') {
                 // Get tercero
                 $.ajax({
-                    url: window.Misc.urlFull(Route.route('terceros.search')),
+                    url: window.Misc.urlFull(Route.route('search.terceros')),
                     type: 'GET',
                     data: data,
                     beforeSend: function () {

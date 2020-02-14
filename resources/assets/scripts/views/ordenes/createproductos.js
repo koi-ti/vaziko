@@ -16,16 +16,12 @@ app || (app = {});
         events: {
             'click .submit-ordenp2': 'submitForm',
             'submit #form-orden-producto': 'onStore',
-            'ifChanged .check-type': 'checkType',
-            'change .total-calculate': 'totalCalculate',
-            'change .calculate_formula': 'changeFormula',
             'submit #form-materialp-producto': 'onStoreMaterialp',
             'submit #form-empaque-producto': 'onStoreEmpaquep',
             'submit #form-areap-producto': 'onStoreAreap',
             'submit #form-transporte-producto': 'onStoreTransporte',
-            'change .change-materialp': 'changeMaterialp',
+            'change .total-calculate': 'totalCalculate',
             'change .change-insumo': 'changeInsumo',
-            'change #orden6_areap': 'changeAreap',
         },
         parameters: {
             data: {
@@ -78,22 +74,6 @@ app || (app = {});
 
             // reference to Fine uploader
             this.$uploaderFile = this.$('.fine-uploader');
-
-            // Tiro
-            this.$inputyellow = this.$('#orden2_yellow');
-            this.$inputmagenta = this.$('#orden2_magenta');
-            this.$inputcyan = this.$('#orden2_cyan');
-            this.$inputkey = this.$('#orden2_key');
-
-            // Retiro
-            this.$inputyellow2 = this.$('#orden2_yellow2');
-            this.$inputmagenta2 = this.$('#orden2_magenta2');
-            this.$inputcyan2 = this.$('#orden2_cyan2');
-            this.$inputkey2 = this.$('#orden2_key2');
-
-            // Rerence inputs areasp
-            this.$inputarea = this.$('#orden6_nombre');
-            this.$inputvalor = this.$('#orden6_valor');
 
             // Inputs cuadro de informacion
             this.$inputround = this.$('#orden2_round');
@@ -198,46 +178,6 @@ app || (app = {});
                     dataFilter: dataFilter
                 }
             });
-        },
-
-        /**
-        * Event change check tiro \\ retiro
-        */
-        checkType: function (e) {
-            var selected = this.$(e.currentTarget).is(':checked');
-                type = this.$(e.currentTarget).val();
-
-            if (type == 'orden2_tiro') {
-                this.$inputyellow.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputmagenta.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputcyan.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputkey.iCheck(selected ? 'check' : 'uncheck');
-            } else {
-                this.$inputyellow2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputmagenta2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputcyan2.iCheck(selected ? 'check' : 'uncheck');
-                this.$inputkey2.iCheck(selected ? 'check' : 'uncheck');
-            }
-        },
-
-        /**
-        * Event change formulas
-        */
-        changeFormula: function (e) {
-            var reg = /[0-9/\+/\-/\*/\/\/\./\(/\)/]/,
-                string = this.$(e.currentTarget).val(),
-                response = this.$(e.currentTarget).data('response'),
-                valor  = '';
-
-             for (var i = 0; i <= string.length - 1; i++) {
-                if (reg.test(string.charAt(i))) {
-                    valor += string.charAt(i);
-                }
-            }
-
-            // remplazar campos no validos y hacer operacion matematica
-            this.$(e.currentTarget).val(valor);
-            this.$('#' + response).val(eval(valor)).trigger('change');
         },
 
         /**
@@ -365,43 +305,6 @@ app || (app = {});
         },
 
         /**
-        * Event change materialp
-        */
-        changeMaterialp: function (e) {
-            var materialp = this.$(e.currentTarget).val(),
-                reference = this.$(e.currentTarget).data('reference'),
-                _this = this;
-
-            // Reference
-            this.$referenceselected = this.$('#' + this.$(e.currentTarget).data('field'));
-            this.$referencewrapper = this.$('#' + this.$(e.currentTarget).data('wrapper'));
-            this.$selectedinput = this.$('#' + this.$referenceselected.data('valor'));
-            this.$selectedhistorial = this.$('#' + this.$referenceselected.data('historial'));
-
-            if (typeof(materialp) !== 'undefined' && !_.isUndefined(materialp) && !_.isNull(materialp) && materialp != '') {
-                window.Misc.setSpinner(this.$referencewrapper);
-                $.get(window.Misc.urlFull(Route.route('productos.index', {materialp: materialp, reference: reference})), function (resp) {
-                    if (resp.length) {
-                        _this.$referenceselected.empty().val(0).removeAttr('disabled');
-                        _this.$referenceselected.append("<option value=></option>");
-                        _.each(resp, function (item) {
-                            _this.$referenceselected.append("<option value="+item.id+">"+item.producto_nombre+"</option>");
-                        });
-                    } else {
-                        _this.$referenceselected.empty().val(0).prop('disabled', true);
-                        _this.$selectedinput.val(0);
-                        _this.$selectedhistorial.empty();
-                    }
-                    window.Misc.removeSpinner(_this.$referencewrapper);
-                });
-            } else {
-                this.$referenceselected.empty().val(0).prop('disabled', true);
-                this.$selectedinput.val(0);
-                this.$selectedhistorial.empty();
-            }
-        },
-
-        /**
         * Event change insumo
         */
         changeInsumo: function (e) {
@@ -439,27 +342,6 @@ app || (app = {});
             } else {
                 this.$inputinsumo.val(0);
                 this.$historialinsumo.empty();
-            }
-        },
-
-        /**
-        * Event change areap
-        */
-        changeAreap: function (e) {
-            var _this = this;
-                areap = this.$(e.currentTarget).val();
-
-            // Reference
-            if (typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '') {
-                $.get(window.Misc.urlFull(Route.route('areasp.show', {areasp: areap})), function (resp) {
-                    if (resp) {
-                        _this.$inputarea.val('').attr('readonly', true);
-                        _this.$inputvalor.val(resp.areap_valor);
-                    }
-                });
-            } else {
-                this.$inputarea.val('').attr('readonly', false);
-                this.$inputvalor.val('');
             }
         },
 

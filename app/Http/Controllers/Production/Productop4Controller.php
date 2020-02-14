@@ -17,12 +17,16 @@ class Productop4Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Productop4::query();
-            $query->where('productop4_productop', $request->productop_id);
-            $query->select('koi_productop4.*', 'koi_maquinap.id as maquinap_id', 'maquinap_nombre');
-            $query->join('koi_maquinap', 'productop4_maquinap', '=', 'koi_maquinap.id');
-            $query->orderBy('koi_productop4.id', 'asc');
-            return response()->json($query->get());
+            $data = [];
+            if ($request->has('productop_id')) {
+                $query = Productop4::query();
+                $query->where('productop4_productop', $request->productop_id);
+                $query->select('koi_productop4.*', 'koi_maquinap.id as maquinap_id', 'maquinap_nombre');
+                $query->join('koi_maquinap', 'productop4_maquinap', '=', 'koi_maquinap.id');
+                $query->orderBy('koi_productop4.id', 'asc');
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }

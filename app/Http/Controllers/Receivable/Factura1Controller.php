@@ -41,12 +41,6 @@ class Factura1Controller extends Controller
 
             return Datatables::of($query)
                 ->filter(function($query) use($request) {
-
-                    // Estado
-                    if ($request->has('factura1_estado')) {
-                        $query->where('factura1_anulado', false);
-                    }
-
                     // Numero
                     if ($request->has('factura1_numero')) {
                         $query->whereRaw("factura1_numero LIKE '%{$request->factura1_numero}%'");
@@ -55,13 +49,6 @@ class Factura1Controller extends Controller
                     // Documento
                     if ($request->has('tercero_nit')) {
                         $query->whereRaw("tercero_nit LIKE '%{$request->tercero_nit}%'");
-                    }
-
-                    // If sum saldo
-                    if ($request->has('activo') && $request->activo == 'saldo') {
-                        $query->whereHas('cuotas', function ($query) {
-                            $query->where('factura4_saldo', '<>', 0);
-                        });
                     }
                 })
                 ->make(true);

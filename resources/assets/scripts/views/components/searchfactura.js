@@ -14,7 +14,6 @@ app || (app = {});
       	el: 'body',
         template: _.template(($('#koi-search-factura-component-tpl').html() || '')),
 		events: {
-			// 'change input.factura-koi-component': 'facturaChanged',
             'click .btn-koi-search-factura-component-table': 'searchFactura',
             'click .btn-search-koi-search-factura-component': 'search',
             'click .btn-clear-koi-search-factura-component': 'clear',
@@ -56,7 +55,7 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('facturas.index')),
+                    url: window.Misc.urlFull(Route.route('search.facturas')),
                     data: function (data) {
                         data.factura1_estado = true;
                         data.factura1_numero = _this.$searchfacturaNumero.val();
@@ -80,7 +79,7 @@ app || (app = {});
                         }
                     }
                 ],
-                fnRowCallback: function(row, data) {
+                fnRowCallback: function (row, data) {
                     if (parseInt(data.factura1_anulado)) {
                         $(row).css({"color":"red"});
                     } else {

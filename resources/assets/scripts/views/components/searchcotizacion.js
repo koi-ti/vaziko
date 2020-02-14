@@ -54,8 +54,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('cotizaciones.index')),
+                    url: window.Misc.urlFull(Route.route('search.cotizaciones')),
                     data: function (data) {
+                        data.search = true;
                         data.cotizacion_estado = _this.state;
                         data.cotizacion_numero = _this.$searchCotizacion.val();
                         data.cotizacion_tercero_nit = _this.$searchCotizacionTercero.val();

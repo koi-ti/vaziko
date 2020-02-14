@@ -19,6 +19,7 @@ class PlanCuentasNifController extends Controller
         if ($request->ajax()) {
             $query = PlanCuentaNif::query();
             $query->select('id', 'plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_naturaleza', 'plancuentasn_tercero', 'plancuentasn_tasa', 'plancuentasn_centro', 'plancuentasn_tipo');
+            
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['search_plancuentasn_cuenta' => $request->has('plancuentasn_cuenta') ? $request->plancuentasn_cuenta : '']);
@@ -206,21 +207,5 @@ class PlanCuentasNifController extends Controller
             case '15': $nivel = 8; break;
         }
         return response()->json(['success' => true, 'nivel' => $nivel]);
-    }
-
-    /**
-     * Search plan cuentas.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->has('plancuentasn_cuenta')) {
-            $plancuentanif = PlanCuentaNif::where('plancuentasn_cuenta', $request->plancuentasn_cuenta)->first();
-            if ($plancuentanif instanceof PlanCuenta) {
-                return response()->json(['success' => true, 'plancuentasn_nombre' => $plancuentanif->plancuentasn_nombre, 'plancuentasn_tasa' => $plancuentanif->plancuentasn_tasa, 'plancuentasn_centro' => $plancuentanif->plancuentasn_centro, 'plancuentasn_naturaleza' => $plancuentanif->plancuentasn_naturaleza, 'plancuentasn_tipo' => $plancuentanif->plancuentasn_tipo]);
-            }
-        }
-        return response()->json(['success' => false]);
     }
 }

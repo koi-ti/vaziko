@@ -41,7 +41,7 @@ app || (app = {});
             this.$searchordenpTercero = this.$('#searchordenp_tercero');
             this.$searchordenpTerceroNombre = this.$('#searchordenp_tercero_nombre');
             this.$ordersSearchTable = this.$modalComponent.find('#koi-search-ordenp-component-table');
-            this.$inputContent = this.$("#"+$(e.currentTarget).attr("data-field"));
+            this.$inputContent = this.$("#" + $(e.currentTarget).attr("data-field"));
             this.$inputName = this.$("#"+this.$inputContent.attr("data-name"));
             this.$factura = this.$inputContent.attr("data-factura");
             this.$estado = this.$inputContent.attr("data-estado");
@@ -53,8 +53,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('ordenes.index')),
+                    url: window.Misc.urlFull(Route.route('search.ordenes')),
                     data: function (data) {
+                        data.search = true;
                         data.factura = _this.$factura;
                         data.orden_estado = _this.$estado;
                         data.orden_numero = _this.$searchordenpOrden.val();
@@ -107,7 +108,7 @@ app || (app = {});
                         }
                     }
                 ],
-                fnRowCallback: function(row, data) {
+                fnRowCallback: function (row, data) {
                     if (parseInt(data.orden_abierta)) {
                         $(row).css({"color":"#00A65A"});
                     } else if (parseInt(data.orden_anulada)) {
@@ -158,8 +159,8 @@ app || (app = {});
 			var _this = this;
 
 			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+			this.$inputName = this.$("#" + $(e.currentTarget).attr("data-name"));
+			this.$wraperConten = this.$("#" + $(e.currentTarget).attr("data-wrapper"));
             this.$estado = this.$inputContent.attr("data-estado");
 
 			var orden = this.$inputContent.val(),
@@ -171,15 +172,18 @@ app || (app = {});
 			if (!_.isUndefined(orden) && !_.isNull(orden) && orden != '') {
 				// Get Orden
 	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('ordenes.search')),
+	                url: window.Misc.urlFull(Route.route('search.ordenes')),
 	                type: 'GET',
-	                data: { orden_codigo: orden, orden_estado: estado },
+	                data: {
+                        orden_codigo: orden,
+                        orden_estado: estado
+                    },
 	                beforeSend: function () {
 						_this.$inputName.val('');
 	                    window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
-	            .done(function(resp) {
+	            .done(function (resp) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                if (resp.success) {
 	                    if (!_.isUndefined(resp.tercero_nombre) && !_.isNull(resp.tercero_nombre)) {
@@ -187,7 +191,7 @@ app || (app = {});
 	                    }
 	                }
 	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
+	            .fail(function (jqXHR, ajaxOptions, thrownError) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });

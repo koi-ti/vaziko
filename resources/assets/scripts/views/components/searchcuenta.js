@@ -56,8 +56,9 @@ app || (app = {});
                 serverSide: true,
             	language: window.Misc.dataTableES(),
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('plancuentas.index')),
-                    data: function(data) {
+                    url: window.Misc.urlFull(Route.route('search.cuentas')),
+                    data: function (data) {
+                        data.search = true;
                         data.plancuentas_cuenta = _this.$searchCuenta.val();
                         data.plancuentas_nombre = _this.$searchName.val();
                     }
@@ -152,13 +153,13 @@ app || (app = {});
 
 			// References
 			this.$inputContent = $(e.currentTarget);
-			this.$inputName = this.$("#"+$(e.currentTarget).attr("data-name"));
-			this.$inputBase = this.$("#"+$(e.currentTarget).attr("data-base"));
-			this.$inputTasa = this.$("#"+$(e.currentTarget).attr("data-tasa"));
+			this.$inputName = this.$("#" + $(e.currentTarget).attr("data-name"));
+			this.$inputBase = this.$("#" + $(e.currentTarget).attr("data-base"));
+			this.$inputTasa = this.$("#" + $(e.currentTarget).attr("data-tasa"));
 
-			this.$inputValor = this.$("#"+$(e.currentTarget).attr("data-valor"));
-			this.$inputCentro = this.$("#"+$(e.currentTarget).attr("data-centro"));
-			this.$wraperConten = this.$("#"+$(e.currentTarget).attr("data-wrapper"));
+			this.$inputValor = this.$("#" + $(e.currentTarget).attr("data-valor"));
+			this.$inputCentro = this.$("#" + $(e.currentTarget).attr("data-centro"));
+			this.$wraperConten = this.$("#" + $(e.currentTarget).attr("data-wrapper"));
 
 			var cuenta = this.$inputContent.val();
 
@@ -183,14 +184,16 @@ app || (app = {});
 			if (!_.isUndefined(cuenta) && !_.isNull(cuenta) && cuenta != '') {
 				// Get plan cuenta
 	            $.ajax({
-	                url: window.Misc.urlFull(Route.route('plancuentas.search')),
+	                url: window.Misc.urlFull(Route.route('search.cuentas')),
 	                type: 'GET',
-	                data: { plancuentas_cuenta: cuenta },
+	                data: {
+                        plancuentas_cuenta: cuenta
+                    },
 	                beforeSend: function () {
 						window.Misc.setSpinner(_this.$wraperConten);
 	                }
 	            })
-	            .done(function(resp) {
+	            .done(function (resp) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
                    if (resp.success) {
 	                    // Set name
@@ -202,7 +205,7 @@ app || (app = {});
 	                    _this.actions(resp);
 	                }
 	            })
-	            .fail(function(jqXHR, ajaxOptions, thrownError) {
+	            .fail(function (jqXHR, ajaxOptions, thrownError) {
 	                window.Misc.removeSpinner(_this.$wraperConten);
 	                alertify.error(thrownError);
 	            });

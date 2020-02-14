@@ -22,19 +22,19 @@ class PlanCuentasController extends Controller
             $query->leftJoin('koi_plancuentasn', 'plancuentas_equivalente', '=', 'koi_plancuentasn.id');
 
             // Persistent data filter
-            if($request->has('persistent') && $request->persistent) {
+            if ($request->has('persistent') && $request->persistent) {
                 session(['search_plancuentas_cuenta' => $request->has('plancuentas_cuenta') ? $request->plancuentas_cuenta : '']);
                 session(['search_plancuentas_nombre' => $request->has('plancuentas_nombre') ? $request->plancuentas_nombre : '']);
             }
 
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Cuenta
-                    if($request->has('plancuentas_cuenta')) {
+                    if ($request->has('plancuentas_cuenta')) {
                         $query->whereRaw("plancuentas_cuenta LIKE '%{$request->plancuentas_cuenta}%'");
                     }
                     // Nombre
-                    if($request->has('plancuentas_nombre')) {
+                    if ($request->has('plancuentas_nombre')) {
                         $query->whereRaw("plancuentas_nombre LIKE '%{$request->plancuentas_nombre}%'");
                     }
                 })
@@ -67,10 +67,10 @@ class PlanCuentasController extends Controller
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    if( $request->has('plancuentas_centro') ){
+                    if ( $request->has('plancuentas_centro') ){
                         // Validar centro costos
                         $centrocosto = CentroCosto::find($request->plancuentas_centro);
-                        if(!$centrocosto instanceof CentroCosto){
+                        if (!$centrocosto instanceof CentroCosto){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
                         }
@@ -93,7 +93,7 @@ class PlanCuentasController extends Controller
 
                         // Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
                         $result = $nif->validarSubnivelesCuenta();
-                        if($result != 'OK') {
+                        if ($result != 'OK') {
                             return $result;
                         }
                         $plancuenta->plancuentas_equivalente = $nif->id;
@@ -159,10 +159,10 @@ class PlanCuentasController extends Controller
             if ($plancuenta->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    if( $request->has('plancuentas_centro') ){
+                    if ( $request->has('plancuentas_centro') ){
                         // Validar centro costos
                         $centrocosto = CentroCosto::find($request->plancuentas_centro);
-                        if(!$centrocosto instanceof CentroCosto){
+                        if (!$centrocosto instanceof CentroCosto){
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el centro de costo, por favor verifique la información o consulte a su administrador']);
                         }
@@ -185,7 +185,7 @@ class PlanCuentasController extends Controller
 
                         // Verifico que no existan subniveles de la cuenta que estoy realizando el asiento
                         $result = $nif->validarSubnivelesCuenta();
-                        if($result != 'OK') {
+                        if ($result != 'OK') {
                             return response()->json(['success' => false, 'errors' => "No es posible que el plan de cuenta nif $nif->plancuentasn_nombre sea un equivalente, por favor verifique la información o consulte a su administrador" ]);
                         }
                         $plancuenta->plancuentas_equivalente = $nif->id;
@@ -236,22 +236,5 @@ class PlanCuentasController extends Controller
             case '15': $nivel = 8; break;
         }
         return response()->json(['success' => true, 'nivel' => $nivel]);
-    }
-
-    /**
-     * Search plan cuentas.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->has('plancuentas_cuenta')) {
-            $plancuenta = PlanCuenta::where('plancuentas_cuenta', $request->plancuentas_cuenta)->first();
-            if ($plancuenta instanceof PlanCuenta) {
-                $ica = ($plancuenta->plancuentas_nivel == 4 && strstr($plancuenta->plancuentas_cuenta, '2368') && $plancuenta->plancuentas_tasa != 0) ? true : false;
-                return response()->json(['success' => true, 'plancuentas_nombre' => $plancuenta->plancuentas_nombre, 'plancuentas_tasa' => $plancuenta->plancuentas_tasa, 'plancuentas_centro' => $plancuenta->plancuentas_centro, 'plancuentas_naturaleza' => $plancuenta->plancuentas_naturaleza, 'plancuentas_tipo' => $plancuenta->plancuentas_tipo, 'ica' => $ica]);
-            }
-        }
-        return response()->json(['success' => false]);
     }
 }

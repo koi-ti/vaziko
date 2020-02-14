@@ -17,12 +17,16 @@ class Productop5Controller extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Productop5::query();
-            $query->where('productop5_productop', $request->productop_id);
-            $query->select('koi_productop5.*', 'koi_materialp.id as materialp_id', 'materialp_nombre');
-            $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
-            $query->orderBy('koi_productop5.id', 'asc');
-            return response()->json($query->get());
+            $data = [];
+            if ($request->has('productop_id')) {
+                $query = Productop5::query();
+                $query->where('productop5_productop', $request->productop_id);
+                $query->select('koi_productop5.*', 'koi_materialp.id as materialp_id', 'materialp_nombre');
+                $query->join('koi_materialp', 'productop5_materialp', '=', 'koi_materialp.id');
+                $query->orderBy('koi_productop5.id', 'asc');
+                $data = $query->get();
+            }
+            return response()->json($data);
         }
         abort(404);
     }
