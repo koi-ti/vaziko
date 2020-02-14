@@ -127,7 +127,7 @@ class CotizacionArchivosController extends Controller
                 }
 
                 // Crear bitacora
-                Bitacora::createBitacora($cotizacion, [], "Se elimino el archivo {$cotizacionarchivo->cotizacionarchivo_archivo}", 'Archivos', 'D');
+                Bitacora::createBitacora($cotizacion, [], "Se elimino el archivo {$cotizacionarchivo->cotizacionarchivo_archivo}", 'Archivos', 'D', $request->ip());
 
                 // Eliminar item detallepedido
                 if (Storage::has("cotizaciones/cotizacion_{$cotizacion->id}/archivos/{$cotizacionarchivo->cotizacionarchivo_archivo}")) {
