@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Bitacora;
 use App\Models\Production\CotizacionArchivo, App\Models\Production\Cotizacion1;
-use Storage, DB;
+use Storage, DB, Log;
 
 class CotizacionArchivosController extends Controller
 {
