@@ -293,37 +293,35 @@
 	                </div>
 	        	</div>
 
-				@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-					<div class="box box-danger">
-						<div class="box-header with-border">
-							<h3 class="box-title">Fórmulas</h3>
-						</div>
-						<div class="box-body">
-							<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-								<div class="form-group col-md-6">
-									<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
-								</div>
-
-								<label class="control-label col-md-1">Precio</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
-								</div>
+				<div class="box box-danger">
+					<div class="box-header with-border">
+						<h3 class="box-title">Fórmulas</h3>
+					</div>
+					<div class="box-body">
+						<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+							<div class="form-group col-md-6">
+								<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
 							</div>
-							<div class="row">
-								<label class="control-label col-md-1">Fórmula</label>
-								<div class="form-group col-md-6">
-									<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
-								</div>
 
-								<label class="control-label col-md-1">Viáticos</label>
-								<div class="form-group col-md-4">
-									<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
-								</div>
+							<label class="control-label col-md-1">Precio</label>
+							<div class="form-group col-md-4">
+								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+							</div>
+						</div>
+						<div class="row">
+							<label class="control-label col-md-1">Fórmula</label>
+							<div class="form-group col-md-6">
+								<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
+							</div>
+
+							<label class="control-label col-md-1">Viáticos</label>
+							<div class="form-group col-md-4">
+								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
 							</div>
 						</div>
 					</div>
-				@endif
+				</div>
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
@@ -530,7 +528,7 @@
         	</div>
         </div>
 
-		@if (auth()->user()->ability('admin', 'opcional4', ['module' => 'cotizaciones']))
+		@if (!auth()->user()->hasRole('Diseplanea'))
 			<div class="row">
 			    <div class="col-md-6 col-md-offset-3">
 			        <div class="box box-danger">

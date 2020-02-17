@@ -335,35 +335,33 @@
                             </div>
                         </div>
 
-                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                            <div class="box box-danger">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Fórmulas</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <label for="cotizacion2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="cotizacion2_precio_formula" value="<%- cotizacion2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="cotizacion2_precio_formula" type="text" maxlength="200" data-response="cotizacion2_precio_venta">
-                                        </div>
-                                        <label for="cotizacion2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="cotizacion2_precio_venta" value="<%- cotizacion2_precio_venta %>" placeholder="Precio" class="form-control input-sm total-calculate" name="cotizacion2_precio_venta" type="text" maxlength="30" data-currency required>
-                                        </div>
+                        <div class="box box-danger">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Fórmulas</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <label for="cotizacion2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
+                                    <div class="form-group col-md-6">
+                                        <input id="cotizacion2_precio_formula" value="<%- cotizacion2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="cotizacion2_precio_formula" type="text" maxlength="200" data-response="cotizacion2_precio_venta">
                                     </div>
-                                    <div class="row">
-                                        <label for="cotizacion2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="cotizacion2_viaticos_formula" value="<%- cotizacion2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="cotizacion2_viaticos_formula" type="text" maxlength="200" data-response="cotizacion2_viaticos">
-                                        </div>
-                                        <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viáticos</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm total-calculate" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency>
-                                        </div>
+                                    <label for="cotizacion2_precio_venta" class="col-sm-1 control-label">Precio</label>
+                                    <div class="form-group col-md-4">
+                                        <input id="cotizacion2_precio_venta" value="<%- cotizacion2_precio_venta %>" placeholder="Precio" class="form-control input-sm total-calculate" name="cotizacion2_precio_venta" type="text" maxlength="30" data-currency required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="cotizacion2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
+                                    <div class="form-group col-md-6">
+                                        <input id="cotizacion2_viaticos_formula" value="<%- cotizacion2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="cotizacion2_viaticos_formula" type="text" maxlength="200" data-response="cotizacion2_viaticos">
+                                    </div>
+                                    <label for="cotizacion2_viaticos" class="col-sm-1 control-label">Viáticos</label>
+                                    <div class="form-group col-md-4">
+                                        <input id="cotizacion2_viaticos" value="<%- cotizacion2_viaticos %>" class="form-control input-sm total-calculate" name="cotizacion2_viaticos" type="text" maxlength="30" data-currency>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                         <div class="box box-danger">
                             <div class="box-header with-border">
                                 <h3 class="box-title">Imágenes</h3>
@@ -502,21 +500,17 @@
                                             <th width="30%">Área</th>
                                             <th width="30%">Nombre</th>
                                             <th width="20%" class="text-center">Tiempo</th>
-                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                                <th width="10%">Valor</th>
-                                                <th width="10%">Total</th>
-                                            @endif
+                                            <th width="10%">Valor</th>
+                                            <th width="10%">Total</th>
                                         </tr>
                                     </thead>
-                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5"></td>
-                                                <th class="text-right">Total</th>
-                                                <th class="text-right" id="total">0</th>
-                                            </tr>
-                                        </tfoot>
-                                    @endif
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -679,7 +673,7 @@
                 </div>
             </div>
 
-            @if (auth()->user()->ability('admin', 'opcional4', ['module' => 'cotizaciones']))
+            @if (!auth()->user()->hasRole('Diseplanea'))
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-danger">
@@ -941,10 +935,8 @@
         <td><%- areap_nombre || '-' %></td>
         <td><%- cotizacion6_nombre || '-' %></td>
         <td class="text-center"><%- cotizacion6_horas %>:<%- cotizacion6_minutos %></td>
-        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-            <td class="text-right"><%- window.Misc.currency(cotizacion6_valor) %></td>
-            <td class="text-right"><%- window.Misc.currency(total) %></td>
-        @endif
+        <td class="text-right"><%- window.Misc.currency(cotizacion6_valor) %></td>
+        <td class="text-right"><%- window.Misc.currency(total) %></td>
     </script>
 
     <script type="text/template" id="cotizacion-producto-areas-edit-item-tpl">

@@ -307,22 +307,24 @@ class Cotizacion2Controller extends Controller
                         $totaltransportes += $cotizacion10->cotizacion10_valor_total;
                     }
 
-                    // Operacion para calcular el total del producto
-                    $precio = $cotizacion2->cotizacion2_precio_venta;
-                    $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
-                    $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-                    $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_areap)/100);;
-                    $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
-                    $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+                    if (!auth()->user()->hasRole('Diseplanea')) {
+                        // Operacion para calcular el total del producto
+                        $precio = $cotizacion2->cotizacion2_precio_venta;
+                        $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
+                        $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                        $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_areap)/100);;
+                        $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
+                        $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
 
-                    $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
-                    $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                    $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
+                        $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                        $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                        $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
 
-                    // Actualizar valores
-                    $cotizacion2->cotizacion2_vtotal = $comision;
-                    $cotizacion2->cotizacion2_total_valor_unitario = $total;
-                    $cotizacion2->save();
+                        // Actualizar valores
+                        $cotizacion2->cotizacion2_vtotal = $comision;
+                        $cotizacion2->cotizacion2_total_valor_unitario = $total;
+                        $cotizacion2->save();
+                    }
 
                     // Si hay cambios en la cotizacion
                     Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'C', $request->ip());
