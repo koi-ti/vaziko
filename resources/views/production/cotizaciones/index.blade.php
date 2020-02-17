@@ -24,7 +24,9 @@
                         <label for="searchcotizacion_estado" class="col-md-1 control-label">Estado</label>
                         <div class="col-md-2">
                             <select name="searchcotizacion_estado" id="searchcotizacion_estado" class="form-control">
-                                <option value="" selected>Todas</option>
+                                <option value="" selected>TODAS</option>
+                                <option value="A" {{ session('searchcotizacion_estado') == 'A' ? 'selected': '' }}>ABIERTAS</option>
+                                <option value="C" {{ session('searchcotizacion_estado') == 'C' ? 'selected': '' }}>CERRADAS</option>
                                 @foreach (config('koi.produccion.estados') as $key => $value)
                                     <option value="{{ $key }}" {{ session('searchcotizacion_estado') == $key ? 'selected': '' }}>{{ $value }}</option>
                                 @endforeach
