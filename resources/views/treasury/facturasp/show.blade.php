@@ -58,7 +58,9 @@
 	                        <tr>
 	                            <th>Cuota</th>
 	                            <th>Vencimiento</th>
-	                            <th>Valor</th>
+                                @ability ('precios' | 'facturasp')
+	                               <th>Valor</th>
+                                @endability
 	                        </tr>
 	                    </thead>
 	                    <tbody>

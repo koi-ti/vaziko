@@ -19,7 +19,7 @@ class ActividadpController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Actividadp::query())->make(true);
         }
-        return view('production.actividadesp.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.actividadesp.index');
     }
 
     /**

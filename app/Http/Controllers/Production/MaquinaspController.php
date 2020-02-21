@@ -19,7 +19,7 @@ class MaquinaspController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Maquinap::query())->make(true);
         }
-        return view('production.maquinas.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.maquinas.index');
     }
 
     /**

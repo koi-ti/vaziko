@@ -1,6 +1,6 @@
 @extends('accounting.plancuentas.main')
 
-@section('breadcrumb')	
+@section('breadcrumb')
 	<li><a href="{{ route('plancuentas.index') }}">Plan de cuentas</a></li>
 	<li class="active">{{ $plancuenta->plancuentas_cuenta }}</li>
 @stop
@@ -12,7 +12,7 @@
 			<div class="row">
 				<div class="form-group col-md-3">
 					<label class="control-label">Cuenta</label>
-					<div>{{ $plancuenta->plancuentas_cuenta }}</div>      
+					<div>{{ $plancuenta->plancuentas_cuenta }}</div>
 				</div>
 
 				<div class="form-group col-md-1">
@@ -26,7 +26,7 @@
 				</div>
 			</div>
 
-			@if($plancuenta->plancuentas_centro)
+			@if ($plancuenta->plancuentas_centro)
 				<div class="row">
 					<div class="form-group col-md-6">
 						<label class="control-label">Centro de costo</label>
@@ -69,12 +69,14 @@
 		</div>
 		<div class="box-footer with-border">
         	<div class="row">
-				<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+				<div class="col-md-2 @ability ('editar' | 'plancuentas') col-md-offset-4 @elseability col-md-offset-5 @endability col-sm-6 col-xs-6 text-left">
 					<a href="{{ route('plancuentas.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 				</div>
-				<div class="col-md-2 col-sm-6 col-xs-6 text-right">
-					<a href="{{ route('plancuentas.edit', ['plancuentas' => $plancuenta->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-				</div>
+				@ability ('editar' | 'plancuentas')
+					<div class="col-md-2 col-sm-6 col-xs-6 text-right">
+						<a href="{{ route('plancuentas.edit', ['plancuentas' => $plancuenta->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+					</div>
+				@endability
 			</div>
 		</div>
 	</div>

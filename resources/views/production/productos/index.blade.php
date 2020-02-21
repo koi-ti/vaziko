@@ -30,22 +30,24 @@
                         </div>
 
                         <div class="form-group">
-                            <div class="col-md-offset-3 col-md-2 col-xs-4">
+                            <div class="@ability ('crear' | 'productosp') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-4">
                                 <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                             </div>
-                            <div class="col-md-2 col-xs-4">
-                                <a href="{{ route('productosp.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-plus"></i> Nuevo producto
-                                </a>
-                            </div>
+                            @ability ('crear' | 'productosp')
+                                <div class="col-md-2 col-xs-4">
+                                    <a href="{{ route('productosp.create') }}" class="btn btn-default btn-block btn-sm">
+                                        <i class="fa fa-plus"></i> Nuevo producto
+                                    </a>
+                                </div>
+                            @endability
                         </div>
                     {!! Form::close() !!}
 
                     <div class="table-responsive">
-                        <table id="productosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+                        <table id="productosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
                             <thead>
                                 <tr>
                                     <th>Código</th>

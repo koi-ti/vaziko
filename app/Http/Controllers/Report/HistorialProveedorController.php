@@ -25,9 +25,11 @@ class HistorialProveedorController extends Controller
             $historyProveider = [];
 
             if ($request->has('filter_tercero')) {
-
                 // Recuperate tercero
-                $tercero =  Tercero::select('id', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,'',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"))->where('tercero_nit', $request->filter_tercero)->first();
+                $query = Tercero::query();
+                $query->select('id', DB::raw("(CASE WHEN tercero_persona = 'N' THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2, (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)) ELSE tercero_razonsocial END) AS tercero_nombre"));
+                $query->where('tercero_nit', $request->filter_tercero);
+                $tercero =  $query->first();
 
                 // Initial position the array
                 $i = 0;
@@ -36,8 +38,8 @@ class HistorialProveedorController extends Controller
                 $facturaProveedor = Facturap::historyProviderReport($tercero, $historyProveider, $i);
                 $historyProveider = $facturaProveedor->facturaProveedor;
                 $i = $facturaProveedor->position;
-
             }
+
             // Prepare data
             $title = "Historial del proveedor $tercero->tercero_nombre";
             $type = $request->type;

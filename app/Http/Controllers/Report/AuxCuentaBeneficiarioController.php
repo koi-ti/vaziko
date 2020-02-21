@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Reports\Accounting\AuxCuentaBeneficiario;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
-use View, App, Excel, DB, Validator;
+use Excel, DB, Validator;
 
 class AuxCuentaBeneficiarioController extends Controller
 {
@@ -33,9 +33,8 @@ class AuxCuentaBeneficiarioController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rauxcuentabeneficiario')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rauxcuentabeneficiario')->withInput();
             }
 
             list($año, $mes, $dia) = (explode('-',$request->filter_fecha_inicial));
@@ -57,9 +56,8 @@ class AuxCuentaBeneficiarioController extends Controller
                 $cuenta = PlanCuenta::where('plancuentas_cuenta',$request->filter_cuenta)->first();
                 // Validate Plan Cuenta
                 if (!$cuenta instanceof PlanCuenta) {
-                    return redirect('/rauxcuentabeneficiario')
-                    ->withErrors("No es posible recuperar plan  de cuenta, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
+                    session()->flash('errors', ['No es posible recuperar plan  de cuenta, por favor verifique la información o consulte al administrador.']);
+                    return redirect('/rauxcuentabeneficiario')->withInput();
                 }
                 $query->where('asiento2_cuenta', $cuenta->id);
             }
@@ -68,12 +66,13 @@ class AuxCuentaBeneficiarioController extends Controller
                 $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
                 // Validate Tercero
                 if (!$tercero instanceof Tercero) {
-                    return redirect('/rauxcuentabeneficiario')
-                    ->withErrors("No es posible recuperar tercero, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
+                    session()->flash('errors', ['No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+                    return redirect('/rauxcuentabeneficiario')->withInput();
+
                 }
                 $query->where('asiento2_beneficiario', $tercero->id);
             }
+
             $query->orderBy('koi_asiento2.asiento2_beneficiario', 'asc');
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
             $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
@@ -102,71 +101,5 @@ class AuxCuentaBeneficiarioController extends Controller
             }
         }
         return view('reports.accounting.auxcuentabeneficiario.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

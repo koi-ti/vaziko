@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Classes\Reports\Accounting\PlanCuentas;
 use App\Models\Accounting\PlanCuenta;
-use Excel, View, App;
+use Excel;
 
 class PlanCuentasController extends Controller
 {
@@ -20,11 +20,11 @@ class PlanCuentasController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('type')) {
+        if ($request->has('type')) {
             $query = PlanCuenta::query();
 
             // Filters
-            if($request->has('nivel')) {
+            if ($request->has('nivel')) {
                 $query->where('plancuentas_nivel', '<=', $request->nivel);
             }
 

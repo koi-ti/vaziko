@@ -84,7 +84,7 @@ elixir(function(mix) {
     .scripts([
         '../scripts/models/**/*.js',
         '../scripts/collections/**/*.js',
-        '../scripts/views/**/*.js',
+        '../scripts/views/**/**/*.js',
         '../scripts/helpers/misc.js',
         '../scripts/helpers/routes.min.js',
         '../scripts/routes.js',

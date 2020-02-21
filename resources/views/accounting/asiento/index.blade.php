@@ -21,7 +21,6 @@
                             <div class="col-sm-2">
 								<input id="search_numero" name="search_numero" placeholder="Número" class="form-control input-sm" type="text" maxlength="15" value="{{ session('search_numero') }}">
                             </div>
-
                             <label for="search_tercero" class="col-sm-1 control-label">Tercero</label>
                             <div class="col-sm-3">
                                 <div class="input-group input-group-sm">
@@ -42,12 +41,11 @@
 							<label for="search_documento" class="col-md-1 control-label">Documento</label>
 							<div class="col-md-4">
 								<select name="search_documento" id="search_documento" class="form-control select2-default-clear">
-									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
+									@foreach (App\Models\Accounting\Documento::getDocuments() as $key => $value)
 										<option value="{{ $key }}" {{ session('search_documento') == $key ? 'selected': '' }}>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
-
 							<label for="search_fecha_asiento" class="col-md-1 control-label">Fecha asiento</label>
 							<div class="col-md-2">
 								<div class="input-group">
@@ -57,7 +55,6 @@
 									<input type="text" id="search_fecha_asiento" name="search_fecha_asiento" placeholder="Fecha asiento" value="{{ session('search_fecha_asiento') }}" class="form-control input-sm datepicker">
 								</div>
 							</div>
-
 							<label for="search_fecha_elaboro" class="col-md-1 control-label">Fecha elaboro</label>
 							<div class="col-md-2">
 								<div class="input-group">
@@ -67,28 +64,31 @@
 									<input type="text" id="search_fecha_elaboro" name="search_fecha_elaboro" placeholder="Fecha elaboro" value="{{ session('search_fecha_elaboro') }}" class="form-control input-sm datepicker">
 								</div>
 							</div>
-
-							<div class="col-md-1">
-								<a href="#" class="btn btn-default btn-sm btn-import-modal"><i class="fa fa-upload"></i> Importar</a>
-							</div>
+							@ability ('importar' | 'asientos')
+								<div class="col-md-1">
+									<a href="#" class="btn btn-default btn-sm btn-import-modal"><i class="fa fa-upload"></i> Importar</a>
+								</div>
+							@endability
 						</div>
 						<div class="form-group">
-                            <div class="col-md-offset-3 col-md-2 col-xs-4">
+                            <div class="@ability ('crear' | 'asientos') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-4">
                                 <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                             </div>
                             <div class="col-md-2 col-xs-4">
                                 <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                             </div>
-                            <div class="col-md-2 col-xs-4">
-                                <a href="{{ route('asientos.create') }}" class="btn btn-default btn-block btn-sm">
-                                    <i class="fa fa-plus"></i> Nuevo
-                                </a>
-                            </div>
+							@ability ('crear' | 'asientos')
+	                            <div class="col-md-2 col-xs-4">
+	                                <a href="{{ route('asientos.create') }}" class="btn btn-default btn-block btn-sm">
+	                                    <i class="fa fa-plus"></i> Nuevo
+	                                </a>
+	                            </div>
+							@endability
                         </div>
                     {!! Form::close() !!}
 
 					<div class="box-body table-responsive">
-						<table id="asientos-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+						<table id="asientos-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
 					        <thead>
 					            <tr>
 					                <th>Número</th>

@@ -8,7 +8,7 @@
     <div id="tipoproductosp-main">
         <div class="box box-success">
             <div class="box-body table-responsive">
-                <table id="tipoproductosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+                <table id="tipoproductosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
                     <thead>
                         <tr>
                             <th>Código</th>

@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Reports\Accounting\AuxPorCuenta;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
-use View, App, Excel, DB, Validator;
+use Excel, DB, Validator;
 
 class AuxPorCuentaController extends Controller
 {
@@ -31,9 +31,8 @@ class AuxPorCuentaController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rauxporcuenta')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rauxporcuenta')->withInput();
             }
 
             // Saldo inicial de la cuenta
@@ -58,17 +57,17 @@ class AuxPorCuentaController extends Controller
                 $cuenta = PlanCuenta::where('plancuentas_cuenta',$request->cuenta_inicio)->first();
                 // Validate Plan Cuenta
                 if (!$cuenta instanceof PlanCuenta) {
-                    return redirect('/rauxporcuenta')
-                    ->withErrors("No es posible recuperar plan  de cuenta, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
+                    session()->flash('errors', ['No es posible recuperar plan  de cuenta, por favor verifique la información o consulte al administrador.']);
+                    return redirect('/rauxporcuenta')->withInput();
                 }
+
                 // Sql saldos
                 $mes = $request->mes;
                 $ano = $request->ano;
-                if($mes == 1) {
+                if ($mes == 1) {
                     $mes2 = 13;
                     $ano2 = $ano - 1;
-                }else{
+                } else {
                     $mes2 = $mes - 1;
                     $ano2 = $ano;
                 }
@@ -127,12 +126,14 @@ class AuxPorCuentaController extends Controller
             // Prepare data
             $auxcontable = $query->get();
             $saldoInicial = DB::selectOne($sqlSaldo);
+
             if (!is_null($saldoInicial)) {
                 $saldo->inicial = !is_null($saldoInicial->inicial) ? $saldo->inicial : 0 ;
                 $saldo->debitomes = !is_null($saldoInicial->debitomes) ? $saldo->debitomes : 0 ;
                 $saldo->creditomes = !is_null($saldoInicial->creditomes) ? $saldo->creditomes : 0 ;
                 $saldo->final = !is_null($saldo->final) ? $saldo->final : 0 ;
             }
+
             $title = sprintf('%s %s %s', 'Libro auxiliar por cuenta ',  config('koi.meses')[$request->mes], $request->ano) ;
             $subtitle = "$cuenta->plancuentas_cuenta - $cuenta->plancuentas_nombre";
             $type = $request->type;
@@ -153,71 +154,5 @@ class AuxPorCuentaController extends Controller
             }
         }
         return view('reports.accounting.auxporcuenta.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -55,7 +55,7 @@
     						<div class="form-group col-md-offset-4 col-sm-offset-4 col-xs-6 col-sm-3 col-md-2">
     							<label for="mes_inicial" class="control-label">Mes inicial</label>
     							<select name="mes_inicial" id="mes_inicial" class="form-control" required>
-    								@foreach( config('koi.meses') as $key => $value)
+    								@foreach (config('koi.meses') as $key => $value)
     									<option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
     								@endforeach
     							</select>
@@ -74,7 +74,7 @@
     						<div class="form-group col-md-offset-4 col-sm-offset-4 col-xs-6 col-sm-3 col-md-2">
     							<label for="mes_final" class="control-label">Mes final</label>
     							<select name="mes_final" id="mes" class="form-control" required>
-    								@foreach( config('koi.meses') as $key => $value)
+    								@foreach (config('koi.meses') as $key => $value)
     									<option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
     								@endforeach
     							</select>
@@ -83,7 +83,7 @@
     						<div class="form-group col-xs-6 col-sm-3 col-md-2">
     							<label for="ano_final" class="control-label">Año final</label>
     							<select name="ano_final" id="ano" class="form-control" required>
-    								@for($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+    								@for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
     									<option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
     								@endfor
     							</select>
@@ -91,28 +91,11 @@
     					</div>
 					</div>
 				</div>
-                <div class="box-footer">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-                        </button>
-                    </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-                        </button>
-                    </div>
-                </div>
+
+                @include('partials.buttons', ['type' => 'exportar', 'module' => 'rauxbeneficiariocuenta'])
 			</form>
-            @if (count($errors) > 0)
-			    <div class="alert alert-danger">
-			        <ul>
-			            @foreach ($errors->all() as $error)
-			                <li>{{ $error }}</li>
-			            @endforeach
-			        </ul>
-			    </div>
-			@endif
 		</div>
+
+        @include('partials.message')
 	</section>
 @stop

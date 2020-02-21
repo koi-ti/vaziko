@@ -55,7 +55,7 @@ class FacturapController extends Controller
                 })
                 ->make(true);
         }
-        return view('treasury.facturasp.index', ['empresa' => parent::getPaginacion()]);
+        return view('treasury.facturasp.index');
     }
 
     /**

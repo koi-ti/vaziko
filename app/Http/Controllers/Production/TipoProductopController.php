@@ -19,7 +19,7 @@ class TipoProductopController extends Controller
         if ($request->ajax()) {
             return Datatables::of(TipoProductop::query())->make(true);
         }
-        return view('production.tipoproductosp.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.tipoproductosp.index');
     }
 
     /**

@@ -4,13 +4,13 @@
 
 	<table class="brtable" border="0" cellspacing="0" cellpadding="0">
 		<tbody>
-			@if($orden->orden_anulada)
+			@if ($orden->orden_anulada)
 				<tr>
 					<th class="center titleespecial" colspan="6">ANULADA</th>
 				</tr>
             @endif
 
-            @if($orden->orden_abierta)
+            @if ($orden->orden_abierta)
 				<tr>
 					<th class="center titleespecial" colspan="6">LA ORDEN ACTUALMENTE ESTA ABIERTA Y SUJETA A CAMBIOS</th>
 				</tr>
@@ -18,7 +18,7 @@
 			<tr>
 				<th width="10%" class="left">Código</th>
 				<td width="15%" class="left">{{ $orden->orden_codigo }}</td>
-				@if( $orden->cotizacion_codigo )
+				@if ($orden->cotizacion_codigo)
 					<th width="10%" class="left">Cotización</th>
 					<td width="15%" class="left">{{ $orden->cotizacion_codigo }}</td>
 				@endif
@@ -78,7 +78,7 @@
 	        </tr>
        	<thead>
    		<tbody>
-			@if(count($detalle) > 0)
+			@if (count($detalle) > 0)
 				{{--*/ $tunidades = $tfacturado = $tsubtotal = $tcredito = 0; /*--}}
 				@foreach($detalle as $ordenp2)
 					<tr>

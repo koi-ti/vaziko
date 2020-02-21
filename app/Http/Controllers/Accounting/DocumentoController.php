@@ -22,7 +22,7 @@ class DocumentoController extends Controller
             $query->leftJoin('koi_folder', 'documento_folder', '=', 'koi_folder.id');
             return Datatables::of($query)->make(true);
         }
-        return view('accounting.documentos.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.documentos.index');
     }
 
     /**

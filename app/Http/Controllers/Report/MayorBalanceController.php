@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Classes\Reports\Accounting\MayorBalance;
-use DB, View, Excel, App;
+use DB, Excel;
 
 class MayorBalanceController extends Controller
 {
@@ -35,11 +35,6 @@ class MayorBalanceController extends Controller
                 $mes2 = $mes - 1;
                 $ano2 = $ano;
             }
-
-            // (select (CASE when plancuentas_naturaleza = 'D'
-            //         THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
-            //         ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial)
-            //         END)
 
             // Preparar sql
             $sql = "
@@ -77,9 +72,11 @@ class MayorBalanceController extends Controller
             if ($request->has('cuenta_inicio')) {
                 $sql .= "AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) >= RPAD({$request->cuenta_inicio}, 15, 0)";
             }
+
             if ($request->has('cuenta_fin')) {
                 $sql .= "AND RPAD(koi_plancuentas.plancuentas_cuenta, 15, 0) <= RPAD({$request->cuenta_fin}, 15, 0) ";
             }
+
             $sql .= " ORDER BY plancuentas_cuenta ASC";
             $saldos = DB::select($sql);
 

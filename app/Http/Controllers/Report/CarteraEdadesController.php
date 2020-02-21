@@ -19,16 +19,15 @@ class CarteraEdadesController extends Controller
      */
     public function index(Request $request)
     {
-        if( $request->has('type') ){
+        if ($request->has('type')) {
             $validator = Validator::make($request->all(), [
                 'filter_fecha' => 'required',
             ]);
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rcarteraedades')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rcarteraedades')->withInput();
             }
 
             $query = Factura4::query();
@@ -37,17 +36,17 @@ class CarteraEdadesController extends Controller
             $query->join('koi_tercero', 'factura1_tercero', '=', 'koi_tercero.id');
             $query->where('factura4_saldo', '<>',  0);
             $query->whereRaw("factura1_fecha <= '$request->filter_fecha'");
-            if($request->has('filter_tercero')) {
-                $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
 
+            if ($request->has('filter_tercero')) {
                 // Validate Tercero
+                $tercero = Tercero::where('tercero_nit',$request->filter_tercero)->first();
                 if (!$tercero instanceof Tercero) {
-                    return redirect('/rcarteraedades')
-                    ->withErrors("No es posible recuperar tercero, por favor verifique la información o consulte al administrador.")
-                    ->withInput();
+                    session()->flash('errors', ['No es posible recuperar tercero, por favor verifique la información o consulte al administrador.']);
+                    return redirect('/rcarteraedades')->withInput();
                 }
                 $query->where('factura1_tercero', $tercero->id);
             }
+
             $query->orderBy('tercero_nit', 'asc');
             $query->orderBy('factura1_numero', 'asc');
             $data = $query->get();

@@ -673,7 +673,7 @@
                 </div>
             </div>
 
-            @if (!auth()->user()->hasRole('Diseplanea'))
+            @ability ('utilidades' | 'cotizaciones')
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-danger">
@@ -819,7 +819,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            @endability
         </section>
     </script>
 
@@ -1007,8 +1007,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-
-            @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+            @ability ('archivos' | 'cotizaciones')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -1018,17 +1017,8 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @elseif (isset($cotizacion2) && $cotizacion2->continue)
-                <div class="buttons">
-                    <div class="qq-upload-button-selector qq-upload-button">
-                        <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
-                    </div>
-                </div>
-                <span class="qq-drop-processing-selector qq-drop-processing">
-                    <span>{{ trans('app.files.process') }}</span>
-                    <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -1042,24 +1032,19 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+                    @ability ('archivos' | 'cotizaciones')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                         <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
-                    @elseif (isset($cotizacion2) && $cotizacion2->continue)
-                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                        <span class="btn-imprimir"><input type="checkbox" class="qq-imprimir"> Imprimir </span>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
-
             <dialog class="qq-alert-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
                     <button type="button" class="qq-cancel-button-selector">Cerrar</button>
                 </div>
             </dialog>
-
             <dialog class="qq-confirm-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
@@ -1067,7 +1052,6 @@
                     <button type="button" class="qq-ok-button-selector">Si</button>
                 </div>
             </dialog>
-
             <dialog class="qq-prompt-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <input type="text">

@@ -29,11 +29,13 @@
 						<div>{{ $asiento->asiento1_dia }}</div>
 					</div>
 
-					<div class="col-md-1 col-md-offset-8 col-sm-6 col-xs-6 text-right">
-						<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" target="_blank" class="btn btn-default btn-sm btn-block">
-							<i class="fa fa-file-pdf-o"></i>
-						</a>
-					</div>
+					@ability ('exportar' | 'asientos')
+						<div class="col-md-1 col-md-offset-8 col-sm-6 col-xs-6 text-right">
+							<a href="{{ route('asientos.exportar', ['asientos' => $asiento->id]) }}" target="_blank" class="btn btn-default btn-sm btn-block">
+								<i class="fa fa-file-pdf-o"></i>
+							</a>
+						</div>
+					@endability
 				</div>
 
 				<div class="row">
@@ -51,7 +53,7 @@
 						<label for="asiento1_numero" class="control-label">Número</label>
 						<div>{{ $asiento->asiento1_numero }}</div>
 					</div>
-					@if($asiento->asiento1_preguardado)
+					@if ($asiento->asiento1_preguardado)
 						<div class="form-group col-md-offset-2 col-md-2 text-right">
 							<span class="label label-warning">PRE-GUARDADO</span>
 						</div>
@@ -95,11 +97,13 @@
 					<div class="col-md-2 col-md-offset-{{ $asiento->asiento1_documentos == NULL ? 4 : 5 }} col-sm-6 col-xs-6 text-left">
 						<a href="{{ route('asientos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 					</div>
-					@if ($asiento->asiento1_documentos == NULL) 
-						<div class="col-md-2 col-sm-6 col-xs-6 text-right">
-							<a href="#" class="btn btn-primary btn-sm btn-block reverse-asiento">{{ trans('app.edit') }}</a>
-						</div>
-					@endif
+					@ability ('editar' | 'asientos')
+						@if ($asiento->asiento1_documentos == NULL)
+							<div class="col-md-2 col-sm-6 col-xs-6 text-right">
+								<a href="#" class="btn btn-primary btn-sm btn-block reverse-asiento">{{ trans('app.edit') }}</a>
+							</div>
+						@endif
+					@endability
 				</div>
 			</div>
 		</div>
@@ -109,34 +113,41 @@
 				<div class="table-responsive">
 					<table id="browse-detalle-asiento-list" class="table table-hover table-bordered" cellspacing="0" width="100%">
 						<thead>
-							<tr>
-								<td colspan="4"></td>
-								<th class="text-left">Total</th>
-								<td class="text-right total-debitos">0</td>
-								<td class="text-right total-creditos">0</td>
-								<td></td>
-							</tr>
+							@ability ('precios' | 'asientos')
+								<tr>
+									<td colspan="4"></td>
+									<th class="text-left">Total</th>
+									<td class="text-right total-debitos">0</td>
+									<td class="text-right total-creditos">0</td>
+									<td></td>
+								</tr>
+							@endability
 							<tr>
 								<th>Cuenta</th>
 								<th>Nombre</th>
 								<th>Beneficiario</th>
 								<th>Centro Costo</th>
-								<th>Base</th>
-								<th>Débito</th>
-								<th>Crédito</th>
-								<th></th>
+								@ability ('precios' | 'asientos')
+									<th>Base</th>
+									<th>Débito</th>
+									<th>Crédito</th>
+									<th></th>
+								@endability
 							</tr>
 						</thead>
-						<tbody></tbody>
-						<tfoot>
-							<tr>
-								<td colspan="4"></td>
-								<th class="text-left">Total</th>
-								<td class="text-right total-debitos">0</td>
-								<td class="text-right total-creditos">0</td>
-								<td></td>
-							</tr>
-						</tfoot>
+						<tbody>
+						</tbody>
+						@ability ('precios' | 'asientos')
+							<tfoot>
+								<tr>
+									<td colspan="4"></td>
+									<th class="text-left">Total</th>
+									<td class="text-right total-debitos">0</td>
+									<td class="text-right total-creditos">0</td>
+									<td></td>
+								</tr>
+							</tfoot>
+						@endability
 					</table>
 				</div>
 			</div>

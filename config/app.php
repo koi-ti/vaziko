@@ -144,6 +144,8 @@ return [
         App\Providers\AuthServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
+        App\Providers\SettingsServiceProvider::class,
+        App\Providers\EntrustServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
         Lord\Laroute\LarouteServiceProvider::class,
@@ -151,9 +153,8 @@ return [
         Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Zizaco\Entrust\EntrustServiceProvider::class,
         Codedge\Fpdf\FpdfServiceProvider::class,
-        // Barryvdh\Debugbar\ServiceProvider::class
+        Barryvdh\Debugbar\ServiceProvider::class
     ],
 
     /*

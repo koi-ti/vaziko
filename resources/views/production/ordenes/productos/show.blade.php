@@ -30,28 +30,24 @@
 							{{ $orden->orden_referencia }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Cliente</label>
 						<div class="form-group col-md-10">
 							{{ $orden->tercero_nit }} - {{ $orden->tercero_nombre }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Orden</label>
 						<div class="form-group col-md-10">
 							{{ $orden->orden_codigo }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Código producto</label>
 						<div class="form-group col-md-10">
 							{{ $producto->id }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Producto</label>
 						<div class="form-group col-md-10">
@@ -59,7 +55,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="row">
 					<label class="control-label col-md-1">Referencia</label>
 					<div class="form-group col-md-8">
@@ -70,7 +65,6 @@
 						<div>{{ $ordenp2->orden2_cantidad }}</div>
 					</div>
 				</div>
-
 				<div class="row">
 					<label class="col-sm-1 control-label">Observaciones</label>
 					<div class="form-group col-md-11">
@@ -78,10 +72,10 @@
 					</div>
 				</div><br>
 
-				@if($producto->productop_abierto || $producto->productop_cerrado)
+				@if ($producto->productop_abierto || $producto->productop_cerrado)
 					<div class="box box-primary">
 						<div class="box-body">
-							@if($producto->productop_abierto)
+							@if ($producto->productop_abierto)
 								<div class="row">
 									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
 									<label for="orden2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -102,7 +96,7 @@
 								</div>
 							@endif
 
-							@if($producto->productop_cerrado)
+							@if ($producto->productop_cerrado)
 								<div class="row">
 									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
 									<label for="orden2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -126,7 +120,7 @@
 					</div>
 				@endif
 
-				@if($producto->productop_3d)
+				@if ($producto->productop_3d)
 					<div class="box box-primary">
 						<div class="box-body">
 							<div class="row">
@@ -159,7 +153,7 @@
 					</div>
 				@endif
 
-				@if($producto->productop_tiro || $producto->productop_retiro)
+				@if ($producto->productop_tiro || $producto->productop_retiro)
 					<div class="box box-primary">
 						<div class="box-body">
 							<div class="row">
@@ -177,7 +171,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											@if($producto->productop_tiro)
+											@if ($producto->productop_tiro)
 												<tr>
 													<th class="text-center">T <input type="checkbox" disabled {{ $ordenp2->orden2_tiro ? 'checked': '' }}></th>
 													<td class="text-center"><input type="checkbox" disabled {{ $ordenp2->orden2_yellow ? 'checked': '' }}></td>
@@ -188,7 +182,7 @@
 													<td class="text-center"><input type="checkbox" disabled {{ $ordenp2->orden2_color2 ? 'checked': '' }}></td>
 												</tr>
 											@endif
-											@if($producto->productop_retiro)
+											@if ($producto->productop_retiro)
 												<tr>
 													<th class="text-center">R <input type="checkbox" disabled {{ $ordenp2->orden2_retiro ? 'checked': '' }}></th>
 													<td class="text-center"><input type="checkbox" disabled {{ $ordenp2->orden2_yellow2 ? 'checked': '' }}></td>
@@ -205,15 +199,15 @@
 							</div>
 
 							<div class="row">
-								@if($producto->productop_tiro)
-									<div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+								@if ($producto->productop_tiro)
+									<div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
 										<label for="orden2_nota_tiro" class="control-label">Nota tiro</label>
 										<div>{{ $ordenp2->orden2_nota_tiro }}</div>
 									</div>
 								@endif
 
-								@if($producto->productop_retiro)
-									<div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+								@if ($producto->productop_retiro)
+									<div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
 										<label for="orden2_nota_retiro" class="control-label">Nota retiro</label>
 										<div>{{ $ordenp2->orden2_nota_retiro }}</div>
 									</div>
@@ -284,7 +278,7 @@
 					</div>
 				</div>
 
-				@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+				@ability ('precios' | 'ordenes')
 					<div class="box box-primary">
 						<div class="box-header with-border">
 							<h3 class="box-title">Fórmulas</h3>
@@ -312,7 +306,7 @@
 							</div>
 						</div>
 					</div>
-				@endif
+				@endability
 
 				<div class="box box-primary">
 					<div class="box-header with-border">
@@ -335,10 +329,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+									@ability ('precios' | 'ordenes')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -349,15 +343,15 @@
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->orden4_medidas }}</td>
 										<td>{{ $materialp->orden4_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+							@ability ('precios' | 'ordenes')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -365,7 +359,7 @@
 										<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
@@ -382,10 +376,10 @@
 										<th>Área</th>
 										<th>Nombre</th>
 										<th>Horas</th>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+										@ability ('precios' | 'ordenes')
 											<th>Valor</th>
 											<th>Total</th>
-										@endif
+										@endability
 									</tr>
 								</thead>
 								<tbody>
@@ -402,14 +396,14 @@
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 											<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
 											<td class="text-center">{{  $areap->orden6_tiempo }}</td>
-											@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+											@ability ('precios' | 'ordenes')
 												<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
 												<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
-											@endif
+											@endability
 										</tr>
 									@endforeach
 								</tbody>
-								@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+								@ability ('precios' | 'ordenes')
 									<tfoot>
 										<tr>
 											<td colspan="3"></td>
@@ -417,7 +411,7 @@
 											<th class="text-right">{{ number_format($totalareasp, 2, ',', '.') }}</th>
 										</tr>
 									</tfoot>
-								@endif
+								@endability
 							</table>
 						</div>
 					</div>
@@ -435,10 +429,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+									@ability ('precios' | 'ordenes')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -449,15 +443,15 @@
 										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
 										<td>{{ $empaque->orden9_medidas }}</td>
 										<td>{{ $empaque->orden9_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+							@ability ('precios' | 'ordenes')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -465,7 +459,7 @@
 										<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
@@ -482,10 +476,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+									@ability ('precios' | 'ordenes')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -496,15 +490,15 @@
 										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
 										<td>{{ $transporte->orden10_medidas }}</td>
 										<td>{{ $transporte->orden10_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+							@ability ('precios' | 'ordenes')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -512,14 +506,14 @@
 										<th class="text-right" id="total">{{ number_format($totaltransportes, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+		@ability ('utilidades' | 'ordenes')
 			<div class="row">
 				<div class="col-md-6 col-md-offset-3">
 					<div class="box box-primary">
@@ -681,6 +675,6 @@
 					</div>
 				</div>
 			</div>
-		@endif
+		@endability
 	</section>
 @stop

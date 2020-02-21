@@ -40,7 +40,7 @@ class ProductopController extends Controller
                 })
                 ->make(true);
         }
-        return view('production.productos.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.productos.index');
     }
 
     /**

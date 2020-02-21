@@ -68,7 +68,7 @@
                             <label for="factura1_puntoventa" class="col-md-1 control-label">Punto de venta</label>
                             <div class="form-group col-md-3">
                                 <select name="factura1_puntoventa" id="factura1_puntoventa" class="form-control select2-default-clear" required>
-                                    @foreach( App\Models\Base\PuntoVenta::getPuntosVenta() as $key => $value)
+                                    @foreach (App\Models\Base\PuntoVenta::getPuntosVenta() as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -187,7 +187,9 @@
     <script type="text/template" id="add-detalle-factura-tpl">
         <td><%- factura4_cuota %></td>
     	<td><%- factura4_vencimiento %></td>
-        <td><%- window.Misc.currency(factura4_valor) %></td>
-        <td><%- window.Misc.currency(factura4_saldo) %></td>
+        @ability ('precios' | 'facturas')
+            <td><%- window.Misc.currency(factura4_valor) %></td>
+            <td><%- window.Misc.currency(factura4_saldo) %></td>
+        @endability
     </script>
 @stop

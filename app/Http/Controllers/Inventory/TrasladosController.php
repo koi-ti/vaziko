@@ -24,7 +24,7 @@ class TrasladosController extends Controller
             $query->join('koi_sucursal as d', 'traslado1_destino', '=', 'd.id');
             return Datatables::of($query)->make(true);
         }
-        return view('inventory.traslados.index', ['empresa' => parent::getPaginacion()]);
+        return view('inventory.traslados.index');
     }
 
     /**

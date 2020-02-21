@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif;
-use App\Models\Base\Tercero, App\Models\Base\Contacto;
+use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Actividad, App\Models\Base\Municipio;
 use App\Models\Receivable\Factura1;
 use App\Models\Inventory\Producto;
 use App\Models\Production\Cotizacion1, App\Models\Production\Ordenp, App\Models\Production\Cotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\SubActividadp, App\Models\Production\SubtipoProductop;
@@ -272,10 +272,6 @@ class BuscadorController extends Controller
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
             $query->leftjoin('koi_precotizacion1', 'cotizacion1_precotizacion', '=', 'koi_precotizacion1.id');
-            // $query->with(['productos' => function ($producto) {
-            //     $producto->select('cotizacion2_cotizacion', DB::raw('SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total'))
-            //                     ->groupBy('cotizacion2_cotizacion');
-            // }]);
 
             return Datatables::of($query)
                 ->filter(function ($query) use ($request) {
@@ -672,6 +668,70 @@ class BuscadorController extends Controller
                 $data = $query->get();
             }
             return response()->json($data);
+        }
+        abort(404);
+    }
+
+    /**
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function municipios(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Municipio::query();
+            $query->select('koi_municipio.id as id', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as text"));
+            $query->join('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+
+            if ($request->has('id')) {
+                $query->where('koi_municipio.id', $request->id);
+            }
+
+            if ($request->has('q')) {
+                $query->where(function ($query) use ($request) {
+                    $query->whereRaw("municipio_nombre like '%".$request->q."%'");
+                    $query->orWhereRaw("departamento_nombre like '%".$request->q."%'");
+                });
+            }
+
+            if (empty($request->q) && empty($request->id)) {
+                $query->take(50);
+            }
+
+            $query->orderby('departamento_nombre','asc');
+            $query->orderby('municipio_nombre','asc');
+            return response()->json($query->get());
+        }
+        abort(404);
+    }
+
+    /**
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function actividades(Request $request)
+    {
+        if ($request->ajax()) {
+            $query = Actividad::query();
+            $query->select('koi_actividad.id', DB::raw("UPPER(CONCAT(actividad_codigo, ' - ', actividad_nombre)) as text"));
+
+            if ($request->has('id')) {
+                $query->where('koi_actividad.id', $request->id);
+            }
+
+            if ($request->has('q')) {
+                $query->where(function ($query) use ($request) {
+                    $query->whereRaw("actividad_nombre like '%".$request->q."%'");
+                    $query->orWhereRaw("actividad_codigo like '%".$request->q."%'");
+                });
+            }
+
+            if (empty($request->q) && empty($request->id)) {
+                $query->take(50);
+            }
+
+            $query->orderby('actividad_nombre','asc');
+            return response()->json($query->get());
         }
         abort(404);
     }

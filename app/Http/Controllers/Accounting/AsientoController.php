@@ -62,7 +62,7 @@ class AsientoController extends Controller
                 })
                 ->make(true);
         }
-        return view('accounting.asiento.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.asiento.index');
     }
 
     /**
@@ -668,7 +668,7 @@ class AsientoController extends Controller
                     return response()->json(['success' => false, 'errors' => $result]);
                 }
             }
-            
+
             if ($documento->documento_nif) {
                 $asientoNif = new AsientoNif;
                 $consecutive++;

@@ -15,20 +15,24 @@
 
    	<section class="content">
 	    <div class="box box-success" id="empresa-create">
-		 	{!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}
+            @ability ('editar' | 'empresa')
+	 	        {!! Form::open(['id' => 'form-create-empresa', 'data-toggle' => 'validator']) !!}
+            @endability
 
 			<div class="box-body" id="render-form-empresa">
 				{{-- Render form empresa --}}
 			</div>
 
-			<div class="box-header with-border">
-	        	<div class="row">
-					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
-						<button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
-					</div>
-				</div>
-			</div>
-			{!! Form::close() !!}
+            @ability ('editar' | 'empresa')
+        			<div class="box-header with-border">
+        	        	<div class="row">
+        					<div class="col-md-2 col-md-offset-5 col-sm-12 col-xs-6 text-right">
+        						<button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
+        					</div>
+        				</div>
+			         </div>
+                {!! Form::close() !!}
+            @endability
 		</div>
 	</section>
 
@@ -50,7 +54,7 @@
 				<label for="tercero_tipo" class="control-label">Tipo</label>
 				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
 					<option value="" selected>Seleccione</option>
-					@foreach( config('koi.terceros.tipo') as $key => $value)
+					@foreach (config('koi.terceros.tipo') as $key => $value)
 						<option value="{{ $key }}" <%- tercero_tipo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 					@endforeach
 				</select>
@@ -60,7 +64,7 @@
 				<label for="tercero_persona" class="control-label">Persona</label>
 				<select name="tercero_persona" id="tercero_persona" class="form-control" required readonly>
 					<option value="" selected>Seleccione</option>
-					@foreach( config('koi.terceros.persona') as $key => $value)
+					@foreach (config('koi.terceros.persona') as $key => $value)
 						<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 					@endforeach
 				</select>
@@ -70,7 +74,7 @@
 				<label for="tercero_regimen" class="control-label">Regimen</label>
 				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
 					<option value="" selected>Seleccione</option>
-					@foreach( config('koi.terceros.regimen') as $key => $value)
+					@foreach (config('koi.terceros.regimen') as $key => $value)
 						<option value="{{ $key }}" <%- tercero_regimen == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 					@endforeach
 				</select>
@@ -100,7 +104,7 @@
 
 			<div class="form-group col-md-3">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
-				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.municipios'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
 				</select>
 			</div>
 
@@ -189,14 +193,14 @@
 						    		<label for="empresa_niif" class="control-label">Grupo Niif</label>
 						    		<select name="empresa_niif" id="empresa_niif" class="form-control" required>
 										<option value="">Seleccione</option>
-										@foreach( config('koi.terceros.niif') as $key => $value)
+										@foreach (config('koi.terceros.niif') as $key => $value)
 											<option value="{{ $key }}" <%- empresa_niif == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 										@endforeach
 									</select>
 						    	</div>
 						    	<div class="form-group col-md-8">
 						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('actividades.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
+									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.actividades'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
 									</select>
 						    	</div>
 						    	<div class="form-group col-md-2">
@@ -209,7 +213,7 @@
 								<div class="form-group col-md-2">
 						    		<label for="empresa_iva" class="control-label">Iva</label>
 						    		<select name="empresa_iva" id="empresa_iva" class="form-control" required>
-                                        @foreach( config('koi.contabilidad.iva') as $key => $value)
+                                        @foreach (config('koi.contabilidad.iva') as $key => $value)
                                             <option value="{{ $key }}" <%- empresa_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                         @endforeach
                                     </select>

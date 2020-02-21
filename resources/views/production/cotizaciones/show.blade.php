@@ -17,22 +17,30 @@
             <div class="nav-tabs-custom tab-danger tab-whithout-box-shadow">
                 <ul class="nav nav-tabs">
                     <li class="active"><a href="#tab_cotizacion" data-toggle="tab">Cotización</a></li>
-                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                        <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
-                    @endif
-                    <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
-                    <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
+                    @ability ('graficas' | 'cotizaciones')
+                        <li><a href="#tab_graficas" data-toggle="tab">Gráficas de producción</a></li>
+                    @endability
+                    @ability ('graficas' | 'cotizaciones')
+                        <li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+                    @endability
+                    @ability ('bitacora' | 'cotizaciones')
+                        <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
+                    @endability
                     <li class="pull-right">
                         <div class="btn-group" role="group">
-                            @if (!$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
-                                <a class="btn btn-danger open-cotizacion" title="Reabrir cotización"><i class="fa fa-unlock"></i></a>
-                            @endif
-                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                            @ability ('abrir' | 'cotizaciones')
+                                @if (!$cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada)
+                                    <a class="btn btn-danger open-cotizacion" title="Reabrir cotización"><i class="fa fa-unlock"></i></a>
+                                @endif
+                            @endability
+                            @ability ('clonar' | 'cotizaciones')
                                 <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
-                            @endif
-                            @if ($cotizacion->cotizacion1_estados == 'CS')
-                                <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                            @endif
+                            @endability
+                            @ability ('exportar' | 'cotizaciones')
+                                @if ($cotizacion->cotizacion1_estados == 'CS')
+                                    <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                @endif
+                            @endability
                         </div>
                     </li>
                 </ul>
@@ -167,10 +175,10 @@
                                             <th width="60%">Nombre</th>
                                             <th width="10%">Cantidad</th>
                                             <th width="10%">Facturado</th>
-                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                            @ability ('precios' | 'cotizaciones')
                                                 <th width="10%">Precio</th>
                                                 <th width="10%">Total</th>
-                                            @endif
+                                            @endability
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -182,12 +190,12 @@
                                             <th class="text-right">Subtotal</th>
                                             <th class="text-center" id="subtotal-cantidad">0</th>
                                             <th class="text-center" id="subtotal-facturado">0</th>
-                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                            @ability ('precios' | 'cotizaciones')
                                                 <td></td>
                                                 <th class="text-right" id="subtotal-total">0</th>
-                                            @endif
+                                            @endability
                                         </tr>
-                                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+                                        @ability ('precios' | 'cotizaciones')
                                             <tr>
                                                 <td></td>
                                                 <th class="text-right">Iva ({{ $cotizacion->cotizacion1_iva }}%)</th>
@@ -198,57 +206,63 @@
                                                 <th class="text-right">Total</th>
                                                 <th colspan="5" class="text-right" id="total-total">0</th>
                                             </tr>
-                                        @endif
+                                        @endability
                                     </tfoot>
                                 </table>
                             </div>
                   	     </div>
                     </div>
-                    <div class="tab-pane" id="tab_charts">
-                        <div class="box box-solid">
-                            <div class="box-body">
-                                <div class="chart-container">
-                                    <canvas id="chart_producto" width="500" height="200"></canvas>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="tab_files">
-                        <div class="row">
-                            <div class="form-group col-sm-12">
-                                <textarea class="form-control" rows="25" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-sm-12">
-                                <div class="fine-uploader"></div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="tab_bitacora">
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div class="table-responsive">
-                                        <table id="browse-bitacora-list" class="table no-padding" cellspacing="0">
-                                            <thead>
-                                                <tr>
-                                                    <th width="10%"><small>Módulo</small></th>
-                                                    <th width="10%"><small>Acción</small></th>
-                                                    <th width="50%"><small>Descripción</small></th>
-                                                    <th width="15%"><small>IP</small></th>
-                                                    <th width="15%"><small>Usuario cambio</small></th>
-                                                    <th width="15%"><small>Fecha cambio</small></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                            </tbody>
-                                        </table>
+                    @ability ('graficas' | 'cotizaciones')
+                        <div class="tab-pane" id="tab_graficas">
+                            <div class="box box-solid">
+                                <div class="box-body">
+                                    <div class="chart-container">
+                                        <canvas id="chart_producto" width="500" height="200"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    @endability
+                    @ability ('archivos' | 'cotizaciones')
+                        <div class="tab-pane" id="tab_archivos">
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <textarea class="form-control" rows="25" placeholder="Observaciones" disabled>{{ $cotizacion->cotizacion1_observaciones_archivo }}</textarea>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <div class="fine-uploader"></div>
+                                </div>
+                            </div>
+                        </div>
+                    @endability
+                    @ability ('bitacora' | 'cotizaciones')
+                        <div class="tab-pane" id="tab_bitacora">
+                            <div class="box-body">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table id="browse-bitacora-list" class="table no-padding" cellspacing="0">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="10%"><small>Módulo</small></th>
+                                                        <th width="10%"><small>Acción</small></th>
+                                                        <th width="50%"><small>Descripción</small></th>
+                                                        <th width="15%"><small>IP</small></th>
+                                                        <th width="15%"><small>Usuario cambio</small></th>
+                                                        <th width="15%"><small>Fecha cambio</small></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endability
                	</div>
         	</div>
         </div>

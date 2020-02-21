@@ -3980,7 +3980,7 @@ app || (app = {});
         initialize: function () {
 
             this.$acabadospSearchTable = this.$('#acabadosp-search-table');
-            var paginacion = this.$acabadospSearchTable.data('paginacion');
+            var paginacion = this.$acabadospSearchTable.data('pagination');
 
             this.$acabadospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -4144,7 +4144,7 @@ app || (app = {});
         initialize: function () {
 
             this.$actividadesSearchTable = this.$('#actividades-search-table');
-            var paginacion = this.$actividadesSearchTable.data('paginacion');
+            var paginacion = this.$actividadesSearchTable.data('pagination');
 
             this.$actividadesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -4317,7 +4317,7 @@ app || (app = {});
         initialize: function () {
 
             this.$actividadespSearchTable = this.$('#actividadesp-search-table');
-            paginacion = this.$actividadespSearchTable.data('paginacion');
+            paginacion = this.$actividadespSearchTable.data('pagination');
 
             this.$actividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -4596,7 +4596,7 @@ app || (app = {});
         initialize: function () {
 
             this.$areaspSearchTable = this.$('#areasp-search-table');
-            var paginacion = this.$areaspSearchTable.data('paginacion');
+            var paginacion = this.$areaspSearchTable.data('pagination');
 
             this.$areaspSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -6265,7 +6265,7 @@ app || (app = {});
         initialize: function () {
             var _this = this;
             this.$asientosSearchTable = this.$('#asientos-search-table');
-            var paginacion = this.$asientosSearchTable.data('paginacion');
+            var paginacion = this.$asientosSearchTable.data('pagination');
 
             // References
             this.$searchTercero = this.$('#search_tercero');
@@ -7211,7 +7211,7 @@ app || (app = {});
         */
         initialize: function () {
             this.$asientosNifSearchTable = this.$('#asientosnif-search-table');
-            var paginacion = this.$asientosNifSearchTable.data('paginacion');
+            var paginacion = this.$asientosNifSearchTable.data('pagination');
 
             this.$asientosNifSearchTable.DataTable({
 				processing: true,
@@ -7460,7 +7460,7 @@ app || (app = {});
         initialize: function () {
 
             this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
-            var paginacion = this.$centroscostoSearchTable.data('paginacion');
+            var paginacion = this.$centroscostoSearchTable.data('pagination');
 
             this.$centroscostoSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -14719,7 +14719,7 @@ app || (app = {});
             this.$searchcotizacionEstado = this.$('#searchcotizacion_estado');
             this.$searchcotizacionReferencia = this.$('#searchcotizacion_referencia');
             this.$searchcotizacionProductop = this.$('#searchcotizacion_productop');
-            var paginacion = this.$cotizacionesSearchTable.data('paginacion');
+            var paginacion = this.$cotizacionesSearchTable.data('pagination');
 
             this.cotizacionesSearchTable = this.$cotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -16399,7 +16399,7 @@ app || (app = {});
         initialize: function () {
 
             this.$departamentosSearchTable = this.$('#departamentos-search-table');
-            var paginacion = this.$departamentosSearchTable.data('paginacion');
+            var paginacion = this.$departamentosSearchTable.data('pagination');
 
             this.$departamentosSearchTable.DataTable({
 				processing: true,
@@ -16552,7 +16552,7 @@ app || (app = {});
         initialize: function () {
 
             this.$documentosSearchTable = this.$('#documentos-search-table');
-            var paginacion = this.$documentosSearchTable.data('paginacion');
+            var paginacion = this.$documentosSearchTable.data('pagination');
 
             this.$documentosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -17248,7 +17248,7 @@ app || (app = {});
 
             // Rerefences
             this.$facturasSearchTable = this.$('#facturas-search-table');
-            var paginacion = this.$facturasSearchTable.data('paginacion');
+            var paginacion = this.$facturasSearchTable.data('pagination');
 
             // References
             this.$searchfacturaNumero = this.$('#searchfactura_numero');
@@ -17610,7 +17610,7 @@ app || (app = {});
 
             // Rerefences
             this.$facturaspSearchTable = this.$('#facturasp-search-table');
-            var paginacion = this.$facturaspSearchTable.data('paginacion');
+            var paginacion = this.$facturaspSearchTable.data('pagination');
 
             // References
             this.$searchfacturapFacturap = this.$('#searchfacturap_facturap');
@@ -17838,7 +17838,7 @@ app || (app={});
         initialize: function () {
 
             this.$foldersSearchTable = this.$('#folders-search-table');
-            var paginacion = this.$foldersSearchTable.data('paginacion');
+            var paginacion = this.$foldersSearchTable.data('pagination');
 
             this.$foldersSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -17998,7 +17998,7 @@ app || (app = {});
         initialize: function () {
 
             this.$gruposSearchTable = this.$('#grupos-search-table');
-            var paginacion = this.$gruposSearchTable.data('paginacion');
+            var paginacion = this.$gruposSearchTable.data('pagination');
 
             this.$gruposSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -18158,7 +18158,7 @@ app || (app = {});
         initialize: function () {
 
             this.$maquinaspSearchTable = this.$('#maquinasp-search-table');
-            var paginacion = this.$maquinaspSearchTable.data('paginacion');
+            var paginacion = this.$maquinaspSearchTable.data('pagination');
 
             this.$maquinaspSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -18324,7 +18324,7 @@ app || (app = {});
         initialize: function () {
 
             this.$materialespSearchTable = this.$('#materialesp-search-table');
-            var paginacion = this.$materialespSearchTable.data('paginacion');
+            var paginacion = this.$materialespSearchTable.data('pagination');
 
             this.$materialespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -18395,7 +18395,7 @@ app || (app = {});
         initialize: function () {
 
             this.$modulosSearchTable = this.$('#modulos-search-table');
-            var paginacion = this.$modulosSearchTable.data('paginacion');
+            var paginacion = this.$modulosSearchTable.data('pagination');
 
             this.$modulosSearchTable.DataTable({
 				processing: true,
@@ -18441,7 +18441,7 @@ app || (app = {});
         initialize: function () {
 
             this.$municipiosSearchTable = this.$('#municipios-search-table');
-            var paginacion = this.$municipiosSearchTable.data('paginacion');
+            var paginacion = this.$municipiosSearchTable.data('pagination');
 
             this.$municipiosSearchTable.DataTable({
 				processing: true,
@@ -18628,7 +18628,7 @@ app || (app = {});
         initialize: function () {
 
             this.$permisosSearchTable = this.$('#permisos-search-table');
-            var paginacion = this.$permisosSearchTable.data('paginacion');
+            var paginacion = this.$permisosSearchTable.data('pagination');
 
             this.$permisosSearchTable.DataTable({
 				processing: true,
@@ -21370,7 +21370,7 @@ app || (app = {});
             this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
             this.$searchordenpReferencia = this.$('#searchordenp_ordenp_referencia');
             this.$searchordenpProductop = this.$('#searchordenp_ordenp_productop');
-            var paginacion = this.$ordersSearchTable.data('paginacion');
+            var paginacion = this.$ordersSearchTable.data('pagination');
 
             this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -23516,7 +23516,7 @@ app || (app = {});
             this.$plancuentasSearchTable = this.$('#plancuentas-search-table');
             this.$searchCuenta = this.$('#plancuentas_cuenta');
             this.$searchName = this.$('#plancuentas_nombre');
-            var paginacion = this.$plancuentasSearchTable.data('paginacion');
+            var paginacion = this.$plancuentasSearchTable.data('pagination');
 
             this.plancuentasSearchTable = this.$plancuentasSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -23771,7 +23771,7 @@ app || (app = {});
             this.$plancuentasNifSearchTable = this.$('#plancuentasnif-search-table');
             this.$searchCuenta = this.$('#plancuentasn_cuenta');
             this.$searchName = this.$('#plancuentasn_nombre');
-            var paginacion = this.$plancuentasNifSearchTable.data('paginacion');
+            var paginacion = this.$plancuentasNifSearchTable.data('pagination');
 
             this.plancuentasNifSearchTable = this.$plancuentasNifSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -23893,7 +23893,7 @@ app || (app = {});
             this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
             this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
             this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
-            var paginacion = this.$precotizacionesSearchTable.data('paginacion');
+            var paginacion = this.$precotizacionesSearchTable.data('pagination');
 
             this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -24411,7 +24411,7 @@ app || (app = {});
 
             // Rerefences
             this.$productosSearchTable = this.$('#productos-search-table');
-            var paginacion = this.$productosSearchTable.data('paginacion');
+            var paginacion = this.$productosSearchTable.data('pagination');
 
             this.$searchCod = this.$('#producto_codigo');
             this.$searchName = this.$('#producto_nombre');
@@ -25702,7 +25702,7 @@ app || (app = {});
             this.$productospSearchTable = this.$('#productosp-search-table');
             this.$searchCod = this.$('#productop_codigo');
             this.$searchName = this.$('#productop_nombre');
-            var paginacion = this.$productospSearchTable.data('paginacion');
+            var paginacion = this.$productospSearchTable.data('pagination');
 
             this.productospSearchTable = this.$productospSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
@@ -26675,7 +26675,7 @@ app || (app = {});
         initialize: function () {
 
             this.$puntosventaSearchTable = this.$('#puntosventa-search-table');
-            var paginacion = this.$puntosventaSearchTable.data('paginacion');
+            var paginacion = this.$puntosventaSearchTable.data('pagination');
 
             this.$puntosventaSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27330,7 +27330,7 @@ app || (app = {});
         initialize: function () {
 
             this.$rolesSearchTable = this.$('#roles-search-table');
-            var paginacion = this.$rolesSearchTable.data('paginacion');
+            var paginacion = this.$rolesSearchTable.data('pagination');
 
             this.$rolesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27629,7 +27629,7 @@ app || (app = {});
         initialize: function () {
             
             this.$subactividadespSearchTable = this.$('#subactividadesp-search-table');
-            var paginacion = this.$subactividadespSearchTable.data('paginacion');
+            var paginacion = this.$subactividadespSearchTable.data('pagination');
 
             this.$subactividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27803,7 +27803,7 @@ app || (app = {});
         initialize: function () {
 
             this.$subgruposSearchTable = this.$('#subgrupos-search-table');
-            var paginacion = this.$subgruposSearchTable.data('paginacion');
+            var paginacion = this.$subgruposSearchTable.data('pagination');
 
             this.$subgruposSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -27972,7 +27972,7 @@ app || (app = {});
         initialize: function () {
 
             this.$subtipoproductospSearchTable = this.$('#subtipoproductosp-search-table');
-            var paginacion = this.$subtipoproductospSearchTable.data('paginacion');
+            var paginacion = this.$subtipoproductospSearchTable.data('pagination');
 
             this.$subtipoproductospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -28146,7 +28146,7 @@ app || (app = {});
         initialize: function () {
 
             this.$sucursalesSearchTable = this.$('#sucursales-search-table');
-            var paginacion = this.$sucursalesSearchTable.data('paginacion');
+            var paginacion = this.$sucursalesSearchTable.data('pagination');
 
             this.$sucursalesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -29063,7 +29063,7 @@ app || (app = {});
             this.$tercerosSearchTable = this.$('#terceros-search-table');
             this.$searchNit = this.$('#tercero_nit');
             this.$searchName = this.$('#tercero_nombre');
-            var paginacion = this.$tercerosSearchTable.data('paginacion');
+            var paginacion = this.$tercerosSearchTable.data('pagination');
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
@@ -29733,7 +29733,7 @@ app || (app = {});
         initialize: function () {
 
             this.$tipomaterialpSearchTablese = this.$('#tipomaterialesp-search-table');
-            var paginacion = this.$tipomaterialpSearchTablese.data('paginacion');
+            var paginacion = this.$tipomaterialpSearchTablese.data('pagination');
 
             this.$tipomaterialpSearchTablese.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -29907,7 +29907,7 @@ app || (app = {});
         initialize: function () {
 
             this.$tipoproductospSearchTable = this.$('#tipoproductosp-search-table');
-            var paginacion = this.$tipoproductospSearchTable.data('paginacion');
+            var paginacion = this.$tipoproductospSearchTable.data('pagination');
 
             this.$tipoproductospSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -30138,7 +30138,7 @@ app || (app = {});
         initialize: function () {
 
             this.$trasladosSearchTable = this.$('#traslados-search-table');
-            var paginacion = this.$trasladosSearchTable.data('paginacion');
+            var paginacion = this.$trasladosSearchTable.data('pagination');
 
             this.$trasladosSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
@@ -30534,7 +30534,7 @@ app || (app = {});
         initialize: function () {
 
             this.$unidadesSearchTable = this.$('#unidades-search-table');
-            var paginacion = this.$unidadesSearchTable.data('paginacion');
+            var paginacion = this.$unidadesSearchTable.data('pagination');
 
             this.$unidadesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +

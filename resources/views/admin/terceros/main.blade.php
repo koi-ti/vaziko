@@ -42,7 +42,7 @@
                 				<label for="tercero_tipo" class="control-label">Tipo</label>
                 				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
                 					<option value="" selected>Seleccione</option>
-                					@foreach( config('koi.terceros.tipo') as $key => $value)
+                					@foreach (config('koi.terceros.tipo') as $key => $value)
                 						<option value="{{ $key }}" <%- tercero_tipo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                 					@endforeach
                 				</select>
@@ -51,7 +51,7 @@
                 				<label for="tercero_persona" class="control-label">Persona</label>
                 				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
                 					<option value="" selected>Seleccione</option>
-                					@foreach( config('koi.terceros.persona') as $key => $value)
+                					@foreach (config('koi.terceros.persona') as $key => $value)
                 						<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                 					@endforeach
                 				</select>
@@ -60,7 +60,7 @@
                 				<label for="tercero_regimen" class="control-label">Regimen</label>
                 				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
                 					<option value="" selected>Seleccione</option>
-                					@foreach( config('koi.terceros.regimen') as $key => $value)
+                					@foreach (config('koi.terceros.regimen') as $key => $value)
                 						<option value="{{ $key }}" <%- tercero_regimen == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                 					@endforeach
                 				</select>
@@ -116,7 +116,7 @@
                 			</div>
                 			<div class="form-group col-md-6">
                 				<label for="tercero_municipio" class="control-label">Municipio</label>
-                				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
+                				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.municipios'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
                 				</select>
                 			</div>
             			</div>
@@ -245,7 +245,7 @@
     				    	    <div class="row">
     						    	<div class="form-group col-md-10">
     						    		<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-    									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('actividades.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
+    									<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.actividades'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
     									</select>
     						    	</div>
     						    	<div class="form-group col-md-2">
@@ -374,7 +374,7 @@
     	                               	<div id="wrapper-coordinador" class="form-group col-md-6 <%- parseInt(tercero_tecnico) ? '' : 'hide' %>">
     										<label for="tercero_coordinador_por" class="control-label">Coordinado por</label>
     										<select name="tercero_coordinador_por" id="tercero_coordinador_por" class="form-control select2-default">
-    		                                    @foreach( App\Models\Base\Tercero::getTechnicalAdministrators() as $key => $value)
+    		                                    @foreach (App\Models\Base\Tercero::getTechnicalAdministrators() as $key => $value)
     		                                        <option value="{{ $key }}" <%- tercero_coordinador_por == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
     		                                    @endforeach
     		                                </select>
@@ -432,7 +432,7 @@
     						                        	<label for="role_id" class="control-label col-sm-1 col-md-offset-1 hidden-xs">Rol</label>
     						                            <div class="form-group col-md-7 col-xs-9">
     						                                <select name="role_id" id="role_id" class="form-control select2-default" required>
-    						                                    @foreach( App\Models\Base\Rol::getRoles() as $key => $value)
+    						                                    @foreach (App\Models\Base\Rol::getRoles() as $key => $value)
     						                                        <option value="{{ $key }}">{{ $value }}</option>
     						                                    @endforeach
     						                                </select>
@@ -522,8 +522,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-
-            @if(Auth::user()->ability('admin', 'opcional2', ['module' => 'terceros']))
+            @ability ('archivos' | 'terceros')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -533,7 +532,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -547,20 +546,18 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(Auth::user()->ability('admin', 'opcional3', ['module' => 'terceros']))
+                    @ability ('archivos' | 'terceros')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
-
             <dialog class="qq-alert-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
                     <button type="button" class="qq-cancel-button-selector">Cerrar</button>
                 </div>
             </dialog>
-
             <dialog class="qq-confirm-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
@@ -568,7 +565,6 @@
                     <button type="button" class="qq-ok-button-selector">Si</button>
                 </div>
             </dialog>
-
             <dialog class="qq-prompt-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <input type="text">

@@ -28,12 +28,8 @@
                     <div class="box-body">
                         <div class="row">
                             <label for="display_name" class="col-sm-1 control-label">Nombre</label>
-                            <div class="form-group col-sm-4">
+                            <div class="form-group col-sm-8">
                                 <input id="display_name" value="<%- display_name %>" placeholder="Mostrar nombre" class="form-control input-sm" name="display_name" required>
-                            </div>
-                            <label for="name" class="col-sm-1 control-label">Key</label>
-                            <div class="form-group col-sm-3">
-                                <input id="name" value="<%- name %>" placeholder="Nombre" class="form-control input-sm" name="name" <%- typeof(id) !== 'undefined' ? 'readonly' : ''%> >
                             </div>
                         </div>
                         <div class="row">
@@ -63,7 +59,7 @@
                     </div>
                     <div class="box-body">
                         <div class="box-group">
-                            @foreach(App\Models\Base\Modulo::getModules() as $father)
+                            @foreach (App\Models\Base\Modulo::getModules() as $father)
                                 <div id="wrapper-father-{{ $father->id }}" class="panel box box-whithout-border">
                                     <div class="box-header">
                                         <h1 class="box-title">
@@ -73,7 +69,7 @@
                                     <div id="collapse_{{ $father->id }}" class="panel-collapse collapse">
                                         <div class="box-body">
                                             <table class="table table-condensed">
-                                                @foreach($father->childrens as $children)
+                                                @foreach ($father->childrens as $children)
                                                     <tr>
                                                         <th>
                                                             <a class="toggle-children" data-resource="{{ $children->id }}" data-father="{{ $father->id }}" data-nivel1="{{ $children->nivel1 }}" data-nivel2="{{ $children->nivel2 }}" data-toggle="collapse" data-parent="#accordion" href="#collapse_children_{{ $children->id }}">
@@ -111,11 +107,11 @@
 
     <!-- Modal add permisorol -->
     <div class="modal fade" id="modal-permisorol-component" data-backdrop="static" data-keyboard="true" aria-hidden="true" tabindex="-1">
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content" id="content-permisorol-component">
                 <div class="modal-header small-box {{ config('koi.template.bg') }}">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="inner-title-modal"></h4>
+                    <h4 class="inner-title-modal modal-title"></h4>
                 </div>
                 {!! Form::open(['id' => 'form-permisorol-component', 'data-toggle' => 'validator']) !!}
                     <div class="content-modal"></div>
@@ -140,27 +136,25 @@
     </script>
 
     <script type="text/template" id="edit-permissions-tpl">
-        <div class="table-responsive no-padding">
-            <table class="table table-striped">
-                <thead>
+        <div class="modal-body">
+            <div class="table-responsive no-padding">
+                <table class="table table-striped">
                     <tr>
-                        <% _.each(permissions, function(permission) { %>
-                            <th class="text-center">
-                                <%- permission.display_name %>
-                            </th>
-                        <% }); %>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th></th>
                     </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <% _.each(permissions, function(permission) { %>
+                    <% _.each(permissions, function(permission) { %>
+                        <tr>
+                            <td><%- permission.display_name %></td>
+                            <td><%- permission.description %></td>
                             <td class="text-center">
                                 <input type="checkbox" id="permiso_<%- permission.id %>" name="permiso_<%- permission.id %>" value="permiso_<%- permission.id %>" <%- mpermissions.indexOf(permission.id) != -1 ? 'checked': ''%>>
                             </td>
-                        <% }); %>
-                    </tr>
-                </tbody>
-            </table>
+                        </tr>
+                    <% }); %>
+                </table>
+            </div>
         </div>
     </script>
 @stop

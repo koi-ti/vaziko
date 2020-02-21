@@ -311,35 +311,33 @@
                             </div>
                         </div>
 
-                        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                            <div class="box box-primary">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Fórmulas</h3>
-                                </div>
-                                <div class="box-body">
-                                    <div class="row">
-                                        <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_precio_formula" type="text" maxlength="200" data-response="orden2_precio_venta">
-                                        </div>
-                                        <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm total-calculate" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
-                                        </div>
+                        <div class="box box-primary">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Fórmulas</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="row">
+                                    <label for="orden2_precio_formula" class="col-sm-1 control-label">Fórmula</label>
+                                    <div class="form-group col-md-6">
+                                        <input id="orden2_precio_formula" value="<%- orden2_precio_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_precio_formula" type="text" maxlength="200" data-response="orden2_precio_venta">
                                     </div>
-                                    <div class="row">
-                                        <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
-                                        <div class="form-group col-md-6">
-                                            <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-response="orden2_viaticos">
-                                        </div>
-                                        <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
-                                        <div class="form-group col-md-4">
-                                            <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm total-calculate" name="orden2_viaticos" type="text" maxlength="30" data-currency>
-                                        </div>
+                                    <label for="orden2_precio_venta" class="col-sm-1 control-label">Precio</label>
+                                    <div class="form-group col-md-4">
+                                        <input id="orden2_precio_venta" value="<%- orden2_precio_venta %>" placeholder="Precio" class="form-control input-sm total-calculate" name="orden2_precio_venta" type="text" maxlength="30" data-currency required>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <label for="orden2_viaticos_formula" class="col-sm-1 control-label">Fórmula</label>
+                                    <div class="form-group col-md-6">
+                                        <input id="orden2_viaticos_formula" value="<%- orden2_viaticos_formula %>" placeholder="Fórmula" class="form-control input-sm production-calculate-formula" name="orden2_viaticos_formula" type="text" maxlength="200" data-response="orden2_viaticos">
+                                    </div>
+                                    <label for="orden2_viaticos" class="col-sm-1 control-label">Viaticos</label>
+                                    <div class="form-group col-md-4">
+                                        <input id="orden2_viaticos" value="<%- orden2_viaticos %>" class="form-control input-sm total-calculate" name="orden2_viaticos" type="text" maxlength="30" data-currency>
                                     </div>
                                 </div>
                             </div>
-                        @endif
+                        </div>
                     </form>
 
                     <div class="box box-primary">
@@ -479,21 +477,17 @@
                                             <th width="30%">Área</th>
                                             <th width="30%">Nombre</th>
                                             <th width="20%" class="text-center">Tiempo</th>
-                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                <th width="10%">Valor</th>
-                                                <th width="10%">Total</th>
-                                            @endif
+                                            <th width="10%">Valor</th>
+                                            <th width="10%">Total</th>
                                         </tr>
                                     </thead>
-                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                        <tfoot>
-                                            <tr>
-                                                <td colspan="5"></td>
-                                                <th class="text-right">Total</th>
-                                                <th class="text-right" id="total">0</th>
-                                            </tr>
-                                        </tfoot>
-                                    @endif
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5"></td>
+                                            <th class="text-right">Total</th>
+                                            <th class="text-right" id="total">0</th>
+                                        </tr>
+                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -656,7 +650,7 @@
                 </div>
             </div>
 
-            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+            @ability ('utilidades' | 'ordenes')
                 <div class="row">
                     <div class="col-md-6 col-md-offset-3">
                         <div class="box box-primary">
@@ -802,7 +796,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            @endability
         </section>
     </script>
 
@@ -918,10 +912,8 @@
         <td><%- areap_nombre ? areap_nombre : '-' %></td>
         <td><%- orden6_nombre ? orden6_nombre : '-' %></td>
         <td class="text-center"><%- orden6_horas %>:<%- orden6_minutos %></td>
-        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-            <td class="text-right"><%- window.Misc.currency (orden6_valor) %></td>
-            <td class="text-right"><%- window.Misc.currency (total) %></td>
-        @endif
+        <td class="text-right"><%- window.Misc.currency (orden6_valor) %></td>
+        <td class="text-right"><%- window.Misc.currency (total) %></td>
     </script>
 
     <script type="text/template" id="orden-producto-areas-edit-item-tpl">
@@ -992,8 +984,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-
-            @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+            @ability ('archivos' | 'ordenes')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -1003,17 +994,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @elseif (isset($ordenp2) && $ordenp2->continue)
-                <div class="buttons">
-                    <div class="qq-upload-button-selector qq-upload-button">
-                        <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
-                    </div>
-                </div>
-                <span class="qq-drop-processing-selector qq-drop-processing">
-                    <span>{{ trans('app.files.process') }}</span>
-                    <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
-                </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -1027,22 +1008,18 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+                    @ability ('archivos' | 'ordenes')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @elseif (isset($ordenp2) && $ordenp2->continue)
-                        <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
-
             <dialog class="qq-alert-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
                     <button type="button" class="qq-cancel-button-selector">Cerrar</button>
                 </div>
             </dialog>
-
             <dialog class="qq-confirm-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
@@ -1050,7 +1027,6 @@
                     <button type="button" class="qq-ok-button-selector">Si</button>
                 </div>
             </dialog>
-
             <dialog class="qq-prompt-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <input type="text">

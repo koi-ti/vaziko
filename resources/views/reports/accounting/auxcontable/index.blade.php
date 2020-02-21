@@ -86,29 +86,8 @@
 	                        </div>
 	                    </div>
 					</div>
-                    <!-- <div class="row">
-                        <label for="filter_order" class="control-label col-md-2 text-right col-md-offset-2">Ordenar por</label>
-                        <div class="form-group col-md-2">
-                            <select name="filter_order" id="filter_order" class="form-control" required>
-                                <option value="1">Fecha</option>
-                                <option value="2">Documento</option>
-                                <option value="3">Saldos terceros</option>
-                            </select>
-                        </div>
-                    </div> -->
 				</div>
-                <div class="box-footer">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-                        </button>
-                    </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-                        </button>
-                    </div>
-                </div>
+                @include('partials.buttons', ['type' => 'exportar', 'module' => 'rauxcontable'])
 			</form>
 		</div>
 	</section>

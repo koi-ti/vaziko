@@ -12,19 +12,17 @@
     </section>
 
     <section class="content">
-        <div id="roles-main">
-            <div class="box box-success">
-                <div class="box-body">
-                    <div class="table-responsive">
-                        <table id="roles-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
-                            <thead>
-                                <tr>
-                                    <th width="30%">Nombre</th>
-                                    <th width="70%">Descripcion</th>
-                                </tr>
-                            </thead>
-                        </table>
-                    </div>
+        <div id="roles-main" class="box box-success">
+            <div class="box-body">
+                <div class="table-responsive">
+                    <table id="roles-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
+                        <thead>
+                            <tr>
+                                <th width="30%">Nombre</th>
+                                <th width="70%">Descripcion</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>

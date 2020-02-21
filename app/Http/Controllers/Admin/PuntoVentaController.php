@@ -17,9 +17,9 @@ class PuntoVentaController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of( PuntoVenta::query() )->make(true);
+            return Datatables::of(PuntoVenta::query())->make(true);
         }
-        return view('admin.puntosventa.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.puntosventa.index');
     }
 
     /**

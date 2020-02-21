@@ -33,32 +33,34 @@
 							</div>
 							<div class="form-group col-xs-12 col-sm-3 col-md-2">
 								<select name="asiento1_mes" id="asiento1_mes" class="form-control" required>
-									@foreach( config('koi.meses') as $key => $value)
+									@foreach (config('koi.meses') as $key => $value)
 										<option value="{{ $key }}" <%- asiento1_mes == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
 							</div>
 							<div class="form-group col-xs-12 col-sm-2 col-md-1">
 								<select name="asiento1_dia" id="asiento1_dia" class="form-control" required>
-									@for($i = 1; $i <= 31; $i++)
+									@for ($i = 1; $i <= 31; $i++)
 										<option value="{{ $i }}" <%- asiento1_dia == '{{ $i }}' ? 'selected': ''%>>{{ $i }}</option>
 									@endfor
 								</select>
 							</div>
-							<% if (edit) { %>
-								<div class="col-xs-2 col-sm-2 col-md-1 text-right pull-right">
-									<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" target="_blank" class="btn btn-danger btn-sm btn-block">
-										<i class="fa fa-file-pdf-o"></i>
-									</a>
-								</div>
-							<% } %>
+							@ability ('exportar' | 'asientos')
+								<% if (edit) { %>
+									<div class="col-xs-2 col-sm-2 col-md-1 text-right pull-right">
+										<a href="<%- window.Misc.urlFull( Route.route('asientos.exportar', { asientos: id}) ) %>" target="_blank" class="btn btn-danger btn-sm btn-block">
+											<i class="fa fa-file-pdf-o"></i>
+										</a>
+									</div>
+								<% } %>
+							@endability
 						</div>
 						<div class="row">
 							<label for="asiento1_folder" class="col-xs-12 col-sm-1 col-md-1 control-label">Folder</label>
 							<div class="form-group col-xs-12 col-sm-3 col-md-3">
 								<select name="asiento1_folder" id="asiento1_folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper=".spinner-main" data-documents="asiento1_documento" required>
 									<option value="" selected>Seleccione</option>
-									@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
+									@foreach (App\Models\Accounting\Folder::getFolders() as $key => $value)
 										<option value="{{ $key }}" <%- asiento1_folder == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
@@ -67,7 +69,7 @@
 							<div class="form-group col-xs-12 col-sm-4 col-md-3">
 								<select name="asiento1_documento" id="asiento1_documento" class="form-control select2-default" required>
 									<option value="" selected>Seleccione</option>
-									@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
+									@foreach (App\Models\Accounting\Documento::getDocuments() as $key => $value)
 										<option value="{{ $key }}" <%- asiento1_documento == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
 									@endforeach
 								</select>
@@ -113,7 +115,7 @@
 					<div class="box-footer with-border">
 			        	<div class="row">
 							<div class="col-xs-6 col-sm-6 col-md-2 <%- (edit) ? 'col-md-offset-4' : 'col-md-offset-5' %> text-left">
-								<a href="<%- window.Misc.urlFull( edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
+								<a href="<%- window.Misc.urlFull(edit ? Route.route('asientos.show', { asientos: id}) : Route.route('asientos.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.cancel') }}</a>
 							</div>
 							<% if (edit) { %>
 								<div class="col-md-2 col-sm-6 col-xs-6 text-right">
@@ -128,7 +130,7 @@
 			<!-- Detalle -->
 			<div class="box box-success spinner-main">
 				<div class="box-body">
-					<% if(edit) { %> <form method="POST" accept-charset="UTF-8" id="form-item-asiento" data-toggle="validator"> <% } %>
+					<% if (edit) { %> <form method="POST" accept-charset="UTF-8" id="form-item-asiento" data-toggle="validator"> <% } %>
 						<div class="row">
 							<div class="form-group col-sm-2 col-xs-12">
 					      		<div class="input-group input-group-sm">
@@ -145,7 +147,7 @@
 							</div>
 							<div class="form-group col-sm-6 col-xs-12">
 								<select name="asiento2_centro" id="asiento2_centro" class="form-control select2-default-clear"  data-placeholder="Seleccione centro de costo">
-									@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto() as $key => $value)
+									@foreach (App\Models\Accounting\CentroCosto::getCentrosCosto() as $key => $value)
 										<option value="{{ $key }}">{{ $value }}</option>
 									@endforeach
 								</select>
@@ -225,7 +227,8 @@
 									<td></td>
 								</tr>
 								<tr>
-									<th colspan="2"></th>
+									<th></th>
+									<th></th>
 									<th>Cuenta</th>
 									<th>Nombre</th>
 									<th>Beneficiario</th>
@@ -464,7 +467,7 @@
 			<div class="form-group <%- asiento2_naturaleza == 'D' ? 'col-sm-3' : 'col-sm-4' %> col-xs-12">
 				<select name="movimiento_sucursal" id="movimiento_sucursal" class="form-control evaluate-producto-movimiento-asiento" required>
 					<option value="" selected>Sucursal</option>
-					@foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
+					@foreach (App\Models\Base\Sucursal::getSucursales() as $key => $value)
 						<option value="{{ $key }}">{{ $value }}</option>
 					@endforeach
 				</select>

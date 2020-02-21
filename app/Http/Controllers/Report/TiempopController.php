@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Classes\Reports\Production\TiempoProduccion;
 use App\Models\Production\Tiempop, App\Models\Base\Tercero, App\Models\Report\ReporteTiempop;
-use View, App, Validator, DB, Log;
+use Validator, DB, Log;
 
 class TiempopController extends Controller
 {
@@ -32,8 +32,8 @@ class TiempopController extends Controller
     {
         $data = $request->all();
         $rtiempop = new ReporteTiempop;
-        if($rtiempop->isValid($data)){
-            try{
+        if ($rtiempop->isValid($data)){
+            try {
                 $chart = new \stdClass();
                 $chart->labels = [];
                 $chart->data = [];
@@ -62,7 +62,7 @@ class TiempopController extends Controller
                     $chart->data[] = $hours;
                 }
                 return response()->json(['success' => true, 'chart' => $chart]);
-            }catch(\Exception $e){
+            } catch(\Exception $e) {
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
             }
@@ -78,7 +78,7 @@ class TiempopController extends Controller
      */
     public function exportar(Request $request)
     {
-        if($request->has('type')){
+        if ($request->has('type')) {
             $data = $request->all();
             $validator = Validator::make($data, [
                 'filter_fecha_inicial' => 'required',
@@ -87,21 +87,19 @@ class TiempopController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rtiemposp')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rtiemposp')->withInput();
             }
 
             // Validar fecha inicial no puede ser mayor a la final
-            if($request->filter_fecha_final < $request->filter_fecha_inicial ){
-                return redirect('/rtiemposp')
-                    ->withErrors('La fecha final no puede ser menor a la inicial.')
-                    ->withInput();
+            if ($request->filter_fecha_final < $request->filter_fecha_inicial) {
+                session()->flash('errors', ['La fecha final no puede ser menor a la inicial.']);
+                return redirect('/rtiemposp')->withInput();
             }
 
             $data = [];
             $funcionarios = Tercero::getTechnical(explode(',', $request->filter_funcionario[0]));
-            foreach ( $funcionarios as $funcionario) {
+            foreach ($funcionarios as $funcionario) {
                 $object = new \stdClass();
                 $object->tercero = $funcionario;
 

@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Classes\Reports\Accounting\RelacionImpuestos;
 use App\Models\Accounting\Asiento2;
 use App\Models\Base\Tercero;
-use Excel, View, App, DB;
+use Excel, DB;
 
 class RelacionImpuestosController extends Controller
 {
@@ -21,7 +21,7 @@ class RelacionImpuestosController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->has('type')) {
+        if ($request->has('type')) {
             list($año, $mes, $dia) = (explode('-',$request->fecha_inicial));
             list($añoF, $mesF, $diaF) = (explode('-',$request->fecha_final));
             $fechaI = sprintf('%s-%s-%s', intval($año), intval($mes), intval($dia));
@@ -40,19 +40,24 @@ class RelacionImpuestosController extends Controller
             if ($request->has('cuenta_inicio')) {
                 $query->whereRaw("plancuentas_cuenta >= '$request->cuenta_inicio'");
             }
+
             if ($request->has('cuenta_fin')) {
                 $query->whereRaw("plancuentas_cuenta <= '$request->cuenta_fin'");
             }
-            if($request->has('filter_tercero')) {
+
+            if ($request->has('filter_tercero')) {
                 $query->where('tercero_nit', $request->filter_tercero);
             }
+
             $query->where('asiento2_base', '>', 0);
             $query->groupBy('tercero_nit','plancuentas_cuenta');
             $query->orderBy('plancuentas_cuenta', 'asc');
             $data = $query->get();
+
             // Prepare data
             $title = "Reporte relación de impuestos durante el período de $request->fecha_inicial hasta $request->fecha_final";
             $type = $request->type;
+
             // Generate file
             switch ($type) {
                 case 'xls':
@@ -69,73 +74,6 @@ class RelacionImpuestosController extends Controller
                 break;
             }
         }
-
         return view('reports.accounting.impuestos.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

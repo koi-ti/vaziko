@@ -18,7 +18,7 @@
     </section>
 
    	<script type="text/template" id="add-tiempop-tpl">
-        @if(auth()->user()->ability('admin', 'crear', ['module' => 'tiemposp']))
+        @ability ('crear' | 'tiemposp')
     	    <div id="tiempop-main" class="box box-success spinner-main">
     		 	{!! Form::open(['id' => 'form-tiempop', 'data-toggle' => 'validator']) !!}
                     <div class="box-body">
@@ -52,7 +52,7 @@
                             <label for="tiempop_actividadp" class="control-label col-md-1">Actividad</label>
                             <div class="form-group col-md-5">
                                 <select name="tiempop_actividadp" id="tiempop_actividadp" class="form-control select2-default-clear change-production-actividadp" data-wrapper=".spinner-main" data-reference="tiempop_subactividadp" required>
-                                    @foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+                                    @foreach (App\Models\Production\Actividadp::getActividadesp() as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -68,7 +68,7 @@
                             <label for="tiempop_areap" class="control-label col-md-1">Área</label>
                             <div class="form-group col-md-4">
                                 <select name="tiempop_areap" id="tiempop_areap" class="form-control select2-default-clear" required>
-                                    @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                    @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                         <option value="{{ $key }}">{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -105,7 +105,7 @@
         			</div>
                 {!! Form::close() !!}
             </div>
-        @endif
+        @endability
 
         <div class="box box-success spinner-main">
             <div class="box-header with-border">
@@ -136,13 +136,13 @@
             <td><%- tiempop_fecha %></td>
             <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
             <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-            @if (auth()->user()->ability('admin', 'editar', ['module' => 'tiemposp']))
+            @ability ('editar' | 'tiemposp')
                 <td class="text-center">
                     <a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
                         <span><i class="fa fa-pencil-square-o"></i></span>
                     </a>
                 </td>
-            @endif
+            @endability
             <td class="text-center">
                 <a class="btn btn-success btn-xs item-show" data-toggle="collapse" href="#collapse_<%- id %>">
                     <span><i class="fa fa-eye"></i></span>

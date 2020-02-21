@@ -16,6 +16,7 @@
 	<section class="content">
     	@yield('module')
     </section>
+    
     <script type="text/template" id="close-accounting-mensual-confirm-tpl">
         <p>Esta Operación afectará los saldos iniciales de los Saldos Contables. Desea Continuar?</p>
     </script>

@@ -31,12 +31,14 @@
         </div>
         <div class="box-footer with-border">
             <div class="row">
-                <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
-                    <a href=" {{ route('actividades.index')}} " class="btn btn-default btn-sm btn-block"> {{ trans('app.comeback') }}</a>
+                <div class="col-md-2 @ability ('editar' | 'actividades') col-md-offset-4 @elseability col-md-offset-5 @endability col-sm-6 col-xs-6 text-left">
+                    <a href="{{ route('actividades.index') }} " class="btn btn-default btn-sm btn-block"> {{ trans('app.comeback') }}</a>
                 </div>
-                <div class="col-md-2 col-sm-6 col-xs-6 text-right">
-                    <a href=" {{ route('actividades.edit', ['actividades' => $actividad->id])}}" class="btn btn-primary btn-sm btn-block">{{trans('app.edit')}}</a>
-                </div>
+                @ability ('editar' | 'actividades')
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                        <a href="{{ route('actividades.edit', ['actividades' => $actividad->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+                    </div>
+                @endability
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ class SubActividadpController extends Controller
              $query->join('koi_actividadp', 'subactividadp_actividadp', '=', 'koi_actividadp.id');
              return Datatables::of($query)->make(true);
          }
-         return view('production.subactividadesp.index', ['empresa' => parent::getPaginacion()]);
+         return view('production.subactividadesp.index');
      }
 
     /**

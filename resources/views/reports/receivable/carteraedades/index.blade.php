@@ -44,29 +44,10 @@
 	                    </div>
 					</div>
 				</div>
-                <div class="box-footer">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-                        </button>
-                    </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-                        </button>
-                    </div>
-                </div>
-			</form>
+                @include('partials.buttons', ['type' => 'exportar', 'module' => 'rcarteraedades'])
+            </form>
 		</div>
 
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('partials.message')
 	</section>
 @stop

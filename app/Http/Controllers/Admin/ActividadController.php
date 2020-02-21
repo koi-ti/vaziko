@@ -17,35 +17,9 @@ class ActividadController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $query = Actividad::query();
-
-            if ($request->has('datatables')) {
-                return Datatables::of($query)->make(true);
-            }
-
-            $data = [];
-            $query->select('koi_actividad.id', DB::raw("UPPER(CONCAT(actividad_codigo, ' - ', actividad_nombre)) as text"));
-            $query->orderby('actividad_codigo', 'asc');
-
-            if ($request->has('id')) {
-                $query->where('koi_actividad.id', $request->id);
-            }
-
-            if ($request->has('q')) {
-                $query->where( function($query) use($request) {
-                    $query->whereRaw("actividad_nombre like '%".$request->q."%'");
-                    $query->orWhereRaw("actividad_codigo like '%".$request->q."%'");
-                });
-            }
-
-            if (empty($request->q) && empty($request->id)) {
-                $query->take(50);
-            }
-
-            $query->orderby('actividad_nombre','asc');
-            return response()->json($query->get());
+            return Datatables::of(Actividad::query())->make(true);
         }
-        return view('admin.actividades.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.actividades.index');
     }
 
     /**

@@ -21,21 +21,27 @@
                         <a href="#" class="dropdown-toggle a-color" data-toggle="dropdown">Opciones <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li role="presentation">
-                                <a role="menuitem" tabindex="-1" href="#" class="anular-factura">
-                                    <i class="fa fa-ban"></i>Anular
-                                </a>
-                                <a role="menuitem" tabindex="-1" href="#" class="imprimir-factura">
-                                    <i class="fa fa-file-pdf-o"></i>Imprimir
-                                </a>
+                                @ability ('anular' | 'facturas')
+                                    <a role="menuitem" tabindex="-1" href="#" class="anular-factura">
+                                        <i class="fa fa-ban"></i>Anular
+                                    </a>
+                                @endability
+                                @ability ('exportar' | 'facturas')
+                                    <a role="menuitem" tabindex="-1" href="#" class="imprimir-factura">
+                                        <i class="fa fa-file-pdf-o"></i>Imprimir
+                                    </a>
+                                @endability
                             </li>
                         </ul>
                     </div>
                 @else
-                    <div class="form-group col-md-1 pull-right">
-                        <button type="button" class="btn btn-block btn-danger btn-sm imprimir-factura">
-                            <i class="fa fa-file-pdf-o"></i>
-                        </button>
-                    </div>
+                    @ability ('exportar' | 'facturas')
+                        <div class="form-group col-md-1 pull-right">
+                            <button type="button" class="btn btn-block btn-danger btn-sm imprimir-factura">
+                                <i class="fa fa-file-pdf-o"></i>
+                            </button>
+                        </div>
+                    @endability
                     <label class="label label-default pull-right">ESTADO: ANULADA</label>
                 @endif
                 <div class="row">
@@ -72,20 +78,22 @@
                         <div>{{ $factura->factura1_cuotas }}</div>
                     </div>
                 </div>
-            	<div class="row">
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Subtotal</label>
-                        <div>$ {{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Iva</label>
-                        <div>$ {{ number_format($factura->factura1_iva, '2', ',', '.') }}</div>
-                    </div>
-                    <div class="form-group col-md-3">
-                        <label class="control-label">Total</label>
-                        <div>$ {{ number_format($factura->factura1_total, '2', ',', '.') }}</div>
-                    </div>
-            	</div>
+                @ability ('precios' | 'facturas')
+                	<div class="row">
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Subtotal</label>
+                            <div>$ {{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Iva</label>
+                            <div>$ {{ number_format($factura->factura1_iva, '2', ',', '.') }}</div>
+                        </div>
+                        <div class="form-group col-md-3">
+                            <label class="control-label">Total</label>
+                            <div>$ {{ number_format($factura->factura1_total, '2', ',', '.') }}</div>
+                        </div>
+                	</div>
+                @endability
         	</div>
             <div class="box-footer with-border">
     	        <div class="row">
@@ -104,40 +112,44 @@
 	                        <tr>
 	                            <th width="10%">Codigo</th>
 	                            <th width="60%">Nombre</th>
-	                            <th width="5%">Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
-	                            <th width="15%">Valor unitario</th>
-	                            <th width="15%">Total</th>
+                                @ability ('precios' | 'facturas')
+    	                            <th width="5%">Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
+    	                            <th width="15%">Valor unitario</th>
+    	                            <th width="15%">Total</th>
+                                @endability
 	                        </tr>
 	                    </thead>
 	                    <tbody>
 	                        {{-- Render content detalle factura --}}
 	                    </tbody>
-	                    <tfoot>
-	                    	<tr>
-                                <th colspan="2" class="text-right">SUBTOTAL</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-right">IVA ({{ $factura->factura1_porcentaje_iva }}%)</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_iva, '2', ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-right">RTE FTE</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_retefuente, '2', ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-right">RTE ICA</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteica, '2', ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-right">RTE IVA</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteiva, '2', ',', '.') }}</td>
-                            </tr>
-                            <tr>
-                                <th colspan="2" class="text-right">TOTAL</th>
-                                <td colspan="3" class="text-right">{{ number_format($factura->factura1_total, '2', ',', '.') }}</td>
-                            </tr>
-	                    </tfoot>
+                        @ability ('precios' | 'facturas')
+    	                    <tfoot>
+    	                    	<tr>
+                                    <th colspan="2" class="text-right">SUBTOTAL</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_subtotal, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="text-right">IVA ({{ $factura->factura1_porcentaje_iva }}%)</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_iva, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="text-right">RTE FTE</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_retefuente, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="text-right">RTE ICA</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteica, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="text-right">RTE IVA</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_reteiva, '2', ',', '.') }}</td>
+                                </tr>
+                                <tr>
+                                    <th colspan="2" class="text-right">TOTAL</th>
+                                    <td colspan="3" class="text-right">{{ number_format($factura->factura1_total, '2', ',', '.') }}</td>
+                                </tr>
+    	                    </tfoot>
+                        @endability
 	                </table>
 	    		</div>
         	</div>
@@ -151,8 +163,10 @@
                             <tr>
                                 <th>Cuota</th>
                                 <th>Vencimiento</th>
-                                <th>Valor</th>
-                                <th>Saldo</th>
+                                @ability ('precios' | 'facturas')
+                                    <th>Valor</th>
+                                    <th>Saldo</th>
+                                @endability
                             </tr>
                         </thead>
                         <tbody>
@@ -183,8 +197,10 @@
     <script type="text/template" id="add-factura-item-tpl">
         <td><%- factura2_orden2 %></td>
         <td><%- factura2_producto_nombre %></td>
-        <td class="text-center"><%- factura2_cantidad %></td>
-        <td class="text-right"><%- window.Misc.currency(factura2_producto_valor_unitario) %></td>
-        <td class="text-right"><%- window.Misc.currency(factura2_cantidad * factura2_producto_valor_unitario) %></td>
+        @ability ('precios' | 'facturas')
+            <td class="text-center"><%- factura2_cantidad %></td>
+            <td class="text-right"><%- window.Misc.currency(factura2_producto_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency(factura2_cantidad * factura2_producto_valor_unitario) %></td>
+        @endability
     </script>
 @stop

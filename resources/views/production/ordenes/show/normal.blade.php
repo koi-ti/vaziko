@@ -4,27 +4,41 @@
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#tab_orden" data-toggle="tab">Orden</a></li>
                 <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
-                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                @ability ('tiempos' | 'ordenes')
                     <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
-                    <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
-                    <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
+                @endability
+                @ability ('graficas' | 'ordenes')
+                    <li><a href="#tab_graficas" data-toggle="tab">Gráficas de producción</a></li>
+                @endability
+                @ability ('archivos' | 'ordenes')
+                    <li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+                @endability
+                @ability ('bitacora' | 'ordenes')
                     <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
+                @endability
+                @ability ('estados' | 'ordenes')
                     @if ($orden->orden_cotizacion)
                         <li><a href="#tab_estados" data-toggle="tab">Estados</a></li>
                     @endif
-                @endif
+                @endability
                 <li class="pull-right">
                     <div class="btn-group" role="group">
-                        <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                        @if (!$orden->orden_abierta && !$orden->orden_anulada && auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
-                            <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
-                        @endif
-                        @if ($orden->orden_culminada && auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
-                            <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
-                        @endif
-                        @if (auth()->user()->ability('opcional2', 'opcional2', ['module' => 'ordenes']))
+                        @ability ('exportar' | 'ordenes')
+                            <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                        @endability
+                        @ability ('abrir' | 'ordenes')
+                            @if (!$orden->orden_abierta && !$orden->orden_anulada)
+                                <a class="btn btn-primary open-ordenp" title="Reabrir orden"><i class="fa fa-unlock"></i></a>
+                            @endif
+                        @endability
+                        @ability ('cerrar' | 'ordenes')
+                            @if ($orden->orden_culminada)
+                                <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
+                            @endif
+                        @endability
+                        @ability ('clonar' | 'ordenes')
                             <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
-                        @endif
+                        @endability
                         <a class="btn btn-primary resume-ordenp" title="Orden de producción resumida"><i class="fa fa-list"></i></a>
                     </div>
                 </li>
@@ -39,11 +53,11 @@
 									<label class="control-label">Código</label>
 									<div>
                                         {{ $orden->orden_codigo }}
-                                        @if($orden->orden_anulada)
+                                        @if ($orden->orden_anulada)
                                             <span class="label label-danger">ANULADA</span>
-                                        @elseif($orden->orden_abierta)
+                                        @elseif ($orden->orden_abierta)
                                             <span class="label label-success">ABIERTA</span>
-                                        @elseif($orden->orden_culminada)
+                                        @elseif ($orden->orden_culminada)
                                             <span class="label bg-blue">CULMINADO</span>
                                         @else
                                             <span class="label label-warning">CERRADA</span>
@@ -58,7 +72,6 @@
                                         </div>
 									</div>
                                 @endif
-
                                 @if ($orden->cotizacion_codigo)
 									<div class="form-group col-md-2">
 										<label class="control-label">Cotización</label>
@@ -67,13 +80,11 @@
                                         </div>
 									</div>
                                 @endif
-
 								<div class="form-group col-md-5">
 									<label class="control-label">Referencia</label>
 									<div>{{ $orden->orden_referencia }}</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-3">
 									<label class="control-label">F. Inicio</label>
@@ -89,7 +100,6 @@
 									<div>{{ $orden->orden_hora_entrega }}</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-9">
 									<label class="control-label">Cliente</label>
@@ -100,7 +110,6 @@
 									</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-6">
 									<label class="control-label">Contacto</label>
@@ -111,7 +120,6 @@
 									<div>{{ $orden->tcontacto_telefono }}</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-6">
 									<label class="control-label">Suministran</label>
@@ -122,23 +130,19 @@
 									<div>{{ $orden->orden_formapago }}</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-12">
 									<label class="control-label">Detalle</label>
 									<div>{{ $orden->orden_observaciones }}</div>
 								</div>
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-12">
 									<label class="control-label">Terminado</label>
 									<div>{{ $orden->orden_terminado }}</div>
 								</div>
-
                                 <input type="hidden" id="orden_iva" value="{{ $orden->orden_iva }}">
 							</div>
-
 							<div class="row">
 								<div class="form-group col-md-3">
 									<label class="control-label">F. Recogida #1</label>
@@ -157,7 +161,6 @@
                                     <div>{!! $orden->orden_hora_recogida2 ?: '-' !!}</div>
                                 </div>
 							</div>
-
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label class="control-label">Vendedor</label>
@@ -167,7 +170,6 @@
                                     </div>
                                 </div>
                             </div>
-
 							<div class="row">
 								<div class="form-group col-md-2">
 									<label class="control-label">Usuario elaboro</label>
@@ -182,17 +184,18 @@
 								</div>
 							</div>
                         </div>
-
 						<div class="box-footer with-border">
 							<div class="row">
                                 <div class="col-md-2 col-md-offset-{{ $orden->orden_abierta ? '4' : '5' }} col-sm-6 col-xs-6">
                                     <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                                 </div>
-                                @if ($orden->orden_abierta)
-                                    <div class="col-md-2 col-sm-6 col-xs-6">
-                                        <a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-                                    </div>
-                                @endif
+                                @ability ('editar' | 'ordenes')
+                                    @if ($orden->orden_abierta)
+                                        <div class="col-md-2 col-sm-6 col-xs-6">
+                                            <a href="{{ route('ordenes.edit', ['ordenes' => $orden->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+                                        </div>
+                                    @endif
+                                @endability
                             </div>
                         </div>
                     </div>
@@ -209,10 +212,10 @@
                                                 <th width="65%">Nombre</th>
                                                 <th width="10%">Cantidad</th>
                                                 <th width="10%">Facturado</th>
-                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                                                @ability ('precios' | 'ordenes')
                                                     <th width="10%">Precio</th>
                                                     <th width="10%">Total</th>
-                                                @endif
+                                                @endability
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -223,12 +226,12 @@
                                                 <td></td>
                                                 <th class="text-right">Subtotal</th>
                                                 <td class="text-center" id="subtotal-cantidad">0</td>
-                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                                                @ability ('precios' | 'ordenes')
                                                     <td colspan="2"></td>
                                                     <td class="text-right" id="subtotal-total">0</td>
-                                                @endif
+                                                @endability
                                             </tr>
-                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                                            @ability ('precios' | 'ordenes')
                                                 <tr>
                                                     <td></td>
                                                     <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
@@ -239,7 +242,7 @@
                                                     <th class="text-right">Total</th>
                                                     <td colspan="4" class="text-right" id="total-total">0</td>
                                                 </tr>
-                                            @endif
+                                            @endability
                                         </tfoot>
                                     </table>
                                 </div>
@@ -271,8 +274,7 @@
                         </div>
                     </div>
                 </div>
-
-                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                @ability ('tiempos' | 'ordenes')
                     <div class="tab-pane" id="tab_tiemposp">
                         <div class="box box-whithout-border">
                             <div class="box-body table-responsive no-padding">
@@ -296,12 +298,14 @@
                             </div>
                         </div>
                     </div>
-
-                    <div class="tab-pane" id="tab_charts">
+                @endability
+                @ability ('graficas' | 'ordenes')
+                    <div class="tab-pane" id="tab_graficas">
                         @include('production.ordenes.charts.charts')
                     </div>
-
-                    <div class="tab-pane" id="tab_files">
+                @endability
+                @ability ('archivos' | 'ordenes')
+                    <div class="tab-pane" id="tab_archivos">
                         <div class="row">
                             <div class="form-group col-md-12">
                                 <textarea name="orden_observaciones_archivo" rows="25" class="form-control" placeholder="Observaciones.." disabled>{{ $orden->orden_observaciones_archivo }}</textarea>
@@ -313,7 +317,8 @@
                             </div>
                         </div>
                     </div>
-
+                @endability
+                @ability ('bitacora' | 'ordenes')
                     <div class="tab-pane" id="tab_bitacora">
                         <div class="box-body">
                             <div class="row">
@@ -338,6 +343,8 @@
                             </div>
                         </div>
                     </div>
+                @endability
+                @ability ('estados' | 'ordenes')
                     @if ($orden->orden_cotizacion)
                         <div class="tab-pane" id="tab_estados">
                             <div class="box-body">
@@ -362,7 +369,7 @@
                             </div>
                         </div>
                     @endif
-                @endif
+                @endability
            	</div>
     	</div>
     </div>

@@ -6,11 +6,11 @@
                     <label class="control-label">Código</label>
                     <div>
                         {{ $orden->orden_codigo }}
-                        @if($orden->orden_anulada)
+                        @if ($orden->orden_anulada)
                             <span class="label label-danger">ANULADA</span>
-                        @elseif($orden->orden_abierta)
+                        @elseif ($orden->orden_abierta)
                             <span class="label label-success">ABIERTA</span>
-                        @elseif($orden->orden_culminada)
+                        @elseif ($orden->orden_culminada)
                             <span class="label bg-blue">CULMINADO</span>
                         @else
                             <span class="label label-warning">CERRADA</span>

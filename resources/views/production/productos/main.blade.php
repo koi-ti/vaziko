@@ -13,10 +13,10 @@
             <ol class="breadcrumb">
                 <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
                 <li><a href="{{ route('productosp.index')}}">Producto</a></li>
-                <% if( !_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
+                <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                     <li><a href="<%- window.Misc.urlFull( Route.route('productosp.show', { productosp: id}) ) %>"><%- id %></a></li>
                     <li class="active">Editar</li>
-                <% }else{ %>
+                <% } else { %>
                     <li class="active">Nuevo</li>
                 <% } %>
             </ol>
@@ -36,7 +36,7 @@
                             <label for="productop_tipoproductop" class="col-sm-1 control-label">Tipo de producto</label>
                             <div class="form-group col-sm-5">
                                 <select id="productop_tipoproductop" name="productop_tipoproductop" class="form-control select2-default-clear change-production-tipoproductop" data-reference="productop_subtipoproductop" data-wrapper=".spinner-main" equired>
-                                    @foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                    @foreach (App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_tipoproductop == '{{ $key }}' ? 'selected': '' %>>{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -63,7 +63,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_ancho_med" id="productop_ancho_med" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_ancho_med == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -72,7 +72,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_alto_med" id="productop_alto_med" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_alto_med == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -87,7 +87,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_c_med_ancho" id="productop_c_med_ancho" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_c_med_ancho == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -96,7 +96,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_c_med_alto" id="productop_c_med_alto" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_c_med_alto == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -111,7 +111,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_3d_ancho_med" id="productop_3d_ancho_med" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_3d_ancho_med == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -120,7 +120,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_3d_alto_med" id="productop_3d_alto_med" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_3d_alto_med == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -129,7 +129,7 @@
                             <div class="form-group col-md-2">
                                 <select name="productop_3d_profundidad_med" id="productop_3d_profundidad_med" class="form-control">
                                     <option value="" selected>Seleccione</option>
-                                    @foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+                                    @foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
                                         <option value="{{ $key }}" <%- productop_3d_profundidad_med == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                     @endforeach
                                 </select>
@@ -168,7 +168,9 @@
                             <li><a href="#tab_maquinas" data-toggle="tab">Máquinas</a></li>
                             <li><a href="#tab_materiales" data-toggle="tab">Materiales</a></li>
                             <li><a href="#tab_acabados" data-toggle="tab">Acabados</a></li>
-                            <li><a href="#tab_imagenes" data-toggle="tab">Imágenes</a></li>
+                            @ability ('archivos' | 'productosp')
+                                <li><a href="#tab_imagenes" data-toggle="tab">Imágenes</a></li>
+                            @endability
                         </ul>
                         <div class="tab-content">
                             <div class="tab-pane active" id="tab_areas">
@@ -179,7 +181,7 @@
                                                 <label for="productop3_areap" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Área</label>
                                                 <div class="form-group col-sm-7 col-xs-10">
                                                     <select name="productop3_areap" id="productop3_areap" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Production\Areap::getAreas() as $key => $value)
+                                                        @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                             <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -253,7 +255,7 @@
                                                 <label for="productop4_maquinap" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Máquina</label>
                                                 <div class="form-group col-sm-7 col-xs-10">
                                                     <select name="productop4_maquinap" id="productop4_maquinap" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Production\Maquinap::getMaquinas() as $key => $value)
+                                                        @foreach (App\Models\Production\Maquinap::getMaquinas() as $key => $value)
                                                             <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -296,7 +298,7 @@
                                                 <label for="productop5_materialp" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Material</label>
                                                 <div class="form-group col-sm-7 col-xs-10">
                                                     <select name="productop5_materialp" id="productop5_materialp" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Production\Materialp::getMateriales() as $key => $value)
+                                                        @foreach (App\Models\Production\Materialp::getMateriales() as $key => $value)
                                                             <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -339,7 +341,7 @@
                                                 <label for="productop6_acabadop" class="control-label col-sm-1 col-sm-offset-1 hidden-xs">Acabado</label>
                                                 <div class="form-group col-sm-7 col-xs-10">
                                                     <select name="productop6_acabadop" id="productop6_acabadop" class="form-control select2-default" required>
-                                                        @foreach( App\Models\Production\Acabadop::getAcabados() as $key => $value)
+                                                        @foreach (App\Models\Production\Acabadop::getAcabados() as $key => $value)
                                                             <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
@@ -374,17 +376,19 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane" id="tab_imagenes">
-                                <div class="box box-solid">
-                                    <div class="box-body">
-                                        <div class="row">
-                                            <div class="form-group col-sm-12">
-                                                <div class="fine-uploader"></div>
+                            @ability ('archivos' | 'productosp')
+                                <div class="tab-pane" id="tab_imagenes">
+                                    <div class="box box-solid">
+                                        <div class="box-body">
+                                            <div class="row">
+                                                <div class="form-group col-sm-12">
+                                                    <div class="fine-uploader"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endability
                         </div>
                     </div>
                 </div>
@@ -458,7 +462,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-            @if (auth()->user()->ability('admin', ['create', 'edit'], ['module' => 'productosp']))
+            @ability ('archivos' | 'productosp')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -468,7 +472,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -482,9 +486,9 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if (auth()->user()->ability('admin', ['create', 'edit'], ['module' => 'productosp']))
+                    @ability ('archivos' | 'productosp')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>

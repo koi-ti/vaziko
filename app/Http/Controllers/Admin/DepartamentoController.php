@@ -19,7 +19,7 @@ class DepartamentoController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Departamento::query())->make(true);
         }
-        return view('admin.departamentos.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.departamentos.index');
     }
 
     /**

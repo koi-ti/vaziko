@@ -27,9 +27,8 @@ class BalancePruebaController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rbalanceprueba')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rbalanceprueba')->withInput();
             }
 
             // Reference var
@@ -39,10 +38,10 @@ class BalancePruebaController extends Controller
             // Saldos iniciales
             $saldos = [];
         	while (true) {
-    			if($xmes == 1) {
+    			if ($xmes == 1) {
     				$xmes2 = 13;
     				$xano2 = $xano - 1;
-    			}else{
+    			} else {
     				$xmes2 = $xmes - 1;
     				$xano2 = $xano;
     			}
@@ -74,14 +73,14 @@ class BalancePruebaController extends Controller
                 //  Transaction querie
                 $saldos[] = DB::select($sql);
 
-    			if($xmes == $request->filter_end_month && $xano == $request->filter_end_year) {
+    			if ($xmes == $request->filter_end_month && $xano == $request->filter_end_year) {
     				break;
     			}
 
-    			if($xmes == 13) {
+    			if ($xmes == 13) {
     				$xmes = 1;
     				$xano++;
-    			}else{
+    			} else {
     				$xmes++;
     			}
     		}

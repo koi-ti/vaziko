@@ -27,16 +27,14 @@ class ResumenTiempopController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/rresumentiemposp')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/rresumentiemposp')->withInput();
             }
 
             // Validar fecha inicial no puede ser mayor a la final
-            if($request->fecha_final < $request->fecha_inicial ){
-                return redirect('/rresumentiemposp')
-                    ->withErrors('La fecha final no puede ser menor a la inicial.')
-                    ->withInput();
+            if ($request->fecha_final < $request->fecha_inicial ) {
+                session()->flash('errors', ['La fecha final no puede ser menor a la inicial.']);
+                return redirect('/rresumentiemposp')->withInput();
             }
 
             // Recuperar terceros
@@ -87,71 +85,5 @@ class ResumenTiempopController extends Controller
             }
         }
         return view('reports.production.resumentiemposp.index');
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

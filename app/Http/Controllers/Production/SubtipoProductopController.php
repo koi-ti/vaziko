@@ -22,7 +22,7 @@ class SubtipoProductopController extends Controller
              $query->select('koi_subtipoproductop.*', 'tipoproductop_nombre');
              return Datatables::of($query)->make(true);
          }
-         return view('production.subtipoproductosp.index', ['empresa' => parent::getPaginacion()]);
+         return view('production.subtipoproductosp.index');
      }
 
     /**

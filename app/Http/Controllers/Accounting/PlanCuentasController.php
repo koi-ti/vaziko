@@ -40,7 +40,7 @@ class PlanCuentasController extends Controller
                 })
                 ->make(true);
         }
-        return view('accounting.plancuentas.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.plancuentas.index');
     }
 
     /**

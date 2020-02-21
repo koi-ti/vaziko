@@ -19,7 +19,7 @@ class RolController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Rol::query())->make(true);
         }
-        return view('admin.roles.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.roles.index');
     }
 
     /**
@@ -48,6 +48,14 @@ class RolController extends Controller
                 try {
                     // roles
                     $rol->fill($data);
+
+                    // Validate if exists unique key
+                    $validateUniqueName = Rol::where('name', $rol->name)->first();
+                    if ($validateUniqueName instanceof Rol) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'El rol ya se encuentra registrado.']);
+                    }
+
                     $rol->save();
 
                     // Commit Transaction
@@ -112,12 +120,6 @@ class RolController extends Controller
             if ($rol->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    $valRol = Rol::where('name', $request->name)->first();
-                    if (!$valRol instanceof Rol) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar Key, por favor verifique la información o consulte al administrador.']);
-                    }
-
                     // rol
                     $rol->fill($data);
                     $rol->save();

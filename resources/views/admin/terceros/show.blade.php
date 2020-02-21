@@ -35,7 +35,7 @@
 				</div>
 
 				<div class="row">
-					@if($tercero->tercero_persona == 'J')
+					@if ($tercero->tercero_persona == 'J')
 						<div class="form-group col-md-12">
 							<label class="control-label">Razón Social o Comercial</label>
 							<div>{{ $tercero->tercero_razonsocial }}</div>
@@ -150,12 +150,14 @@
 					</div>
 				</div>
 				<div class="row">
-					<div class="col-md-offset-4 col-md-2 col-sm-6 col-xs-6">
+					<div class="col-md-2 @ability ('editar' | 'terceros') col-md-offset-4 @elseability col-md-offset-5 @endability col-sm-6 col-xs-6 text-left">
 						<a href="{{ route('terceros.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
 					</div>
-					<div class="col-md-2 col-sm-6 col-xs-6">
-						<a href="{{ route('terceros.edit', ['terceros' => $tercero->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
-					</div>
+					@ability ('editar' | 'terceros')
+						<div class="col-md-2 col-sm-6 col-xs-6">
+							<a href="{{ route('terceros.edit', ['terceros' => $tercero->id]) }}" class="btn btn-primary btn-sm btn-block">{{ trans('app.edit') }}</a>
+						</div>
+					@endability
 				</div>
 			</div>
 		</div>
@@ -168,7 +170,9 @@
 					<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
 					<li><a href="#tab_proveedor" data-toggle="tab">Proveedor</a></li>
 					<li><a href="#tab_cartera" data-toggle="tab">Cartera</a></li>
-					<li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+					@ability ('archivos' | 'terceros')
+						<li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+					@endability
 				</ul>
 				<div class="tab-content">
 					{{-- Tab contabilidad --}}
@@ -463,11 +467,11 @@
 							</div>
 						</div>
 					</div>
-
-					{{-- Tab cartera --}}
-					<div class="tab-pane" id="tab_archivos">
-						<div class="fine-uploader"></div>
-					</div>
+					@ability ('archivos' | 'terceros')
+						<div class="tab-pane" id="tab_archivos">
+							<div class="fine-uploader"></div>
+						</div>
+					@endability
 				</div>
 			</div>
 		</div>

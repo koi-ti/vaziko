@@ -19,7 +19,7 @@ class FolderController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Folder::query())->make(true);
         }
-        return view('accounting.folders.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.folders.index');
     }
 
     /**

@@ -8,7 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use App\Classes\Reports\Accounting\LibroMayor;
-use View, App, Excel, DB;
+use Excel, DB;
 
 class LibroMayorController extends Controller
 {
@@ -20,12 +20,11 @@ class LibroMayorController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
-
             // Reference var
             $mes = $request->filter_month;
             $ano = $request->filter_year;
 
-            if($mes == 1){
+            if ($mes == 1){
             	$mes2 = 13;
                 $ano2 = $ano-1;
             }else{

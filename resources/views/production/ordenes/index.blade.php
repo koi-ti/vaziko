@@ -31,7 +31,6 @@
                                 <option value="T" {{ session('searchordenp_ordenp_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
                             </select>
                         </div>
-
                         <label for="searchordenp_tercero" class="col-sm-1 control-label">Tercero</label>
                         <div class="col-sm-2">
                             <div class="input-group input-group-sm">
@@ -57,7 +56,7 @@
                         <label for="searchordenp_ordenp_productop" class="col-md-1 control-label">Producto</label>
                         <div class="col-md-5">
                             <select name="searchordenp_ordenp_productop" id="searchordenp_ordenp_productop" class="form-control select2-default-clear">
-                                @foreach( App\Models\Production\Productop::getProductos() as $key => $value)
+                                @foreach (App\Models\Production\Productop::getProductos() as $key => $value)
                                     <option value="{{ $key }}" {{ session('searchordenp_ordenp_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
                                 @endforeach
                             </select>
@@ -65,22 +64,24 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-2 col-xs-12">
+                        <div class="@ability ('crear' | 'ordenes') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-12">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
                         <div class="col-md-2 col-xs-12">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
-                        <div class="col-md-2 col-xs-12">
-                            <a href="{{ route('ordenes.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nueva orden
-                            </a>
-                        </div>
+                        @ability ('crear' | 'ordenes')
+                            <div class="col-md-2 col-xs-12">
+                                <a href="{{ route('ordenes.create') }}" class="btn btn-default btn-block btn-sm">
+                                    <i class="fa fa-plus"></i> Nueva orden
+                                </a>
+                            </div>
+                        @endability
                     </div>
                 {!! Form::close() !!}
 
                 <div class="box-body table-responsive">
-                    <table id="ordenes-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+                    <table id="ordenes-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
                         <thead>
                             <tr>
                                 <th>Código</th>

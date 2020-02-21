@@ -122,14 +122,16 @@
                         <input type="checkbox" disabled {{ $producto->producto_empaque ? 'checked': '' }}>
                     </div>
                 </div>
-                <div class="form-group col-md-2">
-                    <label class="control-label">Precio</label>
-                    <div>{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
-                </div>
-                <div class="form-group col-md-2">
-                    <label class="control-label">Costo promedio</label>
-                    <div>{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
-                </div>
+                @ability ('precios' | 'productos')
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Precio</label>
+                        <div>{{ number_format($producto->producto_precio, 2, '.', ',') }}</div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        <label class="control-label">Costo promedio</label>
+                        <div>{{ number_format($producto->producto_costo, 2, '.', ',') }}</div>
+                    </div>
+                @endability
             </div>
         </div>
         <div class="box-footer">
@@ -137,11 +139,13 @@
                 <div class="col-md-2 {{ $producto->id == $producto->producto_referencia ? 'col-md-offset-4' : 'col-md-offset-5'}} col-sm-6 col-xs-6 text-left">
                     <a href=" {{ route('productos.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                 </div>
-                <div class="col-md-2 col-sm-6 col-xs-6 text-right">
-                    @if ($producto->id == $producto->producto_referencia)
-                        <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
-                    @endif
-                </div>
+                @ability ('editar' | 'productos')
+                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                        @if ($producto->id == $producto->producto_referencia)
+                            <a href="{{ route('productos.edit', ['productos' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                        @endif
+                    </div>
+                @endability
             </div>
         </div>
     </div>
@@ -157,62 +161,63 @@
                         <table class="table table-striped table-condensed table-bordered" cellspacing="0">
                             <tbody>
                                 <!-- Producto metrado -->
-                                @if( $producto->producto_metrado )
-                                <tr>
-                                    <th>Sucursal</th>
-                                    <th>Disponible (Mts)</th>
-                                </tr>
+                                @if ($producto->producto_metrado)
+                                    <tr>
+                                        <th>Sucursal</th>
+                                        <th>Disponible (Mts)</th>
+                                    </tr>
 
-                                @if( $available->isEmpty() )
-                                <tr>
-                                    <th colspan="2" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
-                                </tr>
-                                @else
-                                @foreach( $available as $item)
-                                <tr>
-                                    <td>{{ $item->sucursal_nombre }}</td>
-                                    <td><a href="#" class="get-info-availability" title="Ver rollos" data-action="rollos" data-sucursal="{{ $item->sucursal }}" >{{ $item->disponible }}</a></td>
-                                </tr>
-                                @endforeach
-                                @endif
-                                @else
-                                <tr>
-                                    <th width="60%">Sucursal</th>
-                                    <th width="20%">Disponible</th>
-                                    <th width="20%">Reservadas</th>
-                                </tr>
-
-                                @if( $available->isEmpty() )
-                                <tr>
-                                    <th colspan="3" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
-                                </tr>
-                                @else
-                                @foreach( $available as $item)
-                                <tr>
-                                    <td>{{ $item->sucursal_nombre }}</td>
-                                    <td>{{ $item->disponible }}</td>
-                                    <td>{{ $item->prodbode_reservada }}</td>
-                                </tr>
-                                @endforeach
-                                @endif
-                                <!--  Hablitar btn para ver series de productos padres -->
-                                @if( $producto->producto_serie && $producto->id == $producto->producto_referencia )
-                                <tr>
-                                    <th colspan="3" class="text-center"><a class="btn get-info-availability" data-action="series">Ver series</a></th>
-                                </tr>
-                                <table id="browse-prodbode-table" class="table table-striped table-condensed" cellspacing="0">
-                                    <thead>
+                                    @if ($available->isEmpty())
                                         <tr>
-                                            <th width="30%">Sucursal</th>
-                                            <th width="20%">Código</th>
-                                            <th width="30%">Nombre</th>
+                                            <th colspan="2" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
                                         </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{--Render series--}}
-                                    </tbody>
-                                </table>
-                                @endif
+                                    @else
+                                        @foreach( $available as $item)
+                                            <tr>
+                                                <td>{{ $item->sucursal_nombre }}</td>
+                                                <td><a href="#" class="get-info-availability" title="Ver rollos" data-action="rollos" data-sucursal="{{ $item->sucursal }}" >{{ $item->disponible }}</a></td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+                                @else
+                                    <tr>
+                                        <th width="60%">Sucursal</th>
+                                        <th width="20%">Disponible</th>
+                                        <th width="20%">Reservadas</th>
+                                    </tr>
+
+                                    @if ($available->isEmpty())
+                                        <tr>
+                                            <th colspan="3" class="text-center">NO EXISTEN UNIDADES EN INVENTARIO</th>
+                                        </tr>
+                                    @else
+                                        @foreach( $available as $item)
+                                            <tr>
+                                                <td>{{ $item->sucursal_nombre }}</td>
+                                                <td>{{ $item->disponible }}</td>
+                                                <td>{{ $item->prodbode_reservada }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @endif
+
+                                    <!--  Hablitar btn para ver series de productos padres -->
+                                    @if ($producto->producto_serie && $producto->id == $producto->producto_referencia)
+                                        <tr>
+                                            <th colspan="3" class="text-center"><a class="btn get-info-availability" data-action="series">Ver series</a></th>
+                                        </tr>
+                                        <table id="browse-prodbode-table" class="table table-striped table-condensed" cellspacing="0">
+                                            <thead>
+                                                <tr>
+                                                    <th width="30%">Sucursal</th>
+                                                    <th width="20%">Código</th>
+                                                    <th width="30%">Nombre</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {{--Render series--}}
+                                            </tbody>
+                                        </table>
+                                    @endif
                                 @endif
                             </tbody>
                         </table>

@@ -22,7 +22,7 @@ class MaterialespController extends Controller
             $query->leftJoin('koi_tipomaterial', 'materialp_tipomaterial', '=', 'koi_tipomaterial.id');
             return Datatables::of($query)->make(true);
         }
-        return view('production.materiales.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.materiales.index');
     }
 
     /**

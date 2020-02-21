@@ -19,7 +19,7 @@ class PlanCuentasNifController extends Controller
         if ($request->ajax()) {
             $query = PlanCuentaNif::query();
             $query->select('id', 'plancuentasn_cuenta', 'plancuentasn_nivel', 'plancuentasn_nombre', 'plancuentasn_naturaleza', 'plancuentasn_tercero', 'plancuentasn_tasa', 'plancuentasn_centro', 'plancuentasn_tipo');
-            
+
             // Persistent data filter
             if($request->has('persistent') && $request->persistent) {
                 session(['search_plancuentasn_cuenta' => $request->has('plancuentasn_cuenta') ? $request->plancuentasn_cuenta : '']);
@@ -39,7 +39,7 @@ class PlanCuentasNifController extends Controller
                 })
                 ->make(true);
         }
-        return view('accounting.plancuentasnif.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.plancuentasnif.index');
     }
 
     /**

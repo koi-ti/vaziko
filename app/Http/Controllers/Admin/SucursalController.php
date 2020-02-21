@@ -21,7 +21,7 @@ class SucursalController extends Controller
             $query->select('koi_sucursal.id as id', 'sucursal_nombre');
             return Datatables::of($query)->make(true);
         }
-        return view('admin.sucursal.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.sucursal.index');
     }
 
     /**

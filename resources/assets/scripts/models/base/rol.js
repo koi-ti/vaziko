@@ -16,7 +16,6 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'name': '',
             'display_name': '',
             'description': '',
             'permissions': []

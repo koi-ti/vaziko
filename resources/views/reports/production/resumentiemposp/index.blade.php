@@ -66,25 +66,19 @@
 
                     <div id="render-funcionarios"></div>
 
-					<div class="row">
-						<div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-block btn-danger white btn-sm btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> Generar pdf
-							</button>
-						</div>
-					</div>
+                    @ability ('exportar' | 'rresumentiemposp')
+    					<div class="row">
+    						<div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
+    							<button type="submit" class="btn btn-block btn-danger white btn-sm btn-export-pdf-koi-component">
+    								<i class="fa fa-file-pdf-o"></i> Generar pdf
+    							</button>
+    						</div>
+    					</div>
+                    @endability
 				</div>
 			</form>
 		</div>
 
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+        @include('partials.message')
 	</section>
 @stop

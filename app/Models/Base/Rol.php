@@ -29,20 +29,13 @@ class Rol extends EntrustRole
      * @var array
      */
     protected $fillable = [
-        'name', 'display_name', 'description'
+        'display_name', 'description'
     ];
 
     public function isValid($data) {
         $rules = [
-            'name' => 'alpha|unique:koi_rol',
             'display_name' => 'required',
         ];
-
-        if ($this->exists) {
-            $rules['name'] .= ',name,' . $this->id;
-        } else {
-            $rules['name'] .= '|required';
-        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
@@ -50,6 +43,14 @@ class Rol extends EntrustRole
         }
         $this->errors = $validator->errors();
         return false;
+    }
+
+    public function setDisplayNameAttribute ($value) {
+        $this->attributes['display_name'] = $value;
+
+        if (!$this->exists) {
+            $this->attributes['name'] = strtolower(str_slug(preg_replace('/\d+/u', '', $value), ''));
+        }
     }
 
     public static function getRoles() {

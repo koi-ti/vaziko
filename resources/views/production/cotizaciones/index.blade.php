@@ -20,7 +20,6 @@
                         <div class="col-md-2">
                             <input id="searchcotizacion_numero" placeholder="Código" class="form-control input-sm" name="searchcotizacion_numero" type="text" maxlength="15" value="{{ session('searchcotizacion_numero') }}">
                         </div>
-
                         <label for="searchcotizacion_estado" class="col-md-1 control-label">Estado</label>
                         <div class="col-md-2">
                             <select name="searchcotizacion_estado" id="searchcotizacion_estado" class="form-control">
@@ -32,7 +31,6 @@
                                 @endforeach
                             </select>
                         </div>
-
                         <label for="searchcotizacion_tercero" class="col-sm-1 control-label">Tercero</label>
                         <div class="col-sm-2">
                             <div class="input-group input-group-sm">
@@ -48,13 +46,11 @@
                             <input id="searchcotizacion_tercero_nombre" name="searchcotizacion_tercero_nombre" placeholder="Tercero beneficiario" class="form-control input-sm" type="text" maxlength="15" readonly value="{{ session('searchcotizacion_tercero_nombre') }}">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="searchcotizacion_referencia" class="col-md-1 control-label">Referencia</label>
                         <div class="col-md-5">
                             <input id="searchcotizacion_referencia" placeholder="Referencia" class="form-control input-sm input-toupper" name="searchcotizacion_referencia" type="text" maxlength="200" value="{{ session('searchcotizacion_referencia') }}">
                         </div>
-
                         <label for="searchcotizacion_productop" class="col-md-1 control-label">Producto</label>
                         <div class="col-md-5">
                             <select name="searchcotizacion_productop" id="searchcotizacion_productop" class="form-control select2-default-clear">
@@ -64,24 +60,25 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-2 col-xs-12">
+                        <div class="@ability ('crear' | 'cotizaciones') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-12">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
                         <div class="col-md-2 col-xs-12">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
-                        <div class="col-md-2 col-xs-12">
-                            <a href="{{ route('cotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nueva cotización
-                            </a>
-                        </div>
+                        @ability ('crear' | 'cotizaciones')
+                            <div class="col-md-2 col-xs-12">
+                                <a href="{{ route('cotizaciones.create') }}" class="btn btn-default btn-block btn-sm">
+                                    <i class="fa fa-plus"></i> Nueva cotización
+                                </a>
+                            </div>
+                        @endability
                     </div>
                 {!! Form::close() !!}
 
                 <div class="box-body table-responsive">
-                    <table id="cotizaciones-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+                    <table id="cotizaciones-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
                         <thead>
                             <tr>
                                 <th>Código</th>

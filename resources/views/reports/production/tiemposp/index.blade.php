@@ -77,16 +77,20 @@
                     <div id="render-funcionarios"></div>
 
 					<div class="row">
-						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-block btn-danger white btn-sm btn-export-pdf-koi-component">
-								<i class="fa fa-file-pdf-o"></i> Generar pdf
-							</button>
-						</div>
-						<div class="col-md-2 col-sm-6 col-xs-6">
-							<button type="submit" class="btn btn-primary btn-sm btn-block btn-export-chart-koi-component">
-                                <i class="fa fa-pie-chart"></i> Generar gráfica
-							</button>
-						</div>
+                        @ability ('exportar' | 'rtiemposp')
+    						<div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
+    							<button type="submit" class="btn btn-block btn-danger white btn-sm btn-export-pdf-koi-component">
+    								<i class="fa fa-file-pdf-o"></i> Generar pdf
+    							</button>
+    						</div>
+                        @endability
+                        @ability ('graficas' | 'rtiemposp')
+    						<div class="col-md-2 col-sm-6 col-xs-6">
+    							<button type="submit" class="btn btn-primary btn-sm btn-block btn-export-chart-koi-component">
+                                    <i class="fa fa-pie-chart"></i> Generar gráfica
+    							</button>
+    						</div>
+                        @endability
 					</div>
 				</div>
 			</form>

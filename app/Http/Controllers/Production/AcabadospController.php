@@ -19,7 +19,7 @@ class AcabadospController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Acabadop::query())->make(true);
         }
-        return view('production.acabados.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.acabados.index');
     }
 
     /**

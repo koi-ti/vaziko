@@ -118,7 +118,7 @@ class Cotizacion1Controller extends Controller
                 })
                 ->make(true);
         }
-        return view('production.cotizaciones.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.cotizaciones.index');
     }
 
     /**

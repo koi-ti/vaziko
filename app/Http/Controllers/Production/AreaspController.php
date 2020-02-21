@@ -19,7 +19,7 @@ class AreaspController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Areap::query())->make(true);
         }
-        return view('production.areas.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.areas.index');
     }
 
     /**

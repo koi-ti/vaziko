@@ -19,7 +19,7 @@ class TipoMaterialespController extends Controller
         if ($request->ajax()) {
             return Datatables::of(TipoMaterialp::query())->make(true);
         }
-        return view('production.tipomaterialesp.index', ['empresa' => parent::getPaginacion()]);
+        return view('production.tipomaterialesp.index');
     }
 
     /**

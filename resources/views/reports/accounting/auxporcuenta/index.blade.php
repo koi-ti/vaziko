@@ -39,7 +39,7 @@
 						<div class="form-group col-md-offset-4 col-sm-offset-4 col-xs-6 col-sm-3 col-md-2">
 							<label for="mes" class="control-label">Mes</label>
 							<select name="mes" id="mes" class="form-control" required>
-								@foreach( config('koi.meses') as $key => $value)
+								@foreach (config('koi.meses') as $key => $value)
 									<option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
 								@endforeach
 								<!-- <option value="13">Trece</option> -->
@@ -49,35 +49,17 @@
 						<div class="form-group col-xs-6 col-sm-3 col-md-2">
 							<label for="ano" class="control-label">Año</label>
 							<select name="ano" id="ano" class="form-control" required>
-								@for($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+								@for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
 									<option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
 								@endfor
 							</select>
 						</div>
 					</div>
 				</div>
-                <div class="box-footer">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-xls-koi-component">
-                            <i class="fa fa-file-text-o"></i> {{ trans('app.xls') }}
-                        </button>
-                    </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6">
-                        <button type="submit" class="btn btn-default btn-sm btn-block btn-export-pdf-koi-component">
-                            <i class="fa fa-file-pdf-o"></i> {{ trans('app.pdf') }}
-                        </button>
-                    </div>
-                </div>
+                @include('partials.buttons', ['type' => 'exportar', 'module' => 'rauxporcuenta'])
 			</form>
-            @if (count($errors) > 0)
-                <div class="alert alert-danger">
-                    <ul>
-                        @foreach ($errors->all() as $error)
-                            <li>{{ $error }}</li>
-                        @endforeach
-                    </ul>
-                </div>
-            @endif
 		</div>
+
+        @include('partials.message')
 	</section>
 @stop

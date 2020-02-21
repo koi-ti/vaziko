@@ -36,6 +36,8 @@ Route::group(['middleware' => 'auth'], function () {
 	|-------------------------
 	*/
 	Route::group(['prefix' => 'search'], function () {
+		Route::get('actividades', ['as' => 'search.actividades', 'uses' => 'Admin\BuscadorController@actividades']);
+		Route::get('municipios', ['as' => 'search.municipios', 'uses' => 'Admin\BuscadorController@municipios']);
 		Route::get('terceros', ['as' => 'search.terceros', 'uses' => 'Admin\BuscadorController@terceros']);
 		Route::get('contactos', ['as' => 'search.contactos', 'uses' => 'Admin\BuscadorController@contactos']);
 		Route::get('cuentas', ['as' => 'search.cuentas', 'uses' => 'Admin\BuscadorController@cuentas']);
@@ -125,7 +127,6 @@ Route::group(['middleware' => 'auth'], function () {
 		});
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
-	Route::resource('reglasasientos', 'Accounting\ReglaAsientoController', ['only' => ['index', 'store']]);
 	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['except' => ['destroy']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['except' => ['destroy']]);
    	Route::resource('folders', 'Accounting\FolderController', ['except' => ['destroy']]);
@@ -304,7 +305,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('rauxcuentabeneficiario', 'Report\AuxCuentaBeneficiarioController', ['only' => ['index']]);
 	Route::resource('rauxbeneficiariocuenta', 'Report\AuxBeneficiarioCuentaController', ['only' => ['index']]);
 	Route::resource('rauxporcuenta', 'Report\AuxPorCuentaController', ['only' => ['index']]);
-	Route::resource('rbalancecomparativo', 'Report\BalanceComparativoController', ['only' => ['index']]);
 	Route::resource('rbalanceprueba', 'Report\BalancePruebaController', ['only' => ['index']]);
 	Route::resource('restadoresultado', 'Report\EstadoResultadoController', ['only' => ['index']]);
 	Route::resource('rcarteraedades', 'Report\CarteraEdadesController', ['only' => ['index']]);

@@ -9,8 +9,7 @@ use App\Http\Controllers\Controller;
 
 use App\Classes\Reports\Accounting\LibroDiario;
 use App\Models\Accounting\Asiento;
-
-use View, App, Excel, Validator, DB;
+use Excel, Validator, DB;
 
 class LibroDiarioController extends Controller
 {
@@ -22,7 +21,6 @@ class LibroDiarioController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
-
             $startDate = strtotime($request->filter_fecha_inicial);
             $endDate = strtotime($request->filter_fecha_final);
 
@@ -30,7 +28,7 @@ class LibroDiarioController extends Controller
             while ($startDate <= $endDate) {
                 // Reference variables
                 $date = date('Y-m-d', $startDate);
-                list( $year, $month, $day ) = explode('-', $date);
+                list($year, $month, $day) = explode('-', $date);
 
                 // Querie in asiento
                 $query = Asiento::query();

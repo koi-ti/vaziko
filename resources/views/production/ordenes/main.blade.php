@@ -30,25 +30,37 @@
                         <% if (!_.isUndefined(edit) && !_.isNull(edit) && edit) { %>
                             <li><a href="#tab_despachos" data-toggle="tab">Distribución por clientes</a></li>
                             <li><a href="#tab_contabilidad" data-toggle="tab">Contabilidad</a></li>
-                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                            @ability ('tiempos' | 'ordenes')
                                 <li><a href="#tab_tiemposp" data-toggle="tab">Tiempos de producción</a></li>
-                                <li><a href="#tab_charts" data-toggle="tab">Gráficas de producción</a></li>
-                                <li><a href="#tab_files" data-toggle="tab">Archivos</a></li>
+                            @endability
+                            @ability ('graficas' | 'ordenes')
+                                <li><a href="#tab_graficas" data-toggle="tab">Gráficas de producción</a></li>
+                            @endability
+                            @ability ('archivos' | 'ordenes')
+                                <li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+                            @endability
+                            @ability ('bitacora' | 'ordenes')
                                 <li><a href="#tab_bitacora" data-toggle="tab">Bitácora</a></li>
+                            @endability
+                            @ability ('estados' | 'ordenes')
                                 <% if (orden_cotizacion) { %>
                                     <li><a href="#tab_estados" data-toggle="tab">Estados</a></li>
                                 <% } %>
-                            @endif
+                            @endability
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
-                                    <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                                    @if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
+                                    @ability ('exportar' | 'ordenes')
+                                        <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
+                                    @endability
+                                    @ability ('cerrar' | 'ordenes')
                                         <a class="btn btn-primary close-ordenp" title="Cerrar orden"><i class="fa fa-lock"></i></a>
-                                    @endif
-                                    @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                                    @endability
+                                    @ability ('clonar' | 'ordenes')
                                         <a class="btn btn-primary clone-ordenp" title="Clonar orden"><i class="fa fa-clone"></i></a>
+                                    @endability
+                                    @ability ('culminar' | 'ordenes')
                                         <a class="btn btn-primary complete-ordenp" title="Culminar orden"><i class="fa fa-handshake-o"></i></a>
-                                    @endif
+                                    @endability
                                 </div>
                             </li>
                         <% } %>
@@ -78,7 +90,6 @@
                                                     <a href="<%- window.Misc.urlFull (Route.route('cotizaciones.show', {cotizaciones: orden_cotizacion })) %>" title="Ir a cotización"><%- cotizacion_codigo %></a>
                                                 </div>
                                             <% } %>
-
                                             <label for="orden_referencia" class="col-xs-12 col-sm-1 control-label">Referencia</label>
                                             <div class="form-group col-xs-12 col-md-5">
                                                 <input id="orden_referencia" value="<%- orden_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden_referencia" type="text" maxlength="200" required>
@@ -90,12 +101,10 @@
                                             <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_fecha_inicio" name="orden_fecha_inicio" placeholder="Fecha inicio" class="form-control input-sm datepicker" value="<%- orden_fecha_inicio %>" required>
                                             </div>
-
                                             <label for="orden_fecha_entrega" class="col-xs-12 col-sm-1 control-label">F. Entrega</label>
                                             <div class="form-group col-xs-12 col-md-2">
                                                 <input type="text" id="orden_fecha_entrega" name="orden_fecha_entrega" placeholder="Fecha entrega" class="form-control input-sm datepicker" value="<%- orden_fecha_entrega %>" required>
                                             </div>
-
                                             <label for="orden_hora_entrega" class="col-xs-12 col-sm-1 control-label">H. Entrega</label>
                                             <div class="form-group col-xs-12 col-md-2">
                                                 <div class="input-group input-group-sm clockpicker">
@@ -107,7 +116,6 @@
                                                 <div class="help-block with-errors"></div>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="orden_cliente" class="col-xs-12 col-sm-1 control-label">Cliente</label>
                                             <div class="form-group col-xs-12 col-sm-3">
@@ -129,7 +137,6 @@
                                                 </button>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="tcontacto_nombre" class="col-xs-12 col-sm-1 control-label">Contacto</label>
                                             <div class="form-group col-sm-5 col-xs-10">
@@ -148,7 +155,6 @@
                                                     <i class="fa fa-plus"></i>
                                                 </button>
                                             </div>
-
                                             <label for="tcontacto_telefono" class="col-xs-12 col-sm-1 control-label">Teléfono</label>
                                             <div class="form-group col-xs-12 col-md-3">
                                                 <div class="input-group">
@@ -159,7 +165,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="orden_suministran" class="col-xs-12 col-sm-1 control-label">Suministran</label>
                                             <div class="form-group col-xs-12 col-sm-6">
@@ -174,27 +179,24 @@
                                                 <div class="form-group col-xs-12 col-sm-1">
                                                     <select name="orden_iva" id="orden_iva" class="form-control" required>
                                                         @foreach (config('koi.contabilidad.iva') as $key => $value)
-                                                        <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                                                            <option value="{{ $key }}" <%- orden_iva == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             <% } %>
                                         </div>
-
                                         <div class="row">
                                             <label for="orden_observaciones" class="col-xs-12 col-sm-1 control-label">Detalle</label>
                                             <div class="form-group col-xs-12 col-sm-11">
                                                 <textarea id="orden_observaciones" name="orden_observaciones" class="form-control" rows="2" placeholder="Detalle"><%- orden_observaciones %></textarea>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="orden_terminado" class="col-xs-12 col-sm-1 control-label">Terminado</label>
                                             <div class="form-group col-xs-12 col-sm-11">
                                                 <textarea id="orden_terminado" name="orden_terminado" class="form-control" rows="2" placeholder="Terminado"><%- orden_terminado %></textarea>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="orden_fecha_inicio" class="col-xs-12 col-sm-1 control-label">F. Recogida #1</label>
                                             <div class="form-group col-xs-12 col-md-3">
@@ -214,7 +216,6 @@
                                                 </div>
                                                 <div class="help-block with-errors"></div>
                                             </div>
-
                                             <label for="orden_fecha_inicio" class="col-xs-12 col-sm-1 control-label">F. Recogida #2</label>
                                             <div class="form-group col-xs-12 col-md-3">
                                                 <div class="input-group input-group-sm">
@@ -326,10 +327,8 @@
                                                                 <th width="55%">Nombre</th>
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Facturado</th>
-                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                                    <th width="10%">Precio</th>
-                                                                    <th width="10%">Total</th>
-                                                                @endif
+                                                                <th width="10%">Precio</th>
+                                                                <th width="10%">Total</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -341,23 +340,19 @@
                                                                 <th class="text-right">Subtotal</th>
                                                                 <th class="text-center" id="subtotal-cantidad">0</th>
                                                                 <th class="text-center" id="subtotal-facturado">0</th>
-                                                                @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                                    <th></th>
-                                                                    <th class="text-right" id="subtotal-total">0</th>
-                                                                @endif
+                                                                <th></th>
+                                                                <th class="text-right" id="subtotal-total">0</th>
                                                             </tr>
-                                                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                                                                <tr>
-                                                                    <th colspan="3"></th>
-                                                                    <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                    <th colspan="4" class="text-right" id="iva-total">0</th>
-                                                                </tr>
-                                                                <tr>
-                                                                    <th colspan="3"></th>
-                                                                    <th class="text-right">Total</th>
-                                                                    <th colspan="4" class="text-right" id="total-total">0</th>
-                                                                </tr>
-                                                            @endif
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
+                                                                <th colspan="4" class="text-right" id="iva-total">0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Total</th>
+                                                                <th colspan="4" class="text-right" id="total-total">0</th>
+                                                            </tr>
                                                         </tfoot>
                                                     </table>
                                                 </div>
@@ -388,7 +383,6 @@
                                                                 <input id="despachop1_nombre" placeholder="Contacto" class="form-control" name="despachop1_nombre" type="text" readonly required>
                                                             </div>
                                                         </div>
-
                                                         <div class="col-sm-1 col-xs-2">
                                                             <button type="button" id="btn-add-contact" class="btn btn-default btn-flat btn-sm btn-add-resource-koi-component" data-resource="contacto" data-field="despachop1_contacto" data-name="despachop1_nombre" data-tercero="<%- orden_cliente %>" data-phone="despachop1_telefono" data-address="despachop1_direccion" data-name-nomenclatura="despachop1_nomenclatura" data-city="despachop1_municipio" data-email="despachop1_email" data-address-default="<%- tercero_direccion %>" data-address-nomenclatura-default="<%- tercero_direccion_nomenclatura %>" data-municipio-default="<%- tercero_municipio %>">
                                                                 <i class="fa fa-plus"></i>
@@ -396,7 +390,6 @@
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_telefono" class="control-label">Teléfono</label>
                                                     <div class="input-group">
@@ -407,7 +400,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div class="row">
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_direccion" class="control-label">Dirección</label>
@@ -422,23 +414,20 @@
                                                         </span>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_municipio" class="control-label">Municipio</label>
                                                     <select name="despachop1_municipio" id="despachop1_municipio" class="form-control select2-default" required>
                                                         @foreach (App\Models\Base\Municipio::getMunicipios() as $key => $value)
-                                                        <option value="{{ $key }}">{{ $value }}</option>
+                                                            <option value="{{ $key }}">{{ $value }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-
                                                 <div class="form-group col-md-4">
                                                     <label for="despachop1_email" class="control-label">Email</label>
                                                     <input id="despachop1_email" placeholder="Email" class="form-control input-sm" name="despachop1_email" type="email" maxlength="200">
                                                     <div class="help-block with-errors"></div>
                                                 </div>
                                             </div>
-
                                             <!-- table table-bordered table-striped -->
                                             <div class="box-body table-responsive no-padding">
                                                 <table id="browse-orden-despachosp-pendientes-list" class="table table-hover table-bordered" cellspacing="0">
@@ -456,7 +445,6 @@
                                                     </tbody>
                                                 </table>
                                             </div>
-
                                             <div class="row">
                                                 <div class="form-group col-md-6">
                                                     <label for="despachop1_observacion" class="control-label">Detalle</label>
@@ -467,7 +455,6 @@
                                                     <input id="despachop1_transporte" placeholder="Transporte" class="form-control input-sm input-toupper" name="despachop1_transporte" type="text" maxlength="200">
                                                 </div>
                                             </div>
-
                                             <div class="row">
                                                 <div class="col-md-2 col-md-offset-5 col-sm-6 col-xs-6">
                                                     <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
@@ -482,9 +469,7 @@
                                                     <table id="browse-orden-despachosp-list" class="table table-hover table-bordered" cellspacing="0">
                                                         <thead>
                                                             <tr>
-                                                                @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
-                                                                    <th width="5%"></th>
-                                                                @endif
+                                                                <th width="5%"></th>
                                                                 <th width="5%">Código</th>
                                                                 <th width="60%">Contacto</th>
                                                                 <th width="15%">Fecha</th>
@@ -527,7 +512,7 @@
                                 </div>
                             </div>
 
-                            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
+                            @ability ('tiempos' | 'ordenes')
                                 <div class="tab-pane" id="tab_tiemposp">
                                     <div class="box box-whithout-border">
                                         <div class="box-body table-responsive no-padding">
@@ -551,12 +536,14 @@
                                         </div>
                                     </div>
                                 </div>
-
-                                <div class="tab-pane" id="tab_charts">
+                            @endability
+                            @ability ('graficas' | 'ordenes')
+                                <div class="tab-pane" id="tab_graficas">
                                     @include('production.ordenes.charts.charts')
                                 </div>
-
-                                <div class="tab-pane" id="tab_files">
+                            @endability
+                            @ability ('archivos' | 'ordenes')
+                                <div class="tab-pane" id="tab_archivos">
                                     <div class="row">
                                         <div class="form-group col-sm-12">
                                             <textarea id="orden_observaciones_archivo" name="orden_observaciones_archivo" class="form-control" rows="25" placeholder="Observaciones"><%- orden_observaciones_archivo %></textarea>
@@ -568,7 +555,8 @@
                                         </div>
                                     </div>
                                 </div>
-
+                            @endability
+                            @ability ('bitacora' | 'ordenes')
                                 <div class="tab-pane" id="tab_bitacora">
                                     <div class="box-body">
                                         <div class="row">
@@ -593,6 +581,8 @@
                                         </div>
                                     </div>
                                 </div>
+                            @endability
+                            @ability ('estados' | 'ordenes')
                                 <% if (orden_cotizacion) { %>
                                     <div class="tab-pane" id="tab_estados">
                                         <div class="box-body">
@@ -617,7 +607,7 @@
                                         </div>
                                     </div>
                                 <% } %>
-                            @endif
+                            @endability
                         <% } %>
                     </div>
                 </div>
@@ -626,21 +616,21 @@
     </script>
 
     <script type="text/template" id="ordenp-producto-item-list-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
-                @if (auth()->user()->ability('admin', 'eliminar', ['module' => 'ordenes']))
+                @ability ('eliminar' | 'ordenes')
                     <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                         <span><i class="fa fa-times"></i></span>
                     </a>
-                @endif
+                @endability
             </td>
 
             <td class="text-center">
-                @if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes']))
+                @ability ('clonar' | 'ordenes')
                     <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
-                @endif
+                @endability
             </td>
         <% } %>
         <td>
@@ -649,23 +639,19 @@
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
-        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-            <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
-            <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
-        @endif
+        <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
     </script>
 
     <script type="text/template" id="ordenp-despacho-item-list-tpl">
         <% if(edit) { %>
-            @if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
-                <td class="text-center">
-                    <% if (!despachop1_anulado) { %>
-                        <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
-                            <span><i class="fa fa-times"></i></span>
-                        </a>
-                    <% } %>
-                </td>
-            @endif
+            <td class="text-center">
+                <% if (!despachop1_anulado) { %>
+                    <a class="btn btn-default btn-xs item-orden-despacho-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                <% } %>
+            </td>
         <% } %>
         <td class="text-center"><%- id %></td>
         <td><%- tcontacto_nombre %></td>
@@ -690,13 +676,11 @@
             <td><%- tiempop_fecha %></td>
             <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
             <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-            @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']))
-                <td class="text-center">
-                    <a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
-                        <span><i class="fa fa-pencil-square-o"></i></span>
-                    </a>
-                </td>
-            @endif
+            <td class="text-center">
+                <a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil-square-o"></i></span>
+                </a>
+            </td>
         </tr>
     </script>
 
@@ -892,8 +876,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-
-            @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+            @ability ('archivos' | 'ordenes')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -903,7 +886,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -917,20 +900,18 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes']))
+                    @ability ('eliminar' | 'ordenes')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
-
             <dialog class="qq-alert-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
                     <button type="button" class="qq-cancel-button-selector">Cerrar</button>
                 </div>
             </dialog>
-
             <dialog class="qq-confirm-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
@@ -938,7 +919,6 @@
                     <button type="button" class="qq-ok-button-selector">Si</button>
                 </div>
             </dialog>
-
             <dialog class="qq-prompt-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <input type="text">

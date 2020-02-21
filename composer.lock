@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d8cf9f15fe8a1b46e450c72ef287fd10",
+    "content-hash": "5b7baed06fe04394818833178fc5d2f3",
     "packages": [
         {
             "name": "barryvdh/laravel-debugbar",
@@ -1368,6 +1368,7 @@
                 "cron",
                 "schedule"
             ],
+            "abandoned": "dragonmantank/cron-expression",
             "time": "2017-01-23T04:29:33+00:00"
         },
         {

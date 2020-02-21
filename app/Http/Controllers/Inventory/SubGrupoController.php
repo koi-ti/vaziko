@@ -19,7 +19,7 @@ class SubGrupoController extends Controller
         if ($request->ajax()) {
             return Datatables::of(SubGrupo::query())->make(true);
         }
-        return view('inventory.subgrupos.index', ['empresa' => parent::getPaginacion()]);
+        return view('inventory.subgrupos.index');
     }
 
     /**

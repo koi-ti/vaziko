@@ -41,7 +41,7 @@ class ProductoController extends Controller
                     }
                 })->make(true);
         }
-        return view('inventory.productos.index', ['empresa' => parent::getPaginacion()]);
+        return view('inventory.productos.index');
     }
 
     /**

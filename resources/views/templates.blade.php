@@ -38,7 +38,7 @@
 
     	<div class="form-group col-md-4">
 			<label for="tcontacto_municipio" class="control-label">Municipio</label>
-			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('municipios.index'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tcontacto_municipio %>">
+			<select name="tcontacto_municipio" id="tcontacto_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.municipios'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tcontacto_municipio %>">
 			</select>
 		</div>
 
@@ -837,17 +837,21 @@
 
 {{-- Inicio template general asiento detalle --}}
 <script type="text/template" id="add-asiento2-item-tpl">
-	<% if(edit) { %>
-    	<td class="text-center" width="2%">
-    		<a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
-                <span><i class="fa fa-pencil"></i></span>
-    		</a>
-        </td>
-        <td class="text-center" width="2%">
-    		<a class="btn btn-default btn-xs item-remove" data-resource="<%- id %>">
-                <span><i class="fa fa-times"></i></span>
-    		</a>
-    	</td>
+	<% if (edit) { %>
+        @if (auth()->user()->ability('admin', 'editar', ['module' => 'asientos']))
+        	<td class="text-center" width="2%">
+        		<a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
+                    <span><i class="fa fa-pencil"></i></span>
+        		</a>
+            </td>
+        @endif
+        @if (auth()->user()->ability('admin', 'eliminar', ['module' => 'asientos']))
+            <td class="text-center" width="2%">
+        		<a class="btn btn-default btn-xs item-remove" data-resource="<%- id %>">
+                    <span><i class="fa fa-times"></i></span>
+        		</a>
+        	</td>
+        @endif
 	<% } %>
 	<td><%- plancuentas_cuenta %></td>
     <td><%- plancuentas_nombre %></td>
@@ -863,9 +867,11 @@
 	    	</a>
     	<% } %>
     </td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
-    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
+    @if (auth()->user()->ability('admin', 'precios', ['module' => 'asientos']))
+        <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
+        <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
+        <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
+    @endif
     <td class="text-center" width="2%">
 		<a class="btn btn-default btn-xs item-show" data-resource="<%- id %>">
 			<span><i class="fa fa-info-circle"></i></span>

@@ -9,7 +9,7 @@
             <li><a href="{{ route('dashboard') }}"><i class="fa fa-dashboard"></i> {{trans('app.home')}}</a></li>
             <li><a href="{{ route('productosp.index')}}">Producto</a></li>
             <li class="active">{{ $producto->id }}</li>
-            <ol>
+        <ol>
     </section>
 
     <section id="productop-show" class="content">
@@ -20,7 +20,7 @@
                         <label class="control-label">Nombre</label>
                         <div>{{ $producto->productop_nombre }}</div>
                     </div>
-                    @if (auth()->user()->ability('admin', ['module' => 'productosp']))
+                    @if (auth()->user()->hasRole('admin'))
                         <div class="col-sm-1 col-xs-2 col-md-offset-3">
                             <button type="button" class="btn btn-block btn-primary btn-sm clone-productop" title="Clonar producto">
                                 <i class="fa fa-clone"></i>
@@ -48,7 +48,7 @@
                     <div class="form-group col-md-2">
                         <label class="control-label">Abierto</label>
                         <div>
-                            <input type="checkbox" id="productop_abierto" name="productop_abierto" value="productop_abierto" disabled {{ $producto->productop_abierto ? 'checked': '' }}>
+                            <input type="checkbox" disabled {{ $producto->productop_abierto ? 'checked': '' }}>
                         </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -64,7 +64,7 @@
                     <div class="form-group col-md-2">
                         <label class="control-label">Cerrado</label>
                         <div>
-                            <input type="checkbox" id="productop_cerrado" name="productop_cerrado" value="productop_cerrado" disabled {{ $producto->productop_cerrado ? 'checked': '' }}>
+                            <input type="checkbox" disabled {{ $producto->productop_cerrado ? 'checked': '' }}>
                         </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -80,7 +80,7 @@
                     <div class="form-group col-md-2">
                         <label class="control-label">3D</label>
                         <div>
-                            <input type="checkbox" id="productop_3d" name="productop_3d" value="productop_3d" disabled {{ $producto->productop_3d ? 'checked': '' }}>
+                            <input type="checkbox" disabled {{ $producto->productop_3d ? 'checked': '' }}>
                         </div>
                     </div>
                     <div class="form-group col-md-2">
@@ -100,25 +100,27 @@
                     <div class="form-group col-md-2">
                         <label class="control-label">Tiro</label>
                         <div>
-                            <input type="checkbox" id="productop_tiro" name="productop_tiro" value="productop_tiro" disabled {{ $producto->productop_tiro ? 'checked': '' }}>
+                            <input type="checkbox" disabled {{ $producto->productop_tiro ? 'checked': '' }}>
                         </div>
                     </div>
                     <div class="form-group col-md-2">
                         <label class="control-label">Retiro</label>
                         <div>
-                            <input type="checkbox" id="productop_retiro" name="productop_retiro" value="productop_retiro" disabled {{ $producto->productop_retiro ? 'checked': '' }}>
+                            <input type="checkbox" disabled {{ $producto->productop_retiro ? 'checked': '' }}>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="box-footer with-border">
                 <div class="row">
-                    <div class="col-md-2 col-md-offset-4 col-sm-6 col-xs-6 text-left">
+                    <div class="col-md-2 @ability ('editar' | 'productosp') col-md-offset-4 @elseability col-md-offset-5 @endability col-sm-6 col-xs-6 text-left">
                         <a href=" {{ route('productosp.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                     </div>
-                    <div class="col-md-2 col-sm-6 col-xs-6 text-right">
-                        <a href="{{ route('productosp.edit', ['productosp' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
-                    </div>
+                    @ability ('editar' | 'productosp')
+                        <div class="col-md-2 col-sm-6 col-xs-6 text-right">
+                            <a href="{{ route('productosp.edit', ['productosp' => $producto->id]) }}" class="btn btn-primary btn-sm btn-block"> {{trans('app.edit')}}</a>
+                        </div>
+                    @endability
                 </div>
             </div>
         </div>
@@ -131,7 +133,9 @@
                     <li><a href="#tab_maquinas" data-toggle="tab">Máquinas</a></li>
                     <li><a href="#tab_materiales" data-toggle="tab">Materiales</a></li>
                     <li><a href="#tab_acabados" data-toggle="tab">Acabados</a></li>
-                    <li><a href="#tab_imagenes" data-toggle="tab">Imágenes</a></li>
+                    @ability ('archivos' | 'productosp')
+                        <li><a href="#tab_imagenes" data-toggle="tab">Imágenes</a></li>
+                    @endability
                 </ul>
                 <div class="tab-content">
                     <div class="tab-pane active" id="tab_areas">

@@ -44,17 +44,19 @@
                         <div class="col-md-2 col-xs-4">
                             <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
                         </div>
-                        <div class="col-md-2 col-xs-4">
-                            <a href="{{ route('facturas.create') }}" class="btn btn-default btn-block btn-sm">
-                                <i class="fa fa-plus"></i> Nueva
-                            </a>
-                        </div>
+                        @ability ('crear' | 'facturas')
+                            <div class="col-md-2 col-xs-4">
+                                <a href="{{ route('facturas.create') }}" class="btn btn-default btn-block btn-sm">
+                                    <i class="fa fa-plus"></i> Nueva
+                                </a>
+                            </div>
+                        @endability
                     </div>
                 {!! Form::close() !!}
             </div>
 
             <div class="box-body table-index">
-                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
+                <table id="facturas-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
                     <thead>
                         <tr>
                             <th >Número</th>

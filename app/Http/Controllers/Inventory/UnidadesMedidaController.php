@@ -19,7 +19,7 @@ class UnidadesMedidaController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Unidad::query())->make(true);
         }
-        return view('inventory.unidades.index', ['empresa' => parent::getPaginacion()]);
+        return view('inventory.unidades.index');
     }
 
     /**

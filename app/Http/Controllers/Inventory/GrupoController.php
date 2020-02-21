@@ -19,7 +19,7 @@ class GrupoController extends Controller
         if ($request->ajax()) {
             return Datatables::of(Grupo::query())->make(true);
         }
-        return view('inventory.grupos.index', ['empresa' => parent::getPaginacion()]);
+        return view('inventory.grupos.index');
     }
 
     /**

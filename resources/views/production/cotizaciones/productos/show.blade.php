@@ -31,35 +31,30 @@
 							{{ $cotizacion->cotizacion1_referencia }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Cliente</label>
 						<div class="form-group col-md-10">
 							{{ $cotizacion->tercero_nit }} - {{ $cotizacion->tercero_nombre }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Estado</label>
 						<div class="form-group col-md-10">
 							<span class="label label-{{ in_array($cotizacion->cotizacion1_estados, ['PC', 'PF']) ? 'warning' : 'success' }}">{{ config('koi.produccion.estados')[$cotizacion->cotizacion1_estados] }}</span>
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Cotización</label>
 						<div class="form-group col-md-10">
 							{{ $cotizacion->cotizacion_codigo }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Código producto</label>
 						<div class="form-group col-md-10">
 							{{ $producto->id }}
 						</div>
 					</div>
-
 					<div class="row">
 						<label class="col-md-2 control-label">Producto</label>
 						<div class="form-group col-md-10">
@@ -67,7 +62,6 @@
 						</div>
 					</div>
 				</div>
-
 				<div class="row">
 					<label class="control-label col-md-1">Referencia</label>
 					<div class="form-group col-md-8">
@@ -78,19 +72,17 @@
 						<div>{{ $cotizacion2->cotizacion2_cantidad }}</div>
 					</div>
 				</div>
-
 				<div class="row">
 					<label class="col-sm-1 control-label">Observaciones</label>
 					<div class="form-group col-md-11">
 						<textarea placeholder="Observaciones" class="form-control" rows="2" disabled>{{ $cotizacion2->cotizacion2_observaciones }}</textarea>
 					</div>
-				</div>
-				<br>
+				</div><br>
 
-				@if($producto->productop_abierto || $producto->productop_cerrado)
+				@if ($producto->productop_abierto || $producto->productop_cerrado)
 					<div class="box box-danger">
 						<div class="box-body">
-							@if($producto->productop_abierto)
+							@if ($producto->productop_abierto)
 								<div class="row">
 									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
 									<label for="cotizacion2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -111,7 +103,7 @@
 								</div>
 							@endif
 
-							@if($producto->productop_cerrado)
+							@if ($producto->productop_cerrado)
 								<div class="row">
 									<label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
 									<label for="cotizacion2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -135,7 +127,7 @@
 					</div>
 				@endif
 
-				@if($producto->productop_3d)
+				@if ($producto->productop_3d)
 	                <div class="box box-danger">
 	                    <div class="box-body">
 	                        <div class="row">
@@ -168,7 +160,7 @@
 	                </div>
 	            @endif
 
-				@if($producto->productop_tiro || $producto->productop_retiro)
+				@if ($producto->productop_tiro || $producto->productop_retiro)
 	                <div class="box box-danger">
 	                    <div class="box-body">
 							<div class="row">
@@ -186,7 +178,7 @@
 											</tr>
 										</thead>
 										<tbody>
-											@if($producto->productop_tiro)
+											@if ($producto->productop_tiro)
 												<tr>
 													<th class="text-center">T <input type="checkbox" disabled {{ $cotizacion2->cotizacion2_tiro ? 'checked': '' }}></th>
 													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_yellow ? 'checked': '' }}></td>
@@ -197,7 +189,7 @@
 													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_color2 ? 'checked': '' }}></td>
 												</tr>
 											@endif
-											@if($producto->productop_retiro)
+											@if ($producto->productop_retiro)
 												<tr>
 													<th class="text-center">R <input type="checkbox" disabled {{ $cotizacion2->cotizacion2_retiro ? 'checked': '' }}></th>
 													<td class="text-center"><input type="checkbox" disabled {{ $cotizacion2->cotizacion2_yellow2 ? 'checked': '' }}></td>
@@ -214,15 +206,15 @@
 							</div>
 
 	                        <div class="row">
-	                            @if($producto->productop_tiro)
-	                                <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+	                            @if ($producto->productop_tiro)
+	                                <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
 	                                    <label for="cotizacion2_nota_tiro" class="control-label">Nota tiro</label>
 	                                    <div>{{ $cotizacion2->cotizacion2_nota_tiro }}</div>
 	                                </div>
 	                            @endif
 
-	                            @if($producto->productop_retiro)
-	                                <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+	                            @if ($producto->productop_retiro)
+	                                <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
 	                                    <label for="cotizacion2_nota_retiro" class="control-label">Nota retiro</label>
 	                                    <div>{{ $cotizacion2->cotizacion2_nota_retiro }}</div>
 	                                </div>
@@ -293,35 +285,37 @@
 	                </div>
 	        	</div>
 
-				<div class="box box-danger">
-					<div class="box-header with-border">
-						<h3 class="box-title">Fórmulas</h3>
-					</div>
-					<div class="box-body">
-						<div class="row">
-							<label class="control-label col-md-1">Fórmula</label>
-							<div class="form-group col-md-6">
-								<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
-							</div>
+				@ability ('precios' | cotizaciones)
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Fórmulas</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
+								<label class="control-label col-md-1">Fórmula</label>
+								<div class="form-group col-md-6">
+									<div>{{ $cotizacion2->cotizacion2_precio_formula }}</div>
+								</div>
 
-							<label class="control-label col-md-1">Precio</label>
-							<div class="form-group col-md-4">
-								<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+								<label class="control-label col-md-1">Precio</label>
+								<div class="form-group col-md-4">
+									<div>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.') }}</div>
+								</div>
+							</div>
+							<div class="row">
+								<label class="control-label col-md-1">Fórmula</label>
+								<div class="form-group col-md-6">
+									<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
+								</div>
+
+								<label class="control-label col-md-1">Viáticos</label>
+								<div class="form-group col-md-4">
+									<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
+								</div>
 							</div>
 						</div>
-						<div class="row">
-							<label class="control-label col-md-1">Fórmula</label>
-							<div class="form-group col-md-6">
-								<div>{{ $cotizacion2->cotizacion2_viaticos_formula }}</div>
-							</div>
-
-							<label class="control-label col-md-1">Viáticos</label>
-							<div class="form-group col-md-4">
-								<div>{{ number_format($cotizacion2->cotizacion2_viaticos, 2, ',', '.') }}</div>
-							</div>
-						</div>
 					</div>
-				</div>
+				@endability
 
 				<div class="box box-danger">
 					<div class="box-header with-border">
@@ -344,10 +338,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+									@ability ('precios' | 'cotizaciones')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -358,15 +352,15 @@
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
 										<td>{{ $materialp->cotizacion4_medidas }}</td>
 										<td>{{ $materialp->cotizacion4_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totalmaterialesp += $materialp->cotizacion4_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+							@ability ('precios' | 'cotizaciones')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -374,7 +368,7 @@
 										<th class="text-right" id="total">{{ number_format($totalmaterialesp, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
@@ -391,10 +385,10 @@
 		                                <th>Área</th>
 		                                <th>Nombre</th>
 		                                <th>Tiempo</th>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+										@ability ('precios' | 'cotizaciones')
 			                                <th>Valor</th>
 			                                <th>Total</th>
-										@endif
+										@endability
 		                            </tr>
 		                        </thead>
 								<tbody>
@@ -411,14 +405,14 @@
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 			                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
 			                                <td class="text-left">{{  $areap->cotizacion6_tiempo }}</td>
-											@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+											@ability ('precios' | 'cotizaciones')
 												<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
 				                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
-											@endif
+											@endability
 										</tr>
 									@endforeach
 								</tbody>
-								@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+								@ability ('precios' | 'cotizaciones')
 			                        <tfoot>
 			                            <tr>
 			                                <td colspan="3"></td>
@@ -426,7 +420,7 @@
 			                                <th class="text-right">{{ number_format($totalareasp, 2, ',', '.') }}</th>
 			                            </tr>
 			                        </tfoot>
-								@endif
+								@endability
 		                    </table>
 		                </div>
 					</div>
@@ -444,10 +438,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+									@ability ('precios' | 'cotizaciones')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -458,15 +452,15 @@
 										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
 										<td>{{ $empaque->cotizacion9_medidas }}</td>
 										<td>{{ $empaque->cotizacion9_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totalempaques += $empaque->cotizacion9_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+							@ability ('precios' | 'cotizaciones')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -474,7 +468,7 @@
 										<th class="text-right" id="total">{{ number_format($totalempaques, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
@@ -491,10 +485,10 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+									@ability ('precios' | 'cotizaciones')
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
-									@endif
+									@endability
 								</tr>
 							</thead>
 							<tbody>
@@ -505,15 +499,15 @@
 										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
 										<td>{{ $transporte->cotizacion10_medidas }}</td>
 										<td>{{ $transporte->cotizacion10_cantidad }}</td>
-										@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_total, 2, ',', '.') }}</td>
-										@endif
+										@endability
 									</tr>
 									{{--*/ $totaltransportes += $transporte->cotizacion10_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
+							@ability ('precios' | 'cotizaciones')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>
@@ -521,14 +515,14 @@
 										<th class="text-right" id="total">{{ number_format($totaltransportes, 2, ',', '.') }}</th>
 									</tr>
 								</tfoot>
-							@endif
+							@endability
 						</table>
 					</div>
 				</div>
         	</div>
         </div>
 
-		@if (!auth()->user()->hasRole('Diseplanea'))
+		@ability ('utilidades' | 'cotizaciones')
 			<div class="row">
 			    <div class="col-md-6 col-md-offset-3">
 			        <div class="box box-danger">
@@ -689,6 +683,6 @@
 			        </div>
 			    </div>
 			</div>
-		@endif
+		@endability
 	</section>
 @stop

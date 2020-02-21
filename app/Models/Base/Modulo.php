@@ -22,7 +22,7 @@ class Modulo extends Model
         $query->where('nivel2', '=', '0');
         $query->where('nivel3', '=', '0');
         $query->where('nivel4', '=', '0');
-        $query->orderBy('nivel1', 'asc');
+        $query->orderBy('display_name', 'asc');
         $fathers = $query->get();
 
         $data = [];

@@ -26,36 +26,31 @@
                         <div class="form-group col-sm-3">
                             <select name="traslado1_sucursal" id="traslado1_sucursal" class="form-control select2-default change-sucursal-consecutive-koi-component" data-wrapper="traslados-create" data-field="traslado1_numero" data-module="traslados" required>
                                 <option value="" selected>Seleccione</option>
-                                @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
+                                @foreach (App\Models\Base\Sucursal::getSucursales() as $key => $value)
                                     <option value="{{ $key }}" <%- traslado1_sucursal == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
-
                         <label for="traslado1_numero" class="col-sm-1 control-label">Número</label>
                         <div class="form-group col-sm-2">
                             <input id="traslado1_numero" name="traslado1_numero" placeholder="Número" class="form-control input-sm input-toupper" type="number" required readonly>
                         </div>
                     </div>
-
                     <div class="row">
                         <label for="traslado1_destino" class="col-sm-1 control-label">Destino</label>
                         <div class="form-group col-sm-3">
                             <select name="traslado1_destino" id="traslado1_destino" class="form-control select2-default" required>
                                 <option value="" selected>Seleccione</option>
-                                @foreach( App\Models\Base\Sucursal::getSucursales() as $key => $value)
+                                @foreach (App\Models\Base\Sucursal::getSucursales() as $key => $value)
                                     <option value="{{ $key }}" <%- traslado1_destino == '{{ $key }}' ? 'selected': ''%>>{{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
-
-
                         <label for="traslado1_fecha" class="col-sm-1 control-label">Fecha</label>
                         <div class="form-group col-sm-2">
                             <input type="text" id="traslado1_fecha" name="traslado1_fecha" placeholder="Fecha" value="<%- traslado1_fecha %>" class="form-control input-sm datepicker" required>
                         </div>
                     </div>
-
                     <div class="row">
                         <label for="traslado1_observaciones" class="col-sm-1 control-label">Detalle</label>
                         <div class="form-group col-sm-10">
@@ -129,7 +124,7 @@
     </script>
 
     <script type="text/template" id="add-traslado2-item-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-traslado2-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>

@@ -22,7 +22,7 @@
                         <div class="form-group col-md-2 col-md-offset-4">
                             <label for="filter_mes">Mes</label>
                             <select class="form-control" name="filter_mes">
-                                @foreach( config('koi.meses') as $key => $value)
+                                @foreach (config('koi.meses') as $key => $value)
                                     <option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>{{ $value }}</option>
                                 @endforeach
                             </select>
@@ -30,7 +30,7 @@
                         <div class="form-group col-md-2">
                             <label for="filter_mes">Año</label>
                             <select class="form-control" name="filter_ano">
-                                @for($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+                                @for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
                                     <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
                                 @endfor
                             </select>
@@ -47,22 +47,6 @@
             </div>
         </div>
 
-        @if (count($errors) > 0)
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-
-        @if(session('success'))
-            <div class="alert alert-success">
-                <ul>
-                    <li>{{session('success')}}</li>
-                </ul>
-            </div>
-        @endif
+        @include('partials.message')
     </section>
 @stop

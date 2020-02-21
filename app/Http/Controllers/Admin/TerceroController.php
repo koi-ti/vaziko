@@ -48,7 +48,7 @@ class TerceroController extends Controller
                 })
                 ->make(true);
         }
-        return view('admin.terceros.index', ['empresa' => parent::getPaginacion()]);
+        return view('admin.terceros.index');
     }
 
     /**

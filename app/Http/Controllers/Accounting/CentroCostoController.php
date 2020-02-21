@@ -19,7 +19,7 @@ class CentroCostoController extends Controller
         if ($request->ajax()) {
             return Datatables::of(CentroCosto::query())->make(true);
         }
-        return view('accounting.centroscosto.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.centroscosto.index');
     }
 
     /**

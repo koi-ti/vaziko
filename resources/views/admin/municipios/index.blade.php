@@ -14,20 +14,18 @@
     </section>
 
 	<section class="content">
-		<div id="municipios-main">
-			<div class="box box-success">
-				<div class="box-body table-responsive">
-					<table id="municipios-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-paginacion="{{ $empresa->empresa_paginacion }}">
-				        <thead>
-				            <tr>
-				                <th>Codigo Dpto.</th>
-				                <th>Departamento</th>
-				                <th>Codigo Mpio.</th>
-				                <th>Municipio</th>
-				            </tr>
-				        </thead>
-				    </table>
-				</div>
+		<div id="municipios-main" class="box box-success">
+			<div class="box-body table-responsive">
+				<table id="municipios-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
+			        <thead>
+			            <tr>
+			                <th>Codigo Dpto.</th>
+			                <th>Departamento</th>
+			                <th>Codigo Mpio.</th>
+			                <th>Municipio</th>
+			            </tr>
+			        </thead>
+			    </table>
 			</div>
 		</div>
     </section>

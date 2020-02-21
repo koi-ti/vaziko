@@ -17,7 +17,7 @@ class EstadoResultadoController extends Controller
      */
     public function index(Request $request)
     {
-        if( $request->has('type') ) {
+        if ($request->has('type')) {
             $validator = Validator::make($request->all(), [
                 'filter_initial_month' => 'required',
                 'filter_initial_year' => 'required',
@@ -27,9 +27,8 @@ class EstadoResultadoController extends Controller
 
             // Validar que sean requeridos
             if ($validator->fails()) {
-                return redirect('/restadoresultado')
-                    ->withErrors($validator)
-                    ->withInput();
+                session()->flash('errors', $validator->errors()->all());
+                return redirect('/restadoresultado')->withInput();
             }
 
             // Reference var
@@ -37,14 +36,13 @@ class EstadoResultadoController extends Controller
             $xano = $request->filter_initial_year;
 
             $saldos = DB::table('koi_saldoscontables')
-                                ->select('plancuentas_cuenta as cuenta', 'plancuentas_nombre as nombre', DB::raw('SUM(saldoscontables_debito_mes) as mes'))
-                                ->whereBetween('saldoscontables_mes', [$request->filter_initial_month, $request->filter_end_month])
-                                ->whereBetween('saldoscontables_ano', [$request->filter_initial_year, $request->filter_end_year])
-                                ->where('plancuentas_cuenta', '>=', 4)
-                                ->join('koi_plancuentas', 'saldoscontables_cuenta', '=', 'koi_plancuentas.id')
-                                ->groupBy('cuenta', 'nombre')
-                                ->get();
-            dd($saldos);
+                        ->select('plancuentas_cuenta as cuenta', 'plancuentas_nombre as nombre', DB::raw('SUM(saldoscontables_debito_mes) as mes'))
+                        ->whereBetween('saldoscontables_mes', [$request->filter_initial_month, $request->filter_end_month])
+                        ->whereBetween('saldoscontables_ano', [$request->filter_initial_year, $request->filter_end_year])
+                        ->where('plancuentas_cuenta', '>=', 4)
+                        ->join('koi_plancuentas', 'saldoscontables_cuenta', '=', 'koi_plancuentas.id')
+                        ->groupBy('cuenta', 'nombre')
+                        ->get();
 
             // Mezclar los saldos de los meses
             $saldos = array_collapse($saldos);

@@ -23,7 +23,7 @@ class AsientoNifController extends Controller
             $query->join('koi_tercero', 'koi_asienton1.asienton1_beneficiario', '=', 'koi_tercero.id');
             return Datatables::of($query->get())->make(true);
         }
-        return view('accounting.asientonif.index', ['empresa' => parent::getPaginacion()]);
+        return view('accounting.asientonif.index');
     }
 
     /**
@@ -35,14 +35,14 @@ class AsientoNifController extends Controller
     public function show(Request $request, $id)
     {
         $asientoNif = AsientoNif::getAsientoNif($id);
-        if(!$asientoNif instanceof AsientoNif){
+        if (!$asientoNif instanceof AsientoNif) {
             abort(404);
         }
         if ($request->ajax()) {
             return response()->json($asientoNif);
         }
 
-        return view('accounting.asientonif.show', ['asientoNif' => $asientoNif]);
+        return view('accounting.asientonif.show', compact('asientoNif'));
     }
 
     /**
@@ -56,11 +56,11 @@ class AsientoNifController extends Controller
         $asientoNif = AsientoNif::findOrFail($id);
         // Get document and valid show or edit
         $documento = Documento::find($asientoNif->asienton1_documento);
-        if($asientoNif->asienton1_preguardado == false || $documento->documento_actual == true ) {
-            return redirect()->route('asientosnif.show', ['asientoNif' => $asientoNif]);
+        if (!$asientoNif->asienton1_preguardado || $documento->documento_actual) {
+            return redirect()->route('asientosnif.show', compact('asientoNif'));
         }
 
-        return view('accounting.asientonif.create', ['asientoNif' => $asientoNif]);
+        return view('accounting.asientonif.create', compact('asientoNif'));
     }
 
     /**
@@ -107,28 +107,28 @@ class AsientoNifController extends Controller
 
                     // Creo el objeto para manejar el asiento
                     $objAsiento = new AsientoNifContableDocumento($data, $asientoNif);
-                    if($objAsiento->asientoNif_error) {
+                    if ($objAsiento->asientoNif_error) {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $objAsiento->asientoNif_error]);
                     }
 
                     // Preparar asiento
                     $result = $objAsiento->asientoCuentas($cuentas);
-                    if($result != 'OK'){
+                    if ($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
 
                     // Insertar asiento
                     $result = $objAsiento->insertarAsientoNif();
-                    if($result != 'OK') {
+                    if ($result != 'OK') {
                         DB::rollback();
                         return response()->json(['success' => false, 'errors' => $result]);
                     }
                     // Insertar movimientos asiento
                     foreach ($asientoNif2 as $item) {
                         $result = $item->movimientos();
-                        if($result != 'OK') {
+                        if ($result != 'OK') {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => $result]);
                         }
@@ -136,7 +136,7 @@ class AsientoNifController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $asientoNif->id]);
-                }catch(\Exception $e){
+                } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -156,7 +156,7 @@ class AsientoNifController extends Controller
     public function exportar($id)
     {
         $asientoNif = AsientoNif::getAsientoNif($id);
-        if(!$asientoNif instanceof AsientoNif){
+        if (!$asientoNif instanceof AsientoNif) {
             abort(404);
         }
         $detalle = AsientoNif2::getAsientoNif2($asientoNif->id);

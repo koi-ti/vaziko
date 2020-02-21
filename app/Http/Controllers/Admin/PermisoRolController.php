@@ -23,7 +23,7 @@ class PermisoRolController extends Controller
             $query->where('nivel2', '=', $request->nivel2);
             $query->where('nivel3', '!=', '0');
             $query->where('nivel4', '=', '0');
-            $query->orderBy('nivel3', 'asc');
+            $query->orderBy('display_name', 'asc');
             $modules = $query->get();
 
             $data = [];
@@ -81,7 +81,7 @@ class PermisoRolController extends Controller
                     $query->where('permission_id', $permission->id);
                     $permissionrole = $query->first();
 
-                    if ($request->has("permiso_$permission->id")) {
+                    if ($request->has("permiso_{$permission->id}")) {
                         if (!$permissionrole instanceof PermisoRol) {
                             $permissionrole = new PermisoRol;
                             $permissionrole->role_id = $role->id;
