@@ -16,8 +16,9 @@ class Controller extends BaseController
      */
     public function __construct()
     {
-        $this->middleware('ability:admin,consultar', ['only' => ['index']]);
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store']]);
+        $this->middleware('ability:admin,consultar', ['only' => ['index', 'show']]);
+        $this->middleware('ability:admin,crear', ['only' => ['create']]);
+        $this->middleware('ability:admin,crear|editar', ['only' => ['store']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
         $this->middleware('ability:admin,eliminar', ['only' => ['destroy']]);
     }

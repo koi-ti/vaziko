@@ -17,16 +17,9 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            // DataTable
             this.$permisosSearchTable = this.$('#permisos-search-table');
-            var paginacion = this.$permisosSearchTable.data('pagination');
-
             this.$permisosSearchTable.DataTable({
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull(Route.route('permisos.index')),
                 columns: [
                     { data: 'name', name: 'name'},

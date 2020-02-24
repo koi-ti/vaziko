@@ -31,15 +31,10 @@ app || (app = {});
             this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
             this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
             this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
-            var paginacion = this.$precotizacionesSearchTable.data('pagination');
 
             this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
                     data: function(data) {

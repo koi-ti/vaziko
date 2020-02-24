@@ -158,7 +158,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit orden
-                Backbone.history.navigate(Route.route('ordenes.edit', { ordenes: resp.id}), { trigger:true });
+                window.Misc.redirect(window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.id})));
             }
         }
     });

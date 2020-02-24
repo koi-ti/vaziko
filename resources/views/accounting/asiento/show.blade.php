@@ -161,4 +161,31 @@
 	<script type="text/template" id="asiento-anular-confirm-tpl">
 		<p>¿Está seguro que desea eliminar el asiento <b>{{ $asiento->asiento1_numero }}</b>?</p>
 	</script>
+
+	<script type="text/template" id="add-asiento2-item-tpl">
+		<td><%- plancuentas_cuenta %></td>
+	    <td><%- plancuentas_nombre %></td>
+	    <td>
+	    	<a href="<%- window.Misc.urlFull( Route.route('terceros.show', {terceros: asiento2_beneficiario}) ) %>" title="<%- tercero_nombre %>" target="_blank">
+	    		<%- tercero_nit %>
+	    	</a>
+	    </td>
+	    <td>
+	    	<% if( !_.isUndefined(asiento2_centro) && !_.isNull(asiento2_centro) && asiento2_centro != '') { %>
+		    	<a href="<%- window.Misc.urlFull( Route.route('centroscosto.show', {centroscosto: asiento2_centro}) ) %>" title="<%- centrocosto_nombre %>" target="_blank">
+		    		<%- centrocosto_codigo %>
+		    	</a>
+	    	<% } %>
+	    </td>
+	    @if (auth()->user()->ability('admin', 'precios', ['module' => 'asientos']))
+	        <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
+	        <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
+	        <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
+	    @endif
+	    <td class="text-center" width="2%">
+			<a class="btn btn-default btn-xs item-show" data-resource="<%- id %>">
+				<span><i class="fa fa-info-circle"></i></span>
+			</a>
+		</td>
+	</script>
 @stop

@@ -212,23 +212,37 @@
 						<table id="browse-detalle-asiento-list" class="table table-bordered" cellspacing="0" width="100%">
 							<thead>
 								<tr>
-									<td colspan="6"></td>
+									@ability ('editar' | 'asientos')
+										<th></th>
+									@endability
+									@ability ('eliminar' | 'asientos')
+										<th></th>
+									@endability
+									<td colspan="4"></td>
 									<th class="text-left">Total</th>
 									<td class="text-right total-debitos">0</td>
 									<td class="text-right total-creditos">0</td>
-									<td></td>
 								</tr>
 								<tr>
-									<th colspan="6"></th>
+									@ability ('editar' | 'asientos')
+										<th></th>
+									@endability
+									@ability ('eliminar' | 'asientos')
+										<th></th>
+									@endability
+									<th colspan="4"></th>
 									<th class="text-left">Diferencia</th>
 									<td colspan="2" class="text-right">
 										<small class="label bg-red total-diferencia">0</small>
 									</td>
-									<td></td>
 								</tr>
 								<tr>
-									<th></th>
-									<th></th>
+									@ability ('editar' | 'asientos')
+										<th></th>
+									@endability
+									@ability ('eliminar' | 'asientos')
+										<th></th>
+									@endability
 									<th>Cuenta</th>
 									<th>Nombre</th>
 									<th>Beneficiario</th>
@@ -236,26 +250,35 @@
 									<th>Base</th>
 									<th>Débito</th>
 									<th>Crédito</th>
-									<th></th>
 								</tr>
 							</thead>
 							<tbody>
 							</tbody>
 							<tfoot>
 								<tr>
-									<td colspan="6"></td>
+									@ability ('editar' | 'asientos')
+										<th></th>
+									@endability
+									@ability ('eliminar' | 'asientos')
+										<th></th>
+									@endability
+									<td colspan="4"></td>
 									<th class="text-left">Total</th>
 									<td class="text-right total-debitos">0</td>
 									<td class="text-right total-creditos">0</td>
-									<td></td>
 								</tr>
 								<tr>
-									<th colspan="6"></th>
+									@ability ('editar' | 'asientos')
+										<th></th>
+									@endability
+									@ability ('eliminar' | 'asientos')
+										<th></th>
+									@endability
+									<th colspan="4"></th>
 									<th class="text-left">Diferencia</th>
 									<td colspan="2" class="text-right">
 										<small class="label bg-red total-diferencia">0</small>
 									</td>
-									<td></td>
 								</tr>
 							</tfoot>
 						</table>

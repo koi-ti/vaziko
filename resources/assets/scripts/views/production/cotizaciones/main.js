@@ -36,15 +36,10 @@ app || (app = {});
             this.$searchcotizacionEstado = this.$('#searchcotizacion_estado');
             this.$searchcotizacionReferencia = this.$('#searchcotizacion_referencia');
             this.$searchcotizacionProductop = this.$('#searchcotizacion_productop');
-            var paginacion = this.$cotizacionesSearchTable.data('pagination');
 
             this.cotizacionesSearchTable = this.$cotizacionesSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull(Route.route('cotizaciones.index')),
                     data: function(data) {
@@ -126,7 +121,7 @@ app || (app = {});
                             if (full.cotizacion1_estados == 'CS') {
                                 buttons += exportar;
                             }
-                            
+
                             if (parseInt(full.cotizacion1_abierta)) {
                                 if (parseInt(full.isAdmin)) {
                                     if (full.cotizacion1_estados != 'PC') {

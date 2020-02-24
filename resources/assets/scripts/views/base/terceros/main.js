@@ -27,15 +27,10 @@ app || (app = {});
             this.$tercerosSearchTable = this.$('#terceros-search-table');
             this.$searchNit = this.$('#tercero_nit');
             this.$searchName = this.$('#tercero_nombre');
-            var paginacion = this.$tercerosSearchTable.data('pagination');
 
             this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull(Route.route('terceros.index')),
                     data: function (data) {

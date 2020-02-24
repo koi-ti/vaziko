@@ -200,7 +200,7 @@ app || (app = {});
                 }
 
                 // Redirect to Content Course
-                window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id}), {trigger: true}));
+                window.Misc.redirect(window.Misc.urlFull(Route.route('asientos.edit', {asientos: resp.id})));
             }
         }
     });

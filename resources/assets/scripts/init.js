@@ -16,6 +16,15 @@ var app = app || {};
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
             }
         });
+
+        var pagination = $('table[data-pagination]').data('pagination');
+        $.extend(true, $.fn.dataTable.defaults, {
+            processing: true,
+            serverSide: true,
+            pageLength: pagination,
+            lengthMenu: [[pagination, 10, 25, 50, 100], [pagination, 10, 25, 50, 100]],
+            language: window.Misc.dataTableES()
+        });
     }
 
     String.prototype.replaceAll = function(search, replace) {

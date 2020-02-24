@@ -330,13 +330,14 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'ordenes')
+										{{--*/ $totalmaterialesp = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totalmaterialesp = 0; /*--}}
 								@foreach (App\Models\Production\Ordenp4::getOrdenesp4($ordenp2->id) as $materialp)
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
@@ -346,9 +347,10 @@
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
+
+											{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 								@endforeach
 							</tbody>
 							@ability ('precios' | 'ordenes')
@@ -377,26 +379,25 @@
 										<th>Nombre</th>
 										<th>Horas</th>
 										@ability ('precios' | 'ordenes')
+											{{--*/ $area = $totalareasp = 0; /*--}}
+
 											<th>Valor</th>
 											<th>Total</th>
 										@endability
 									</tr>
 								</thead>
 								<tbody>
-									{{-- variables para calcular las areas --}}
-									{{--*/ $area = $totalareasp = 0; /*--}}
 									@foreach (App\Models\Production\Ordenp6::getOrdenesp6($ordenp2->id) as $areap)
-										{{--*/
-											$tiempo = explode(':', $areap->orden6_tiempo);
-											$area = round (($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor);
-											$totalareasp += $area;
-										/*--}}
-
 										<tr>
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 											<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
 											<td class="text-center">{{  $areap->orden6_tiempo }}</td>
 											@ability ('precios' | 'ordenes')
+												{{--*/
+													$tiempo = explode(':', $areap->orden6_tiempo);
+													$totalareasp += round (($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor);
+												/*--}}
+
 												<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
 												<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
 											@endability
@@ -430,13 +431,14 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'ordenes')
+										{{--*/ $totalempaques = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totalempaques = 0; /*--}}
 								@foreach (App\Models\Production\Ordenp9::getOrdenesp9($ordenp2->id) as $empaque)
 									<tr>
 										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
@@ -446,9 +448,10 @@
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
+
+											{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 								@endforeach
 							</tbody>
 							@ability ('precios' | 'ordenes')
@@ -476,29 +479,31 @@
 									<th width="25%">Insumo</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
-									@ability ('precios' | 'ordenes')
+									@ability ('precios' | 'ordenes')
+										{{--*/ $totaltransportes = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totaltransportes = 0; /*--}}
 								@foreach (App\Models\Production\Ordenp10::getOrdenesp10($ordenp2->id) as $transporte)
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
 										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
 										<td>{{ $transporte->orden10_medidas }}</td>
 										<td>{{ $transporte->orden10_cantidad }}</td>
-										@ability ('precios' | 'ordenes')
+										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
+											
+											{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 								@endforeach
 							</tbody>
-							@ability ('precios' | 'ordenes')
+							@ability ('precios' | 'ordenes')
 								<tfoot>
 									<tr>
 										<td colspan="4"></td>

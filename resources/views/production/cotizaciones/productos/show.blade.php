@@ -285,7 +285,7 @@
 	                </div>
 	        	</div>
 
-				@ability ('precios' | cotizaciones)
+				@ability ('precios' | 'cotizaciones')
 					<div class="box box-danger">
 						<div class="box-header with-border">
 							<h3 class="box-title">Fórmulas</h3>
@@ -339,13 +339,14 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'cotizaciones')
+										{{--*/ $totalmaterialesp = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totalmaterialesp = 0; /*--}}
 								@foreach (App\Models\Production\Cotizacion4::getCotizaciones4( $cotizacion2->id) as $materialp)
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
@@ -355,9 +356,10 @@
 										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->cotizacion4_valor_total, 2, ',', '.') }}</td>
+
+											{{--*/ $totalmaterialesp += $materialp->cotizacion4_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totalmaterialesp += $materialp->cotizacion4_valor_total; /*--}}
 								@endforeach
 							</tbody>
 							@ability ('precios' | 'cotizaciones')
@@ -386,6 +388,8 @@
 		                                <th>Nombre</th>
 		                                <th>Tiempo</th>
 										@ability ('precios' | 'cotizaciones')
+											{{--*/ $area = $totalareasp = 0; /*--}}
+
 			                                <th>Valor</th>
 			                                <th>Total</th>
 										@endability
@@ -393,19 +397,17 @@
 		                        </thead>
 								<tbody>
 									{{-- variables para calcular las areas --}}
-									{{--*/ $area = $totalareasp = 0; /*--}}
 									@foreach (App\Models\Production\Cotizacion6::getCotizaciones6($cotizacion2->id) as $areap)
-										{{--*/
-											$tiempo = explode(':', $areap->cotizacion6_tiempo);
-											$area = round(($tiempo[0] + ($tiempo[1] / 60)) * $areap->cotizacion6_valor);
-											$totalareasp += $area;
-										/*--}}
-
 										<tr>
 											<td>{{ $areap->areap_nombre == '' ? '-': $areap->areap_nombre }}</td>
 			                                <td>{{ $areap->cotizacion6_nombre == '' ? '-': $areap->cotizacion6_nombre }}</td>
 			                                <td class="text-left">{{  $areap->cotizacion6_tiempo }}</td>
 											@ability ('precios' | 'cotizaciones')
+												{{--*/
+													$tiempo = explode(':', $areap->cotizacion6_tiempo);
+													$totalareasp += round(($tiempo[0] + ($tiempo[1] / 60)) * $areap->cotizacion6_valor);
+												/*--}}
+
 												<td class="text-right">{{ number_format($areap->cotizacion6_valor, 2, ',', '.') }}</td>
 				                                <td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
 											@endability
@@ -439,13 +441,14 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'cotizaciones')
+										{{--*/ $totalempaques = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totalempaques = 0; /*--}}
 								@foreach (App\Models\Production\Cotizacion9::getCotizaciones9( $cotizacion2->id) as $empaque)
 									<tr>
 										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
@@ -455,9 +458,10 @@
 										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->cotizacion9_valor_total, 2, ',', '.') }}</td>
+
+											{{--*/ $totalempaques += $empaque->cotizacion9_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totalempaques += $empaque->cotizacion9_valor_total; /*--}}
 								@endforeach
 							</tbody>
 							@ability ('precios' | 'cotizaciones')
@@ -486,13 +490,14 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'cotizaciones')
+										{{--*/ $totaltransportes = 0; /*--}}
+
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
 								</tr>
 							</thead>
 							<tbody>
-								{{--*/ $totaltransportes = 0; /*--}}
 								@foreach (App\Models\Production\Cotizacion10::getCotizaciones10( $cotizacion2->id) as $transporte)
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
@@ -502,9 +507,10 @@
 										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_total, 2, ',', '.') }}</td>
+
+											{{--*/ $totaltransportes += $transporte->cotizacion10_valor_total; /*--}}
 										@endability
 									</tr>
-									{{--*/ $totaltransportes += $transporte->cotizacion10_valor_total; /*--}}
 								@endforeach
 							</tbody>
 							@ability ('precios' | 'cotizaciones')
@@ -522,7 +528,7 @@
         	</div>
         </div>
 
-		@ability ('utilidades' | 'cotizaciones')
+		@ability ('utilidades' | 'cotizaciones')
 			<div class="row">
 			    <div class="col-md-6 col-md-offset-3">
 			        <div class="box box-danger">

@@ -74,7 +74,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit rol
-                Backbone.history.navigate(Route.route('roles.edit', {roles: resp.id}), {trigger: true});
+                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.edit', {roles: resp.id})));
             }
         }
     });

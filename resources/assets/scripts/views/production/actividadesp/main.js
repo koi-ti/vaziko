@@ -17,19 +17,12 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            // DataTable
             this.$actividadespSearchTable = this.$('#actividadesp-search-table');
-            paginacion = this.$actividadespSearchTable.data('pagination');
-
             this.$actividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull(Route.route('actividadesp.index')),
                     data: function( data ) {
@@ -43,7 +36,7 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nueva',
+                        text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
                         action: function (e, dt, node, config) {
                             window.Misc.redirect(window.Misc.urlFull(Route.route('actividadesp.create')))

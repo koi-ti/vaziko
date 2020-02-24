@@ -161,11 +161,11 @@
                     <table id="browse-factura4-list" class="table no-margin">
                         <thead>
                             <tr>
-                                <th>Cuota</th>
-                                <th>Vencimiento</th>
+                                <th class="text-center">Cuota</th>
+                                <th class="text-center">Vencimiento</th>
                                 @ability ('precios' | 'facturas')
-                                    <th>Valor</th>
-                                    <th>Saldo</th>
+                                    <th class="text-right">Valor</th>
+                                    <th class="text-right">Saldo</th>
                                 @endability
                             </tr>
                         </thead>
@@ -201,6 +201,15 @@
             <td class="text-center"><%- factura2_cantidad %></td>
             <td class="text-right"><%- window.Misc.currency(factura2_producto_valor_unitario) %></td>
             <td class="text-right"><%- window.Misc.currency(factura2_cantidad * factura2_producto_valor_unitario) %></td>
+        @endability
+    </script>
+
+    <script type="text/template" id="add-detalle-factura-tpl">
+        <td class="text-center"><%- factura4_cuota %></td>
+        <td class="text-center"><%- factura4_vencimiento %></td>
+        @ability ('precios' | 'facturas')
+            <td class="text-right"><%- window.Misc.currency(factura4_valor) %></td>
+            <td class="text-right"><%- window.Misc.currency(factura4_saldo) %></td>
         @endability
     </script>
 @stop

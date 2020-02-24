@@ -49,7 +49,7 @@
                             @endability
                             <li class="pull-right">
                                 <div class="btn-group" role="group">
-                                    @ability ('exportar' | 'ordenes')
+                                    @ability ('exportar' | 'ordenes')
                                         <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                                     @endability
                                     @ability ('cerrar' | 'ordenes')
@@ -618,7 +618,7 @@
     <script type="text/template" id="ordenp-producto-item-list-tpl">
         <% if (edit) { %>
             <td class="text-center">
-                @ability ('eliminar' | 'ordenes')
+                @ability ('eliminar' | 'ordenes')
                     <a class="btn btn-default btn-xs item-orden-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                         <span><i class="fa fa-times"></i></span>
                     </a>
@@ -626,7 +626,7 @@
             </td>
 
             <td class="text-center">
-                @ability ('clonar' | 'ordenes')
+                @ability ('clonar' | 'ordenes')
                     <a class="btn btn-default btn-xs item-orden-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>

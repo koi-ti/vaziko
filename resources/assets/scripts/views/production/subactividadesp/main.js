@@ -17,25 +17,13 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-            
+            // DataTable
             this.$subactividadespSearchTable = this.$('#subactividadesp-search-table');
-            var paginacion = this.$subactividadespSearchTable.data('pagination');
-
             this.$subactividadespSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('subactividadesp.index')),
-                    data: function (data) {
-                        data.datatables = true;
-                    }
-                },
+                ajax: window.Misc.urlFull(Route.route('subactividadesp.index')),
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'actividadp_nombre', name: 'koi_actividadp.actividadp_nombre'},
@@ -44,7 +32,7 @@ app || (app = {});
                 ],
                 buttons: [
                     {
-                        text: '<i class="fa fa-plus"></i> Nueva',
+                        text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
                         action: function (e, dt, node, config) {
                             window.Misc.redirect(window.Misc.urlFull(Route.route('subactividadesp.create')))

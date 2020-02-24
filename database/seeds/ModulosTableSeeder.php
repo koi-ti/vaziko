@@ -91,7 +91,7 @@ class ModulosTableSeeder extends Seeder
     	//Referencias
     	Modulo::create([
         	'name' => 'actividades',
-        	'display_name' => 'Acitividades',
+        	'display_name' => 'Actividades',
         	'nivel1' => 1,
         	'nivel2' => 2,
         	'nivel3' => 1
@@ -106,27 +106,11 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'modulos',
-        	'display_name' => 'Modulos',
-        	'nivel1' => 1,
-        	'nivel2' => 2,
-        	'nivel3' => 3
-    	]);
-
-    	Modulo::create([
         	'name' => 'municipios',
         	'display_name' => 'Municipios',
         	'nivel1' => 1,
         	'nivel2' => 2,
         	'nivel3' => 4
-    	]);
-
-    	Modulo::create([
-        	'name' => 'permisos',
-        	'display_name' => 'Permisos',
-        	'nivel1' => 1,
-        	'nivel2' => 2,
-        	'nivel3' => 5
     	]);
 
     	Modulo::create([
@@ -151,6 +135,7 @@ class ModulosTableSeeder extends Seeder
             'nivel1' => 2,
             'nivel2' => 1
         ]);
+
         Modulo::create([
             'display_name' => 'Reportes',
             'nivel1' => 2,
@@ -168,11 +153,19 @@ class ModulosTableSeeder extends Seeder
 
         // Reportes
         Modulo::create([
+            'name' => 'rcarteraedades',
+            'display_name' => 'Cartera por edades',
+            'nivel1' => 2,
+            'nivel2' => 2,
+            'nivel3' => 1
+        ]);
+
+        Modulo::create([
             'name' => 'restadocartera',
             'display_name' => 'Estado de cartera',
             'nivel1' => 2,
             'nivel2' => 2,
-            'nivel3' => 1
+            'nivel3' => 2
         ]);
 
     	// Contabilidad
@@ -211,12 +204,21 @@ class ModulosTableSeeder extends Seeder
         	'nivel2' => 1,
         	'nivel3' => 2
     	]);
+
     	Modulo::create([
         	'name' => 'cierresmensuales',
         	'display_name' => 'Cierre mensual',
         	'nivel1' => 3,
         	'nivel2' => 1,
         	'nivel3' => 3
+    	]);
+
+    	Modulo::create([
+        	'name' => 'saldos',
+        	'display_name' => 'Saldos',
+        	'nivel1' => 3,
+        	'nivel2' => 1,
+        	'nivel3' => 4
     	]);
 
     	//Reportes
@@ -227,19 +229,29 @@ class ModulosTableSeeder extends Seeder
         	'nivel2' => 2,
         	'nivel3' => 1
     	]);
+
+    	Modulo::create([
+        	'name' => 'rbalanceprueba',
+        	'display_name' => 'Balance prueba',
+        	'nivel1' => 3,
+        	'nivel2' => 2,
+        	'nivel3' => 2
+    	]);
+
     	Modulo::create([
         	'name' => 'rauxbeneficiariocuenta',
         	'display_name' => 'Libro beneficiario/cuenta',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 2
+        	'nivel3' => 3
     	]);
+
     	Modulo::create([
         	'name' => 'rauxcuentabeneficiario',
         	'display_name' => 'Libro cuenta/beneficiario',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 3
+        	'nivel3' => 4
     	]);
 
     	Modulo::create([
@@ -247,7 +259,7 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Libro diario',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 4
+        	'nivel3' => 5
     	]);
 
     	Modulo::create([
@@ -255,19 +267,11 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Libro mayor',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 5
+        	'nivel3' => 6
     	]);
     	Modulo::create([
         	'name' => 'rauxporcuenta',
         	'display_name' => 'Libro por cuenta',
-        	'nivel1' => 3,
-        	'nivel2' => 2,
-        	'nivel3' => 6
-    	]);
-
-    	Modulo::create([
-        	'name' => 'rplancuentas',
-        	'display_name' => 'Plan cuentas',
         	'nivel1' => 3,
         	'nivel2' => 2,
         	'nivel3' => 7
@@ -280,12 +284,21 @@ class ModulosTableSeeder extends Seeder
         	'nivel2' => 2,
         	'nivel3' => 8
     	]);
+
+        Modulo::create([
+        	'name' => 'rplancuentas',
+        	'display_name' => 'Plan cuentas',
+        	'nivel1' => 3,
+        	'nivel2' => 2,
+        	'nivel3' => 9
+    	]);
+
     	Modulo::create([
         	'name' => 'rimpuestos',
         	'display_name' => 'Relación impuestos',
         	'nivel1' => 3,
         	'nivel2' => 2,
-        	'nivel3' => 9
+        	'nivel3' => 10
     	]);
 
     	//referencias
@@ -405,11 +418,27 @@ class ModulosTableSeeder extends Seeder
 
     	//Modulos
         Modulo::create([
+            'name' => 'agendaordenes',
+            'display_name' => 'Agenda',
+            'nivel1' => 5,
+            'nivel2' => 1,
+            'nivel3' => 1
+        ]);
+
+        Modulo::create([
+            'name' => 'precotizaciones',
+            'display_name' => 'Pre-cotizaciones',
+            'nivel1' => 5,
+            'nivel2' => 1,
+            'nivel3' => 2
+        ]);
+
+        Modulo::create([
             'name' => 'cotizaciones',
             'display_name' => 'Cotizaciones',
             'nivel1' => 5,
             'nivel2' => 1,
-            'nivel3' => 1
+            'nivel3' => 3
         ]);
 
     	Modulo::create([
@@ -417,7 +446,7 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Productos',
         	'nivel1' => 5,
         	'nivel2' => 1,
-        	'nivel3' => 2
+        	'nivel3' => 4
     	]);
 
     	Modulo::create([
@@ -425,7 +454,7 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Ordenes',
         	'nivel1' => 5,
         	'nivel2' => 1,
-        	'nivel3' => 3
+        	'nivel3' => 5
     	]);
 
     	Modulo::create([
@@ -433,16 +462,24 @@ class ModulosTableSeeder extends Seeder
         	'display_name' => 'Tiempos',
         	'nivel1' => 5,
         	'nivel2' => 1,
-        	'nivel3' => 4
+        	'nivel3' => 6
     	]);
 
     	// Reportes
     	Modulo::create([
         	'name' => 'rtiemposp',
-        	'display_name' => 'Reporte de tiempos',
+        	'display_name' => 'Tiempos',
         	'nivel1' => 5,
         	'nivel2' => 2,
         	'nivel3' => 1
+    	]);
+
+    	Modulo::create([
+        	'name' => 'rresumentiemposp',
+        	'display_name' => 'Tiempos de producción',
+        	'nivel1' => 5,
+        	'nivel2' => 2,
+        	'nivel3' => 3
     	]);
 
     	//Referencias
@@ -487,7 +524,7 @@ class ModulosTableSeeder extends Seeder
     	]);
 
     	Modulo::create([
-        	'name' => 'tiposmaterialp',
+        	'name' => 'tipomaterialesp',
         	'display_name' => 'Tipo de material',
         	'nivel1' => 5,
         	'nivel2' => 3,

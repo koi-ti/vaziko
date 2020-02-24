@@ -1,7 +1,6 @@
 @extends('production.productos.main')
 
 @section('module')
-
     <section class="content-header">
         <h1>
             Productos <small>Administración de productos</small>
@@ -13,49 +12,47 @@
     </section>
 
     <section class="content">
-        <div id="productosp-main">
-            <div class="box box-success">
-                <div class="box-body">
-                    {!! Form::open(['id' => 'form-koi-search-producto-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
-                        <div class="form-group">
-                            <label for="productop_codigo" class="col-md-1 control-label">Código</label>
-                            <div class="col-md-2">
-                                {!! Form::text('productop_codigo', session('search_productop_codigo'), ['id' => 'productop_codigo', 'class' => 'form-control input-sm']) !!}
-                            </div>
-
-                            <label for="productop_nombre" class="col-md-1 control-label">Nombre</label>
-                            <div class="col-md-8">
-                                {!! Form::text('productop_nombre', session('search_productop_nombre'), ['id' => 'productop_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
-                            </div>
+        <div id="productosp-main" class="box box-success">
+            <div class="box-body">
+                {!! Form::open(['id' => 'form-koi-search-producto-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
+                    <div class="form-group">
+                        <label for="productop_codigo" class="col-md-1 control-label">Código</label>
+                        <div class="col-md-2">
+                            {!! Form::text('productop_codigo', session('search_productop_codigo'), ['id' => 'productop_codigo', 'class' => 'form-control input-sm']) !!}
                         </div>
 
-                        <div class="form-group">
-                            <div class="@ability ('crear' | 'productosp') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-4">
-                                <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
-                            </div>
-                            <div class="col-md-2 col-xs-4">
-                                <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
-                            </div>
-                            @ability ('crear' | 'productosp')
-                                <div class="col-md-2 col-xs-4">
-                                    <a href="{{ route('productosp.create') }}" class="btn btn-default btn-block btn-sm">
-                                        <i class="fa fa-plus"></i> Nuevo producto
-                                    </a>
-                                </div>
-                            @endability
+                        <label for="productop_nombre" class="col-md-1 control-label">Nombre</label>
+                        <div class="col-md-8">
+                            {!! Form::text('productop_nombre', session('search_productop_nombre'), ['id' => 'productop_nombre', 'class' => 'form-control input-sm input-toupper']) !!}
                         </div>
-                    {!! Form::close() !!}
-
-                    <div class="table-responsive">
-                        <table id="productosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
-                            <thead>
-                                <tr>
-                                    <th>Código</th>
-                                    <th>Nombre</th>
-                                </tr>
-                            </thead>
-                        </table>
                     </div>
+
+                    <div class="form-group">
+                        <div class="@ability ('crear' | 'productosp') col-md-offset-3 @elseability col-md-offset-4 @endability col-md-2 col-xs-4">
+                            <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
+                        </div>
+                        <div class="col-md-2 col-xs-4">
+                            <button type="button" class="btn btn-primary btn-block btn-sm btn-search">Buscar</button>
+                        </div>
+                        @ability ('crear' | 'productosp')
+                            <div class="col-md-2 col-xs-4">
+                                <a href="{{ route('productosp.create') }}" class="btn btn-default btn-block btn-sm">
+                                    <i class="fa fa-plus"></i> Nuevo producto
+                                </a>
+                            </div>
+                        @endability
+                    </div>
+                {!! Form::close() !!}
+
+                <div class="table-responsive">
+                    <table id="productosp-search-table" class="table table-bordered table-striped" cellspacing="0" width="100%" data-pagination="{{ $companyPagination }}">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
         </div>

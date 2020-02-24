@@ -26,15 +26,10 @@ app || (app = {});
             this.$plancuentasNifSearchTable = this.$('#plancuentasnif-search-table');
             this.$searchCuenta = this.$('#plancuentasn_cuenta');
             this.$searchName = this.$('#plancuentasn_nombre');
-            var paginacion = this.$plancuentasNifSearchTable.data('pagination');
 
             this.plancuentasNifSearchTable = this.$plancuentasNifSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull(Route.route('plancuentasnif.index')),
                     data: function (data) {

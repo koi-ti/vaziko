@@ -773,7 +773,7 @@
 {{-- Template SubtipoProductop --}}
 <script type="text/template" id="add-subtipoproductop-tpl">
 	<div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
 			<label for="subtipoproductop_tipoproductop" class="control-label">Tipo de producto</label>
 			<select name="subtipoproductop_tipoproductop" id="subtipoproductop_tipoproductop" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
@@ -782,8 +782,9 @@
 				@endforeach
 			</select>
 		</div>
-
-		<div class="form-group col-md-5">
+	</div>
+	<div class="row">
+		<div class="form-group col-md-6">
 			<label for="subtipoproductop_nombre" class="control-label">Nombre</label>
 			<input type="text" id="subtipoproductop_nombre" name="subtipoproductop_nombre" value="<%- subtipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
 		</div>
@@ -813,7 +814,7 @@
 {{-- Template SubActividadp --}}
 <script type="text/template" id="add-subactividadp-tpl">
 	<div class="row">
-        <div class="form-group col-md-4">
+        <div class="form-group col-md-6">
 			<label for="subactividadp_actividadp" class="control-label">Actividad</label>
 			<select name="subactividadp_actividadp" id="subactividadp_actividadp" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
@@ -822,8 +823,9 @@
 				@endforeach
 			</select>
 		</div>
-
-		<div class="form-group col-md-5">
+	</div>
+    <div class="row">
+		<div class="form-group col-md-6">
 			<label for="subactividadp_nombre" class="control-label">Nombre</label>
 			<input type="text" id="subactividadp_nombre" name="subactividadp_nombre" value="<%- subactividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
@@ -867,11 +869,9 @@
 	    	</a>
     	<% } %>
     </td>
-    @if (auth()->user()->ability('admin', 'precios', ['module' => 'asientos']))
-        <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
-        <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
-        <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
-    @endif
+    <td class="text-right"><%- window.Misc.currency(asiento2_base ? asiento2_base : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_debito ? asiento2_debito : 0) %></td>
+    <td class="text-right"><%- window.Misc.currency(asiento2_credito ? asiento2_credito: 0) %></td>
     <td class="text-center" width="2%">
 		<a class="btn btn-default btn-xs item-show" data-resource="<%- id %>">
 			<span><i class="fa fa-info-circle"></i></span>

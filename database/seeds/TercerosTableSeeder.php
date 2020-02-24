@@ -22,7 +22,7 @@ class TercerosTableSeeder extends Seeder
             'tercero_nombre2'   => 'Antonio',
             'tercero_apellido1'   => 'Camargo',
             'tercero_apellido2'   => 'Jimenez',
-            // 'tercero_actividad'   => 204,
+            // 'tercero_actividad'   => 0,
             'tercero_activo'   => true,
             'tercero_interno'   => true,
             'tercero_email'    => 'dropecamargo@gmail.com',

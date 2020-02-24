@@ -17,16 +17,9 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            // DataTable
             this.$municipiosSearchTable = this.$('#municipios-search-table');
-            var paginacion = this.$municipiosSearchTable.data('pagination');
-
             this.$municipiosSearchTable.DataTable({
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull(Route.route('municipios.index')),
                 columns: [
                     { data: 'departamento_codigo', name: 'koi_departamento.departamento_codigo'},

@@ -99,7 +99,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit tercero
-                Backbone.history.navigate(Route.route('terceros.edit', { terceros: resp.id}), {trigger: true});
+                window.Misc.redirect(window.Misc.urlFull(Route.route('terceros.edit', {terceros: resp.id})));
             }
         }
     });

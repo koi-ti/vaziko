@@ -516,7 +516,7 @@ app || (app = {});
 
             if (producto && sucursal) {
                 $.ajax({
-                    url: window.Misc.urlFull(Route.route('productos.search')),
+                    url: window.Misc.urlFull(Route.route('search.productos')),
                     type: 'GET',
                     data: {producto_codigo: producto},
                     beforeSend: function() {

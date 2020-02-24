@@ -168,7 +168,7 @@
                             <li><a href="#tab_maquinas" data-toggle="tab">Máquinas</a></li>
                             <li><a href="#tab_materiales" data-toggle="tab">Materiales</a></li>
                             <li><a href="#tab_acabados" data-toggle="tab">Acabados</a></li>
-                            @ability ('archivos' | 'productosp')
+                            @ability ('archivos' | 'productosp')
                                 <li><a href="#tab_imagenes" data-toggle="tab">Imágenes</a></li>
                             @endability
                         </ul>

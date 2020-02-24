@@ -173,7 +173,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="row">
                                             <label for="cotizacion1_suministran" class="col-xs-12 col-sm-1 col-md-1 control-label">Suministran</label>
                                             <div class="form-group col-xs-12 col-sm-11 col-md-10">
@@ -230,7 +229,7 @@
                                                     <label for="typeproductop" class="col-xs-12 col-sm-2 col-md-1 col-md-offset-2 control-label">Tipo </label>
                                                     <div class="form-group col-xs-12 col-sm-6 col-md-3">
                                                         <select name="typeproductop" id="typeproductop" class="form-control select2-default-clear">
-                                                            @foreach(App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                                                            @foreach (App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
                                                                 <option value="{{ $key }}">{{ $value }}</option>
                                                             @endforeach
                                                         </select>
@@ -378,19 +377,18 @@
     <script type="text/template" id="cotizacion-producto-item-list-tpl">
         <% if (edit) { %>
             <td class="text-center">
-                @if (auth()->user()->ability('admin', 'eliminar', ['module' => 'cotizaciones']))
+                @ability ('eliminar' | 'cotizaciones')
                     <a class="btn btn-default btn-xs item-cotizacion-producto-remove" data-resource="<%- id %>" title="Eliminar producto">
                         <span><i class="fa fa-times"></i></span>
                     </a>
-                @endif
+                @endability
             </td>
-
             <td class="text-center">
-                @if (auth()->user()->ability('admin', 'crear', ['module' => 'cotizaciones']))
+                @ability ('clonar' | 'cotizaciones')
                     <a class="btn btn-default btn-xs item-cotizacion-producto-clone" data-resource="<%- id %>" title="Clonar producto">
                         <span><i class="fa fa-clone"></i></span>
                     </a>
-                @endif
+                @endability
             </td>
         <% } %>
         <td>
@@ -399,10 +397,8 @@
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- cotizacion2_cantidad %></td>
         <td class="text-center"><%- cotizacion2_facturado %></td>
-        @if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']))
-            <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
-            <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
-        @endif
+        <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
     </script>
 
     <script type="text/template" id="cotizacion-open-confirm-tpl">
@@ -441,8 +437,7 @@
             <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
                 <span class="qq-upload-drop-area-text-selector"></span>
             </div>
-
-            @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+            @ability ('archivos' | 'cotizaciones')
                 <div class="buttons">
                     <div class="qq-upload-button-selector qq-upload-button">
                         <div><i class="fa fa-folder-open" aria-hidden="true"></i> {{ trans('app.files.choose-file') }}</div>
@@ -452,7 +447,7 @@
                     <span>{{ trans('app.files.process') }}</span>
                     <span class="qq-drop-processing-spinner-selector qq-drop-processing-spinner"></span>
                 </span>
-            @endif
+            @endability
             <ul class="qq-upload-list-selector qq-upload-list" aria-live="polite" aria-relevant="additions removals">
                 <li>
                     <div class="qq-progress-bar-container-selector">
@@ -466,20 +461,18 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @if(auth()->user()->ability('admin', 'opcional3', ['module' => 'cotizaciones']))
+                    @ability ('archivos' | 'cotizaciones')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
-                    @endif
+                    @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
                 </li>
             </ul>
-
             <dialog class="qq-alert-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
                     <button type="button" class="qq-cancel-button-selector">Cerrar</button>
                 </div>
             </dialog>
-
             <dialog class="qq-confirm-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <div class="qq-dialog-buttons">
@@ -487,7 +480,6 @@
                     <button type="button" class="qq-ok-button-selector">Si</button>
                 </div>
             </dialog>
-
             <dialog class="qq-prompt-dialog-selector">
                 <div class="qq-dialog-message-selector"></div>
                 <input type="text">

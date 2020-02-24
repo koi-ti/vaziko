@@ -17,7 +17,9 @@ class ActividadController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of(Actividad::query())->make(true);
+            return Datatables::of(Actividad::query())
+                                ->addColumn('create', auth()->user()->ability('admin', 'crear', ['module' => 'actividades']))
+                                ->make(true);
         }
         return view('admin.actividades.index');
     }

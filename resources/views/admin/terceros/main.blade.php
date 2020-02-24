@@ -234,7 +234,9 @@
     					<% if( !_.isUndefined(tercero_nit) && !_.isNull(tercero_nit) && tercero_nit != ''){ %>
     						<li><a id="wrapper-empleados" href="#tab_empleados" data-toggle="tab" class="<%- parseInt(tercero_empleado) || parseInt(tercero_interno) ? '' : 'hide' %>">Empleado</a></li>
     						<li><a href="#tab_contactos" data-toggle="tab">Contactos</a></li>
-    						<li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+                            @ability ('archivos' | 'terceros')
+                                <li><a href="#tab_archivos" data-toggle="tab">Archivos</a></li>
+                            @endability
     					<% } %>
     				</ul>
 
@@ -493,10 +495,11 @@
     								</div>
     							</div>
     						</div>
-
-    						<div class="tab-pane" id="tab_archivos">
-                                <div class="fine-uploader"></div>
-    						</div>
+                            @ability ('archivos' | 'terceros')
+        						<div class="tab-pane" id="tab_archivos">
+                                    <div class="fine-uploader"></div>
+        						</div>
+                            @endability
     					<% } %>
     				</div>
     			</div>

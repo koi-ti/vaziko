@@ -275,4 +275,17 @@
     <script type="text/template" id="cotizacion-clone-confirm-tpl">
         <p>¿Está seguro que desea clonar la cotización <b>{{ $cotizacion->cotizacion_codigo }}</b>?</p>
     </script>
+
+    <script type="text/template" id="cotizacion-producto-item-list-tpl">
+        <td>
+            <a href="<%- window.Misc.urlFull(Route.route('cotizaciones.productos.show', {productos: id})) %>" title="Ver producto"><%- id %></a>
+        </td>
+        <td><%- productop_nombre %></td>
+        <td class="text-center"><%- cotizacion2_cantidad %></td>
+        <td class="text-center"><%- cotizacion2_facturado %></td>
+        @ability ('precios' | 'cotizaciones')
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
+        @endability
+    </script>
 @stop

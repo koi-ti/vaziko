@@ -17,19 +17,12 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            // DataTable
             this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
-            var paginacion = this.$centroscostoSearchTable.data('pagination');
-
             this.$centroscostoSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
 					"<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull(Route.route('centroscosto.index')),
                 columns: [
                     { data: 'centrocosto_codigo', name: 'centrocosto_codigo' },

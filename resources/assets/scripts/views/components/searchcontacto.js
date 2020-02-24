@@ -60,9 +60,8 @@ app || (app = {});
 			this.contactoSearchTable = this.$contactoSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull(Route.route('search.contactos')),
                     data: function (data) {
@@ -113,23 +112,23 @@ app || (app = {});
 			if (this.$inputPhone.length) {
                 this.$inputPhone.val(data.tcontacto_telefono);
             }
-            
+
             if (this.$inputAddress.length) {
                 this.$inputAddress.val(data.tcontacto_direccion);
             }
-            
+
             if (this.$inputNomenclatura.length) {
                 this.$inputNomenclatura.val(data.tcontacto_direccion_nomenclatura);
             }
-            
+
             if (this.$labelNomenclatura.length) {
                 this.$labelNomenclatura.text(data.tcontacto_direccion_nomenclatura);
             }
-            
+
             if (this.$inputCity.length) {
                 this.$inputCity.val(data.tcontacto_municipio).trigger('change');
             }
-            
+
             if (this.$inputEmail.length) {
 				this.$inputEmail.val(data.tcontacto_email);
 			}

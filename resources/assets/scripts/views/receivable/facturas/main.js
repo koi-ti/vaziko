@@ -25,7 +25,6 @@ app || (app = {});
 
             // Rerefences
             this.$facturasSearchTable = this.$('#facturas-search-table');
-            var paginacion = this.$facturasSearchTable.data('pagination');
 
             // References
             this.$searchfacturaNumero = this.$('#searchfactura_numero');
@@ -35,10 +34,6 @@ app || (app = {});
             this.facturasSearchTable = this.$facturasSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull(Route.route('facturas.index')),
                     data: function (data) {

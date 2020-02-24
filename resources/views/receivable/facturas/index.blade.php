@@ -38,7 +38,7 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-md-offset-3 col-md-2 col-xs-4">
+                        <div class="col-md-2 @ability ('crear' | 'facturas') col-md-offset-3 @elseability col-md-offset-4 @endability col-sm-6 col-xs-6 text-left">
                             <button type="button" class="btn btn-default btn-block btn-sm btn-clear">Limpiar</button>
                         </div>
                         <div class="col-md-2 col-xs-4">

@@ -23,8 +23,8 @@ app || (app = {});
         */
         initialize: function () {
             var _this = this;
+
             this.$asientosSearchTable = this.$('#asientos-search-table');
-            var paginacion = this.$asientosSearchTable.data('pagination');
 
             // References
             this.$searchTercero = this.$('#search_tercero');
@@ -38,13 +38,9 @@ app || (app = {});
             this.asientosSearchTable = this.$asientosSearchTable.DataTable({
                 dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
-            	pageLength: paginacion,
                 ajax: {
                     url: window.Misc.urlFull(Route.route('asientos.index')),
-                    data: function( data ) {
+                    data: function (data) {
                         data.persistent = true;
                         data.asiento_numero = _this.$searchNumero.val();
                         data.asiento_tercero_nit = _this.$searchTercero.val();

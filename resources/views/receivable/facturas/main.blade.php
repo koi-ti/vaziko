@@ -183,13 +183,4 @@
         <td><input id="facturado_cantidad_<%- id %>" name="facturado_cantidad_<%- id %>" data-resource="<%- id %>" class="form-control input-sm change-cantidad" type="number" min="0" max="<%- orden2_cantidad %>" value="0" step="1" required></td>
         <td class="text-right"><%- window.Misc.currency( factura2_producto_valor_unitario ) %></td>
     </script>
-
-    <script type="text/template" id="add-detalle-factura-tpl">
-        <td><%- factura4_cuota %></td>
-    	<td><%- factura4_vencimiento %></td>
-        @ability ('precios' | 'facturas')
-            <td><%- window.Misc.currency(factura4_valor) %></td>
-            <td><%- window.Misc.currency(factura4_saldo) %></td>
-        @endability
-    </script>
 @stop

@@ -23,7 +23,7 @@ class PermisoRolController extends Controller
             $query->where('nivel2', '=', $request->nivel2);
             $query->where('nivel3', '!=', '0');
             $query->where('nivel4', '=', '0');
-            $query->orderBy('display_name', 'asc');
+            $query->orderBy('nivel1', 'asc');
             $modules = $query->get();
 
             $data = [];

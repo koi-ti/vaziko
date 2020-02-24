@@ -51,9 +51,8 @@ app || (app = {});
 			this.facturaSearchTable = this.$facturaSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
 					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-				processing: true,
-                serverSide: true,
-            	language: window.Misc.dataTableES(),
+                pageLength: 10,
+                lengthMenu: [[10, 25, 50, 100], [10, 25, 50, 100]],
                 ajax: {
                     url: window.Misc.urlFull(Route.route('search.facturas')),
                     data: function (data) {

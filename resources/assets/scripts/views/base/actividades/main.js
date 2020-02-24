@@ -17,19 +17,12 @@ app || (app = {});
         * Constructor Method
         */
         initialize: function () {
-
+            // DataTable
             this.$actividadesSearchTable = this.$('#actividades-search-table');
-            var paginacion = this.$actividadesSearchTable.data('pagination');
-
             this.$actividadesSearchTable.DataTable({
 				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
                         "<'row'<'col-sm-12'tr>>" +
                         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                processing: true,
-                serverSide: true,
-                language: window.Misc.dataTableES(),
-                pageLength: paginacion,
-                lengthMenu: [[paginacion, 10, 25, 50, 100], [paginacion, 10, 25, 50, 100]],
                 ajax: window.Misc.urlFull(Route.route('actividades.index')),
                 columns: [
                     { data: 'actividad_codigo', name: 'actividad_codigo' },
@@ -37,21 +30,19 @@ app || (app = {});
                     { data: 'actividad_categoria', name: 'actividad_categoria'},
                     { data: 'actividad_tarifa', name: 'actividad_tarifa' }
                 ],
-                buttons: [
-                    {
-                        text: '<i class="fa fa-plus"></i> Nueva',
-                        className: 'btn-sm',
-                        action: function (e, dt, node, config) {
-                                window.Misc.redirect(window.Misc.urlFull(Route.route('actividades.create')))
-                        }
+                buttons: [{
+                    text: '<i class="fa fa-plus"></i> Nuevo',
+                    className: 'btn-sm',
+                    action: function (e, dt, node, config) {
+                        window.Misc.redirect(window.Misc.urlFull(Route.route('actividades.create')))
                     }
-                ],
+                }],
                 columnDefs: [
                     {
                         targets: 0,
                         width: '15%',
                         render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('actividades.show', {actividades: full.id }) )  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull( Route.route('actividades.show', {actividades: full.id}) )  +'">' + data + '</a>';
                         }
                     }
                 ]

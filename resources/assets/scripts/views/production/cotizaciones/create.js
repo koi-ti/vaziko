@@ -119,7 +119,7 @@ app || (app = {});
                 }
 
                 // Redirect to edit cotizaciones
-                Backbone.history.navigate(Route.route('cotizaciones.edit', {cotizaciones: resp.id}), {trigger: true});
+                window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.id})));
             }
         }
     });
