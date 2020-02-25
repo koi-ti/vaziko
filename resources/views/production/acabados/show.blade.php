@@ -1,22 +1,15 @@
 @extends('production.acabados.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('acabadosp.index')}}">Acabados</a></li>
-    <li class="active">{{ $acabado->id }}</li>
+    <li><a href="{{ route('acabadosp.index')}}">Acabado</a></li>
+    <li class="active">{{ $acabado->acabadop_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $acabado->id }}</div>
-                </div>
-            </div>
-
-            <div class="row">
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-12">
                     <label class="control-label">Nombre</label>
                     <div>{{ $acabado->acabadop_nombre }}</div>
                 </div>

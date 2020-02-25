@@ -2,14 +2,14 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('tipoproductosp.index')}}">Tipo de producto</a></li>
-    <li class="active">{{ $tipoproductop->id }}</li>
+    <li class="active">{{ $tipoproductop->tipoproductop_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-6">
                     <label class="control-label">Nombre</label>
                     <div>{{ $tipoproductop->tipoproductop_nombre }}</div>
                 </div>

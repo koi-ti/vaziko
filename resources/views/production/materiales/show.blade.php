@@ -1,8 +1,8 @@
 @extends('production.materiales.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('materialesp.index')}}">Materiales</a></li>
-    <li class="active">{{ $material->id }}</li>
+    <li><a href="{{ route('materialesp.index')}}">Materiale</a></li>
+    <li class="active">{{ $material->materialp_nombre }}</li>
 @stop
 
 @section('module')

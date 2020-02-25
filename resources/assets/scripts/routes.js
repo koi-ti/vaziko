@@ -182,8 +182,8 @@ app || (app = {});
             /*--------------------------
             |   Tesoreria
             /---------------------------*/
-            'facturap(/)': 'getFacturaspMain',
-            'facturap(/):facturap(/)': 'getFacturaspShow',
+            'facturasp(/)': 'getFacturaspMain',
+            'facturasp(/):facturasp(/)': 'getFacturaspShow',
         },
 
         /**
@@ -2131,9 +2131,9 @@ app || (app = {});
         /**
         * show view show facturasp
         */
-        getFacturaspShow: function (facturap) {
+        getFacturaspShow: function (facturasp) {
             this.facturapModel = new app.FacturapModel();
-            this.facturapModel.set({id: facturap}, {silent: true});
+            this.facturapModel.set({id: facturasp}, {silent: true});
 
             if( this.showFacturapView instanceof Backbone.View ){
                 this.showFacturapView.stopListening();

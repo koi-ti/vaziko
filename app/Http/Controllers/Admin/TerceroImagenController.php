@@ -9,8 +9,6 @@ use Storage, Auth, DB;
 
 class TerceroImagenController extends Controller
 {
-    public function __construct() {}
-
     /**
      * Display a listing of the resource.
      *

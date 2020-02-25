@@ -69,15 +69,18 @@ app || (app = {});
 
         clickHistorialInsumo: function (e) {
             e.preventDefault();
+            
             var insumo = this.$(e.currentTarget).attr('data-resource');
-                call = this.$(e.currentTarget).attr('data-call');
+                tipo = this.$(e.currentTarget).attr('data-tipo');
                 title = '';
 
             if (insumo) {
-                if (call == 'materialp') {
+                if (tipo == 'M') {
                     title = 'Materiales de producción';
-                } else {
+                } else if (tipo == 'E') {
                     title = 'Empaques de producción';
+                } else {
+                    title = 'Transportes de producción';
                 }
 
                 this.$modal = $('#modal-historial-resource-component');
@@ -89,8 +92,8 @@ app || (app = {});
                     collection: new app.ProductoHistorialList(),
                     parameters: {
                         dataFilter: {
-                            producto_id: insumo,
-                            call: call
+                            insumo: insumo,
+                            tipo: tipo
                         }
                     }
                 });

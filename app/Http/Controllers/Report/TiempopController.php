@@ -28,7 +28,7 @@ class TiempopController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function charts(Request $request)
+    public function graficas(Request $request)
     {
         $data = $request->all();
         $rtiempop = new ReporteTiempop;

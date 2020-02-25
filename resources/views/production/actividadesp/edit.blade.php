@@ -1,8 +1,8 @@
 @extends('production.actividadesp.main')
 
 @section('breadcrumb')
-	<li><a href="{{ route('actividadesp.index') }}">Actividades de produccióm</a></li>
-	<li><a href="{{ route('actividadesp.show', ['actividadp' => $actividadp->id]) }}">{{ $actividadp->id }}</a></li>
+	<li><a href="{{ route('actividadesp.index') }}">Actividad de produccióm</a></li>
+	<li><a href="{{ route('actividadesp.show', ['actividadp' => $actividadp->id]) }}">{{ $actividadp->actividadp_nombre }}</a></li>
 	<li class="active">Editar</li>
 @stop
 

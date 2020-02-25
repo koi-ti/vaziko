@@ -1,27 +1,20 @@
 @extends('production.actividadesp.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('actividadesp.index')}}">Actividades de producción</a></li>
-    <li class="active">{{ $actividadp->id }}</li>
+    <li><a href="{{ route('actividadesp.index')}}">Actividad de producción</a></li>
+    <li class="active">{{ $actividadp->actividadp_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $actividadp->id }}</div>
-                </div>
-            </div>
-
-            <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>
                     <div>{{ $actividadp->actividadp_nombre }}</div>
                 </div>
 
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-2"><br>
                     <label class="checkbox-inline" for="actividadp_activo">
                         <input type="checkbox" disabled {{ $actividadp->actividadp_activo ? 'checked': '' }}> Activo
                     </label>

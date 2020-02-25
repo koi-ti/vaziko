@@ -1,19 +1,13 @@
 @extends('production.areas.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('areasp.index')}}">Áreas</a></li>
-    <li class="active">{{ $area->id }}</li>
+    <li><a href="{{ route('areasp.index')}}">Área</a></li>
+    <li class="active">{{ $area->areap_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
-            <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $area->id }}</div>
-                </div>
-            </div>
             <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>

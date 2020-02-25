@@ -40,15 +40,20 @@ class Ordenp2 extends BaseModel
             'orden2_cantidad' => 'required|min:1|integer',
             'orden2_precio_venta' => 'required',
             'orden2_ancho' => 'numeric|min:0',
-            'orden2_round' => 'required|min:-3|max:3|numeric',
-            'orden2_volumen' => 'min:0|max:100|integer',
-            'orden2_margen_materialp' => 'min:0|max:100|numeric',
-            'orden2_margen_areap' => 'min:0|max:100|numeric',
-            'orden2_margen_empaque' => 'min:0|max:100|numeric',
-            'orden2_margen_transporte' => 'min:0|max:100|numeric',
-            'orden2_descuento' => 'min:0|max:100|numeric',
-            'orden2_comision' => 'min:0|max:100|numeric'
         ];
+
+        if (auth()->user()->ability('admin', 'utilidades', ['module' => 'ordenes'])) {
+            $rules += [
+                'orden2_volumen' => 'min:0|max:100|integer',
+                'orden2_margen_materialp' => 'min:0|max:100|numeric',
+                'orden2_margen_areap' => 'min:0|max:100|numeric',
+                'orden2_margen_empaque' => 'min:0|max:100|numeric',
+                'orden2_margen_transporte' => 'min:0|max:100|numeric',
+                'orden2_descuento' => 'min:0|max:100|numeric',
+                'orden2_round' => 'required|min:-3|max:3|numeric',
+                'orden2_comision' => 'min:0|max:100|numeric'
+            ];
+        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
@@ -60,9 +65,7 @@ class Ordenp2 extends BaseModel
 
     public static function getOrdenesp2($orden) {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario',
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario')),
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total')));
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'));
         $query->producto();
         $query->where('orden2_orden', $orden);
         return $query->get();
@@ -73,8 +76,7 @@ class Ordenp2 extends BaseModel
         $query->select('koi_ordenproduccion2.id as id', 'orden2_referencia', 'productop_nombre', 'orden2_orden', 'orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario',
             DB::raw("CASE WHEN orden2_tiro IS TRUE THEN (orden2_yellow + orden2_magenta + orden2_cyan + orden2_key + orden2_color1 + orden2_color2) ELSE '0' END AS tiro"),
             DB::raw("CASE WHEN orden2_retiro IS TRUE THEN (orden2_yellow2 + orden2_magenta2 + orden2_cyan2 + orden2_key2 + orden2_color12 + orden2_color22) ELSE '0' END AS retiro"),
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario')),
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total')),
+            DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'),
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -122,8 +124,7 @@ class Ordenp2 extends BaseModel
     public static function getDetails() {
         $query = Ordenp2::query();
         $query->select('koi_ordenproduccion2.id as id', 'orden2_productop', 'orden2_orden', 'orden_abierta', 'orden_anulada', 'orden_culminada', 'orden_cliente', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano',
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? 'orden2_total_valor_unitario' : DB::raw('0 as orden2_total_valor_unitario')),
-            (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes']) ? DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total') : DB::raw('0 as orden2_precio_total')));
+            'orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'));
         $query->producto();
         $query->join('koi_ordenproduccion', 'orden2_orden', '=', 'koi_ordenproduccion.id');
         $query->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');

@@ -65,7 +65,7 @@ app || (app = {});
             // If documento exists
             if (documento) {
                 window.Misc.setSpinner(this.spinner);
-                $.get(window.Misc.urlFull(Route.route('documentos.show', {documentos: documento})), function (resp) {
+                $.get(window.Misc.urlFull(Route.route('search.documentos', {documento: documento})), function (resp) {
                     window.Misc.removeSpinner(_this.spinner);
                     if (resp) {
                         if (!_.isUndefined(resp.documento_tipo_consecutivo) && !_.isNull(resp.documento_tipo_consecutivo)) {

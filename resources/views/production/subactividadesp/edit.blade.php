@@ -1,8 +1,8 @@
 @extends('production.subactividadesp.main')
 
 @section('breadcrumb')
-	<li><a href="{{ route('subactividadesp.index') }}">Subactividades de produccióm</a></li>
-	<li><a href="{{ route('subactividadesp.show', ['subactividadp' => $subactividadp->id]) }}">{{ $subactividadp->id }}</a></li>
+	<li><a href="{{ route('subactividadesp.index') }}">Subactividad de produccióm</a></li>
+	<li><a href="{{ route('subactividadesp.show', ['subactividadp' => $subactividadp->id]) }}">{{ $subactividadp->subactividadp_nombre }}</a></li>
 	<li class="active">Editar</li>
 @stop
 

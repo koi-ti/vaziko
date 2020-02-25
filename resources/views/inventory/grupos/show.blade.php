@@ -1,19 +1,15 @@
 @extends('inventory.grupos.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('grupos.index')}}">Grupos</a></li>
-    <li class="active">{{ $grupo->id }}</li>
+    <li><a href="{{ route('grupos.index')}}">Grupo</a></li>
+    <li class="active">{{ $grupo->grupo_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $grupo->id }}</div>
-                </div>
-                <div class="form-group col-md-8">
+                <div class="form-group col-md-12">
                     <label class="control-label">Nombre</label>
                     <div>{{ $grupo->grupo_nombre }}</div>
             </div>

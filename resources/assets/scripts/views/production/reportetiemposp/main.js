@@ -64,7 +64,7 @@ app || (app = {});
                     case 'chart':
 
                         $.ajax({
-                            url: window.Misc.urlFull(Route.route('rtiemposp.charts')),
+                            url: window.Misc.urlFull(Route.route('rtiemposp.graficas')),
                             type: 'GET',
                             data: data,
                             beforeSend: function () {

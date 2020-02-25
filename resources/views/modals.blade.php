@@ -1395,15 +1395,13 @@
 </div>
 
 <script type="text/template" id="producto-historial-item-list-tpl">
-	<% if (type == 'PRE') { %>
-		<td><span class="label label-success">PRECOTIZACIÓN</span></td>
-	<% } else if (type == 'COT') { %>
+	<% if (productohistorial_tipo == 'COT') { %>
 		<td><span class="label label-danger">COTIZACIÓN</span></td>
 	<% } else { %>
 		<td><span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
 	<% } %>
-	<td><%- moment(fecha).format('YYYY-MM-DD') %></td>
-	<td class="text-right"><%- window.Misc.currency(valor) %></td>
+	<td><%- moment(productohistorial_fh_elaboro).format('YYYY-MM-DD') %></td>
+	<td class="text-right"><%- window.Misc.currency(productohistorial_valor) %></td>
 </script>
 
 <script type="text/template" id="add-producto-component-tpl">

@@ -5,12 +5,24 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Tercero, App\Models\Base\Bitacora;
+use App\Models\Inventory\Producto, App\Models\Inventory\ProductoHistorial;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\PreCotizacion2, App\Models\Production\Cotizacion2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Despachop2, App\Models\Production\Areap, App\Models\Production\Materialp;
-use App\Models\Inventory\Producto;
 use DB, Log, Datatables, Storage;
 
 class DetalleOrdenpController extends Controller
 {
+    /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,consultar', ['only' => ['index', 'show']]);
+        $this->middleware('ability:admin,crear|editar', ['only' => ['create', 'store']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
+        $this->middleware('ability:admin,eliminar', ['only' => 'destroy']);
+        $this->middleware('ability:admin,clonar', ['only' => 'clonar']);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -179,6 +191,15 @@ class DetalleOrdenpController extends Controller
                         $orden4->orden4_usuario_elaboro = auth()->user()->id;
                         $orden4->save();
 
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'M';
+                        $historial->productohistorial_modulo = 'O';
+                        $historial->productohistorial_producto = $orden4->orden4_producto;
+                        $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
+                        $historial->save();
+
                         $totalmaterialesp += $orden4->orden4_valor_total;
                     }
 
@@ -228,6 +249,15 @@ class DetalleOrdenpController extends Controller
                         $orden9->orden9_usuario_elaboro = auth()->user()->id;
                         $orden9->save();
 
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'E';
+                        $historial->productohistorial_modulo = 'O';
+                        $historial->productohistorial_producto = $orden9->orden9_producto;
+                        $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
+                        $historial->save();
+
                         $totalempaques += $orden9->orden9_valor_total;
                     }
 
@@ -258,6 +288,15 @@ class DetalleOrdenpController extends Controller
                         $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
                         $orden10->orden10_usuario_elaboro = auth()->user()->id;
                         $orden10->save();
+
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'T';
+                        $historial->productohistorial_modulo = 'O';
+                        $historial->productohistorial_producto = $orden10->orden10_producto;
+                        $historial->productohistorial_valor = $orden10->orden10_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $orden10->orden10_fh_elaboro;
+                        $historial->save();
 
                         $totaltransportes += $orden10->orden10_valor_total;
                     }
@@ -839,7 +878,7 @@ class DetalleOrdenpController extends Controller
         }
         abort(403);
     }
-    
+
     /**
      * Remove the specified resource from storage.
      *

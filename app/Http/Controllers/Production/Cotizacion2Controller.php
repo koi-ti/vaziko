@@ -4,13 +4,25 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\PreCotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp, App\Models\Production\ProductopImagen;
 use App\Models\Base\Tercero, App\Models\Base\Bitacora;
-use App\Models\Inventory\Producto;
+use App\Models\Inventory\Producto, App\Models\Inventory\ProductoHistorial;
+use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion3, App\Models\Production\Cotizacion4, App\Models\Production\Cotizacion5, App\Models\Production\Cotizacion6, App\Models\Production\Cotizacion8, App\Models\Production\Cotizacion9, App\Models\Production\Cotizacion10, App\Models\Production\PreCotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\Areap, App\Models\Production\Materialp, App\Models\Production\ProductopImagen;
 use DB, Log, Datatables, Storage;
 
 class Cotizacion2Controller extends Controller
 {
+    /**
+     * Instantiate a new Controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('ability:admin,consultar', ['only' => ['index', 'show']]);
+        $this->middleware('ability:admin,crear|editar', ['only' => ['create', 'store']]);
+        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
+        $this->middleware('ability:admin,eliminar', ['only' => 'destroy']);
+        $this->middleware('ability:admin,clonar', ['only' => 'clonar']);
+    }
+    
     /**
      * Display a listing of the resource.
      *
@@ -224,6 +236,15 @@ class Cotizacion2Controller extends Controller
                         $cotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                         $cotizacion4->save();
 
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'M';
+                        $historial->productohistorial_modulo = 'C';
+                        $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
+                        $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                        $historial->save();
+
                         $totalmaterialesp += $cotizacion4->cotizacion4_valor_total;
                     }
 
@@ -273,6 +294,15 @@ class Cotizacion2Controller extends Controller
                         $cotizacion9->cotizacion9_usuario_elaboro = auth()->user()->id;
                         $cotizacion9->save();
 
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'E';
+                        $historial->productohistorial_modulo = 'C';
+                        $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
+                        $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
+                        $historial->save();
+
                         $totalempaques += $cotizacion9->cotizacion9_valor_total;
                     }
 
@@ -303,6 +333,15 @@ class Cotizacion2Controller extends Controller
                         $cotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
                         $cotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
                         $cotizacion10->save();
+
+                        // Historial
+                        $historial = new ProductoHistorial;
+                        $historial->productohistorial_tipo = 'T';
+                        $historial->productohistorial_modulo = 'C';
+                        $historial->productohistorial_producto = $cotizacion10->cotizacion10_producto;
+                        $historial->productohistorial_valor = $cotizacion10->cotizacion10_valor_unitario;
+                        $historial->productohistorial_fh_elaboro = $cotizacion10->cotizacion10_fh_elaboro;
+                        $historial->save();
 
                         $totaltransportes += $cotizacion10->cotizacion10_valor_total;
                     }

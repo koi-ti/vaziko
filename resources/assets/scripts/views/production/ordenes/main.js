@@ -54,14 +54,14 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'orden_codigo', name: 'orden_codigo' },
-                    { data: 'orden_create', name: 'orden_create' },
+                    { data: 'id', name: 'id' },
                     { data: 'orden_ano', name: 'orden_ano' },
                     { data: 'orden_numero', name: 'orden_numero' },
                     { data: 'orden_fecha_inicio', name: 'orden_fecha_inicio' },
                     { data: 'orden_fecha_entrega', name: 'orden_fecha_entrega' },
                     { data: 'orden_hora_entrega', name: 'orden_hora_entrega' },
                     { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'detalle[0].total', name: 'detalle[0].total' },
+                    { data: 'detalle[0].valor_total', name: 'detalle[0].valor_total' },
                     { data: 'orden_abierta', name: 'orden_abierta' },
                     { data: 'id', name: 'id' }
                 ],
@@ -77,21 +77,15 @@ app || (app = {});
                         width: '13%',
                         searchable: false,
                         render: function (data, type, full, row) {
-                            const pre = '<a href="' + window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion})) + '" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
-
-                            const cot = '<a href="' + window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion})) + '" title="Ir a cotización"><span class="label label-danger">' + full.cotizacion_codigo + '</span></a>';
-
-                            const nor = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id})) + '">' + data + '</a>';
-
-                            var badges = nor + " ";
+                            var badges = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id})) + '">' + data + '</a> ';
                             if (full.cotizacion1_precotizacion) {
-                                badges += pre + " ";
+                                badges += '<a href="' + window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion})) + '" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a> ';
                             }
 
                             if (full.orden_cotizacion) {
-                                badges += cot;
+                                badges += '<a href="' + window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.orden_cotizacion})) + '" title="Ir a cotización"><span class="label label-danger">' + full.cotizacion_codigo + '</span></a>';
                             }
-                            return badges
+                            return badges;
                         }
                     },
                     {
@@ -100,38 +94,25 @@ app || (app = {});
                         width: '13%',
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            const close = '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-lock"></i></a>';
+                            var buttons = '<div class="btn-group btn-group-justified btn-group-xs" role="group">';
+                            if (parseInt(full.orden_abierta)) {
+                                if (parseInt(full.cerrar)) {
+                                    buttons += '<a class="btn btn-info btn-xs close-ordenp" title="Cerrar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.orden_codigo + '"><i class="fa fa-lock"></i></a>';
+                                }
 
-                            const open = '<a class="btn btn-info btn-xs open-ordenp" title="Reabrir orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-unlock"></i></a>';
+                                if (parseInt(full.clonar)) {
+                                    buttons += '<a class="btn btn-info btn-xs clone-ordenp" title="Clonar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.orden_codigo + '"><i class="fa fa-clone"></i></a>';
+                                }
 
-                            const clone = '<a class="btn btn-info btn-xs clone-ordenp" title="Clonar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-clone"></i></a>';
-
-                            const complete = '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="' + full.id + '" data-code="' + full.orden_codigo + '" data-refer="' + full.tercero_nombre+ '"><i class="fa fa-handshake-o"></i></a>';
-
-                            var buttons = '';
-
-                            if (parseInt(full.orden_create) && parseInt(full.orden_opcional)) {
-                                buttons += parseInt(full.orden_abierta) ? close : '';
-                            }
-
-                            if (!parseInt(full.orden_abierta) && parseInt(full.orden_opcional3)) {
-                                buttons += open;
-                            }
-
-                            if (parseInt(full.orden_opcional)) {
-                                // Verificar que este alguno de estos activos para continuar agregando botones
-                                if (parseInt(full.orden_anulada) ||  parseInt(full.orden_culminada) || parseInt(full.orden_abierta)) {
-                                    buttons += parseInt(full.orden_abierta) ? ' ' + clone + ' ' + complete : '';
-                                    buttons += parseInt(full.orden_culminada) ? ' ' + close : '';
+                                if (parseInt(full.culminar)) {
+                                    buttons += '<a class="btn btn-info btn-xs complete-ordenp" title="Culminar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.orden_codigo + '"><i class="fa fa-handshake-o"></i></a>';
+                                }
+                            } else {
+                                if (parseInt(full.abrir)) {
+                                    buttons += '<a class="btn btn-info btn-xs open-ordenp" title="Reabrir orden de producción" data-resource="' + full.id + '" data-codigo="' + full.orden_codigo + '"><i class="fa fa-unlock"></i></a>';
                                 }
                             }
-
-                            if (parseInt(full.orden_anulada)) {
-                                buttons = '';
-                            }
-
-                            buttons = (buttons) ? buttons : '----';
-                            return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
+                            return (buttons.length <= 69) ? '----' : buttons + '</div>';
                         },
                     },
                     {
@@ -153,7 +134,7 @@ app || (app = {});
                         orderable: false,
                         className: 'text-right',
                         render: function (data, type, full, row) {
-                            return parseInt(full.admin) ? window.Misc.currency(parseFloat(data)) : '-';
+                            return window.Misc.currency(parseFloat(data));
                         }
                     },
                     {
@@ -232,7 +213,7 @@ app || (app = {});
             var closeConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        orden_codigo: model.code
+                        orden_codigo: model.codigo
                     },
                     template: _.template(($('#ordenp-close-confirm-tpl').html() || '')),
                     titleConfirm: 'Cerrar orden de producción',
@@ -285,7 +266,7 @@ app || (app = {});
             var completeConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        orden_codigo: model.code
+                        orden_codigo: model.codigo
                     },
                     template: _.template(($('#ordenp-complete-confirm-tpl').html() || '')),
                     titleConfirm: 'Completar orden de producción',
@@ -333,7 +314,7 @@ app || (app = {});
 
             var model = this.$(e.currentTarget).data(),
                 route = window.Misc.urlFull(Route.route('ordenes.clonar', {ordenes: model.resource})),
-                data = {orden_codigo: model.code},
+                data = {orden_codigo: model.codigo},
                 _this = this;
 
             var cloneConfirm = new window.app.ConfirmWindow({
@@ -370,7 +351,7 @@ app || (app = {});
             var openConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        orden_codigo: model.code
+                        orden_codigo: model.codigo
                     },
                     template: _.template(($('#ordenp-open-confirm-tpl').html() || '')),
                     titleConfirm: 'Reabir orden de producción',

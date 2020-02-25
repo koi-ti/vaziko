@@ -216,7 +216,7 @@
 		<div class="form-group col-md-6 col-xs-10">
 			<label for="plancuentas_centro" class="control-label">Centro de costo</label>
 			<select name="plancuentas_centro" id="plancuentas_centro" class="form-control select2-default-clear">
-				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
+				@foreach (App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
 					<option value="{{ $key }}" <%- plancuentas_centro == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -280,7 +280,7 @@
 		<div class="form-group col-md-4">
 			<label for="plancuentas_equivalente" class="control-label">Equivalencia en NIF</label>
 			<select name="plancuentas_equivalente" id="plancuentas_equivalente" class="form-control select2-default-clear">
-				@foreach( App\Models\Accounting\PlanCuentaNif::getPlanCuentas() as $key => $value)
+				@foreach (App\Models\Accounting\PlanCuentaNif::getPlanCuentas() as $key => $value)
 					<option value="{{ $key }}" <%- plancuentas_equivalente == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -312,7 +312,7 @@
 		<div class="form-group col-md-6 col-xs-10">
 			<label for="plancuentasn_centro" class="control-label">Centro de costo</label>
 			<select name="plancuentasn_centro" id="plancuentasn_centro" class="form-control select2-default-clear">
-				@foreach( App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
+				@foreach (App\Models\Accounting\CentroCosto::getCentrosCosto('S') as $key => $value)
 					<option value="{{ $key }}" <%- plancuentasn_centro == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -405,7 +405,7 @@
 		<div class="form-group col-md-6 col-xs-10">
 			<label for="documento_folder" class="control-label">Folder</label>
 			<select name="documento_folder" id="documento_folder" class="form-control select2-default" required>
-				@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
+				@foreach (App\Models\Accounting\Folder::getFolders() as $key => $value)
 					<option value="{{ $key }}" <%- documento_folder == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -499,13 +499,7 @@
 {{-- Inventory templates --}}
 <script type="text/template" id="add-subgrupo-tpl">
     <div class="row">
-        @if( isset($subgrupo->id) )
-    		<div class="form-group col-md-2">
-    			<label class="control-label">Código</label>
-    			<input type="text" value="<%- id %>" placeholder="Código" class="form-control input-sm input-toupper" disabled>
-    		</div>
-        @endif
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-12">
 			<label for="subgrupo_nombre" class="control-label">Nombre</label>
 			<input type="text" id="subgrupo_nombre" name="subgrupo_nombre" value="<%- subgrupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
@@ -514,13 +508,7 @@
 
 <script type="text/template" id="add-grupo-tpl">
     <div class="row">
-        @if( isset($grupo->id) )
-    		<div class="form-group col-md-2">
-    			<label class="control-label">Código</label>
-    			<input type="text" value="<%- id %>" placeholder="Código" class="form-control input-sm input-toupper" disabled>
-    		</div>
-        @endif
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-12">
 			<label for="grupo_nombre" class="control-label">Nombre</label>
 			<input type="text" id="grupo_nombre" name="grupo_nombre" value="<%- grupo_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
@@ -568,7 +556,7 @@
 		<div class="form-group col-md-3 col-xs-10">
 			<label for="producto_grupo" class="control-label">Grupo</label>
 			<select name="producto_grupo" id="producto_grupo" class="form-control select2-default" required>
-				@foreach( App\Models\Inventory\Grupo::getGrupos() as $key => $value)
+				@foreach (App\Models\Inventory\Grupo::getGrupos() as $key => $value)
 					<option value="{{ $key }}" <%- producto_grupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -584,7 +572,7 @@
 		<div class="form-group col-md-3 col-xs-10">
 			<label for="producto_subgrupo" class="control-label">Subgrupo</label>
 			<select name="producto_subgrupo" id="producto_subgrupo" class="form-control select2-default" required>
-				@foreach( App\Models\Inventory\SubGrupo::getSubGrupos() as $key => $value)
+				@foreach (App\Models\Inventory\SubGrupo::getSubGrupos() as $key => $value)
 					<option value="{{ $key }}" <%- producto_subgrupo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -599,7 +587,7 @@
         <div class="form-group col-md-4 col-xs-10">
             <label for="producto_materialp" class="control-label">Material de producción</label>
             <select name="producto_materialp" id="producto_materialp" class="form-control select2-default-clear">
-                @foreach( App\Models\Production\Materialp::getMateriales() as $key => $value)
+                @foreach (App\Models\Production\Materialp::getMateriales() as $key => $value)
                     <option value="{{ $key }}" <%- producto_materialp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
                 @endforeach
             </select>
@@ -610,7 +598,7 @@
 		<div class="form-group col-md-3 col-xs-10">
 			<label for="producto_unidadmedida" class="control-label">Unidad de medida</label>
 			<select name="producto_unidadmedida" id="producto_unidadmedida" class="form-control select2-default-clear">
-				@foreach( App\Models\Inventory\Unidad::getUnidades() as $key => $value)
+				@foreach (App\Models\Inventory\Unidad::getUnidades() as $key => $value)
 					<option value="{{ $key }}" <%- producto_unidadmedida == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -675,7 +663,7 @@
 			<input type="text" id="areap_nombre" name="areap_nombre" value="<%- areap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
 
-		<div class="form-group col-md-3">
+		<div class="form-group col-md-4">
 			<label for="areap_nombre" class="control-label">Valor</label>
 			<input type="text" id="areap_valor" name="areap_valor" value="<%- areap_valor %>" placeholder="Nombre" class="form-control input-sm input-toupper" data-currency required>
 		</div>
@@ -684,14 +672,14 @@
 
 <script type="text/template" id="add-acabadop-tpl">
 	<div class="row">
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-12">
 			<label for="acabadop_nombre" class="control-label">Nombre</label>
 			<input type="text" id="acabadop_nombre" name="acabadop_nombre" value="<%- acabadop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
     </div>
 
     <div class="row">
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-12">
 			<label for="acabadop_descripcion" class="control-label">Descripción</label>
             <textarea id="acabadop_descripcion" name="acabadop_descripcion" class="form-control" rows="2" placeholder="Descripción"><%- acabadop_descripcion %></textarea>
 		</div>
@@ -700,7 +688,7 @@
 
 <script type="text/template" id="add-maquinap-tpl">
 	<div class="row">
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-12">
 			<label for="maquinap_nombre" class="control-label">Nombre</label>
 			<input type="text" id="maquinap_nombre" name="maquinap_nombre" value="<%- maquinap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
@@ -718,7 +706,7 @@
 			<label for="materialp_tipomaterial" class="control-label">Tipo de material</label>
 			<select name="materialp_tipomaterial" id="materialp_tipomaterial" class="form-control select2-default-clear" required>
 				<option value="" selected>Seleccione</option>
-				@foreach( App\Models\Production\TipoMaterialp::getTiposMaterialp() as $key => $value)
+				@foreach (App\Models\Production\TipoMaterialp::getTiposMaterialp() as $key => $value)
 					<option value="{{ $key }}" <%- materialp_tipomaterial == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
 				@endforeach
 			</select>
@@ -743,7 +731,7 @@
 
 <script type="text/template" id="add-tipomaterialp-tpl">
 	<div class="row">
-		<div class="form-group col-md-6">
+		<div class="form-group col-md-10">
 			<label for="tipomaterial_nombre" class="control-label">Nombre</label>
 			<input type="text" id="tipomaterial_nombre" name="tipomaterial_nombre" value="<%- tipomaterial_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
@@ -758,7 +746,7 @@
 {{-- Template TipoProductop --}}
 <script type="text/template" id="add-tipoproductop-tpl">
 	<div class="row">
-		<div class="form-group col-md-6">
+		<div class="form-group col-md-10">
 			<label for="tipoproductop_nombre" class="control-label">Nombre</label>
 			<input type="text" id="tipoproductop_nombre" name="tipoproductop_nombre" value="<%- tipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="35" required>
 		</div>
@@ -773,22 +761,21 @@
 {{-- Template SubtipoProductop --}}
 <script type="text/template" id="add-subtipoproductop-tpl">
 	<div class="row">
-        <div class="form-group col-md-6">
-			<label for="subtipoproductop_tipoproductop" class="control-label">Tipo de producto</label>
-			<select name="subtipoproductop_tipoproductop" id="subtipoproductop_tipoproductop" class="form-control select2-default-clear" required>
-				<option value="" selected>Seleccione</option>
-				@foreach( App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
-					<option value="{{ $key }}" <%- subtipoproductop_tipoproductop == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
-	</div>
-	<div class="row">
-		<div class="form-group col-md-6">
+        <div class="form-group col-md-12">
 			<label for="subtipoproductop_nombre" class="control-label">Nombre</label>
 			<input type="text" id="subtipoproductop_nombre" name="subtipoproductop_nombre" value="<%- subtipoproductop_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="25" required>
 		</div>
-
+	</div>
+	<div class="row">
+        <div class="form-group col-md-6">
+            <label for="subtipoproductop_tipoproductop" class="control-label">Tipo de producto</label>
+            <select name="subtipoproductop_tipoproductop" id="subtipoproductop_tipoproductop" class="form-control select2-default-clear" required>
+                <option value="" selected>Seleccione</option>
+                @foreach (App\Models\Production\TipoProductop::getTypeProductsp() as $key => $value)
+                <option value="{{ $key }}" <%- subtipoproductop_tipoproductop == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="subtipoproductop_activo" class="control-label">Activo</label>
 			<div><input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" <%- parseInt(subtipoproductop_activo) ? 'checked': ''%>></div>
@@ -799,7 +786,7 @@
 {{-- Template Actividadp --}}
 <script type="text/template" id="add-actividadp-tpl">
 	<div class="row">
-		<div class="form-group col-md-8">
+		<div class="form-group col-md-10">
 			<label for="actividadp_nombre" class="control-label">Nombre</label>
 			<input type="text" id="actividadp_nombre" name="actividadp_nombre" value="<%- actividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
 		</div>
@@ -814,22 +801,21 @@
 {{-- Template SubActividadp --}}
 <script type="text/template" id="add-subactividadp-tpl">
 	<div class="row">
-        <div class="form-group col-md-6">
-			<label for="subactividadp_actividadp" class="control-label">Actividad</label>
-			<select name="subactividadp_actividadp" id="subactividadp_actividadp" class="form-control select2-default-clear" required>
-				<option value="" selected>Seleccione</option>
-				@foreach( App\Models\Production\Actividadp::getActividadesp() as $key => $value)
-					<option value="{{ $key }}" <%- subactividadp_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-				@endforeach
-			</select>
-		</div>
+        <div class="form-group col-md-12">
+            <label for="subactividadp_nombre" class="control-label">Nombre</label>
+            <input type="text" id="subactividadp_nombre" name="subactividadp_nombre" value="<%- subactividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
+        </div>
 	</div>
     <div class="row">
-		<div class="form-group col-md-6">
-			<label for="subactividadp_nombre" class="control-label">Nombre</label>
-			<input type="text" id="subactividadp_nombre" name="subactividadp_nombre" value="<%- subactividadp_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="50" required>
-		</div>
-
+        <div class="form-group col-md-6">
+            <label for="subactividadp_actividadp" class="control-label">Actividad</label>
+            <select name="subactividadp_actividadp" id="subactividadp_actividadp" class="form-control select2-default-clear" required>
+                <option value="" selected>Seleccione</option>
+                @foreach (App\Models\Production\Actividadp::getActividadesp() as $key => $value)
+                    <option value="{{ $key }}" <%- subactividadp_actividadp == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
 		<div class="form-group col-md-2 col-xs-6">
 			<label for="subactividadp_activo" class="control-label">Activo</label>
 			<div><input type="checkbox" id="subactividadp_activo" name="subactividadp_activo" value="subactividadp_activo" <%- parseInt(subactividadp_activo) ? 'checked': ''%>></div>

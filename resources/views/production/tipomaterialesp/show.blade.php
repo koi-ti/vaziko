@@ -1,15 +1,15 @@
 @extends('production.tipomaterialesp.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('tipomaterialesp.index')}}">Tipos de material</a></li>
-    <li class="active">{{ $tipomaterialp->id }}</li>
+    <li><a href="{{ route('tipomaterialesp.index')}}">Tipo de material</a></li>
+    <li class="active">{{ $tipomaterialp->tipomaterial_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-5">
                     <label class="control-label">Nombre</label>
                     <div>{{ $tipomaterialp->tipomaterial_nombre }}</div>
                 </div>

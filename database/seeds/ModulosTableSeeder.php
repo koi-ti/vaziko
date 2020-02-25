@@ -570,7 +570,7 @@ class ModulosTableSeeder extends Seeder
 
         // Modulos
         Modulo::create([
-            'name' => 'facturap',
+            'name' => 'facturasp',
             'display_name' => 'Factura proveedor',
             'nivel1' => 6,
             'nivel2' => 1,

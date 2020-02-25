@@ -111,7 +111,7 @@ app || (app = {});
 
             if (!_.isUndefined(documento) && !_.isNull(documento) && documento != '') {
                 $.ajax({
-                    url: window.Misc.urlFull(Route.route('documentos.show', {documentos: documento})),
+                    url: window.Misc.urlFull(Route.route('search.documentos', {documento: documento})),
                     type: 'GET',
                     beforeSend: function() {
                         window.Misc.setSpinner(_this.spinner);

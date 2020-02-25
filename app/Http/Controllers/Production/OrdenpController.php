@@ -11,18 +11,6 @@ use App, View, DB, Log, Datatables, Storage;
 class OrdenpController extends Controller
 {
     /**
-     * Instantiate a new Controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'cerrar', 'abrir']]);
-        $this->middleware('ability:admin,opcional2', ['only' => ['completar', 'clonar']]);
-        $this->middleware('ability:admin,opcional3', ['only' => ['abrir']]);
-        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -48,37 +36,21 @@ class OrdenpController extends Controller
             $query->leftjoin('koi_cotizacion1', 'orden_cotizacion', '=', 'koi_cotizacion1.id');
             $query->leftjoin('koi_precotizacion1', 'cotizacion1_precotizacion', '=', 'koi_precotizacion1.id');
 
-            $query->with(['detalle' => function ($producto) {
-                $producto->select('orden2_orden', DB::raw('SUM(orden2_total_valor_unitario * orden2_cantidad) as total'))
-                                ->groupBy('orden2_orden');
-            }]);
-
-            // Permisions mostrar botones crear [close, open]
-            if (auth()->user()->ability('admin', 'crear', ['module' => 'ordenes'])) {
-                $query->addSelect(DB::raw('TRUE as orden_create'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as orden_create'));
+            // If ability 'precios'
+            if (auth()->user()->ability('admin', 'precios', ['module' => 'ordenes'])) {
+                $query->with(['detalle' => function ($producto) {
+                    $producto->select('orden2_orden', DB::raw('SUM(orden2_total_valor_unitario * orden2_cantidad) as valor_total'))->groupBy('orden2_orden');
+                }]);
             }
 
-            if (auth()->user()->hasRole('admin')) {
-                $query->addSelect(DB::raw('TRUE as admin'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as admin'));
-            }
+            // If permissions
+            $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
+            $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
+            $culminar = auth()->user()->ability('admin', 'culminar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
+            $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
 
-            // Permisions mostrar botones opcional2 [complete, clone]
-            if (auth()->user()->ability('admin', 'opcional2', ['module' => 'ordenes'])) {
-                $query->addSelect(DB::raw('TRUE as orden_opcional'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as orden_opcional'));
-            }
-
-            // Permisions mostrar botones opcional2 [complete, clone]
-            if (auth()->user()->ability('admin', 'opcional3', ['module' => 'ordenes'])) {
-                $query->addSelect(DB::raw('TRUE as orden_opcional3'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as orden_opcional3'));
-            }
+            // If ability other permission
+            $query->addSelect(DB::raw("{$cerrar} AS cerrar, {$abrir} AS abrir, {$culminar} AS culminar, {$clonar} AS clonar"));
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
@@ -90,7 +62,7 @@ class OrdenpController extends Controller
                 session(['searchordenp_ordenp_productop' => $request->has('orden_productop') ? $request->orden_productop : '']);
             }
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Orden codigo
                     if ($request->has('orden_numero')) {
                         $query->whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) LIKE '%{$request->orden_numero}%'");
@@ -666,9 +638,9 @@ class OrdenpController extends Controller
     }
 
     /**
-     * function charts ordenesp
+     * function graficas ordenesp
      */
-    public function charts(Request $request, $id)
+    public function graficas(Request $request, $id)
     {
         if ($request->ajax()) {
             $ordenp = Ordenp::getOrden($id);

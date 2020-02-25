@@ -1,7 +1,7 @@
 @extends('production.maquinas.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('maquinasp.index')}}">Maquinap</a></li>
+    <li><a href="{{ route('maquinasp.index')}}">Maquina</a></li>
 	<li class="active">Nuevo</li>
 @stop
 

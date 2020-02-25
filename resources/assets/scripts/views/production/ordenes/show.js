@@ -342,7 +342,7 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull(Route.route('ordenes.charts', {ordenes: _this.model.get('id')})),
+                url: window.Misc.urlFull(Route.route('ordenes.graficas', {ordenes: _this.model.get('id')})),
                 type: 'GET',
                 beforeSend: function() {
                     window.Misc.setSpinner(_this.spinner);

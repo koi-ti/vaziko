@@ -1,7 +1,7 @@
 @extends('production.actividadesp.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('actividadesp.index')}}">Actividades de producción</a></li>
+    <li><a href="{{ route('actividadesp.index')}}">Actividad de producción</a></li>
 	<li class="active">Nueva</li>
 @stop
 

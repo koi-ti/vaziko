@@ -203,7 +203,9 @@
                                             <table id="browse-areas-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%"></th>
+                                                        @ability ('eliminar' | 'productosp')
+                                                            <th width="5%"></th>
+                                                        @endability
                                                         <th width="95%">Nombre</th>
                                                     </tr>
                                                 </thead>
@@ -235,7 +237,9 @@
                                             <table id="browse-tips-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%"></th>
+                                                        @ability ('eliminar' | 'productosp')
+                                                            <th width="5%"></th>
+                                                        @endability
                                                         <th width="95%">Tip</th>
                                                     </tr>
                                                 </thead>
@@ -277,7 +281,9 @@
                                             <table id="browse-maquinas-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%"></th>
+                                                        @ability ('eliminar' | 'productosp')
+                                                            <th width="5%"></th>
+                                                        @endability
                                                         <th width="5%">Código</th>
                                                         <th width="90%">Nombre</th>
                                                     </tr>
@@ -320,7 +326,9 @@
                                             <table id="browse-materiales-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%"></th>
+                                                        @ability ('eliminar' | 'productosp')
+                                                            <th width="5%"></th>
+                                                        @endability
                                                         <th width="5%">Código</th>
                                                         <th width="90%">Nombre</th>
                                                     </tr>
@@ -363,7 +371,9 @@
                                             <table id="browse-acabados-productop-list" class="table table-hover table-bordered" cellspacing="0">
                                                 <thead>
                                                     <tr>
-                                                        <th width="5%"></th>
+                                                        @ability ('eliminar' | 'productosp')
+                                                            <th width="5%"></th>
+                                                        @endability
                                                         <th width="5%">Código</th>
                                                         <th width="90%">Nombre</th>
                                                     </tr>
@@ -397,59 +407,69 @@
     </script>
 
     <script type="text/template" id="productop-tip-item-list-tpl">
-        <% if (edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-productop2-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
-        <% } %>
+        @ability ('eliminar' | 'productosp')
+            <% if (edit) { %>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-productop2-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            <% } %>
+        @endability
         <td><%- productop2_tip %></td>
     </script>
 
     <script type="text/template" id="productop-area-item-list-tpl">
-        <% if (edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-productop3-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
-        <% } %>
+        @ability ('eliminar' | 'productosp')
+            <% if (edit) { %>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-productop3-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            <% } %>
+        @endability
         <td><%- areap_nombre %></td>
     </script>
 
     <script type="text/template" id="productop-maquina-item-list-tpl">
-        <% if (edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-productop4-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
-        <% } %>
+        @ability ('eliminar' | 'productosp')
+            <% if (edit) { %>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-productop4-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            <% } %>
+        @endability
         <td><%- maquinap_id %></td>
         <td><%- maquinap_nombre %></td>
     </script>
 
     <script type="text/template" id="productop-material-item-list-tpl">
-        <% if (edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-productop5-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
-        <% } %>
+        @ability ('eliminar' | 'productosp')
+            <% if (edit) { %>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-productop5-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            <% } %>
+        @endability
         <td><%- materialp_id %></td>
         <td><%- materialp_nombre %></td>
     </script>
 
     <script type="text/template" id="productop-acabado-item-list-tpl">
-        <% if (edit) { %>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-productop6-remove" data-resource="<%- id %>">
-                    <span><i class="fa fa-times"></i></span>
-                </a>
-            </td>
-        <% } %>
+        @ability ('eliminar' | 'productosp')
+            <% if (edit) { %>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs item-productop6-remove" data-resource="<%- id %>">
+                        <span><i class="fa fa-times"></i></span>
+                    </a>
+                </td>
+            <% } %>
+        @endability
         <td><%- acabadop_id %></td>
         <td><%- acabadop_nombre %></td>
     </script>
@@ -486,7 +506,7 @@
                     <span class="qq-upload-size-selector qq-upload-size"></span>
                     <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel">{{ trans('app.cancel') }}</button>
                     <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">{{ trans('app.files.retry') }}</button>
-                    @ability ('archivos' | 'productosp')
+                    @ability ('eliminar' | 'productosp')
                         <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">{{ trans('app.delete') }}</button>
                     @endability
                     <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>

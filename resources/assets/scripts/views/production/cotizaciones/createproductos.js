@@ -46,6 +46,7 @@ app || (app = {});
             // Declare previes values materiales, empaques
             this.prevmateriales = 0;
             this.prevempaques = 0;
+            this.prevtransportes = 0;
 
             // Events
             this.listenTo( this.model, 'change', this.render );
@@ -305,6 +306,7 @@ app || (app = {});
 
                 var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                     data.cotizacion10_cantidad = this.$('#cotizacion10_cantidad:disabled').val();
+                    data.previo = this.prevtransportes;
                 this.transportesProductopCotizacionList.trigger('store', data, this.$formtransporte);
             }
         },
@@ -313,35 +315,40 @@ app || (app = {});
         * Event change insumo
         */
         changeInsumo: function (e) {
-            var insumo = this.$(e.currentTarget).val(),
-                call = this.$(e.currentTarget).data('historial').split('_')[1],
-                url = '',
+            var selected = this.$(e.currentTarget),
+                insumo = selected.val(),
+                tipo = selected.data('historial').split('_')[1],
                 _this = this;
 
             // Reference
-            this.$selectinsumo = this.$(e.currentTarget);
-            this.$inputinsumo = this.$('#' + this.$selectinsumo.data('valor'));
-            this.$historialinsumo = this.$('#' + this.$selectinsumo.data('historial'));
+            this.$inputinsumo = this.$('#' + selected.data('valor'));
+            this.$historialinsumo = this.$('#' + selected.data('historial'));
 
             if (insumo) {
-                if (call == 'cotizacion4') {
+                var url;
+                if (tipo == 'cotizacion4') {
                     url = window.Misc.urlFull( Route.route('cotizaciones.productos.materiales.index', {insumo: insumo}));
-                    call = 'materialp';
-                } else {
+                    tipo = 'M';
+                } else if (tipo == 'cotizacion9') {
                     url = window.Misc.urlFull( Route.route('cotizaciones.productos.empaques.index', {insumo: insumo}));
-                    call = 'empaque';
+                    tipo = 'E';
+                } else {
+                    url = window.Misc.urlFull( Route.route('cotizaciones.productos.transportes.index', {insumo: insumo}));
+                    tipo = 'T';
                 }
 
                 $.get(url, function (resp) {
                     if (resp) {
-                        if (call == 'materialp') {
+                        if (tipo == 'M') {
                             _this.prevmateriales = resp.valor;
-                        } else {
+                        } else if (tipo == 'E') {
                             _this.prevempaques = resp.valor;
+                        } else {
+                            _this.prevtransportes = resp.valor;
                         }
 
                         _this.$inputinsumo.val(resp.valor);
-                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-call', call);
+                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-tipo', tipo);
                     }
                 });
             } else {

@@ -1,8 +1,8 @@
 @extends('inventory.subgrupos.main')
 
 @section('breadcrumb')
-	<li><a href="{{ route('subgrupos.index') }}">Subgrupos</a></li>
-	<li><a href="{{ route('subgrupos.show', ['subgrupos' => $subgrupo->id]) }}">{{ $subgrupo->id }}</a></li>
+	<li><a href="{{ route('subgrupos.index') }}">Subgrupo</a></li>
+	<li><a href="{{ route('subgrupos.show', ['subgrupos' => $subgrupo->id]) }}">{{ $subgrupo->subgrupo_nombre }}</a></li>
 	<li class="active">Editar</li>
 @stop
 

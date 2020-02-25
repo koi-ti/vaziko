@@ -398,7 +398,7 @@
 
             // Search facturap
             $.ajax({
-                url: window.Misc.urlFull(Route.route('facturap.search')),
+                url: window.Misc.urlFull(Route.route('facturasp.search')),
                 type: 'GET',
                 data: { facturap1_factura: settings.facturap, tercero_nit: settings.tercero },
                 beforeSend: function() {
@@ -573,7 +573,7 @@
             } else {
                 preview = states[states.indexOf(value)+1];
             }
-            
+
             return _.isUndefined(preview) ? value : preview;
         }
     };

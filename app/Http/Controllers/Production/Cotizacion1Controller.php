@@ -11,17 +11,6 @@ use App, View, DB, Log, Datatables, Storage;
 class Cotizacion1Controller extends Controller
 {
     /**
-     * Instantiate a new Controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store', 'abrir', 'estados']]);
-        $this->middleware('ability:admin,opcional2', ['only' => ['terminar', 'clonar', 'estados']]);
-        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update', 'estados']]);
-    }
-
-    /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
@@ -45,24 +34,24 @@ class Cotizacion1Controller extends Controller
             );
             $query->join('koi_tercero', 'cotizacion1_cliente', '=', 'koi_tercero.id');
             $query->leftjoin('koi_precotizacion1', 'cotizacion1_precotizacion', '=', 'koi_precotizacion1.id');
-            $query->with(['productos' => function ($producto) {
-                $producto->select('cotizacion2_cotizacion', DB::raw('SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total'))
-                                ->groupBy('cotizacion2_cotizacion');
-            }]);
 
-            if (auth()->user()->hasRole('admin')) {
-                $query->addSelect(DB::raw('TRUE as isAdmin'));
-            } else {
-                $query->addSelect(DB::raw('FALSE as isAdmin'));
+            if (auth()->user()->ability('admin', 'precios', ['module' => 'cotizaciones'])) {
+                $query->with(['productos' => function ($producto) {
+                    $producto->select('cotizacion2_cotizacion', DB::raw('SUM(cotizacion2_total_valor_unitario*cotizacion2_cantidad) as total'))->groupBy('cotizacion2_cotizacion');
+                }]);
             }
 
-            // Permisions mostrar botones opcional2 [complete, clone]
-            if (auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones'])) {
-                $query->addSelect(DB::raw('TRUE as isOptional'));
-            } else {
-                $query->where('cotizacion1_abierta', true);
-                $query->addSelect(DB::raw('FALSE as isOptional'));
-            }
+            // If permissions
+            $devolver = auth()->user()->hasRole('admin') ? 'TRUE' : 'FALSE';
+            $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $precotizar = auth()->user()->ability('admin', 'precotizar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $cotizar = auth()->user()->ability('admin', 'cotizar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $exportar = auth()->user()->ability('admin', 'exportar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+
+            // If ability other permission
+            $query->addSelect(DB::raw("{$devolver} AS devolver, {$cerrar} AS cerrar, {$abrir} AS abrir, {$clonar} AS clonar, {$precotizar} AS precotizar, {$cotizar} AS cotizar, {$exportar} AS exportar"));
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
@@ -920,9 +909,9 @@ class Cotizacion1Controller extends Controller
     }
 
     /**
-     * function charts ordenesp
+     * function graficas ordenesp
      */
-    public function charts(Request $request, $id)
+    public function graficas(Request $request, $id)
     {
         if ($request->ajax()) {
             $cotizacion = Cotizacion1::find($id);

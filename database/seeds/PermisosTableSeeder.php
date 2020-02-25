@@ -82,13 +82,13 @@ class PermisosTableSeeder extends Seeder
         Permiso::create([
             'name'   => 'generar',
             'display_name'   => 'Generar',
-            'description'   => 'Permiso para generar (Cotización y Orden)'
+            'description'   => 'Permiso para generar (Cotización y Orden de producción)'
         ]);
 
         Permiso::create([
             'name'   => 'utilidades',
             'display_name'   => 'Utilidades',
-            'description'   => 'Permiso para ver utilidades (Cotización y Orden)'
+            'description'   => 'Permiso para ver utilidades (Cotización y Orden de producción)'
         ]);
 
         Permiso::create([
@@ -99,7 +99,7 @@ class PermisosTableSeeder extends Seeder
 
         Permiso::create([
             'name'   => 'cotizar',
-            'display_name'   => 'Ccotizar',
+            'display_name'   => 'Cotizar',
             'description'   => 'Permiso para cotizar (Cotizaciónes)'
         ]);
 
@@ -122,9 +122,21 @@ class PermisosTableSeeder extends Seeder
         ]);
 
         Permiso::create([
+            'name'   => 'tiempos',
+            'display_name'   => 'Tiempos',
+            'description'   => 'Permiso para ver tiempos (Orden de producción)'
+        ]);
+
+        Permiso::create([
+            'name'   => 'estados',
+            'display_name'   => 'Estados',
+            'description'   => 'Permiso para ver estados (Orden de producción)'
+        ]);
+
+        Permiso::create([
             'name'   => 'operario',
             'display_name'   => 'Operario',
-            'description'   => 'Permiso para ver como operario (Orden de produccion)'
+            'description'   => 'Permiso para ver como operario (Orden de producción)'
         ]);
 
         Permiso::create([

@@ -69,11 +69,11 @@ app || (app = {});
                         targets: 0,
                         width: '10%',
                         render: function (data, type, full, row) {
+                            var label = '<a href="'+ window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.id }))  +'">' + data + '</a>';
                             if (full.cotizacion1_precotizacion) {
-                                return '<a href="'+ window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.id }))  +'">' + data + '</a> <a href="'+ window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion })) +'" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
-                            } else {
-                                return '<a href="'+ window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.id }))  +'">' + data + '</a>';
+                                label += ' <a href="'+ window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion })) +'" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
                             }
+                            return label;
                         }
                     },
                     {
@@ -82,60 +82,48 @@ app || (app = {});
                         width: '13%',
                         className: 'text-center',
                         render: function (data, type, full, row) {
-                            const close = '<div class="btn-group btn-group-xs">' +
-                            '<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>' +
-                            '<ul class="dropdown-menu pull-right">' +
-                            '<li><a href="#" class="state-cotizacion" data-state="CR" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '">RECOTIZAR</a></li>' +
-                            '<li><a href="#" class="state-cotizacion" data-state="CN" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '">NO ACEPTADA</a></li>' +
-                            '</ul></div>';
-
-                            const exportar = '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
-
-                            const prev = '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
-
-                            const next = '<a class="btn btn-success btn-xs state-cotizacion" title="Siguiente estado de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="next"><i class="fa fa-arrow-right"></i></a>';
-
-                            const open = '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '" data-refer="' + full.tercero_nombre + '"><i class="fa fa-unlock"></i></a>';
-
-                            const clone = '<a class="btn btn-danger btn-xs clone-cotizacion" title="Clonar cotización" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '" data-refer="' + full.tercero_nombre + '"><i class="fa fa-clone"></i></a>';
-
-                            const generate = '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-code="' + full.cotizacion_codigo + '" data-refer="' + full.tercero_nombre + '"><i class="fa fa-sticky-note"></i></a>';
-
-                            var buttons = '';
-
-                            if (parseInt(full.isOptional) || parseInt(full.isAdmin)) {
-                                if (['CC' , 'CF', 'CS'].indexOf(full.cotizacion1_estados) !== -1 && parseInt(full.cotizacion1_abierta)) {
-                                    buttons += close;
-                                } else if (!parseInt(full.cotizacion1_abierta)) {
-                                    buttons += open;
-                                }
-                                buttons += clone;
-                            }
-
-                            if (['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
-                                if (parseInt(full.cotizacion1_abierta)) {
-                                    buttons += generate;
-                                }
-                            }
-
-                            if (full.cotizacion1_estados == 'CS') {
-                                buttons += exportar;
-                            }
+                            var buttons = '<div class="btn-group btn-group-justified btn-group-xs" role="group">';
 
                             if (parseInt(full.cotizacion1_abierta)) {
-                                if (parseInt(full.isAdmin)) {
-                                    if (full.cotizacion1_estados != 'PC') {
-                                        buttons += prev;
-                                    }
+                                if (parseInt(full.cerrar) && ['CC' , 'CF', 'CS'].indexOf(full.cotizacion1_estados) !== -1) {
+                                    buttons += '<div class="btn-group btn-group-xs">' +
+                                                '<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>' +
+                                                '<ul class="dropdown-menu pull-right">' +
+                                                    '<li><a href="#" class="state-cotizacion" data-state="CR" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">RECOTIZAR</a></li>' +
+                                                    '<li><a href="#" class="state-cotizacion" data-state="CN" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">NO ACEPTADA</a></li>' +
+                                                '</ul></div>';
                                 }
 
-                                if (parseInt(full.isOptional) || parseInt(full.isAdmin)) {
-                                    if (full.cotizacion1_estados != 'CS') {
-                                        buttons += next;
-                                    }
+                                if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
+                                    buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
+                                }
+
+                                if (parseInt(full.exportar) && full.cotizacion1_estados == 'CS') {
+                                    buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
+                                }
+
+                                if (parseInt(full.devolver) && full.cotizacion1_estados != 'PC') {
+                                    buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
+                                }
+
+                                if (parseInt(full.precotizar) && full.cotizacion1_estados == 'PC') {
+                                    buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Siguiente estado de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="next"><i class="fa fa-arrow-right"></i></a>';
+                                }
+
+                                if (parseInt(full.cotizar) && ['PF', 'CC', 'CF'].indexOf(full.cotizacion1_estados) !== -1) {
+                                    buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Siguiente estado de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="next"><i class="fa fa-arrow-right"></i></a>';
+                                }
+
+                            } else {
+                                if (parseInt(full.abrir)) {
+                                    buttons += '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-unlock"></i></a>';
                                 }
                             }
-                            return '<div class="btn-group btn-group-justified btn-group-xs" role="group">' + buttons + '</div>';
+
+                            if (parseInt(full.clonar)) {
+                                buttons += '<a class="btn btn-danger btn-xs clone-cotizacion" title="Clonar cotización" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-clone"></i></a>';
+                            }
+                            return (buttons.length <= 69) ? '----' : buttons + '</div>';
                         }
                     },
                     {
@@ -161,7 +149,7 @@ app || (app = {});
                         orderable: false,
                         className: 'text-right',
                         render: function (data, type, full, row) {
-                            return parseInt(full.isAdmin) ? window.Misc.currency(parseFloat(data)) : '-';
+                            return window.Misc.currency(parseFloat(data));
                         }
                     },
                 ],
@@ -223,7 +211,7 @@ app || (app = {});
                     parameters: {
                         dataFilter: {
                             estado: window.Misc.stateProduction(new_state),
-                            codigo: data.code
+                            codigo: data.codigo
                         },
                         template: _.template(($('#cotizacion-state-confirm-tpl').html() || '')),
                         titleConfirm: 'Estado cotización',
@@ -281,7 +269,7 @@ app || (app = {});
             var cloneConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        cotizacion_codigo: model.code
+                        cotizacion_codigo: model.codigo
                     },
                     template: _.template(($('#cotizacion-clone-confirm-tpl').html() || '')),
                     titleConfirm: 'Clonar cotización',
@@ -315,7 +303,7 @@ app || (app = {});
             var generateConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        cotizacion_codigo: model.code,
+                        cotizacion_codigo: model.codigo,
                         cotizacion_referencia: model.refer
                     },
                     template: _.template(($('#cotizacion-generate-confirm-tpl').html() || '')),
@@ -367,7 +355,7 @@ app || (app = {});
             var openConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     dataFilter: {
-                        cotizacion_codigo: model.code
+                        cotizacion_codigo: model.codigo
                     },
                     template: _.template(($('#cotizacion-open-confirm-tpl').html() || '')),
                     titleConfirm: 'Reabir cotización',
@@ -413,7 +401,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open(window.Misc.urlFull(Route.route('cotizaciones.exportar', {cotizaciones: $(e.currentTarget).data('code')})), '_blank');
+            window.open(window.Misc.urlFull(Route.route('cotizaciones.exportar', {cotizaciones: $(e.currentTarget).data('codigo')})), '_blank');
         },
     });
 })(jQuery, this, this.document);

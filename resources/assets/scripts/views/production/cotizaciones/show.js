@@ -166,7 +166,7 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull(Route.route('cotizaciones.charts', {cotizaciones: _this.model.get('id')})),
+                url: window.Misc.urlFull(Route.route('cotizaciones.graficas', {cotizaciones: _this.model.get('id')})),
                 type: 'GET',
                 beforeSend: function () {
                     window.Misc.setSpinner(_this.spinner);

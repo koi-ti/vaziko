@@ -18,8 +18,8 @@
     </section>
 
     <script type="text/template" id="facturap-item-list-tpl">
-        <td><%- facturap2_cuota %></td>
-        <td><%- facturap2_vencimiento %></td>
+        <td class="text-center"><%- facturap2_cuota %></td>
+        <td class="text-center"><%- facturap2_vencimiento %></td>
         @ability ('precios' | 'facturasp')
             <td class="text-right"><%- window.Misc.currency(facturap2_saldo) %></td>
         @endability

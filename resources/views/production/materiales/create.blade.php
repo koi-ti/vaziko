@@ -1,7 +1,7 @@
 @extends('production.materiales.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('materialesp.index')}}">Materiales</a></li>
+    <li><a href="{{ route('materialesp.index')}}">Material</a></li>
 	<li class="active">Nuevo</li>
 @stop
 

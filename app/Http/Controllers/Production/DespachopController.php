@@ -6,21 +6,10 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Empresa, App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Bitacora;
 use App\Models\Production\Despachop, App\Models\Production\Despachop2, App\Models\Production\Ordenp, App\Models\Production\Ordenp2;
-use Auth, DB, Log, App, View;
+use DB, Log, App, View;
 
 class DespachopController extends Controller
 {
-    /**
-     * Instantiate a new Controller instance.
-     */
-    public function __construct()
-    {
-        $this->middleware('ability:admin,consultar');
-        $this->middleware('ability:admin,crear', ['only' => ['create', 'store']]);
-        $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
-        $this->middleware('ability:admin,opcional3', ['only' => ['destroy']]);
-    }
-
     /**
      * Display a listing of the resource.
      *
@@ -97,7 +86,7 @@ class DespachopController extends Controller
                     $despacho->despachop1_fecha = date('Y-m-d');
                     $despacho->despachop1_orden = $orden->id;
                     $despacho->despachop1_contacto = $contacto->id;
-                    $despacho->despachop1_usuario_elaboro = Auth::user()->id;
+                    $despacho->despachop1_usuario_elaboro = auth()->user()->id;
                     $despacho->despachop1_fecha_elaboro = date('Y-m-d H:i:s');
                     $despacho->save();
 
@@ -193,7 +182,7 @@ class DespachopController extends Controller
 
                 // Anular despachop1
                 $despacho->despachop1_anulado = true;
-                $despacho->despachop1_usuario_anulo = Auth::user()->id;
+                $despacho->despachop1_usuario_anulo = auth()->user()->id;
                 $despacho->despachop1_fecha_anulo = date('Y-m-d H:i:s');
                 $despacho->save();
 

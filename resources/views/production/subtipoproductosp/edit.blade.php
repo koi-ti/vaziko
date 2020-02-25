@@ -2,7 +2,7 @@
 
 @section('breadcrumb')
 	<li><a href="{{ route('subtipoproductosp.index') }}">Subtipo de producto</a></li>
-	<li><a href="{{ route('subtipoproductosp.show', ['subtipoproductop' => $subtipoproductop->id]) }}">{{ $subtipoproductop->id }}</a></li>
+	<li><a href="{{ route('subtipoproductosp.show', ['subtipoproductop' => $subtipoproductop->id]) }}">{{ $subtipoproductop->subtipoproductop_nombre }}</a></li>
 	<li class="active">Editar</li>
 @stop
 

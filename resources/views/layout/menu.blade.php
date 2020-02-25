@@ -320,20 +320,20 @@
     </li>
 
     {{-- Tesoreria --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['facturap', 'rhistorialproveedores']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['facturasp', 'rhistorialproveedores']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-balance-scale"></i> <span>Tesorería</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos tesoreria --}}
-            <li class="{{ in_array(Request::segment(1), ['facturap']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['facturasp']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li class="{{ Request::segment(1) == 'facturap' ? 'active' : '' }}">
-                        <a href="{{ route('facturap.index') }}"><i class="fa fa-pencil-square-o"></i> Factura proveedor</a>
+                    <li class="{{ Request::segment(1) == 'facturasp' ? 'active' : '' }}">
+                        <a href="{{ route('facturasp.index') }}"><i class="fa fa-pencil-square-o"></i> Factura proveedor</a>
                     </li>
                 </ul>
             </li>

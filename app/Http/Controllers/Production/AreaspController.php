@@ -17,7 +17,8 @@ class AreaspController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of(Areap::query())->make(true);
+            return Datatables::of(Areap::select('id', 'areap_nombre', DB::raw(auth()->user()->ability('admin', 'precios', ['module' => 'areasp']) ? 'areap_valor' : '0 AS areap_valor')))
+                        ->make(true);
         }
         return view('production.areas.index');
     }

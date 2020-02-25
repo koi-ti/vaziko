@@ -2,23 +2,23 @@
 
 @section('breadcrumb')
     <li><a href="{{ route('subtipoproductosp.index')}}">Subtipo de producto</a></li>
-    <li class="active">{{ $subtipoproductop->id }}</li>
+    <li class="active">{{ $subtipoproductop->subtipoproductop_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
             <div class="row">
-                <div class="form-group col-md-4">
-                    <label class="control-label">Tipo de producto</label>
-                    <div>{{ $subtipoproductop->tipoproductop_nombre }}</div>
-                </div>
-
-                <div class="form-group col-md-4">
+                <div class="form-group col-md-12">
                     <label class="control-label">Nombre</label>
                     <div>{{ $subtipoproductop->subtipoproductop_nombre }}</div>
                 </div>
-
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">Tipo de producto</label>
+                    <div>{{ $subtipoproductop->tipoproductop_nombre }}</div>
+                </div>
                 <div class="form-group col-md-2"><br>
                     <label class="checkbox-inline" for="subtipoproductop_activo">
                         <input type="checkbox" id="subtipoproductop_activo" name="subtipoproductop_activo" value="subtipoproductop_activo" disabled {{ $subtipoproductop->subtipoproductop_activo ? 'checked': '' }}> Activo

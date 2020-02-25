@@ -1,7 +1,7 @@
 @extends('production.areas.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('areasp.index')}}">Áreas</a></li>
+    <li><a href="{{ route('areasp.index')}}">Área</a></li>
 	<li class="active">Nuevo</li>
 @stop
 

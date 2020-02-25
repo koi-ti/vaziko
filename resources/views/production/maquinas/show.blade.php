@@ -1,19 +1,13 @@
 @extends('production.maquinas.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('maquinasp.index')}}">Máquinas</a></li>
-    <li class="active">{{ $maquina->id }}</li>
+    <li><a href="{{ route('maquinasp.index')}}">Máquina</a></li>
+    <li class="active">{{ $maquina->maquinap_nombre }}</li>
 @stop
 
 @section('module')
     <div class="box box-success">
         <div class="box-body">
-            <div class="row">
-                <div class="form-group col-md-2">
-                    <label class="control-label">Código</label>
-                    <div>{{ $maquina->id }}</div>
-                </div>
-            </div>
             <div class="row">
                 <div class="form-group col-md-8">
                     <label class="control-label">Nombre</label>

@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif;
+use App\Models\Accounting\PlanCuenta, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\Documento;
 use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Actividad, App\Models\Base\Municipio;
 use App\Models\Receivable\Factura1;
 use App\Models\Inventory\Producto;
@@ -732,6 +732,19 @@ class BuscadorController extends Controller
 
             $query->orderby('actividad_nombre','asc');
             return response()->json($query->get());
+        }
+        abort(404);
+    }
+
+    /**
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function documentos(Request $request)
+    {
+        if ($request->ajax()) {
+            $documento = Documento::getDocument($request->documento);
+            return response()->json($documento);
         }
         abort(404);
     }

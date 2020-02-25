@@ -36,7 +36,7 @@ app || (app = {});
                 dom: "<'row'<'col-sm-12'tr>>" +
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 ajax: {
-                    url: window.Misc.urlFull(Route.route('facturap.index')),
+                    url: window.Misc.urlFull(Route.route('facturasp.index')),
                     data: function(data) {
                         data.persistent = true;
                         data.facturap = _this.$searchfacturapFacturap.val();
@@ -57,7 +57,7 @@ app || (app = {});
                         targets: 0,
                         width: '5%',
                         render: function (data, type, full, row) {
-                           return '<a href="'+ window.Misc.urlFull(Route.route('facturap.show', {facturap: full.id}))  +'">' + data + '</a>';
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturasp.show', {facturasp: full.id}))  +'">' + data + '</a>';
                         },
                     },
                 ]

@@ -186,7 +186,7 @@
                         </div>
 						<div class="box-footer with-border">
 							<div class="row">
-                                <div class="col-md-2 col-md-offset-{{ $orden->orden_abierta ? '4' : '5' }} col-sm-6 col-xs-6">
+                                <div class="col-md-2 col-md-offset-{{ ($orden->orden_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'ordenes'])) ? '4' : '5' }} col-sm-6 col-xs-6">
                                     <a href="{{ route('ordenes.index') }}" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
                                 </div>
                                 @ability ('editar' | 'ordenes')
@@ -221,17 +221,15 @@
                                         <tbody>
                                             {{-- Render content productos --}}
                                         </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td></td>
-                                                <th class="text-right">Subtotal</th>
-                                                <td class="text-center" id="subtotal-cantidad">0</td>
-                                                @ability ('precios' | 'ordenes')
+                                        @ability ('precios' | 'ordenes')
+                                            <tfoot>
+                                                <tr>
+                                                    <td></td>
+                                                    <th class="text-right">Subtotal</th>
+                                                    <td class="text-center" id="subtotal-cantidad">0</td>
                                                     <td colspan="2"></td>
                                                     <td class="text-right" id="subtotal-total">0</td>
-                                                @endability
-                                            </tr>
-                                            @ability ('precios' | 'ordenes')
+                                                </tr>
                                                 <tr>
                                                     <td></td>
                                                     <th class="text-right">Iva ({{ $orden->orden_iva }}%)</th>
@@ -242,8 +240,8 @@
                                                     <th class="text-right">Total</th>
                                                     <td colspan="4" class="text-right" id="total-total">0</td>
                                                 </tr>
-                                            @endability
-                                        </tfoot>
+                                            </tfoot>
+                                        @endability
                                     </table>
                                 </div>
                            	</div>
@@ -385,4 +383,17 @@
 
 <script type="text/template" id="ordenp-clone-confirm-tpl">
     <p>¿Está seguro que desea clonar la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
+</script>
+
+<script type="text/template" id="ordenp-producto-item-list-tpl">
+    <td>
+        <a href="<%- window.Misc.urlFull (Route.route('ordenes.productos.show', {productos: id})) %>" title="Ver producto"><%- id %></a>
+    </td>
+    <td><%- productop_nombre %></td>
+    <td class="text-center"><%- orden2_cantidad %></td>
+    <td class="text-center"><%- orden2_facturado %></td>
+    @ability ('precios' | 'ordenes')
+        <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
+        <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
+    @endability
 </script>

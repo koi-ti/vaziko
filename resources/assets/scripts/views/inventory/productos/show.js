@@ -94,8 +94,8 @@ app || (app = {});
                 collection: this.productoHistorialList,
                 parameters: {
                     dataFilter: {
-                        producto_id: this.model.get('id'),
-                        call: 'materialp'
+                        insumo: this.model.get('id'),
+                        tipo: 'M'
                     }
                 }
             });

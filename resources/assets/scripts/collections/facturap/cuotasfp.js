@@ -12,7 +12,7 @@ app || (app = {});
     app.CuotasFPList = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('facturap.cuotas.index'));
+            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
         },
         model: app.Facturap2Model
    });

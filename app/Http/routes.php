@@ -51,6 +51,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('productosorden', ['as' => 'search.productosorden', 'uses' => 'Admin\BuscadorController@productosOrden']);
 		Route::get('subactividadesp', ['as' => 'search.subactividadesp', 'uses' => 'Admin\BuscadorController@subactividadesp']);
 		Route::get('subtipoproductosp', ['as' => 'search.subtipoproductosp', 'uses' => 'Admin\BuscadorController@subtipoproductosp']);
+		Route::get('documentos', ['as' => 'search.documentos', 'uses' => 'Admin\BuscadorController@documentos']);
 	});
 
 	/*
@@ -151,11 +152,11 @@ Route::group(['middleware' => 'auth'], function () {
 	| Supplier invoice Routes
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'facturap'], function () {
-		Route::get('search', ['as' => 'facturap.search', 'uses' => 'Treasury\FacturapController@search']);
+	Route::group(['prefix' => 'facturasp'], function () {
+		Route::get('search', ['as' => 'facturasp.search', 'uses' => 'Treasury\FacturapController@search']);
 		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
-	Route::resource('facturap', 'Treasury\FacturapController', ['only' => ['index', 'show']]);
+	Route::resource('facturasp', 'Treasury\FacturapController', ['only' => ['index', 'show']]);
 
 	/*
 	|-------------------------
@@ -187,7 +188,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('abrir/{cotizaciones}', ['as' => 'cotizaciones.abrir', 'uses' => 'Production\Cotizacion1Controller@abrir']);
 		Route::get('clonar/{cotizaciones}', ['as' => 'cotizaciones.clonar', 'uses' => 'Production\Cotizacion1Controller@clonar']);
 		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
-		Route::get('charts/{cotizaciones}', ['as' => 'cotizaciones.charts', 'uses' => 'Production\Cotizacion1Controller@charts']);
+		Route::get('graficas/{cotizaciones}', ['as' => 'cotizaciones.graficas', 'uses' => 'Production\Cotizacion1Controller@graficas']);
 		Route::resource('archivos', 'Production\CotizacionArchivosController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function () {
@@ -213,7 +214,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
 		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
-		Route::get('charts/{ordenes}', ['as' => 'ordenes.charts', 'uses' => 'Production\OrdenpController@charts']);
+		Route::get('graficas/{ordenes}', ['as' => 'ordenes.graficas', 'uses' => 'Production\OrdenpController@graficas']);
 		Route::resource('archivos', 'Production\OrdenpArchivosController', ['only' => ['index', 'store', 'destroy']]);
 
 		Route::group(['prefix' => 'productos'], function () {
@@ -289,7 +290,7 @@ Route::group(['middleware' => 'auth'], function () {
 	|-------------------------
 	*/
 	Route::group(['prefix' => 'rtiemposp'], function () {
-		Route::get('charts', ['as' => 'rtiemposp.charts', 'uses' => 'Report\TiempopController@charts']);
+		Route::get('graficas', ['as' => 'rtiemposp.graficas', 'uses' => 'Report\TiempopController@graficas']);
 		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
 	});
 	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);

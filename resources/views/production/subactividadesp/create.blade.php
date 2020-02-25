@@ -1,7 +1,7 @@
 @extends('production.subactividadesp.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('subactividadesp.index')}}">Subactividades de producción</a></li>
+    <li><a href="{{ route('subactividadesp.index')}}">Subactividad de producción</a></li>
 	<li class="active">Nueva</li>
 @stop
 

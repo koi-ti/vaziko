@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\ControlTiemposp::class,
         Commands\ActualizarProduccion::class,
-        Commands\ActualizarEstadosProduccion::class,
+        Commands\ActualizarHistorialProducto::class,
         Commands\SaldosContables::class
     ];
 

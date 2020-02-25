@@ -39,8 +39,11 @@ class Factura1Controller extends Controller
                 session(['searchfactura_numero' => $request->has('id') ? $request->id : '']);
             }
 
+            // If permission
+            $query->addSelect(DB::raw(auth()->user()->ability('admin', 'precios', ['module' => 'facturas']) ? "factura1_total" : "0" . " AS factura1_total"));
+
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Numero
                     if ($request->has('factura1_numero')) {
                         $query->whereRaw("factura1_numero LIKE '%{$request->factura1_numero}%'");

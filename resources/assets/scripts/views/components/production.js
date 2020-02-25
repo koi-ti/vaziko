@@ -190,10 +190,10 @@ app || (app = {});
                         _.each(resp, function (item) {
                             _this.$subactividadesp.append("<option value=" + item.id + ">" + item.subactividadp_nombre + "</option>");
                         });
-                        window.Misc.removeSpinner(_this.$referencewrapper);
                     } else {
                         _this.$subactividadesp.empty().prop('disabled', true);
                     }
+                    window.Misc.removeSpinner(_this.$referencewrapper);
                 });
             } else {
                 this.$subactividadesp.empty().val(0).prop('disabled', true);

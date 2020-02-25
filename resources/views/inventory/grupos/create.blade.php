@@ -1,7 +1,7 @@
 @extends('inventory.grupos.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('grupos.index')}}">Grupos</a></li>
+    <li><a href="{{ route('grupos.index')}}">Grupo</a></li>
 	<li class="active">Nuevo</li>
 @stop
 

@@ -1,7 +1,7 @@
 @extends('production.acabados.main')
 
 @section('breadcrumb')
-    <li><a href="{{ route('acabadosp.index')}}">Acabados</a></li>
+    <li><a href="{{ route('acabadosp.index')}}">Acabado</a></li>
 	<li class="active">Nuevo</li>
 @stop
 
