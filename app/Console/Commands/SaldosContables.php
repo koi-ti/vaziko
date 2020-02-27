@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use App\Models\Accounting\Asiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\AsientoNif, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\SaldoContable, App\Models\Accounting\SaldoTercero, App\Models\Accounting\SaldoContableNif, App\Models\Accounting\SaldoTerceroNif, App\Models\Base\Tercero, App\Models\Base\Notificacion;
+use App\Models\Accounting\Asiento, App\Models\Accounting\PlanCuenta, App\Models\Accounting\AsientoNif, App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\SaldoContable, App\Models\Accounting\SaldoTercero, App\Models\Accounting\SaldoContableNif, App\Models\Accounting\SaldoTerceroNif, App\Models\Base\Tercero;
 use DB, Auth, Log, Carbon\Carbon;
 
 class SaldosContables extends Command
@@ -110,11 +110,9 @@ class SaldosContables extends Command
             // Crear nueva notifiacion (tercero, title, description, fh)
             DB::commit();
             Log::info("Se actualizaron los saldos con exito.");
-            return Notificacion::nuevaNotificacion($this->argument('user'), 'Rutina de saldos', "Se actualizaron con exito los saldos.", Carbon::now());
         } catch (\Exception $e) {
             DB::rollback();
             Log::error("{$e->getMessage()}");
-            return Notificacion::nuevaNotificacion($this->argument('user'), 'Error en la rutina', "Por favor comuníquese con el administrador.", Carbon::now());
         }
     }
 

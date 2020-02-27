@@ -743,8 +743,17 @@ class BuscadorController extends Controller
     public function documentos(Request $request)
     {
         if ($request->ajax()) {
-            $documento = Documento::getDocument($request->documento);
-            return response()->json($documento);
+            $data = [];
+            if ($request->has('documento')) {
+                $data = Documento::getDocument($request->documento);
+                return response()->json($data);
+            }
+
+            if ($request->has('folder')) {
+                $data = Documento::select('id', 'documento_nombre')->where('documento_folder', $request->folder)->get();
+                return response()->json(['success' => true, 'documents' => $data]);
+            }
+            return response()->json(['success' => false]);
         }
         abort(404);
     }

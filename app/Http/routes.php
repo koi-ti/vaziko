@@ -56,9 +56,10 @@ Route::group(['middleware' => 'auth'], function () {
 
 	/*
 	|-------------------------
-	| Admin Routes
+	| Administracion
 	|-------------------------
 	*/
+	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
 	Route::group(['prefix' => 'terceros'], function () {
 		Route::get('dv', ['as' => 'terceros.dv', 'uses' => 'Admin\TerceroController@dv']);
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
@@ -69,94 +70,90 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('imagenes', 'Admin\TerceroImagenController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('terceros', 'Admin\TerceroController', ['except' => ['destroy']]);
-	Route::resource('empresa', 'Admin\EmpresaController', ['only' => ['index', 'update']]);
-    Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
-	Route::resource('actividades', 'Admin\ActividadController', ['except' => ['destroy']]);
-	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
-	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
-	Route::resource('notificaciones', 'Admin\NotificacionController', ['only' => ['index', 'update']]);
-	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
-
 	Route::group(['prefix' => 'roles'], function () {
 		Route::resource('permisos', 'Admin\PermisoRolController', ['only' => ['index', 'update', 'destroy']]);
 	});
 	Route::resource('roles', 'Admin\RolController', ['except' => ['destroy']]);
+	Route::resource('actividades', 'Admin\ActividadController', ['except' => ['destroy']]);
+	Route::resource('departamentos', 'Admin\DepartamentoController', ['only' => ['index', 'show']]);
+	Route::resource('municipios', 'Admin\MunicipioController', ['only' => ['index']]);
+	Route::resource('sucursales', 'Admin\SucursalController', ['except' => ['destroy']]);
+	Route::resource('puntosventa', 'Admin\PuntoVentaController', ['except' => ['destroy']]);
+
+	/*
+	|-------------------
+	| Cartera
+	|-------------------
+	*/
+	Route::group(['prefix' => 'facturas'], function () {
+		Route::get('impuestos', ['as' => 'facturas.impuestos', 'uses' => 'Receivable\Factura1Controller@impuestos']);
+		Route::get('anular/{facturas}', ['as' => 'facturas.anular', 'uses' => 'Receivable\Factura1Controller@anular']);
+		Route::get('exportar/{facturas}', ['as' => 'facturas.exportar', 'uses' => 'Receivable\Factura1Controller@exportar']);
+		Route::resource('facturados', 'Receivable\Factura2Controller', ['only' => ['index', 'store']]);
+		Route::resource('productos', 'Receivable\Factura4Controller', ['only' => ['index']]);
+	});
+	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show', 'create', 'store']]);
 
 	/*
 	|-------------------------
-	| Accounting Routes
+	| Contabilidad
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'plancuentas'], function () {
-		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
-	});
-    Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['except' => ['destroy']]);
-    Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
-
-	Route::group(['prefix' => 'plancuentasnif'], function () {
-		Route::get('nivel', ['as' => 'plancuentasnif.nivel', 'uses' => 'Accounting\PlanCuentasNifController@nivel']);
-	});
-    Route::resource('plancuentasnif', 'Accounting\PlanCuentasNifController', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'documentos'], function () {
-		Route::get('filter', ['as' => 'documentos.filter', 'uses' => 'Accounting\DocumentoController@filter']);
-	});
-	Route::resource('documentos', 'Accounting\DocumentoController', ['except' => ['destroy']]);
-
 	Route::group(['prefix' => 'asientos'], function () {
 		Route::get('reverse/{asientos}', ['as' => 'asientos.reverse', 'uses' => 'Accounting\AsientoController@reverse']);
 		Route::get('exportar/{asientos}', ['as' => 'asientos.exportar', 'uses' => 'Accounting\AsientoController@exportar']);
 		Route::post('import', ['as' => 'asientos.import', 'uses' => 'Accounting\AsientoController@import']);
-		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'update', 'destroy']]);
-
 		Route::group(['prefix' => 'detalle'], function () {
 			Route::post('evaluate', ['as' => 'asientos.detalle.evaluate', 'uses' => 'Accounting\DetalleAsientoController@evaluate']);
 			Route::post('validate', ['as' => 'asientos.detalle.validate', 'uses' => 'Accounting\DetalleAsientoController@validation']);
 			Route::resource('movimientos', 'Accounting\AsientoMovimientoController', ['only' => ['index']]);
 		});
+		Route::resource('detalle', 'Accounting\DetalleAsientoController', ['only' => ['index', 'store', 'update', 'destroy']]);
 	});
 	Route::resource('asientos', 'Accounting\AsientoController', ['except' => ['destroy']]);
-
 	Route::group(['prefix' => 'asientosnif'], function () {
-		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
 		Route::get('exportar/{asientosnif}', ['as' => 'asientosnif.exportar', 'uses' => 'Accounting\AsientoNifController@exportar']);
-
 		Route::group(['prefix' => 'detalle'], function () {
 			Route::post('evaluate', ['as' => 'asientosnif.detalle.evaluate', 'uses' => 'Accounting\AsientoNifDetalleController@evaluate']);
 			Route::post('validate', ['as' => 'asientosnif.detalle.validate', 'uses' => 'Accounting\AsientoNifDetalleController@validation']);
 			Route::get('movimientos', ['as' => 'asientosnif.detalle.movimientos', 'uses' => 'Accounting\AsientoNifDetalleController@movimientos']);
 		});
+		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
 	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['except' => ['destroy']]);
+	Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['except' => ['destroy']]);
-   	Route::resource('folders', 'Accounting\FolderController', ['except' => ['destroy']]);
-
-   	/*
-   	|-------------------
-   	| Receivable
-   	|-------------------
-   	*/
-	Route::group(['prefix' => 'facturas'], function () {
-		Route::get('impuestos', ['as' => 'facturas.impuestos', 'uses' => 'Receivable\Factura1Controller@impuestos']);
-		Route::get('exportar/{facturas}', ['as' => 'facturas.exportar', 'uses' => 'Receivable\Factura1Controller@exportar']);
-		Route::get('anular/{facturas}', ['as' => 'facturas.anular', 'uses' => 'Receivable\Factura1Controller@anular']);
-		Route::resource('comentario', 'Receivable\Factura3Controller', ['only' => ['index', 'store']]);
-		Route::resource('facturado', 'Receivable\Factura2Controller', ['only' => ['index', 'store']]);
-		Route::resource('detalle', 'Receivable\Factura4Controller', ['only' => ['index']]);
+	Route::resource('documentos', 'Accounting\DocumentoController', ['except' => ['destroy']]);
+	Route::resource('folders', 'Accounting\FolderController', ['except' => ['destroy']]);
+	Route::group(['prefix' => 'plancuentas'], function () {
+		Route::get('nivel', ['as' => 'plancuentas.nivel', 'uses' => 'Accounting\PlanCuentasController@nivel']);
 	});
-	Route::resource('facturas', 'Receivable\Factura1Controller', ['only' => ['index', 'show', 'create', 'store']]);
+    Route::resource('plancuentas', 'Accounting\PlanCuentasController', ['except' => ['destroy']]);
+	Route::group(['prefix' => 'plancuentasnif'], function () {
+		Route::get('nivel', ['as' => 'plancuentasnif.nivel', 'uses' => 'Accounting\PlanCuentasNifController@nivel']);
+	});
+    Route::resource('plancuentasnif', 'Accounting\PlanCuentasNifController', ['except' => ['destroy']]);
 
-   	/*
+	/*
 	|-------------------------
-	| Supplier invoice Routes
+	| Inventario
 	|-------------------------
 	*/
-	Route::group(['prefix' => 'facturasp'], function () {
-		Route::get('search', ['as' => 'facturasp.search', 'uses' => 'Treasury\FacturapController@search']);
-		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
+	Route::group(['prefix' => 'productos'], function () {
+		Route::post('evaluate', ['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate']);
+		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
+		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
+		Route::resource('historial', 'Inventory\ProductoHistorialController', ['only' => ['index']]);
 	});
-	Route::resource('facturasp', 'Treasury\FacturapController', ['only' => ['index', 'show']]);
+	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
+	Route::group(['prefix' => 'traslados'], function () {
+		Route::resource('detalle', 'Inventory\DetalleTrasladoController', ['only' => ['index', 'store']]);
+	});
+	Route::resource('traslados', 'Inventory\TrasladosController', ['only' => ['index', 'create', 'store', 'show']]);
+	Route::resource('grupos', 'Inventory\GrupoController', ['except' => ['destroy']]);
+	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
+	Route::resource('unidades', 'Inventory\UnidadesMedidaController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------
@@ -167,7 +164,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('exportar', ['as' => 'agendaordenes.exportar', 'uses' => 'Production\AgendaOrdenespController@exportar']);
 	});
 	Route::resource('agendaordenes', 'Production\AgendaOrdenespController', ['only' => ['index']]);
-
 	Route::group(['prefix' => 'precotizaciones'], function () {
 		Route::group(['prefix' => 'productos'], function () {
 			Route::resource('maquinas', 'Production\PreCotizacion8Controller', ['only' => ['index']]);
@@ -181,7 +177,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('productos', 'Production\PreCotizacion2Controller', ['only' => ['index', 'show']]);
 	});
 	Route::resource('precotizaciones', 'Production\PreCotizacion1Controller', ['only' => ['index', 'show']]);
-
 	Route::group(['prefix' => 'cotizaciones'], function () {
 		Route::get('exportar/{cotizaciones}', ['as' => 'cotizaciones.exportar', 'uses' => 'Production\Cotizacion1Controller@exportar']);
 		Route::get('estados/{cotizaciones}', ['as' => 'cotizaciones.estados', 'uses' => 'Production\Cotizacion1Controller@estados']);
@@ -190,7 +185,6 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('generar/{cotizaciones}', ['as' => 'cotizaciones.generar', 'uses' => 'Production\Cotizacion1Controller@generar']);
 		Route::get('graficas/{cotizaciones}', ['as' => 'cotizaciones.graficas', 'uses' => 'Production\Cotizacion1Controller@graficas']);
 		Route::resource('archivos', 'Production\CotizacionArchivosController', ['only' => ['index', 'store', 'destroy']]);
-
 		Route::group(['prefix' => 'productos'], function () {
 			Route::get('clonar/{productos}', ['as' => 'cotizaciones.productos.clonar', 'uses' => 'Production\Cotizacion2Controller@clonar']);
 			Route::post('producto', ['as' => 'cotizaciones.productos.producto', 'uses' => 'Production\Cotizacion2Controller@producto']);
@@ -206,20 +200,26 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('bitacora', 'Admin\BitacoraController', ['only' => ['index']]);
 	});
 	Route::resource('cotizaciones', 'Production\Cotizacion1Controller', ['except' => ['destroy']]);
-
+	Route::group(['prefix' => 'productosp'], function () {
+		Route::get('clonar/{productosp}', ['as' => 'productosp.clonar', 'uses' => 'Production\ProductopController@clonar']);
+		Route::resource('tips', 'Production\Productop2Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('areas', 'Production\Productop3Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
+		Route::resource('imagenes', 'Production\ProductopImagenController', ['only' => ['index', 'store', 'destroy']]);
+	});
+	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
 	Route::group(['prefix' => 'ordenes'], function () {
-		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 		Route::get('cerrar/{ordenes}', ['as' => 'ordenes.cerrar', 'uses' => 'Production\OrdenpController@cerrar']);
-		Route::get('completar/{ordenes}', ['as' => 'ordenes.completar', 'uses' => 'Production\OrdenpController@completar']);
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
+		Route::get('completar/{ordenes}', ['as' => 'ordenes.completar', 'uses' => 'Production\OrdenpController@completar']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
-		Route::get('productos/formula', ['as' => 'ordenes.productos.formula', 'uses' => 'Production\DetalleOrdenpController@formula']);
+		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 		Route::get('graficas/{ordenes}', ['as' => 'ordenes.graficas', 'uses' => 'Production\OrdenpController@graficas']);
 		Route::resource('archivos', 'Production\OrdenpArchivosController', ['only' => ['index', 'store', 'destroy']]);
-
 		Route::group(['prefix' => 'productos'], function () {
 			Route::get('clonar/{productos}', ['as' => 'ordenes.productos.clonar', 'uses' => 'Production\DetalleOrdenpController@clonar']);
-			Route::get('search', ['as' => 'ordenes.productos.search', 'uses' => 'Production\DetalleOrdenpController@search']);
 			Route::post('producto', ['as' => 'ordenes.productos.producto', 'uses' => 'Production\DetalleOrdenpController@producto']);
 			Route::resource('maquinas', 'Production\DetalleMaquinaController', ['only' => ['index']]);
 			Route::resource('acabados', 'Production\DetalleAcabadoController', ['only' => ['index']]);
@@ -231,7 +231,6 @@ Route::group(['middleware' => 'auth'], function () {
 		});
 		Route::resource('productos', 'Production\DetalleOrdenpController');
 		Route::resource('bitacora', 'Admin\BitacoraController', ['only' => ['index']]);
-
 		Route::group(['prefix' => 'despachos'], function () {
 			Route::get('exportar/{despachos}', ['as' => 'ordenes.despachos.exportar', 'uses' => 'Production\DespachopController@exportar']);
 			Route::get('pendientes', ['as' => 'ordenes.despachos.pendientes', 'uses' => 'Production\DespachopController@pendientes']);
@@ -240,49 +239,26 @@ Route::group(['middleware' => 'auth'], function () {
 	});
 	Route::resource('ordenes', 'Production\OrdenpController', ['except' => ['destroy']]);
 	Route::resource('tiemposp', 'Production\TiempopController', ['except' => ['destroy']]);
-
-	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('acabadosp', 'Production\AcabadospController', ['except' => ['destroy']]);
+	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
+	Route::resource('areasp', 'Production\AreaspController', ['except' => ['destroy']]);
 	Route::resource('maquinasp', 'Production\MaquinaspController', ['except' => ['destroy']]);
 	Route::resource('materialesp', 'Production\MaterialespController', ['except' => ['destroy']]);
 	Route::resource('tipomaterialesp', 'Production\TipoMaterialespController', ['except' => ['destroy']]);
 	Route::resource('tipoproductosp', 'Production\TipoProductopController', ['except' => ['destroy']]);
-	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
-	Route::resource('actividadesp', 'Production\ActividadpController', ['except' => ['destroy']]);
 	Route::resource('subactividadesp', 'Production\SubActividadpController', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'productosp'], function () {
-		Route::get('clonar/{productosp}', ['as' => 'productosp.clonar', 'uses' => 'Production\ProductopController@clonar']);
-		Route::resource('tips', 'Production\Productop2Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('areas', 'Production\Productop3Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('maquinas', 'Production\Productop4Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('materiales', 'Production\Productop5Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('acabados', 'Production\Productop6Controller', ['only' => ['index', 'store', 'destroy']]);
-		Route::resource('imagenes', 'Production\ProductopImagenController', ['only' => ['index', 'store', 'destroy']]);
-	});
-	Route::resource('productosp', 'Production\ProductopController', ['except' => ['destroy']]);
+	Route::resource('subtipoproductosp', 'Production\SubtipoProductopController', ['except' => ['destroy']]);
 
 	/*
 	|-------------------------
-	| Inventory Routes
+	| Tesoreria
 	|-------------------------
 	*/
-	Route::resource('grupos', 'Inventory\GrupoController', ['except' => ['destroy']]);
-	Route::resource('subgrupos', 'Inventory\SubGrupoController', ['except' => ['destroy']]);
-	Route::resource('unidades', 'Inventory\UnidadesMedidaController', ['except' => ['destroy']]);
-
-	Route::group(['prefix' => 'traslados'], function () {
-		Route::resource('detalle', 'Inventory\DetalleTrasladoController', ['only' => ['index', 'store']]);
+	Route::group(['prefix' => 'facturasp'], function () {
+		Route::get('search', ['as' => 'facturasp.search', 'uses' => 'Treasury\FacturapController@search']);
+		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
-   	Route::resource('traslados', 'Inventory\TrasladosController', ['only' => ['index', 'create', 'store', 'show']]);
-
-	Route::group(['prefix' => 'productos'], function () {
-		Route::post('evaluate',['as' =>'productos.evaluate','uses'=>'Inventory\ProductoController@evaluate'] );
-		Route::resource('rollos', 'Inventory\ProdbodeRolloController', ['only' => ['index']]);
-		Route::resource('prodbode', 'Inventory\ProdBodeController', ['only' => ['index']]);
-		Route::resource('historial', 'Inventory\ProductoHistorialController', ['only' => ['index']]);
-	});
-	Route::resource('productos', 'Inventory\ProductoController', ['except' => ['destroy']]);
+	Route::resource('facturasp', 'Treasury\FacturapController', ['only' => ['index', 'show']]);
 
    	/*
 	|-------------------------

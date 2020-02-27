@@ -66,20 +66,19 @@
 			</tr>
 		</thead>
 		<tbody>
-			@if(count($detalle) > 0)
-				@foreach($detalle as $ordenp2)
-					{{--*/ $totalRow = $ordenp2->factura2_cantidad * $ordenp2->orden2_total_valor_unitario; /*--}}
+			@if(count($productos) > 0)
+				@foreach($productos as $producto)
 					<tr>
-						<td class="left">{{ $ordenp2->orden2_id }}</td>
-						<td class="left">{{ $ordenp2->productop_nombre }}</td>
-						<td class="center">{{ $ordenp2->factura2_cantidad }}</td>
-						<td class="right">{{ number_format($ordenp2->orden2_total_valor_unitario,2,'.',',') }}</td>
-						<td class="right">{{ number_format($totalRow,2,'.',',') }}</td>
+						<td class="left">{{ $producto->factura2_orden2 }}</td>
+						<td class="left">{{ $producto->factura2_producto_nombre }}</td>
+						<td class="center">{{ $producto->factura2_cantidad }}</td>
+						<td class="right">{{ number_format($producto->factura2_total_valor_unitario,2,'.',',') }}</td>
+						<td class="right">{{ number_format($producto->total, 2, '.', ',') }}</td>
 					</tr>
 				@endforeach
 
-				@if( count($detalle) < 24 )
-					@for($i = count($detalle); $i < 24; $i++)
+				@if( count($productos) < 24 )
+					@for($i = count($productos); $i < 24; $i++)
 						<tr>
 							<td colspan="5"></td>
 						</tr>

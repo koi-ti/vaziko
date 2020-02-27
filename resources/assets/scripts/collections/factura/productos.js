@@ -11,7 +11,7 @@ app || (app = {});
 
     app.DetalleFactura4List = Backbone.Collection.extend({
         url: function () {
-            return window.Misc.urlFull(Route.route('facturas.detalle.index'));
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
         },
         model: app.Factura4Model,
 

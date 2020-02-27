@@ -22,7 +22,7 @@ class Cotizacion2Controller extends Controller
         $this->middleware('ability:admin,eliminar', ['only' => 'destroy']);
         $this->middleware('ability:admin,clonar', ['only' => 'clonar']);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -346,7 +346,7 @@ class Cotizacion2Controller extends Controller
                         $totaltransportes += $cotizacion10->cotizacion10_valor_total;
                     }
 
-                    if (!auth()->user()->hasRole('Diseplanea')) {
+                    if (!auth()->user()->ability('admin', 'precios', ['module' => 'cotizaciones'])) {
                         // Operacion para calcular el total del producto
                         $precio = $cotizacion2->cotizacion2_precio_venta;
                         $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);

@@ -13,7 +13,6 @@ app || (app = {});
 
         el: '#factura-show',
         events: {
-            'click .imprimir-factura': 'imprimirFactura',
             'click .anular-factura': 'anularFactura'
         },
 
@@ -64,23 +63,13 @@ app || (app = {});
         },
 
         /**
-        * imprimir to PDF
-        */
-        imprimirFactura: function (e) {
-            e.preventDefault();
-
-            // Redirect to pdf
-            window.open(window.Misc.urlFull(Route.route('facturas.exportar', { facturas: this.model.get('id') })));
-        },
-
-        /**
         * Event anular factura
         */
         anularFactura: function (e) {
             e.preventDefault();
             var _this = this;
 
-            var banConfirm = new window.app.ConfirmWindow({
+            var anularConfirm = new window.app.ConfirmWindow({
                 parameters: {
                     template: _.template(($('#factura-anular-confirm-tpl').html() || '')),
                     titleConfirm: 'Anular factura',
@@ -107,7 +96,7 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', { facturas: _this.model.get('id') })));
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', {facturas: _this.model.get('id')})));
                             }
                         })
                         .fail(function(jqXHR, ajaxOptions, thrownError) {
@@ -117,8 +106,7 @@ app || (app = {});
                     }
                 }
             });
-
-            banConfirm.render();
+            anularConfirm.render();
         }
     });
 

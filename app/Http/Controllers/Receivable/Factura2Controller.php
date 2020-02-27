@@ -20,7 +20,7 @@ class Factura2Controller extends Controller
         if ($request->ajax()) {
             $data = [];
             if ($request->has('factura')) {
-                $data = Factura2::where('factura2_factura1', $request->factura)->get();
+                $data = Factura2::getProductosFactura($request->factura);
             }
 
             if ($request->has('factura1_orden')) {

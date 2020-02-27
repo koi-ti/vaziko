@@ -158,18 +158,4 @@ class DocumentoController extends Controller
     {
         //
     }
-
-    /**
-     * Filter documentos.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function filter(Request $request)
-    {
-        if ($request->has('folder')) {
-            $data = Documento::select('id', 'documento_nombre')->where('documento_folder', $request->folder)->get();
-            return response()->json(['success' => true, 'documents' => $data]);
-        }
-        return response()->json(['success' => false]);
-    }
 }

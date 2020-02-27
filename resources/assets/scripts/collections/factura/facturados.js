@@ -12,7 +12,7 @@ app || (app = {});
     app.DetalleFactura2List = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('facturas.facturado.index'));
+            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
         },
         model: app.Factura2Model,
 

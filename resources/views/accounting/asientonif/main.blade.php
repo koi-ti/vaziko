@@ -811,13 +811,4 @@
 	    <td><%- window.Misc.currency(factura4_saldo) %></td>
 	    <td><input type="text" id="factura4_pagar_<%- id %>" name="factura4_pagar_<%- id %>" class="form-control input-sm" data-currency-negative></td>
     </script>
-
-    <script type="text/template" id="add-comments-item-tpl">
-    	<td class="text-center">
-			<a class="btn btn-default btn-xs item-factura-remove" data-resource="<%- id %>">
-				<span><i class="fa fa-times"></i></span>
-			</a>
-		</td>
-    	<td><%- factura3_observaciones %></td>
-    </script>
 @stop

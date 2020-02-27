@@ -21,6 +21,7 @@ class Controller extends BaseController
         $this->middleware('ability:admin,crear|editar', ['only' => 'store']);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
         $this->middleware('ability:admin,eliminar', ['only' => 'destroy']);
+        $this->middleware('ability:admin,anular', ['only' => 'anular']);
         $this->middleware('ability:admin,cerrar', ['only' => 'cerrar']);
         $this->middleware('ability:admin,abrir', ['only' => 'abrir']);
         $this->middleware('ability:admin,culminar', ['only' => 'culminar']);

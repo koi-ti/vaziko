@@ -225,7 +225,7 @@ class Cotizacion1Controller extends Controller
         }
 
         // Permisions
-        if (!auth()->user()->ability('admin', 'opcional2', ['module' => 'cotizaciones']) && !$cotizacion->cotizacion1_abierta) {
+        if (!$cotizacion->cotizacion1_abierta) {
             abort(403);
         }
 

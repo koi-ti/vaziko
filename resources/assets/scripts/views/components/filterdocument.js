@@ -33,7 +33,7 @@ app || (app = {});
             // If exists value in selected
             if (selected) {
                 window.Misc.setSpinner(this.$wraperConten);
-                $.get(window.Misc.urlFull(Route.route('documentos.filter', {folder: selected})), function (resp) {
+                $.get(window.Misc.urlFull(Route.route('search.documentos', {folder: selected})), function (resp) {
                     window.Misc.removeSpinner(_this.$wraperConten);
                     if (resp.success) {
                         if (resp.documents.length) {

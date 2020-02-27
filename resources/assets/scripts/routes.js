@@ -33,8 +33,6 @@ app || (app = {});
 
             'municipios(/)': 'getMunicipiosMain',
 
-            'notificaciones(/)': 'getNotificationsMain',
-
             'puntosventa(/)': 'getPuntosVentaMain',
             'puntosventa/create(/)': 'getPuntosVentaCreate',
             'puntosventa/:puntoventa/edit(/)': 'getPuntosVentaEdit',
@@ -360,17 +358,6 @@ app || (app = {});
             }
 
             this.mainDepartamentoView = new app.MainDepartamentoView();
-        },
-
-        // Notifications
-        getNotificationsMain: function () {
-
-            if (this.mainNotificationView instanceof Backbone.View) {
-                this.mainNotificationView.stopListening();
-                this.mainNotificationView.undelegateEvents();
-            }
-
-            this.mainNotificationView = new app.MainNotificationView();
         },
 
         /**

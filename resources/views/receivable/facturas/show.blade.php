@@ -15,35 +15,26 @@
     <section class="content" id="factura-show">
         <div class="box box-success spinner-main">
             <div class="box-body">
-                @if (!$factura->factura1_anulado)
-                    <div class="dropdown pull-right">
-                        <label class="label label-success">ESTADO: ACTIVO</label>
-                        <a href="#" class="dropdown-toggle a-color" data-toggle="dropdown">Opciones <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li role="presentation">
-                                @ability ('anular' | 'facturas')
+                <div class="dropdown pull-right">
+                    <label class="label label-{{ $factura->factura1_anulado ? 'danger' : 'success' }}">ESTADO: {{ $factura->factura1_anulado ? 'ANULADA' : 'ACTIVO' }}</label>
+                    <div class="btn-group">
+                        <a href="{{ route('facturas.exportar', ['facturas' =>  $factura->id ]) }}" class="btn btn-danger btn-sm" target="_blank">
+                            <i class="fa fa-file-pdf-o"></i>
+                        </a>
+                        @if (!$factura->factura1_anulado && auth()->user()->ability('admin', 'anular', ['module' => 'facturas']))
+                            <button type="button" class="btn btn-danger btn-sm dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-right">
+                                <li>
                                     <a role="menuitem" tabindex="-1" href="#" class="anular-factura">
                                         <i class="fa fa-ban"></i>Anular
                                     </a>
-                                @endability
-                                @ability ('exportar' | 'facturas')
-                                    <a role="menuitem" tabindex="-1" href="#" class="imprimir-factura">
-                                        <i class="fa fa-file-pdf-o"></i>Imprimir
-                                    </a>
-                                @endability
-                            </li>
-                        </ul>
+                                </li>
+                            </ul>
+                        @endif
                     </div>
-                @else
-                    @ability ('exportar' | 'facturas')
-                        <div class="form-group col-md-1 pull-right">
-                            <button type="button" class="btn btn-block btn-danger btn-sm imprimir-factura">
-                                <i class="fa fa-file-pdf-o"></i>
-                            </button>
-                        </div>
-                    @endability
-                    <label class="label label-default pull-right">ESTADO: ANULADA</label>
-                @endif
+                </div>
                 <div class="row">
                     <div class="form-group col-md-3">
                         <label class="control-label">Punto de venta</label>
@@ -112,8 +103,8 @@
 	                        <tr>
 	                            <th width="10%">Codigo</th>
 	                            <th width="60%">Nombre</th>
+	                            <th width="5%">Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
                                 @ability ('precios' | 'facturas')
-    	                            <th width="5%">Facturado {!! $factura->factura1_anulado ? '<span class="label label-danger">Anulado</span>' : '' !!}</th>
     	                            <th width="15%">Valor unitario</th>
     	                            <th width="15%">Total</th>
                                 @endability
@@ -197,8 +188,8 @@
     <script type="text/template" id="add-factura-item-tpl">
         <td><%- factura2_orden2 %></td>
         <td><%- factura2_producto_nombre %></td>
+        <td class="text-center"><%- factura2_cantidad %></td>
         @ability ('precios' | 'facturas')
-            <td class="text-center"><%- factura2_cantidad %></td>
             <td class="text-right"><%- window.Misc.currency(factura2_producto_valor_unitario) %></td>
             <td class="text-right"><%- window.Misc.currency(factura2_cantidad * factura2_producto_valor_unitario) %></td>
         @endability

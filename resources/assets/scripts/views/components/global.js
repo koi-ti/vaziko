@@ -15,7 +15,6 @@ app || (app = {});
 		events: {
             'click .sidebar-toggle': 'clickSidebar',
             'click .history-back': 'clickHistorialBack',
-            'click .view-notification': 'clickViewNotification',
             'click .historial-insumo': 'clickHistorialInsumo',
             'change .calculate-formula': 'calculateFormula',
             'hidden.bs.modal': 'multiModal',
@@ -37,39 +36,9 @@ app || (app = {});
 			window.history.back();
 		},
 
-        clickViewNotification: function (e) {
-            var _this = this;
-                notification = this.$(e.currentTarget).attr('data-notification');
-
-            // Update machine
-            $.ajax({
-                url: window.Misc.urlFull(Route.route('notificaciones.update', {notification: notification})),
-                type: 'PUT',
-            })
-            .done(function(resp) {
-                if (!_.isUndefined(resp.success)) {
-                    // response success or error
-                    var text = resp.success ? '' : resp.errors;
-                    if (_.isObject(resp.errors)) {
-                        text = window.Misc.parseErrors(resp.errors);
-                    }
-
-                    if (!resp.success) {
-                        alertify.error(text);
-                        return;
-                    }
-
-                    window.Misc.redirect(window.Misc.urlFull(Route.route('notificaciones.index')));
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                alertify.error(thrownError);
-            });
-        },
-
         clickHistorialInsumo: function (e) {
             e.preventDefault();
-            
+
             var insumo = this.$(e.currentTarget).attr('data-resource');
                 tipo = this.$(e.currentTarget).attr('data-tipo');
                 title = '';

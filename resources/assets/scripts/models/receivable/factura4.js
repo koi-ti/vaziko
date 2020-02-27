@@ -12,7 +12,7 @@ app || (app = {});
     app.Factura4Model = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.detalle.index'));
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
         },
         idAttribute: 'id',
         defaults: {}

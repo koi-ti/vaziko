@@ -301,12 +301,12 @@ class Factura1Controller extends Controller
             abort(404);
         }
 
-        $detalle = Factura2::getFactura2($factura->id);
+        $productos = Factura2::getProductosFactura($factura->id);
         $title = sprintf('Factura %s', $factura->factura1_orden);
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML( View::make('receivable.facturas.export.export',  compact('factura', 'detalle', 'title'))->render() );
+        $pdf->loadHTML(View::make('receivable.facturas.export.export',  compact('factura', 'productos', 'title'))->render());
         return $pdf->stream( sprintf('%s_%s_%s_%s.pdf', 'factura', $factura->id, date('Y_m_d'), date('H_i_s')) );
     }
 
