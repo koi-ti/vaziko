@@ -237,7 +237,7 @@ class OrdenpController extends Controller
         }
 
         // If show all products
-        if (auth()->user()->ability('admin', 'operario', ['module' => 'ordenes']) || $request->has('resumido')) {
+        if (auth()->user()->hasRole('admin') == false && (auth()->user()->ability('admin', 'operario', ['module' => 'ordenes']) || $request->has('resumido'))) {
             $data = [];
 
             $productos = Ordenp2::getOrdenespSpecial2($orden->id);
