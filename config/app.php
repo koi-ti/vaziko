@@ -153,8 +153,7 @@ return [
         Felixkiss\UniqueWithValidator\UniqueWithValidatorServiceProvider::class,
         Barryvdh\DomPDF\ServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
-        Codedge\Fpdf\FpdfServiceProvider::class,
-        Barryvdh\Debugbar\ServiceProvider::class
+        Codedge\Fpdf\FpdfServiceProvider::class
     ],
 
     /*
@@ -209,8 +208,7 @@ return [
         'PDF'       => Barryvdh\DomPDF\Facade::class,
         'Excel'     => Maatwebsite\Excel\Facades\Excel::class,
         'Entrust'   => Zizaco\Entrust\EntrustFacade::class,
-        'Fpdf'      => Codedge\Fpdf\Facades\Fpdf::class,
-        // 'Debugbar'  => Barryvdh\Debugbar\Facade::class
+        'Fpdf'      => Codedge\Fpdf\Facades\Fpdf::class
     ],
 
 ];
