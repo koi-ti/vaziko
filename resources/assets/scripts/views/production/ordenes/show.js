@@ -60,7 +60,7 @@ app || (app = {});
                 this.$uploaderFile = this.$('.fine-uploader');
 
                 // Reference views && fineuploader container
-                if ($('.chart-container').length) {
+                if ($('#tab_graficas').length) {
                     this.referenceCharts()
                 }
 

@@ -88,7 +88,7 @@ app || (app = {});
             this.uploadPictures();
             this.ready();
 
-            if ($('.chart-container').length) {
+            if ($('#tab_graficas').length) {
                 this.referenceCharts();
             }
         },
