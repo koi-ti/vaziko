@@ -85,9 +85,12 @@ app || (app = {});
 
             // Reference views and ready
             this.referenceViews();
-            this.referenceCharts();
             this.uploadPictures();
             this.ready();
+
+            if ($('.chart-container').length) {
+                this.referenceCharts();
+            }
         },
 
         /**

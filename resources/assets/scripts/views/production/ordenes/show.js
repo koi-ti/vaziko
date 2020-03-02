@@ -60,8 +60,11 @@ app || (app = {});
                 this.$uploaderFile = this.$('.fine-uploader');
 
                 // Reference views && fineuploader container
+                if ($('.chart-container').length) {
+                    this.referenceCharts()
+                }
+
                 this.referenceViews();
-                this.referenceCharts()
                 this.uploadPictures();
             }
 
@@ -137,9 +140,6 @@ app || (app = {});
         openOrdenp: function (e) {
             e.preventDefault();
 
-            // if (!this.model.get('permission'))
-            //     return;
-
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -190,9 +190,6 @@ app || (app = {});
         closeOrdenp: function (e) {
             e.preventDefault();
 
-            // if (!this.model.get('permission'))
-            //     return;
-
             var _this = this;
             var cancelConfirm = new window.app.ConfirmWindow({
                 parameters: {
@@ -242,9 +239,6 @@ app || (app = {});
         */
         cloneOrdenp: function (e) {
             e.preventDefault();
-
-            // if (!this.model.get('permission'))
-            //     return;
 
             var route = window.Misc.urlFull(Route.route('ordenes.clonar', {ordenes: this.model.get('id')})),
                 _this = this;

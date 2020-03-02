@@ -4,18 +4,15 @@ namespace App\Models\Base;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
-use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use App\Models\BaseModel;
 use Validator, DB, Cache;
 
-class Tercero extends BaseModel implements AuthenticatableContract, CanResetPasswordContract
+class Tercero extends BaseModel implements AuthenticatableContract
 {
-    use Authenticatable, CanResetPassword;
-    use EntrustUserTrait;
+    use Authenticatable, EntrustUserTrait;
 
     /**
      * The database table used by the model.

@@ -35,7 +35,9 @@ app || (app = {});
             this.bitacoraCotizacionList = new app.BitacoraCotizacionList();
 
             // Reference views
-            this.referenceCharts();
+            if ($('.chart-container').length) {
+                this.referenceCharts();
+            }
             this.referenceViews();
             this.uploadPictures();
         },

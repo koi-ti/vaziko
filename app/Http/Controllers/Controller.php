@@ -17,16 +17,16 @@ class Controller extends BaseController
     public function __construct()
     {
         $this->middleware('ability:admin,consultar', ['only' => ['index', 'show']]);
-        $this->middleware('ability:admin,crear', ['only' => 'create']);
-        $this->middleware('ability:admin,crear|editar', ['only' => 'store']);
+        $this->middleware('ability:admin,crear', ['only' => ['create']]);
+        $this->middleware('ability:admin,crear|editar', ['only' => ['store']]);
         $this->middleware('ability:admin,editar', ['only' => ['edit', 'update']]);
-        $this->middleware('ability:admin,eliminar', ['only' => 'destroy']);
-        $this->middleware('ability:admin,anular', ['only' => 'anular']);
-        $this->middleware('ability:admin,cerrar', ['only' => 'cerrar']);
-        $this->middleware('ability:admin,abrir', ['only' => 'abrir']);
-        $this->middleware('ability:admin,culminar', ['only' => 'culminar']);
-        $this->middleware('ability:admin,clonar', ['only' => 'clonar']);
-        $this->middleware('ability:admin,exportar', ['only' => 'exportar']);
-        $this->middleware('ability:admin,graficas', ['only' => 'graficas']);
+        $this->middleware('ability:admin,eliminar', ['only' => ['destroy']]);
+        $this->middleware('ability:admin,anular', ['only' => ['anular']]);
+        $this->middleware('ability:admin,cerrar', ['only' => ['cerrar']]);
+        $this->middleware('ability:admin,abrir', ['only' => ['abrir']]);
+        $this->middleware('ability:admin,culminar', ['only' => ['culminar']]);
+        $this->middleware('ability:admin,clonar', ['only' => ['clonar']]);
+        $this->middleware('ability:admin,exportar', ['only' => ['exportar']]);
+        $this->middleware('ability:admin,graficas', ['only' => ['graficas']]);
     }
 }

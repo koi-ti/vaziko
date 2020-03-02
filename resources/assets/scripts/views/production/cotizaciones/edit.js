@@ -69,7 +69,7 @@ app || (app = {});
             if ($('.chart-container').length) {
                 this.referenceCharts();
             }
-            
+
             this.referenceViews();
             this.uploadPictures();
             this.ready();
