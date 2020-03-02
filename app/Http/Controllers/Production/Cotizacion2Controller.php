@@ -382,12 +382,9 @@ class Cotizacion2Controller extends Controller
                         }
                     }
 
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => 'K.O!']);
-
-                    // // Commit Transaction
-                    // DB::commit();
-                    // return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
+                    // Commit Transaction
+                    DB::commit();
+                    return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
                 } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
