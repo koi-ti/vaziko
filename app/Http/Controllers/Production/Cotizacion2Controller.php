@@ -346,7 +346,7 @@ class Cotizacion2Controller extends Controller
                         $totaltransportes += $cotizacion10->cotizacion10_valor_total;
                     }
 
-                    if (!auth()->user()->ability('admin', 'precios', ['module' => 'cotizaciones'])) {
+                    if (auth()->user()->ability('admin', 'utilidades', ['module' => 'cotizaciones'])) {
                         // Operacion para calcular el total del producto
                         $precio = $cotizacion2->cotizacion2_precio_venta;
                         $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
@@ -382,9 +382,12 @@ class Cotizacion2Controller extends Controller
                         }
                     }
 
-                    // Commit Transaction
-                    DB::commit();
-                    return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
+                    DB::rollback();
+                    return response()->json(['success' => false, 'errors' => 'K.O!']);
+
+                    // // Commit Transaction
+                    // DB::commit();
+                    // return response()->json(['success' => true, 'id' => $cotizacion2->id, 'id_cotizacion' => $cotizacion->id]);
                 } catch(\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
