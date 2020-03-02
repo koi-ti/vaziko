@@ -223,12 +223,7 @@ class Cotizacion1Controller extends Controller
         if ($request->ajax()) {
             return response()->json($cotizacion);
         }
-
-        // Permisions
-        if (!$cotizacion->cotizacion1_abierta) {
-            abort(403);
-        }
-
+        
         if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             return redirect()->route('cotizaciones.edit', compact('cotizacion'));
         }
