@@ -11,6 +11,7 @@ use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Actividad
 use App\Models\Receivable\Factura1;
 use App\Models\Inventory\Producto;
 use App\Models\Production\Cotizacion1, App\Models\Production\Ordenp, App\Models\Production\Cotizacion2, App\Models\Production\Ordenp2, App\Models\Production\Productop, App\Models\Production\SubActividadp, App\Models\Production\SubtipoProductop;
+use App\Models\Treasury\Facturap;
 use Datatables, DB;
 
 class BuscadorController extends Controller
@@ -101,9 +102,10 @@ class BuscadorController extends Controller
             $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', 'tcontacto_direccion_nomenclatura', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_municipio', 'tcontacto_email');
             $query->leftJoin('koi_municipio', 'tcontacto_municipio', '=', 'koi_municipio.id');
             $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
+            $query->where('tcontacto_activo', false);
 
             return Datatables::of($query)
-                ->filter(function($query) use($request) {
+                ->filter(function ($query) use ($request) {
                     // Tercero
                     if ($request->has('tcontacto_tercero')) {
                         $query->where('tcontacto_tercero', $request->tcontacto_tercero);
@@ -752,6 +754,30 @@ class BuscadorController extends Controller
             if ($request->has('folder')) {
                 $data = Documento::select('id', 'documento_nombre')->where('documento_folder', $request->folder)->get();
                 return response()->json(['success' => true, 'documents' => $data]);
+            }
+            return response()->json(['success' => false]);
+        }
+        abort(404);
+    }
+
+    /**
+    *
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function facturasp(Request $request)
+    {
+        if ($request->ajax()) {
+            if ($request->has('facturap1_factura') && $request->has('tercero_nit')) {
+                $query = Facturap::query();
+                $query->select('koi_facturap1.id as id');
+                $query->join('koi_tercero', 'facturap1_tercero', '=', 'koi_tercero.id');
+                $query->where('facturap1_factura', $request->facturap1_factura);
+                $query->where('tercero_nit', $request->tercero_nit);
+                $facturap = $query->first();
+
+                if ($facturap instanceof Facturap) {
+                    return response()->json(['success' => true, 'id' => $facturap->id]);
+                }
             }
             return response()->json(['success' => false]);
         }

@@ -40,10 +40,10 @@ class Tiempop extends BaseModel
         ];
 
         if (!$this->exists) {
-            $rules = array_merge($rules, [
+            $rules += [
                 'tiempop_areap' => 'required|integer',
                 'tiempop_actividadp' => 'required|integer'
-            ]);
+            ];
         }
 
         // Validar que hora final no sea menor o igual a la inicial

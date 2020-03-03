@@ -54,9 +54,7 @@ class PlanCuenta extends BaseModel
         ];
 
         if ($this->exists) {
-            $rules['plancuentas_cuenta'] .= ',plancuentas_cuenta,' . $this->id;
-        } else {
-            $rules['plancuentas_cuenta'] .= '|required';
+            $rules['plancuentas_cuenta'] .= ",plancuentas_cuenta,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

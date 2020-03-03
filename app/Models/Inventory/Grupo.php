@@ -38,9 +38,7 @@ class Grupo extends Model
         ];
 
         if ($this->exists) {
-            $rules['grupo_nombre'] .= ',grupo_nombre,' . $this->id;
-        } else {
-            $rules['grupo_nombre'] .= '|required';
+            $rules['grupo_nombre'] .= ",grupo_nombre,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

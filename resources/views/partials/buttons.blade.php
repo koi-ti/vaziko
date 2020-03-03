@@ -13,6 +13,4 @@
             </div>
         </div>
     @endability
-@elseif ($type == 'buscadores')
-
 @endif

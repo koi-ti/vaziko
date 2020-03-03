@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Productop, App\Models\Production\Productop2, App\Models\Production\Productop3, App\Models\Production\Productop4, App\Models\Production\Productop5, App\Models\Production\Productop6, App\Models\Production\TipoProductop, App\Models\Production\SubtipoProductop;
-use Auth, DB, Log, Datatables, Cache;
+use DB, Log, Datatables, Cache;
 
 class ProductopController extends Controller
 {
@@ -92,7 +92,7 @@ class ProductopController extends Controller
                     $producto->setProperties();
                     $producto->productop_tipoproductop = $tipoproducto->id;
                     $producto->productop_subtipoproductop = $subtipoproducto->id;
-                    $producto->productop_usuario_elaboro = Auth::user()->id;
+                    $producto->productop_usuario_elaboro = auth()->user()->id;
                     $producto->productop_fecha_elaboro = date('Y-m-d H:i:s');
                     $producto->save();
 
@@ -228,7 +228,7 @@ class ProductopController extends Controller
                 // Cotizacion
                 $newproductop = $productop->replicate();
                 $newproductop->productop_nombre = sprintf('%s - %s', $newproductop->productop_nombre, 'COPIA');
-                $newproductop->productop_usuario_elaboro = Auth::user()->id;
+                $newproductop->productop_usuario_elaboro = auth()->user()->id;
                 $newproductop->productop_fecha_elaboro = date('Y-m-d H:i:s');
                 $newproductop->save();
 

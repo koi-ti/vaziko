@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Classes\Reports\Accounting;
+
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
-use Auth;
 
 class LibroMayor extends FPDF
 {
@@ -31,7 +31,7 @@ class LibroMayor extends FPDF
     }
 
     function Footer() {
-        $user = utf8_decode(Auth::user()->username);
+        $user = utf8_decode(auth()->user()->username);
         $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);

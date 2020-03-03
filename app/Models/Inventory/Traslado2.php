@@ -21,6 +21,7 @@ class Traslado2 extends Model
             'producto_codigo' => 'required',
             'traslado2_cantidad' => 'required'
         ];
+
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {
             return true;

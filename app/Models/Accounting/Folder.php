@@ -32,9 +32,7 @@ class Folder extends Model
         ];
 
         if ($this->exists) {
-            $rules['folder_codigo'] .= ',folder_codigo,' . $this->id;
-        } else {
-            $rules['folder_codigo'] .= '|required';
+            $rules['folder_codigo'] .= ",folder_codigo,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

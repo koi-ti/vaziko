@@ -39,10 +39,8 @@ class PuntoVenta extends Model
         ];
 
         if ($this->exists) {
-            $rules['puntoventa_nombre'] .= ',puntoventa_nombre,' . $this->id;
-            $rules['puntoventa_prefijo'] .= ',puntoventa_prefijo,' . $this->id;
-        } else {
-            $rules['puntoventa_nombre'] .= '|required';
+            $rules['puntoventa_nombre'] .= ",puntoventa_nombre,{$this->id}";
+            $rules['puntoventa_prefijo'] .= ",puntoventa_prefijo,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

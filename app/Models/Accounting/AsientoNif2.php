@@ -5,7 +5,7 @@ namespace App\Models\Accounting;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use App\Models\Base\Tercero, App\Models\Production\Ordenp, App\Models\Production\Ordenp2,App\Models\Inventory\Producto, App\Models\Inventory\Inventario, App\Models\Inventory\InventarioRollo, App\Models\Inventory\Prodbode, App\Models\Inventory\ProdbodeRollo, App\Models\Base\PuntoVenta, App\Models\Receivable\Factura1, App\Models\Receivable\Factura2, App\Models\Receivable\Factura4, App\Models\Treasury\Facturap, App\Models\Treasury\Facturap2;
-use Validator, Auth, DB;
+use Validator, DB;
 
 class AsientoNif2 extends Model
 {
@@ -742,7 +742,7 @@ class AsientoNif2 extends Model
                 $facturap->facturap1_cuotas = $movefp->movimiento_item;
                 $facturap->facturap1_periodicidad = $movefp->movimiento_periodicidad;
                 $facturap->facturap1_observaciones = $movefp->movimiento_observaciones;
-                $facturap->facturap1_usuario_elaboro = Auth::user()->id;
+                $facturap->facturap1_usuario_elaboro = auth()->user()->id;
                 $facturap->facturap1_fecha_elaboro = date('Y-m-d H:i:s');
                 $facturap->save();
 

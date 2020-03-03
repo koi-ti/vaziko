@@ -43,9 +43,7 @@ class Documento extends BaseModel
         ];
 
         if ($this->exists) {
-            $rules['documento_codigo'] .= ',documento_codigo,' . $this->id;
-        } else {
-            $rules['documento_codigo'] .= '|required';
+            $rules['documento_codigo'] .= ",documento_codigo,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

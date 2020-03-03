@@ -26,6 +26,7 @@ class CreateTcontactoTable extends Migration
             $table->string('tcontacto_celular', 15)->nullable();
             $table->string('tcontacto_email', 200)->nullable();
             $table->string('tcontacto_cargo', 200)->nullable();
+            $table->boolean('tcontacto_activo')->default(true);
 
             $table->foreign('tcontacto_tercero')->references('id')->on('koi_tercero')->onDelete('restrict');
             $table->foreign('tcontacto_municipio')->references('id')->on('koi_municipio')->onDelete('restrict');

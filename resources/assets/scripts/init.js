@@ -23,11 +23,12 @@ var app = app || {};
             serverSide: true,
             pageLength: pagination,
             lengthMenu: [[pagination, 10, 25, 50, 100], [pagination, 10, 25, 50, 100]],
-            language: window.Misc.dataTableES()
+            language: window.Misc.dataTableES(),
+            responsive: true
         });
     }
 
-    String.prototype.replaceAll = function(search, replace) {
+    String.prototype.replaceAll = function (search, replace) {
         if (!replace)
             return this;
         return this.replace(new RegExp('[' + search + ']', 'g'), replace);

@@ -43,8 +43,12 @@ class Materialp extends BaseModel
 
     public function isValid($data) {
         $rules = [
-            'materialp_nombre' => 'required|max:200'
+            'materialp_nombre' => 'required|max:200|unique:koi_materialp'
         ];
+
+        if ($this->exists) {
+            $rules['materialp_nombre'] .= ",materialp_nombre,{$this->id}";
+        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {

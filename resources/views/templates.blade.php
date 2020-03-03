@@ -82,12 +82,25 @@
 	<td><%- tcontacto_direccion %></td>
 	<td><%- tcontacto_telefono %></td>
 	<td><%- tcontacto_celular %></td>
-    <% if(edit) { %>
-    	<td class="text-center">
-    		<a class="btn btn-default btn-xs btn-edit-tcontacto" data-resource="<%- id %>">
-    			<span><i class="fa fa-pencil-square-o"></i></span>
-    		</a>
-    	</td>
+    <% if (edit) { %>
+        <% if (tcontacto_activo) { %>
+        	<td class="text-center">
+        		<a class="btn btn-default btn-xs item-edit" title="Editar contacto" data-resource="<%- id %>">
+        			<span><i class="fa fa-pencil-square-o"></i></span>
+        		</a>
+        	</td>
+        	<td class="text-center">
+        		<a class="btn btn-danger btn-xs item-state" title="Deshabilitar contacto" data-resource="<%- id %>">
+        			<span><i class="fa fa-ban"></i></span>
+        		</a>
+        	</td>
+        <% } else { %>
+            <td class="text-center" colspan="2">
+                <a class="btn btn-success btn-xs item-state" title="Habilitar contacto" data-resource="<%- id %>">
+                    <span><i class="fa fa-check"></i></span>
+                </a>
+            </td>
+        <% } %>
     <% } %>
 </script>
 

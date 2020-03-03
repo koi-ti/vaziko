@@ -1,9 +1,9 @@
 <?php
 
 namespace App\Classes\Reports\Accounting;
+
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
-use Auth;
 
 class PlanCuentas extends FPDF
 {
@@ -23,7 +23,7 @@ class PlanCuentas extends FPDF
 		$this->SetXY(75,17);
 		$this->SetFont('Arial','B',8);
         $this->Cell(70,5,"NIT: $empresa->tercero_nit",0,0,'C');
-		$this->Line(10,22,200,22);;
+		$this->Line(10,22,200,22);
 		$this->SetXY(85,23);
         $this->Cell(50, 5, utf8_decode($this->metadata['Title']), 0, 0,'C');
         $this->Ln(5);
@@ -31,7 +31,7 @@ class PlanCuentas extends FPDF
     }
 
     function Footer() {
-        $user = utf8_decode(Auth::user()->username);
+        $user = utf8_decode(auth()->user()->username);
         $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);

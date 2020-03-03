@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Classes\Reports\Accounting;
+
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
-use Auth;
 
 class MayorBalance extends FPDF
 {
-
     function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
@@ -32,7 +31,7 @@ class MayorBalance extends FPDF
     }
 
     function Footer() {
-        $user = utf8_decode(Auth::user()->username);
+        $user = utf8_decode(auth()->user()->username);
         $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);

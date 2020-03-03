@@ -2,9 +2,8 @@
 
 namespace App\Classes;
 
-use Auth, DB;
-
 use App\Models\Accounting\PlanCuentaNif, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\AsientoNif, App\Models\Accounting\AsientoNif2, App\Models\Accounting\CentroCosto, App\Models\Accounting\SaldoContableNif, App\Models\Accounting\SaldoTerceroNif, App\Models\Base\Empresa;
+use DB;
 
 class AsientoNifContableDocumento {
 
@@ -163,7 +162,7 @@ class AsientoNifContableDocumento {
 		// AsientoNif
 		$this->asientoNif->asienton1_preguardado = false;
 		$this->asientoNif->asienton1_beneficiario = $this->beneficiario->id;
-		$this->asientoNif->asienton1_usuario_elaboro = Auth::user()->id;
+		$this->asientoNif->asienton1_usuario_elaboro = auth()->user()->id;
 		$this->asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
 		$this->asientoNif->save();
 

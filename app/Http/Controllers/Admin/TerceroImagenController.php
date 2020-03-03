@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\TerceroImagen, App\Models\Base\Tercero;
-use Storage, Auth, DB;
+use Storage, DB;
 
 class TerceroImagenController extends Controller
 {
@@ -27,17 +27,16 @@ class TerceroImagenController extends Controller
 
                 $data = [];
                 foreach ($imagenes as $imagen) {
-                    if (Storage::has("terceros/tercero_$imagen->terceroimagen_tercero/archivos/$imagen->terceroimagen_archivo")) {
+                    if (Storage::has("terceros/tercero_{$imagen->terceroimagen_tercero}/archivos/{$imagen->terceroimagen_archivo}")) {
                         $object = new \stdClass();
                         $object->uuid = $imagen->id;
                         $object->name = $imagen->terceroimagen_archivo;
-                        $object->size = Storage::size("terceros/tercero_$imagen->terceroimagen_tercero/archivos/$imagen->terceroimagen_archivo");
-                        $object->thumbnailUrl = url("storage/terceros/tercero_$imagen->terceroimagen_tercero/archivos/$imagen->terceroimagen_archivo");
+                        $object->size = Storage::size("terceros/tercero_{$imagen->terceroimagen_tercero}/archivos/{$imagen->terceroimagen_archivo}");
+                        $object->thumbnailUrl = url("storage/terceros/tercero_{$imagen->terceroimagen_tercero}/archivos/{$imagen->terceroimagen_archivo}");
                         $data[] = $object;
                     }
                 }
             }
-
         }
         return response()->json($data);
     }
@@ -65,17 +64,17 @@ class TerceroImagenController extends Controller
                     // Recuperar nombre de archivo
                     $name = str_random(4)."_{$file->getClientOriginalName()}";
 
-                    Storage::put("terceros/tercero_$tercero->id/archivos/$name", file_get_contents($file->getRealPath()));
+                    Storage::put("terceros/tercero_{$tercero->id}/archivos/{$name}", file_get_contents($file->getRealPath()));
 
                     // Retornar url href
-                    $url = url("storage/terceros/tercero_$tercero->id/archivos/$name");
+                    $url = url("storage/terceros/tercero_{$tercero->id}/archivos/{$name}");
 
                     // Insertar imagen
                     $imagen = new TerceroImagen;
                     $imagen->terceroimagen_archivo = $name;
                     $imagen->terceroimagen_tercero = $tercero->id;
                     $imagen->terceroimagen_fh_elaboro = date('Y-m-d H:i:s');
-                    $imagen->terceroimagen_usuario_elaboro = Auth::user()->id;
+                    $imagen->terceroimagen_usuario_elaboro = auth()->user()->id;
                     $imagen->save();
 
                     // Commit Transaction
@@ -120,8 +119,8 @@ class TerceroImagenController extends Controller
                 }
 
                 // Eliminar item detalle
-                if (Storage::has("terceros/tercero_$tercero->id/archivos/$terceroimagen->terceroimagen_archivo")) {
-                    Storage::delete("terceros/tercero_$tercero->id/archivos/$terceroimagen->terceroimagen_archivo");
+                if (Storage::has("terceros/tercero_{$tercero->id}/archivos/{$terceroimagen->terceroimagen_archivo}")) {
+                    Storage::delete("terceros/tercero_{$tercero->id}/archivos/{$terceroimagen->terceroimagen_archivo}");
                     $terceroimagen->delete();
                 }
 

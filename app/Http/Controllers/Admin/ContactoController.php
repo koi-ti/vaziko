@@ -58,7 +58,7 @@ class ContactoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $contacto->id, 'tcontacto_nombre' => "{$contacto->tcontacto_nombres} {$contacto->tcontacto_apellidos}"]);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -84,6 +84,11 @@ class ContactoController extends Controller
             if ($contacto->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    if (!$contacto->tcontacto_activo) {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => 'No es posible editar el contacto.']);
+                    }
+
                     // Contacto
                     $contacto->fill($data);
                     $contacto->save();
@@ -91,13 +96,50 @@ class ContactoController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $contacto->id]);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
                 }
             }
             return response()->json(['success' => false, 'errors' => $contacto->errors]);
+        }
+        abort(403);
+    }
+
+    /**
+     * Estado the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function estado(Request $request)
+    {
+        if ($request->ajax()) {
+            if (!$request->has('contacto')) {
+                return response()->json(['success' => false, 'errors' => 'No envio el contacto.']);
+            }
+
+            $contacto = Contacto::find($request->contacto);
+            if (!$contacto instanceof Contacto) {
+                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el contacto.']);
+            }
+
+            DB::beginTransaction();
+            try {
+                // Contacto
+                $contacto->tcontacto_activo = !$contacto->tcontacto_activo;
+                $contacto->save();
+
+                // Commit Transaction
+                DB::commit();
+                return response()->json(['success' => true, 'msg' => 'Se cambio el estado del contacto con éxito.']);
+            } catch (\Exception $e) {
+                DB::rollback();
+                Log::error($e->getMessage());
+                return response()->json(['success' => false, 'errors' => trans('app.exception')]);
+            }
         }
         abort(403);
     }

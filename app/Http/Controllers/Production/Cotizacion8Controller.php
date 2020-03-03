@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Production;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Production\Cotizacion2, App\Models\Production\Cotizacion8;
-use DB, Log, Storage, Auth;
+use DB, Log, Storage;
 
 class Cotizacion8Controller extends Controller
 {
@@ -77,7 +77,7 @@ class Cotizacion8Controller extends Controller
                     $imagen->cotizacion8_archivo = $name;
                     $imagen->cotizacion8_cotizacion2 = $cotizacion2->id;
                     $imagen->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
-                    $imagen->cotizacion8_usuario_elaboro = Auth::user()->id;
+                    $imagen->cotizacion8_usuario_elaboro = auth()->user()->id;
                     $imagen->save();
 
                     // Commit Transaction

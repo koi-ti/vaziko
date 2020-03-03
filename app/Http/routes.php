@@ -52,6 +52,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('subactividadesp', ['as' => 'search.subactividadesp', 'uses' => 'Admin\BuscadorController@subactividadesp']);
 		Route::get('subtipoproductosp', ['as' => 'search.subtipoproductosp', 'uses' => 'Admin\BuscadorController@subtipoproductosp']);
 		Route::get('documentos', ['as' => 'search.documentos', 'uses' => 'Admin\BuscadorController@documentos']);
+		Route::get('facturasp', ['as' => 'search.facturasp', 'uses' => 'Admin\BuscadorController@facturasp']);
 	});
 
 	/*
@@ -65,6 +66,9 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('rcree', ['as' => 'terceros.rcree', 'uses' => 'Admin\TerceroController@rcree']);
 		Route::get('facturap', ['as' => 'terceros.facturap', 'uses' => 'Admin\TerceroController@facturap']);
 		Route::post('setpassword', ['as' => 'terceros.setpassword', 'uses' => 'Admin\TerceroController@setpassword']);
+		Route::group(['prefix' => 'contactos'], function () {
+			Route::get('estado', ['as' => 'terceros.contactos.estado', 'uses' => 'Admin\ContactoController@estado']);
+		});
 		Route::resource('contactos', 'Admin\ContactoController', ['only' => ['index', 'store', 'update']]);
 		Route::resource('roles', 'Admin\UsuarioRolController', ['only' => ['index', 'store', 'destroy']]);
 		Route::resource('imagenes', 'Admin\TerceroImagenController', ['only' => ['index', 'store', 'destroy']]);
@@ -255,7 +259,6 @@ Route::group(['middleware' => 'auth'], function () {
 	|-------------------------
 	*/
 	Route::group(['prefix' => 'facturasp'], function () {
-		Route::get('search', ['as' => 'facturasp.search', 'uses' => 'Treasury\FacturapController@search']);
 		Route::resource('cuotas', 'Treasury\FacturapCuotasController', ['only' => ['index']]);
 	});
 	Route::resource('facturasp', 'Treasury\FacturapController', ['only' => ['index', 'show']]);

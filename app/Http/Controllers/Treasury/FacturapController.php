@@ -72,26 +72,4 @@ class FacturapController extends Controller
         }
         return view('treasury.facturasp.show', compact('facturap'));
     }
-
-    /**
-     * Search invoice.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function search(Request $request)
-    {
-        if ($request->has('facturap1_factura') && $request->has('tercero_nit')) {
-            $query = Facturap::query();
-            $query->select('koi_facturap1.id as id');
-            $query->join('koi_tercero', 'facturap1_tercero', '=', 'koi_tercero.id');
-            $query->where('facturap1_factura', $request->facturap1_factura);
-            $query->where('tercero_nit', $request->tercero_nit);
-            $invoice = $query->first();
-
-            if ($invoice instanceof Facturap) {
-                return response()->json(['success' => true, 'id' => $invoice->id]);
-            }
-        }
-        return response()->json(['success' => false]);
-    }
 }

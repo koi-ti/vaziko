@@ -473,11 +473,11 @@
 
                                 <div class="row">
                                     <div class="form-group col-sm-2 col-md-offset-2">
-                                        <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" class="form-control input-xs" min="0" step="1" max="9999" required>
+                                        <input type="number" id="cotizacion6_horas" name="cotizacion6_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-2">
-                                        <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" class="form-control input-xs" min="00" step="01" max="59" required>
+                                        <input type="number" id="cotizacion6_minutos" name="cotizacion6_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="0" step="01" max="59" required>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-3">

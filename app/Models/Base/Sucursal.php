@@ -38,9 +38,7 @@ class Sucursal extends Model
         ];
 
         if ($this->exists) {
-            $rules['sucursal_nombre'] .= ',sucursal_nombre,' . $this->id;
-        } else {
-            $rules['sucursal_nombre'] .= '|required';
+            $rules['sucursal_nombre'] .= ",sucursal_nombre,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

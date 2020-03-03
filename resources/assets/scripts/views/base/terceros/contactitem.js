@@ -35,6 +35,11 @@ app || (app = {});
         render: function () {
             var attributes = this.model.toJSON();
                 attributes.edit = this.parameters.edit;
+
+            if (!attributes.tcontacto_activo) {
+                this.$el.addClass('disable-row');
+            }
+
             this.$el.html(this.template(attributes));
             return this;
         }

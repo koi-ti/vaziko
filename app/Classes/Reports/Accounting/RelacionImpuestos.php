@@ -1,13 +1,12 @@
 <?php
 
 namespace App\Classes\Reports\Accounting;
+
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
-use Auth;
 
 class RelacionImpuestos extends FPDF
 {
-
     function buldReport($data, $title) {
         $this->SetMargins(5,5,5);
         $this->SetTitle($title, true);
@@ -24,7 +23,7 @@ class RelacionImpuestos extends FPDF
 		$this->SetXY(75,17);
 		$this->SetFont('Arial','B',8);
         $this->Cell(130,5,"NIT: $empresa->tercero_nit",0,0,'C');
-		$this->Line(10,22,270,22);;
+		$this->Line(10,22,270,22);
 		$this->SetXY(85,23);
         $this->Cell(110, 5, utf8_decode($this->metadata['Title']), 0, 0,'C');
         $this->Ln(5);
@@ -32,7 +31,7 @@ class RelacionImpuestos extends FPDF
     }
 
     function Footer() {
-        $user = utf8_decode(Auth::user()->username);
+        $user = utf8_decode(auth()->user()->username);
         $date = date('Y-m-d H:i:s');
 
         $this->SetY(-15);

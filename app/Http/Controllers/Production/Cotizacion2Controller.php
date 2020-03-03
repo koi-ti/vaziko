@@ -217,8 +217,8 @@ class Cotizacion2Controller extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        $insumo = Producto::find($material->cotizacion4_producto);
-                        if (!$insumo instanceof Producto) {
+                        $producto = Producto::find($material->cotizacion4_producto);
+                        if (!$producto instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                         }
@@ -227,7 +227,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion4 = new Cotizacion4;
                         $cotizacion4->cotizacion4_cotizacion2 = $cotizacion2->id;
                         $cotizacion4->cotizacion4_materialp = $materialp->id;
-                        $cotizacion4->cotizacion4_producto = $insumo->id;
+                        $cotizacion4->cotizacion4_producto = $producto->id;
                         $cotizacion4->cotizacion4_medidas = $material->cotizacion4_medidas;
                         $cotizacion4->cotizacion4_cantidad = $material->cotizacion4_cantidad;
                         $cotizacion4->cotizacion4_valor_unitario = $material->cotizacion4_valor_unitario;
@@ -244,6 +244,10 @@ class Cotizacion2Controller extends Controller
                         $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
                         $historial->save();
+
+                        // Actualizar producto
+                        $producto->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                        $producto->save();
 
                         $totalmaterialesp += $cotizacion4->cotizacion4_valor_total;
                     }
@@ -303,6 +307,10 @@ class Cotizacion2Controller extends Controller
                         $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
                         $historial->save();
 
+                        // Actualizar producto
+                        $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
+                        $producto->save();
+
                         $totalempaques += $cotizacion9->cotizacion9_valor_total;
                     }
 
@@ -342,6 +350,10 @@ class Cotizacion2Controller extends Controller
                         $historial->productohistorial_valor = $cotizacion10->cotizacion10_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $cotizacion10->cotizacion10_fh_elaboro;
                         $historial->save();
+
+                        // Actualizar producto
+                        $producto->producto_precio = $cotizacion10->cotizacion10_valor_unitario;
+                        $producto->save();
 
                         $totaltransportes += $cotizacion10->cotizacion10_valor_total;
                     }

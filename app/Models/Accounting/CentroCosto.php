@@ -45,9 +45,7 @@ class CentroCosto extends BaseModel
         ];
 
         if ($this->exists) {
-            $rules['centrocosto_codigo'] .= ',centrocosto_codigo,' . $this->id;
-        } else {
-            $rules['centrocosto_codigo'] .= '|required';
+            $rules['centrocosto_codigo'] .= ",centrocosto_codigo,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

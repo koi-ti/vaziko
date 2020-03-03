@@ -398,7 +398,7 @@
 
             // Search facturap
             $.ajax({
-                url: window.Misc.urlFull(Route.route('facturasp.search')),
+                url: window.Misc.urlFull(Route.route('search.facturasp')),
                 type: 'GET',
                 data: { facturap1_factura: settings.facturap, tercero_nit: settings.tercero },
                 beforeSend: function() {

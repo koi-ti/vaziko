@@ -38,9 +38,7 @@ class SubGrupo extends Model
         ];
 
         if ($this->exists) {
-            $rules['subgrupo_nombre'] .= ',subgrupo_nombre,' . $this->id;
-        } else {
-            $rules['subgrupo_nombre'] .= '|required';
+            $rules['subgrupo_nombre'] .= ",subgrupo_nombre,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

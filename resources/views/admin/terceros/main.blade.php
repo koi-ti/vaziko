@@ -486,6 +486,7 @@
     								                <th>Dirección</th>
     								                <th>Teléfono</th>
     								                <th>Celular</th>
+    								                <th colspan="2"></th>
     								            </tr>
     							           </thead>
     							           <tbody>
@@ -515,6 +516,10 @@
     	<td><%- factura4_vencimiento %></td>
     	<td><%- days %></td>
         <td class="text-right"><%- window.Misc.currency(factura4_saldo) %></td>
+    </script>
+
+    <script type="text/template" id="tcontacto-state-confirm-tpl">
+        <p>Esta seguro de <%- parseInt(activo) ? 'deshabilitar' : 'activar' %> el contacto <b><%- nombre %></b>?</p>
     </script>
 
     <script type="text/template" id="qq-template-tercero">

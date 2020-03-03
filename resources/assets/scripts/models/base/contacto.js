@@ -24,7 +24,8 @@ app || (app = {});
             'tcontacto_direccion': '',
         	'tcontacto_direccion_nomenclatura': '',
         	'tcontacto_email': '',
-        	'tcontacto_cargo': ''
+        	'tcontacto_cargo': '',
+            'tcontacto_activo': 1
         }
     });
 

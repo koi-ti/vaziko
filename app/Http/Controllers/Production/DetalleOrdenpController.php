@@ -172,8 +172,8 @@ class DetalleOrdenpController extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el material de producción, por favor verifique la información o consulte al administrador.']);
                         }
 
-                        $insumo = Producto::find($material->orden4_producto);
-                        if (!$insumo instanceof Producto) {
+                        $producto = Producto::find($material->orden4_producto);
+                        if (!$producto instanceof Producto) {
                             DB::rollback();
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                         }
@@ -182,7 +182,7 @@ class DetalleOrdenpController extends Controller
                         $orden4 = new Ordenp4;
                         $orden4->orden4_orden2 = $orden2->id;
                         $orden4->orden4_materialp = $materialp->id;
-                        $orden4->orden4_producto = $insumo->id;
+                        $orden4->orden4_producto = $producto->id;
                         $orden4->orden4_medidas = $material->orden4_medidas;
                         $orden4->orden4_cantidad = $material->orden4_cantidad;
                         $orden4->orden4_valor_unitario = $material->orden4_valor_unitario;
@@ -199,6 +199,10 @@ class DetalleOrdenpController extends Controller
                         $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
                         $historial->save();
+
+                        // Actualizar producto
+                        $producto->producto_precio = $orden4->orden4_valor_unitario;
+                        $producto->save();
 
                         $totalmaterialesp += $orden4->orden4_valor_total;
                     }
@@ -258,6 +262,10 @@ class DetalleOrdenpController extends Controller
                         $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
                         $historial->save();
 
+                        // Actualizar producto
+                        $producto->producto_precio = $orden9->orden9_valor_unitario;
+                        $producto->save();
+
                         $totalempaques += $orden9->orden9_valor_total;
                     }
 
@@ -297,6 +305,10 @@ class DetalleOrdenpController extends Controller
                         $historial->productohistorial_valor = $orden10->orden10_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $orden10->orden10_fh_elaboro;
                         $historial->save();
+
+                        // Actualizar producto
+                        $producto->producto_precio = $orden10->orden10_valor_unitario;
+                        $producto->save();
 
                         $totaltransportes += $orden10->orden10_valor_total;
                     }

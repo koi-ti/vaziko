@@ -40,9 +40,7 @@ class Actividad extends Model
         ];
 
         if ($this->exists) {
-            $rules['actividad_codigo'] .= ',actividad_codigo,' . $this->id;
-        } else {
-            $rules['actividad_codigo'] .= '|required';
+            $rules['actividad_codigo'] .= ",actividad_codigo,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);

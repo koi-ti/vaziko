@@ -39,9 +39,7 @@ class Unidad extends Model
         ];
 
         if ($this->exists) {
-            $rules['unidadmedida_sigla'] .= ',unidadmedida_sigla,' . $this->id;
-        } else {
-            $rules['unidadmedida_sigla'] .= '|required';
+            $rules['unidadmedida_sigla'] .= ",unidadmedida_sigla,{$this->id}";
         }
 
         $validator = Validator::make($data, $rules);
