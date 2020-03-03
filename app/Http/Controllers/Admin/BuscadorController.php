@@ -102,7 +102,7 @@ class BuscadorController extends Controller
             $query->select('koi_tcontacto.id', 'tcontacto_nombres', 'tcontacto_apellidos', 'tcontacto_telefono', DB::raw("CONCAT(municipio_nombre, ' - ', departamento_nombre) as municipio_nombre"), 'tcontacto_direccion', 'tcontacto_direccion_nomenclatura', DB::raw("CONCAT(tcontacto_nombres,' ',tcontacto_apellidos) AS tcontacto_nombre"), 'tcontacto_municipio', 'tcontacto_email');
             $query->leftJoin('koi_municipio', 'tcontacto_municipio', '=', 'koi_municipio.id');
             $query->leftJoin('koi_departamento', 'koi_municipio.departamento_codigo', '=', 'koi_departamento.departamento_codigo');
-            $query->where('tcontacto_activo', false);
+            $query->where('tcontacto_activo', true);
 
             return Datatables::of($query)
                 ->filter(function ($query) use ($request) {
