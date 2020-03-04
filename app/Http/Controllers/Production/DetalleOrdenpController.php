@@ -204,7 +204,7 @@ class DetalleOrdenpController extends Controller
                         $producto->producto_precio = $orden4->orden4_valor_unitario;
                         $producto->save();
 
-                        $totalmaterialesp += $orden4->orden4_valor_total;
+                        $totalmaterialesp += round($orden4->orden4_valor_total);
                     }
 
                     // Areap
@@ -222,7 +222,7 @@ class DetalleOrdenpController extends Controller
                         $orden6->save();
 
                         $tiempo = intval($areap->orden6_horas) + (intval($areap->orden6_minutos) / 60);
-                        $totalareasp += $orden6->orden6_valor * $tiempo;
+                        $totalareasp += round($orden6->orden6_valor * $tiempo);
                     }
 
                     // Empaques
@@ -266,7 +266,7 @@ class DetalleOrdenpController extends Controller
                         $producto->producto_precio = $orden9->orden9_valor_unitario;
                         $producto->save();
 
-                        $totalempaques += $orden9->orden9_valor_total;
+                        $totalempaques += round($orden9->orden9_valor_total);
                     }
 
                     // Transportes
@@ -310,7 +310,7 @@ class DetalleOrdenpController extends Controller
                         $producto->producto_precio = $orden10->orden10_valor_unitario;
                         $producto->save();
 
-                        $totaltransportes += $orden10->orden10_valor_total;
+                        $totaltransportes += round($orden10->orden10_valor_total);
                     }
 
                     // Operacion para calcular el total del producto
@@ -320,10 +320,9 @@ class DetalleOrdenpController extends Controller
                     $areas = round($totalareasp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_areap)/100);
                     $empaques = round($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
                     $transportes = round($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
-
                     $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
                     $comision = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
-                    $total = round(($subtotal+$comision), $orden2->orden2_round);
+                    $total = round(($subtotal + $comision), $orden2->orden2_round);
 
                     // Actualizar valores
                     $orden2->orden2_vtotal = $comision;
@@ -550,7 +549,7 @@ class DetalleOrdenpController extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $orden4->id;
-                            $totalmaterialesp += $orden4->orden4_valor_total;
+                            $totalmaterialesp += round($orden4->orden4_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -579,7 +578,7 @@ class DetalleOrdenpController extends Controller
 
                             $keys[] = $orden6->id;
                             $tiempo = intval($areap['orden6_horas']) + (intval($areap['orden6_minutos']) / 60);
-                            $totalareasp += $orden6->orden6_valor * $tiempo;
+                            $totalareasp += round($orden6->orden6_valor * $tiempo);
                         }
 
                         // Remover registros que no existan
@@ -618,7 +617,7 @@ class DetalleOrdenpController extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $orden9->id;
-                            $totalempaques += $orden9->orden9_valor_total;
+                            $totalempaques += round($orden9->orden9_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -658,7 +657,7 @@ class DetalleOrdenpController extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $orden10->id;
-                            $totaltransportes += $orden10->orden10_valor_total;
+                            $totaltransportes += round($orden10->orden10_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -672,10 +671,9 @@ class DetalleOrdenpController extends Controller
                         $areas = round($totalareasp/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_areap)/100);
                         $empaques = round($totalempaques/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_empaque)/100);
                         $transportes = round($totaltransportes/$orden2->orden2_cantidad)/((100-$orden2->orden2_margen_transporte)/100);
-
                         $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
-                        $volumen = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
-                        $total = round(($subtotal+$volumen), $orden2->orden2_round);
+                        $comision = ($subtotal/((100-$orden2->orden2_volumen)/100)) * (1-(((100-$orden2->orden2_volumen)/100)));
+                        $total = round(($subtotal + $comision), $orden2->orden2_round);
 
                         // Actualizar valores
                         $orden2->orden2_vtotal = $volumen;

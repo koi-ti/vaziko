@@ -249,7 +249,7 @@ class Cotizacion2Controller extends Controller
                         $producto->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
                         $producto->save();
 
-                        $totalmaterialesp += $cotizacion4->cotizacion4_valor_total;
+                        $totalmaterialesp += round($cotizacion4->cotizacion4_valor_total);
                     }
 
                     // Areap
@@ -267,7 +267,7 @@ class Cotizacion2Controller extends Controller
                         $cotizacion6->save();
 
                         $tiempo = intval($areap->cotizacion6_horas) + (intval($areap->cotizacion6_minutos) / 60);
-                        $totalareasp += $cotizacion6->cotizacion6_valor * $tiempo;
+                        $totalareasp += round($cotizacion6->cotizacion6_valor * $tiempo);
                     }
 
                     // Empaques
@@ -311,7 +311,7 @@ class Cotizacion2Controller extends Controller
                         $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
                         $producto->save();
 
-                        $totalempaques += $cotizacion9->cotizacion9_valor_total;
+                        $totalempaques += round($cotizacion9->cotizacion9_valor_total);
                     }
 
                     // Transportes
@@ -355,27 +355,24 @@ class Cotizacion2Controller extends Controller
                         $producto->producto_precio = $cotizacion10->cotizacion10_valor_unitario;
                         $producto->save();
 
-                        $totaltransportes += $cotizacion10->cotizacion10_valor_total;
+                        $totaltransportes += round($cotizacion10->cotizacion10_valor_total);
                     }
 
-                    if (auth()->user()->ability('admin', 'utilidades', ['module' => 'cotizaciones'])) {
-                        // Operacion para calcular el total del producto
-                        $precio = $cotizacion2->cotizacion2_precio_venta;
-                        $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
-                        $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-                        $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_areap)/100);;
-                        $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
-                        $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+                    // Operacion para calcular el total del producto
+                    $precio = $cotizacion2->cotizacion2_precio_venta;
+                    $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
+                    $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
+                    $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_areap)/100);;
+                    $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
+                    $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+                    $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                    $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
+                    $total = round(($subtotal + $comision), $cotizacion2->cotizacion2_round);
 
-                        $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
-                        $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                        $total = round(($subtotal+$comision), $cotizacion2->cotizacion2_round);
-
-                        // Actualizar valores
-                        $cotizacion2->cotizacion2_vtotal = $comision;
-                        $cotizacion2->cotizacion2_total_valor_unitario = $total;
-                        $cotizacion2->save();
-                    }
+                    // Actualizar valores
+                    $cotizacion2->cotizacion2_vtotal = $comision;
+                    $cotizacion2->cotizacion2_total_valor_unitario = $total;
+                    $cotizacion2->save();
 
                     // Si hay cambios en la cotizacion
                     Bitacora::createBitacora($cotizacion, [], "Código: {$cotizacion2->id}\r\nReferencia: {$cotizacion2->cotizacion2_referencia}\r\nCantidad: {$cotizacion2->cotizacion2_saldo}", 'Productos', 'C', $request->ip());
@@ -638,7 +635,7 @@ class Cotizacion2Controller extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $cotizacion4->id;
-                            $totalmaterialesp += $cotizacion4->cotizacion4_valor_total;
+                            $totalmaterialesp += round($cotizacion4->cotizacion4_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -667,7 +664,7 @@ class Cotizacion2Controller extends Controller
 
                             $keys[] = $cotizacion6->id;
                             $tiempo = intval($areap['cotizacion6_horas']) + (intval($areap['cotizacion6_minutos']) / 60);
-                            $totalareasp += $cotizacion6->cotizacion6_valor * $tiempo;
+                            $totalareasp += round($cotizacion6->cotizacion6_valor * $tiempo);
                         }
 
                         // Remover registros que no existan
@@ -708,7 +705,7 @@ class Cotizacion2Controller extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $cotizacion9->id;
-                            $totalempaques += $cotizacion9->cotizacion9_valor_total;
+                            $totalempaques += round($cotizacion9->cotizacion9_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -749,7 +746,7 @@ class Cotizacion2Controller extends Controller
 
                             // asociar id a un array para validar
                             $keys[] = $cotizacion10->id;
-                            $totaltransportes += $cotizacion10->cotizacion10_valor_total;
+                            $totaltransportes += round($cotizacion10->cotizacion10_valor_total);
                         }
 
                         // Remover registros que no existan
@@ -765,8 +762,7 @@ class Cotizacion2Controller extends Controller
 
                         $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
                         $volumen = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                        $total = $subtotal + $volumen;
-                        $total = round(($subtotal+$volumen), $cotizacion2->cotizacion2_round);
+                        $total = round(($subtotal + $volumen), $cotizacion2->cotizacion2_round);
 
                         // Actualizar valores
                         $cotizacion2->cotizacion2_vtotal = $volumen;

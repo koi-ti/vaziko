@@ -38,22 +38,17 @@ class Cotizacion2 extends BaseModel
         $rules = [
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
-            'cotizacion2_ancho' => 'numeric|min:0'
+            'cotizacion2_ancho' => 'numeric|min:0',
+            'cotizacion2_volumen' => 'min:0|max:100|integer',
+            'cotizacion2_margen_materialp' => 'min:0|max:100|numeric',
+            'cotizacion2_margen_areap' => 'min:0|max:100|numeric',
+            'cotizacion2_margen_empaque' => 'min:0|max:100|numeric',
+            'cotizacion2_margen_transporte' => 'min:0|max:100|numeric',
+            'cotizacion2_descuento' => 'min:0|max:100|numeric',
+            'cotizacion2_comision' => 'min:0|max:100|numeric',
+            'cotizacion2_round' => 'required|min:-3|max:3|numeric',
+            'cotizacion2_precio_venta' => 'required'
         ];
-
-        if (auth()->user()->ability('admin', 'utilidades', ['module' => 'cotizaciones'])) {
-            $rules += [
-                'cotizacion2_volumen' => 'min:0|max:100|integer',
-                'cotizacion2_margen_materialp' => 'min:0|max:100|numeric',
-                'cotizacion2_margen_areap' => 'min:0|max:100|numeric',
-                'cotizacion2_margen_empaque' => 'min:0|max:100|numeric',
-                'cotizacion2_margen_transporte' => 'min:0|max:100|numeric',
-                'cotizacion2_descuento' => 'min:0|max:100|numeric',
-                'cotizacion2_comision' => 'min:0|max:100|numeric',
-                'cotizacion2_round' => 'required|min:-3|max:3|numeric',
-                'cotizacion2_precio_venta' => 'required'
-            ];
-        }
 
         $validator = Validator::make($data, $rules);
         if ($validator->passes()) {

@@ -199,38 +199,21 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                if (this.model.id != undefined) {
-                    var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
-                        data.orden2_margen_materialp = this.$inputmargenmaterialp.val();
-                        data.orden2_margen_areap = this.$inputmargenareap.val();
-                        data.orden2_margen_empaque = this.$inputmargenempaque.val();
-                        data.orden2_margen_transporte = this.$inputmargentransporte.val();
-                        data.orden2_descuento = this.$inputdescuento.val();
-                        data.orden2_comision = this.$inputcomision.val();
-                        data.orden2_volumen = this.$inputvolumen.val();
-                        data.orden2_round = this.$inputround.val();
-                        data.materialesp = this.materialesProductopOrdenList.toJSON();
-                        data.areasp = this.areasProductopOrdenList.toJSON();
-                        data.empaques = this.empaquesProductopOrdenList.toJSON();
-                        data.transportes = this.transportesProductopOrdenList.toJSON();
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
+                    data.orden2_margen_materialp = this.$inputmargenmaterialp.val();
+                    data.orden2_margen_areap = this.$inputmargenareap.val();
+                    data.orden2_margen_empaque = this.$inputmargenempaque.val();
+                    data.orden2_margen_transporte = this.$inputmargentransporte.val();
+                    data.orden2_descuento = this.$inputdescuento.val();
+                    data.orden2_comision = this.$inputcomision.val();
+                    data.orden2_volumen = this.$inputvolumen.val();
+                    data.orden2_round = this.$inputround.val();
+                    data.materialesp = this.model.isNew() ? JSON.stringify(this.materialesProductopOrdenList) : this.materialesProductopOrdenList.toJSON();
+                    data.areasp = this.model.isNew() ? JSON.stringify(this.areasProductopOrdenList) : this.areasProductopOrdenList.toJSON();
+                    data.empaques = this.model.isNew() ? JSON.stringify(this.empaquesProductopOrdenList) : this.empaquesProductopOrdenList.toJSON();
+                    data.transportes = this.model.isNew() ? JSON.stringify(this.transportesProductopOrdenList) : this.transportesProductopOrdenList.toJSON();
 
-                    this.model.save(data, {silent: true});
-
-                } else {
-                    var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
-                        data.orden2_margen_materialp = this.$inputmargenmaterialp.val();
-                        data.orden2_margen_areap = this.$inputmargenareap.val();
-                        data.orden2_margen_empaque = this.$inputmargenempaque.val();
-                        data.orden2_margen_transporte = this.$inputmargentransporte.val();
-                        data.orden2_descuento = this.$inputdescuento.val();
-                        data.orden2_comision = this.$inputcomision.val();
-                        data.orden2_volumen = this.$inputvolumen.val();
-                        data.orden2_round = this.$inputround.val();
-                        data.materialesp = JSON.stringify(this.materialesProductopOrdenList);
-                        data.areasp = JSON.stringify(this.areasProductopOrdenList);
-                        data.empaques = JSON.stringify(this.empaquesProductopOrdenList);
-                        data.transportes = JSON.stringify(this.transportesProductopOrdenList);
-
+                if (this.model.isNew()) {
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
                     _.each(this.$files, function (file, key) {
@@ -248,6 +231,8 @@ app || (app = {});
                         processData: false,
                         contentType: false
                     });
+                } else {
+                    this.model.save(data, {wait: true, patch: true, silent: true});
                 }
             }
         },

@@ -202,40 +202,22 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                if (this.model.id != undefined) {
-                    var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
-                        data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
-                        data.cotizacion2_margen_areap = this.$inputmargenareap.val();
-                        data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
-                        data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
-                        data.cotizacion2_comision = this.$inputcomision.val();
-                        data.cotizacion2_descuento = this.$inputdescuento.val();
-                        data.cotizacion2_volumen = this.$inputvolumen.val();
-                        data.cotizacion2_round = this.$inputround.val();
-                        data.materialesp = this.materialesProductopCotizacionList.toJSON();
-                        data.areasp = this.areasProductopCotizacionList.toJSON();
-                        data.empaques = this.empaquesProductopCotizacionList.toJSON();
-                        data.transportes = this.transportesProductopCotizacionList.toJSON();
-                        data.productop_imagenes = imagenesProducto;
+                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
+                    data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val() || 30;
+                    data.cotizacion2_margen_areap = this.$inputmargenareap.val() || 30;
+                    data.cotizacion2_margen_empaque = this.$inputmargenempaque.val() || 30;
+                    data.cotizacion2_margen_transporte = this.$inputmargentransporte.val() || 30;
+                    data.cotizacion2_comision = this.$inputcomision.val() || 0;
+                    data.cotizacion2_descuento = this.$inputdescuento.val() || 0;
+                    data.cotizacion2_volumen = this.$inputvolumen.val() || 0;
+                    data.cotizacion2_round = this.$inputround.val() || 0;
+                    data.materialesp = this.model.isNew() ? JSON.stringify(this.materialesProductopCotizacionList) : this.materialesProductopCotizacionList.toJSON();
+                    data.areasp = this.model.isNew() ? JSON.stringify(this.areasProductopCotizacionList) : this.areasProductopCotizacionList.toJSON();
+                    data.empaques = this.model.isNew() ? JSON.stringify(this.empaquesProductopCotizacionList) : this.empaquesProductopCotizacionList.toJSON();
+                    data.transportes = this.model.isNew() ? JSON.stringify(this.transportesProductopCotizacionList) : this.transportesProductopCotizacionList.toJSON();
+                    data.productop_imagenes = imagenesProducto;
 
-                    this.model.save(data, {wait: true, patch: true, silent: true});
-
-                } else {
-                    var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
-                        data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val();
-                        data.cotizacion2_margen_areap = this.$inputmargenareap.val();
-                        data.cotizacion2_margen_empaque = this.$inputmargenempaque.val();
-                        data.cotizacion2_margen_transporte = this.$inputmargentransporte.val();
-                        data.cotizacion2_comision = this.$inputcomision.val();
-                        data.cotizacion2_descuento = this.$inputdescuento.val();
-                        data.cotizacion2_volumen = this.$inputvolumen.val();
-                        data.cotizacion2_round = this.$inputround.val();
-                        data.materialesp = JSON.stringify(this.materialesProductopCotizacionList);
-                        data.areasp = JSON.stringify(this.areasProductopCotizacionList);
-                        data.empaques = JSON.stringify(this.empaquesProductopCotizacionList);
-                        data.transportes = JSON.stringify(this.transportesProductopCotizacionList);
-                        data.productop_imagenes = imagenesProducto;
-
+                if (this.model.isNew()) {
                     this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
                     var formData = new FormData();
                     _.each(this.$files, function(file, key) {
@@ -253,6 +235,8 @@ app || (app = {});
                         processData: false,
                         contentType: false
                     });
+                } else {
+                    this.model.save(data, {wait: true, patch: true, silent: true});
                 }
             }
         },

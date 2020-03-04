@@ -223,7 +223,7 @@ class Cotizacion1Controller extends Controller
         if ($request->ajax()) {
             return response()->json($cotizacion);
         }
-        
+
         if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             return redirect()->route('cotizaciones.edit', compact('cotizacion'));
         }
@@ -299,7 +299,17 @@ class Cotizacion1Controller extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
                         }
 
+                        // Actualizar comision vendedor
+                        if ($cotizacion->cotizacion1_vendedor != $vendedor->id) {
+                            $productos = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
+                            foreach ($productos as $producto) {
+                                $producto->cotizacion2_comision = $vendedor->tercero_comision;
+                                $producto->save();
+                            }
+                        }
+
                         $cotizacion->cotizacion1_vendedor = $vendedor->id;
+
                     }
 
                     // Traer datos originales
@@ -918,46 +928,41 @@ class Cotizacion1Controller extends Controller
             $object = new \stdClass();
 
             // Chart productos
-            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = $total = 0;
+            $precio = $viaticos = $prevMateriales = $materiales = $prevAreas = $areas = $prevEmpaques = $empaques = $prevTransportes = $transportes = $volumen = $total = 0;
             $cotizaciones2 = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->get();
             foreach ($cotizaciones2 as $cotizacion2) {
-                $tprecio += $precio = $cotizacion2->cotizacion2_precio_venta * $cotizacion2->cotizacion2_cantidad;
-                $tviaticos += $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad) * $cotizacion2->cotizacion2_cantidad;
+                $precio += $productoPrecio = $cotizacion2->cotizacion2_precio_venta * $cotizacion2->cotizacion2_cantidad;
+                $viaticos += $productoViaticos = round($cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad) * $cotizacion2->cotizacion2_cantidad;
+                $prevMateriales += $productoMateriales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
+                $prevAreas += $productoAreas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
+                $prevEmpaques += $productoEmpaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
+                $prevTransportes += $productoTransportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->sum('cotizacion10_valor_total');
 
-                $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->sum('cotizacion4_valor_total');
-                $tmateriales += $materiales = ($materiales/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100) * $cotizacion2->cotizacion2_cantidad;
+                $materiales += ($productoMateriales / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_materialp) / 100) * $cotizacion2->cotizacion2_cantidad;
+                $areas += $productoAreas / ((100 - $cotizacion2->cotizacion2_margen_areap) / 100) * $cotizacion2->cotizacion2_cantidad;
+                $empaques += ($productoEmpaques / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_materialp) / 100) * $cotizacion2->cotizacion2_cantidad;
+                $transportes += ($productoTransportes / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_transporte) / 100) * $cotizacion2->cotizacion2_cantidad;
 
-                $areas = Cotizacion6::select(DB::raw("SUM(((SUBSTRING_INDEX(cotizacion6_tiempo, ':', 1) + (SUBSTRING_INDEX(cotizacion6_tiempo, ':', -1)/60)) * cotizacion6_valor)/$cotizacion2->cotizacion2_cantidad) as total"))->where('cotizacion6_cotizacion2', $cotizacion2->id)->value('total');
-                $tareas += $areas = $areas/((100-$cotizacion2->cotizacion2_margen_areap)/100) * $cotizacion2->cotizacion2_cantidad;
-
-                $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->sum('cotizacion9_valor_total');
-                $tempaques += $empaques = ($empaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100) * $cotizacion2->cotizacion2_cantidad;
-
-                $transportes = Cotizacion10::where('cotizacion10_cotizacion2', $cotizacion2->id)->sum('cotizacion10_valor_total');
-                $ttransportes += $transportes = ($transportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100) * $cotizacion2->cotizacion2_cantidad;
-
-                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
-                $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                $tvolumen += $comision;
-
-                $total += ($subtotal + $comision);
+                $subtotal = $productoPrecio + $productoViaticos + round($productoMateriales) + round($productoAreas) + round($productoEmpaques) + round($productoTransportes);
+                $volumen += $productoVolumen =  ($subtotal / ((100 - $cotizacion2->cotizacion2_volumen) / 100)) * (1 - (((100 - $cotizacion2->cotizacion2_volumen) / 100)));
+                $total += ($subtotal + $productoVolumen);
             }
 
             // Make object
-            $labelprecio =  round($tprecio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($tprecio,2,',','.');
-            $labelviaticos = round($tviaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($tviaticos,2,',','.');
-            $labelmateriales = round($tmateriales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($tmateriales,2,',','.');
-            $labelareas = round($tareas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($tareas,2,',','.');
-            $labelempaques = round($tempaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($tempaques,2,',','.');
-            $labeltransportes = round($ttransportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($ttransportes,2,',','.');
-            $labelvolumen = round($tvolumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($tvolumen,2,',','.');
+            $labelprecio =  round($precio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
+            $labelviaticos = round($viaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
+            $labelmateriales = round($materiales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
+            $labelareas = round($areas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
+            $labelempaques = round($empaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
+            $labeltransportes = round($transportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
+            $labelvolumen = round($volumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
 
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
                 $labelprecio, $labelviaticos, $labelmateriales, $labelareas, $labelempaques, $labeltransportes, $labelvolumen
             ];
             $chartproducto->data = [
-                $tprecio, $tviaticos, $tmateriales, $tareas, $tempaques, $ttransportes, $tvolumen
+                $precio, $viaticos, $materiales, $areas, $empaques, $transportes, $volumen
             ];
             $object->chartproductos = $chartproducto;
 

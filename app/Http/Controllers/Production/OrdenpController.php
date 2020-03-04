@@ -333,6 +333,15 @@ class OrdenpController extends Controller
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el vendedor, por favor verifique la información o consulte al administrador.']);
                         }
 
+                        // Actualizar comision vendedor
+                        if ($orden->orden_vendedor != $vendedor->id) {
+                            $productos = Ordenp2::where('orden2_orden', $orden->id)->get();
+                            foreach ($productos as $producto) {
+                                $producto->orden2_comision = $vendedor->tercero_comision;
+                                $producto->save();
+                            }
+                        }
+
                         $orden->orden_vendedor = $vendedor->id;
                     }
 
@@ -711,45 +720,41 @@ class OrdenpController extends Controller
             $object->tiempototal = $hours;
 
             // Chart productos
-            $tprecio = $tviaticos = $tmateriales = $tareas = $tempaques = $ttransportes = $tvolumen = $total = 0;
+            $precio = $viaticos = $prevMateriales = $materiales = $prevAreas = $areas = $prevEmpaques = $empaques = $prevTransportes = $transportes = $volumen = $total = 0;
             $ordenesp2 = Ordenp2::where('orden2_orden', $ordenp->id)->get();
             foreach ($ordenesp2 as $ordenp2) {
-                $tprecio += $precio = $ordenp2->orden2_precio_venta * $ordenp2->orden2_cantidad;
-                $tviaticos += $viaticos = round($ordenp2->orden2_viaticos/$ordenp2->orden2_cantidad) * $ordenp2->orden2_cantidad;
+                $precio += $productoPrecio = $ordenp2->orden2_precio_venta * $ordenp2->orden2_cantidad;
+                $viaticos += $productoViaticos = round($ordenp2->orden2_viaticos / $ordenp2->orden2_cantidad) * $ordenp2->orden2_cantidad;
+                $prevMateriales += $productoMateriales = Ordenp4::where('orden4_orden2', $ordenp2->id)->sum('orden4_valor_total');
+                $prevAreas += $productoAreas = Ordenp6::select(DB::raw("SUM(((SUBSTRING_INDEX(orden6_tiempo, ':', 1) + (SUBSTRING_INDEX(orden6_tiempo, ':', -1)/60)) * orden6_valor)/$ordenp2->orden2_cantidad) as total"))->where('orden6_orden2', $ordenp2->id)->value('total');
+                $prevEmpaques += $productoEmpaques = Ordenp9::where('orden9_orden2', $ordenp2->id)->sum('orden9_valor_total');
+                $prevTransportes += $productoTransportes = Ordenp10::where('orden10_orden2', $ordenp2->id)->sum('orden10_valor_total');
 
-                $materiales = Ordenp4::where('orden4_orden2', $ordenp2->id)->sum('orden4_valor_total');
-                $tmateriales += $materiales = ($materiales/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100) * $ordenp2->orden2_cantidad;
+                $materiales += ($productoMateriales / $ordenp2->orden2_cantidad) / ((100 - $ordenp2->orden2_margen_materialp) / 100) * $ordenp2->orden2_cantidad;
+                $areas += $productoAreas / ((100 - $ordenp2->orden2_margen_areap) / 100) * $ordenp2->orden2_cantidad;
+                $empaques += ($productoEmpaques / $ordenp2->orden2_cantidad) / ((100 - $ordenp2->orden2_margen_materialp) / 100) * $ordenp2->orden2_cantidad;
+                $transportes += ($productoTransportes / $ordenp2->orden2_cantidad) / ((100 - $ordenp2->orden2_margen_transporte) / 100) * $ordenp2->orden2_cantidad;
 
-                $areas = Ordenp6::select(DB::raw("SUM(((SUBSTRING_INDEX(orden6_tiempo, ':', 1) + (SUBSTRING_INDEX(orden6_tiempo, ':', -1)/60)) * orden6_valor)/$ordenp2->orden2_cantidad) as total"))->where('orden6_orden2', $ordenp2->id)->value('total');
-                $tareas += $areas = $areas/((100-$ordenp2->orden2_margen_areap)/100) * $ordenp2->orden2_cantidad;
-
-                $empaques = Ordenp9::where('orden9_orden2', $ordenp2->id)->sum('orden9_valor_total');
-                $tempaques += $empaques = ($empaques/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_materialp)/100) * $ordenp2->orden2_cantidad;
-
-                $transportes = Ordenp10::where('orden10_orden2', $ordenp2->id)->sum('orden10_valor_total');
-                $ttransportes += $transportes = ($transportes/$ordenp2->orden2_cantidad)/((100-$ordenp2->orden2_margen_transporte)/100) * $ordenp2->orden2_cantidad;
-
-                $subtotal = $precio + $viaticos + $materiales + round($areas) + $empaques + $transportes;
-                $tvolumen += $comision = ($subtotal/((100-$ordenp2->orden2_volumen)/100)) * (1-(((100-$ordenp2->orden2_volumen)/100)));
-
-                $total += ($subtotal + $comision);
+                $subtotal = $productoPrecio + $productoViaticos + round($productoMateriales) + round($productoAreas) + round($productoEmpaques) + round($productoTransportes);
+                $volumen += $productoVolumen = ($subtotal / ((100 - $ordenp2->orden2_volumen) / 100)) * (1 - (((100 - $ordenp2->orden2_volumen) / 100)));
+                $total += ($subtotal + $productoVolumen);
             }
 
             // Make object
-            $labelprecio =  round($tprecio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($tprecio,2,',','.');
-            $labelviaticos = round($tviaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($tviaticos,2,',','.');
-            $labelmateriales = round($tmateriales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($tmateriales,2,',','.');
-            $labelareas = round($tareas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($tareas,2,',','.');
-            $labelempaques = round($tempaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($tempaques,2,',','.');
-            $labeltransportes = round($ttransportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($ttransportes,2,',','.');
-            $labelvolumen = round($tvolumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($tvolumen,2,',','.');
+            $labelprecio =  round($precio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
+            $labelviaticos = round($viaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
+            $labelmateriales = round($materiales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
+            $labelareas = round($areas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
+            $labelempaques = round($empaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
+            $labeltransportes = round($transportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
+            $labelvolumen = round($volumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
 
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
                 $labelprecio, $labelviaticos, $labelmateriales, $labelareas, $labelempaques, $labeltransportes, $labelvolumen
             ];
             $chartproducto->data = [
-                $tprecio, $tviaticos, $tmateriales, $tareas, $tempaques, $ttransportes, $tvolumen
+                $precio, $viaticos, $materiales, $areas, $empaques, $transportes, $volumen
             ];
             $object->chartproductos = $chartproducto;
 
