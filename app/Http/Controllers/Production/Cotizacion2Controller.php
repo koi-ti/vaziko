@@ -360,17 +360,17 @@ class Cotizacion2Controller extends Controller
 
                     // Operacion para calcular el total del producto
                     $precio = $cotizacion2->cotizacion2_precio_venta;
-                    $viaticos = round($cotizacion2->cotizacion2_viaticos/$cotizacion2->cotizacion2_cantidad);
-                    $materiales = round($totalmaterialesp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_materialp)/100);
-                    $areas = round($totalareasp/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_areap)/100);;
-                    $empaques = round($totalempaques/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_empaque)/100);
-                    $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
+                    $viaticos = round($cotizacion2->cotizacion2_viaticos / $cotizacion2->cotizacion2_cantidad);
+                    $materiales = round($totalmaterialesp / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_materialp) / 100);
+                    $areas = round($totalareasp / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_areap) / 100);
+                    $empaques = round($totalempaques / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_empaque) / 100);
+                    $transportes = round($totaltransportes / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_transporte) / 100);
                     $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
-                    $comision = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
-                    $total = round(($subtotal + $comision), $cotizacion2->cotizacion2_round);
+                    $volumen = ($subtotal / ((100 - $cotizacion2->cotizacion2_volumen) / 100)) * (1 - (((100 - $cotizacion2->cotizacion2_volumen) / 100)));
+                    $total = round(($subtotal + $volumen), $cotizacion2->cotizacion2_round);
 
                     // Actualizar valores
-                    $cotizacion2->cotizacion2_vtotal = $comision;
+                    $cotizacion2->cotizacion2_vtotal = $volumen;
                     $cotizacion2->cotizacion2_total_valor_unitario = $total;
                     $cotizacion2->save();
 

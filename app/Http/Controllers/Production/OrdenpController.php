@@ -741,13 +741,13 @@ class OrdenpController extends Controller
             }
 
             // Make object
-            $labelprecio =  round($precio/($total ? $total : 1 )*100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
-            $labelviaticos = round($viaticos/($total ? $total : 1 )*100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
-            $labelmateriales = round($materiales/($total ? $total : 1 )*100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
-            $labelareas = round($areas/($total ? $total : 1 )*100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
-            $labelempaques = round($empaques/($total ? $total : 1 )*100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
-            $labeltransportes = round($transportes/($total ? $total : 1 )*100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
-            $labelvolumen = round($volumen/($total ? $total : 1 )*100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
+            $labelprecio =  round($precio/($total ? $total : 1 ) * 100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
+            $labelviaticos = round($viaticos/($total ? $total : 1 ) * 100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
+            $labelmateriales = round($materiales/($total ? $total : 1 ) * 100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
+            $labelareas = round($areas/($total ? $total : 1 ) * 100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
+            $labelempaques = round($empaques/($total ? $total : 1 ) * 100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
+            $labeltransportes = round($transportes/($total ? $total : 1 ) * 100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
+            $labelvolumen = round($volumen/($total ? $total : 1 ) * 100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
 
             $chartproducto = new \stdClass();
             $chartproducto->labels = [
