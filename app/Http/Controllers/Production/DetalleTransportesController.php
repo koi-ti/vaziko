@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Materialp, App\Models\Production\Ordenp10;
+use App\Models\Production\Ordenp10;
 use App\Models\Inventory\Producto;
 use DB, Log;
 
@@ -40,18 +40,15 @@ class DetalleTransportesController extends Controller
             $orden10 = new Ordenp10;
             if ($orden10->isValid($data)) {
                 try {
-                    $transporte = Materialp::where('materialp_transporte', true)->find($request->orden10_materialp);
-                    if (!$transporte instanceof Materialp) {
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
-                    }
-
-                    $producto = Producto::find($request->orden10_producto);
-                    if (!$producto instanceof Producto) {
-                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
+                    if ($request->has('orden10_producto')) {
+                        $producto = Producto::find($request->orden10_producto);
+                        if (!$producto instanceof Producto) {
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
+                        }
                     }
 
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => $transporte->materialp_nombre, 'producto_nombre' => $producto->producto_nombre]);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => isset($producto) ? $producto->producto_nombre : '-']);
                 } catch(\Exception $e) {
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

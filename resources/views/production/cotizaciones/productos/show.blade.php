@@ -347,7 +347,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (App\Models\Production\Cotizacion4::getCotizaciones4( $cotizacion2->id) as $materialp)
+								@foreach (App\Models\Production\Cotizacion4::getCotizaciones4($cotizacion2->id) as $materialp)
 									<tr>
 										<td>{{ $materialp->materialp_nombre }}</td>
 										<td>{{ isset($materialp->producto_nombre) ? $materialp->producto_nombre : '-' }}</td>
@@ -449,7 +449,7 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (App\Models\Production\Cotizacion9::getCotizaciones9( $cotizacion2->id) as $empaque)
+								@foreach (App\Models\Production\Cotizacion9::getCotizaciones9($cotizacion2->id) as $empaque)
 									<tr>
 										<td>{{ isset($empaque->empaque_nombre) ? $empaque->empaque_nombre : '-' }}</td>
 										<td>{{ isset($empaque->producto_nombre) ? $empaque->producto_nombre : '-' }}</td>
@@ -486,7 +486,7 @@
 							<thead>
 								<tr>
 									<th width="25%">Transporte</th>
-									<th width="25%">Insumo</th>
+									<th width="25%">Nombre</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'cotizaciones')
@@ -498,10 +498,10 @@
 								</tr>
 							</thead>
 							<tbody>
-								@foreach (App\Models\Production\Cotizacion10::getCotizaciones10( $cotizacion2->id) as $transporte)
+								@foreach (App\Models\Production\Cotizacion10::getCotizaciones10($cotizacion2->id) as $transporte)
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
-										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
+										<td>{{ $transporte->cotizacion10_nombre ? $transporte->cotizacion10_nombre : '-' }}</td>
 										<td>{{ $transporte->cotizacion10_medidas }}</td>
 										<td>{{ $transporte->cotizacion10_cantidad }}</td>
 										@ability ('precios' | 'cotizaciones')

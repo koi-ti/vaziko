@@ -22,7 +22,7 @@ class Ordenp10 extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'orden10_medidas', 'orden10_cantidad', 'orden10_valor_unitario', 'orden10_valor_total'
+        'orden10_nombre', 'orden10_medidas', 'orden10_cantidad', 'orden10_valor_unitario', 'orden10_valor_total'
     ];
 
     /**
@@ -36,8 +36,7 @@ class Ordenp10 extends BaseModel
 
     public function isValid($data) {
         $rules = [
-            'orden10_materialp' => 'required',
-            'orden10_producto' => 'required',
+            'orden10_producto' => 'required_without:orden10_nombre',
             'orden10_medidas' => 'required',
             'orden10_valor_unitario' => 'required'
         ];
@@ -52,8 +51,7 @@ class Ordenp10 extends BaseModel
 
     public static function getOrdenesp10($orden2 = null) {
         $query = self::query();
-        $query->select('koi_ordenproduccion10.*', 'materialp_nombre as transporte_nombre', 'producto_nombre');
-        $query->leftJoin('koi_materialp', 'orden10_materialp', '=', 'koi_materialp.id');
+        $query->select('koi_ordenproduccion10.*', 'producto_nombre as transporte_nombre');
         $query->leftJoin('koi_producto', 'orden10_producto', '=', 'koi_producto.id');
         $query->where('orden10_orden2', $orden2);
         $query->orderBy('transporte_nombre', 'asc');

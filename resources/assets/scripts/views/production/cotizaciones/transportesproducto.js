@@ -146,7 +146,7 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if ( model instanceof Backbone.Model ) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Transporte<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
+                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Transporte<th>Nombre<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.TransportesProductopCotizacionItemView({
                     model: model,
                     parameters: {

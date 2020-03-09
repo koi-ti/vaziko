@@ -272,23 +272,19 @@ class DetalleOrdenpController extends Controller
                     // Transportes
                     $transportes = isset($data['transportes']) ? $data['transportes'] : null;
                     foreach ($transportes as $transporte) {
-                        $materialp = Materialp::find($transporte->orden10_materialp);
-                        if (!$materialp instanceof Materialp) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
-                        }
-
-                        $producto = Producto::find($transporte->orden10_producto);
-                        if (!$producto instanceof Producto) {
-                            DB::rollback();
-                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                        if (!empty($transporte->orden10_producto)) {
+                            $producto = Producto::find($transporte->orden10_producto);
+                            if (!$producto instanceof Producto) {
+                                DB::rollback();
+                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                            }
                         }
 
                         // Guardar individual porque sale error por ser objeto decodificado
                         $orden10 = new Ordenp10;
                         $orden10->orden10_orden2 = $orden2->id;
-                        $orden10->orden10_producto = $producto->id;
-                        $orden10->orden10_materialp = $materialp->id;
+                        $orden10->orden10_producto = !empty($transporte->orden10_producto) ? $producto->id : null;
+                        $orden10->orden10_nombre = $transporte->orden10_nombre;
                         $orden10->orden10_medidas = $transporte->orden10_medidas;
                         $orden10->orden10_cantidad = $transporte->orden10_cantidad;
                         $orden10->orden10_valor_unitario = $transporte->orden10_valor_unitario;
@@ -297,18 +293,20 @@ class DetalleOrdenpController extends Controller
                         $orden10->orden10_usuario_elaboro = auth()->user()->id;
                         $orden10->save();
 
-                        // Historial
-                        $historial = new ProductoHistorial;
-                        $historial->productohistorial_tipo = 'T';
-                        $historial->productohistorial_modulo = 'O';
-                        $historial->productohistorial_producto = $orden10->orden10_producto;
-                        $historial->productohistorial_valor = $orden10->orden10_valor_unitario;
-                        $historial->productohistorial_fh_elaboro = $orden10->orden10_fh_elaboro;
-                        $historial->save();
+                        if (!empty($transporte->orden10_producto)) {
+                            // Historial
+                            $historial = new ProductoHistorial;
+                            $historial->productohistorial_tipo = 'T';
+                            $historial->productohistorial_modulo = 'O';
+                            $historial->productohistorial_producto = $orden10->orden10_producto;
+                            $historial->productohistorial_valor = $orden10->orden10_valor_unitario;
+                            $historial->productohistorial_fh_elaboro = $orden10->orden10_fh_elaboro;
+                            $historial->save();
 
-                        // Actualizar producto
-                        $producto->producto_precio = $orden10->orden10_valor_unitario;
-                        $producto->save();
+                            // Actualizar producto
+                            $producto->producto_precio = $orden10->orden10_valor_unitario;
+                            $producto->save();
+                        }
 
                         $totaltransportes += round($orden10->orden10_valor_total);
                     }
@@ -630,23 +628,18 @@ class DetalleOrdenpController extends Controller
                         foreach ($transportes as $transporte) {
                             $orden10 = Ordenp10::find( is_numeric($transporte['id']) ? $transporte['id'] : null);
                             if (!$orden10 instanceof Ordenp10) {
-                                $materialp = Materialp::find($transporte['orden10_materialp']);
-                                if (!$materialp instanceof Materialp) {
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
-                                }
-
-                                $producto = Producto::find($transporte['orden10_producto']);
-                                if (!$producto instanceof Producto) {
-                                    DB::rollback();
-                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                                if (!empty($transporte['orden10_producto'])) {
+                                    $producto = Producto::find($transporte['orden10_producto']);
+                                    if (!$producto instanceof Producto) {
+                                        DB::rollback();
+                                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
+                                    }
                                 }
 
                                 $orden10 = new Ordenp10;
                                 $orden10->fill($transporte);
-                                $orden10->orden10_producto = $producto->id;
-                                $orden10->orden10_materialp = $materialp->id;
                                 $orden10->orden10_orden2 = $orden2->id;
+                                $orden10->orden10_producto = !empty($transporte['orden10_producto']) ? $producto->id : null;
                                 $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
                                 $orden10->orden10_usuario_elaboro = auth()->user()->id;
                                 $orden10->save();

@@ -101,10 +101,10 @@
                             </div>
                         </div>
 
-                        @if($producto->productop_abierto || $producto->productop_cerrado)
+                        @if ($producto->productop_abierto || $producto->productop_cerrado)
                             <div class="box box-primary">
                                 <div class="box-body">
-                                    @if($producto->productop_abierto)
+                                    @if ($producto->productop_abierto)
                                         <div class="row">
                                             <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Abierto</label>
                                             <label for="orden2_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -125,7 +125,7 @@
                                         </div>
                                     @endif
 
-                                    @if($producto->productop_cerrado)
+                                    @if ($producto->productop_cerrado)
                                         <div class="row">
                                             <label class="col-xs-12 col-sm-1 col-sm-offset-1 control-label">Cerrado</label>
                                             <label for="orden2_c_ancho" class="col-xs-2 col-sm-1 control-label text-right">Ancho</label>
@@ -151,7 +151,7 @@
                             </div>
                         @endif
 
-                        @if($producto->productop_3d)
+                        @if ($producto->productop_3d)
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
@@ -187,7 +187,7 @@
                             </div>
                         @endif
 
-                        @if($producto->productop_tiro || $producto->productop_retiro)
+                        @if ($producto->productop_tiro || $producto->productop_retiro)
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="row">
@@ -205,7 +205,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    @if($producto->productop_tiro)
+                                                    @if ($producto->productop_tiro)
                                                         <tr>
                                                             <th class="text-center">T <input type="checkbox" id="orden2_tiro" name="orden2_tiro" class="production-check-measurements" value="orden2_tiro" data-resource="orden2" <%- parseInt(orden2_tiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="orden2_yellow" name="orden2_yellow" value="orden2_yellow" <%- parseInt(orden2_yellow) ? 'checked': ''%>></td>
@@ -216,7 +216,7 @@
                                                             <td class="text-center"><input type="checkbox" id="orden2_color2" name="orden2_color2" value="orden2_color2" <%- parseInt(orden2_color2) ? 'checked': ''%>></td>
                                                         </tr>
                                                     @endif
-                                                    @if($producto->productop_retiro)
+                                                    @if ($producto->productop_retiro)
                                                         <tr>
                                                             <th class="text-center">R <input type="checkbox" id="orden2_retiro" name="orden2_retiro" class="production-check-measurements" value="orden2_retiro" data-resource="orden2" <%- parseInt(orden2_retiro) ? 'checked': ''%>></th>
                                                             <td class="text-center"><input type="checkbox" id="orden2_yellow2" name="orden2_yellow2" value="orden2_yellow2" <%- parseInt(orden2_yellow2) ? 'checked': ''%>></td>
@@ -233,15 +233,15 @@
                                     </div>
 
                                     <div class="row">
-                                        @if($producto->productop_tiro)
-                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                        @if ($producto->productop_tiro)
+                                            <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
                                                 <label for="orden2_nota_tiro" class="control-label">Nota tiro</label>
                                                 <textarea id="orden2_nota_tiro" name="orden2_nota_tiro" class="form-control" rows="2" placeholder="Nota tiro"><%- orden2_nota_tiro %></textarea>
                                             </div>
                                         @endif
 
-                                        @if($producto->productop_retiro)
-                                            <div class="form-group @if($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
+                                        @if ($producto->productop_retiro)
+                                            <div class="form-group @if ($producto->productop_tiro && $producto->productop_retiro) col-sm-6 @else col-sm-12 @endif">
                                                 <label for="orden2_nota_retiro" class="control-label">Nota retiro</label>
                                                 <textarea id="orden2_nota_retiro" name="orden2_nota_retiro" class="form-control" rows="2" placeholder="Nota retiro"><%- orden2_nota_retiro %></textarea>
                                             </div>
@@ -579,27 +579,17 @@
                         <div class="box-body">
                             <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
                                 <div class="row">
-                                    @foreach (App\Models\Production\Productop5::getTransportes() as $transporte)
-                                        <div class="form-group col-md-4">
-                                            <label>{{ $transporte }}</label>
-                                        </div>
-                                    @endforeach
-                                </div><br>
-                                <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden10_materialp" id="orden10_materialp" class="form-control select2-default-clear change-production-materialp" data-placeholder="Empaque de producción" data-field="orden10_producto" data-wrapper="transportes-wrapper-producto" data-reference="transporte" required>
+                                        <select name="orden10_producto" id="orden10_producto" class="form-control select2-default-clear change-production-transporte change-insumo" data-placeholder="Insumo" data-historial="historial_orden10" data-disable-input="orden10_nombre" data-valor="orden10_valor_unitario">
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach (App\Models\Production\Productop5::getTransportes() as $key => $value)
+                                            @foreach (App\Models\Inventory\Producto::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-6">
-                                        <select name="orden10_producto" id="orden10_producto" class="form-control select2-default-clear change-insumo" data-placeholder="Insumo" data-historial="historial_orden10" data-valor="orden10_valor_unitario" disabled required>
-                                            <option value hidden selected>Seleccione</option>
-                                        </select>
-                                        <div class="help-block with-errors"></div>
+                                        <input id="orden10_nombre" name="orden10_nombre" placeholder="Nombre" class="form-control input-sm input-toupper" type="text" maxlength="200">
                                     </div>
                                 </div>
                                 <div class="row">
@@ -613,6 +603,7 @@
                                     </div>
                                     <div class="form-group col-sm-3">
                                         <input id="orden10_valor_unitario" name="orden10_valor_unitario" class="form-control input-sm" type="text" required data-currency>
+                                        <div class="help-block pull-right"><a id="historial_orden10" class="historial-insumo cursor-pointer"></a></div>
                                     </div>
                                     <div class="form-group col-sm-1">
                                         <button type="submit" class="btn btn-primary btn-sm btn-block">
@@ -629,7 +620,7 @@
                                         <tr>
                                             <th colspan="2"></th>
                                             <th width="25%">Transporte</th>
-                                            <th width="25%">Insumo</th>
+                                            <th width="25%">Nombre</th>
                                             <th width="15%">Medidas</th>
                                             <th width="15%">Cantidad</th>
                                             <th width="15%">Valor unidad</th>
@@ -829,8 +820,8 @@
                 </a>
             </td>
         <% } %>
-        <td><%- materialp_nombre %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- materialp_nombre || '-' %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td><%- orden4_medidas %></td>
         <td><%- orden4_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency (orden4_valor_unitario) %></td>
@@ -843,7 +834,7 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="orden4_medidas_<%- id %>" name="orden4_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden4_cantidad_<%- id %>" maxlength="50" value="<%- orden4_medidas %>" required>
@@ -869,8 +860,8 @@
                 </a>
             </td>
         <% } %>
-        <td><%- !_.isUndefined(empaque_nombre) && !_.isNull(empaque_nombre) ? empaque_nombre : '-' %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
+        <td><%- empaque_nombre || '-' %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td><%- orden9_medidas %></td>
         <td><%- orden9_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency (orden9_valor_unitario) %></td>
@@ -883,7 +874,7 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- producto_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="orden9_medidas_<%- id %>" name="orden9_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden9_cantidad_<%- id %>" maxlength="50" value="<%- orden9_medidas %>" required>
@@ -897,7 +888,7 @@
     </script>
 
     <script type="text/template" id="orden-producto-areas-item-tpl">
-        <% if(edit) { %>
+        <% if (edit) { %>
             <td class="text-center">
                 <a class="btn btn-default btn-xs item-producto-areap-orden-remove" data-resource="<%- id %>">
                     <span><i class="fa fa-times"></i></span>
@@ -909,8 +900,8 @@
                 </a>
             </td>
         <% } %>
-        <td><%- areap_nombre ? areap_nombre : '-' %></td>
-        <td><%- orden6_nombre ? orden6_nombre : '-' %></td>
+        <td><%- areap_nombre || '-' %></td>
+        <td><%- orden6_nombre || '-' %></td>
         <td class="text-center"><%- orden6_horas %>:<%- orden6_minutos %></td>
         <td class="text-right"><%- window.Misc.currency (orden6_valor) %></td>
         <td class="text-right"><%- window.Misc.currency (total) %></td>
@@ -922,8 +913,8 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- areap_nombre ? areap_nombre : '-' %></td>
-        <td><%- orden6_nombre ? orden6_nombre : '-' %></td>
+        <td><%- areap_nombre || '-' %></td>
+        <td><%- orden6_nombre || '-' %></td>
         <td colspan="3">
             <div class="row">
                 <div class="col-xs-12 col-sm-6">
@@ -949,8 +940,8 @@
                 </a>
             </td>
         <% } %>
-        <td><%- !_.isUndefined(transporte_nombre) && !_.isNull(transporte_nombre) ? transporte_nombre : '-' %></td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : '-' %></td>
+        <td><%- transporte_nombre || '-' %></td>
+        <td><%- orden10_nombre || '-' %></td>
         <td><%- orden10_medidas %></td>
         <td><%- orden10_cantidad %></td>
         <td class="text-right"><%- window.Misc.currency (orden10_valor_unitario) %></td>
@@ -963,7 +954,8 @@
                 <span><i class="fa fa-check"></i></span>
             </a>
         </td>
-        <td><%- !_.isUndefined(producto_nombre) && !_.isNull(producto_nombre) ? producto_nombre : "-" %></td>
+        <td><%- transporte_nombre || '-' %></td>
+        <td><%- orden10_nombre || '-' %></td>
         <td colspan="4">
             <div class="input-group">
                 <input type="text" id="orden10_medidas_<%- id %>" name="orden10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden10_cantidad_<%- id %>" maxlength="50" value="<%- orden10_medidas %>" required>

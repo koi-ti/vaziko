@@ -17,6 +17,7 @@ app || (app = {});
             'change .production-calculate-formula': 'changeProductionCalculateFormula',
             'change .change-production-materialp': 'changeProductionMaterialp',
             'change .change-production-areap': 'changeProductionAreap',
+            'change .change-production-transporte': 'changeProductionTransporte',
             'change .change-production-tipoproductop': 'changeProductionTipoProducto',
             'change .change-production-actividadp': 'changeProductionActividadp',
 		},
@@ -133,6 +134,27 @@ app || (app = {});
             } else {
                 this.$inputarea.val('').attr('readonly', false);
                 this.$inputvalor.val('');
+            }
+        },
+
+        /**
+        * Event change transporte
+        */
+        changeProductionTransporte: function (e) {
+            var option = this.$(e.currentTarget),
+                inputName = option.data('disable-input'),
+                inputValue = option.data('valor'),
+                value = option.val(),
+                _this = this;
+
+            this.$inputName = $('#' + inputName);
+            this.$inputValor = this.$('#' + inputValue);
+
+            if (value) {
+                this.$inputName.prop('disabled', true);
+            } else {
+                this.$inputName.prop('disabled', false);
+                this.$inputValor.val(0);
             }
         },
 

@@ -17,8 +17,8 @@ class CreateOrdenproduccion10Table extends Migration
 
             $table->increments('id');
             $table->integer('orden10_orden2')->unsigned();
-            $table->integer('orden10_materialp')->unsigned()->nullable();
             $table->integer('orden10_producto')->unsigned()->nullable();
+            $table->string('orden10_nombre', 200)->nullable();
             $table->string('orden10_medidas', 50);
             $table->double('orden10_cantidad')->default(0);
             $table->double('orden10_valor_unitario')->default(0);

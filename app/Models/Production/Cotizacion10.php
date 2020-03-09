@@ -22,7 +22,7 @@ class Cotizacion10 extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'cotizacion10_medidas', 'cotizacion10_cantidad', 'cotizacion10_valor_unitario', 'cotizacion10_valor_total'
+        'cotizacion10_nombre', 'cotizacion10_medidas', 'cotizacion10_cantidad', 'cotizacion10_valor_unitario', 'cotizacion10_valor_total'
     ];
 
     /**
@@ -36,8 +36,7 @@ class Cotizacion10 extends BaseModel
 
     public function isValid($data) {
         $rules = [
-            'cotizacion10_materialp' => 'required',
-            'cotizacion10_producto' => 'required',
+            'cotizacion10_producto' => 'required_without:cotizacion10_nombre',
             'cotizacion10_medidas' => 'required',
             'cotizacion10_valor_unitario' => 'required'
         ];
@@ -52,8 +51,7 @@ class Cotizacion10 extends BaseModel
 
     public static function getCotizaciones10($cotizacion2 = null) {
         $query = self::query();
-        $query->select('koi_cotizacion10.*', 'materialp_nombre as transporte_nombre', 'producto_nombre');
-        $query->leftJoin('koi_materialp', 'cotizacion10_materialp', '=', 'koi_materialp.id');
+        $query->select('koi_cotizacion10.*', 'producto_nombre as transporte_nombre');
         $query->leftJoin('koi_producto', 'cotizacion10_producto', '=', 'koi_producto.id');
         $query->where('cotizacion10_cotizacion2', $cotizacion2);
         $query->orderBy('transporte_nombre', 'asc');

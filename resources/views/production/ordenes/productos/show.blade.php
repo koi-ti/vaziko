@@ -476,7 +476,7 @@
 							<thead>
 								<tr>
 									<th width="25%">Transporte</th>
-									<th width="25%">Insumo</th>
+									<th width="25%">Nombre</th>
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'ordenes')
@@ -491,13 +491,13 @@
 								@foreach (App\Models\Production\Ordenp10::getOrdenesp10($ordenp2->id) as $transporte)
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
-										<td>{{ isset($transporte->producto_nombre) ? $transporte->producto_nombre : '-' }}</td>
+										<td>{{ $transporte->orden10_nombre ? $transporte->orden10_nombre : '-' }}</td>
 										<td>{{ $transporte->orden10_medidas }}</td>
 										<td>{{ $transporte->orden10_cantidad }}</td>
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
-											
+
 											{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 										@endability
 									</tr>

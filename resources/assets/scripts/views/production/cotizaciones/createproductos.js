@@ -311,13 +311,13 @@ app || (app = {});
             if (insumo) {
                 var url;
                 if (tipo == 'cotizacion4') {
-                    url = window.Misc.urlFull( Route.route('cotizaciones.productos.materiales.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.materiales.index', {insumo: insumo}));
                     tipo = 'M';
                 } else if (tipo == 'cotizacion9') {
-                    url = window.Misc.urlFull( Route.route('cotizaciones.productos.empaques.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.empaques.index', {insumo: insumo}));
                     tipo = 'E';
                 } else {
-                    url = window.Misc.urlFull( Route.route('cotizaciones.productos.transportes.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.transportes.index', {insumo: insumo}));
                     tipo = 'T';
                 }
 

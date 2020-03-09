@@ -15,12 +15,12 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'transporte_nombre': '',
-            'orden10_materialp': '',
+            'orden10_nombre': '',
             'orden10_medidas': '',
             'orden10_cantidad': 0,
             'orden10_valor_unitario': '',
-            'orden10_valor_total': ''
+            'orden10_valor_total': '',
+            'transporte_nombre': ''
         }
     });
 

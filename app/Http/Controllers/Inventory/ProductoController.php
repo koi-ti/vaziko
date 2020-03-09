@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\Producto, App\Models\Inventory\Grupo, App\Models\Inventory\SubGrupo, App\Models\Inventory\Unidad;
 use App\Models\Production\Materialp;
-use DB, Log, Datatables;
+use DB, Log, Datatables, Cache;
 
 class ProductoController extends Controller
 {
@@ -122,6 +122,9 @@ class ProductoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
+                    // Forget cache
+                    Cache::forget(Producto::$key_cache_transport);
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 } catch(\Exception $e) {
                     DB::rollback();
@@ -229,6 +232,9 @@ class ProductoController extends Controller
 
                     // Commit Transaction
                     DB::commit();
+
+                    // Forget cache
+                    Cache::forget(Producto::$key_cache_transport);
                     return response()->json(['success' => true, 'id' => $producto->id]);
                 } catch(\Exception $e) {
                     DB::rollback();

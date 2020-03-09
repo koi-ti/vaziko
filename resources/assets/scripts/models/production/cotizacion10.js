@@ -15,12 +15,12 @@ app || (app = {});
         },
         idAttribute: 'id',
         defaults: {
-            'transporte_nombre': '',
-            'cotizacion10_materialp': '',
+            'cotizacion10_nombre': '',
             'cotizacion10_medidas': '',
             'cotizacion10_cantidad': 0,
             'cotizacion10_valor_unitario': '',
-            'cotizacion10_valor_total': ''
+            'cotizacion10_valor_total': '',
+            'transporte_nombre': ''
         }
     });
 
