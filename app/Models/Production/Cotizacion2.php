@@ -381,7 +381,7 @@ class Cotizacion2 extends BaseModel
         foreach ($transportes as $transporte) {
              $orden10 = new Ordenp10;
              $orden10->orden10_orden2 = $orden2->id;
-             $orden10->orden10_materialp = $transporte->cotizacion10_materialp;
+             $orden10->orden10_nombre = $transporte->cotizacion10_nombre;
              $orden10->orden10_producto = $transporte->cotizacion10_producto;
              $orden10->orden10_medidas = $transporte->cotizacion10_medidas;
              $orden10->orden10_cantidad = $transporte->cotizacion10_cantidad;
