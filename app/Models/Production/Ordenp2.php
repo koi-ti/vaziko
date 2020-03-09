@@ -60,7 +60,8 @@ class Ordenp2 extends BaseModel
 
     public static function getOrdenesp2($orden) {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'));
+        $query->select('koi_ordenproduccion2.id as id', 'orden2_orden','orden2_cantidad', 'orden2_saldo', 'orden2_facturado');
+        $query->precio();
         $query->producto();
         $query->where('orden2_orden', $orden);
         return $query->get();
@@ -137,6 +138,12 @@ class Ordenp2 extends BaseModel
         $query->whereRaw('orden2_total_valor_unitario <> 0');
         $query->where('koi_ordenproduccion2.id', $id);
         return $query->first();
+    }
+
+    public function scopePrecio ($query) {
+        return auth()->user()->ability('admin', 'precios', ['module' => 'ordenes']) ?
+                $query->addSelect('orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total')) :
+                $query->addSelect(DB::raw('0 AS orden2_total_valor_unitario, 0 as orden2_precio_total'));
     }
 
     public function scopeDetalle ($query) {

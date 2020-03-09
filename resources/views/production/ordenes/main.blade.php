@@ -326,33 +326,37 @@
                                                                 <th width="55%">Nombre</th>
                                                                 <th width="10%">Cantidad</th>
                                                                 <th width="10%">Facturado</th>
-                                                                <th width="10%">Precio</th>
-                                                                <th width="10%">Total</th>
+                                                                @ability ('precios' | 'ordenes')
+                                                                    <th width="10%">Precio</th>
+                                                                    <th width="10%">Total</th>
+                                                                @endability
                                                             </tr>
                                                         </thead>
                                                         <tbody>
                                                             {{-- Render content productos --}}
                                                         </tbody>
-                                                        <tfoot>
-                                                            <tr>
-                                                                <td colspan="3"></td>
-                                                                <th class="text-right">Subtotal</th>
-                                                                <th class="text-center" id="subtotal-cantidad">0</th>
-                                                                <th class="text-center" id="subtotal-facturado">0</th>
-                                                                <th></th>
-                                                                <th class="text-right" id="subtotal-total">0</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Iva (<%- orden_iva %>%)</th>
-                                                                <th colspan="4" class="text-right" id="iva-total">0</th>
-                                                            </tr>
-                                                            <tr>
-                                                                <th colspan="3"></th>
-                                                                <th class="text-right">Total</th>
-                                                                <th colspan="4" class="text-right" id="total-total">0</th>
-                                                            </tr>
-                                                        </tfoot>
+                                                        @ability ('precios' | 'ordenes')
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="3"></td>
+                                                                    <th class="text-right">Subtotal</th>
+                                                                    <th class="text-center" id="subtotal-cantidad">0</th>
+                                                                    <th class="text-center" id="subtotal-facturado">0</th>
+                                                                    <th></th>
+                                                                    <th class="text-right" id="subtotal-total">0</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Iva (<%- orden_iva %>%)</th>
+                                                                    <th colspan="4" class="text-right" id="iva-total">0</th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th colspan="3"></th>
+                                                                    <th class="text-right">Total</th>
+                                                                    <th colspan="4" class="text-right" id="total-total">0</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        @endability
                                                     </table>
                                                 </div>
                                             </div>
@@ -639,8 +643,10 @@
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- orden2_cantidad %></td>
         <td class="text-center"><%- orden2_facturado %></td>
-        <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
-        <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
+        @ability ('precios' | 'ordenes')
+            <td class="text-right"><%- window.Misc.currency (orden2_total_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency (orden2_precio_total) %></td>
+        @endability
     </script>
 
     <script type="text/template" id="ordenp-despacho-item-list-tpl">

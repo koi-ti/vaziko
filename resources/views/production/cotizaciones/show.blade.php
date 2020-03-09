@@ -184,18 +184,16 @@
                                     <tbody>
                                         {{-- Render content productos --}}
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td></td>
-                                            <th class="text-right">Subtotal</th>
-                                            <th class="text-center" id="subtotal-cantidad">0</th>
-                                            <th class="text-center" id="subtotal-facturado">0</th>
-                                            @ability ('precios' | 'cotizaciones')
+                                    @ability ('precios' | 'cotizaciones')
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <th class="text-right">Subtotal</th>
+                                                <th class="text-center" id="subtotal-cantidad">0</th>
+                                                <th class="text-center" id="subtotal-facturado">0</th>
                                                 <td></td>
                                                 <th class="text-right" id="subtotal-total">0</th>
-                                            @endability
-                                        </tr>
-                                        @ability ('precios' | 'cotizaciones')
+                                            </tr>
                                             <tr>
                                                 <td></td>
                                                 <th class="text-right">Iva ({{ $cotizacion->cotizacion1_iva }}%)</th>
@@ -206,8 +204,8 @@
                                                 <th class="text-right">Total</th>
                                                 <th colspan="5" class="text-right" id="total-total">0</th>
                                             </tr>
-                                        @endability
-                                    </tfoot>
+                                        </tfoot>
+                                    @endability
                                 </table>
                             </div>
                   	     </div>

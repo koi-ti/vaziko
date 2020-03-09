@@ -94,14 +94,18 @@ class Cotizacion1Controller extends Controller
                     if ($request->has('cotizacion_estado')) {
                         if ($request->cotizacion_estado == 'A') {
                             $query->whereIn('cotizacion1_estados', ['CC', 'CF', 'CS']);
-
                         }
+                        
                         if ($request->cotizacion_estado == 'C') {
                             $query->whereIn('cotizacion1_estados', ['CN', 'CR', 'CO']);
                         }
 
                         if ($request->cotizacion_estado == 'P') {
                             $query->whereIn('cotizacion1_estados', ['PC', 'PF']);
+                        }
+
+                        if (!in_array($request->cotizacion_estado, ['A', 'C', 'P'])) {
+                            $query->where('cotizacion1_estados', $request->cotizacion_estado);
                         }
                     }
                 })

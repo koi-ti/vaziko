@@ -60,12 +60,12 @@ class Cotizacion2 extends BaseModel
 
     public static function getCotizaciones2($cotizacion = null) {
         $query = self::query();
-        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion', 'cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion2_total_valor_unitario', 'cotizacion1_ano', 'cotizacion1_numero', 'cotizacion1_abierta', 'cotizacion1_anulada', 'cotizacion1_estados',
+        $query->select('koi_cotizacion2.id as id', 'cotizacion2_cotizacion', 'cotizacion2_cantidad', 'cotizacion2_saldo', 'cotizacion2_facturado', 'cotizacion1_iva', 'cotizacion1_ano', 'cotizacion1_numero', 'cotizacion1_abierta', 'cotizacion1_anulada', 'cotizacion1_estados',
             DB::raw("CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo"),
             DB::raw("CASE WHEN cotizacion2_tiro != 0 THEN ( cotizacion2_yellow + cotizacion2_magenta + cotizacion2_cyan + cotizacion2_key + cotizacion2_color1 + cotizacion2_color2) ELSE '0' END AS tiro"),
-            DB::raw("CASE WHEN cotizacion2_retiro != 0 THEN ( cotizacion2_yellow2 + cotizacion2_magenta2 + cotizacion2_cyan2 + cotizacion2_key2 + cotizacion2_color12 + cotizacion2_color22) ELSE '0' END AS retiro"),
-            DB::raw('(cotizacion2_total_valor_unitario * cotizacion2_cantidad) as cotizacion2_precio_total')
+            DB::raw("CASE WHEN cotizacion2_retiro != 0 THEN ( cotizacion2_yellow2 + cotizacion2_magenta2 + cotizacion2_cyan2 + cotizacion2_key2 + cotizacion2_color12 + cotizacion2_color22) ELSE '0' END AS retiro")
         );
+        $query->precio();
         $query->producto();
         $query->join('koi_cotizacion1', 'cotizacion2_cotizacion', '=', 'koi_cotizacion1.id');
         if ($cotizacion) {
@@ -122,6 +122,12 @@ class Cotizacion2 extends BaseModel
         $query->producto();
         $query->where('koi_cotizacion2.id', $cotizacion2);
         return $query->first();
+    }
+
+    public function scopePrecio ($query) {
+        return auth()->user()->ability('admin', 'precios', ['module' => 'cotizaciones']) ?
+                $query->addSelect('cotizacion2_total_valor_unitario', DB::raw('(cotizacion2_total_valor_unitario * cotizacion2_cantidad) as cotizacion2_precio_total')) :
+                $query->addSelect(DB::raw('0 AS cotizacion2_total_valor_unitario, 0 as cotizacion2_precio_total'));
     }
 
     public function scopeProducto ($query) {

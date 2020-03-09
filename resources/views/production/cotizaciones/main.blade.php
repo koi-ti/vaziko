@@ -283,33 +283,37 @@
                                                             <th width="60%">Nombre</th>
                                                             <th width="5%">Cantidad</th>
                                                             <th width="6%">Facturado</th>
-                                                            <th width="10%" class="text-right">Precio</th>
-                                                            <th width="10%" class="text-right">Total</th>
+                                                            @ability ('precios' | 'cotizaciones')
+                                                                <th width="10%" class="text-right">Precio</th>
+                                                                <th width="10%" class="text-right">Total</th>
+                                                            @endability
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         {{-- Render content productos --}}
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="3"></td>
-                                                            <th class="text-right">Subtotal</th>
-                                                            <th class="text-center" id="subtotal-cantidad">0</th>
-                                                            <th class="text-center" id="subtotal-facturado">0</th>
-                                                            <th></th>
-                                                            <th class="text-right" id="subtotal-total">0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colspan="3"></th>
-                                                            <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
-                                                            <th colspan="5" class="text-right" id="iva-total">0</th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th colspan="3"></th>
-                                                            <th class="text-right">Total</th>
-                                                            <th colspan="5" class="text-right" id="total-total">0</th>
-                                                        </tr>
-                                                    </tfoot>
+                                                    @ability ('precios' | 'cotizaciones')
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="3"></td>
+                                                                <th class="text-right">Subtotal</th>
+                                                                <th class="text-center" id="subtotal-cantidad">0</th>
+                                                                <th class="text-center" id="subtotal-facturado">0</th>
+                                                                <th></th>
+                                                                <th class="text-right" id="subtotal-total">0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Iva (<%- cotizacion1_iva %>%)</th>
+                                                                <th colspan="5" class="text-right" id="iva-total">0</th>
+                                                            </tr>
+                                                            <tr>
+                                                                <th colspan="3"></th>
+                                                                <th class="text-right">Total</th>
+                                                                <th colspan="5" class="text-right" id="total-total">0</th>
+                                                            </tr>
+                                                        </tfoot>
+                                                    @endability
                                                 </table>
                                             </div>
                                         </div>
@@ -397,8 +401,10 @@
         <td><%- productop_nombre %></td>
         <td class="text-center"><%- cotizacion2_cantidad %></td>
         <td class="text-center"><%- cotizacion2_facturado %></td>
-        <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
-        <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
+        @ability ('precios' | 'cotizaciones')
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_total_valor_unitario) %></td>
+            <td class="text-right"><%- window.Misc.currency(cotizacion2_precio_total) %></td>
+        @endability
     </script>
 
     <script type="text/template" id="cotizacion-open-confirm-tpl">
