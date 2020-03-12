@@ -77,7 +77,11 @@ app || (app = {});
                         width: '13%',
                         searchable: false,
                         render: function (data, type, full, row) {
-                            var badges = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id})) + '">' + data + '</a> ';
+                            if (parseInt(full.operario) && !parseInt(full.admin)) {
+                                var badges = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id, resumido: true})) + '">' + data + '</a> ';
+                            } else {
+                                var badges = '<a href="' + window.Misc.urlFull(Route.route('ordenes.show', {ordenes: full.id})) + '">' + data + '</a> ';
+                            }
                             if (full.cotizacion1_precotizacion) {
                                 badges += '<a href="' + window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion})) + '" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a> ';
                             }

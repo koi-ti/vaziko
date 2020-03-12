@@ -199,7 +199,7 @@
                         <table class="table">
                             @foreach ($producto->materiales as $material)
                                 <tr>
-                                    <td>{{ $material->orden4_medidas }}</td>
+                                    <td>{{ $material->orden4_cantidad }}</td>
                                     <td>{{ $material->material->materialp_nombre }}</td>
                                 </tr>
                             @endforeach
@@ -227,7 +227,7 @@
                         <table class="table">
                             @foreach ($producto->empaques as $empaque)
                                 <tr>
-                                    <td>{{ $empaque->orden9_medidas }}</td>
+                                    <td>{{ $empaque->orden9_cantidad }}</td>
                                     <td>{{ $empaque->empaque->materialp_nombre }}</td>
                                 </tr>
                             @endforeach
@@ -241,8 +241,8 @@
                         <table class="table">
                             @foreach ($producto->transportes as $transporte)
                                 <tr>
-                                    <td>{{ $transporte->orden10_medidas }}</td>
-                                    <td>{{$transporte->transporte->materialp_nombre}}</td>
+                                    <td>{{ $transporte->orden10_tiempo }}</td>
+                                    <td>{{ $transporte->transporte ? $transporte->transporte->areap_nombre : $transporte->orden10_nombre }}</td>
                                 </tr>
                             @endforeach
                         </table>

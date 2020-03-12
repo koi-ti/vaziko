@@ -122,7 +122,7 @@ app || (app = {});
                 var removeConfirm = new window.app.ConfirmWindow({
                     parameters: {
                         dataFilter: {
-                            transporte_nombre: model.get('producto_nombre')
+                            nombre: model.get('transporte_nombre') || model.get('orden10_nombre')
                         },
                         template: _.template( ($('#orden-delete-transporte-confirm-tpl').html() || '') ),
                         titleConfirm: 'Eliminar transporte de producción',
@@ -147,7 +147,6 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if (model instanceof Backbone.Model) {
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th>Transporte<th>Nombre<th colspan="2">Medidas<th colspan="2">Cantidad<th colspan="2">Valor unidad');
                 var view = new app.TransportesProductopOrdenItemView({
                     model: model,
                     parameters: {
@@ -155,7 +154,6 @@ app || (app = {});
                     }
                 });
                 model.view.$el.replaceWith(view.render().el);
-                this.ready();
             }
         },
 
@@ -169,40 +167,32 @@ app || (app = {});
                 model = this.collection.get(resource);
 
             if (model instanceof Backbone.Model) {
-                var medidas = this.$('#orden10_medidas_' + model.get('id')).val(),
-                    cantidad = this.$('#orden10_cantidad_' + model.get('id')).val(),
-                    valor = this.$('#orden10_valor_unitario_' + model.get('id')).inputmask('unmaskedvalue');
+                var hour = this.$('#orden10_horas_' + model.get('id')).val();
+                    minute = this.$('#orden10_minutos_' + model.get('id')).val();
 
-                if (!medidas.length || !cantidad.length || !valor) {
-                    alertify.error('Ningun campo puede ir vacio.');
+                if (hour < 0 || _.isNaN(parseInt(hour))) {
+                    alertify.error('El campo de horas no es valido.');
+                    return;
+                }
+
+                if (minute < 0 || minute >= 60 || _.isNaN(parseInt(minute))) {
+                    alertify.error('El campo de minutos no es valido.');
                     return;
                 }
 
                 var attributes = {};
-                if (model.get('orden10_medidas') != medidas)
-                    attributes.orden10_medidas = medidas;
+                if (model.get('orden10_horas') != parseInt(hour))
+                    attributes.orden10_horas = parseInt(hour);
 
-                if (model.get('orden10_cantidad') != cantidad)
-                    attributes.orden10_cantidad = Math.round(cantidad*100)/100;
+                if (model.get('orden10_minutos') != parseInt(minute))
+                    attributes.orden10_minutos = parseInt(minute)
 
-                if (model.get('orden10_valor_unitario') != valor)
-                    attributes.orden10_valor_unitario = valor;
+                // Set tiempo
+                attributes.orden10_tiempo = parseInt(hour) + ':' + parseInt(minute);
 
-                this.$el.find('thead').replaceWith('<thead><tr><th colspan="2"><th width="25%">Transporte<th width="25%">Insumo<th width="10%">Medidas<th width="10%">Cantidad<th width="15%">Valor unidad<th width="15%">Valor total');
                 model.set(attributes, {silent: true});
                 this.collection.trigger('reset');
             }
-        },
-
-        /**
-        * Event success edit item
-        */
-        ready: function () {
-            if (typeof window.initComponent.initInputMask == 'function')
-                window.initComponent.initInputMask();
-
-            if (typeof window.initComponent.initInputFormula == 'function')
-                window.initComponent.initInputFormula();
         },
 
         /**

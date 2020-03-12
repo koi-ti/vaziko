@@ -17,17 +17,16 @@ class CreateCotizacion10Table extends Migration
 
             $table->increments('id');
             $table->integer('cotizacion10_cotizacion2')->unsigned();
-            $table->integer('cotizacion10_producto')->unsigned()->nullable();
+            $table->integer('cotizacion10_transporte')->unsigned()->nullable();
             $table->string('cotizacion10_nombre', 200)->nullable();
-            $table->string('cotizacion10_medidas', 50);
-            $table->double('cotizacion10_cantidad')->default(0);
+            $table->string('cotizacion10_tiempo', 10);
             $table->double('cotizacion10_valor_unitario')->default(0);
             $table->double('cotizacion10_valor_total')->default(0);
             $table->datetime('cotizacion10_fh_elaboro');
             $table->integer('cotizacion10_usuario_elaboro')->unsigned();
 
             $table->foreign('cotizacion10_cotizacion2')->references('id')->on('koi_cotizacion2')->onDelete('restrict');
-            $table->foreign('cotizacion10_producto')->references('id')->on('koi_producto')->onDelete('restrict');
+            $table->foreign('cotizacion10_transporte')->references('id')->on('koi_areap')->onDelete('restrict');
             $table->foreign('cotizacion10_usuario_elaboro')->references('id')->on('koi_tercero')->onDelete('restrict');
         });
     }

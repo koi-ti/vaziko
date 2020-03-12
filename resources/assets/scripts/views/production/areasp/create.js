@@ -70,6 +70,9 @@ app || (app = {});
 
             if (typeof window.initComponent.initValidator == 'function')
                 window.initComponent.initValidator();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
         },
 
         /**

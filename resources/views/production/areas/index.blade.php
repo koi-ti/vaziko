@@ -12,6 +12,7 @@
                     <tr>
                         <th>Código</th>
                         <th>Nombre</th>
+                        <th>Transporte</th>
                         <th>Valor</th>
                     </tr>
                 </thead>

@@ -459,7 +459,7 @@
                             <form method="POST" accept-charset="UTF-8" id="form-areap-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-5 col-md-offset-1">
-                                        <select id="cotizacion6_areap" name="cotizacion6_areap" class="form-control select2-default-clear change-production-areap" data-wrapper="areasp-wrapper-producto" data-placeholder="Áreas de producción">
+                                        <select id="cotizacion6_areap" name="cotizacion6_areap" class="form-control select2-default-clear change-production-areap" data-input-name="cotizacion6_nombre" data-input-value="cotizacion6_valor" data-wrapper="areasp-wrapper-producto" data-placeholder="Áreas de producción">
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
@@ -603,9 +603,9 @@
                             <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="cotizacion10_producto" id="cotizacion10_producto" class="form-control select2-default-clear change-production-transporte change-insumo" data-placeholder="Insumo" data-valor="cotizacion10_valor_unitario" data-disable-input="cotizacion10_nombre" data-historial="historial_cotizacion10">
+                                        <select name="cotizacion10_transporte" id="cotizacion10_transporte" class="form-control select2-default-clear change-production-transporte" data-placeholder="Transporte" data-input-name="cotizacion10_nombre" data-input-value="cotizacion10_valor_unitario" data-wrapper="transportes-wrapper-producto">
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach (App\Models\Inventory\Producto::getTransportes() as $key => $value)
+                                            @foreach (App\Models\Production\Areap::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -616,17 +616,16 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" id="cotizacion10_medidas" name="cotizacion10_medidas" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="cotizacion10_cantidad" maxlength="50" required>
-                                            <span class="input-group-addon">=</span>
-                                            <input type="text" id="cotizacion10_cantidad" name="cotizacion10_cantidad" placeholder="Total" class="form-control text-right" disabled>
-                                        </div>
+                                    <div class="form-group col-sm-2 col-md-offset-2">
+                                        <input type="number" id="cotizacion10_horas" name="cotizacion10_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="cotizacion10_minutos" name="cotizacion10_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="0" step="01" max="59" required>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-3">
                                         <input id="cotizacion10_valor_unitario" name="cotizacion10_valor_unitario" class="form-control input-sm" type="text" required data-currency>
-                                        <div class="help-block pull-right"><a id="historial_cotizacion10" class="historial-insumo cursor-pointer"></a></div>
                                     </div>
                                     <div class="form-group col-sm-1">
                                         <button type="submit" class="btn btn-danger btn-sm btn-block">
@@ -644,15 +643,14 @@
                                             <th colspan="2"></th>
                                             <th width="25%">Transporte</th>
                                             <th width="25%">Nombre</th>
-                                            <th width="10%">Medidas</th>
-                                            <th width="10%">Cantidad</th>
+                                            <th width="10%">Tiempo</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="6"></td>
+                                            <td colspan="5"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -827,7 +825,7 @@
     </script>
 
     <script type="text/template" id="cotizacion-delete-transporte-confirm-tpl">
-        <p>¿Está seguro que desea eliminar el transporte <b><%- transporte_nombre %> </b>?</p>
+        <p>¿Está seguro que desea eliminar el transporte <b><%- nombre %> </b>?</p>
     </script>
 
     <script type="text/template" id="cotizacion-producto-materialp-item-tpl">
@@ -965,8 +963,7 @@
         <% } %>
         <td><%- transporte_nombre || '-' %></td>
         <td><%- cotizacion10_nombre || '-' %></td>
-        <td><%- cotizacion10_medidas %></td>
-        <td><%- cotizacion10_cantidad %></td>
+        <td><%- cotizacion10_tiempo %></td>
         <td class="text-right"><%- window.Misc.currency(cotizacion10_valor_unitario) %></td>
         <td class="text-right"><%- window.Misc.currency(cotizacion10_valor_total) %></td>
     </script>
@@ -979,15 +976,15 @@
         </td>
         <td><%- transporte_nombre || '-' %></td>
         <td><%- cotizacion10_nombre || '-' %></td>
-        <td colspan="4">
-            <div class="input-group">
-                <input type="text" id="cotizacion10_medidas_<%- id %>" name="cotizacion10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="cotizacion10_cantidad_<%- id %>" maxlength="50" value="<%- cotizacion10_medidas %>" required>
-                <span class="input-group-addon">=</span>
-                <input type="text" id="cotizacion10_cantidad_<%- id %>" name="cotizacion10_cantidad_<%- id %>" placeholder="Total" value="<%- cotizacion10_cantidad %>" class="form-control text-right" disabled>
+        <td colspan="3">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <input type="number" id="cotizacion10_horas_<%- id %>" name="cotizacion10_horas_<%- id %>" placeholder="Hora" value="<%- cotizacion10_horas %>" class="form-control input-xs" min="0" step="1" max="9999" required>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <input type="number" id="cotizacion10_minutos_<%- id %>" name="cotizacion10_minutos_<%- id %>" placeholder="Minutos" value="<%- cotizacion10_minutos %>" class="form-control input-xs" min="00" step="01" max="59" required>
+                </div>
             </div>
-        </td>
-        <td  colspan="2" class="text-right">
-            <input id="cotizacion10_valor_unitario_<%- id %>" name="cotizacion10_valor_unitario_<%- id %>" value="<%- cotizacion10_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
     </script>
 

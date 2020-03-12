@@ -22,7 +22,7 @@
 				<th colspan="2" align="left" class="border">Transporte:</th>
 			</tr>
 			<tr>
-				<th align="left" class="border-left">Compañia:</th>
+				<th align="left" class="border-left">Compañía:</th>
 				<td colspan="2" class="noborder">{{ $cotizacion->tercero_nombre }}</td>
 				<th align="left" class="noborder">Nit:</th>
 				<td colspan="2" class="noborder">{{ $cotizacion->tercero_nit }}</td>

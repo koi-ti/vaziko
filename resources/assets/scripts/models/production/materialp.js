@@ -19,8 +19,7 @@ app || (app = {});
             'materialp_nombre': '',
             'materialp_descripcion': '',
             'materialp_tipomaterial': '',
-            'materialp_empaque': 0,
-            'materialp_transporte': 0
+            'materialp_empaque': 0
         }
     });
 

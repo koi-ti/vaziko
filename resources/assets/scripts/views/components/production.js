@@ -16,7 +16,7 @@ app || (app = {});
             'ifChanged .production-check-measurements': 'checkProductionMedidas',
             'change .production-calculate-formula': 'changeProductionCalculateFormula',
             'change .change-production-materialp': 'changeProductionMaterialp',
-            'change .change-production-areap': 'changeProductionAreap',
+            'change .change-production-areap': 'changeProductionTransporte',
             'change .change-production-transporte': 'changeProductionTransporte',
             'change .change-production-tipoproductop': 'changeProductionTipoProducto',
             'change .change-production-actividadp': 'changeProductionActividadp',
@@ -105,56 +105,36 @@ app || (app = {});
         },
 
         /**
-        * Event change areap
-        */
-        changeProductionAreap: function (e) {
-            var option = this.$(e.currentTarget),
-                name = option.attr('name'),
-                resource = name.split('_')[0],
-                areap = option.val(),
-                _this = this;
-
-            // Rerence inputs areasp
-            this.$inputarea = this.$('#' + resource + '_nombre');
-            this.$inputvalor = this.$('#' + resource + '_valor');
-
-            // Reference wrapper
-            this.$referencewrapper = this.$('#' + option.data('wrapper'));
-
-            // Reference
-            if (typeof(areap) !== 'undefined' && !_.isUndefined(areap) && !_.isNull(areap) && areap != '') {
-                window.Misc.setSpinner(this.$referencewrapper);
-                $.get(window.Misc.urlFull(Route.route('areasp.show', {areasp: areap})), function (resp) {
-                    if (resp) {
-                        _this.$inputarea.val('').attr('readonly', true);
-                        _this.$inputvalor.val(resp.areap_valor);
-                    }
-                    window.Misc.removeSpinner(_this.$referencewrapper);
-                });
-            } else {
-                this.$inputarea.val('').attr('readonly', false);
-                this.$inputvalor.val('');
-            }
-        },
-
-        /**
         * Event change transporte
         */
         changeProductionTransporte: function (e) {
             var option = this.$(e.currentTarget),
-                inputName = option.data('disable-input'),
-                inputValue = option.data('valor'),
+                inputName = option.data('input-name'),
+                inputValue = option.data('input-value'),
+                referenceWrapper = option.data('wrapper'),
                 value = option.val(),
                 _this = this;
 
             this.$inputName = $('#' + inputName);
             this.$inputValor = this.$('#' + inputValue);
 
+            // Reference wrapper
+            this.$referenceWrapper = this.$('#' + referenceWrapper);
+
             if (value) {
                 this.$inputName.prop('disabled', true);
+
+                window.Misc.setSpinner(this.$referenceWrapper);
+                $.get(window.Misc.urlFull(Route.route('areasp.show', {areasp: value})), function (resp) {
+                    if (resp) {
+                        _this.$inputName.val('').attr('readonly', true);
+                        _this.$inputValor.val(resp.areap_valor);
+                    }
+                    window.Misc.removeSpinner(_this.$referenceWrapper);
+                });
             } else {
-                this.$inputName.prop('disabled', false);
-                this.$inputValor.val(0);
+                this.$inputName.val('').prop('disabled', false);
+                this.$inputValor.val('');
             }
         },
 

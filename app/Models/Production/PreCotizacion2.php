@@ -207,10 +207,8 @@ class PreCotizacion2 extends BaseModel
         foreach ($transportes as $transporte) {
              $cotizacion10 = new Cotizacion10;
              $cotizacion10->cotizacion10_cotizacion2 = $cotizacion2->id;
-             $cotizacion10->cotizacion10_materialp = $transporte->precotizacion10_materialp;
-             $cotizacion10->cotizacion10_producto = $transporte->precotizacion10_producto;
-             $cotizacion10->cotizacion10_medidas = $transporte->precotizacion10_medidas;
-             $cotizacion10->cotizacion10_cantidad = $transporte->precotizacion10_cantidad;
+             $cotizacion10->cotizacion10_transporte = $transporte->precotizacion10_materialp;
+             $cotizacion10->cotizacion10_tiempo = '0:0';
              $cotizacion10->cotizacion10_valor_unitario = $transporte->precotizacion10_valor_unitario;
              $cotizacion10->cotizacion10_valor_total = $transporte->precotizacion10_valor_total;
              $cotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
@@ -367,10 +365,8 @@ class PreCotizacion2 extends BaseModel
         foreach ($transportes as $transporte) {
              $orden10 = new Ordenp10;
              $orden10->orden10_orden2 = $orden2->id;
-             $orden10->orden10_materialp = $transporte->precotizacion10_materialp;
-             $orden10->orden10_producto = $transporte->precotizacion10_producto;
-             $orden10->orden10_medidas = $transporte->precotizacion10_medidas;
-             $orden10->orden10_cantidad = $transporte->precotizacion10_cantidad;
+             $orden10->orden10_transporte = $transporte->precotizacion10_materialp;
+             $orden10->orden10_tiempo = '0:0';
              $orden10->orden10_valor_unitario = $transporte->precotizacion10_valor_unitario;
              $orden10->orden10_valor_total = $transporte->precotizacion10_valor_total;
              $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');

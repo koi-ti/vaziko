@@ -17,7 +17,7 @@ class AreaspController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            return Datatables::of(Areap::select('id', 'areap_nombre', DB::raw(auth()->user()->ability('admin', 'precios', ['module' => 'areasp']) ? 'areap_valor' : '0 AS areap_valor')))
+            return Datatables::of(Areap::select('id', 'areap_nombre', 'areap_transporte', DB::raw(auth()->user()->ability('admin', 'precios', ['module' => 'areasp']) ? 'areap_valor' : '0 AS areap_valor')))
                         ->make(true);
         }
         return view('production.areas.index');
@@ -49,6 +49,7 @@ class AreaspController extends Controller
                 try {
                     // Area
                     $area->fill($data);
+                    $area->fillBoolean($data);
                     $area->save();
 
                     // Commit Transaction
@@ -56,6 +57,8 @@ class AreaspController extends Controller
 
                     // Forget cache
                     Cache::forget(Areap::$key_cache);
+                    Cache::forget(Areap::$key_cache_transporte);
+
                     return response()->json(['success' => true, 'id' => $area->id]);
                 } catch(\Exception $e) {
                     DB::rollback();
@@ -112,6 +115,7 @@ class AreaspController extends Controller
                 try {
                     // Area
                     $area->fill($data);
+                    $area->fillBoolean($data);
                     $area->save();
 
                     // Commit Transaction
@@ -119,6 +123,8 @@ class AreaspController extends Controller
 
                     // Forget cache
                     Cache::forget(Areap::$key_cache);
+                    Cache::forget(Areap::$key_cache_transporte);
+
                     return response()->json(['success' => true, 'id' => $area->id]);
                 } catch(\Exception $e) {
                     DB::rollback();

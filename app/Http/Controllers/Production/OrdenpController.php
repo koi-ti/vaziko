@@ -44,13 +44,15 @@ class OrdenpController extends Controller
             }
 
             // If permissions
+            $admin = auth()->user()->hasRole('admin') ? 'TRUE' : 'FALSE';
             $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
             $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
             $culminar = auth()->user()->ability('admin', 'culminar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
             $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
+            $operario = auth()->user()->ability('admin', 'operario', ['module' => 'ordenes']) ? 'TRUE' : 'FALSE';
 
             // If ability other permission
-            $query->addSelect(DB::raw("{$cerrar} AS cerrar, {$abrir} AS abrir, {$culminar} AS culminar, {$clonar} AS clonar"));
+            $query->addSelect(DB::raw("{$admin} AS admin, {$cerrar} AS cerrar, {$abrir} AS abrir, {$culminar} AS culminar, {$clonar} AS clonar, {$operario} AS operario"));
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
@@ -237,7 +239,7 @@ class OrdenpController extends Controller
         }
 
         // If show all products
-        if (auth()->user()->hasRole('admin') == false && (auth()->user()->ability('admin', 'operario', ['module' => 'ordenes']) || $request->has('resumido'))) {
+        if (auth()->user()->ability('admin', 'operario', ['module' => 'ordenes']) && $request->has('resumido')) {
             $data = [];
 
             $productos = Ordenp2::getOrdenespSpecial2($orden->id);

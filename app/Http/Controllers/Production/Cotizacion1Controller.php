@@ -95,7 +95,7 @@ class Cotizacion1Controller extends Controller
                         if ($request->cotizacion_estado == 'A') {
                             $query->whereIn('cotizacion1_estados', ['CC', 'CF', 'CS']);
                         }
-                        
+
                         if ($request->cotizacion_estado == 'C') {
                             $query->whereIn('cotizacion1_estados', ['CN', 'CR', 'CO']);
                         }
@@ -858,10 +858,9 @@ class Cotizacion1Controller extends Controller
                     foreach ($transportes as $cotizacion10) {
                          $orden10 = new Ordenp10;
                          $orden10->orden10_orden2 = $orden2->id;
+                         $orden10->orden10_transporte = $cotizacion10->cotizacion10_transporte;
                          $orden10->orden10_nombre = $cotizacion10->cotizacion10_nombre;
-                         $orden10->orden10_producto = $cotizacion10->cotizacion10_producto;
-                         $orden10->orden10_medidas = $cotizacion10->cotizacion10_medidas;
-                         $orden10->orden10_cantidad = $cotizacion10->cotizacion10_cantidad;
+                         $orden10->orden10_tiempo = $cotizacion10->cotizacion10_tiempo;
                          $orden10->orden10_valor_unitario = $cotizacion10->cotizacion10_valor_unitario;
                          $orden10->orden10_valor_total = $cotizacion10->cotizacion10_valor_total;
                          $orden10->orden10_usuario_elaboro = auth()->user()->id;

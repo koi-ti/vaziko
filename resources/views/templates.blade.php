@@ -658,10 +658,6 @@
 	</div>
     <div class="row">
         <div class="form-group col-md-2 col-xs-4">
-            <label for="producto_transporte" class="control-label">Transporte</label>
-            <div><input type="checkbox" id="producto_transporte" name="producto_transporte" value="producto_transporte" <%- parseInt(producto_transporte) ? 'checked': ''%>></div>
-        </div>
-        <div class="form-group col-md-2 col-xs-4">
             <label for="producto_empaque" class="control-label">¿Empaque?</label>
             <div><input type="checkbox" id="producto_empaque" name="producto_empaque" value="producto_empaque" <%- parseInt(producto_empaque) ? 'checked': ''%>></div>
         </div>
@@ -675,11 +671,14 @@
 			<label for="areap_nombre" class="control-label">Nombre</label>
 			<input type="text" id="areap_nombre" name="areap_nombre" value="<%- areap_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
-
-		<div class="form-group col-md-4">
+		<div class="form-group col-md-3">
 			<label for="areap_nombre" class="control-label">Valor</label>
 			<input type="text" id="areap_valor" name="areap_valor" value="<%- areap_valor %>" placeholder="Nombre" class="form-control input-sm input-toupper" data-currency required>
 		</div>
+        <div class="form-group col-md-1">
+            <label for="areap_transporte" class="control-label">Transporte</label>
+            <div><input type="checkbox" id="areap_transporte" name="areap_transporte" value="areap_transporte" <%- parseInt(areap_transporte) ? 'checked': ''%>></div>
+        </div>
     </div>
 </script>
 
@@ -734,10 +733,6 @@
         <div class="form-group col-md-2">
             <label for="materialp_empaque" class="control-label">Empaque</label>
             <div><input type="checkbox" id="materialp_empaque" name="materialp_empaque" value="materialp_empaque" <%- parseInt(materialp_empaque) ? 'checked': ''%>></div>
-        </div>
-        <div class="form-group col-md-2">
-            <label for="materialp_transporte" class="control-label">Transporte</label>
-            <div><input type="checkbox" id="materialp_transporte" name="materialp_transporte" value="materialp_transporte" <%- parseInt(materialp_transporte) ? 'checked': ''%>></div>
         </div>
     </div>
 </script>

@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Cotizacion10;
-use App\Models\Inventory\Producto;
+use App\Models\Production\Cotizacion10, App\Models\Production\Areap;
 use Log, DB;
 
 class Cotizacion10Controller extends Controller
@@ -40,15 +39,17 @@ class Cotizacion10Controller extends Controller
             $cotizacion10 = new Cotizacion10;
             if ($cotizacion10->isValid($data)) {
                 try {
-                    if ($request->has('cotizacion10_producto')) {
-                        $producto = Producto::find($request->cotizacion10_producto);
-                        if (!$producto instanceof Producto) {
+                    if ($request->has('cotizacion10_transporte')) {
+                        $transporte = Areap::find($request->cotizacion10_transporte);
+                        if (!$transporte instanceof Areap) {
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
                         }
                     }
 
+                    $tiempo = "{$request->cotizacion10_horas}:{$request->cotizacion10_minutos}";
+
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => isset($producto) ? $producto->producto_nombre : '-']);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => isset($transporte) ? $transporte->areap_nombre : '-', 'cotizacion10_tiempo' => $tiempo]);
                 } catch(\Exception $e) {
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

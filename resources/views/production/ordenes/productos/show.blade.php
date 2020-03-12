@@ -477,8 +477,7 @@
 								<tr>
 									<th width="25%">Transporte</th>
 									<th width="25%">Nombre</th>
-									<th width="10%">Medidas</th>
-									<th width="10%">Cantidad</th>
+									<th width="10%">Tiempo</th>
 									@ability ('precios' | 'ordenes')
 										{{--*/ $totaltransportes = 0; /*--}}
 
@@ -492,8 +491,7 @@
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
 										<td>{{ $transporte->orden10_nombre ? $transporte->orden10_nombre : '-' }}</td>
-										<td>{{ $transporte->orden10_medidas }}</td>
-										<td>{{ $transporte->orden10_cantidad }}</td>
+										<td>{{ $transporte->orden10_tiempo }}</td>
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
@@ -506,7 +504,7 @@
 							@ability ('precios' | 'ordenes')
 								<tfoot>
 									<tr>
-										<td colspan="4"></td>
+										<td colspan="3"></td>
 										<th class="text-right">Total</th>
 										<th class="text-right" id="total">{{ number_format($totaltransportes, 2, ',', '.') }}</th>
 									</tr>

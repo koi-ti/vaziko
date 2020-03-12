@@ -4,8 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\Production\Ordenp10;
-use App\Models\Inventory\Producto;
+use App\Models\Production\Ordenp10, App\Models\Production\Areap;
 use DB, Log;
 
 class DetalleTransportesController extends Controller
@@ -40,15 +39,17 @@ class DetalleTransportesController extends Controller
             $orden10 = new Ordenp10;
             if ($orden10->isValid($data)) {
                 try {
-                    if ($request->has('orden10_producto')) {
-                        $producto = Producto::find($request->orden10_producto);
-                        if (!$producto instanceof Producto) {
+                    if ($request->has('orden10_transporte')) {
+                        $transporte = Areap::find($request->orden10_transporte);
+                        if (!$transporte instanceof Areap) {
                             return response()->json(['success' => false, 'errors' => 'No es posible recuperar el transporte de producción, por favor verifique la información o consulte al administrador.']);
                         }
                     }
 
+                    $tiempo = "{$request->orden10_horas}:{$request->orden10_minutos}";
+
                     // Commit Transaction
-                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => isset($producto) ? $producto->producto_nombre : '-']);
+                    return response()->json(['success' => true, 'id' => uniqid(), 'transporte_nombre' => isset($transporte) ? $transporte->areap_nombre : '-', 'orden10_tiempo' => $tiempo]);
                 } catch(\Exception $e) {
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);

@@ -16,17 +16,35 @@ app || (app = {});
         },
         model: app.Ordenp10Model,
 
-        totalTransporte: function () {
-            _.each(this.models, function (model) {
-                var total = parseFloat(model.get('orden10_valor_unitario')) * model.get('orden10_cantidad');
-                model.set('orden10_valor_total', total);
-            });
+        /**
+        *   Evento para convertir minutos a horas
+        */
+        convertMinutesToHours: function (model) {
+            var horas = parseInt(model.get('orden10_horas'));
+            var minutos = parseInt(model.get('orden10_minutos'));
+
+            // Regla de 3 para convertir min a horas
+            var total = horas + (minutos / 60);
+                total = _.isNaN(total) ? 0 : parseFloat(total);
+
+            return total;
         },
 
         total: function () {
-            return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('orden10_valor_unitario')) * model.get('orden10_cantidad');
+            var _this = this;
+
+            return this.reduce(function (sum, model) {
+                return sum + _this.convertMinutesToHours(model) * parseFloat(model.get('orden10_valor_unitario'));
             }, 0);
+        },
+
+        totalTransporte: function () {
+            var _this = this;
+
+            _.each(this.models, function (model) {
+                total = _this.convertMinutesToHours(model) * parseFloat(model.get('orden10_valor_unitario'));
+                model.set('orden10_valor_total', Math.round(total));
+            });
         },
 
         totalize: function () {
@@ -34,7 +52,7 @@ app || (app = {});
                 this.totalTransporte();
 
             return {
-                total: total
+                total: Math.round(total)
             }
         }
    });

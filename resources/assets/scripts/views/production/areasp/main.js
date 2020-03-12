@@ -27,6 +27,7 @@ app || (app = {});
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'areap_nombre', name: 'areap_nombre' },
+                    { data: 'areap_transporte', name: 'areap_transporte' },
                     { data: 'areap_valor', name: 'areap_valor'}
                 ],
 				buttons: [
@@ -48,6 +49,13 @@ app || (app = {});
                     },
                     {
                         targets: 2,
+                        className: 'text-right',
+                        render: function (data) {
+                            return parseInt(data) ? 'SI' : 'NO';
+                        }
+                    },
+                    {
+                        targets: 3,
                         className: 'text-right',
                         render: function (data) {
                             return window.Misc.currency(data);

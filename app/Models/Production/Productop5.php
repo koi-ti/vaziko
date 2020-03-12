@@ -50,16 +50,4 @@ class Productop5 extends Model
 
         return $query->lists('empaque_nombre', 'id');
     }
-
-    /**
-    *  Select transporte dependiendo del productop
-    **/
-    public static function getTransportes() {
-        $query = Materialp::query();
-        $query->select('koi_materialp.id as id', 'materialp_nombre as transporte_nombre');
-        $query->where('materialp_transporte', true);
-        $query->orderBy('transporte_nombre', 'asc');
-
-        return $query->lists('transporte_nombre', 'id');
-    }
 }

@@ -272,41 +272,19 @@ class DetalleOrdenpController extends Controller
                     // Transportes
                     $transportes = isset($data['transportes']) ? $data['transportes'] : null;
                     foreach ($transportes as $transporte) {
-                        if (!empty($transporte->orden10_producto)) {
-                            $producto = Producto::find($transporte->orden10_producto);
-                            if (!$producto instanceof Producto) {
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
-                            }
-                        }
-
-                        // Guardar individual porque sale error por ser objeto decodificado
                         $orden10 = new Ordenp10;
                         $orden10->orden10_orden2 = $orden2->id;
-                        $orden10->orden10_producto = !empty($transporte->orden10_producto) ? $producto->id : null;
-                        $orden10->orden10_nombre = $transporte->orden10_nombre;
-                        $orden10->orden10_medidas = $transporte->orden10_medidas;
-                        $orden10->orden10_cantidad = $transporte->orden10_cantidad;
+                        if (!empty($transporte->orden10_transporte)) {
+                            $orden10->orden10_transporte = $transporte->orden10_transporte;
+                        } else {
+                            $orden10->orden10_nombre = $transporte->orden10_nombre;
+                        }
+                        $orden10->orden10_tiempo = $transporte->orden10_tiempo;
                         $orden10->orden10_valor_unitario = $transporte->orden10_valor_unitario;
                         $orden10->orden10_valor_total = $transporte->orden10_valor_total;
                         $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
                         $orden10->orden10_usuario_elaboro = auth()->user()->id;
                         $orden10->save();
-
-                        if (!empty($transporte->orden10_producto)) {
-                            // Historial
-                            $historial = new ProductoHistorial;
-                            $historial->productohistorial_tipo = 'T';
-                            $historial->productohistorial_modulo = 'O';
-                            $historial->productohistorial_producto = $orden10->orden10_producto;
-                            $historial->productohistorial_valor = $orden10->orden10_valor_unitario;
-                            $historial->productohistorial_fh_elaboro = $orden10->orden10_fh_elaboro;
-                            $historial->save();
-
-                            // Actualizar producto
-                            $producto->producto_precio = $orden10->orden10_valor_unitario;
-                            $producto->save();
-                        }
 
                         $totaltransportes += round($orden10->orden10_valor_total);
                     }
@@ -626,29 +604,21 @@ class DetalleOrdenpController extends Controller
                         $keys = [];
                         $transportes = isset($data['transportes']) ? $data['transportes'] : [];
                         foreach ($transportes as $transporte) {
-                            $orden10 = Ordenp10::find( is_numeric($transporte['id']) ? $transporte['id'] : null);
-                            if (!$orden10 instanceof Ordenp10) {
-                                if (!empty($transporte['orden10_producto'])) {
-                                    $producto = Producto::find($transporte['orden10_producto']);
-                                    if (!$producto instanceof Producto) {
-                                        DB::rollback();
-                                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
-                                    }
-                                }
-
+                            if (isset($transporte['success'])) {
                                 $orden10 = new Ordenp10;
                                 $orden10->fill($transporte);
                                 $orden10->orden10_orden2 = $orden2->id;
-                                $orden10->orden10_producto = !empty($transporte['orden10_producto']) ? $producto->id : null;
                                 $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
                                 $orden10->orden10_usuario_elaboro = auth()->user()->id;
                                 $orden10->save();
                             } else {
-                                $orden10->fill($transporte);
-                                $orden10->save();
+                                $orden10 = Ordenp10::find($transporte['id']);
+                                if ($orden10 instanceof Ordenp10) {
+                                    $orden10->fill($transporte);
+                                    $orden10->save();
+                                }
                             }
 
-                            // asociar id a un array para validar
                             $keys[] = $orden10->id;
                             $totaltransportes += round($orden10->orden10_valor_total);
                         }

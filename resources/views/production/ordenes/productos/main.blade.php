@@ -580,9 +580,9 @@
                             <form method="POST" accept-charset="UTF-8" id="form-transporte-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-6">
-                                        <select name="orden10_producto" id="orden10_producto" class="form-control select2-default-clear change-production-transporte change-insumo" data-placeholder="Insumo" data-historial="historial_orden10" data-disable-input="orden10_nombre" data-valor="orden10_valor_unitario">
+                                        <select name="orden10_transporte" id="orden10_transporte" class="form-control select2-default-clear change-production-transporte" data-placeholder="Transporte" data-input-name="orden10_nombre" data-input-value="orden10_valor_unitario">
                                             <option value hidden selected>Seleccione</option>
-                                            @foreach (App\Models\Inventory\Producto::getTransportes() as $key => $value)
+                                            @foreach (App\Models\Production\Areap::getTransportes() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
                                             @endforeach
                                         </select>
@@ -593,20 +593,19 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="form-group col-sm-8">
-                                        <div class="input-group">
-                                            <input type="text" id="orden10_medidas" name="orden10_medidas" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden10_cantidad" maxlength="50" required>
-                                            <span class="input-group-addon">=</span>
-                                            <input type="text" id="orden10_cantidad" name="orden10_cantidad" placeholder="Total" class="form-control text-right" disabled>
-                                        </div>
+                                    <div class="form-group col-sm-2 col-md-offset-2">
+                                        <input type="number" id="orden10_horas" name="orden10_horas" placeholder="Hora" value="0" class="form-control input-xs" min="0" step="1" max="9999" required>
+                                        <div class="help-block with-errors"></div>
+                                    </div>
+                                    <div class="form-group col-sm-2">
+                                        <input type="number" id="orden10_minutos" name="orden10_minutos" placeholder="Minutos" value="0" class="form-control input-xs" min="0" step="01" max="59" required>
                                         <div class="help-block with-errors"></div>
                                     </div>
                                     <div class="form-group col-sm-3">
                                         <input id="orden10_valor_unitario" name="orden10_valor_unitario" class="form-control input-sm" type="text" required data-currency>
-                                        <div class="help-block pull-right"><a id="historial_orden10" class="historial-insumo cursor-pointer"></a></div>
                                     </div>
                                     <div class="form-group col-sm-1">
-                                        <button type="submit" class="btn btn-primary btn-sm btn-block">
+                                        <button type="submit" class="btn btn-danger btn-sm btn-block">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -621,15 +620,14 @@
                                             <th colspan="2"></th>
                                             <th width="25%">Transporte</th>
                                             <th width="25%">Nombre</th>
-                                            <th width="15%">Medidas</th>
-                                            <th width="15%">Cantidad</th>
+                                            <th width="15%">Tiempo</th>
                                             <th width="15%">Valor unidad</th>
                                             <th width="15%">Valor</th>
                                         </tr>
                                     </thead>
                                     <tfoot>
                                         <tr>
-                                            <td colspan="6"></td>
+                                            <td colspan="5"></td>
                                             <th class="text-right">Total</th>
                                             <th class="text-right" id="total">0</th>
                                         </tr>
@@ -804,7 +802,7 @@
     </script>
 
     <script type="text/template" id="orden-delete-transporte-confirm-tpl">
-        <p>¿Está seguro que desea eliminar el transporte <b><%- transporte_nombre %> </b>?</p>
+        <p>¿Está seguro que desea eliminar el transporte <b><%- nombre %> </b>?</p>
     </script>
 
     <script type="text/template" id="orden-producto-materialp-item-tpl">
@@ -942,8 +940,7 @@
         <% } %>
         <td><%- transporte_nombre || '-' %></td>
         <td><%- orden10_nombre || '-' %></td>
-        <td><%- orden10_medidas %></td>
-        <td><%- orden10_cantidad %></td>
+        <td><%- orden10_tiempo %></td>
         <td class="text-right"><%- window.Misc.currency (orden10_valor_unitario) %></td>
         <td class="text-right"><%- window.Misc.currency (orden10_valor_total) %></td>
     </script>
@@ -956,15 +953,15 @@
         </td>
         <td><%- transporte_nombre || '-' %></td>
         <td><%- orden10_nombre || '-' %></td>
-        <td colspan="4">
-            <div class="input-group">
-                <input type="text" id="orden10_medidas_<%- id %>" name="orden10_medidas_<%- id %>" placeholder="Medidas" class="form-control input-xs input-formula production-calculate-formula" data-response="orden10_cantidad_<%- id %>" maxlength="50" value="<%- orden10_medidas %>" required>
-                <span class="input-group-addon">=</span>
-                <input type="text" id="orden10_cantidad_<%- id %>" name="orden10_cantidad_<%- id %>" placeholder="Total" value="<%- orden10_cantidad %>" class="form-control text-right" disabled>
+        <td colspan="3">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6">
+                    <input type="number" id="orden10_horas_<%- id %>" name="orden10_horas_<%- id %>" placeholder="Hora" value="<%- orden10_horas %>" class="form-control input-xs" min="0" step="1" max="9999" required>
+                </div>
+                <div class="col-xs-12 col-sm-6">
+                    <input type="number" id="orden10_minutos_<%- id %>" name="orden10_minutos_<%- id %>" placeholder="Minutos" value="<%- orden10_minutos %>" class="form-control input-xs" min="00" step="01" max="59" required>
+                </div>
             </div>
-        </td>
-        <td colspan="2" class="text-right">
-            <input id="orden10_valor_unitario_<%- id %>" name="orden10_valor_unitario_<%- id %>" value="<%- orden10_valor_unitario %>" class="form-control input-sm" type="text" data-currency required>
         </td>
     </script>
 

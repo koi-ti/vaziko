@@ -193,30 +193,34 @@
                 field_type = $(this);
 
                 // Inputmask data-currency
-                if ( field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == ''){
+                if (field_type.attr('data-currency') == '' || field_type.attr('data-currency-negative') == '') {
                     field_type.val('');
                 }
 
-                if( field_type.hasClass('timepicker') ){
-                    field_type.val( moment().format('H:mm') );
+                if (field_type.hasClass('timepicker')) {
+                    field_type.val(moment().format('H:mm'));
                 }
 
                 // Checkbox && radiobutton
-                if( field_type.attr('type') == 'radio' || field_type.attr('type') == 'checkbox'){
+                if (field_type.attr('type') == 'radio' || field_type.attr('type') == 'checkbox') {
                     field_type.iCheck('update');
                 }
 
                 // Select2
-                if( field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default') ){
+                if (field_type.hasClass('select2-default-clear') || field_type.hasClass('select2-default')) {
                     var name = field_type.attr('id');
                     field_type.val('').trigger('change');
                     $('#select2-'+name+'-container').removeAttr('title');
 
                     // Select2 with ajax
-                }else if( field_type.hasClass('choice-select-autocomplete') ){
+                } else if(field_type.hasClass('choice-select-autocomplete')) {
                     field_type.empty();
                     id = field_type.attr('id');
                     $('#select2-'+id+'-container').removeAttr('title');
+                }
+
+                if (field_type.attr('readonly')) {
+                    field_type.removeAttr('readonly');
                 }
             });
         },

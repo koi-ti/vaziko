@@ -111,12 +111,6 @@
 
             <div class="row">
                 <div class="form-group col-md-2">
-                    <label class="control-label">Transporte</label>
-                    <div>
-                        <input type="checkbox" disabled {{ $producto->producto_transporte ? 'checked': '' }}>
-                    </div>
-                </div>
-                <div class="form-group col-md-2">
                     <label class="control-label">¿Empaque?</label>
                     <div>
                         <input type="checkbox" disabled {{ $producto->producto_empaque ? 'checked': '' }}>

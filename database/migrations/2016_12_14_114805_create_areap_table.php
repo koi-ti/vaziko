@@ -17,6 +17,7 @@ class CreateAreapTable extends Migration
 
             $table->increments('id');
             $table->string('areap_nombre', 250);
+            $table->boolean('areap_transporte')->default(false);
             $table->double('areap_valor')->default(0);
         });
     }

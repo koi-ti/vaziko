@@ -16,8 +16,9 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'orden10_nombre': '',
-            'orden10_medidas': '',
-            'orden10_cantidad': 0,
+            'orden10_tiempo': '',
+            'orden10_horas': '',
+            'orden10_minutos': '',
             'orden10_valor_unitario': '',
             'orden10_valor_total': '',
             'transporte_nombre': ''

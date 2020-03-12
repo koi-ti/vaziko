@@ -17,6 +17,7 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'areap_nombre': '',
+            'areap_transporte': 0,
             'areap_valor': 0
         }
     });

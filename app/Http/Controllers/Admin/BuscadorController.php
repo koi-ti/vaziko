@@ -493,9 +493,6 @@ class BuscadorController extends Controller
                     $query->where('producto_empaque', true);
                 }
 
-                if ($request->reference == 'transporte') {
-                    $query->where('producto_transporte', true);
-                }
                 return response()->json($query->get());
             } else {
                 if ($request->has('producto_codigo')) {

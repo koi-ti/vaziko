@@ -22,7 +22,7 @@ class Ordenp10 extends BaseModel
      * @var array
      */
     protected $fillable = [
-        'orden10_nombre', 'orden10_medidas', 'orden10_cantidad', 'orden10_valor_unitario', 'orden10_valor_total'
+        'orden10_transporte', 'orden10_nombre', 'orden10_tiempo', 'orden10_valor_unitario', 'orden10_valor_total'
     ];
 
     /**
@@ -31,13 +31,14 @@ class Ordenp10 extends BaseModel
      * @var array
      */
     protected $nullable = [
-        'orden10_producto'
+        'orden10_transporte', 'orden10_nombre'
     ];
 
     public function isValid($data) {
         $rules = [
-            'orden10_producto' => 'required_without:orden10_nombre',
-            'orden10_medidas' => 'required',
+            'orden10_transporte' => 'required_without:orden10_nombre',
+            'orden10_horas' => 'required|min:0|max:9999|numeric',
+            'orden10_minutos' => 'required|min:0|max:59|numeric',
             'orden10_valor_unitario' => 'required'
         ];
 
@@ -51,14 +52,19 @@ class Ordenp10 extends BaseModel
 
     public static function getOrdenesp10($orden2 = null) {
         $query = self::query();
-        $query->select('koi_ordenproduccion10.*', 'producto_nombre as transporte_nombre');
-        $query->leftJoin('koi_producto', 'orden10_producto', '=', 'koi_producto.id');
+        $query->select('koi_ordenproduccion10.*', 'areap_nombre as transporte_nombre');
+        $query->tiempo();
+        $query->leftJoin('koi_areap', 'orden10_transporte', '=', 'koi_areap.id');
         $query->where('orden10_orden2', $orden2);
         $query->orderBy('transporte_nombre', 'asc');
         return $query->get();
     }
 
     public function transporte () {
-        return $this->belongsTo(Materialp::class, 'orden10_materialp', 'id');
+        return $this->hasOne(Areap::class, 'id', 'orden10_transporte');
+    }
+
+    public function scopeTiempo ($query) {
+        return $query->addSelect(DB::raw("SUBSTRING_INDEX(orden10_tiempo, ':', '-1') AS orden10_minutos, SUBSTRING_INDEX(orden10_tiempo, ':', '1') AS orden10_horas"));
     }
 }

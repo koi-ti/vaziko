@@ -31,7 +31,6 @@ app || (app = {});
             'producto_serie': false,
             'producto_metrado': false,
             'producto_empaque': false,
-            'producto_transporte': false,
             'producto_ancho': 0,
             'producto_largo': 0
         }

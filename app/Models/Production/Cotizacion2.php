@@ -387,10 +387,9 @@ class Cotizacion2 extends BaseModel
         foreach ($transportes as $transporte) {
              $orden10 = new Ordenp10;
              $orden10->orden10_orden2 = $orden2->id;
+             $orden10->orden10_transporte = $transporte->cotizacion10_transporte;
              $orden10->orden10_nombre = $transporte->cotizacion10_nombre;
-             $orden10->orden10_producto = $transporte->cotizacion10_producto;
-             $orden10->orden10_medidas = $transporte->cotizacion10_medidas;
-             $orden10->orden10_cantidad = $transporte->cotizacion10_cantidad;
+             $orden10->orden10_tiempo = $transporte->cotizacion10_tiempo;
              $orden10->orden10_valor_unitario = $transporte->cotizacion10_valor_unitario;
              $orden10->orden10_valor_total = $transporte->cotizacion10_valor_total;
              $orden10->orden10_fh_elaboro = date('Y-m-d H:i:s');

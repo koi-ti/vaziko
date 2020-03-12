@@ -16,8 +16,9 @@ app || (app = {});
         idAttribute: 'id',
         defaults: {
             'cotizacion10_nombre': '',
-            'cotizacion10_medidas': '',
-            'cotizacion10_cantidad': 0,
+            'cotizacion10_tiempo': '',
+            'cotizacion10_horas': '',
+            'cotizacion10_minutos': '',
             'cotizacion10_valor_unitario': '',
             'cotizacion10_valor_total': '',
             'transporte_nombre': ''

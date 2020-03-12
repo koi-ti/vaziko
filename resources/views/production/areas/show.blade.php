@@ -13,13 +13,16 @@
                     <label class="control-label">Nombre</label>
                     <div>{{ $area->areap_nombre }}</div>
                 </div>
-
                 @ability ('precios' | 'areasp')
                     <div class="form-group col-md-3">
                         <label class="control-label">Valor</label>
                         <div>$ {{ number_format($area->areap_valor,2,',','.') }}</div>
                     </div>
                 @endability
+                <div class="form-group col-md-1">
+                    <label class="control-label">Transporte</label>
+                    <div><input type="checkbox" disabled {{ $area->areap_transporte ? 'checked': '' }}></div>
+                </div>
             </div>
         </div>
         <div class="box-footer with-border">

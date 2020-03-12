@@ -2,10 +2,10 @@
 
 namespace App\Models\Production;
 
-use Illuminate\Database\Eloquent\Model;
+use App\Models\BaseModel;
 use Validator, Cache;
 
-class Areap extends Model
+class Areap extends BaseModel
 {
     /**
      * The database table used by the model.
@@ -22,6 +22,7 @@ class Areap extends Model
      * @var static string
      */
     public static $key_cache = '_areas_production';
+    public static $key_cache_transporte = '_transportes_production';
 
     /**
      * The attributes that are mass assignable.
@@ -30,6 +31,15 @@ class Areap extends Model
      */
     protected $fillable = [
         'areap_nombre', 'areap_valor'
+    ];
+
+    /**
+     * The attributes that are mass assignable boolean.
+     *
+     * @var boolean
+     */
+    protected $boolean = [
+        'areap_transporte'
     ];
 
     public function isValid($data) {
@@ -52,8 +62,24 @@ class Areap extends Model
         }
 
         return Cache::rememberForever(self::$key_cache, function() {
-            $query = Areap::query();
+            $query = self::query();
             $query->orderBy('areap_nombre', 'asc');
+            $collection = $query->lists('areap_nombre', 'id');
+
+            $collection->prepend('', '');
+            return $collection;
+        });
+    }
+
+    public static function getTransportes() {
+        if (Cache::has(self::$key_cache_transporte)) {
+            return Cache::get(self::$key_cache_transporte);
+        }
+
+        return Cache::rememberForever(self::$key_cache_transporte, function() {
+            $query = self::query();
+            $query->orderBy('areap_nombre', 'asc');
+            $query->where('areap_transporte', true);
             $collection = $query->lists('areap_nombre', 'id');
 
             $collection->prepend('', '');

@@ -38,7 +38,7 @@ class Producto extends BaseModel
      * @var array
      */
     protected $boolean = [
-        'producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque', 'producto_transporte'
+        'producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque'
     ];
 
     /**
@@ -82,22 +82,6 @@ class Producto extends BaseModel
         $query->leftJoin('koi_materialp', 'koi_producto.producto_materialp', '=', 'koi_materialp.id');
         $query->where('koi_producto.id', $id);
         return $query->first();
-    }
-
-    public static function getTransportes() {
-        if (Cache::has(self::$key_cache_transport)) {
-            return Cache::get(self::$key_cache_transport);
-        }
-
-        return Cache::rememberForever(self::$key_cache_transport, function() {
-            $query = self::query();
-            $query->where('producto_transporte', true);
-            $query->orderby('producto_nombre', 'asc');
-            $collection = $query->lists('producto_nombre', 'id');
-
-            $collection->prepend('', '');
-            return $collection;
-        });
     }
 
     public function serie($serie) {

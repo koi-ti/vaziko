@@ -487,8 +487,7 @@
 								<tr>
 									<th width="25%">Transporte</th>
 									<th width="25%">Nombre</th>
-									<th width="10%">Medidas</th>
-									<th width="10%">Cantidad</th>
+									<th width="10%">Tiempo</th>
 									@ability ('precios' | 'cotizaciones')
 										{{--*/ $totaltransportes = 0; /*--}}
 
@@ -502,8 +501,7 @@
 									<tr>
 										<td>{{ isset($transporte->transporte_nombre) ? $transporte->transporte_nombre : '-' }}</td>
 										<td>{{ $transporte->cotizacion10_nombre ? $transporte->cotizacion10_nombre : '-' }}</td>
-										<td>{{ $transporte->cotizacion10_medidas }}</td>
-										<td>{{ $transporte->cotizacion10_cantidad }}</td>
+										<td class="text-center">{{ $transporte->cotizacion10_tiempo }}</td>
 										@ability ('precios' | 'cotizaciones')
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->cotizacion10_valor_total, 2, ',', '.') }}</td>
@@ -516,7 +514,7 @@
 							@ability ('precios' | 'cotizaciones')
 								<tfoot>
 									<tr>
-										<td colspan="4"></td>
+										<td colspan="3"></td>
 										<th class="text-right">Total</th>
 										<th class="text-right" id="total">{{ number_format($totaltransportes, 2, ',', '.') }}</th>
 									</tr>

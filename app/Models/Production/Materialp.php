@@ -38,7 +38,7 @@ class Materialp extends BaseModel
      * @var array
      */
     protected $boolean = [
-        'materialp_empaque', 'materialp_transporte'
+        'materialp_empaque'
     ];
 
     public function isValid($data) {

@@ -317,41 +317,19 @@ class Cotizacion2Controller extends Controller
                     // Transportes
                     $transportes = isset($data['transportes']) ? $data['transportes'] : null;
                     foreach ($transportes as $transporte) {
-                        if (!empty($transporte->cotizacion10_producto)) {
-                            $producto = Producto::where('producto_transporte', true)->find($transporte->cotizacion10_producto);
-                            if (!$producto instanceof Producto) {
-                                DB::rollback();
-                                return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
-                            }
-                        }
-
-                        // Guardar individual porque sale error por ser objeto decodificado
                         $cotizacion10 = new Cotizacion10;
                         $cotizacion10->cotizacion10_cotizacion2 = $cotizacion2->id;
-                        $cotizacion10->cotizacion10_producto = !empty($transporte->cotizacion10_producto) ? $producto->id : null;
-                        $cotizacion10->cotizacion10_nombre = $transporte->cotizacion10_nombre;
-                        $cotizacion10->cotizacion10_medidas = $transporte->cotizacion10_medidas;
-                        $cotizacion10->cotizacion10_cantidad = $transporte->cotizacion10_cantidad;
+                        if (!empty($transporte->cotizacion10_transporte)) {
+                            $cotizacion10->cotizacion10_transporte = $transporte->cotizacion10_transporte;
+                        } else {
+                            $cotizacion10->cotizacion10_nombre = $transporte->cotizacion10_nombre;
+                        }
+                        $cotizacion10->cotizacion10_tiempo = $transporte->cotizacion10_tiempo;
                         $cotizacion10->cotizacion10_valor_unitario = $transporte->cotizacion10_valor_unitario;
                         $cotizacion10->cotizacion10_valor_total = $transporte->cotizacion10_valor_total;
                         $cotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
                         $cotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
                         $cotizacion10->save();
-
-                        if (!empty($transporte->cotizacion10_producto)) {
-                            // Historial
-                            $historial = new ProductoHistorial;
-                            $historial->productohistorial_tipo = 'T';
-                            $historial->productohistorial_modulo = 'C';
-                            $historial->productohistorial_producto = $cotizacion10->cotizacion10_producto;
-                            $historial->productohistorial_valor = $cotizacion10->cotizacion10_valor_unitario;
-                            $historial->productohistorial_fh_elaboro = $cotizacion10->cotizacion10_fh_elaboro;
-                            $historial->save();
-
-                            // Actualizar producto
-                            $producto->producto_precio = $cotizacion10->cotizacion10_valor_unitario;
-                            $producto->save();
-                        }
 
                         $totaltransportes += round($cotizacion10->cotizacion10_valor_total);
                     }
@@ -713,31 +691,21 @@ class Cotizacion2Controller extends Controller
                         $keys = [];
                         $transportes = isset($data['transportes']) ? $data['transportes'] : [];
                         foreach ($transportes as $transporte) {
-                            $cotizacion10 = Cotizacion10::find(is_numeric($transporte['id']) ? $transporte['id'] : null);
-                            if (!$cotizacion10 instanceof Cotizacion10) {
-                                if (!empty($transporte['cotizacion10_producto'])) {
-                                    $producto = Producto::where('producto_transporte', true)->find($transporte['cotizacion10_producto']);
-                                    if (!$producto instanceof Producto) {
-                                        DB::rollback();
-                                        return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del transporte, por favor verifique la información o consulte al administrador.']);
-                                    }
-                                }
-
+                            if (isset($transporte['success'])) {
                                 $cotizacion10 = new Cotizacion10;
                                 $cotizacion10->fill($transporte);
                                 $cotizacion10->cotizacion10_cotizacion2 = $cotizacion2->id;
-                                $cotizacion10->cotizacion10_producto = !empty($transporte['cotizacion10_producto']) ? $producto->id : null;
                                 $cotizacion10->cotizacion10_fh_elaboro = date('Y-m-d H:i:s');
                                 $cotizacion10->cotizacion10_usuario_elaboro = auth()->user()->id;
                                 $cotizacion10->save();
-
                             } else {
-                                $cotizacion10->fill($transporte);
-                                $cotizacion10->save();
-
+                                $cotizacion10 = Cotizacion10::find($transporte['id']);
+                                if ($cotizacion10 instanceof Cotizacion10) {
+                                    $cotizacion10->fill($transporte);
+                                    $cotizacion10->save();
+                                }
                             }
 
-                            // asociar id a un array para validar
                             $keys[] = $cotizacion10->id;
                             $totaltransportes += round($cotizacion10->cotizacion10_valor_total);
                         }
