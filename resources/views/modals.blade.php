@@ -1084,82 +1084,86 @@
 <script type="text/template" id="add-generic-tercero-tpl">
 	<form method="POST" accept-charset="UTF-8" id="form-tercero" data-toggle="validator">
 		<div class="row">
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_nit" class="control-label">Documento</label>
 				<div class="row">
 					<div class="col-md-9">
-						<input id="tercero_nit" value="<%- tercero_nit %>" placeholder="Nit" class="form-control input-sm change-nit-koi-component" name="tercero_nit" type="text" required data-field="tercero_digito" data-modal="true">
+						<input id="tercero_nit" placeholder="Nit" class="form-control input-sm change-nit-koi-component" name="tercero_nit" type="text" required data-field="tercero_digito" data-modal="true">
 					</div>
 					<div class="col-md-3">
-						<input id="tercero_digito" value="<%- tercero_digito %>" class="form-control input-sm" name="tercero_digito" type="text" readonly required>
+						<input id="tercero_digito" class="form-control input-sm" name="tercero_digito" type="text" readonly required>
 					</div>
 				</div>
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_tipo" class="control-label">Tipo</label>
 				<select name="tercero_tipo" id="tercero_tipo" class="form-control" required>
 					<option value="" selected>Seleccione</option>
 					@foreach( config('koi.terceros.tipo') as $key => $value)
-						<option value="{{ $key }}" <%- tercero_tipo == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-					@endforeach
-				</select>
-			</div>
-			<div class="form-group col-md-3">
-				<label for="tercero_persona" class="control-label">Persona</label>
-				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
-					<option value="" selected>Seleccione</option>
-					@foreach( config('koi.terceros.persona') as $key => $value)
-						<option value="{{ $key }}" <%- tercero_persona == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
-					@endforeach
-				</select>
-			</div>
-			<div class="form-group col-md-3">
-				<label for="tercero_regimen" class="control-label">Regimen</label>
-				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
-					<option value="" selected>Seleccione</option>
-					@foreach( config('koi.terceros.regimen') as $key => $value)
-						<option value="{{ $key }}" <%- tercero_regimen == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+						<option value="{{ $key }}">{{ $value }}</option>
 					@endforeach
 				</select>
 			</div>
 		</div>
 		<div class="row">
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
+				<label for="tercero_persona" class="control-label">Persona</label>
+				<select name="tercero_persona" id="tercero_persona" class="form-control" required>
+					<option value="" selected>Seleccione</option>
+					@foreach( config('koi.terceros.persona') as $key => $value)
+						<option value="{{ $key }}">{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+			<div class="form-group col-md-6">
+				<label for="tercero_regimen" class="control-label">Regimen</label>
+				<select name="tercero_regimen" id="tercero_regimen" class="form-control" required>
+					<option value="" selected>Seleccione</option>
+					@foreach( config('koi.terceros.regimen') as $key => $value)
+						<option value="{{ $key }}">{{ $value }}</option>
+					@endforeach
+				</select>
+			</div>
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
 				<label for="tercero_nombre1" class="control-label">1er. Nombre</label>
-				<input id="tercero_nombre1" value="<%- tercero_nombre1 %>" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
+				<input id="tercero_nombre1" placeholder="1er. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre1" type="text">
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_nombre2" class="control-label">2do. Nombre</label>
-				<input id="tercero_nombre2" value="<%- tercero_nombre2 %>" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
+				<input id="tercero_nombre2" placeholder="2do. Nombre" class="form-control input-sm input-toupper" name="tercero_nombre2" type="text">
 			</div>
-			<div class="form-group col-md-3">
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
 				<label for="tercero_apellido1" class="control-label">1er. Apellido</label>
-				<input id="tercero_apellido1" value="<%- tercero_apellido1 %>" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
+				<input id="tercero_apellido1" placeholder="1er. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido1" type="text">
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_apellido2" class="control-label">2do. Apellido</label>
-				<input id="tercero_apellido2" value="<%- tercero_apellido2 %>" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
+				<input id="tercero_apellido2" placeholder="2do. Apellido" class="form-control input-sm input-toupper" name="tercero_apellido2" type="text">
 			</div>
 		</div>
 		<div class="row">
 			<div class="form-group col-md-12">
 				<label for="tercero_razonsocial" class="control-label">Razón Social, Comercial o Establecimiento</label>
-				<input id="tercero_razonsocial" value="<%- tercero_razonsocial %>" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
+				<input id="tercero_razonsocial" placeholder="Razón Social, Comercial o Establecimiento" class="form-control input-sm input-toupper" name="tercero_razonsocial" type="text">
 			</div>
 		</div>
 		<div class="row">
 			<div class="form-group col-md-6">
 				<label for="tercero_nombre_comercial" class="control-label">Nombre Comercial</label>
-				<input id="tercero_nombre_comercial" value="<%- tercero_nombre_comercial %>" placeholder="Nombre Comercial" class="form-control input-sm input-toupper" name="tercero_nombre_comercial" type="text">
+				<input id="tercero_nombre_comercial" placeholder="Nombre Comercial" class="form-control input-sm input-toupper" name="tercero_nombre_comercial" type="text">
 			</div>
 			<div class="form-group col-md-6">
 				<label for="tercero_sigla" class="control-label">Sigla</label>
-				<input id="tercero_sigla" value="<%- tercero_sigla %>" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="200">
+				<input id="tercero_sigla" placeholder="Sigla" class="form-control input-sm input-toupper" name="tercero_sigla" type="text" maxlength="200">
 			</div>
 		</div>
 		<div class="row">
 			<div class="form-group col-md-6">
-				<label for="tercero_direccion" class="control-label">Dirección</label> <small id="tercero_nomenclatura"><%- tercero_direccion_nomenclatura %></small>
+				<label for="tercero_direccion" class="control-label">Dirección</label> <small id="tercero_nomenclatura"></small>
 	      		<div class="input-group input-group-sm">
       		 		<input type="hidden" id="tercero_direccion_nomenclatura" name="tercero_direccion_nomenclatura" value="<%- tercero_direccion_nomenclatura %>">
 					<input id="tercero_direccion" value="<%- tercero_direccion %>" placeholder="Dirección" class="form-control address-koi-component" name="tercero_direccion" type="text" data-nm-name="tercero_nomenclatura" data-nm-value="tercero_direccion_nomenclatura" required>
@@ -1172,201 +1176,212 @@
 			</div>
 			<div class="form-group col-md-6">
 				<label for="tercero_municipio" class="control-label">Municipio</label>
-				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.municipios'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_municipio %>">
+				<select name="tercero_municipio" id="tercero_municipio" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.municipios'))%>" data-placeholder="Seleccione" placeholder="Seleccione">
 				</select>
 			</div>
 		</div>
 		<div class="row">
-			<div class="form-group col-md-6">
+			<div class="form-group col-md-12">
 				<label for="tercero_email" class="control-label">Email</label>
-				<input id="tercero_email" value="<%- tercero_email %>" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
+				<input id="tercero_email" placeholder="Email" class="form-control input-sm" name="tercero_email" type="email">
 			    <div class="help-block with-errors"></div>
 			</div>
-			<div class="form-group col-md-3">
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
 				<label for="tercero_email_factura1" class="control-label">Email Factura 1</label>
-				<input id="tercero_email_factura1" value="<%- tercero_email_factura1 %>" placeholder="Email Factura 1" class="form-control input-sm" name="tercero_email_factura1" type="email">
+				<input id="tercero_email_factura1" placeholder="Email Factura 1" class="form-control input-sm" name="tercero_email_factura1" type="email">
 			    <div class="help-block with-errors"></div>
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_email_factura2" class="control-label">Email Factura 2</label>
-				<input id="tercero_email_factura2" value="<%- tercero_email_factura2 %>" placeholder="Email Factura 2" class="form-control input-sm" name="tercero_email_factura2" type="email">
+				<input id="tercero_email_factura2" placeholder="Email Factura 2" class="form-control input-sm" name="tercero_email_factura2" type="email">
 			    <div class="help-block with-errors"></div>
 			</div>
 	    </div>
 		<div class="row">
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
                 <label for="tercero_codigopostal" class="control-label">Código postal</label>
-                <input id="tercero_codigopostal" value="<%- tercero_codigopostal %>" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6">
+                <input id="tercero_codigopostal" placeholder="Código postal" class="form-control input-sm" name="tercero_codigopostal" type="text" maxlength="6">
             </div>
-            <div class="form-group col-md-3">
+            <div class="form-group col-md-6">
                 <label for="tercero_formapago" class="control-label">Forma de pago <small>(dias)</small></label>
-                <input id="tercero_formapago" value="<%- tercero_formapago %>" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
+                <input id="tercero_formapago" placeholder="Forma de pago" class="form-control input-sm input-toupper" name="tercero_formapago" type="text" maxlength="30" required>
             </div>
         </div>
-
 	    <div class="row">
-	    	<div class="form-group col-md-3">
+	    	<div class="form-group col-md-6">
 				<label for="tercero_telefono1" class="control-label">Teléfono</label>
 				<div class="input-group">
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono1" value="<%- tercero_telefono1 %>" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
+					<input id="tercero_telefono1" class="form-control input-sm" name="tercero_telefono1" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
-
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_telefono2" class="control-label">2do. Teléfono</label>
 				<div class="input-group">
 					<div class="input-group-addon">
 						<i class="fa fa-phone"></i>
 					</div>
-					<input id="tercero_telefono2" value="<%- tercero_telefono2 %>" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
+					<input id="tercero_telefono2" class="form-control input-sm" name="tercero_telefono2" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
-
-			<div class="form-group col-md-3">
+		</div>
+		<div class="row">
+			<div class="form-group col-md-6">
 				<label for="tercero_fax" class="control-label">Fax</label>
 				<div class="input-group">
 					<div class="input-group-addon">
 						<i class="fa fa-fax"></i>
 					</div>
-					<input id="tercero_fax" value="<%- tercero_fax %>" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
+					<input id="tercero_fax" class="form-control input-sm" name="tercero_fax" type="text" data-inputmask="'mask': '(999) 999-99-99 EXT 99999'" data-mask>
 				</div>
 			</div>
-
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 				<label for="tercero_celular" class="control-label">Celular</label>
 				<div class="input-group">
 					<div class="input-group-addon">
 						<i class="fa fa-mobile"></i>
 					</div>
-					<input id="tercero_celular" value="<%- tercero_celular %>" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
+					<input id="tercero_celular" class="form-control input-sm" name="tercero_celular" type="text" data-inputmask="'mask': '(999) 999-99-99'" data-mask>
 				</div>
 			</div>
 		</div>
-
+		<div class="row">
+			<div class="form-group col-xs-12 col-sm-4 col-md-3">
+				<label for="tercero_vendedor" class="control-label">Vendedor</label>
+				<div class="input-group input-group-sm">
+					<span class="input-group-btn">
+						<button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="tercero_vendedor">
+							<i class="fa fa-user"></i>
+						</button>
+					</span>
+					<input id="tercero_vendedor" placeholder="Documento" class="form-control tercero-koi-component" name="tercero_vendedor" type="text" maxlength="15" data-name="tercero_vendedor_nombre" data-vendedor="true">
+				</div>
+			</div>
+			<div class="col-sm-6"><br>
+				<input id="tercero_vendedor_nombre" name="tercero_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" readonly>
+			</div>
+			<div class="form-group col-md-3">
+				<label for="tercero_comision" class="control-label">Comisión Vendedor</label>
+				<input type="number" id="tercero_comision" name="tercero_comision" placeholder="Vendedor" class="form-control input-sm" min="0" step="0.1" max="100">
+			</div>
+		</div>
 	    <div class="row">
 			<div class="form-group col-md-6">
 				<label for="tercero_representante" class="control-label">Representante Legal</label>
-				<input id="tercero_representante" value="<%- tercero_representante %>" placeholder="Representante Legal" class="form-control input-sm input-toupper" name="tercero_representante" type="text" maxlength="200">
+				<input id="tercero_representante" placeholder="Representante Legal" class="form-control input-sm input-toupper" name="tercero_representante" type="text" maxlength="200">
 			</div>
-			<div class="form-group col-md-3">
+			<div class="form-group col-md-6">
 	    		<label for="tercero_cc_representante" class="control-label">Cédula</label>
-	    		<input id="tercero_cc_representante" value="<%- tercero_cc_representante %>" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
+	    		<input id="tercero_cc_representante" placeholder="Cédula" class="form-control input-sm" name="tercero_cc_representante" type="text" maxlength="15">
 	    	</div>
 		</div>
-
 	    <div class="row">
-            <div class="col-md-offset-4 col-md-2 col-sm-6 col-xs-6">
-                <a href="<%- window.Misc.urlFull( (typeof(id) !== 'undefined' && !_.isUndefined(id) && !_.isNull(id) && id != '') ? Route.route('terceros.show', { terceros: id}) : Route.route('terceros.index') ) %>" class="btn btn-default btn-sm btn-block">{{ trans('app.comeback') }}</a>
-            </div>
-            <div class="col-md-2 col-sm-6 col-xs-6">
+            <div class="col-md-offset-4 col-md-3 col-sm-5 col-xs-6">
                 <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.save') }}</button>
             </div>
         </div>
-
 		<div class="row">
 			<div class="form-group col-md-10">
 				<label for="tercero_actividad" class="control-label">Actividad Económica</label>
-				<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.actividades'))%>" data-placeholder="Seleccione" placeholder="Seleccione" data-initial-value="<%- tercero_actividad %>">
+				<select name="tercero_actividad" id="tercero_actividad" class="form-control choice-select-autocomplete" data-ajax-url="<%- window.Misc.urlFull(Route.route('search.actividades'))%>" data-placeholder="Seleccione" placeholder="Seleccione">
 				</select>
 			</div>
 			<div class="form-group col-md-2">
 				<label for="tercero_retecree" class="control-label">% Cree</label>
-				<div id="tercero_retecree"><%- actividad_tarifa %></div>
+				<div id="tercero_retecree"></div>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_cliente">
-					<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente" <%- parseInt(tercero_cliente) ? 'checked': ''%>> Cliente
+					<input type="checkbox" id="tercero_cliente" name="tercero_cliente" value="tercero_cliente"> Cliente
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_acreedor">
-					<input type="checkbox" id="tercero_acreedor" name="tercero_acreedor" value="tercero_acreedor" <%- parseInt(tercero_acreedor) ? 'checked': ''%>> Acreedor
+					<input type="checkbox" id="tercero_acreedor" name="tercero_acreedor" value="tercero_acreedor"> Acreedor
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_proveedor">
-					<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor" <%- parseInt(tercero_proveedor) ? 'checked': ''%>> Proveedor
+					<input type="checkbox" id="tercero_proveedor" name="tercero_proveedor" value="tercero_proveedor"> Proveedor
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_autoretenedor_ica">
-					<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica" <%- parseInt(tercero_autoretenedor_ica) ? 'checked': ''%>> Autorretenedor ICA
+					<input type="checkbox" id="tercero_autoretenedor_ica" name="tercero_autoretenedor_ica" value="tercero_autoretenedor_ica"> Autorretenedor ICA
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_responsable_iva">
-					<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva" <%- parseInt(tercero_responsable_iva) ? 'checked': ''%>> Responsable de IVA
+					<input type="checkbox" id="tercero_responsable_iva" name="tercero_responsable_iva" value="tercero_responsable_iva"> Responsable de IVA
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_empleado">
-					<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado" <%- parseInt(tercero_empleado) ? 'checked': ''%> class="change_employee"> Empleado
+					<input type="checkbox" id="tercero_empleado" name="tercero_empleado" value="tercero_empleado"> Empleado
 				</label>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_interno">
-					<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno" <%- parseInt(tercero_interno) ? 'checked': ''%> class="change_employee"> Interno
+					<input type="checkbox" id="tercero_interno" name="tercero_interno" value="tercero_interno"> Interno
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_extranjero">
-					<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero" <%- parseInt(tercero_extranjero) ? 'checked': ''%>> Extranjero
+					<input type="checkbox" id="tercero_extranjero" name="tercero_extranjero" value="tercero_extranjero"> Extranjero
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_afiliado">
-					<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado" <%- parseInt(tercero_afiliado) ? 'checked': ''%>> Afiliado
+					<input type="checkbox" id="tercero_afiliado" name="tercero_afiliado" value="tercero_afiliado"> Afiliado
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_autoretenedor_cree">
-					<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree" <%- parseInt(tercero_autoretenedor_cree) ? 'checked': ''%>> Autorretenedor CREE
+					<input type="checkbox" id="tercero_autoretenedor_cree" name="tercero_autoretenedor_cree" value="tercero_autoretenedor_cree"> Autorretenedor CREE
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_socio">
-					<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio" <%- parseInt(tercero_socio) ? 'checked': ''%>> Socio
+					<input type="checkbox" id="tercero_socio" name="tercero_socio" value="tercero_socio"> Socio
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_mandatario">
-					<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario" <%- parseInt(tercero_mandatario) ? 'checked': ''%>> Mandatario
+					<input type="checkbox" id="tercero_mandatario" name="tercero_mandatario" value="tercero_mandatario"> Mandatario
 				</label>
 			</div>
 		</div>
-
 		<div class="row">
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_gran_contribuyente">
-					<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente" <%- parseInt(tercero_gran_contribuyente) ? 'checked': ''%>> Gran contribuyente
+					<input type="checkbox" id="tercero_gran_contribuyente" name="tercero_gran_contribuyente" value="tercero_gran_contribuyente"> Gran contribuyente
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_autoretenedor_renta">
-					<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta" <%- parseInt(tercero_autoretenedor_renta) ? 'checked': ''%>> Autorretenedor renta
+					<input type="checkbox" id="tercero_autoretenedor_renta" name="tercero_autoretenedor_renta" value="tercero_autoretenedor_renta"> Autorretenedor renta
 				</label>
 			</div>
 			<div class="form-group col-md-2">
-				<label class="checkbox-inline" for="tercero_vendedor">
-					<input type="checkbox" id="tercero_vendedor" name="tercero_vendedor" value="tercero_vendedor" <%- parseInt(tercero_vendedor) ? 'checked': ''%>> Vendedor
+				<label class="checkbox-inline" for="tercero_vendedor_estado">
+					<input type="checkbox" id="tercero_vendedor_estado" name="tercero_vendedor_estado" value="tercero_vendedor_estado"> Vendedor
 				</label>
 			</div>
 			<div class="form-group col-md-2">
 				<label class="checkbox-inline" for="tercero_otro">
-					<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro" <%- parseInt(tercero_otro) ? 'checked': ''%>> Otro
+					<input type="checkbox" id="tercero_otro" name="tercero_otro" value="tercero_otro"> Otro
 				</label>
 			</div>
 			<div class="form-group col-md-4">
-				<input id="tercero_cual" value="<%- tercero_cual %>" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
+				<input id="tercero_cual" placeholder="¿Cual?" class="form-control input-sm" name="tercero_cual" type="text" maxlength="15">
 			</div>
 		</div>
 	</form>
