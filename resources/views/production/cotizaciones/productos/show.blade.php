@@ -528,7 +528,7 @@
 
 		@ability ('utilidades' | 'cotizaciones')
 			<div class="row">
-			    <div class="col-md-6 col-md-offset-3">
+			    <div class="col-md-8 col-md-offset-2">
 			        <div class="box box-danger">
 			                {{-- Content informacion --}}
 			                {{--*/ $subtotal = $total = $viaticos = 0; /*--}}
@@ -547,6 +547,7 @@
 								$prevtotaltransportes = $totaltransportes;
 								$totaltransportes = $totaltransportes/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
 			                    $subtotal = $cotizacion2->cotizacion2_precio_venta + $viaticos + $totalmaterialesp + $totalareasp + $totalempaques + $totaltransportes;
+								$subtotal = $subtotal != 0 ? $subtotal : 1;
 								$percentageprecio = ($cotizacion2->cotizacion2_precio_venta/$subtotal)*100;
 								$percentageviaticos = ($viaticos/$subtotal)*100;
 								$percentagematerialesp = ($totalmaterialesp/$subtotal)*100;
@@ -560,7 +561,12 @@
 								$iva = round($cotizacion2->cotizacion2_total_valor_unitario * ($cotizacion->cotizacion1_iva/100));
 								$total = $cotizacion2->cotizacion2_total_valor_unitario + $iva;
 			                /*--}}
-
+							<div class="box-header">
+								<h3 class="box-title">{{ $cotizacion2->cotizacion2_referencia }}</h3>
+								<div class="box-tools">
+									<h5>{{ $cotizacion2->cotizacion2_cantidad }}</h5>
+								</div>
+							</div>
 							<div class="box-body">
 								<div class="list-group">
 								    <div class="list-group-item list-group-item-info">

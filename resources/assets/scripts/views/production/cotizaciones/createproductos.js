@@ -21,7 +21,8 @@ app || (app = {});
             'submit #form-areap-producto': 'onStoreAreap',
             'submit #form-transporte-producto': 'onStoreTransporte',
             'change .total-calculate': 'totalCalculate',
-            'change .change-insumo': 'changeInsumo'
+            'change .change-insumo': 'changeInsumo',
+            'change .change-info-title': 'changeInfoTitle',
         },
         parameters: {
             data: {
@@ -339,6 +340,16 @@ app || (app = {});
                 this.$inputinsumo.val(0);
                 this.$historialinsumo.empty();
             }
+        },
+
+        /**
+        * Event change info
+        */
+        changeInfoTitle: function (e) {
+            e.preventDefault();
+
+            var selected = this.$(e.currentTarget);
+            $('#' + selected.data('input-info')).text(selected.val());
         },
 
         /**

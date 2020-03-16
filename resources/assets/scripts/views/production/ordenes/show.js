@@ -37,11 +37,9 @@ app || (app = {});
         },
 
         render: function () {
-            var attributes = this.model.toJSON();
+            this.tiempopList = new app.TiempopList();
 
-            if (this.model.get('permission') || this.parameters.resumido == 'true') {
-                this.tiempopList = new app.TiempopList();
-            } else {
+            if (!this.parameters.resumido) {
                 _.bindAll(this, 'onSessionRequestComplete');
 
                 this.$iva = this.$('#orden_iva');
@@ -63,18 +61,17 @@ app || (app = {});
                 if ($('#tab_graficas').length) {
                     this.referenceCharts()
                 }
-
-                this.referenceViews();
                 this.uploadPictures();
             }
 
+            this.referenceViews();
         },
 
         /**
         * reference to views
         */
         referenceViews: function () {
-            if (!this.model.get('permission')) {
+            if (!this.parameters.resumido) {
                 // Productos list
                 this.productopOrdenListView = new app.ProductopOrdenListView( {
                     collection: this.productopOrdenList,
@@ -128,7 +125,7 @@ app || (app = {});
                 parameters: {
                     dataFilter: {
                         call: 'ordenp',
-                        orden2_orden: this.model.get('id')
+                        ordenp: this.model.get('id')
                     }
                }
             });

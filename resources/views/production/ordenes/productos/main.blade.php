@@ -83,13 +83,13 @@
                         <div class="row">
                             <label for="orden2_referencia" class="col-sm-1 control-label">Referencia</label>
                             <div class="form-group col-md-8">
-                                <input id="orden2_referencia" value="<%- orden2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="orden2_referencia" type="text" maxlength="200" required>
+                                <input id="orden2_referencia" value="<%- orden2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper change-info-title" name="orden2_referencia" type="text" maxlength="200" data-input-info="info-referencia" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <label for="orden2_cantidad" class="col-sm-1 control-label">Cantidad</label>
                             <div class="form-group col-sm-2">
-                                <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm total-calculate" name="orden2_cantidad" type="number" min="1" required>
+                                <input id="orden2_cantidad" value="<%- orden2_cantidad %>" class="form-control input-sm total-calculate change-info-title" name="orden2_cantidad" type="number" min="1" data-input-info="info-cantidad" required>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -641,8 +641,14 @@
 
             @ability ('utilidades' | 'ordenes')
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-8 col-md-offset-2">
                         <div class="box box-primary">
+                            <div class="box-header">
+                                <h3 class="box-title" id="info-referencia"><%- orden2_referencia %></h3>
+                                <div class="box-tools">
+                                    <h5 id="info-cantidad"><%- orden2_cantidad %></h5>
+                                </div>
+                            </div>
                             <div class="box-body">
                                 <div class="list-group">
                                     <div class="list-group-item list-group-item-info">

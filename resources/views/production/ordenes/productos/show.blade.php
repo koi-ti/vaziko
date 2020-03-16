@@ -518,7 +518,7 @@
 
 		@ability ('utilidades' | 'ordenes')
 			<div class="row">
-				<div class="col-md-6 col-md-offset-3">
+				<div class="col-md-8 col-md-offset-2">
 					<div class="box box-primary">
 						{{-- Content informacion --}}
 						{{--*/ $subtotal = $total = $transporte = $viaticos = 0; /*--}}
@@ -539,6 +539,7 @@
 							$prevtotaltransportes = $totaltransportes;
 							$totaltransportes = $totaltransportes/((100-$ordenp2->orden2_margen_transporte)/100);
 							$subtotal = $ordenp2->orden2_precio_venta + $viaticos + $totalmaterialesp + $totalareasp + $totalempaques + $totaltransportes;
+							$subtotal = $subtotal != 0 ? $subtotal : 1;
 							$percentageprecio = ($ordenp2->orden2_precio_venta/$subtotal)*100;
 							$percentageviaticos = ($viaticos/$subtotal)*100;
 							$percentagematerialesp = ($totalmaterialesp/$subtotal)*100;
@@ -553,6 +554,12 @@
 							$total = $ordenp2->orden2_total_valor_unitario + $iva;
 						/*--}}
 
+						<div class="box-header">
+							<h3 class="box-title">{{ $ordenp2->orden2_referencia }}</h3>
+							<div class="box-tools">
+								<h5>{{ $ordenp2->orden2_cantidad }}</h5>
+							</div>
+						</div>
 						<div class="box-body">
 							<div class="list-group">
 								<div class="list-group-item list-group-item-info">

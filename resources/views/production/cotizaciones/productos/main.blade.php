@@ -90,13 +90,13 @@
                         <div class="row">
                             <label for="cotizacion2_referencia" class="col-sm-1 control-label">Referencia</label>
                             <div class="form-group col-md-8">
-                                <input id="cotizacion2_referencia" value="<%- cotizacion2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper" name="cotizacion2_referencia" type="text" maxlength="200" required>
+                                <input id="cotizacion2_referencia" value="<%- cotizacion2_referencia %>" placeholder="Referencia" class="form-control input-sm input-toupper change-info-title" name="cotizacion2_referencia" type="text" maxlength="200" data-input-info="info-referencia" required>
                                 <div class="help-block with-errors"></div>
                             </div>
 
                             <label for="cotizacion2_cantidad" class="col-sm-1 control-label">Cantidad</label>
                             <div class="form-group col-md-2">
-                                <input id="cotizacion2_cantidad" value="<%- cotizacion2_cantidad %>" class="form-control input-sm total-calculate" name="cotizacion2_cantidad" type="number" min="1" required>
+                                <input id="cotizacion2_cantidad" value="<%- cotizacion2_cantidad %>" class="form-control input-sm total-calculate change-info-title" name="cotizacion2_cantidad" type="number" min="1" data-input-info="info-cantidad" required>
                                 <div class="help-block with-errors"></div>
                             </div>
                         </div>
@@ -664,8 +664,14 @@
 
             @ability ('utilidades' | 'cotizaciones')
                 <div class="row">
-                    <div class="col-md-6 col-md-offset-3">
+                    <div class="col-md-8 col-md-offset-2">
                         <div class="box box-danger">
+                            <div class="box-header">
+                                <h3 class="box-title" id="info-referencia"><%- cotizacion2_referencia %></h3>
+                                <div class="box-tools">
+                                    <h5 id="info-cantidad"><%- cotizacion2_cantidad %></h5>
+                                </div>
+                            </div>
                             <div class="box-body">
                                 <div class="list-group">
                                     <div class="list-group-item list-group-item-info">

@@ -34,7 +34,7 @@ class TiempopController extends Controller
                 }
 
                 if ($request->call == 'ordenp') {
-                    $data = Tiempop::getTiempospOrdenp($request->orden2_orden);
+                    $data = Tiempop::getTiempospOrdenp($request->ordenp);
                 }
             }
             return response()->json($data);

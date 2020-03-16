@@ -263,9 +263,9 @@
                 <thead>
                     <tr>
                         <th width="20%">Tercero</th>
-                        <th width="6%">Fecha</th>
-                        <th width="5%">H. inicio</th>
-                        <th width="5%">H. fin</th>
+                        <th width="10%">Fecha</th>
+                        <th width="10%">H. inicio</th>
+                        <th width="10%">H. fin</th>
                         <th width="15%">Actividad</th>
                         <th width="20%">Subactividad</th>
                         <th width="25%">Área</th>
@@ -289,11 +289,13 @@
 </section>
 
 <script type="text/template" id="ordenp-tiempop-item-list-tpl">
-    <td><%- tercero_nombre %></td>
-    <td><%- tiempop_fecha %></td>
-    <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
-    <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-    <td><%- actividadp_nombre %></td>
-    <td><%- subactividadp_nombre || '-' %></td>
-    <td><%- areap_nombre %></td>
+    <tr>
+        <td><%- tercero_nombre %></td>
+        <td><%- tiempop_fecha %></td>
+        <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
+        <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
+        <td><%- actividadp_nombre %></td>
+        <td><%- subactividadp_nombre || '-' %></td>
+        <td><%- areap_nombre %></td>
+    </tr>
 </script>
