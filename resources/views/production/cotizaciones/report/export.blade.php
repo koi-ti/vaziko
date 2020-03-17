@@ -11,10 +11,8 @@
 				</td>
 			</tr>
 			<tr>
-				<th align="left" valign="top" class="border-tbl">Referencia:</th>
-				<td colspan="2" valign="top" class="border-tbr">{{ $cotizacion->cotizacion1_referencia }}</td>
-				<th align="left" valign="top" class="border-tbl">Suministran:</th>
-				<td colspan="6" valign="top" class="border-tbr">{{ $cotizacion->cotizacion1_suministran }}</td>
+				<td align="left" colspan="3" valign="top" class="border-tbl"><b>Referencia:</b> {{ $cotizacion->cotizacion1_referencia }}</td>
+				<td align="left" colspan="7" valign="top" class="border-tbl"><b>Suministran:</b> {{ $cotizacion->cotizacion1_suministran }}</td>
 			</tr>
 			<tr>
 				<th colspan="6" align="left" class="border">Cliente</th>
@@ -22,37 +20,25 @@
 				<th colspan="2" align="left" class="border">Transporte:</th>
 			</tr>
 			<tr>
-				<th align="left" class="border-left">Compañía:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tercero_nombre }}</td>
-				<th align="left" class="noborder">Nit:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tercero_nit }}</td>
+				<td align="left" colspan="3" class="border-left"><b>Compañía:</b> {{ $cotizacion->tercero_nombre }}</td>
+				<td align="left" colspan="3" class="noborder"><b>Nit:</b> {{ $cotizacion->tercero_nit }}</td>
 
 				<td colspan="2" rowspan="2" class="border"></td>
 				<td colspan="2" rowspan="2" class="border"></td>
 			</tr>
 			<tr>
-				<th align="left" class="border-left">Dirección:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tercero_direccion }}</td>
-				<th align="left" class="noborder">Celular:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tercero_celular }}</td>
+				<td align="left" colspan="3" class="border-left"><b>Dirección:</b> {{ $cotizacion->tercero_direccion }}</td>
+				<td align="left" colspan="3" class="noborder"><b>Celular:</b> {{ $cotizacion->tercero_celular }}</td>
 			</tr>
 			<tr>
-				<th align="left" class="border-left">Contacto:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tcontacto_nombre }}</td>
-				<th align="left" class="noborder">Teléfono:</th>
-				@if( !empty( $cotizacion->tercero_telefono1 ) )
-					<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono1 }}</td>
-				@else
-					<td colspan="2" class="noborder">{{ $cotizacion->tercero_telefono2 }}</td>
-				@endif
+				<td align="left" colspan="3" class="border-left"><b>Contacto:</b> {{ $cotizacion->tcontacto_nombre }}</td>
+				<td align="left" colspan="3" class="noborder"><b>Teléfono:</b> {{ !empty( $cotizacion->tercero_telefono1) ? $cotizacion->tercero_telefono1 : $cotizacion->tercero_telefono2}}</td>
 				<th colspan="2" align="left" class="border">Tomado por:</th>
 				<td colspan="2" class="border">{{ $cotizacion->usuario_nombre }}</td>
 			</tr>
 			<tr>
-				<th align="left" class="border-left">Email:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->tcontacto_email }}</td>
-				<th align="left" class="noborder">Ciudad:</th>
-				<td colspan="2" class="noborder">{{ $cotizacion->municipio_nombre }}</td>
+				<td align="left" colspan="3" class="border-left"><b>Email:</b> {{ $cotizacion->tcontacto_email }}</td>
+				<td align="left" colspan="3" class="noborder"><b>Ciudad:</b> {{ $cotizacion->municipio_nombre }}</td>
 				<th colspan="2" align="left" class="border">Términos:</th>
 				<td colspan="2" class="border">{{ $cotizacion->cotizacion1_formapago }}</td>
 			</tr>
@@ -88,7 +74,7 @@
 								{!! isset($cotizacion2->materialp_nombre) ? "Material: $cotizacion2->materialp_nombre <br>" : "" !!}
 								{!! isset($cotizacion2->acabadop_nombre) ? "Acabado: $cotizacion2->acabadop_nombre <br>" : ""  !!}
 								{!! isset($cotizacion2->empaque_nombre) ? "Empaque: $cotizacion2->empaque_nombre <br>" : ""  !!}
-								{!! isset($cotizacion2->transporte_nombre) ? "Transporte: $cotizacion2->transporte_nombre <br>" : ""  !!}
+								{!! !empty($cotizacion2->transporte_nombre) ? "Transporte: $cotizacion2->transporte_nombre <br>" : ""  !!}
 							</p>
 							@if ($cotizacion2->imagenes != [])
 								<table class="rtable" border="0">

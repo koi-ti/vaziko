@@ -497,7 +497,7 @@ class Cotizacion1Controller extends Controller
             $empaques = $query->first();
 
             $query = Cotizacion10::query();
-            $query->select(DB::raw("GROUP_CONCAT(areap_nombre SEPARATOR ', ') AS transporte_nombre, GROUP_CONCAT(cotizacion10_nombre SEPARATOR ', ') AS cotizacion10_nombre"));
+            $query->select(DB::raw("CONCAT_WS(', ', GROUP_CONCAT(areap_nombre SEPARATOR ', '), GROUP_CONCAT(cotizacion10_nombre SEPARATOR ', ')) AS transporte_nombre"));
             $query->leftJoin('koi_areap', 'cotizacion10_transporte', '=', 'koi_areap.id');
             $query->where('cotizacion10_cotizacion2', $cotizacion2->id);
             $transportes = $query->first();
@@ -506,7 +506,7 @@ class Cotizacion1Controller extends Controller
             $cotizacion2->materialp_nombre = $materialesp->materialp_nombre;
             $cotizacion2->acabadop_nombre = $acabadosp->acabadop_nombre;
             $cotizacion2->empaque_nombre = $empaques->empaque_nombre;
-            $cotizacion2->transporte_nombre = "{$transportes->transporte_nombre}, {$transportes->cotizacion10_nombre}";
+            $cotizacion2->transporte_nombre = $transportes->transporte_nombre;
 
             $data[] = $cotizacion2;
         }
