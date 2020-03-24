@@ -653,13 +653,28 @@
                                 <div class="list-group">
                                     @ability ('especial' | 'ordenes')
                                         <div class="list-group-item list-group-item-danger">
-                                            <div id="info-subtotal-header" class="pull-right"></div><br>
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <div id="info-subtotal-header" class="pull-right"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="list-group-item list-group-item-danger">
-                                            <div id="info-iva-header" class="pull-right"></div><br>
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>IVA</b></div>
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <div id="info-iva-header" class="pull-right"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="list-group-item list-group-item-danger">
-                                            <div id="info-total-header" class="pull-right"></div><br>
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Total</b></div>
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <div id="info-total-header" class="pull-right"></div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="list-group-item list-group-item-info">
                                             <div class="row">

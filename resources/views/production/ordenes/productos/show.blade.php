@@ -560,13 +560,28 @@
 							<div class="list-group">
 								@ability ('especial' | 'ordenes')
 									<div class="list-group-item list-group-item-danger">
-										<div class="pull-right">$ {{ number_format($subtotal * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<div class="pull-right">$ {{ number_format($subtotal * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div>
+											</div>
+										</div>
 									</div>
 									<div class="list-group-item list-group-item-danger">
-										<div class="pull-right">$ {{ number_format($iva * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>IVA</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<div class="pull-right">$ {{ number_format($iva * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div>
+											</div>
+										</div>
 									</div>
 									<div class="list-group-item list-group-item-danger">
-										<div class="pull-right">$ {{ number_format($total * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<div class="pull-right">$ {{ number_format($total * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div>
+											</div>
+										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
