@@ -87,7 +87,11 @@ app || (app = {});
             this.$inputdescuento = this.$('#orden2_descuento');
             this.$inputcomision = this.$('#orden2_comision');
 
-            // Informacion Cotizacion
+            // Informacion Ordenes
+            this.$infosubtotalheader = this.$('#info-subtotal-header');
+            this.$infoivaheader = this.$('#info-iva-header');
+            this.$infototalheader = this.$('#info-total-header');
+
             this.$infoprecio = this.$('#info-precio');
             this.$percentageprecio = this.$('#percentage-precio');
             this.$infoviaticos = this.$('#info-viaticos');
@@ -424,6 +428,10 @@ app || (app = {});
 
             this.$infoiva.html('$ ' + window.Misc.currency(iva));
             this.$infototal.html('$ ' + window.Misc.currency(total));
+
+            this.$infosubtotalheader.html('$ ' + window.Misc.currency(subtotal * cantidad));
+            this.$infoivaheader.html('$ ' + window.Misc.currency(iva * cantidad));
+            this.$infototalheader.html('$ ' + window.Misc.currency(total * cantidad));
         },
 
         /**

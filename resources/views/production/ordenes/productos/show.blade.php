@@ -323,6 +323,7 @@
 					</div>
 					<div class="box-body table-responsive no-padding">
 						<table id="browse-orden-producto-materiales-list" class="table table-bordered" cellspacing="0" width="100%">
+							{{--*/ $totalmaterialesp = 0; /*--}}
 							<thead>
 								<tr>
 									<th width="25%">Material</th>
@@ -330,8 +331,6 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'ordenes')
-										{{--*/ $totalmaterialesp = 0; /*--}}
-
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
@@ -347,9 +346,9 @@
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($materialp->orden4_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($materialp->orden4_valor_total, 2, ',', '.') }}</td>
-
-											{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 										@endability
+
+										{{--*/ $totalmaterialesp += $materialp->orden4_valor_total; /*--}}
 									</tr>
 								@endforeach
 							</tbody>
@@ -373,14 +372,13 @@
 					<div class="box-body">
 						<div class="box-body table-responsive no-padding">
 							<table id="browse-orden-producto-areas-list" class="table table-bordered" cellspacing="0" width="100%">
+								{{--*/ $area = $totalareasp = 0; /*--}}
 								<thead>
 									<tr>
 										<th>Área</th>
 										<th>Nombre</th>
 										<th>Horas</th>
 										@ability ('precios' | 'ordenes')
-											{{--*/ $area = $totalareasp = 0; /*--}}
-
 											<th>Valor</th>
 											<th>Total</th>
 										@endability
@@ -393,14 +391,14 @@
 											<td>{{ $areap->orden6_nombre == '' ? '-': $areap->orden6_nombre }}</td>
 											<td class="text-center">{{  $areap->orden6_tiempo }}</td>
 											@ability ('precios' | 'ordenes')
-												{{--*/
-													$tiempo = explode(':', $areap->orden6_tiempo);
-													$totalareasp += round (($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor);
-												/*--}}
-
 												<td class="text-right">{{ number_format($areap->orden6_valor, 2, ',', '.') }}</td>
 												<td class="text-right">{{ number_format($area, 2, ',', '.') }}</td>
 											@endability
+
+											{{--*/
+												$tiempo = explode(':', $areap->orden6_tiempo);
+												$totalareasp += round (($tiempo[0] + ($tiempo[1] / 60)) * $areap->orden6_valor);
+											/*--}}
 										</tr>
 									@endforeach
 								</tbody>
@@ -424,6 +422,7 @@
 					</div>
 					<div class="box-body table-responsive no-padding">
 						<table id="browse-orden-producto-empaques-list" class="table table-bordered" cellspacing="0" width="100%">
+							{{--*/ $totalempaques = 0; /*--}}
 							<thead>
 								<tr>
 									<th width="25%">Empaque</th>
@@ -431,8 +430,6 @@
 									<th width="10%">Medidas</th>
 									<th width="10%">Cantidad</th>
 									@ability ('precios' | 'ordenes')
-										{{--*/ $totalempaques = 0; /*--}}
-
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
@@ -448,9 +445,9 @@
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($empaque->orden9_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($empaque->orden9_valor_total, 2, ',', '.') }}</td>
-
-											{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 										@endability
+
+										{{--*/ $totalempaques += $empaque->orden9_valor_total; /*--}}
 									</tr>
 								@endforeach
 							</tbody>
@@ -473,14 +470,13 @@
 					</div>
 					<div class="box-body table-responsive no-padding">
 						<table id="browse-orden-producto-transportes-list" class="table table-bordered" cellspacing="0" width="100%">
+							{{--*/ $totaltransportes = 0; /*--}}
 							<thead>
 								<tr>
 									<th width="25%">Transporte</th>
 									<th width="25%">Nombre</th>
 									<th width="10%">Tiempo</th>
 									@ability ('precios' | 'ordenes')
-										{{--*/ $totaltransportes = 0; /*--}}
-
 										<th width="15%">Valor unidad</th>
 										<th width="15%">Valor</th>
 									@endability
@@ -495,9 +491,9 @@
 										@ability ('precios' | 'ordenes')
 											<td class="text-right">{{ number_format($transporte->orden10_valor_unitario, 2, ',', '.') }}</td>
 											<td class="text-right">{{ number_format($transporte->orden10_valor_total, 2, ',', '.') }}</td>
-
-											{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 										@endability
+
+										{{--*/ $totaltransportes += $transporte->orden10_valor_total; /*--}}
 									</tr>
 								@endforeach
 							</tbody>
@@ -562,121 +558,148 @@
 						</div>
 						<div class="box-body">
 							<div class="list-group">
-								<div class="list-group-item list-group-item-info">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Precio</b></div>
-										<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageprecio, 2) }}%</small></div>
+								@ability ('especial' | 'ordenes')
+									<div class="list-group-item list-group-item-danger">
+										<div class="pull-right">$ {{ number_format($subtotal * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
 									</div>
-								</div>
-								<div class="list-group-item list-group-item-info">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
-										<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($viaticos, 2, ',', '.')}}</b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageviaticos, 2) }}%</small></div>
+									<div class="list-group-item list-group-item-danger">
+										<div class="pull-right">$ {{ number_format($iva * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
 									</div>
-								</div>
+									<div class="list-group-item list-group-item-danger">
+										<div class="pull-right">$ {{ number_format($total * $ordenp2->orden2_cantidad, 2, ',', '.') }}</div><br>
+									</div>
+									<div class="list-group-item list-group-item-info">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+											<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($ordenp2->orden2_precio_venta, 2, ',', '.')}}</b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageprecio, 2) }}%</small></div>
+										</div>
+									</div>
+									<div class="list-group-item list-group-item-info">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+											<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($viaticos, 2, ',', '.')}}</b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageviaticos, 2) }}%</small></div>
+										</div>
+									</div>
+								@endability
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Materiales</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_materialp }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagematerialesp, 2) }}%</small></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_materialp }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagematerialesp, 2) }}%</small></div>
+										@endability
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_areap }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalareasp, 2, ',', '.') }}</span></b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageareasp, 2) }}%</small></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_areap }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalareasp, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageareasp, 2) }}%</small></div>
+										@endability
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_empaque }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageempaques, 2) }}%</small></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_empaque }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageempaques, 2) }}%</small></div>
+										@endability
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_transporte }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totaltransportes, 2, ',', '.') }}</span></b></div>
-										<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagetransportes, 2) }}%</small></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_transporte }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totaltransportes, 2, ',', '.') }}</span></b></div>
+											<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagetransportes, 2) }}%</small></div>
+										@endability
 									</div>
 								</div>
-								<div class="list-group-item list-group-item-success">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
-										<div class="col-xs-10 col-sm-10 text-right">
-											<span class="pull-right badge bg-red">$ {{ number_format($subtotal, 2, ',', '.') }}</span>
+								@ability ('especial' | 'ordenes')
+									<div class="list-group-item list-group-item-success">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<span class="pull-right badge bg-red">$ {{ number_format($subtotal, 2, ',', '.') }}</span>
+											</div>
 										</div>
 									</div>
-								</div>
+								@endability
 								<div class="list-group-item list-group-item-success">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Descuento</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotaldescuento, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_descuento }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totaldescuento, 2, ',', '.') }}</span></b></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaldescuento, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_descuento }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totaldescuento, 2, ',', '.') }}</span></b></div>
+										@endability
 									</div>
 								</div>
 								<div class="list-group-item list-group-item-success">
 									<div class="row">
 										<div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
-										<div class="col-xs-6 col-sm-3 text-right"><small class="badge bg-red">{{ number_format($prevtotalcomision, 2, ',', '.') }}</small></div>
-										<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_comision }}</div>
-										<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
-										<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalcomision, 2, ',', '.') }}</span></b></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalcomision, 2, ',', '.') }}</small></div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_comision }}</div>
+											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											<div class="col-xs-6 col-sm-4 text-right"><b><span>{{ number_format($totalcomision, 2, ',', '.') }}</span></b></div>
+										@endability
 									</div>
 								</div>
-								<div class="list-group-item list-group-item-success">
-									<div class="row">
-										<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
-										<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_volumen }}</div>
-										<div class="col-xs-12 col-sm-8 text-right">
-											<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_vtotal, 2, ',', '.') }}</span>
+								@ability ('especial' | 'ordenes')
+									<div class="list-group-item list-group-item-success">
+										<div class="row">
+											<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
+											<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_volumen }}</div>
+											<div class="col-xs-12 col-sm-8 text-right">
+												<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_vtotal, 2, ',', '.') }}</span>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="list-group-item list-group-item-success">
-									<div class="row">
-										<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
-										<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_round }}</div>
-										<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
-										<div class="col-xs-10 col-sm-4 text-right">
-											<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_total_valor_unitario, 2, ',', '.') }}</span>
+									<div class="list-group-item list-group-item-success">
+										<div class="row">
+											<div class="col-xs-10 col-sm-2"><b>Redondear</b></div>
+											<div class="col-xs-2 col-sm-2">{{ $ordenp2->orden2_round }}</div>
+											<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-4 text-right">
+												<span class="pull-right badge bg-red">$ {{ number_format($ordenp2->orden2_total_valor_unitario, 2, ',', '.') }}</span>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="list-group-item list-group-item-danger">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>IVA ({{ $orden->orden_iva }}%)</b></div>
-										<div class="col-xs-10 col-sm-10 text-right">
-											<span class="pull-right badge bg-green">{{ number_format($iva, 2, ',', '.') }}</span>
+									<div class="list-group-item list-group-item-danger">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>IVA ({{ $orden->orden_iva }}%)</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<span class="pull-right badge bg-green">{{ number_format($iva, 2, ',', '.') }}</span>
+											</div>
 										</div>
 									</div>
-								</div>
-								<div class="list-group-item list-group-item-danger">
-									<div class="row">
-										<div class="col-xs-2 col-sm-2"><b>Total</b></div>
-										<div class="col-xs-10 col-sm-10 text-right">
-											<span class="pull-right badge bg-green">{{ number_format($total, 2, ',', '.') }}</span>
+									<div class="list-group-item list-group-item-danger">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Total</b></div>
+											<div class="col-xs-10 col-sm-10 text-right">
+												<span class="pull-right badge bg-green">{{ number_format($total, 2, ',', '.') }}</span>
+											</div>
 										</div>
 									</div>
-								</div>
+								@endability
 							</div>
 						</div>
 						<div class="box-footer">

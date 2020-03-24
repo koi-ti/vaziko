@@ -651,138 +651,165 @@
                             </div>
                             <div class="box-body">
                                 <div class="list-group">
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
-                                            <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-precio"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-precio" class="badge bg-info">0%</small></div>
+                                    @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-danger">
+                                            <div id="info-subtotal-header" class="pull-right"></div><br>
                                         </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
-                                            <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-viaticos"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-viaticos" class="badge bg-info">0%</small></div>
+                                        <div class="list-group-item list-group-item-danger">
+                                            <div id="info-iva-header" class="pull-right"></div><br>
                                         </div>
-                                    </div>
+                                        <div class="list-group-item list-group-item-danger">
+                                            <div id="info-total-header" class="pull-right"></div><br>
+                                        </div>
+                                        <div class="list-group-item list-group-item-info">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+                                                <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-precio"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-precio" class="badge bg-info">0%</small></div>
+                                            </div>
+                                        </div>
+                                        <div class="list-group-item list-group-item-info">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+                                                <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-viaticos"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-viaticos" class="badge bg-info">0%</small></div>
+                                            </div>
+                                        </div>
+                                    @endability
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Materiales</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-materiales" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm total-calculate" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-materiales"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-materiales" class="badge bg-info">0%</small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-materiales" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm total-calculate" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-materiales"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-materiales" class="badge bg-info">0%</small></div>
+                                            @endability
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_margen_areap" name="orden2_margen_areap" class="form-control input-sm total-calculate" value="<%- orden2_margen_areap %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-areasp"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-areasp" class="badge bg-info">0%</small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_margen_areap" name="orden2_margen_areap" class="form-control input-sm total-calculate" value="<%- orden2_margen_areap %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-areasp"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-areasp" class="badge bg-info">0%</small></div>
+                                            @endability
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-empaques" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_margen_empaque" name="orden2_margen_empaque" class="form-control input-sm total-calculate" value="<%- orden2_margen_empaque %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-empaques"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-empaques" class="badge bg-info">0%</small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-empaques" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_margen_empaque" name="orden2_margen_empaque" class="form-control input-sm total-calculate" value="<%- orden2_margen_empaque %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-empaques"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-empaques" class="badge bg-info">0%</small></div>
+                                            @endability
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_margen_transporte" name="orden2_margen_transporte" class="form-control input-sm total-calculate" value="<%- orden2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-transportes"></span></b></div>
-                                            <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-transportes" class="badge bg-info">0%</small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_margen_transporte" name="orden2_margen_transporte" class="form-control input-sm total-calculate" value="<%- orden2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-transportes"></span></b></div>
+                                                <div class="col-xs-1 col-sm-1 text-right"><small id="percentage-transportes" class="badge bg-info">0%</small></div>
+                                            @endability
                                         </div>
                                     </div>
-                                    <div class="list-group-item list-group-item-success">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right">
-                                                <span class="pull-right badge bg-red" id="info-subtotal"></span>
+                                    @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-success">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <span class="pull-right badge bg-red" id="info-subtotal"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    @endability
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Descuento</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-descuento" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_descuento" name="orden2_descuento" class="form-control input-sm total-calculate" value="<%- orden2_descuento %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-descuento"></span></b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-descuento" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_descuento" name="orden2_descuento" class="form-control input-sm total-calculate" value="<%- orden2_descuento %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-descuento"></span></b></div>
+                                            @endability
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-success">
                                         <div class="row">
                                             <div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
-                                            <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
-                                            <div class="col-xs-4 col-sm-2 text-left">
-                                                <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- (!edit) ? '{{ ($orden->vendedor) ? $orden->vendedor->tercero_comision : 0 }}' : orden2_comision %>" type="number" min="0" max="100" step="0.1">
-                                            </div>
-                                            <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                            <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-4 col-sm-2 text-left">
+                                                    <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- (!edit) ? '{{ ($orden->vendedor) ? $orden->vendedor->tercero_comision : 0 }}' : orden2_comision %>" type="number" min="0" max="100" step="0.1">
+                                                </div>
+                                                <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
+                                                <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>
+                                            @endability
                                         </div>
                                     </div>
-                                    <div class="list-group-item list-group-item-success">
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>
-                                            <div class="col-xs-3 col-sm-2">
-                                                <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" max="99">
-                                            </div>
-                                            <div class="col-xs-12 col-sm-8 text-right">
-                                                <span class="pull-right badge bg-red" id="info-volumen"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-success">
-                                        <div class="row">
-                                            <div class="col-xs-3 col-sm-2"><b>Redondear</b></div>
-                                            <div class="col-xs-3 col-sm-2">
-                                                <input id="orden2_round" name="orden2_round" class="form-control input-sm total-calculate" value="<%- orden2_round %>" type="number" min="-3" max="3" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
-                                            </div>
-                                            <div class="col-xs-3 col-sm-2 col-sm-offset-2"><b>Total</b></div>
-                                            <div class="col-xs-3 col-sm-4 text-right">
-                                                <span class="pull-right badge bg-red" id="info-pretotal"></span>
+                                    @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-success">
+                                            <div class="row">
+                                                <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>
+                                                <div class="col-xs-3 col-sm-2">
+                                                    <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" max="99">
+                                                </div>
+                                                <div class="col-xs-12 col-sm-8 text-right">
+                                                    <span class="pull-right badge bg-red" id="info-volumen"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-danger">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>IVA ({{ $orden->orden_iva }}%)</b></div>
-                                            <input type="hidden" id="iva_orden" name="iva_orden" value="{{ $orden->orden_iva }}">
-                                            <div class="col-xs-10 col-sm-10 text-right">
-                                                <span class="pull-right badge bg-green" id="info-iva"></span>
+                                        <div class="list-group-item list-group-item-success">
+                                            <div class="row">
+                                                <div class="col-xs-3 col-sm-2"><b>Redondear</b></div>
+                                                <div class="col-xs-3 col-sm-2">
+                                                    <input id="orden2_round" name="orden2_round" class="form-control input-sm total-calculate" value="<%- orden2_round %>" type="number" min="-3" max="3" step="1" title="Si el digito se encuentra en 0, sera redondeado automaticamente">
+                                                </div>
+                                                <div class="col-xs-3 col-sm-2 col-sm-offset-2"><b>Total</b></div>
+                                                <div class="col-xs-3 col-sm-4 text-right">
+                                                    <span class="pull-right badge bg-red" id="info-pretotal"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-danger">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Total</b></div>
-                                            <div class="col-xs-10 col-sm-10 text-right">
-                                                <span class="pull-right badge bg-green" id="info-total"></span>
+                                        <div class="list-group-item list-group-item-danger">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>IVA ({{ $orden->orden_iva }}%)</b></div>
+                                                <input type="hidden" id="iva_orden" name="iva_orden" value="{{ $orden->orden_iva }}">
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <span class="pull-right badge bg-green" id="info-iva"></span>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                        <div class="list-group-item list-group-item-danger">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Total</b></div>
+                                                <div class="col-xs-10 col-sm-10 text-right">
+                                                    <span class="pull-right badge bg-green" id="info-total"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endability
                                 </div>
                             </div>
                             <div class="box-footer">
