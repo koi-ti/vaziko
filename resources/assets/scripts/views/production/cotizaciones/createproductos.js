@@ -423,15 +423,15 @@ app || (app = {});
             this.$infoprevcomision.html(window.Misc.currency(totaldescuento));
             this.$infocomision.html('$ ' + window.Misc.currency(totalcomision));
 
-            this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal));
+            this.$infosubtotal.html('$ ' + window.Misc.currency(subtotal) + ' x ' + cantidad);
             this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
             this.$infopretotal.html('$ ' + window.Misc.currency(pretotal));
 
             var iva = Math.round(pretotal * (this.iva/100)),
                 total = pretotal + iva;
 
-            this.$infoiva.html('$ ' + window.Misc.currency(iva));
-            this.$infototal.html('$ ' + window.Misc.currency(total));
+            this.$infoiva.html('$ ' + window.Misc.currency(iva) + ' x ' + cantidad);
+            this.$infototal.html('$ ' + window.Misc.currency(total) + ' x ' + cantidad);
 
             this.$infosubtotalheader.html('$ ' + window.Misc.currency(subtotal * cantidad));
             this.$infoivaheader.html('$ ' + window.Misc.currency(iva * cantidad));

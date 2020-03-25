@@ -565,100 +565,81 @@
 							</div>
 							<div class="box-body">
 								<div class="list-group">
-									@ability ('especial' | 'cotizaciones')
-										<div class="list-group-item list-group-item-danger">
-											<div class="row">
-												<div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
-												<div class="col-xs-10 col-sm-10 text-right">
-													<div class="pull-right">$ {{ number_format($subtotal * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</div>
-												</div>
-											</div>
-										</div>
-										<div class="list-group-item list-group-item-danger">
-											<div class="row">
-												<div class="col-xs-2 col-sm-2"><b>IVA</b></div>
-												<div class="col-xs-10 col-sm-10 text-right">
-													<div class="pull-right">$ {{ number_format($iva * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</div>
-												</div>
-											</div>
-										</div>
-										<div class="list-group-item list-group-item-danger">
-											<div class="row">
-												<div class="col-xs-2 col-sm-2"><b>Total</b></div>
-												<div class="col-xs-10 col-sm-10 text-right">
-													<div class="pull-right">$ {{ number_format($total * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</div>
-												</div>
-											</div>
-										</div>
-									    <div class="list-group-item list-group-item-info">
-									        <div class="row">
-									            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
-									            <div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageprecio, 2) }}%</small></div>
-									        </div>
-									    </div>
-										<div class="list-group-item list-group-item-info">
-											<div class="row">
-												<div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+								    <div class="list-group-item list-group-item-info">
+								        <div class="row">
+								            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+											@ability ('especial' | 'cotizaciones')
+								            	<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($cotizacion2->cotizacion2_precio_venta, 2, ',', '.')}}</b></div>
+											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-10 @endability text-right"><small class="badge bg-info">{{ number_format($percentageprecio, 2) }}%</small></div>
+								        </div>
+								    </div>
+									<div class="list-group-item list-group-item-info">
+										<div class="row">
+											<div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-9 col-sm-9 text-right"><b>{{ number_format($viaticos, 2, ',', '.')}}</b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageviaticos, 2) }}%</small></div>
-											</div>
+											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-10 @endability text-right"><small class="badge bg-info">{{ number_format($percentageviaticos, 2) }}%</small></div>
 										</div>
-									@endability
+									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
 											<div class="col-xs-6 col-sm-2 text-left"><b>Materiales</b></div>
-											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
 											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-4 col-sm-2 text-right">{{ $cotizacion2->cotizacion2_margen_materialp }}</div>
 												<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
 												<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagematerialesp, 2) }}%</small></div>
 											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentagematerialesp, 2) }}%</small></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
 											<div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
-											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
 											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-4 col-sm-2 text-right">{{ $cotizacion2->cotizacion2_margen_areap }}</div>
 												<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
 												<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalareasp, 2, ',', '.') }}</span></b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageareasp, 2) }}%</small></div>
 											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageareasp, 2) }}%</small></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
 											<div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
-											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
 											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-4 col-sm-2 text-right">{{ $cotizacion2->cotizacion2_margen_empaque }}</div>
 												<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
 												<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentageempaques, 2) }}%</small></div>
 											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageempaques, 2) }}%</small></div>
 										</div>
 									</div>
 									<div class="list-group-item list-group-item-info">
 										<div class="row">
 											<div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
-											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
 											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-4 col-sm-2 text-right">{{ $cotizacion2->cotizacion2_margen_transporte }}</div>
 												<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
 												<div class="col-xs-5 col-sm-3 text-right"><b><span>{{ number_format($totaltransportes, 2, ',', '.') }}</span></b></div>
-												<div class="col-xs-1 col-sm-1 text-right"><small class="badge bg-info">{{ number_format($percentagetransportes, 2) }}%</small></div>
 											@endability
+											<div class="@ability ('especial' | 'cotizaciones') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentagetransportes, 2) }}%</small></div>
 										</div>
 									</div>
 									@ability ('especial' | 'cotizaciones')
 										<div class="list-group-item list-group-item-success">
 											<div class="row">
-												<div class="col-xs-2 col-sm-8"><b>Subtotal</b></div>
-												<div class="col-xs-10 col-sm-4 text-right">
-													<span class="pull-right badge bg-red">$ {{ number_format($subtotal, 2, ',', '.') }}</span>
+												<div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+												<div class="col-xs-10 col-sm-7 text-right">
+													<span class="badge bg-green">$ {{ number_format($subtotal, 2, ',', '.') }} x {{ $cotizacion2->cotizacion2_cantidad }}</span>
+												</div>
+												<div class="col-xs-10 col-sm-3 text-right">
+													<span class="badge bg-red">$ {{ number_format($subtotal * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</span>
 												</div>
 											</div>
 										</div>
@@ -691,7 +672,7 @@
 												<div class="col-xs-10 col-sm-2"><b>Volumen</b></div>
 												<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_volumen }}</div>
 												<div class="col-xs-12 col-sm-8 text-right">
-													<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span>
+													<span class="badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_vtotal, 2, ',', '.') }}</span>
 												</div>
 											</div>
 										</div>
@@ -701,23 +682,29 @@
 												<div class="col-xs-2 col-sm-2">{{ $cotizacion2->cotizacion2_round }}</div>
 												<div class="col-xs-2 col-sm-2 col-sm-offset-2"><b>Total</b></div>
 												<div class="col-xs-10 col-sm-4 text-right">
-													<span class="pull-right badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span>
+													<span class="badge bg-red">$ {{ number_format($cotizacion2->cotizacion2_total_valor_unitario, 2, ',', '.') }}</span>
 												</div>
 											</div>
 										</div>
 										<div class="list-group-item list-group-item-danger">
 											<div class="row">
 												<div class="col-xs-2 col-sm-2"><b>IVA ({{ $cotizacion->cotizacion1_iva }}%)</b></div>
-												<div class="col-xs-10 col-sm-10 text-right">
-													<span class="pull-right badge bg-green">{{ number_format($iva, 2, ',', '.') }}</span>
+												<div class="col-xs-10 col-sm-7 text-right">
+													<span class="badge bg-green">{{ number_format($iva, 2, ',', '.') }} x {{ $cotizacion2->cotizacion2_cantidad }}</span>
+												</div>
+												<div class="col-xs-10 col-sm-3 text-right">
+													<span class="badge bg-red">$ {{ number_format($iva * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</span>
 												</div>
 											</div>
 										</div>
 										<div class="list-group-item list-group-item-danger">
 											<div class="row">
 												<div class="col-xs-2 col-sm-2"><b>Total</b></div>
-												<div class="col-xs-10 col-sm-10 text-right">
-													<span class="pull-right badge bg-green">{{ number_format($total, 2, ',', '.') }}</span>
+												<div class="col-xs-10 col-sm-7 text-right">
+													<span class="badge bg-green">{{ number_format($total, 2, ',', '.') }} x {{ $cotizacion2->cotizacion2_cantidad }}</span>
+												</div>
+												<div class="col-xs-10 col-sm-3 text-right">
+													<span class="badge bg-red">$ {{ number_format($total * $cotizacion2->cotizacion2_cantidad, 2, ',', '.') }}</span>
 												</div>
 											</div>
 										</div>
