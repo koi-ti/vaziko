@@ -651,120 +651,123 @@
                             </div>
                             <div class="box-body">
                                 <div class="list-group">
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
-                                            @ability ('especial' | 'ordenes')
-                                                <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-precio"></span></b></div>
-                                            @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-1 @elseability col-sm-10 @endability text-right"><small id="percentage-precio" class="badge bg-info">0%</small></div>
+                                    @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-info">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Precio</b></div>
+                                                <div class="col-xs-9 col-sm-8 text-right"><b><span id="info-precio"></span></b></div>
+                                                <div class="col-xs-6 col-sm-2 text-right"><small id="percentage-precio" class="badge bg-info">0%</small></div>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-info">
-                                        <div class="row">
-                                            <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
-                                            @ability ('especial' | 'ordenes')
-                                                <div class="col-xs-9 col-sm-9 text-right"><b><span id="info-viaticos"></span></b></div>
-                                            @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-1 @elseability col-sm-10 @endability text-right"><small id="percentage-viaticos" class="badge bg-info">0%</small></div>
+                                        <div class="list-group-item list-group-item-info">
+                                            <div class="row">
+                                                <div class="col-xs-2 col-sm-2"><b>Viáticos</b></div>
+                                                <div class="col-xs-9 col-sm-8 text-right"><b><span id="info-viaticos"></span></b></div>
+                                                <div class="col-xs-6 col-sm-2 text-right"><small id="percentage-viaticos" class="badge bg-info">0%</small></div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    @endability
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Materiales</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small id="info-prev-materiales" class="badge bg-red"></small></div>
+                                            <div class="col-xs-6 col-sm-1 text-left"><b>Materiales</b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small id="info-prev-materiales" class="badge bg-red"></small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-prev-materiales" class="badge bg-info">%</small></div>
                                             @ability ('especial' | 'ordenes')
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_margen_materialp" name="orden2_margen_materialp" class="form-control input-sm total-calculate" value="<%- orden2_margen_materialp %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-materiales"></span></b></div>
+                                                <div class="col-xs-5 col-sm-2 text-right"><b><span id="info-materiales"></span></b></div>
+                                                <div class="col-xs-1 col-sm-2 text-right"><small id="percentage-materiales" class="badge bg-info">0%</small></div>
                                             @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-materiales" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Áreas</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
+                                            <div class="col-xs-6 col-sm-1 text-left"><b>Áreas</b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small id="info-prev-areasp" class="badge bg-red"></small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-prev-areasp" class="badge bg-info">%</small></div>
                                             @ability ('especial' | 'ordenes')
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_margen_areap" name="orden2_margen_areap" class="form-control input-sm total-calculate" value="<%- orden2_margen_areap %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-areasp"></span></b></div>
+                                                <div class="col-xs-5 col-sm-2 text-right"><b><span id="info-areasp"></span></b></div>
+                                                <div class="col-xs-1 col-sm-2 text-right"><small id="percentage-areasp" class="badge bg-info">0%</small></div>
                                             @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-areasp" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Empaques</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small id="info-prev-empaques" class="badge bg-red"></small></div>
+                                            <div class="col-xs-6 col-sm-1 text-left"><b>Empaques</b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small id="info-prev-empaques" class="badge bg-red"></small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-prev-empaques" class="badge bg-info">%</small></div>
                                             @ability ('especial' | 'ordenes')
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_margen_empaque" name="orden2_margen_empaque" class="form-control input-sm total-calculate" value="<%- orden2_margen_empaque %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-empaques"></span></b></div>
+                                                <div class="col-xs-5 col-sm-2 text-right"><b><span id="info-empaques"></span></b></div>
+                                                <div class="col-xs-1 col-sm-2 text-right"><small id="percentage-empaques" class="badge bg-info">0%</small></div>
                                             @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-empaques" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
                                     <div class="list-group-item list-group-item-info">
                                         <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Transportes</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-8 @endability text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
+                                            <div class="col-xs-6 col-sm-1 text-left"><b>Transportes</b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small id="info-prev-transportes" class="badge bg-red"></small></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-prev-transportes" class="badge bg-info">%</small></div>
                                             @ability ('especial' | 'ordenes')
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_margen_transporte" name="orden2_margen_transporte" class="form-control input-sm total-calculate" value="<%- orden2_margen_transporte %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
-                                                <div class="col-xs-5 col-sm-3 text-right"><b><span id="info-transportes"></span></b></div>
+                                                <div class="col-xs-5 col-sm-2 text-right"><b><span id="info-transportes"></span></b></div>
+                                                <div class="col-xs-1 col-sm-2 text-right"><small id="percentage-transportes" class="badge bg-info">0%</small></div>
                                             @endability
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small id="percentage-transportes" class="badge bg-info">0%</small></div>
                                         </div>
                                     </div>
-                                    @ability ('especial' | 'ordenes')
-                                        <div class="list-group-item list-group-item-success">
-                                            <div class="row">
-                                                <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
-                                                <div class="col-xs-10 col-sm-7 text-right">
+                                    <div class="list-group-item list-group-item-success">
+                                        <div class="row">
+                                            <div class="col-xs-2 col-sm-2"><b>Subtotal</b></div>
+                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-10 @endability text-right">
+                                                <span class="badge bg-red" id="info-prev-subtotal"></span>
+                                            </div>
+                                            @ability ('especial' | 'ordenes')
+                                                <div class="col-xs-10 col-sm-5 text-right">
                                                     <span class="badge bg-green" id="info-subtotal"></span>
                                                 </div>
                                                 <div class="col-xs-10 col-sm-3 text-right">
                                                     <span class="badge bg-red" id="info-subtotal-header"></span>
                                                 </div>
-                                            </div>
+                                            @endability
                                         </div>
-                                    @endability
-                                    <div class="list-group-item list-group-item-success">
-                                        <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Descuento</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-descuento" class="badge bg-red"></small></div>
-                                            @ability ('especial' | 'ordenes')
+                                    </div>
+                                    @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-success">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-1 text-left"><b>Descuento</b></div>
+                                                <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-descuento" class="badge bg-red"></small></div>
+                                                <div class="col-xs-6 col-sm-1"></div>
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_descuento" name="orden2_descuento" class="form-control input-sm total-calculate" value="<%- orden2_descuento %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
                                                 <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-descuento"></span></b></div>
-                                            @endability
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="list-group-item list-group-item-success">
-                                        <div class="row">
-                                            <div class="col-xs-6 col-sm-2 text-left"><b>Comisión</b></div>
-                                            <div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-10 @endability text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
-                                            @ability ('especial' | 'ordenes')
+                                        <div class="list-group-item list-group-item-success">
+                                            <div class="row">
+                                                <div class="col-xs-6 col-sm-1 text-left"><b>Comisión</b></div>
+                                                <div class="col-xs-6 col-sm-3 text-right"><small id="info-prev-comision" class="badge bg-red"></small></div>
+                                                <div class="col-xs-6 col-sm-1"></div>
                                                 <div class="col-xs-4 col-sm-2 text-left">
                                                     <input id="orden2_comision" name="orden2_comision" class="form-control input-sm total-calculate" value="<%- (!edit) ? '{{ ($orden->vendedor) ? $orden->vendedor->tercero_comision : 0 }}' : orden2_comision %>" type="number" min="0" max="100" step="0.1">
                                                 </div>
                                                 <div class="col-xs-2 col-sm-1 text-center"><small>(%)</small></div>
                                                 <div class="col-xs-6 col-sm-4 text-right"><b><span id="info-comision"></span></b></div>
-                                            @endability
+                                            </div>
                                         </div>
-                                    </div>
-                                    @ability ('especial' | 'ordenes')
                                         <div class="list-group-item list-group-item-success">
                                             <div class="row">
                                                 <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>

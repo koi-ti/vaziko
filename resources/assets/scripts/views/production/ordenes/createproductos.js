@@ -99,15 +99,20 @@ app || (app = {});
             this.$infoprevmateriales = this.$('#info-prev-materiales');
             this.$infomateriales = this.$('#info-materiales');
             this.$percentagemateriales = this.$('#percentage-materiales');
+            this.$percentageprevmateriales = this.$('#percentage-prev-materiales');
             this.$infoprevareasp = this.$('#info-prev-areasp');
             this.$infoareasp = this.$('#info-areasp');
             this.$percentageareasp = this.$('#percentage-areasp');
+            this.$percentageprevareasp = this.$('#percentage-prev-areasp');
             this.$infoprevempaques = this.$('#info-prev-empaques');
             this.$infoempaques = this.$('#info-empaques');
             this.$percentageempaques = this.$('#percentage-empaques');
+            this.$percentageprevempaques = this.$('#percentage-prev-empaques');
             this.$infoprevtransportes = this.$('#info-prev-transportes');
             this.$infotransportes = this.$('#info-transportes');
             this.$percentagetransportes = this.$('#percentage-transportes');
+            this.$percentageprevtransportes = this.$('#percentage-prev-transportes');
+            this.$infoprevsubtotal = this.$('#info-prev-subtotal');
             this.$infosubtotal = this.$('#info-subtotal');
             this.$infoprevcomision = this.$('#info-prev-comision');
             this.$infocomision = this.$('#info-comision');
@@ -371,7 +376,9 @@ app || (app = {});
             var prevtransportes = transportes;
             var descuento = parseFloat(this.$inputdescuento.val());
             var volumen = parseInt(this.$inputvolumen.val());
-
+            var prevsubtotal = 0;
+            var subtotal = 0;
+            
             materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
             areasp = this.maxinput(this.$inputmargenareap, areasp, this.$inputmargenareap.val())
             empaques = this.maxinput(this.$inputmargenempaque, empaques, this.$inputmargenempaque.val())
@@ -400,6 +407,15 @@ app || (app = {});
             this.$percentageareasp.empty().html(((areasp/subtotal)*100).toFixed(2) + '%');
             this.$percentageempaques.empty().html(((empaques/subtotal)*100).toFixed(2) + '%');
             this.$percentagetransportes.empty().html(((transportes/subtotal)*100).toFixed(2) + '%');
+
+            prevsubtotal = prevmateriales + prevareasp + prevempaques + prevtransportes;
+
+            this.$infoprevsubtotal.empty().html('$ ' + window.Misc.currency(prevsubtotal));
+
+            this.$percentageprevmateriales.empty().html(((prevmateriales/prevsubtotal)*100).toFixed(2) + '%');
+            this.$percentageprevareasp.empty().html(((prevareasp/prevsubtotal)*100).toFixed(2) + '%');
+            this.$percentageprevempaques.empty().html(((prevempaques/prevsubtotal)*100).toFixed(2) + '%');
+            this.$percentageprevtransportes.empty().html(((prevtransportes/prevsubtotal)*100).toFixed(2) + '%');
 
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
