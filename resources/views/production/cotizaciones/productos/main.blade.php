@@ -662,9 +662,9 @@
                 </div>
             </div>
 
-            @ability ('utilidades' | 'cotizaciones')
-                <div class="row">
-                    <div class="col-md-8 col-md-offset-2">
+            <div class="row">
+                @ability ('utilidades' | 'cotizaciones')
+                    <div class="@ability ('graficas' | 'cotizaciones') col-md-7 @elseability col-md-8 col-md-offset-2 @endability">
                         <div class="box box-danger">
                             <div class="box-header">
                                 <h3 class="box-title" id="info-referencia"><%- cotizacion2_referencia %></h3>
@@ -845,8 +845,19 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            @endability
+                @endability
+                @ability ('graficas' | 'cotizaciones')
+                    <div class="col-md-5">
+                        <div class="box box-danger">
+                            <div class="box-body">
+                                <div class="chart-container">
+                                    <canvas id="chart_producto"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endability
+            </div>
         </section>
     </script>
 

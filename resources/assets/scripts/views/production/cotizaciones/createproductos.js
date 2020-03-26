@@ -127,6 +127,20 @@ app || (app = {});
             // Variables globales
             this.range = [-3, -2, -1, 0, 1, 2, 3];
 
+            // If exists container
+            if ($('.chart-container').length) {
+                this.chart = '';
+                this.chartPrecio = 0;
+                this.chartViaticos = 0;
+                this.chartMateriales = 0;
+                this.chartAreas = 0;
+                this.chartEmpaques = 0;
+                this.chartTransportes = 0;
+                this.chartVolumen = 0;
+
+                this.referenceCharts();
+            }
+
             // Reference views
             this.spinner = this.$('.spinner-main');
             this.referenceViews();
@@ -451,6 +465,16 @@ app || (app = {});
             this.$infosubtotalheader.html('$ ' + window.Misc.currency(subtotal * cantidad));
             this.$infoivaheader.html('$ ' + window.Misc.currency(iva * cantidad));
             this.$infototalheader.html('$ ' + window.Misc.currency(total * cantidad));
+
+            // Update charts
+            this.chart.data.datasets[0].data[0] = this.chartPrecio + (precio * cantidad || 0);
+            this.chart.data.datasets[0].data[1] = this.chartViaticos + (viaticos * cantidad || 0);
+            this.chart.data.datasets[0].data[2] = this.chartMateriales + (materiales * cantidad || 0);
+            this.chart.data.datasets[0].data[3] = this.chartAreas + (areasp * cantidad || 0);
+            this.chart.data.datasets[0].data[4] = this.chartEmpaques + (empaques * cantidad || 0);
+            this.chart.data.datasets[0].data[5] = this.chartTransportes + (transportes * cantidad || 0);
+            this.chart.data.datasets[0].data[6] = this.chartVolumen + (volumen * cantidad || 0);
+            this.chart.update();
         },
 
         /**
@@ -470,6 +494,114 @@ app || (app = {});
             }
 
             return value;
+        },
+
+        /**
+        * Reference charts
+        */
+        referenceCharts: function () {
+            var _this = this;
+
+            // Ajax charts
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('cotizaciones.graficas', {cotizaciones: _this.model.get('cotizacion2_cotizacion')})),
+                data: {
+                    producto: _this.model.get('id')
+                },
+                type: 'GET',
+                beforeSend: function () {
+                    window.Misc.setSpinner(_this.spinner);
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner(_this.spinner);
+                if (!_.isUndefined(resp.success)) {
+                    // response success or error
+                    var text = resp.success ? '' : resp.errors;
+                    if (_.isObject(resp.errors)) {
+                        text = window.Misc.parseErrors(resp.errors);
+                    }
+
+                    if (!resp.success) {
+                        alertify.error(text);
+                        return;
+                    }
+
+                    // Render calendar
+                    _this.charts(resp);
+                }
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner(_this.spinner);
+                alertify.error(thrownError);
+            });
+
+        },
+
+        /**
+        * charts
+        */
+        charts: function (resp) {
+            // Definir opciones globales para graficas del modulo
+            Chart.defaults.global.defaultFontColor="black";
+            Chart.defaults.global.defaultFontSize=12;
+            Chart.defaults.global.title.fontSize=14;
+
+            // Charts productos
+            if (!_.isEmpty(resp.chartproductos.data)) {
+                var ctx = this.$('#chart_producto').get(0).getContext('2d');
+
+                this.chart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        datasets: [{
+                            backgroundColor: [
+                                '#CD5C5C', '#F08080', '#FA8072', '#E9967A', '#FFA07A', '#DC143C'
+                            ],
+                            data: resp.chartproductos.data
+                        }],
+                        labels: resp.chartproductos.labels
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        title: {
+                            display: false,
+                        },
+                        legend: {
+                            display: true,
+                            position: 'bottom',
+                        },
+                        tooltips: {
+                            callbacks: {
+                                enabled: false,
+                                label: function(item, data) {
+                                    return data.labels[item.index];
+                                }
+                            }
+                        },
+                        plugins: {
+                            labels: {
+                                render: 'percentage',
+                                precision: 2,
+                                position: 'outside',
+                                arc: false
+                            }
+                        }
+                    }
+                });
+
+                this.chart.canvas.parentNode.style.height = '500px';
+                this.chart.canvas.parentNode.style.width = '100%';
+
+                this.chartPrecio = this.chart.data.datasets[0].data[0];
+                this.chartViaticos = this.chart.data.datasets[0].data[1];
+                this.chartMateriales = this.chart.data.datasets[0].data[2];
+                this.chartAreas = this.chart.data.datasets[0].data[3];
+                this.chartEmpaques = this.chart.data.datasets[0].data[4];
+                this.chartTransportes = this.chart.data.datasets[0].data[5];
+                this.chartVolumen = this.chart.data.datasets[0].data[6];
+            }
         },
 
         /**
