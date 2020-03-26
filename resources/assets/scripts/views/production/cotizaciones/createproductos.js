@@ -122,6 +122,7 @@ app || (app = {});
             this.$infopretotal = this.$('#info-pretotal');
             this.iva = $('#iva_cotizacion').val();
             this.$infoiva = this.$('#info-iva');
+            this.$infototalsubtotal = this.$('#info-total-subtotal');
             this.$infototal = this.$('#info-total');
 
             // Variables globales
@@ -465,6 +466,8 @@ app || (app = {});
             this.$infosubtotalheader.html('$ ' + window.Misc.currency(subtotal * cantidad));
             this.$infoivaheader.html('$ ' + window.Misc.currency(iva * cantidad));
             this.$infototalheader.html('$ ' + window.Misc.currency(total * cantidad));
+
+            this.$infototalsubtotal.html('$ ' + window.Misc.currency(prevsubtotal * cantidad));
 
             // Update charts
             this.chart.data.datasets[0].data[0] = this.chartPrecio + (precio * cantidad || 0);

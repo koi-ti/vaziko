@@ -552,6 +552,7 @@
 							$prevtotalcomision = $totaldescuento;
 							$totalcomision = $totaldescuento/((100-$ordenp2->orden2_comision)/100);
 							$iva = round($ordenp2->orden2_total_valor_unitario * ($orden->orden_iva/100));
+							$totalsubtotal = $prevsubtotal * $ordenp2->orden2_cantidad;
 							$total = $ordenp2->orden2_total_valor_unitario + $iva;
 						/*--}}
 
@@ -698,18 +699,23 @@
 											</div>
 										</div>
 									</div>
-									<div class="list-group-item list-group-item-danger">
-										<div class="row">
-											<div class="col-xs-2 col-sm-2"><b>Total</b></div>
-											<div class="col-xs-10 col-sm-7 text-right">
+								@endability
+								<div class="list-group-item list-group-item-danger">
+									<div class="row">
+										<div class="col-xs-2 col-sm-2"><b>Total</b></div>
+										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-10 @endability text-right">
+											<span class="badge bg-red">{{ number_format($totalsubtotal, 2, ',', '.') }}</span>
+										</div>
+										@ability ('especial' | 'ordenes')
+											<div class="col-xs-10 col-sm-5 text-right">
 												<span class="badge bg-green">{{ number_format($total, 2, ',', '.') }} x {{ $ordenp2->orden2_cantidad }}</span>
 											</div>
 											<div class="col-xs-10 col-sm-3 text-right">
 												<span class="badge bg-red">$ {{ number_format($total * $ordenp2->orden2_cantidad, 2, ',', '.') }}</span>
 											</div>
-										</div>
+										@endability
 									</div>
-								@endability
+								</div>
 							</div>
 						</div>
 						<div class="box-footer">
