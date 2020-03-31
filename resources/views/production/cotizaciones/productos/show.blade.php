@@ -558,7 +558,7 @@
 								$prevtotaldescuento = $subtotal;
 								$totaldescuento = $cotizacion2->cotizacion2_descuento == 0 ? 0 : ($subtotal-($subtotal*($cotizacion2->cotizacion2_descuento/100)));
 								$prevtotalcomision = $totaldescuento;
-								$totalcomision = $totaldescuento/((100-$cotizacion2->cotizacion2_comision)/100);
+								$totalcomision = $subtotal/((100-$cotizacion2->cotizacion2_comision)/100);
 								$iva = round($cotizacion2->cotizacion2_total_valor_unitario * ($cotizacion->cotizacion1_iva/100));
 								$totalsubtotal = $prevsubtotal * $cotizacion2->cotizacion2_cantidad;
 								$total = $cotizacion2->cotizacion2_total_valor_unitario + $iva;

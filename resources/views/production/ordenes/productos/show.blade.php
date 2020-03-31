@@ -550,7 +550,7 @@
 							$prevtotaldescuento = $subtotal;
 							$totaldescuento = $ordenp2->orden2_descuento == 0 ? 0 : ($subtotal-($subtotal*($ordenp2->orden2_descuento/100)));
 							$prevtotalcomision = $totaldescuento;
-							$totalcomision = $totaldescuento/((100-$ordenp2->orden2_comision)/100);
+							$totalcomision = $subtotal/((100-$ordenp2->orden2_comision)/100);
 							$iva = round($ordenp2->orden2_total_valor_unitario * ($orden->orden_iva/100));
 							$totalsubtotal = $prevsubtotal * $ordenp2->orden2_cantidad;
 							$total = $ordenp2->orden2_total_valor_unitario + $iva;

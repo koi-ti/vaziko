@@ -443,7 +443,7 @@ app || (app = {});
 
             var porcentajedescuento = subtotal*(descuento/100);
             var totaldescuento = descuento == 0 ? 0 : (subtotal-porcentajedescuento);
-            var totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
+            var totalcomision = this.maxinput(this.$inputcomision, subtotal, this.$inputcomision.val());
 
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));
             this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));
