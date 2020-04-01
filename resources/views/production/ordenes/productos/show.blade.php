@@ -557,10 +557,9 @@
 						/*--}}
 
 						<div class="box-header">
+							<h3 class="box-title text-center">{{ $orden->orden_codigo }}</h3><hr>
 							<h3 class="box-title">{{ $ordenp2->orden2_referencia }}</h3>
-							<div class="box-tools">
-								<h5>{{ $ordenp2->orden2_cantidad }}</h5>
-							</div>
+							<h5 class="pull-right">{{ $ordenp2->orden2_cantidad }}</h5>
 						</div>
 						<div class="box-body">
 							<div class="list-group">
@@ -583,11 +582,18 @@
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-1 text-left"><b>Materiales</b></div>
-										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+										@if (auth()->user()->hasRole('admin'))
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+										@else
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalmaterialesp, 2, ',', '.') }}</small></div>
+										@endif
 										<div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageprevmaterialesp, 2, ',', '.') }}</small></div>
 										@ability ('especial' | 'ordenes')
 											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_materialp }}</div>
 											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											@if (auth()->user()->hasRole('admin'))
+												<div class="col-xs-5 col-sm-1 text-right"><b><span>{{ number_format($totalmaterialesp - $prevtotalmaterialesp, 2, ',', '.') }}</span></b></div>
+											@endif
 											<div class="col-xs-5 col-sm-2 text-right"><b><span>{{ number_format($totalmaterialesp, 2, ',', '.') }}</span></b></div>
 											<div class="col-xs-1 col-sm-2 text-right"><small class="badge bg-info">{{ number_format($percentagematerialesp, 2) }}%</small></div>
 										@endability
@@ -596,11 +602,18 @@
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-1 text-left"><b>Áreas</b></div>
-										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+										@if (auth()->user()->hasRole('admin'))
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+										@else
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalareasp, 2, ',', '.') }}</small></div>
+										@endif
 										<div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageprevmaterialesp, 2, ',', '.') }}</small></div>
 										@ability ('especial' | 'ordenes')
 											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_areap }}</div>
 											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											@if (auth()->user()->hasRole('admin'))
+												<div class="col-xs-5 col-sm-1 text-right"><b><span>{{ number_format($totalareasp - $prevtotalareasp, 2, ',', '.') }}</span></b></div>
+											@endif
 											<div class="col-xs-5 col-sm-2 text-right"><b><span>{{ number_format($totalareasp, 2, ',', '.') }}</span></b></div>
 											<div class="col-xs-1 col-sm-2 text-right"><small class="badge bg-info">{{ number_format($percentageareasp, 2) }}%</small></div>
 										@endability
@@ -609,11 +622,18 @@
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-1 text-left"><b>Empaques</b></div>
-										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+										@if (auth()->user()->hasRole('admin'))
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+										@else
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotalempaques, 2, ',', '.') }}</small></div>
+										@endif
 										<div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageprevmaterialesp, 2, ',', '.') }}</small></div>
 										@ability ('especial' | 'ordenes')
 											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_empaque }}</div>
 											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											@if (auth()->user()->hasRole('admin'))
+												<div class="col-xs-5 col-sm-1 text-right"><b><span>{{ number_format($totalempaques - $prevtotalempaques, 2, ',', '.') }}</span></b></div>
+											@endif
 											<div class="col-xs-5 col-sm-2 text-right"><b><span>{{ number_format($totalempaques, 2, ',', '.') }}</span></b></div>
 											<div class="col-xs-1 col-sm-2 text-right"><small class="badge bg-info">{{ number_format($percentageempaques, 2) }}%</small></div>
 										@endability
@@ -622,11 +642,18 @@
 								<div class="list-group-item list-group-item-info">
 									<div class="row">
 										<div class="col-xs-6 col-sm-1 text-left"><b>Transportes</b></div>
-										<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+										@if (auth()->user()->hasRole('admin'))
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-2 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+										@else
+											<div class="@ability ('especial' | 'ordenes') col-xs-6 col-sm-3 @elseability col-sm-9 @endability text-right"><small class="badge bg-red">{{ number_format($prevtotaltransportes, 2, ',', '.') }}</small></div>
+										@endif
 										<div class="@ability ('especial' | 'ordenes') col-xs-1 col-sm-1 @elseability col-sm-2 @endability text-right"><small class="badge bg-info">{{ number_format($percentageprevmaterialesp, 2, ',', '.') }}</small></div>
 										@ability ('especial' | 'ordenes')
 											<div class="col-xs-4 col-sm-2 text-right">{{ $ordenp2->orden2_margen_transporte }}</div>
 											<div class="col-xs-2 col-sm-1 text-left"><b><small>(%)</small></b></div>
+											@if (auth()->user()->hasRole('admin'))
+												<div class="col-xs-5 col-sm-1 text-right"><b><span>{{ number_format($totaltransportes - $prevtotaltransportes, 2, ',', '.') }}</span></b></div>
+											@endif
 											<div class="col-xs-5 col-sm-2 text-right"><b><span>{{ number_format($totaltransportes, 2, ',', '.') }}</span></b></div>
 											<div class="col-xs-1 col-sm-2 text-right"><small class="badge bg-info">{{ number_format($percentagetransportes, 2) }}%</small></div>
 										@endability
