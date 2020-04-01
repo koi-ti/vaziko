@@ -464,7 +464,7 @@ app || (app = {});
             this.$infoivaheader.html('$ ' + window.Misc.currency(iva * cantidad));
             this.$infototalheader.html('$ ' + window.Misc.currency(total * cantidad));
 
-            this.$infototalsubtotal.html('$ ' + window.Misc.currency(prevsubtotal * cantidad));
+            this.$infototalsubtotal.html('$ ' + window.Misc.currency(prevsubtotal * cantidad) + ' x ' + cantidad);
 
             // Update charts
             this.chart.data.datasets[0].data[0] = this.chartPrecio + (precio * cantidad || 0);
