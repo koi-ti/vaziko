@@ -664,7 +664,7 @@
 
             <div class="row">
                 @ability ('utilidades' | 'cotizaciones')
-                    <div class="@ability ('graficas' | 'cotizaciones') col-md-7 @elseability col-md-8 col-md-offset-2 @endability">
+                    <div class="@ability ('graficas' | 'cotizaciones') col-md-8 @elseability col-md-9 col-md-offset-2 @endability">
                         <div class="box box-danger">
                             <div class="box-header">
                                 <h3 class="box-title text-center">{{ $cotizacion->cotizacion_codigo }}</h3><hr>
@@ -886,7 +886,7 @@
                     </div>
                 @endability
                 @ability ('graficas' | 'cotizaciones')
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <div class="box box-danger">
                             <div class="box-body">
                                 <div class="chart-container">

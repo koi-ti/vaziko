@@ -641,7 +641,7 @@
 
                 <div class="row">
                     @ability ('utilidades' | 'ordenes')
-                        <div class="@ability ('graficas' | 'ordenes') col-md-7 @elseability col-md-8 col-md-offset-2 @endability">
+                        <div class="@ability ('graficas' | 'ordenes') col-md-8 @elseability col-md-9 col-md-offset-2 @endability">
                             <div class="box box-primary">
                                 <div class="box-header">
                                     <h3 class="box-title text-center">{{ $orden->orden_codigo }}</h3><hr>
@@ -863,7 +863,7 @@
                         </div>
                     @endability
                     @ability ('graficas' | 'ordenes')
-                        <div class="col-md-5">
+                        <div class="col-md-4">
                             <div class="box box-primary">
                                 <div class="box-body">
                                     <div class="chart-container">
