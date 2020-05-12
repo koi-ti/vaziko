@@ -738,7 +738,7 @@
 										<div class="row">
 											<div class="col-xs-2 col-sm-2"><b>Total</b></div>
 											<div class="@ability ('especial' | 'cotizaciones') col-xs-6 col-sm-2 @elseability col-sm-10 @endability text-right">
-												<span class="badge bg-red">{{ number_format($totalsubtotal, 2, ',', '.') }} x {{ $cotizacion2->cotizacion2_cantidad }}</span>
+												<span class="badge bg-red">{{ number_format($totalsubtotal, 2, ',', '.') }}</span>
 											</div>
 											@ability ('especial' | 'cotizaciones')
 												<div class="col-xs-10 col-sm-5 text-right">
