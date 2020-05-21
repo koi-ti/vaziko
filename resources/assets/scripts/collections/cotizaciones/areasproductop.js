@@ -38,11 +38,11 @@ app || (app = {});
 
             // Validate exist
             if (!_.isNull(data.cotizacion6_areap) && !_.isUndefined(data.cotizacion6_areap) && data.cotizacion6_areap != '') {
-                var modelExits = _.find(this.models, function(item) {
+                var modelExits = _.find(this.models, function (item) {
                     return item.get('cotizacion6_areap') == data.cotizacion6_areap;
                 });
             } else {
-                var modelExits = _.find(this.models, function(item) {
+                var modelExits = _.find(this.models, function (item) {
                     return item.get('cotizacion6_nombre') == data.cotizacion6_nombre;
                 });
             }

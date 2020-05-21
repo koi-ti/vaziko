@@ -385,8 +385,8 @@ class Cotizacion1Controller extends Controller
                     $cotizacion->cotizacion1_abierta = false;
                     $cotizacion->cotizacion1_estados = $request->state;
                 } else {
+                    $cotizacion->estados($request->method);
                     $cotizacion->cotizacion1_abierta = true;
-                    $cotizacion->cotizacion1_estados = $cotizacion->estados($request->method);
                 }
                 $cotizacion->save();
 
@@ -394,7 +394,7 @@ class Cotizacion1Controller extends Controller
                 $next = config('koi.produccion.estados')[$cotizacion->cotizacion1_estados];
 
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], "Se cambio el estado de la cotización $prev a $next", 'Estados', 'U', $request->ip());
+                Bitacora::createBitacora($cotizacion, [], "Se cambio el estado de la cotización {$prev} a {$next}", 'Estados', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();

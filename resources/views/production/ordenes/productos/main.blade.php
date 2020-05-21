@@ -799,7 +799,7 @@
                                                 <div class="row">
                                                     <div class="col-xs-3 col-sm-2"><b>Volumen</b></div>
                                                     <div class="col-xs-3 col-sm-2">
-                                                        <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" max="99">
+                                                        <input id="orden2_volumen" name="orden2_volumen" class="form-control input-sm total-calculate" value="<%- orden2_volumen %>" type="number" min="0" step="0.1" max="99">
                                                     </div>
                                                     <div class="col-xs-12 col-sm-8 text-right">
                                                         <span class="badge bg-red" id="info-volumen"></span>

@@ -17,13 +17,13 @@ app || (app = {});
         model: app.AsientoMovimientoModel,
 
         totalize: function (valor) {
-            _.each(this.models, function(model) {
+            _.each(this.models, function (model) {
                 if (model.get('type') == 'FP') {
                     var count = _.filter(model.get('father'), function (child) {
                         return child.movimiento_nuevo != 1;
                     });
 
-                    var nuevo = (valor/count.length);
+                    var nuevo = (valor / count.length);
                     _.each(count, function (cuota) {
                         $('#movimiento_valor_' + cuota.movimiento_id).text(window.Misc.currency(nuevo));
                     });

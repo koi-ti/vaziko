@@ -17,13 +17,13 @@ app || (app = {});
         model: app.Asiento2Model,
 
         debitos: function () {
-            return this.reduce(function(sum, model) {
+            return this.reduce(function (sum, model) {
                 return sum + parseFloat(model.get('asiento2_debito'))
             }, 0);
         },
 
         creditos: function () {
-            return this.reduce(function(sum, model) {
+            return this.reduce(function (sum, model) {
                 return sum + parseFloat(model.get('asiento2_credito'))
             }, 0);
         },
@@ -31,7 +31,11 @@ app || (app = {});
         totalize: function () {
             var debitos = this.debitos();
             var creditos = this.creditos();
-            return { 'debitos': debitos, 'creditos': creditos, 'diferencia': Math.abs(creditos - debitos)}
+            return {
+                'debitos': debitos,
+                'creditos': creditos,
+                'diferencia': Math.abs(creditos - debitos)
+            }
         }
    });
 

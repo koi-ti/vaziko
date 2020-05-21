@@ -387,17 +387,17 @@ app || (app = {});
             // Igualar variables y quitar el inputmask
             var cantidad = parseInt(this.$('#cotizacion2_cantidad').val());
             var precio = parseFloat(this.$('#cotizacion2_precio_venta').inputmask('unmaskedvalue'));
-            var viaticos = Math.round(parseFloat(this.$('#cotizacion2_viaticos').inputmask('unmaskedvalue'))/cantidad);
-            var materiales = Math.round(parseFloat(this.materialesProductopCotizacionList.totalize().total)/cantidad);
+            var viaticos = Math.round(parseFloat(this.$('#cotizacion2_viaticos').inputmask('unmaskedvalue')) / cantidad);
+            var materiales = Math.round(parseFloat(this.materialesProductopCotizacionList.totalize().total) / cantidad);
             var prevmateriales = materiales;
-            var areasp = Math.round(parseFloat(this.areasProductopCotizacionList.totalize().total)/cantidad);
+            var areasp = Math.round(parseFloat(this.areasProductopCotizacionList.totalize().total) / cantidad);
             var prevareasp = areasp
-            var empaques = Math.round(parseFloat(this.empaquesProductopCotizacionList.totalize().total)/cantidad);
+            var empaques = Math.round(parseFloat(this.empaquesProductopCotizacionList.totalize().total) / cantidad);
             var prevempaques = empaques;
-            var transportes = Math.round(parseFloat(this.transportesProductopCotizacionList.totalize().total)/cantidad);
+            var transportes = Math.round(parseFloat(this.transportesProductopCotizacionList.totalize().total) / cantidad);
             var prevtransportes = transportes;
             var descuento = parseFloat(this.$inputdescuento.val());
-            var volumen = parseInt(this.$inputvolumen.val());
+            var volumen = parseFloat(this.$inputvolumen.val());
             var prevsubtotal = 0;
             var subtotal = 0;
 
@@ -424,37 +424,37 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
-            tvolumen = (subtotal/((100-volumen)/100)) * (1-(((100-volumen)/100)));
+            tvolumen = (subtotal / ((100 - volumen) / 100)) * (1 - (((100 - volumen) / 100)));
             pretotal = subtotal + tvolumen;
 
-            this.$percentageprecio.empty().html(((precio/subtotal)*100).toFixed(2) + '%');
-            this.$percentageviaticos.empty().html(((viaticos/subtotal)*100).toFixed(2) + '%');
-            this.$percentagemateriales.empty().html(((materiales/subtotal)*100).toFixed(2) + '%');
-            this.$percentageareasp.empty().html(((areasp/subtotal)*100).toFixed(2) + '%');
-            this.$percentageempaques.empty().html(((empaques/subtotal)*100).toFixed(2) + '%');
-            this.$percentagetransportes.empty().html(((transportes/subtotal)*100).toFixed(2) + '%');
+            this.$percentageprecio.empty().html(((precio / subtotal) * 100).toFixed(2) + '%');
+            this.$percentageviaticos.empty().html(((viaticos / subtotal) * 100).toFixed(2) + '%');
+            this.$percentagemateriales.empty().html(((materiales / subtotal) * 100).toFixed(2) + '%');
+            this.$percentageareasp.empty().html(((areasp / subtotal) * 100).toFixed(2) + '%');
+            this.$percentageempaques.empty().html(((empaques / subtotal) * 100).toFixed(2) + '%');
+            this.$percentagetransportes.empty().html(((transportes / subtotal) * 100).toFixed(2) + '%');
 
             prevsubtotal = prevmateriales + prevareasp + prevempaques + prevtransportes;
 
             this.$infoprevsubtotal.empty().html('$ ' + window.Misc.currency(prevsubtotal));
 
-            this.$percentageprevmateriales.empty().html(((prevmateriales/prevsubtotal)*100).toFixed(2) + '%');
-            this.$percentageprevareasp.empty().html(((prevareasp/prevsubtotal)*100).toFixed(2) + '%');
-            this.$percentageprevempaques.empty().html(((prevempaques/prevsubtotal)*100).toFixed(2) + '%');
-            this.$percentageprevtransportes.empty().html(((prevtransportes/prevsubtotal)*100).toFixed(2) + '%');
+            this.$percentageprevmateriales.empty().html(((prevmateriales / prevsubtotal) * 100).toFixed(2) + '%');
+            this.$percentageprevareasp.empty().html(((prevareasp / prevsubtotal) * 100).toFixed(2) + '%');
+            this.$percentageprevempaques.empty().html(((prevempaques / prevsubtotal) * 100).toFixed(2) + '%');
+            this.$percentageprevtransportes.empty().html(((prevtransportes / prevsubtotal) * 100).toFixed(2) + '%');
 
             // Calcular round decimales
             round = parseInt(this.$inputround.val());
             if (this.range.indexOf(round) != -1) {
                 var exp = Math.pow(10, round);
-                pretotal = Math.round(pretotal*exp)/exp;
+                pretotal = Math.round(pretotal * exp) / exp;
             } else {
                 this.$inputround.val(0);
             }
 
-            var porcentajedescuento = subtotal*(descuento/100);
-            var totaldescuento = descuento == 0 ? 0 : (subtotal-porcentajedescuento);
-            var totalcomision = this.maxinput(this.$inputcomision, subtotal, this.$inputcomision.val());
+            var porcentajedescuento = subtotal * (descuento / 100);
+            var totaldescuento = subtotal - porcentajedescuento;
+            var totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
 
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));
             this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));
@@ -465,7 +465,7 @@ app || (app = {});
             this.$infovolumen.html('$ ' + window.Misc.currency(tvolumen));
             this.$infopretotal.html('$ ' + window.Misc.currency(pretotal));
 
-            var iva = Math.round(pretotal * (this.iva/100)),
+            var iva = Math.round(pretotal * (this.iva / 100)),
                 total = pretotal + iva;
 
             this.$infoiva.html('$ ' + window.Misc.currency(iva) + ' x ' + cantidad);
@@ -501,7 +501,7 @@ app || (app = {});
             // Calcular que no pase de 100% y no se undefinde
             margen = input.val();
             if (margen > 0 && margen <= 99 && !_.isUndefined(margen) && !_.isNaN(margen)) {
-                value = value/((100-margen)/100);
+                value = value / ((100 - margen) / 100);
             }
 
             return value;

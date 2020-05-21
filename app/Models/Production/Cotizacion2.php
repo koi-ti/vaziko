@@ -39,7 +39,7 @@ class Cotizacion2 extends BaseModel
             'cotizacion2_referencia' => 'required|max:200',
             'cotizacion2_cantidad' => 'required|min:1|integer',
             'cotizacion2_ancho' => 'numeric|min:0',
-            'cotizacion2_volumen' => 'min:0|max:100|integer',
+            'cotizacion2_volumen' => 'min:0|max:100|numeric',
             'cotizacion2_margen_materialp' => 'min:0|max:100|numeric',
             'cotizacion2_margen_areap' => 'min:0|max:100|numeric',
             'cotizacion2_margen_empaque' => 'min:0|max:100|numeric',

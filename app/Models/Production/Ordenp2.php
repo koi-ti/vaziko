@@ -40,7 +40,7 @@ class Ordenp2 extends BaseModel
             'orden2_cantidad' => 'required|min:1|integer',
             'orden2_precio_venta' => 'required',
             'orden2_ancho' => 'numeric|min:0',
-            'orden2_volumen' => 'min:0|max:100|integer',
+            'orden2_volumen' => 'min:0|max:100|numeric',
             'orden2_margen_materialp' => 'min:0|max:100|numeric',
             'orden2_margen_areap' => 'min:0|max:100|numeric',
             'orden2_margen_empaque' => 'min:0|max:100|numeric',
