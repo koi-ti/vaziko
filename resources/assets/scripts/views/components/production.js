@@ -134,6 +134,7 @@ app || (app = {});
                 });
             } else {
                 this.$inputName.val('').prop('disabled', false);
+                this.$inputName.val('').prop('readonly', false);
                 this.$inputValor.val('');
             }
         },

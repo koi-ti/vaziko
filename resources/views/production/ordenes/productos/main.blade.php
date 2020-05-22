@@ -436,7 +436,7 @@
                             <form method="POST" accept-charset="UTF-8" id="form-areap-producto" data-toggle="validator">
                                 <div class="row">
                                     <div class="form-group col-sm-5 col-md-offset-1">
-                                        <select id="orden6_areap" name="orden6_areap" class="form-control select2-default-clear change-production-areap" data-wrapper="areasp-wrapper-producto" data-placeholder="Áreas de producción">
+                                        <select id="orden6_areap" name="orden6_areap" class="form-control select2-default-clear change-production-areap" data-wrapper="areasp-wrapper-producto" data-input-name="orden6_nombre" data-input-value="orden6_valor" data-placeholder="Áreas de producción">
                                             <option value hidden selected>Seleccione</option>
                                             @foreach (App\Models\Production\Areap::getAreas() as $key => $value)
                                                 <option value="{{ $key }}">{{ $value }}</option>
