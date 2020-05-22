@@ -425,6 +425,18 @@ app || (app = {});
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
 
+            // Si no existe el input
+            if (_.isNaN(descuento) && !descuento) {
+                this.$inputdescuento.val(0);
+                descuento = 0;
+            }
+
+            // Si no existe el input
+            if (_.isNaN(volumen) && !volumen) {
+                this.$inputvolumen.val(0);
+                volumen = 0;
+            }
+
             // Calcular comision
             porcentajedescuento = subtotal * (descuento / 100);
             totaldescuento = subtotal - porcentajedescuento;
