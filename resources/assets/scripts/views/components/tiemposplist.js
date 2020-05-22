@@ -39,7 +39,67 @@ app || (app = {});
             this.listenTo( this.collection, 'sync', this.responseServer );
 
             // Validar si se viene dataFilter
-            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+            if (this.parameters.dataFilter.call == 'ordenp') {
+                this.viewWithDataTable();
+            } else {
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+            }
+        },
+
+        viewWithDataTable: function () {
+            var _this = this;
+
+            // DataTable
+            this.$searchTable = this.$el;
+            this.searchTable = this.$searchTable.DataTable({
+				dom: "<'row'<'col-sm-4'><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('tiemposp.index')),
+                    data: function (data) {
+                        data.call = 'ordenp';
+                        data.ordenp = _this.parameters.dataFilter.orden2_orden;
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'tercero_nombre', name: 'koi_tercero.tercero_nombre1' },
+                    { data: 'tercero_nombre', name: 'koi_tercero.tercero_nombre2' },
+                    { data: 'tercero_nombre', name: 'koi_tercero.tercero_apellido1' },
+                    { data: 'tercero_nombre', name: 'koi_tercero.tercero_apellido2' },
+                    { data: 'tercero_nombre', name: 'koi_tercero.tercero_nombre' },
+                    { data: 'actividadp_nombre', name: 'koi_actividadp.actividadp_nombre' },
+                    { data: 'subactividadp_nombre', name: 'koi_subactividadp.subactividadp_nombre' },
+                    { data: 'areap_nombre', name: 'koi_areap.areap_nombre' },
+                    { data: 'tiempop_fecha', name: 'tiempop_fecha' },
+                    { data: 'tiempop_hora_inicio', name: 'tiempop_hora_inicio' },
+                    { data: 'tiempop_hora_fin', name: 'tiempop_hora_fin' },
+                    { data: 'id', name: 'id' }
+                ],
+                columnDefs: [
+                    {
+                        targets: [1, 2, 3, 4],
+                        visible: false
+                    },
+                    {
+                        targets: 5,
+                        searchable: false,
+                        orderable: false
+                    },
+                    {
+                        targets: 12,
+                        className: 'text-right',
+                        render: function (data, type, full, row) {
+                            if (_this.parameters.edit) {
+                                return '<a class="btn btn-default btn-xs item-edit" data-resource="' + data + '">' + '<span><i class="fa fa-pencil-square-o"></i></span></a>';
+                            } else {
+                                return '-';
+                            }
+                        }
+                    },
+                ]
+			});
         },
 
         /**
@@ -112,8 +172,19 @@ app || (app = {});
         editOne: function(e) {
             e.preventDefault();
 
-            var resource = this.$(e.currentTarget).data('resource'),
-                model = this.collection.get(resource);
+            var resource = this.$(e.currentTarget).data('resource');
+
+            if (this.parameters.dataFilter.call == 'ordenp') {
+                var model = new app.TiempopModel();
+                this.searchTable.rows(function (idx, data, node) {
+                    if (data.id == resource) {
+                        model.set(data, {silent: true});
+                    }
+                    return false;
+                });
+            } else {
+                var model = this.collection.get(resource);
+            }
 
             // Open tiempopActionView
             if (this.tiempopActionView instanceof Backbone.View) {
@@ -124,7 +195,8 @@ app || (app = {});
             this.tiempopActionView = new app.TiempopActionView({
                 model: model,
                 parameters: {
-                    call: this.parameters.dataFilter.call
+                    call: this.parameters.dataFilter.call,
+                    table: (this.searchTable || null)
                 }
             });
            this.tiempopActionView.render();

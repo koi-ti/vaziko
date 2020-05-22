@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\Bitacora;
 use App\Models\Production\Tiempop, App\Models\Production\Actividadp, App\Models\Production\SubActividadp, App\Models\Production\Ordenp, App\Models\Production\Areap;
-use DB, Log;
+use DB, Log, Datatables;
 
 class TiempopController extends Controller
 {
@@ -34,7 +34,7 @@ class TiempopController extends Controller
                 }
 
                 if ($request->call == 'ordenp') {
-                    $data = Tiempop::getTiempospOrdenp($request->ordenp);
+                    return Datatables::of(Tiempop::getTiempospOrdenp($request->ordenp))->make(true);
                 }
             }
             return response()->json($data);

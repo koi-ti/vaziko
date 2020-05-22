@@ -342,6 +342,10 @@ class Cotizacion2Controller extends Controller
                     $empaques = round($totalempaques / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_empaque) / 100);
                     $transportes = round($totaltransportes / $cotizacion2->cotizacion2_cantidad) / ((100 - $cotizacion2->cotizacion2_margen_transporte) / 100);
                     $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                    $porcentajedescuento = $subtotal * ($cotizacion2->cotizacion2_descuento / 100);
+                    $totaldescuento = $subtotal - $porcentajedescuento;
+                    $totalcomision = $totaldescuento / ((100 - $cotizacion2->cotizacion2_comision) / 100);
+                    $subtotal = $totalcomision;
                     $volumen = ($subtotal / ((100 - $cotizacion2->cotizacion2_volumen) / 100)) * (1 - (((100 - $cotizacion2->cotizacion2_volumen) / 100)));
                     $total = round(($subtotal + $volumen), $cotizacion2->cotizacion2_round);
 
@@ -722,6 +726,12 @@ class Cotizacion2Controller extends Controller
                         $transportes = round($totaltransportes/$cotizacion2->cotizacion2_cantidad)/((100-$cotizacion2->cotizacion2_margen_transporte)/100);
 
                         $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                        $porcentajedescuento = $subtotal * ($cotizacion2->cotizacion2_descuento / 100);
+                        $totaldescuento = $subtotal - $porcentajedescuento;
+                        $totalcomision = $totaldescuento / ((100 - $cotizacion2->cotizacion2_comision) / 100);
+
+                        $subtotal = $totalcomision;
+
                         $volumen = ($subtotal/((100-$cotizacion2->cotizacion2_volumen)/100)) * (1-(((100-$cotizacion2->cotizacion2_volumen)/100)));
                         $total = round(($subtotal + $volumen), $cotizacion2->cotizacion2_round);
 

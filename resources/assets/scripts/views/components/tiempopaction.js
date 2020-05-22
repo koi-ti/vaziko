@@ -81,6 +81,12 @@ app || (app = {});
                 var data = window.Misc.formToJson(e.target);
                     data.call = this.parameters.call;
                 this.model.save(data, {wait: true, patch: true, silent: true});
+
+                // Hide modal
+                if (this.parameters.call == 'ordenp') {
+                    this.parameters.table.ajax.reload();
+                    this.$modal.modal('hide');
+                }
             }
         },
 

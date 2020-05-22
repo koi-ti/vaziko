@@ -90,7 +90,7 @@ class Tiempop extends BaseModel
     // Consulta de detalle ordenp
     public static function getTiempospOrdenp($ordenp) {
         $query = Tiempop::query();
-        $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre',  DB::raw("(CASE WHEN tercero_persona = 'N'
+        $query->select('koi_tiempop.*', 'actividadp_nombre', 'subactividadp_nombre', 'areap_nombre',  'tercero_nombre1', 'tercero_nombre2', 'tercero_apellido1', 'tercero_apellido2', DB::raw("(CASE WHEN tercero_persona = 'N'
                 THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
                         (CASE WHEN (tercero_razonsocial IS NOT NULL AND tercero_razonsocial != '') THEN CONCAT(' - ', tercero_razonsocial) ELSE '' END)
                     )
@@ -103,6 +103,6 @@ class Tiempop extends BaseModel
         $query->join('koi_areap', 'tiempop_areap', '=', 'koi_areap.id');
         $query->where('tiempop_ordenp', $ordenp);
         $query->orderBy('koi_tiempop.id', 'desc');
-        return $query->get();
+        return $query;
     }
 }

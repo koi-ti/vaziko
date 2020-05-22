@@ -123,9 +123,10 @@ app || (app = {});
             this.tiempopListView = new app.TiempopListView({
                 collection: this.tiempopList,
                 parameters: {
+                    edit: false,
                     dataFilter: {
                         call: 'ordenp',
-                        ordenp: this.model.get('id')
+                        orden2_orden: this.model.get('id')
                     }
                }
             });

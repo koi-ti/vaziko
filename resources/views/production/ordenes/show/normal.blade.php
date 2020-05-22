@@ -281,12 +281,17 @@
                                         <tr>
                                             <th width="2%">#</th>
                                             <th width="20%">Tercero</th>
+                                            <th width="20%">Tercero</th>
+                                            <th width="20%">Tercero</th>
+                                            <th width="20%">Tercero</th>
+                                            <th width="20%">Tercero</th>
                                             <th width="20%">Actividad</th>
                                             <th width="20%">Subactividad</th>
                                             <th width="20%">Área</th>
                                             <th width="8%">Fecha</th>
                                             <th width="5%">H. inicio</th>
                                             <th width="5%">H. fin</th>
+                                            <th width="5%"></th>
                                         </tr>
                                     </thead>
                                     <tbody>

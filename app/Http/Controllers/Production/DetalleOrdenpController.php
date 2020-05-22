@@ -297,6 +297,10 @@ class DetalleOrdenpController extends Controller
                     $empaques = round($totalempaques / $orden2->orden2_cantidad) / ((100 - $orden2->orden2_margen_empaque) / 100);
                     $transportes = round($totaltransportes / $orden2->orden2_cantidad) / ((100 - $orden2->orden2_margen_transporte) / 100);
                     $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                    $porcentajedescuento = $subtotal * ($orden2->orden2_descuento / 100);
+                    $totaldescuento = $subtotal - $porcentajedescuento;
+                    $totalcomision = $totaldescuento / ((100 - $orden2->orden2_comision) / 100);
+                    $subtotal = $totalcomision;
                     $volumen = ($subtotal / ((100 - $orden2->orden2_volumen) / 100)) * (1 - (((100 - $orden2->orden2_volumen) / 100)));
                     $total = round(($subtotal + $volumen), $orden2->orden2_round);
 
@@ -635,6 +639,10 @@ class DetalleOrdenpController extends Controller
                         $empaques = round($totalempaques / $orden2->orden2_cantidad) / ((100 - $orden2->orden2_margen_empaque) / 100);
                         $transportes = round($totaltransportes / $orden2->orden2_cantidad) / ((100 - $orden2->orden2_margen_transporte) / 100);
                         $subtotal = $precio + $viaticos + $materiales + $areas + $empaques + $transportes;
+                        $porcentajedescuento = $subtotal * ($orden2->orden2_descuento / 100);
+                        $totaldescuento = $subtotal - $porcentajedescuento;
+                        $totalcomision = $totaldescuento / ((100 - $orden2->orden2_comision) / 100);
+                        $subtotal = $totalcomision;
                         $volumen = ($subtotal / ((100 - $orden2->orden2_volumen) / 100)) * (1 - (((100 - $orden2->orden2_volumen) / 100)));
                         $total = round(($subtotal + $volumen), $orden2->orden2_round);
 

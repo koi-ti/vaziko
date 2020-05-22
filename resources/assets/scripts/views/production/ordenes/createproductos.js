@@ -397,6 +397,9 @@ app || (app = {});
             var volumen = parseFloat(this.$inputvolumen.val());
             var prevsubtotal = 0;
             var subtotal = 0;
+            var porcentajedescuento = 0;
+            var totaldescuento = 0;
+            var totalcomision = 0;
 
             materiales = this.maxinput(this.$inputmargenmaterialp, materiales, this.$inputmargenmaterialp.val())
             areasp = this.maxinput(this.$inputmargenareap, areasp, this.$inputmargenareap.val())
@@ -421,6 +424,14 @@ app || (app = {});
 
             // Calcular total de la orden (transporte+viaticos+precio+areas)
             subtotal = precio + viaticos + materiales + areasp + empaques + transportes;
+
+            // Calcular comision
+            porcentajedescuento = subtotal * (descuento / 100);
+            totaldescuento = subtotal - porcentajedescuento;
+
+            // Reasignar subtotal
+            subtotal = totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
+
             tvolumen = (subtotal / ((100 - volumen) / 100)) * (1 - (((100 - volumen) / 100)));
             pretotal = subtotal + tvolumen;
 
@@ -448,10 +459,6 @@ app || (app = {});
             } else {
                 this.$inputround.val(0);
             }
-
-            var porcentajedescuento = subtotal * (descuento / 100);
-            var totaldescuento = (subtotal - porcentajedescuento);
-            var totalcomision = this.maxinput(this.$inputcomision, totaldescuento, this.$inputcomision.val());
 
             this.$infoprevdescuento.html(window.Misc.currency(subtotal));
             this.$infodescuento.html('$ ' + window.Misc.currency(totaldescuento));
@@ -498,9 +505,8 @@ app || (app = {});
             // Calcular que no pase de 100% y no se undefinde
             margen = input.val();
             if (margen > 0 && margen <= 99 && !_.isUndefined(margen) && !_.isNaN(margen)) {
-                value = value/((100-margen)/100);
+                value = value / ((100 - margen) / 100);
             }
-
             return value;
         },
 

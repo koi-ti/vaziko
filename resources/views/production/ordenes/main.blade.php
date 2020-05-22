@@ -525,12 +525,17 @@
                                                     <tr>
                                                         <th width="2%">#</th>
                                                         <th width="20%">Tercero</th>
+                                                        <th width="20%">Tercero</th>
+                                                        <th width="20%">Tercero</th>
+                                                        <th width="20%">Tercero</th>
+                                                        <th width="20%">Tercero</th>
                                                         <th width="20%">Actividad</th>
                                                         <th width="20%">Subactividad</th>
                                                         <th width="20%">Área</th>
                                                         <th width="8%">Fecha</th>
                                                         <th width="5%">H. inicio</th>
                                                         <th width="5%">H. fin</th>
+                                                        <th width="5%"></th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -674,24 +679,6 @@
                 </a>
             @endability
         </td>
-    </script>
-
-    <script type="text/template" id="ordenp-tiempop-item-list-tpl">
-        <tr>
-            <td><%- id %></td>
-            <td><%- tercero_nombre %></td>
-            <td><%- actividadp_nombre %></td>
-            <td><%- !_.isNull(subactividadp_nombre) ? subactividadp_nombre : ' - ' %></td>
-            <td><%- areap_nombre %></td>
-            <td><%- tiempop_fecha %></td>
-            <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
-            <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-            <td class="text-center">
-                <a class="btn btn-default btn-xs item-edit" data-resource="<%- id %>">
-                    <span><i class="fa fa-pencil-square-o"></i></span>
-                </a>
-            </td>
-        </tr>
     </script>
 
     <script type="text/template" id="ordenp-despacho-pendiente-item-list-tpl">

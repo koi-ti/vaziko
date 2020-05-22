@@ -287,15 +287,3 @@
         </div>
     </div>
 </section>
-
-<script type="text/template" id="ordenp-tiempop-item-list-tpl">
-    <tr>
-        <td><%- tercero_nombre %></td>
-        <td><%- tiempop_fecha %></td>
-        <td><%- moment(tiempop_hora_inicio, 'HH:mm').format('HH:mm') %></td>
-        <td><%- moment(tiempop_hora_fin, 'H:mm').format('H:mm') %></td>
-        <td><%- actividadp_nombre %></td>
-        <td><%- subactividadp_nombre || '-' %></td>
-        <td><%- areap_nombre %></td>
-    </tr>
-</script>
