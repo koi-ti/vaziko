@@ -42,7 +42,7 @@ class Cotizacion1Controller extends Controller
             }
 
             // If permissions
-            $devolver = auth()->user()->hasRole('admin') ? 'TRUE' : 'FALSE';
+            $devolver = auth()->user()->hasRole('admin') ? 'TRUE' : (auth()->user()->hasRole('Diseplanea') ? 'TRUE' : 'FALSE');
             $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
@@ -248,10 +248,13 @@ class Cotizacion1Controller extends Controller
             abort(404);
         }
 
+        if (auth()->user()->hasRole('Diseplanea')) {
+            abort(403);
+        }
+
         if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada) {
             return redirect()->route('cotizaciones.show', compact('cotizacion'));
         }
-
         return view('production.cotizaciones.create', compact('cotizacion'));
     }
 
@@ -371,7 +374,7 @@ class Cotizacion1Controller extends Controller
                 return response()->json(['success' => false, 'errors' => 'El estado no es valido.']);
             }
 
-            if (!auth()->user()->hasRole('admin')) {
+            if (!auth()->user()->hasRole('admin') && !auth()->user()->hasRole('Diseplanea')) {
                 if ($request->method == 'prev') {
                     return response()->json(['success' => false, 'errors' => 'No posee los permisos necesarios para realizar esta acción.']);
                 }

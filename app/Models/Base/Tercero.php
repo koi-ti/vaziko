@@ -305,7 +305,6 @@ class Tercero extends BaseModel implements AuthenticatableContract
         if (is_array($permission)) {
             foreach ($permission as $permName) {
                 $hasPerm = $this->can($permName, $module);
-
                 if ($hasPerm && !$requireAll) {
                     return true;
                 } elseif (!$hasPerm && $requireAll) {
@@ -327,7 +326,6 @@ class Tercero extends BaseModel implements AuthenticatableContract
                 }
             }
         }
-
         return false;
     }
 

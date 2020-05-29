@@ -144,5 +144,17 @@ class PermisosTableSeeder extends Seeder
             'display_name'   => 'Importar',
             'description'   => 'Permiso para importar archivos'
         ]);
+
+        Permiso::create([
+            'name'   => 'especial',
+            'display_name'   => 'Utilidades especial',
+            'description'   => 'Permisos para ver precios en cuadre de utilidades (Cotización y Orden)'
+        ]);
+
+        Permiso::create([
+            'name'   => 'regresar',
+            'display_name'   => 'Regresar a estados anteriores',
+            'description'   => 'Permisos para regresar a estados anteriores (Cotización)'
+        ]);
     }
 }
