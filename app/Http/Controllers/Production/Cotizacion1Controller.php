@@ -228,8 +228,10 @@ class Cotizacion1Controller extends Controller
             return response()->json($cotizacion);
         }
 
-        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
-            return redirect()->route('cotizaciones.edit', compact('cotizacion'));
+        if (!auth()->user()->hasRole('Diseplanea')) {
+            if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
+                return redirect()->route('cotizaciones.edit', compact('cotizacion'));
+            }
         }
 
         return view('production.cotizaciones.show', compact('cotizacion'));
@@ -248,11 +250,7 @@ class Cotizacion1Controller extends Controller
             abort(404);
         }
 
-        if (auth()->user()->hasRole('Diseplanea')) {
-            abort(403);
-        }
-
-        if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada) {
+        if (!$cotizacion->cotizacion1_abierta || $cotizacion->cotizacion1_anulada || auth()->user()->hasRole('Diseplanea')) {
             return redirect()->route('cotizaciones.show', compact('cotizacion'));
         }
         return view('production.cotizaciones.create', compact('cotizacion'));
