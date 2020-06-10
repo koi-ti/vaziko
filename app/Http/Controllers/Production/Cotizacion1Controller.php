@@ -46,12 +46,13 @@ class Cotizacion1Controller extends Controller
             $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
+            $generar = auth()->user()->ability('admin', 'generar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $precotizar = auth()->user()->ability('admin', 'precotizar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $cotizar = auth()->user()->ability('admin', 'cotizar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $exportar = auth()->user()->ability('admin', 'exportar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
 
             // If ability other permission
-            $query->addSelect(DB::raw("{$devolver} AS devolver, {$cerrar} AS cerrar, {$abrir} AS abrir, {$clonar} AS clonar, {$precotizar} AS precotizar, {$cotizar} AS cotizar, {$exportar} AS exportar"));
+            $query->addSelect(DB::raw("{$devolver} AS devolver, {$cerrar} AS cerrar, {$abrir} AS abrir, {$clonar} AS clonar, {$precotizar} AS precotizar, {$cotizar} AS cotizar, {$exportar} AS exportar, {$generar} AS generar"));
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {

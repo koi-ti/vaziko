@@ -98,6 +98,10 @@ app || (app = {});
                                     buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
                                 }
 
+                                if (parseInt(full.exportar) && full.cotizacion1_estados == 'CS') {
+                                    buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
+                                }
+
                                 if (parseInt(full.devolver) && full.cotizacion1_estados != 'PC') {
                                     buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
                                 }
@@ -114,10 +118,6 @@ app || (app = {});
                                 if (parseInt(full.abrir)) {
                                     buttons += '<a class="btn btn-danger btn-xs open-cotizacion" title="Reabrir cotización" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-unlock"></i></a>';
                                 }
-                            }
-
-                            if (parseInt(full.exportar)) {
-                                buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
                             }
 
                             if (parseInt(full.clonar)) {
