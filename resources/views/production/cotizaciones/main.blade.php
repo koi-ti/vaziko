@@ -56,9 +56,7 @@
                                         <a class="btn btn-danger clone-cotizacion" title="Clonar cotización"><i class="fa fa-clone"></i></a>
                                     @endability
                                     @ability ('exportar' | 'cotizaciones')
-                                        <% if (cotizacion1_estados == 'CS') { %>
-                                            <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
-                                        <% } %>
+                                        <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                                     @endability
                                     @ability ('generar' | 'cotizaciones')
                                         <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
