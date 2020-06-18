@@ -26,7 +26,7 @@
 			<th width="10%" class="border-left">Compañia</th>
 			<td class="size-7">{{ $despacho->tercero_nombre }}</td>
 			<th width="10%">Nit</th>
-			<td class="size-7 border-right">{{ $despacho->tercero_nombre }}</td>
+			<td class="size-7 border-right">{{ $despacho->tercero_nit }}</td>
 		</tr>
 		<tr>
 			<th width="10%" class="border-left">Contacto</th>

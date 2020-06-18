@@ -21,8 +21,14 @@ app || (app = {});
         nitChanged: function (e) {
             var _this = this;
 
+            // Remove spaces
+            var trim = this.$(e.currentTarget).val();
+
+            // Set
+            this.$(e.currentTarget).val(trim.split(' ').join('').trim());
+
             // Reference to fields
-            this.$dv = $("#"+$(e.currentTarget).attr("data-field"));
+            this.$dv = $("#" + $(e.currentTarget).attr("data-field"));
         	this.$wraperContent = this.$('#spinner-main');
 
             if (!_.isUndefined($(e.currentTarget).attr("data-modal"))) {
