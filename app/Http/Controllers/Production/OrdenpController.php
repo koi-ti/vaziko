@@ -345,6 +345,8 @@ class OrdenpController extends Controller
                         }
 
                         $orden->orden_vendedor = $vendedor->id;
+                    } else {
+                        $orden->orden_vendedor = NULL;
                     }
 
                     // Traer datos originales

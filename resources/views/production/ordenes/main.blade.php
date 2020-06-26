@@ -250,6 +250,11 @@
                                             <div class="col-sm-7">
                                                 <input id="orden_vendedor_nombre" name="orden_vendedor_nombre" placeholder="Nombre vendedor" class="form-control input-sm" type="text" maxlength="15" value="<%- vendedor_nombre %>" readonly>
                                             </div>
+                                            <div class="col-xs-2 col-sm-1 col-md-1">
+                                                <button type="button" class="btn btn-danger btn-flat btn-sm btn-remove-resource-koi-component" data-field="orden_vendedor">
+                                                    <i class="fa fa-eraser"></i>
+                                                </button>
+                                            </div>
                                         </div>
                                     </form>
                                 </div>

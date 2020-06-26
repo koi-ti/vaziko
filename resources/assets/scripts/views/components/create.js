@@ -14,6 +14,7 @@ app || (app = {});
       	el: 'body',
 		events: {
             'click .btn-add-resource-koi-component': 'addResource',
+            'click .btn-remove-resource-koi-component': 'removeResource',
             'submit #form-create-resource-component': 'onStore'
 		},
         parameters: {},
@@ -170,6 +171,19 @@ app || (app = {});
 				this.$modalComponent.modal('show');
             }
 		},
+
+        /**
+        * Remove resource
+        */
+        removeResource: function (e) {
+            e.preventDefault();
+
+            this.$resourceField = $("#" + this.$(e.currentTarget).attr("data-field"));
+            this.$resourceFieldName = $("#" + this.$resourceField.attr("data-name"));
+
+            this.$resourceField.val('');
+            this.$resourceFieldName.text('').val('');
+        },
 
         /**
         * fires libraries js

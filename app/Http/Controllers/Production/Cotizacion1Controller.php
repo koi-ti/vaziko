@@ -316,7 +316,8 @@ class Cotizacion1Controller extends Controller
                         }
 
                         $cotizacion->cotizacion1_vendedor = $vendedor->id;
-
+                    } else {
+                        $cotizacion->cotizacion1_vendedor = NULL;
                     }
 
                     // Traer datos originales
