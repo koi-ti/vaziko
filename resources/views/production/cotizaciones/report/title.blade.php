@@ -27,10 +27,8 @@
 			<div align="right">
 				<small>NO Gran Contribuyente</small><br>
 				<small>Actividad económica 1811</small><br>
-				<small>Régimen común</small><br>
+				<small>Régimen Simple de Tributación</small><br>
 				<small>Nit: 900.474.161-6</small><br>
-				<small>Actividad ICA 102 - 116</small><br>
-				<small>ICA 6.6X 1000</small>
 			</div>
 		</td>
 	</tr>
