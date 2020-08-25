@@ -567,168 +567,278 @@ class AsientoController extends Controller
 
         DB::beginTransaction();
         try {
-            // Recuperar tercero
-            $tercero = Tercero::where('tercero_nit', $request->tercero)->first();
-            if (!$tercero instanceof Tercero) {
-                DB::rollback();
-                return response()->json(['success' => false, 'errors' => "No es posible recuperar beneficiario con nit $request->tercero, por favor verifique la información del asiento o consulte al administrador."]);
-            }
-
-            // Recuerar folder
-            $folder = Folder::find($request->folder);
-            if (!$folder instanceof Folder) {
-                DB::rollback();
-                return response()->json(['success' => false, 'errors' => 'No es posible recuperar folder, por favor verifique la información del asiento o consulte al administrador.']);
-            }
-
-            // Recuerar documento
-            $documento = Documento::find($request->documento);
-            if (!$documento instanceof Documento) {
-                DB::rollback();
-                return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
-            }
-            $consecutive = $documento->documento_consecutivo;
-
-            // Uploaded file
-            $cuentas = [];
-            $excel = new \stdClass();
-            $excel->success =  true;
-
-            Excel::filter('chunk')->load($request->file->getRealPath())->chunk(250, function($results) use (&$excel, &$cuentas, $tercero) {
-                $headers = $results->getHeading();
-                $defaultHeaders = array_combine($headers, $headers);
-                $validator = \Validator::make($defaultHeaders, [
-                    'cuenta' => 'required',
-                    'centro_costo' => 'required',
-                    'beneficiario' => 'required',
-                    'debito' => 'required',
-                    'credito' => 'required',
-                    'base' => 'required',
-                    'detalle' => 'required'
-                ]);
-
-                if ($validator->fails()) {
-                    $validator->errors()->add('comment', 'Estos campos mencionados no estan presentes en el encabezado del archivo');
-                    $excel->success = false;
-                    $excel->msg = $validator->errors();
-                    return;
-                }
-
-                foreach ($results as $row) {
-                    // Asiento2
-                    $arCuenta = [];
-                    $arCuenta['Cuenta'] = intval($row->cuenta);
-                    $arCuenta['Tercero'] = !intval($row->beneficiario) ? $tercero->tercero_nit : intval($row->beneficiario);
-                    $arCuenta['Detalle'] = $row->detalle;
-                    $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
-                    $arCuenta['CentroCosto'] = intval($row->centro_costo) > 0 ? intval($row->centro_costo) : '';
-                    $arCuenta['Base'] = $row->base;
-                    $arCuenta['Credito'] = $row->credito;
-                    $arCuenta['Debito'] = $row->debito;
-                    $arCuenta['Orden'] = '';
-                    $cuentas[] = $arCuenta;
-                }
-            }, false);
-
-            if ($documento->documento_actual) {
-                $asiento = new Asiento;
-                $consecutive++;
-
-                // Encabezado por defecto
-                $asiento->asiento1_ano = $request->ano;
-                $asiento->asiento1_mes = $request->mes;
-                $asiento->asiento1_dia = $request->dia;
-                $asiento->asiento1_numero = $consecutive;
-                $asiento->asiento1_folder = $folder->id;
-                $asiento->asiento1_documento = $documento->id;
-                $asiento->asiento1_beneficiario = $tercero->id;
-                $asiento->asiento1_preguardado = false;
-                $asiento->asiento1_usuario_elaboro = auth()->user()->id;
-                $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
-
-                // Creo el objeto para manejar el asiento
-                $asiento->asiento1_beneficiario = $tercero->tercero_nit;
-                $objAsiento = new AsientoContableDocumento($asiento->toArray(), $asiento, true);
-                if ($objAsiento->asiento_error) {
+            // Individual
+            if ($request->has('tercero')) {
+                // Recuperar tercero
+                $tercero = Tercero::where('tercero_nit', $request->tercero)->first();
+                if (!$tercero instanceof Tercero) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
+                    return response()->json(['success' => false, 'errors' => "No es posible recuperar beneficiario con nit $request->tercero, por favor verifique la información del asiento o consulte al administrador."]);
                 }
 
-                // Preparar asiento
-                $result = $objAsiento->asientoCuentas($cuentas);
-                if ($result != 'OK'){
+                // Recuerar folder
+                $folder = Folder::find($request->folder);
+                if (!$folder instanceof Folder) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $result]);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar folder, por favor verifique la información del asiento o consulte al administrador.']);
                 }
 
-                // Insertar asiento
-                $result = $objAsiento->insertarAsiento();
-                if ($result != 'OK') {
+                // Recuerar documento
+                $documento = Documento::find($request->documento);
+                if (!$documento instanceof Documento) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $result]);
+                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.']);
                 }
-            }
+                $consecutive = $documento->documento_consecutivo;
 
-            if ($documento->documento_nif) {
-                $asientoNif = new AsientoNif;
-                $consecutive++;
+                // Uploaded file
+                $cuentas = [];
+                $excel = new \stdClass();
+                $excel->success =  true;
 
-                // AsientoNif1
-                $asientoNif->asienton1_ano = $request->ano;
-                $asientoNif->asienton1_mes = $request->mes;
-                $asientoNif->asienton1_dia = $request->dia;
-                $asientoNif->asienton1_numero = $consecutive;
-                $asientoNif->asienton1_asiento =  isset($asiento->id) ? $asiento->id : null;
-                $asientoNif->asienton1_folder = $folder->id;
-                $asientoNif->asienton1_documento = $documento->id;
-                $asientoNif->asienton1_beneficiario = $tercero->id;
-                $asientoNif->asienton1_preguardado = false;
-                $asientoNif->asienton1_usuario_elaboro = auth()->user()->id;
-                $asientoNif->asienton1_fecha_elaboro = date('Y-m-d H:i:s');
+                Excel::filter('chunk')->load($request->file->getRealPath())->chunk(250, function($results) use (&$excel, &$cuentas, $tercero) {
+                    $headers = $results->getHeading();
+                    $defaultHeaders = array_combine($headers, $headers);
 
-                foreach ($cuentas as $value) {
-                    // Recupero plancuenta
-                    $plancuenta = Plancuenta::where('plancuentas_cuenta',$value['Cuenta'])->first();
-                    if (!$plancuenta instanceof Plancuenta) {
-                        DB::rollback();
-                        return response()->json(['success' => false, 'errors' => "No es posible recuperar plan de cuenta, por favor verifique la información o consulte a su administrador"]);
+                    $validator = \Validator::make($defaultHeaders, [
+                        'cuenta' => 'required',
+                        'centro_costo' => 'required',
+                        'beneficiario' => 'required',
+                        'debito' => 'required',
+                        'credito' => 'required',
+                        'base' => 'required',
+                        'detalle' => 'required'
+                    ]);
+
+                    if ($validator->fails()) {
+                        $validator->errors()->add('comment', 'Estos campos mencionados no estan presentes en el encabezado del archivo');
+                        $excel->success = false;
+                        $excel->msg = $validator->errors();
+                        return;
                     }
 
-                    $plancuentaNif = PlanCuentaNif::find($plancuenta->plancuentas_equivalente);
-                    if (!$plancuentaNif instanceof PlanCuentaNif) {
+                    foreach ($results as $row) {
+                        // Asiento2
+                        $arCuenta = [];
+                        $arCuenta['Cuenta'] = intval($row->cuenta);
+                        $arCuenta['Tercero'] = !intval($row->beneficiario) ? $tercero->tercero_nit : intval($row->beneficiario);
+                        $arCuenta['Detalle'] = $row->detalle;
+                        $arCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
+                        $arCuenta['CentroCosto'] = intval($row->centro_costo) > 0 ? intval($row->centro_costo) : '';
+                        $arCuenta['Base'] = $row->base;
+                        $arCuenta['Credito'] = $row->credito;
+                        $arCuenta['Debito'] = $row->debito;
+                        $arCuenta['Orden'] = '';
+                        $cuentas[] = $arCuenta;
+                    }
+                }, false);
+
+                if ($documento->documento_actual) {
+                    $asiento = new Asiento;
+                    $consecutive++;
+
+                    // Encabezado por defecto
+                    $asiento->asiento1_ano = $request->ano;
+                    $asiento->asiento1_mes = $request->mes;
+                    $asiento->asiento1_dia = $request->dia;
+                    $asiento->asiento1_numero = $consecutive;
+                    $asiento->asiento1_folder = $folder->id;
+                    $asiento->asiento1_documento = $documento->id;
+                    $asiento->asiento1_beneficiario = $tercero->id;
+                    $asiento->asiento1_preguardado = false;
+                    $asiento->asiento1_usuario_elaboro = auth()->user()->id;
+                    $asiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
+
+                    // Creo el objeto para manejar el asiento
+                    $asiento->asiento1_beneficiario = $tercero->tercero_nit;
+                    $objAsiento = new AsientoContableDocumento($asiento->toArray(), $asiento, true);
+                    if ($objAsiento->asiento_error) {
                         DB::rollback();
-                        return response()->json(['success' => false, 'errors' => "No es posible encontrar plan de cuenta NIF, por favor verifique la información o consulte a su administrador"]);
+                        return response()->json(['success' => false, 'errors' => $objAsiento->asiento_error]);
                     }
 
-                    // Set item
-                    $value['Cuenta'] = $plancuentaNif->plancuentasn_cuenta;
+                    // Preparar asiento
+                    $result = $objAsiento->asientoCuentas($cuentas);
+                    if ($result != 'OK'){
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
+
+                    // Insertar asiento
+                    $result = $objAsiento->insertarAsiento();
+                    if ($result != 'OK') {
+                        DB::rollback();
+                        return response()->json(['success' => false, 'errors' => $result]);
+                    }
                 }
 
-                // Creo el objeto para manejar el asiento
-                $asientoNif->asienton1_beneficiario = $tercero->tercero_nit;
-                $objAsiento = new AsientoNifContableDocumento($asientoNif->toArray(), $asientoNif, true);
-                if ($objAsiento->asientoNif_error) {
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $objAsiento->asientoNif_error]);
-                }
+                $documento->documento_consecutivo = $consecutive;
+                $documento->save();
+            } else {
+                // Uploaded file
+                $excel = new \stdClass();
+                $excel->success =  true;
 
-                // Preparar asiento
-                $result = $objAsiento->asientoCuentas($cuentas);
-                if ($result != 'OK') {
-                    DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $result]);
-                }
+                Excel::filter('chunk')->load($request->file->getRealPath())->chunk(250, function($results) use (&$excel) {
+                    $headers = $results->getHeading();
+                    $defaultHeaders = array_combine($headers, $headers);
 
-                // Insertar asiento
-                $result = $objAsiento->insertarAsientoNif();
-                if ($result != 'OK') {
+                    // Grupal
+                    $validator = \Validator::make($defaultHeaders, [
+                        'dia' => 'required',
+                        'mes' => 'required',
+                        'ano' => 'required',
+                        'documento_beneficiario' => 'required',
+                        'codigo_folder' => 'required',
+                        'codigo_documento' => 'required',
+                        'cuenta' => 'required',
+                        'centro_costo' => 'required',
+                        'beneficiario' => 'required',
+                        'base' => 'required',
+                        'debito' => 'required',
+                        'credito' => 'required',
+                        'detalle' => 'required'
+                    ]);
+
+                    if ($validator->fails()) {
+                        $validator->errors()->add('comment', 'Estos campos mencionados no estan presentes en el encabezado del archivo');
+                        $excel->success = false;
+                        $excel->errors = $validator->errors();
+                        return;
+                    }
+
+
+                    $lastRow = '';
+                    $asientos = [];
+                    foreach ($results as $key => $row) {
+                        // Prepare data
+                        if (!empty($row->dia)) {
+                            // Recuperar tercero
+                            $tercero = Tercero::where('tercero_nit', $row->documento_beneficiario)->first();
+                            if (!$tercero instanceof Tercero) {
+                                $excel->success = false;
+                                $excel->errors = "No es posible recuperar beneficiario con nit {$row->documento_beneficiario}, por favor verifique la información del asiento o consulte al administrador.";
+                                return;
+                            }
+
+                            // Recuerar folder
+                            $folder = Folder::where('folder_codigo', $row->codigo_folder)->first();
+                            if (!$folder instanceof Folder) {
+                                $excel->success = false;
+                                $excel->errors = 'No es posible recuperar folder, por favor verifique la información del asiento o consulte al administrador.';
+                                return;
+                            }
+
+                            // Recuerar documento
+                            $documento = Documento::where('documento_codigo', $row->codigo_documento)->first();
+                            if (!$documento instanceof Documento) {
+                                $excel->success = false;
+                                $excel->errors = 'No es posible recuperar documento, por favor verifique la información del asiento o consulte al administrador.';
+                                return;
+                            }
+
+                            $consecutive = $documento->documento_consecutivo;
+                            $consecutive += 1;
+
+                            // Asiento
+                            $objAsiento = new \stdClass;
+                            $objAsiento->asiento1_ano = "$row->ano";
+                            $objAsiento->asiento1_mes = "$row->mes";
+                            $objAsiento->asiento1_dia = "$row->dia";
+                            $objAsiento->asiento1_numero = $consecutive;
+                            $objAsiento->asiento1_folder = $folder->id;
+                            $objAsiento->asiento1_documento = $documento->id;
+                            $objAsiento->asiento1_beneficiario = $tercero->tercero_nit;
+                            $objAsiento->asiento1_preguardado = false;
+                            $objAsiento->asiento1_usuario_elaboro = auth()->user()->id;
+                            $objAsiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
+
+                            // Cuentas
+                            $objCuenta = [];
+                            $objCuenta['Cuenta'] = $row->cuenta;
+                            $objCuenta['Tercero'] = $row->beneficiario;
+                            $objCuenta['Detalle'] = $row->detalle;
+                            $objCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
+                            $objCuenta['CentroCosto'] = !empty($row->centro_costo) ? $row->centro_costo : '';
+                            $objCuenta['Base'] = (double) $row->base;
+                            $objCuenta['Credito'] = (double) $row->credito;
+                            $objCuenta['Debito'] = (double) $row->debito;
+                            $objCuenta['Orden'] = '';
+
+                            // Prepare
+                            $objAsiento->cuentas[] = $objCuenta;
+
+                            $asientos[$key] = $objAsiento;
+                            $lastRow = $key;
+
+                            $documento->documento_consecutivo = $consecutive;
+                            $documento->save();
+                        } else {
+                            // Cuentas
+                            $objCuenta = [];
+                            $objCuenta['Cuenta'] = $row->cuenta;
+                            $objCuenta['Tercero'] = $row->beneficiario;
+                            $objCuenta['Detalle'] = $row->detalle;
+                            $objCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
+                            $objCuenta['CentroCosto'] = !empty($row->centro_costo) ? $row->centro_costo : '';
+                            $objCuenta['Base'] = (double) $row->base;
+                            $objCuenta['Credito'] = (double) $row->credito;
+                            $objCuenta['Debito'] = (double) $row->debito;
+                            $objCuenta['Orden'] = '';
+
+                            $asientos[$lastRow]->cuentas[] = $objCuenta;
+                        }
+                    }
+
+                    // Save asientos
+                    foreach ($asientos as $asiento) {
+                        $newAsiento = new Asiento;
+                        $newAsiento->asiento1_ano = $asiento->asiento1_ano;
+                        $newAsiento->asiento1_mes = $asiento->asiento1_mes;
+                        $newAsiento->asiento1_dia = $asiento->asiento1_dia;
+                        $newAsiento->asiento1_beneficiario = $asiento->asiento1_beneficiario;
+                        $newAsiento->asiento1_numero = $asiento->asiento1_numero;
+                        $newAsiento->asiento1_folder = $asiento->asiento1_folder;
+                        $newAsiento->asiento1_documento = $asiento->asiento1_documento;
+                        $newAsiento->asiento1_beneficiario = $asiento->asiento1_beneficiario;
+                        $newAsiento->asiento1_preguardado = $asiento->asiento1_preguardado;
+                        $newAsiento->asiento1_usuario_elaboro = $asiento->asiento1_usuario_elaboro;
+                        $newAsiento->asiento1_fecha_elaboro = $asiento->asiento1_fecha_elaboro;
+
+                        // Creo el objeto para manejar el asiento
+                        $objAsiento = new AsientoContableDocumento($newAsiento->toArray(), $newAsiento, true);
+                        if ($objAsiento->asiento_error) {
+                            Log::error($asiento->asiento1_numero);
+                            $excel->success = false;
+                            $excel->errors = $objAsiento->asiento_error;
+                            return;
+                        }
+
+                        // Preparar asiento
+                        $result = $objAsiento->asientoCuentas($asiento->cuentas);
+                        if ($result != 'OK'){
+                            Log::error($asiento->asiento1_numero);
+                            $excel->success = false;
+                            $excel->errors = $result;
+                            return;
+                        }
+
+                        // Insertar asiento
+                        $result = $objAsiento->insertarAsiento();
+                        if ($result != 'OK') {
+                            Log::error($asiento->asiento1_numero);
+                            $excel->success = false;
+                            $excel->errors = $result;
+                            return;
+                        }
+                    }
+                }, false);
+
+                if (!$excel->success) {
                     DB::rollback();
-                    return response()->json(['success' => false, 'errors' => $result]);
+                    return response()->json(['success' => false, 'errors' => $excel->errors]);
                 }
             }
-
-            $documento->documento_consecutivo = $consecutive;
-            $documento->save();
 
             DB::commit();
             return response()->json(['success'=> true, 'msg'=> 'Se ha importado con exito los datos']);

@@ -129,9 +129,10 @@ app || (app = {});
         * Import data of Excel
         */
         import: function (e) {
-            var _this = this;
-
             e.preventDefault();
+
+            var option = this.$(e.currentTarget).data('option'),
+                _this = this;
 
             // ImportActionView undelegateEvents
             if (this.importActionView instanceof Backbone.View) {
@@ -141,8 +142,8 @@ app || (app = {});
 
             this.importActionView = new app.ImportDataActionView({
                 parameters: {
-                    title: 'asientos',
-                    url: window.Misc.urlFull( Route.route('asientos.import') ),
+                    title: (option == 'I' ? 'asiento' : 'asientos'),
+                    url: window.Misc.urlFull(Route.route('asientos.import')),
                     datatable: _this.asientosSearchTable
                 }
             });

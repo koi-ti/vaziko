@@ -988,11 +988,11 @@
 </div>
 
 <script type="text/template" id="import-data-tpl">
-	<% if(title == 'asientos'){ %>
+	<% if (title == 'asiento') { %>
 		<div class="row">
             <div class="form-group col-sm-4">
                 <select name="ano" id="ano" class="form-control" required>
-                    @for($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+                    @for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
                         <option value="{{ $i }}">{{ $i }}</option>
                     @endfor
                 </select>
@@ -1000,7 +1000,7 @@
 
             <div class="form-group col-sm-5">
                 <select name="mes" id="mes" class="form-control" required>
-                    @foreach( config('koi.meses') as $key => $value)
+                    @foreach (config('koi.meses') as $key => $value)
                         <option value="{{ $key }}">{{ $value }}</option>
                     @endforeach
                 </select>
@@ -1008,7 +1008,7 @@
 
             <div class="form-group col-sm-2">
                 <select name="dia" id="dia" class="form-control" required>
-                    @for($i = 1; $i <= 31; $i++)
+                    @for ($i = 1; $i <= 31; $i++)
                         <option value="{{ $i }}">{{ $i }}</option>
                     @endfor
                 </select>
@@ -1033,7 +1033,7 @@
 			<div class="form-group col-md-12">
 				<label for="folder" class=" control-label">Folder</label>
 				<select name="folder" id="folder" class="form-control select2-default select-filter-document-koi-component" data-wrapper="spinner-main" data-documents="documento" required>
-					@foreach( App\Models\Accounting\Folder::getFolders() as $key => $value)
+					@foreach (App\Models\Accounting\Folder::getFolders() as $key => $value)
 						<option value="{{ $key }}">{{ $value }}</option>
 					@endforeach
 				</select>
@@ -1043,7 +1043,7 @@
 			<div class="form-group col-md-12">
 				<label for="documento" class="control-label">Documento</label>
 				<select name="documento" id="documento" class="form-control select2-default" required>
-					@foreach( App\Models\Accounting\Documento::getDocuments() as $key => $value)
+					@foreach (App\Models\Accounting\Documento::getDocuments() as $key => $value)
 						<option value="{{ $key }}">{{ $value }}</option>
 					@endforeach
 				</select>
@@ -1063,7 +1063,7 @@
 			</div>
 			<span class="help-block">
 				Por favor, seleccione un archivo de tipo <b>.xls</b>
-				<% if(title == 'asientos'){ %>
+				<% if (title == 'asiento') { %>
 					<div class="dropdown">
 						<span class="dropspan"><i class="fa fa-question-circle"></i></span>
 						<div class="dropdown-content">
@@ -1076,6 +1076,7 @@
 						</div>
 					</div>
 				<% } %>
+				<small class="pull-right"><b><a href="<%- title == 'asiento' ? '{{ config('koi.formatos')['asiento'] }}' : '{{ config('koi.formatos')['asientos'] }}' %>" download>Descargar formato</a></b></small>
 			</span>
 		</div>
 	</div>

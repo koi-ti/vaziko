@@ -51,8 +51,8 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var _this = this;
-                    formData =  new FormData(e.target);
+                var formData =  new FormData(e.target),
+                    _this = this;
 
                 $.ajax({
                     url: _this.parameters.url,

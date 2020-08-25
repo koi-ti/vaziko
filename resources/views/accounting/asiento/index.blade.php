@@ -66,7 +66,15 @@
 							</div>
 							@ability ('importar' | 'asientos')
 								<div class="col-md-1">
-									<a href="#" class="btn btn-default btn-sm btn-import-modal"><i class="fa fa-upload"></i> Importar</a>
+									<div class="btn-group">
+										<button type="button" class="btn btn-default btn-sm btn-flat dropdown-toggle" data-toggle="dropdown">
+											Importar <span class="fa fa-upload"></span>
+										</button>
+										<ul class="dropdown-menu pull-right">
+											<li><a href="#" class="btn-import-modal" data-option="I">Individual</a></li>
+											<li><a href="#" class="btn-import-modal" data-option="G">Grupal</a></li>
+										</ul>
+									</div>
 								</div>
 							@endability
 						</div>

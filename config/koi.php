@@ -237,5 +237,10 @@ return [
 
     'template' => [
         'bg' => 'bg-green'
+    ],
+
+    'formatos' => [
+        'asiento' => 'formatos/formato_individual.xlsx',
+        'asientos' => 'formatos/formato_grupal.xlsx'
     ]
 ];
