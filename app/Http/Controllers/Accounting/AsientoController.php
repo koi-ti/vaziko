@@ -737,8 +737,12 @@ class AsientoController extends Controller
                                 return;
                             }
 
-                            $consecutive = $documento->documento_consecutivo;
-                            $consecutive += 1;
+                            if (empty($row->numero_documento)) {
+                                $consecutive = $documento->documento_consecutivo;
+                                $consecutive += 1;
+                            } else {
+                                $consecutive = $row->numero_documento;
+                            }
 
                             // Asiento
                             $objAsiento = new \stdClass;
@@ -771,8 +775,10 @@ class AsientoController extends Controller
                             $asientos[$key] = $objAsiento;
                             $lastRow = $key;
 
-                            $documento->documento_consecutivo = $consecutive;
-                            $documento->save();
+                            if (empty($row->numero_documento)) {
+                                $documento->documento_consecutivo = $consecutive;
+                                $documento->save();
+                            }
                         } else {
                             // Cuentas
                             $objCuenta = [];
