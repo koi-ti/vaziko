@@ -753,6 +753,7 @@ class AsientoController extends Controller
                             $objAsiento->asiento1_folder = $folder->id;
                             $objAsiento->asiento1_documento = $documento->id;
                             $objAsiento->asiento1_beneficiario = $tercero->tercero_nit;
+                            $objAsiento->asiento1_detalle = "$row->descripcion_documento";
                             $objAsiento->asiento1_preguardado = false;
                             $objAsiento->asiento1_usuario_elaboro = auth()->user()->id;
                             $objAsiento->asiento1_fecha_elaboro = date('Y-m-d H:i:s');
@@ -807,6 +808,7 @@ class AsientoController extends Controller
                         $newAsiento->asiento1_folder = $asiento->asiento1_folder;
                         $newAsiento->asiento1_documento = $asiento->asiento1_documento;
                         $newAsiento->asiento1_beneficiario = $asiento->asiento1_beneficiario;
+                        $newAsiento->asiento1_detalle = $asiento->asiento1_detalle;
                         $newAsiento->asiento1_preguardado = $asiento->asiento1_preguardado;
                         $newAsiento->asiento1_usuario_elaboro = $asiento->asiento1_usuario_elaboro;
                         $newAsiento->asiento1_fecha_elaboro = $asiento->asiento1_fecha_elaboro;
