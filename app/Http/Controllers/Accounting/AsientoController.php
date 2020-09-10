@@ -744,6 +744,17 @@ class AsientoController extends Controller
                                 $consecutive = $row->numero_documento;
                             }
 
+                            // Centro costo
+                            if ($row->centro_costo) {
+                                $explodeCentroCosto = explode('-', $row->centro_costo);
+                                $centroCosto = CentroCosto::where('centrocosto_codigo', $explodeCentroCosto[0])->where('centrocosto_centro', $explodeCentroCosto[1])->first();
+                                if (!$centroCosto instanceof CentroCosto) {
+                                    $excel->success = false;
+                                    $excel->errors = 'No es posible recuperar el centro de costo, por favor verifique la información del asiento o consulte al administrador.';
+                                    return;
+                                }
+                            }
+
                             // Asiento
                             $objAsiento = new \stdClass;
                             $objAsiento->asiento1_ano = "$row->ano";
@@ -764,11 +775,11 @@ class AsientoController extends Controller
                             $objCuenta['Tercero'] = $row->beneficiario;
                             $objCuenta['Detalle'] = $row->detalle;
                             $objCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
-                            $objCuenta['CentroCosto'] = !empty($row->centro_costo) ? $row->centro_costo : '';
+                            $objCuenta['CentroCosto'] = $row->centro_costo ? $centroCosto->id : '';
                             $objCuenta['Base'] = (double) $row->base;
                             $objCuenta['Credito'] = (double) $row->credito;
                             $objCuenta['Debito'] = (double) $row->debito;
-                            $objCuenta['Orden'] = '';
+                            $objCuenta['Orden'] = $row->orden ? intval($row->orden) : '';
 
                             // Prepare
                             $objAsiento->cuentas[] = $objCuenta;
@@ -781,17 +792,28 @@ class AsientoController extends Controller
                                 $documento->save();
                             }
                         } else {
+                            // Centro costo
+                            if ($row->centro_costo) {
+                                $explodeCentroCosto = explode('-', $row->centro_costo);
+                                $centroCosto = CentroCosto::where('centrocosto_codigo', $explodeCentroCosto[0])->where('centrocosto_centro', $explodeCentroCosto[1])->first();
+                                if (!$centroCosto instanceof CentroCosto) {
+                                    $excel->success = false;
+                                    $excel->errors = 'No es posible recuperar el centro de costo, por favor verifique la información del asiento o consulte al administrador.';
+                                    return;
+                                }
+                            }
+
                             // Cuentas
                             $objCuenta = [];
                             $objCuenta['Cuenta'] = $row->cuenta;
                             $objCuenta['Tercero'] = $row->beneficiario;
                             $objCuenta['Detalle'] = $row->detalle;
                             $objCuenta['Naturaleza'] = $row->debito != 0 ? 'D': 'C';
-                            $objCuenta['CentroCosto'] = !empty($row->centro_costo) ? $row->centro_costo : '';
+                            $objCuenta['CentroCosto'] = $row->centro_costo ? $centroCosto->id : '';
                             $objCuenta['Base'] = (double) $row->base;
                             $objCuenta['Credito'] = (double) $row->credito;
                             $objCuenta['Debito'] = (double) $row->debito;
-                            $objCuenta['Orden'] = '';
+                            $objCuenta['Orden'] = $row->orden ? intval($row->orden) : '';
 
                             $asientos[$lastRow]->cuentas[] = $objCuenta;
                         }
@@ -816,7 +838,6 @@ class AsientoController extends Controller
                         // Creo el objeto para manejar el asiento
                         $objAsiento = new AsientoContableDocumento($newAsiento->toArray(), $newAsiento, true);
                         if ($objAsiento->asiento_error) {
-                            Log::error($asiento->asiento1_numero);
                             $excel->success = false;
                             $excel->errors = $objAsiento->asiento_error;
                             return;
@@ -825,7 +846,6 @@ class AsientoController extends Controller
                         // Preparar asiento
                         $result = $objAsiento->asientoCuentas($asiento->cuentas);
                         if ($result != 'OK'){
-                            Log::error($asiento->asiento1_numero);
                             $excel->success = false;
                             $excel->errors = $result;
                             return;
@@ -834,7 +854,6 @@ class AsientoController extends Controller
                         // Insertar asiento
                         $result = $objAsiento->insertarAsiento();
                         if ($result != 'OK') {
-                            Log::error($asiento->asiento1_numero);
                             $excel->success = false;
                             $excel->errors = $result;
                             return;
