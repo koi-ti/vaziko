@@ -746,8 +746,7 @@ class AsientoController extends Controller
 
                             // Centro costo
                             if ($row->centro_costo) {
-                                $explodeCentroCosto = explode('-', $row->centro_costo);
-                                $centroCosto = CentroCosto::where('centrocosto_codigo', $explodeCentroCosto[0])->where('centrocosto_centro', $explodeCentroCosto[1])->first();
+                                $centroCosto = CentroCosto::whereRaw("CONCAT(centrocosto_codigo,'-',centrocosto_centro) = '{$row->centro_costo}'")->first();
                                 if (!$centroCosto instanceof CentroCosto) {
                                     $excel->success = false;
                                     $excel->errors = 'No es posible recuperar el centro de costo, por favor verifique la información del asiento o consulte al administrador.';
@@ -804,8 +803,7 @@ class AsientoController extends Controller
                         } else {
                             // Centro costo
                             if ($row->centro_costo) {
-                                $explodeCentroCosto = explode('-', $row->centro_costo);
-                                $centroCosto = CentroCosto::where('centrocosto_codigo', $explodeCentroCosto[0])->where('centrocosto_centro', $explodeCentroCosto[1])->first();
+                                $centroCosto = CentroCosto::whereRaw("CONCAT(centrocosto_codigo,'-',centrocosto_centro) = '{$row->centro_costo}'")->first();
                                 if (!$centroCosto instanceof CentroCosto) {
                                     $excel->success = false;
                                     $excel->errors = 'No es posible recuperar el centro de costo, por favor verifique la información del asiento o consulte al administrador.';
