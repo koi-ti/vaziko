@@ -755,6 +755,16 @@ class AsientoController extends Controller
                                 }
                             }
 
+                            // Orden
+                            if ($row->orden) {
+                                $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$row->orden}'")->first();
+                                if (!$ordenp instanceof Ordenp) {
+                                    $excel->success = false;
+                                    $excel->errors = 'No es posible recuperar la orden de produccion, por favor verifique la información del asiento o consulte al administrador.';
+                                    return;
+                                }
+                            }
+
                             // Asiento
                             $objAsiento = new \stdClass;
                             $objAsiento->asiento1_ano = "$row->ano";
@@ -779,7 +789,7 @@ class AsientoController extends Controller
                             $objCuenta['Base'] = (double) $row->base;
                             $objCuenta['Credito'] = (double) $row->credito;
                             $objCuenta['Debito'] = (double) $row->debito;
-                            $objCuenta['Orden'] = $row->orden ? intval($row->orden) : '';
+                            $objCuenta['Orden'] = $row->orden ? $ordenp->id : '';
 
                             // Prepare
                             $objAsiento->cuentas[] = $objCuenta;
@@ -803,6 +813,16 @@ class AsientoController extends Controller
                                 }
                             }
 
+                            // Orden
+                            if ($row->orden) {
+                                $ordenp = Ordenp::whereRaw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) = '{$row->orden}'")->first();
+                                if (!$ordenp instanceof Ordenp) {
+                                    $excel->success = false;
+                                    $excel->errors = 'No es posible recuperar la orden de produccion, por favor verifique la información del asiento o consulte al administrador.';
+                                    return;
+                                }
+                            }
+
                             // Cuentas
                             $objCuenta = [];
                             $objCuenta['Cuenta'] = $row->cuenta;
@@ -813,7 +833,7 @@ class AsientoController extends Controller
                             $objCuenta['Base'] = (double) $row->base;
                             $objCuenta['Credito'] = (double) $row->credito;
                             $objCuenta['Debito'] = (double) $row->debito;
-                            $objCuenta['Orden'] = $row->orden ? intval($row->orden) : '';
+                            $objCuenta['Orden'] = $row->orden ? $ordenp->id : '';
 
                             $asientos[$lastRow]->cuentas[] = $objCuenta;
                         }
