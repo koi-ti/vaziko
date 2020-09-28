@@ -415,6 +415,8 @@ class Cotizacion2Controller extends Controller
         $cotizacion2->producto = $producto;
 
         if ($request->ajax()) {
+            $cotizacion2->archivos = auth()->user()->ability('admin', 'archivos', ['module' => 'cotizaciones']);
+            
             return response()->json($cotizacion2);
         }
 

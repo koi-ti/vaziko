@@ -363,6 +363,8 @@ class DetalleOrdenpController extends Controller
         $ordenp2->producto = $producto;
 
         if ($request->ajax()) {
+            $ordenp2->archivos = auth()->user()->ability('admin', 'archivos', ['module' => 'ordenes']);
+
             return response()->json($ordenp2);
         }
 
