@@ -35,7 +35,7 @@
 			$_inst_url = config('koi.app.site');
 			$_inst_name = config('koi.app.name');
 			$_inst_img = asset(config('koi.app.image.logo'));
-			$_inst_img1 = "http://104.236.57.82/vaziko/public/images/logo-header-pdf.png";
+			$_inst_img1 = "http://104.131.86.8/vaziko/public/images/logo-header-pdf.png";
 		/*--}}
 
 		<table border="0" cellspacing="0" cellpadding="0" height="{{ $table_wrap_height }}" width="{{ $table_wrap_width }}">

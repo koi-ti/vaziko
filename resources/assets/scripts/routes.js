@@ -240,7 +240,7 @@ app || (app = {});
         start: function () {
             var config = { pushState: true };
 
-            if (document.domain.search(/(104.236.57.82|localhost)/gi) != '-1') {
+            if (document.domain.search(/(104.131.86.8|localhost)/gi) != '-1') {
                 config.root = '/vaziko/public/';
             }
 
