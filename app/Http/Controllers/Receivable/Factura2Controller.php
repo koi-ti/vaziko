@@ -50,7 +50,7 @@ class Factura2Controller extends Controller
                     return response()->json(['success'=>false, 'errors'=>'No es posible recuperar la orden, por favor verifique la informacion o consulte al administrador.']);
                 }
 
-                return response()->json(['success' => true, 'id' => uniqid(), 'factura2_orden2' => $ordenp2->id, 'factura2_producto_nombre' => $ordenp2->productop_nombre, 'orden2_cantidad' => $ordenp2->orden2_cantidad, 'orden2_facturado' => $ordenp2->orden2_facturado, 'factura2_producto_valor_unitario' => $ordenp2->orden2_total_valor_unitario, 'orden_codigo' => $ordenp2->orden_codigo]);
+                return response()->json(['success' => true, 'id' => uniqid(), 'factura2_orden2' => $ordenp2->id, 'factura2_producto_nombre' => $ordenp2->productop_nombre, 'orden2_cantidad' => $ordenp2->orden2_saldo, 'orden2_facturado' => $ordenp2->orden2_facturado, 'factura2_producto_valor_unitario' => $ordenp2->orden2_total_valor_unitario, 'orden_codigo' => $ordenp2->orden_codigo]);
             } catch(\Exception $e) {
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
