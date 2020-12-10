@@ -127,7 +127,7 @@ class Ordenp extends BaseModel
 
     public function paraFacturar () {
         $query = Ordenp2::query();
-        $query->select('koi_ordenproduccion2.id as id', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta',
+        $query->select('koi_ordenproduccion2.id as id', DB::raw('orden2_saldo as orden2_cantidad'), 'orden2_facturado', 'orden2_precio_venta',
             DB::raw("
                 CASE
                 WHEN productop_3d != 0 THEN
@@ -168,7 +168,7 @@ class Ordenp extends BaseModel
         $query->leftJoin('koi_unidadmedida as me6', 'productop_3d_ancho_med', '=', 'me6.id');
         $query->leftJoin('koi_unidadmedida as me7', 'productop_3d_alto_med', '=', 'me7.id');
         $query->where('orden2_orden', $this->id);
-        $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
+        $query->whereRaw('orden2_saldo > 0');
         $query->orderBy('koi_ordenproduccion2.id', 'asc');
         return $query->get();
     }
@@ -206,9 +206,9 @@ class Ordenp extends BaseModel
     }
 
     public function scopeSchedule () {
-        return self::selectRaw("SUM((orden2_cantidad - orden2_facturado) * orden2_total_valor_unitario) as total")
+        return self::selectRaw("SUM(orden2_saldo * orden2_total_valor_unitario) as total")
                             ->join('koi_ordenproduccion2', 'koi_ordenproduccion.id', '=', 'koi_ordenproduccion2.orden2_orden')
-                            ->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
+                            ->whereRaw('orden2_saldo <> 0');
     }
 
     public function scopeAbiertas ($query) {

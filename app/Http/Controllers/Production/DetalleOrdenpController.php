@@ -456,8 +456,10 @@ class DetalleOrdenpController extends Controller
                         $orden2->fillBoolean($data);
                         $orden2->orden2_cantidad = $request->orden2_cantidad;
                         $orden2->orden2_saldo = $orden2->orden2_cantidad - $despacho->despachadas;
+
                         // Cambios
                         $changes = $orden2->getDirty();
+                        
                         // Guardar
                         $orden2->save();
 

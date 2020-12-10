@@ -355,7 +355,7 @@ class BuscadorController extends Controller
 
                         // Ordenes a facturar
                         if ($request->has('factura') && $request->factura == 'true') {
-                            $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('(orden2_cantidad - orden2_facturado) > 0'));
+                            $query->whereIn('koi_ordenproduccion.id', DB::table('koi_ordenproduccion2')->select('orden2_orden')->whereRaw('orden2_saldo > 0'));
                         }
 
                         // Tercero nit
