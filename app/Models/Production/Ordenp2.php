@@ -123,7 +123,7 @@ class Ordenp2 extends BaseModel
             'orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'));
         $query->producto();
         $query->join('koi_ordenproduccion', 'orden2_orden', '=', 'koi_ordenproduccion.id');
-        $query->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
+        $query->whereRaw('orden2_saldo <> 0');
         $query->whereRaw('orden2_total_valor_unitario <> 0');
         return $query;
     }
@@ -134,7 +134,7 @@ class Ordenp2 extends BaseModel
         $query->select('koi_ordenproduccion2.id as id', 'orden2_orden', DB::raw('(orden2_cantidad - orden2_facturado) as orden2_cantidad'), 'orden2_saldo', 'orden2_facturado', 'orden2_total_valor_unitario', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo"), 'orden_numero', 'orden_ano', 'orden2_total_valor_unitario', DB::raw('(orden2_total_valor_unitario * orden2_cantidad) as orden2_precio_total'));
         $query->producto();
         $query->join('koi_ordenproduccion', 'orden2_orden', '=', 'koi_ordenproduccion.id');
-        $query->whereRaw('(orden2_cantidad - orden2_facturado) > 0');
+        $query->whereRaw('orden2_saldo <> 0');
         $query->whereRaw('orden2_total_valor_unitario <> 0');
         $query->where('koi_ordenproduccion2.id', $id);
         return $query->first();
