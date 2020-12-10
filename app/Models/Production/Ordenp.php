@@ -206,9 +206,9 @@ class Ordenp extends BaseModel
     }
 
     public function scopeSchedule () {
-        return self::selectRaw("SUM(orden2_saldo * orden2_total_valor_unitario) as total")
+        return self::selectRaw("SUM((orden2_cantidad - orden2_facturado) * orden2_total_valor_unitario) as total")
                             ->join('koi_ordenproduccion2', 'koi_ordenproduccion.id', '=', 'koi_ordenproduccion2.orden2_orden')
-                            ->whereRaw('orden2_saldo <> 0');
+                            ->whereRaw('(orden2_cantidad - orden2_facturado) <> 0');
     }
 
     public function scopeAbiertas ($query) {
