@@ -3,7 +3,7 @@
 namespace App\Models\Receivable;
 
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Receivable\Factura1, App\Models\Receivable\Factura4, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Accounting\CentroCosto;
+use App\Models\Receivable\Factura1, App\Models\Receivable\Factura4, App\Models\Accounting\Documento, App\Models\Base\Tercero, App\Models\Base\PuntoVenta, App\Models\Accounting\CentroCosto;
 use DB, Validator;
 
 class Factura1 extends Model
@@ -93,8 +93,19 @@ class Factura1 extends Model
         $object->dataNif = [];
         $object->cuentas = [];
 
+        // Recuperar Punto de Venta
+        $puntoventa = PuntoVenta::find($this->factura1_puntoventa);
+        if (!$puntoventa instanceof PuntoVenta) {
+            throw new \Exception('No es posible recuperar el punto de venta.');
+        }
+
         // Recuperar documento
-        $documento = Documento::where('documento_codigo', 'FS')->first();
+        if ($puntoventa->puntoventa_documento) {
+            $documento = Documento::find($puntoventa->puntoventa_documento);
+        } else {
+            $documento = Documento::where('documento_codigo', 'FS')->first();
+        }
+        
         if (!$documento instanceof Documento) {
             throw new \Exception('No es posible recuperar el documento.');
         }

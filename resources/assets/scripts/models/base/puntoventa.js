@@ -19,7 +19,8 @@ app || (app = {});
             'puntoventa_nombre': '',
             'puntoventa_numero': '',
             'puntoventa_prefijo': '',
-            'puntoventa_resolucion_dian': ''
+            'puntoventa_resolucion_dian': '',
+            'puntoventa_documento': ''
         }
     });
 

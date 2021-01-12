@@ -19,15 +19,19 @@
                     <label class="control-label">Prefijo</label>
                     <div>{{ $puntoventa->puntoventa_prefijo }}</div>
                 </div>
-
                 <div class="form-group col-md-4">
                     <label class="control-label">Resolución de facturación DIAN</label>
                     <div>{{ $puntoventa->puntoventa_resolucion_dian }}</div>
                 </div>
-
                 <div class="form-group col-md-2">
                     <label class="control-label">Consecutivo</label>
                     <div>{{ $puntoventa->puntoventa_numero }}</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-12">
+                    <label class="control-label">Documento</label>
+                    <div>{{ $puntoventa->puntoventa_documento ? $puntoventa->documento->documento_nombre : '-' }}</div>
                 </div>
             </div>
         </div>

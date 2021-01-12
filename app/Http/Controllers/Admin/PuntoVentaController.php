@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Base\PuntoVenta;
+use App\Models\Accounting\Documento;
 use DB, Log, Datatables, Cache;
 
 class PuntoVentaController extends Controller
@@ -46,14 +47,23 @@ class PuntoVentaController extends Controller
             if ($puntoventa->isValid($data)) {
                 DB::beginTransaction();
                 try {
+                    // Documento
+                    if ($request->has('puntoventa_documento')) {
+                        $documento = Documento::find($request->puntoventa_documento);
+                        if (!$documento instanceof Documento) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el documento.']);
+                        }
+
+                        $puntoventa->puntoventa_documento = $documento->id;
+                    }
+
                     // punto de venta
                     $puntoventa->fill($data);
                     $puntoventa->save();
 
                     // Commit Transaction
                     DB::commit();
-
-                    // Forget cache
                     Cache::forget(PuntoVenta::$key_cache);
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
                 } catch(\Exception $e) {
@@ -75,7 +85,7 @@ class PuntoVentaController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $puntoventa = PuntoVenta::findOrFail($id);
+        $puntoventa = PuntoVenta::with('documento')->findOrFail($id);
         if ($request->ajax()) {
             return response()->json($puntoventa);
         }
@@ -109,14 +119,23 @@ class PuntoVentaController extends Controller
             if ($puntoventa->isValid($data)) {
                 DB::beginTransaction();
                 try {
-                    // sucursal
+                    // Documento
+                    if ($request->has('puntoventa_documento')) {
+                        $documento = Documento::find($request->puntoventa_documento);
+                        if (!$documento instanceof Documento) {
+                            DB::rollback();
+                            return response()->json(['success' => false, 'errors' => 'No es posible recuperar el documento.']);
+                        }
+
+                        $puntoventa->puntoventa_documento = $documento->id;
+                    }
+
+                    // Punto de venta
                     $puntoventa->fill($data);
                     $puntoventa->save();
 
                     // Commit Transaction
                     DB::commit();
-
-                    // Forget cache
                     Cache::forget(PuntoVenta::$key_cache);
                     return response()->json(['success' => true, 'id' => $puntoventa->id]);
                 } catch(\Exception $e) {

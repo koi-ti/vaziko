@@ -122,17 +122,25 @@
 			<input type="text" id="puntoventa_nombre" name="puntoventa_nombre" value="<%- puntoventa_nombre %>" placeholder="Nombre" class="form-control input-sm input-toupper" maxlength="200" required>
 		</div>
     </div>
-
     <div class="row">
 		<div class="form-group col-md-2">
 			<label for="puntoventa_prefijo" class="control-label">Prefijo</label>
 			<input type="text" id="puntoventa_prefijo" name="puntoventa_prefijo" value="<%- puntoventa_prefijo %>" placeholder="Prefijo" class="form-control input-sm input-toupper" maxlength="4">
 		</div>
-
 		<div class="form-group col-md-4">
 			<label for="puntoventa_resolucion_dian" class="control-label">Resolución de facturación DIAN</label>
 			<input type="text" id="puntoventa_resolucion_dian" name="puntoventa_resolucion_dian" value="<%- puntoventa_resolucion_dian %>" placeholder="Resolución de facturación DIAN" class="form-control input-sm input-toupper" maxlength="200">
 		</div>
+    </div>
+    <div class="row">
+        <div class="form-group col-md-6">
+            <label for="puntoventa_documento" class="control-label">Documento</label>
+            <select id="puntoventa_documento" name="puntoventa_documento" class="form-control select2-default-clear">
+                @foreach (App\Models\Accounting\Documento::getDocuments() as $key => $value)
+                    <option value="{{ $key }}" <%- puntoventa_documento == '{{ $key }}' ? 'selected': ''%> >{{ $value }}</option>
+                @endforeach
+            </select>
+        </div>
     </div>
 </script>
 

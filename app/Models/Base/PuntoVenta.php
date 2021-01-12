@@ -65,4 +65,8 @@ class PuntoVenta extends Model
             return $collection;
         });
     }
+
+    public function documento () {
+        return $this->hasOne('App\Models\Accounting\Documento', 'id', 'puntoventa_documento');
+    }
 }
