@@ -285,7 +285,6 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('rauxcuentabeneficiario', 'Report\AuxCuentaBeneficiarioController', ['only' => ['index']]);
 	Route::resource('rauxbeneficiariocuenta', 'Report\AuxBeneficiarioCuentaController', ['only' => ['index']]);
 	Route::resource('rauxporcuenta', 'Report\AuxPorCuentaController', ['only' => ['index']]);
-	Route::resource('rbalanceprueba', 'Report\BalancePruebaController', ['only' => ['index']]);
 	Route::resource('restadoresultado', 'Report\EstadoResultadoController', ['only' => ['index']]);
 	Route::resource('rcarteraedades', 'Report\CarteraEdadesController', ['only' => ['index']]);
 });

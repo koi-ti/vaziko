@@ -54,7 +54,7 @@ app || (app = {});
                 },
                 columns: [
                     { data: 'cotizacion_codigo', name: 'cotizacion_codigo' },
-                    { data: 'cotizacion_create', name: 'cotizacion_create' },
+                    { data: 'id', name: 'id' },
                     { data: 'cotizacion1_ano', name: 'cotizacion1_ano' },
                     { data: 'cotizacion1_numero', name: 'cotizacion1_numero' },
                     { data: 'cotizacion1_fecha_inicio', name: 'cotizacion1_fecha_inicio' },
