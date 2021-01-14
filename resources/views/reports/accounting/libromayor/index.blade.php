@@ -16,23 +16,20 @@
 	    <div class="box box-success">
 	    	<form action="{{ route('rlibromayor.index') }}" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
-				<div class="box-body">
+                <div class="box-body">
 					<div class="row">
-	                    <div class="form-group col-md-2 col-md-offset-4">
-                            <label for="filter_month" class="control-label">Mes</label>
-                            <select name="filter_month" id="filter_month" class="form-control" required>
+	                    <div class="form-group col-md-3 col-md-offset-4">
+                            <label for="filter_mes" class="control-label">Mes</label>
+                            <select name="filter_mes" id="filter_mes" class="form-control select2-default-clear" required>
+                                <option value selected></option>
                                 @foreach (config('koi.meses') as $key => $value)
-                                    <option value="{{ $key }}" {{ date('m') == $key ? 'selected' : '' }}>{{ $value }}</option>
+                                    <option value="{{ $key }}">{{ $value }}</option>
                                 @endforeach
                             </select>
 	                    </div>
-	                    <div class="form-group col-md-2">
-                            <label for="filter_year" class="control-label">Año</label>
-                            <select name="filter_year" id="filter_year" class="form-control" required>
-                                @for ($i = 2000; $i <= date('Y'); $i++)
-                                    <option value="{{ $i }}" {{ date('Y') == $i ? 'selected' : '' }} >{{ $i }}</option>
-                                @endfor
-                            </select>
+	                    <div class="form-group col-md-1">
+                            <label for="filter_ano" class="control-label">Año</label>
+                            <input type="number" id="filter_ano" name="filter_ano" value="{{ date('Y') }}" class="form-control input-sm" required>
 	                    </div>
 					</div>
 				</div>

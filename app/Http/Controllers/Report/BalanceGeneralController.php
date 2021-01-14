@@ -3,16 +3,13 @@
 namespace App\Http\Controllers\Report;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use App\Classes\Reports\Accounting\AuxPorCuenta;
-use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use App\Models\Base\Tercero;
+use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use Excel, DB, Validator;
 
-class AuxPorCuentaController extends Controller
+class BalanceGeneralController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -153,6 +150,6 @@ class AuxPorCuentaController extends Controller
                 break;
             }
         }
-        return view('reports.accounting.auxporcuenta.index');
+        return view('reports.accounting.balancegeneral.index');
     }
 }

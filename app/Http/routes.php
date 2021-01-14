@@ -268,23 +268,26 @@ Route::group(['middleware' => 'auth'], function () {
 	| Reports Routes
 	|-------------------------
 	*/
+	// Cartera
+	Route::resource('restadocartera', 'Report\EstadoCarteraController', ['only' => ['index']]);
+	Route::resource('rcarteraedades', 'Report\CarteraEdadesController', ['only' => ['index']]);
+
+	// Contabilidad
+	Route::resource('rauxbeneficiariocuenta', 'Report\AuxiliarBeneficiarioCuentaController', ['only' => ['index']]);
+	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
+	Route::resource('rauxcuenta', 'Report\AuxiliarCuentaController', ['only' => ['index']]);
+	Route::resource('rbalancegeneral', 'Report\BalanceGeneralController', ['only' => ['index']]);
+	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
+	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
+
+	// Produccion
 	Route::group(['prefix' => 'rtiemposp'], function () {
 		Route::get('graficas', ['as' => 'rtiemposp.graficas', 'uses' => 'Report\TiempopController@graficas']);
 		Route::get('exportar', ['as' => 'rtiemposp.exportar', 'uses' => 'Report\TiempopController@exportar']);
 	});
 	Route::resource('rtiemposp', 'Report\TiempopController', ['only' => ['index']]);
 	Route::resource('rresumentiemposp', 'Report\ResumenTiempopController', ['only' => ['index']]);
-   	Route::resource('rplancuentas', 'Report\PlanCuentasController', ['only' => ['index']]);
-   	Route::resource('rmayorbalance', 'Report\MayorBalanceController', ['only' => ['index']]);
+
+	// Tesoreria
 	Route::resource('rhistorialproveedores', 'Report\HistorialProveedorController', ['only' => ['index']]);
-	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
-	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
-	Route::resource('rauxcontable', 'Report\AuxiliarContableController', ['only' => ['index']]);
-	Route::resource('rimpuestos', 'Report\RelacionImpuestosController', ['only' => ['index']]);
-	Route::resource('restadocartera', 'Report\EstadoCarteraController', ['only' => ['index']]);
-	Route::resource('rauxcuentabeneficiario', 'Report\AuxCuentaBeneficiarioController', ['only' => ['index']]);
-	Route::resource('rauxbeneficiariocuenta', 'Report\AuxBeneficiarioCuentaController', ['only' => ['index']]);
-	Route::resource('rauxporcuenta', 'Report\AuxPorCuentaController', ['only' => ['index']]);
-	Route::resource('restadoresultado', 'Report\EstadoResultadoController', ['only' => ['index']]);
-	Route::resource('rcarteraedades', 'Report\CarteraEdadesController', ['only' => ['index']]);
 });

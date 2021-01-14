@@ -92,7 +92,7 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif','plancuentas','cierresmensuales' ,'plancuentasnif','centroscosto', 'folders', 'documentos', 'rauxcontable', 'saldos']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales', 'saldos', 'rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'centroscosto',  'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -120,19 +120,34 @@
             </li>
 
             {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rauxcontable']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
+                    <li class="{{ Request::segment(1) == 'rauxbeneficiariocuenta' ? 'active' : '' }}">
+                        <a href="{{ route('rauxbeneficiariocuenta.index') }}"><i class="fa fa-circle-o"></i> Auxiliar beneficiario/cuenta</a>
+                    </li>
                     <li class="{{ Request::segment(1) == 'rauxcontable' ? 'active' : '' }}">
                         <a href="{{ route('rauxcontable.index') }}"><i class="fa fa-circle-o"></i> Auxiliar contable</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rauxcuenta' ? 'active' : '' }}">
+                        <a href="{{ route('rauxcuenta.index') }}"><i class="fa fa-circle-o"></i> Auxiliar cuenta</a>
+                    </li>
+                    {{-- <li class="{{ Request::segment(1) == 'rbalancegeneral' ? 'active' : '' }}">
+                        <a href="{{ route('rbalancegeneral.index') }}"><i class="fa fa-circle-o"></i> Balance general</a>
+                    </li> --}}
+                    <li class="{{ Request::segment(1) == 'rlibrodiario' ? 'active' : '' }}">
+                        <a href="{{ route('rlibrodiario.index') }}"><i class="fa fa-circle-o"></i> Libro diario</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rlibromayor' ? 'active' : '' }}">
+                        <a href="{{ route('rlibromayor.index') }}"><i class="fa fa-circle-o"></i> Libro mayor</a>
                     </li>
                 </ul>
             </li>
 
             {{-- Referencias contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['plancuentas', 'plancuentasnif','centroscosto', 'folders', 'documentos']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['centroscosto', 'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-circle-o"></i> Referencias <i class="fa fa-angle-left pull-right"></i>
                 </a>

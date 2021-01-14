@@ -3,10 +3,9 @@
 namespace App\Http\Controllers\Report;
 
 use Illuminate\Http\Request;
-
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Classes\Reports\Accounting\AuxiliarContable, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta, App\Models\Base\Tercero;
+use App\Models\Base\Tercero;
+use App\Classes\Reports\Accounting\AuxiliarContable, App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use Excel, DB, Carbon\Carbon;
 
 class AuxiliarContableController extends Controller
