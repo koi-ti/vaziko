@@ -16,7 +16,8 @@
         "dompdf/dompdf": "^0.8",
         "barryvdh/laravel-dompdf": "~0.8.0",
         "nesbot/carbon": "^1.34",
-        "illuminated/helper-functions": "5.1.*"
+        "illuminated/helper-functions": "5.1.*",
+        "codedge/laravel-fpdf": "^1.5"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
