@@ -5,7 +5,7 @@ namespace App\Classes\Reports\Accounting;
 use Codedge\Fpdf\Fpdf\Fpdf;
 use App\Models\Base\Empresa;
 
-class AuxPorCuenta extends FPDF
+class AuxiliarCuenta extends FPDF
 {
     private $title;
     private $subtitle;

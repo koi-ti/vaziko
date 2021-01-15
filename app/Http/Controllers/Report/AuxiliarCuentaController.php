@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Report;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Classes\Reports\Accounting\AuxPorCuenta;
+use App\Classes\Reports\Accounting\AuxiliarCuenta;
 use App\Models\Base\Tercero;
 use App\Models\Accounting\Asiento2, App\Models\Accounting\PlanCuenta;
 use Excel, DB, Validator;
@@ -112,7 +112,7 @@ class AuxiliarCuentaController extends Controller
                 break;
 
                 case 'pdf':
-                    $pdf = new AuxPorCuenta('L', 'mm', 'A4');
+                    $pdf = new AuxiliarCuenta('L', 'mm', 'A4');
                     $pdf->buldReport($data, $saldo, $title, $subtitle);
                 break;
             }

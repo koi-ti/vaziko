@@ -42,11 +42,11 @@ class LibroDiario extends FPDF
 
     function headerTable () {
         $this->SetFont('Arial', 'B', 8);
-        $this->Cell(40, 5, 'Cuenta', 1);
+        $this->Cell(20, 5, 'Cuenta', 1);
         $this->Cell(90, 5, 'Nombre', 1);
-        $this->Cell(20, 5, 'Folder', 1);
-        $this->Cell(30, 5, utf8_decode('Débito'), 1);
-        $this->Cell(30, 5, utf8_decode('Crédito'), 1);
+        $this->Cell(10, 5, 'Folder', 1);
+        $this->Cell(35, 5, utf8_decode('Débito'), 1);
+        $this->Cell(35, 5, utf8_decode('Crédito'), 1);
         $this->Ln();
     }
 
@@ -57,21 +57,19 @@ class LibroDiario extends FPDF
         foreach ($data as $item) {
             $tdebito = $tcredito = 0;
             $this->SetFont('Arial', 'B', 8);
-            $this->Cell(100, 5, $key, 0, 0, '');
-            $this->Ln();
 
-            $this->Cell(40, 5, $item->plancuentas_cuenta, '', 0, 'R', $fill);
+            $this->Cell(20, 5, $item->plancuentas_cuenta, '', 0, 'R', $fill);
             $this->Cell(90, 5, $item->plancuentas_nombre, '', 0, '', $fill);
-            $this->Cell(30, 5, $item->plancuentas_nivel, '', 0, '', $fill);
-            $this->Cell(30, 5, number_format($item->debito, 2, ', ' ,  '.'), '', 0, 'R', $fill);
-            $this->Cell(30, 5, number_format(0, 2, ', ' ,  '.'), '', 0, 'R', $fill);
+            $this->Cell(10, 5, $item->plancuentas_nivel, '', 0, '', $fill);
+            $this->Cell(35, 5, number_format($item->debito, 2, ', ' ,  '.'), '', 0, 'R', $fill);
+            $this->Cell(35, 5, number_format(0, 2, ', ' ,  '.'), '', 0, 'R', $fill);
             $this->Ln();
 
-            $this->Cell(40, 5, '', '', 0, 'R', $fill);
+            $this->Cell(20, 5, '', '', 0, 'R', $fill);
             $this->Cell(90, 5, '', '', 0, '', $fill);
-            $this->Cell(30, 5, '', '', 0, '', $fill);
-            $this->Cell(30, 5, number_format(0, 2, ', ' ,  '.'), '', 0, 'R', $fill);
-            $this->Cell(30, 5, number_format($item->credito, 2, ', ' ,  '.'), '', 0, 'R', $fill);
+            $this->Cell(10, 5, '', '', 0, '', $fill);
+            $this->Cell(35, 5, number_format(0, 2, ', ' ,  '.'), '', 0, 'R', $fill);
+            $this->Cell(35, 5, number_format($item->credito, 2, ', ' ,  '.'), '', 0, 'R', $fill);
             $this->Ln();
 
             $tdebito += $item->debito;

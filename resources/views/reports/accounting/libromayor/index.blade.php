@@ -29,7 +29,11 @@
 	                    </div>
 	                    <div class="form-group col-md-1">
                             <label for="filter_ano" class="control-label">Año</label>
-                            <input type="number" id="filter_ano" name="filter_ano" value="{{ date('Y') }}" class="form-control input-sm" required>
+                            <select name="filter_ano" id="filter_ano" class="form-control" required>
+								@for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+									<option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>{{ $i }}</option>
+								@endfor
+							</select>
 	                    </div>
 					</div>
 				</div>
