@@ -146,6 +146,7 @@
                 <p>
                     Referencia: <b>{{ $producto->orden2_referencia }}</b><br>
                     Producto: {{ $producto->productop_nombre }}<br>
+                    Cantidad: {{ $producto->orden2_cantidad }}<br>
                     Medidas: {{ $producto->medidas }}<br>
                     Tinta: {{ $producto->tiro }} / {{ $producto->retiro }}
                 </p>
