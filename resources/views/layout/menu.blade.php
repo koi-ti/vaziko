@@ -134,9 +134,9 @@
                     <li class="{{ Request::segment(1) == 'rauxcuenta' ? 'active' : '' }}">
                         <a href="{{ route('rauxcuenta.index') }}"><i class="fa fa-circle-o"></i> Auxiliar cuenta</a>
                     </li>
-                    {{-- <li class="{{ Request::segment(1) == 'rbalancegeneral' ? 'active' : '' }}">
+                    <li class="{{ Request::segment(1) == 'rbalancegeneral' ? 'active' : '' }}">
                         <a href="{{ route('rbalancegeneral.index') }}"><i class="fa fa-circle-o"></i> Balance general</a>
-                    </li> --}}
+                    </li>
                     <li class="{{ Request::segment(1) == 'rlibrodiario' ? 'active' : '' }}">
                         <a href="{{ route('rlibrodiario.index') }}"><i class="fa fa-circle-o"></i> Libro diario</a>
                     </li>
