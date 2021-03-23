@@ -16,19 +16,19 @@
             <div class="box-body">
                 {!! Form::open(['id' => 'form-koi-search-tercero-component', 'class' => 'form-horizontal', 'data-toggle' => 'validator', 'role' => 'form']) !!}
                     <div class="form-group">
-                        <label for="searchordenp_ordenp_numero" class="col-md-1 control-label">Código</label>
+                        <label for="searchordenp_numero" class="col-md-1 control-label">Código</label>
                         <div class="col-md-2">
-                            <input id="searchordenp_ordenp_numero" placeholder="Código" class="form-control input-sm" name="searchordenp_ordenp_numero" type="text" maxlength="15" value="{{ session('searchordenp_ordenp_numero') }}">
+                            <input id="searchordenp_numero" placeholder="Código" class="form-control input-sm" name="searchordenp_numero" type="text" maxlength="15" value="{{ session('searchordenp_numero') }}">
                         </div>
 
-                        <label for="searchordenp_ordenp_estado" class="col-md-1 control-label">Estado</label>
+                        <label for="searchordenp_estado" class="col-md-1 control-label">Estado</label>
                         <div class="col-md-2">
-                            <select name="searchordenp_ordenp_estado" id="searchordenp_ordenp_estado" class="form-control">
+                            <select name="searchordenp_estado" id="searchordenp_estado" class="form-control">
                                 <option value="" selected>Todas</option>
-                                <option value="A" {{ session('searchordenp_ordenp_estado') == 'A' ? 'selected': '' }}>Abiertas</option>
-                                <option value="N" {{ session('searchordenp_ordenp_estado') == 'N' ? 'selected': '' }}>Anuladas</option>
-                                <option value="C" {{ session('searchordenp_ordenp_estado') == 'C' ? 'selected': '' }}>Cerradas</option>
-                                <option value="T" {{ session('searchordenp_ordenp_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
+                                <option value="A" {{ session('searchordenp_estado') == 'A' ? 'selected': '' }}>Abiertas</option>
+                                <option value="N" {{ session('searchordenp_estado') == 'N' ? 'selected': '' }}>Anuladas</option>
+                                <option value="C" {{ session('searchordenp_estado') == 'C' ? 'selected': '' }}>Cerradas</option>
+                                <option value="T" {{ session('searchordenp_estado') == 'T' ? 'selected': '' }}>Culminadas</option>
                             </select>
                         </div>
                         <label for="searchordenp_tercero" class="col-sm-1 control-label">Tercero</label>
@@ -48,16 +48,16 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="searchordenp_ordenp_referencia" class="col-md-1 control-label">Referencia</label>
+                        <label for="searchordenp_referencia" class="col-md-1 control-label">Referencia</label>
                         <div class="col-md-5">
-                            <input id="searchordenp_ordenp_referencia" placeholder="Referencia" class="form-control input-sm input-toupper" name="searchordenp_ordenp_referencia" type="text" maxlength="200" value="{{ session('searchordenp_ordenp_referencia') }}">
+                            <input id="searchordenp_referencia" placeholder="Referencia" class="form-control input-sm input-toupper" name="searchordenp_referencia" type="text" maxlength="200" value="{{ session('searchordenp_referencia') }}">
                         </div>
 
-                        <label for="searchordenp_ordenp_productop" class="col-md-1 control-label">Producto</label>
+                        <label for="searchordenp_productop" class="col-md-1 control-label">Producto</label>
                         <div class="col-md-5">
-                            <select name="searchordenp_ordenp_productop" id="searchordenp_ordenp_productop" class="form-control select2-default-clear">
+                            <select name="searchordenp_productop" id="searchordenp_productop" class="form-control select2-default-clear">
                                 @foreach (App\Models\Production\Productop::getProductos() as $key => $value)
-                                    <option value="{{ $key }}" {{ session('searchordenp_ordenp_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
+                                    <option value="{{ $key }}" {{ session('searchordenp_productop') == $key ? 'selected': '' }}>{{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>

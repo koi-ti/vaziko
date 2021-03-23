@@ -56,13 +56,14 @@ class OrdenpController extends Controller
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
-                session(['searchordenp_ordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
+                session(['searchordenp_numero' => $request->has('orden_numero') ? $request->orden_numero : '']);
                 session(['searchordenp_tercero' => $request->has('orden_tercero_nit') ? $request->orden_tercero_nit : '']);
                 session(['searchordenp_tercero_nombre' => $request->has('orden_tercero_nombre') ? $request->orden_tercero_nombre : '']);
-                session(['searchordenp_ordenp_estado' => $request->has('orden_estado') ? $request->orden_estado : '']);
-                session(['searchordenp_ordenp_referencia' => $request->has('orden_referencia') ? $request->orden_referencia : '']);
-                session(['searchordenp_ordenp_productop' => $request->has('orden_productop') ? $request->orden_productop : '']);
+                session(['searchordenp_estado' => $request->has('orden_estado') ? $request->orden_estado : '']);
+                session(['searchordenp_referencia' => $request->has('orden_referencia') ? $request->orden_referencia : '']);
+                session(['searchordenp_productop' => $request->has('orden_productop') ? $request->orden_productop : '']);
             }
+
             return Datatables::of($query)
                 ->filter(function ($query) use ($request) {
                     // Orden codigo

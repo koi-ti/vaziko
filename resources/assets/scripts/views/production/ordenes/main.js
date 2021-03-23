@@ -30,12 +30,12 @@ app || (app = {});
 
             // References
             this.$ordersSearchTable = this.$('#ordenes-search-table');
-            this.$searchordenpOrden = this.$('#searchordenp_ordenp_numero');
+            this.$searchordenpOrden = this.$('#searchordenp_numero');
             this.$searchordenpTercero = this.$('#searchordenp_tercero');
             this.$searchordenpTerceroName = this.$('#searchordenp_tercero_nombre');
-            this.$searchordenpEstado = this.$('#searchordenp_ordenp_estado');
-            this.$searchordenpReferencia = this.$('#searchordenp_ordenp_referencia');
-            this.$searchordenpProductop = this.$('#searchordenp_ordenp_productop');
+            this.$searchordenpEstado = this.$('#searchordenp_estado');
+            this.$searchordenpReferencia = this.$('#searchordenp_referencia');
+            this.$searchordenpProductop = this.$('#searchordenp_productop');
 
             this.ordersSearchTable = this.$ordersSearchTable.DataTable({
 				dom: "<'row'<'col-sm-12'tr>>" +
