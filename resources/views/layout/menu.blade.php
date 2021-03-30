@@ -92,14 +92,14 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'cierresmensuales', 'saldos', 'rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'centroscosto',  'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'configuracion', 'saldos', 'rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'centroscosto',  'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
 
         <ul class="treeview-menu">
             {{-- Modulos contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'saldos', 'cierresmensuales']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'saldos', 'configuracion']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-wpforms"></i> Módulos <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -110,11 +110,8 @@
                     <li class="{{ Request::segment(1) == 'asientosnif' ? 'active' : '' }}">
                         <a href="{{ route('asientosnif.index') }}"><i class="fa fa-file-text"></i> Asientos NIF</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'cierresmensuales' ? 'active' : '' }}">
-                        <a href="{{ route('cierresmensuales.index') }}"><i class="fa fa-window-close-o"></i> Cierre mensual</a>
-                    </li>
-                    <li class="{{ Request::segment(1) == 'saldos' ? 'active' : '' }}">
-                        <a href="{{ route('saldos.index') }}"><i class="fa fa-edit"></i> Saldos</a>
+                    <li class="{{ Request::segment(1) == 'configuracion' ? 'active' : '' }}">
+                        <a href="{{ route('configuracion.index') }}"><i class="fa fa-cogs"></i> Configuración</a>
                     </li>
                 </ul>
             </li>

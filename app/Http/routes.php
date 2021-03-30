@@ -125,8 +125,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::resource('detalle', 'Accounting\AsientoNifDetalleController', ['only' => ['index', 'store', 'destroy']]);
 	});
 	Route::resource('asientosnif', 'Accounting\AsientoNifController', ['only' => ['index', 'edit', 'update', 'show']]);
-	Route::resource('cierresmensuales', 'Accounting\CierreMensualController', ['except' => ['destroy']]);
-	Route::resource('saldos', 'Accounting\SaldosController', ['only' => ['index']]);
+	Route::resource('configuracion', 'Accounting\ConfiguracionController', ['only' => ['index', 'store']]);
 	Route::resource('centroscosto', 'Accounting\CentroCostoController', ['except' => ['destroy']]);
 	Route::resource('documentos', 'Accounting\DocumentoController', ['except' => ['destroy']]);
 	Route::resource('folders', 'Accounting\FolderController', ['except' => ['destroy']]);

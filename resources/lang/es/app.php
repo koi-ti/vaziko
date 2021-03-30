@@ -21,6 +21,7 @@ return [
     'create' => 'Crear',
     'save' => 'Guardar',
     'edit' => 'Editar',
+    'update' => 'Actualizar',
     'comeback' => 'Regresar',
     'cancel' => 'Cancelar',
     'add' => 'Agregar',

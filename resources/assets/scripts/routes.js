@@ -72,7 +72,7 @@ app || (app = {});
             'asientosnif/:asientonif(/)': 'getAsientosNifShow',
             'asientosnif/:asientonif/edit(/)': 'getAsientosNifEdit',
 
-            'cierresmensuales(/)': 'getCierreMensualCreate',
+            'configuracion(/)': 'getConfiguracionMain',
 
             'documentos(/)': 'getDocumentosMain',
             'documentos/create(/)': 'getDocumentosCreate',
@@ -182,6 +182,11 @@ app || (app = {});
             /---------------------------*/
             'facturasp(/)': 'getFacturaspMain',
             'facturasp(/):facturasp(/)': 'getFacturaspShow',
+
+            /*--------------------------
+            |   Reportes
+            /---------------------------*/
+            'rbalancegeneral(/)': 'getRBalanceGeneralMain',
         },
 
         /**
@@ -830,15 +835,15 @@ app || (app = {});
         /**
         * show view create cierre contable mensual
         */
-        getCierreMensualCreate: function (){
+        getConfiguracionMain: function () {
 
-            if (this.createCierreContableMensualView instanceof Backbone.View) {
-                this.createCierreContableMensualView.stopListening();
-                this.createCierreContableMensualView.undelegateEvents();
+            if (this.mainConfiguracionView instanceof Backbone.View) {
+                this.mainConfiguracionView.stopListening();
+                this.mainConfiguracionView.undelegateEvents();
             }
 
-            this.createCierreContableMensualView = new app.CreateCierreContableMensualView();
-            this.createCierreContableMensualView.render();
+            this.mainConfiguracionView = new app.MainConfiguracionView();
+            this.mainConfiguracionView.render();
         },
 
         /**
@@ -2130,6 +2135,18 @@ app || (app = {});
             this.showFacturapView = new app.ShowFacturapView({
                 model: this.facturapModel
             });
+        },
+
+        /**
+        * Reports
+        */
+        getRBalanceGeneralMain: function () {
+            if (this.mainRBalanceGeneralView instanceof Backbone.View) {
+                this.mainRBalanceGeneralView.stopListening();
+                this.mainRBalanceGeneralView.undelegateEvents();
+            }
+
+            this.mainRBalanceGeneralView = new app.MainRBalanceGeneralView();
         },
     }));
 

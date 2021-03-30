@@ -18,9 +18,9 @@
 	    	<form action="{{ route('rauxcontable.index') }}" method="GET" data-toggle="validator">
 			 	<input class="hidden" id="type-report-koi-component" name="type"></input>
 				<div class="box-body">
-                    <div class="row">
-					    <label for="filter_tercero" class="col-sm-2 col-md-offset-2 control-label text-right">Tercero</label>
-					    <div class="form-group col-md-2">
+                    <div class="row form-group">
+					    <label for="filter_tercero" class="col-sm-3 control-label text-right">Tercero</label>
+					    <div class="form-group col-md-3">
 					        <div class="input-group input-group-sm">
 					            <span class="input-group-btn">
 					                <button type="button" class="btn btn-default btn-flat btn-koi-search-tercero-component-table" data-field="filter_tercero">
@@ -34,9 +34,9 @@
 					        <input id="filter_terecero_nombre" name="filter_terecero_nombre" placeholder="Nombre tercero" class="form-control input-sm" type="text" maxlength="15" readonly>
 					    </div>
 					</div>
-                    <div class="row">
-						<label for="filter_cuenta_inicio" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta inicio</label>
-						<div class="form-group col-sm-3 col-md-2">
+                    <div class="row form-group">
+						<label for="filter_cuenta_inicio" class="col-sm-3 control-label text-right">Cuenta inicio</label>
+						<div class="form-group col-sm-3">
 				      		<div class="input-group input-group-sm">
 								<span class="input-group-btn">
 									<button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="filter_cuenta_inicio">
@@ -50,9 +50,9 @@
 							<input id="filter_cuenta_inicio_nombre" name="filter_cuenta_inicio_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
 						</div>
 					</div>
-                    <div class="row">
-                        <label for="filter_cuenta_fin" class="col-sm-2 col-md-offset-2 control-label text-right">Cuenta final</label>
-                        <div class="form-group col-sm-3 col-md-2">
+                    <div class="row form-group">
+                        <label for="filter_cuenta_fin" class="col-sm-3 control-label text-right">Cuenta final</label>
+                        <div class="form-group col-sm-3">
                             <div class="input-group input-group-sm">
                                 <span class="input-group-btn">
                                     <button type="button" class="btn btn-default btn-flat btn-koi-search-plancuenta-component" data-field="filter_cuenta_fin">
@@ -66,9 +66,9 @@
                             <input id="filter_cuenta_fin_nombre" name="filter_cuenta_fin_nombre" placeholder="Nombre cuenta" class="form-control input-sm" type="text" maxlength="15" disabled>
                         </div>
                     </div>
-					<div class="row">
-                        <label for="filter_fecha_inicial" class="control-label col-md-2 text-right col-md-offset-2">Fecha inicial</label>
-	                    <div class="form-group col-md-2">
+					<div class="row form-group">
+                        <label for="filter_fecha_inicial" class="control-label col-sm-3 text-right">Fecha inicial</label>
+	                    <div class="form-group col-sm-2">
 	                        <div class="input-group">
 	                            <div class="input-group-addon">
 	                                <i class="fa fa-calendar"></i>
@@ -76,8 +76,8 @@
 	                            <input type="text" id="filter_fecha_inicial" name="filter_fecha_inicial" class="form-control input-sm datepicker" value="{{ date('Y-m-d') }}" required>
 	                        </div>
 	                    </div>
-                        <label for="filter_fecha_final" class="control-label col-md-1">Fecha final</label>
-	                    <div class="form-group col-md-2">
+                        <label for="filter_fecha_final" class="control-label col-sm-2 text-right">Fecha final</label>
+	                    <div class="form-group col-sm-2">
 	                        <div class="input-group">
 	                            <div class="input-group-addon">
 	                                <i class="fa fa-calendar"></i>
