@@ -14,8 +14,10 @@
 		</thead>
 		<tbody>
 			@if (count($saldos) > 0)
-				{{--*/ $saldoDebito = $saldoCredito = $totalFinal = $totalInicio = 0; /*--}}
-				@foreach($saldos as $saldo)
+				{{--*/
+					$cuenta = $saldoDebito = $saldoCredito = $totalFinal = $totalInicio = 0;
+				/*--}}
+				@foreach ($saldos as $saldo)
 					{{--*/
 						if ($saldo->plancuentas_naturaleza == 'D') {
 							$final = $saldo->inicial + ($saldo->debitomes - $saldo->creditomes);
@@ -24,24 +26,53 @@
 						}
 					/*--}}
 
-					<tr>
-						<td class="left">{{ $saldo->plancuentas_cuenta }}</td>
-						<td class="left">{{ $saldo->plancuentas_nombre }}</td>
-						<td class="right">{{ number_format($saldo->inicial, 2, '.', ',') }}</td>
-						<td class="right">{{ number_format($saldo->debitomes, 2, '.', ',') }}</td>
-						<td class="right">{{ number_format($saldo->creditomes, 2, '.', ',') }}</td>
-						<td class="right">{{ number_format($final, 2, '.', ',') }}</td>
+					@if ($tercero)
+						@if ($saldo->plancuentas_cuenta != $cuenta)
+							<tr>
+								<th class="left bg-gray">{{ $saldo->plancuentas_cuenta }}</th>
+								<th class="left bg-gray" colspan="5">{{ $saldo->plancuentas_nombre }}</th>
+							</tr>
+							<tr>
+								<td class="left">{{ $saldo->tercero_nit }}</td>
+								<td class="left">{{ $saldo->tercero_nombre }}</td>
+								<td class="right">{{ number_format($saldo->inicial, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($saldo->debitomes, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($saldo->creditomes, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($final, 2, '.', ',') }}</td>
+							</tr>
+						@else
+							<tr>
+								<td class="left">{{ $saldo->tercero_nit }}</td>
+								<td class="left">{{ $saldo->tercero_nombre }}</td>
+								<td class="right">{{ number_format($saldo->inicial, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($saldo->debitomes, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($saldo->creditomes, 2, '.', ',') }}</td>
+								<td class="right">{{ number_format($final, 2, '.', ',') }}</td>
+							</tr>
+						@endif
+					@else
+						<tr>
+							<td class="left">{{ $saldo->plancuentas_cuenta }}</td>
+							<td class="left">{{ $saldo->plancuentas_nombre }}</td>
+							<td class="right">{{ number_format($saldo->inicial, 2, '.', ',') }}</td>
+							<td class="right">{{ number_format($saldo->debitomes, 2, '.', ',') }}</td>
+							<td class="right">{{ number_format($saldo->creditomes, 2, '.', ',') }}</td>
+							<td class="right">{{ number_format($final, 2, '.', ',') }}</td>
+						</tr>
+					@endif
 
-						{{-- Calculo totales --}}
-						{{--*/
-							if ($saldo->plancuentas_nivel == 1) {
-								$saldoDebito = $saldo->debitomes + $saldoDebito;
-								$saldoCredito = $saldo->creditomes + $saldoCredito;
-								$totalFinal += $final;
-								$totalInicio += $saldo->inicial;
-							}
-						/*--}}
-					</tr>
+
+					{{-- Calculo totales --}}
+					{{--*/
+						if ($saldo->plancuentas_nivel == 1) {
+							$saldoDebito = $saldo->debitomes + $saldoDebito;
+							$saldoCredito = $saldo->creditomes + $saldoCredito;
+							$totalFinal += $final;
+							$totalInicio += $saldo->inicial;
+						}
+
+						$cuenta = $saldo->plancuentas_cuenta;
+					/*--}}
 				@endforeach
 				<tr>
 					<td colspan="2" class="right bold">TOTAL</td>

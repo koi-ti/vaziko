@@ -14,4 +14,9 @@ class SaldoTercero extends Model
     protected $table = 'koi_saldosterceros';
 
     public $timestamps = false;
+
+    public function tercero ()
+    {
+        return $this->hasOne('App\Models\Base\Tercero', 'id', 'saldosterceros_tercero');
+    }
 }
