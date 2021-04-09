@@ -52,7 +52,7 @@ class BalanceGeneralController extends Controller
                         AS tercero_nombre, tercero_nit,
                         (
                             SELECT
-                                (saldosterceros_debito_inicial - saldosterceros_credito_inicial)
+                                (CASE WHEN koi_plancuentas.plancuentas_naturaleza = 'C' THEN (saldosterceros_credito_inicial - saldosterceros_debito_inicial) ELSE (saldosterceros_debito_inicial - saldosterceros_credito_inicial) END)
                             FROM
                                 koi_saldosterceros
                             WHERE
@@ -72,7 +72,7 @@ class BalanceGeneralController extends Controller
             } else {
                 $sql = "
                     SELECT plancuentas_nombre, plancuentas_cuenta, plancuentas_naturaleza, plancuentas_nivel,
-                    (SELECT (saldoscontables_debito_inicial - saldoscontables_credito_inicial)
+                    (SELECT (CASE WHEN koi_plancuentas.plancuentas_naturaleza = 'C' THEN (saldoscontables_credito_inicial - saldoscontables_debito_inicial) ELSE (saldoscontables_debito_inicial - saldoscontables_credito_inicial) END)
                         FROM koi_saldoscontables
                         WHERE saldoscontables_mes = {$mes2} AND saldoscontables_ano = {$ano2} AND saldoscontables_cuenta = koi_plancuentas.id
                     ) AS inicial,
