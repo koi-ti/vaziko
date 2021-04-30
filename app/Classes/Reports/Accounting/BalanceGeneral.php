@@ -43,8 +43,8 @@ class BalanceGeneral extends FPDF
     function headerTable () {
         $this->SetFont('Arial', 'B', 9);
 
-        $this->Cell(40, 4, 'Cuenta', 1);
-        $this->Cell(100, 4, 'Nombre', 1);
+        $this->Cell(20, 4, 'Cuenta', 1, 0, 'C');
+        $this->Cell(120, 4, 'Nombre', 1);
         $this->Cell(32, 4, 'Inicial', 1);
         $this->Cell(32, 4, utf8_decode('Débito'), 1);
         $this->Cell(32, 4, utf8_decode('Crédito'), 1);
@@ -56,13 +56,21 @@ class BalanceGeneral extends FPDF
         $fill = false;
         $this->SetFillColor(247, 247, 247);
         $this->SetFont('Arial', '', 8);
-        $saldoDebito = $saldoCredito = $totalFinal = $totalInicio = 0;
+        $lastNivel = $saldoDebito = $saldoCredito = $totalFinal = $totalInicio = 0;
         foreach ($data as $saldo) {
-            $this->Cell(40, 4, $saldo->plancuentas_cuenta, '', 0, '', $fill);
-            $this->Cell(100, 4, utf8_decode($saldo->plancuentas_nombre), '', 0, '', $fill);
-            $this->Cell(32, 4, number_format($saldo->inicial, 2, '.', ','), '', 0, 'R', $fill);
-            $this->Cell(32, 4, number_format($saldo->debitomes, 2, '.', ','), '', 0, 'R', $fill);
-            $this->Cell(32, 4, number_format($saldo->creditomes, 2, '.', ','), '', 0, 'R', $fill);
+            if (($saldo->plancuentas_nivel == 3 && $lastNivel != 2) || ($saldo->plancuentas_nivel == 2 && $lastNivel > 3)) {
+                $this->Ln();
+            }
+
+            if ($saldo->plancuentas_nivel <= 2) {
+                $this->SetFont('Arial', 'B', 8);
+            }
+            $this->Cell(20, 4, $saldo->plancuentas_cuenta, 0, 0, 'R', $fill);
+            $this->SetFont('Arial', '', 8);
+            $this->Cell(120, 4, utf8_decode($saldo->plancuentas_nombre), 0, 0, 'L', $fill);
+            $this->Cell(32, 4, number_format($saldo->inicial, 2, '.', ','), 0, 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($saldo->debitomes, 2, '.', ','), 0, 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($saldo->creditomes, 2, '.', ','), 0, 0, 'R', $fill);
 
             // Calculo final
             if ($saldo->plancuentas_naturaleza == 'D') {
@@ -75,6 +83,9 @@ class BalanceGeneral extends FPDF
             $this->Cell(32, 4, number_format($final, 2, '.', ','), '', 0, 'R', $fill);
             $this->Ln();
 
+            $fill = !$fill;
+            $lastNivel = $saldo->plancuentas_nivel;
+
             // Calculo totales
             if ($saldo->plancuentas_nivel == 1) {
                 $saldoDebito = $saldo->debitomes + $saldoDebito;
@@ -84,6 +95,6 @@ class BalanceGeneral extends FPDF
             }
         }
 
-        $this->Output(sprintf('%s_%s.pdf', 'balance_general', date('Y_m_d H_i_s')),'d');
+        $this->Output(sprintf('%s_%s.pdf', 'balance_general', date('Y_m_d H_i_s')), 'I');
     }
 }
