@@ -95,6 +95,6 @@ class BalanceGeneral extends FPDF
             }
         }
 
-        $this->Output(sprintf('%s_%s.pdf', 'balance_general', date('Y_m_d H_i_s')), 'I');
+        $this->Output(sprintf('%s_%s.pdf', 'balance_general', date('Y_m_d H_i_s')), 'D');
     }
 }
