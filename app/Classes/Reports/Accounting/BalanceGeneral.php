@@ -62,15 +62,15 @@ class BalanceGeneral extends FPDF
                 $this->Ln();
             }
 
-            if ($saldo->plancuentas_nivel <= 2) {
+            if ($saldo->plancuentas_nivel <= 3) {
                 $this->SetFont('Arial', 'B', 8);
             }
             $this->Cell(20, 4, $saldo->plancuentas_cuenta, 0, 0, 'R', $fill);
             $this->SetFont('Arial', '', 8);
             $this->Cell(120, 4, utf8_decode($saldo->plancuentas_nombre), 0, 0, 'L', $fill);
-            $this->Cell(32, 4, number_format($saldo->inicial, 2, '.', ','), 0, 0, 'R', $fill);
-            $this->Cell(32, 4, number_format($saldo->debitomes, 2, '.', ','), 0, 0, 'R', $fill);
-            $this->Cell(32, 4, number_format($saldo->creditomes, 2, '.', ','), 0, 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($saldo->inicial, 2, ',', '.'), 0, 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($saldo->debitomes, 2, ',', '.'), 0, 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($saldo->creditomes, 2, ',', '.'), 0, 0, 'R', $fill);
 
             // Calculo final
             if ($saldo->plancuentas_naturaleza == 'D') {
@@ -80,20 +80,28 @@ class BalanceGeneral extends FPDF
             }
 
             // Pinto final
-            $this->Cell(32, 4, number_format($final, 2, '.', ','), '', 0, 'R', $fill);
+            $this->Cell(32, 4, number_format($final, 2, ',', '.'), '', 0, 'R', $fill);
             $this->Ln();
-
-            $fill = !$fill;
-            $lastNivel = $saldo->plancuentas_nivel;
 
             // Calculo totales
             if ($saldo->plancuentas_nivel == 1) {
-                $saldoDebito = $saldo->debitomes + $saldoDebito;
-                $saldoCredito = $saldo->creditomes + $saldoCredito;
-                $totalFinal += $final;
                 $totalInicio += $saldo->inicial;
+                $saldoDebito += $saldo->debitomes;
+                $saldoCredito += $saldo->creditomes;
+                $totalFinal += $final;
             }
+
+            $lastNivel = $saldo->plancuentas_nivel;
+            $fill = !$fill;
         }
+
+        // Pintando totales
+        $this->SetFont('Arial', 'B', 8);
+        $this->Cell(140, 4, 'TOTAL', '', 0, 'C', $fill);
+        $this->Cell(32, 4, number_format($totalInicio, 2, ',', '.'), '', 0, 'R', $fill);
+        $this->Cell(32, 4, number_format($saldoDebito, 2, ',', '.'), '', 0, 'R', $fill);
+        $this->Cell(32, 4, number_format($saldoCredito, 2, ',', '.'), '', 0, 'R', $fill);
+        $this->Cell(32, 4, number_format($totalFinal, 2, ',', '.'), '', 0, 'R', $fill);
 
         $this->Output(sprintf('%s_%s.pdf', 'balance_general', date('Y_m_d H_i_s')), 'D');
     }
