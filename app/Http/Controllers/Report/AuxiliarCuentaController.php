@@ -21,7 +21,7 @@ class AuxiliarCuentaController extends Controller
         if ($request->has('type')) {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'filter_mes' => 'required|numeric|min:1|max:12',
+                'filter_mes' => 'numeric|min:1|max:12',
                 'filter_ano' => 'required|numeric|min:2015',
                 'filter_cuenta' => 'required|numeric'
             ]);
@@ -34,14 +34,17 @@ class AuxiliarCuentaController extends Controller
 
             // Query asiento
             $query = Asiento2::query();
-            $query->select('asiento2_detalle AS detalle', 'asiento2_debito AS debito', 'asiento2_credito AS credito', DB::raw("CONCAT(asiento1_ano, '-', asiento1_mes, '-', asiento1_dia) as fecha"), 'documento_nombre', 'folder_codigo');
+            $query->select('asiento1_detalle AS detalle', 'asiento2_debito AS debito', 'asiento2_credito AS credito', 'koi_asiento1.id as asientoId', 'asiento1_detalle as detalle', 'documento_nombre',  DB::raw("CONCAT(asiento1_ano, '-', asiento1_mes, '-', asiento1_dia) as fecha"), 'documento_nombre', 'folder_codigo');
             $query->tercero();
             $query->join('koi_asiento1','asiento2_asiento','=','koi_asiento1.id');
             $query->join('koi_documento', 'asiento1_documento', '=', 'koi_documento.id');
             $query->leftJoin('koi_folder', 'koi_documento.documento_folder', '=', 'koi_folder.id');
             $query->where('koi_asiento1.asiento1_ano', $request->filter_ano);
-            $query->where('koi_asiento1.asiento1_mes', $request->filter_mes);
-
+            if($request->filter_mes){
+                //dd($request->filter_mes);
+                $query->where('koi_asiento1.asiento1_mes', $request->filter_mes);
+            }
+            //dd($query->get()->toArray());
             // Filter plan de cuenta
             $cuenta = PlanCuenta::where('plancuentas_cuenta', $request->filter_cuenta)->first();
             if (!$cuenta instanceof PlanCuenta) {
@@ -52,35 +55,60 @@ class AuxiliarCuentaController extends Controller
 
             // Ordenrs
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
-            $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
+            if($request->filter_mes){
+                $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
+            }
             $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
             $data = $query->get();
+
 
             // Sql saldos
             $mes = $request->filter_mes;
             $ano = $request->filter_ano;
-            if ($mes == 1) {
-                $mes2 = 13;
-                $ano2 = $ano - 1;
-            } else {
-                $mes2 = $mes - 1;
-                $ano2 = $ano;
-            }
+            $mes2 = null;
 
-            // Query saldo inicial de la cuenta
-            $sql = "SELECT plancuentas_cuenta,
+            if($mes){
+                if ($mes == 1) {
+                    $mes2 = 13;
+                    $ano2 = $ano - 1;
+                } else {
+                    $mes2 = $mes - 1;
+                    $ano2 = $ano;
+                }
+                // Query saldo inicial de la cuenta
+                $sql = "SELECT plancuentas_cuenta,
                 (SELECT (CASE WHEN plancuentas_naturaleza = 'D' THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial) ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial) END) FROM koi_saldoscontables WHERE saldoscontables_mes = {$mes2} AND saldoscontables_ano = {$ano2} AND saldoscontables_cuenta = {$cuenta->id}) AS inicial,
                 (SELECT (CASE when plancuentas_naturaleza = 'D' THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial) ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial) END) FROM koi_saldoscontables WHERE saldoscontables_mes = {$mes} AND saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS final,
                 (SELECT (saldoscontables_debito_mes) FROM koi_saldoscontables WHERE saldoscontables_mes = {$mes} AND saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS debitomes,
                 (SELECT (saldoscontables_credito_mes) FROM koi_saldoscontables WHERE saldoscontables_mes = {$mes} AND saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS creditomes
-            FROM koi_plancuentas
-            WHERE koi_plancuentas.id IN
-            (
+                FROM koi_plancuentas
+                WHERE koi_plancuentas.id IN
+                (
                 SELECT s.saldoscontables_cuenta FROM koi_saldoscontables as s WHERE s.saldoscontables_mes = {$mes} AND s.saldoscontables_ano = {$ano} AND s.saldoscontables_cuenta = {$cuenta->id}
                 UNION
                 SELECT s.saldoscontables_cuenta FROM koi_saldoscontables as s WHERE s.saldoscontables_mes = $mes2 AND s.saldoscontables_ano = $ano2 AND s.saldoscontables_cuenta = {$cuenta->id}
-            )
-            ";
+                )
+                ";
+            }else{
+                // Query saldo inicial de la cuenta
+                $ano = $request->filter_ano;
+
+                $sql = "SELECT plancuentas_cuenta,
+                (SELECT (CASE WHEN plancuentas_naturaleza = 'D' THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial) ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial) END) FROM koi_saldoscontables WHERE  saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS inicial,
+                (SELECT (CASE when plancuentas_naturaleza = 'D' THEN (saldoscontables_debito_inicial - saldoscontables_credito_inicial) ELSE (saldoscontables_credito_inicial - saldoscontables_debito_inicial) END) FROM koi_saldoscontables WHERE  saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS final,
+                (SELECT (saldoscontables_debito_mes) FROM koi_saldoscontables WHERE saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS debitomes,
+                (SELECT (saldoscontables_credito_mes) FROM koi_saldoscontables WHERE saldoscontables_ano = {$ano} AND saldoscontables_cuenta = {$cuenta->id}) AS creditomes
+                FROM koi_plancuentas
+                WHERE koi_plancuentas.id IN
+                (
+                SELECT s.saldoscontables_cuenta FROM koi_saldoscontables as s WHERE   s.saldoscontables_ano = {$ano} AND s.saldoscontables_cuenta = {$cuenta->id}
+                UNION
+                SELECT s.saldoscontables_cuenta FROM koi_saldoscontables as s WHERE   s.saldoscontables_ano = $ano AND s.saldoscontables_cuenta = {$cuenta->id}
+                )
+                ";
+            }
+            
+
             $saldoInicial = DB::selectOne($sql);
 
             // Saldo inicial de la cuenta
@@ -96,8 +124,10 @@ class AuxiliarCuentaController extends Controller
                 $saldo->creditomes = !is_null($saldoInicial->creditomes) ? $saldo->creditomes : 0 ;
                 $saldo->final = !is_null($saldo->final) ? $saldo->final : 0 ;
             }
-
-            $monthName = config('koi.meses')[$request->filter_mes];
+            $monthName = null;
+            if($request->filter_mes){
+                $monthName = config('koi.meses')[$request->filter_mes];
+            }
             $title = "Libro auxiliar por cuenta {$monthName} {$request->filter_ano}";
             $subtitle = "{$cuenta->plancuentas_cuenta} - {$cuenta->plancuentas_nombre}";
             $type = $request->type;
