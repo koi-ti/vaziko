@@ -1,17 +1,25 @@
 @extends('reports.layout', ['type' => $type, 'title' => $title])
 
 @section('content')
-	<p>{{ $titleTercero }}</p>
+	{{-- <p>{{ $titleTercero }}</p> --}}
+	
+	<p>Tercero: {{ $filter_tercero }}</p>
+	<p>Cuenta: {{ $filter_cuenta }}</p>
 	<table class="rtable" border="0" cellspacing="0" cellpadding="0">
 		<thead>
 			<tr>
+				<th class="center size-7 width-15">Tercero</th>
+				<th class="center size-7 width-15">Nit</th>
+				<th class="center size-7 width-15">Cuenta</th>
+				<th class="center size-7 width-15">Cuenta nombre</th>
+                <th class="center size-7 width-15">Documento</th>
                 <th class="center size-7 width-10">Fecha</th>
                 <th class="center size-7 width-15">Folder</th>
-                <th class="center size-7 width-15">Documento</th>
                 <th class="center size-7 width-30">Detalle</th>
                 <th class="center size-7">Debito</th>
                 <th class="center size-7">Credito</th>
                 <th class="center size-7">Saldo</th>
+				<th class="center size-7">CR</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -19,89 +27,32 @@
 				$tercero = $cuenta = '' ;
 				$debito = $credito = $tdebito = $tcredito = 0;
 			/*--}}
-			@foreach ($data as $key => $item)
-				@if ($tercero != $item->tercero_nit)
-					@if ($key > 0)
-						{{--*/
-							list($nit, $nombre) = explode('-', $nombre);
-						/*--}}
-						<tr>
-							<th colspan="4">TOTAL {{ $nombre }}</th>
-							<th>{{ $tdebito }}</th>
-							<th>{{ $tcredito }}</th>
-
-							<!-- Obtener saldo -->
-							{{--*/ $saldo = $tdebito - $tcredito /*--}}
-							@if ($tdebito < $tcredito)
-								{{--*/ $saldo = ($tcredito - $tdebito).' CR' /*--}}
-							@endif
-
-							<th>{{ $saldo }}</th>
-							{{--*/
-								$tdebito = $tcredito = 0;
-							/*--}}
-						</tr>
-					@endif
-					{{--*/
-						$nombre = "$item->tercero_nit - $item->tercero_nombre";
-					/*--}}
-					<tr>
-						<td colspan="7">{{ $nombre }}</td>
-					</tr>
-				@endif
-				@if ($cuenta != $item->plancuentas_cuenta) {
-					<tr>
-						<th></th>
-						<th class="size-7" colspan="6">{{ $item->plancuentas_cuenta }} - {{ $item->plancuentas_nombre }}</th>
-					</tr>
-	            @endif
+			@foreach ($data as $item)
 				<tr>
-					<td>{{ $item->fecha }}</td>
-					<td>{{ $item->folder_nombre }}</td>
-					<td>{{ $item->documento_nombre }}</td>
-					<td>{{ $item->detalle }}</td>
-					<td>{{ $item->debito }}</td>
-					<td>{{ $item->credito }}</td>
-
+					<td class="center size-7 width-5">{{ $item->tercero_nombre }}</td>
+					<td class="center size-7 width-5">{{ $item->tercero_nit }}</td>
+					<td class="center size-7 width-5">{{ $item->plancuentas_cuenta }}</td>
+					<td class="center size-7 width-5">{{ $item->plancuentas_nombre }}</td>
+					<td class="center size-7 width-5">{{ $item->documento_nombre }}</td>
+					<td class="center size-7 width-5">{{ $item->fecha }}</td>
+					<td class="center size-7 width-5">{{ $item->folder_nombre }}</td>
+					<td class="center size-7">{{ utf8_decode($item->detalle) }}</td>
+					<td align="right">{{ number_format($item->debito, 2, ',', '.') }}</td>
+					<td align="right">{{ number_format($item->credito, 2, ',', '.') }}</td>
 					<!-- Obtener saldo -->
 					{{--*/
 						$saldo = $item->debito - $item->credito;
+						$cr = '';
 					/*--}}
 					@if ($item->debito < $item->credito)
-						{{--*/ $saldo = ($item->credito - $item->debito).' CR' /*--}}
+						{{-- $saldo = ($item->credito - $item->debito).' CR' --}}
+						{{--*/ $saldo = ($item->credito - $item->debito) /*--}}
+						{{--*/ $cr = ' CR' /*--}}
 					@endif
-					<td>{{ $saldo }}</td>
+					<td align="right">{{ number_format($saldo, 2, ',', '.') }}</td>
+					<td>{{ $cr }}</td>
 				</tr>
-				{{--*/
-					$tercero = $item->tercero_nit;
-					$debito += $item->debito;
-					$credito += $item->credito;
-					$tdebito += $item->debito;
-					$tcredito +=  $item->credito;
-				/*--}}
-
-                @if ($key == $data->count() - 1)
-                    {{--*/
-						list($nit, $nombre) = explode('-', $nombre);
-					/*--}}
-                    <tr>
-                        <th colspan="4">TOTAL {{ $nombre }}</th>
-                        <th>{{ $tdebito }}</th>
-                        <th>{{ $tcredito }}</th>
-
-                        <!-- Obtener saldo -->
-                        {{--*/
-							$saldo = $tdebito - $tcredito
-						/*--}}
-                        @if ($tdebito < $tcredito)
-                            {{--*/ $saldo = ($tcredito - $tdebito).' CR' /*--}}
-                        @endif
-                        <th>{{ $saldo }}</th>
-                        {{--*/
-							$tdebito = $tcredito = 0;
-						/*--}}
-                    </tr>
-                @endif
+				
 			@endforeach
 			<tr>
 				<th colspan="4">TOTALES</th>

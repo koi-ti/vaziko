@@ -19,6 +19,14 @@ class AuxiliarBeneficiarioCuentaController extends Controller
     public function index(Request $request)
     {
         if ($request->has('type')) {
+            if (!$request->has('filter_cuenta') && !$request->has('filter_tercero')) {
+                session()->flash('errors', ['Seleccione un tercero o una cuenta']);
+                return redirect('/rauxbeneficiariocuenta')->withInput();
+            }
+
+            $filter_tercero = $request->has('filter_tercero') ? $request->filter_tercero:null;
+            $filter_cuenta = $request->has('filter_cuenta') ? $request->filter_cuenta:null;
+
             // Preparar datos reporte
             $query = Asiento2::query();
             $query->select('asiento2_detalle AS detalle', 'asiento2_debito AS debito', 'asiento2_credito AS credito', DB::raw("CONCAT(asiento1_ano, '-', asiento1_mes, '-', asiento1_dia) as fecha"), 'documento_nombre', 'folder_nombre', 'plancuentas_cuenta', 'plancuentas_nombre');
@@ -38,6 +46,7 @@ class AuxiliarBeneficiarioCuentaController extends Controller
                     return redirect('/rauxbeneficiariocuenta')->withInput();
                 }
                 $query->where('asiento2_cuenta', $cuenta->id);
+                $filter_cuenta = "$cuenta->plancuentas_cuenta - $cuenta->plancuentas_nombre";
             }
 
             // Filter tercero
@@ -48,6 +57,7 @@ class AuxiliarBeneficiarioCuentaController extends Controller
                     return redirect('/rauxbeneficiariocuenta')->withInput();
                 }
                 $query->where('asiento2_beneficiario', $tercero->id);
+                $filter_tercero = "$tercero->tercero_nombre1 $tercero->tercero_nombre2 $tercero->tercero_apellido1 $tercero->tercero_apellido2";
             }
 
             $query->orderBy('koi_asiento2.asiento2_beneficiario', 'asc');
@@ -62,12 +72,12 @@ class AuxiliarBeneficiarioCuentaController extends Controller
             $title = sprintf('%s %s', "Libro auxiliar beneficiario-cuenta {$monthNameInicial} {$request->filter_ano_inicial}", " hasta {$monthNameFinal} {$request->filter_ano_final}");
             $titleTercero = !isset($tercero) ? 'TODOS LOS TERCEROS' : $tercero->getName();
             $type = $request->type;
-
+            
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s-%s', "Libro auxiliar beneficiario/cuenta {$monthNameInicial} {$request->filter_ano_inicial}", "{$monthNameFinal} {$request->filter_ano_final}"), function ($excel) use ($data, $title, $titleTercero, $type) {
-                        $excel->sheet('Excel', function ($sheet) use ($data, $title, $titleTercero, $type) {
-                            $sheet->loadView('reports.accounting.auxbeneficiariocuenta.report', compact('data', 'title', 'titleTercero', 'type'));
+                    Excel::create(sprintf('%s-%s', "Libro auxiliar beneficiario/cuenta {$monthNameInicial} {$request->filter_ano_inicial}", "{$monthNameFinal} {$request->filter_ano_final}"), function ($excel) use ($data, $title, $titleTercero, $type, $filter_tercero, $filter_cuenta) {
+                        $excel->sheet('Excel', function ($sheet) use ($data, $title, $titleTercero, $type, $filter_tercero, $filter_cuenta) {
+                            $sheet->loadView('reports.accounting.auxbeneficiariocuenta.report', compact('data', 'title', 'titleTercero', 'type', 'filter_tercero', 'filter_cuenta'));
                         });
                     })->download('xls');
                 break;
