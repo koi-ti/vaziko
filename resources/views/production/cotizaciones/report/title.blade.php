@@ -6,9 +6,9 @@
 				<small>Váziko S.A.S.</small><br>
 				<small>{{ $empresa->tercero_direccion }}</small><br>
 				<small>Código postal: 760042</small><br>
-				<small>PBX: (572) 890 06 06</small><br>
+				<small>PBX: {{ $empresa->tercero_telefono1 }}</small><br>
 				<small>www.vaziko.com</small><br>
-				<small>info@vaziko.com</small><br>
+				<small>{{ $empresa->tercero_email }}</small><br>
 				<small>Cali - Colombia</small>
 			</div>
 		</td>

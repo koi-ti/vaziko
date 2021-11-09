@@ -57,7 +57,12 @@ class AuxiliarBeneficiarioCuentaController extends Controller
                     return redirect('/rauxbeneficiariocuenta')->withInput();
                 }
                 $query->where('asiento2_beneficiario', $tercero->id);
-                $filter_tercero = "$tercero->tercero_nombre1 $tercero->tercero_nombre2 $tercero->tercero_apellido1 $tercero->tercero_apellido2";
+                if($tercero->tercero_tipo == 'NI') {
+                    $filter_tercero = "$tercero->tercero_razonsocial";
+                } else  {
+                    $filter_tercero = "$tercero->tercero_nombre1 $tercero->tercero_nombre2 $tercero->tercero_apellido1 $tercero->tercero_apellido2";
+                }
+                
             }
 
             $query->orderBy('koi_asiento2.asiento2_beneficiario', 'asc');

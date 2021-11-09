@@ -54,19 +54,6 @@
 				</tr>
 				
 			@endforeach
-			<tr>
-				<th colspan="4">TOTALES</th>
-				<th>{{ $debito }}</th>
-				<th>{{ $credito }}</th>
-				<!-- Obtener saldo -->
-				{{--*/
-					$saldo = $debito - $credito
-				/*--}}
-				@if ($debito < $credito)
-					{{--*/ $saldo = ($credito - $debito).' CR' /*--}}
-				@endif
-				<th>{{ $saldo }}</th>
-			</tr>
 		</tbody>
 	</table>
 @stop

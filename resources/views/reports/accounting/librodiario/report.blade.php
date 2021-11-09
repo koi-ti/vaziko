@@ -6,7 +6,6 @@
 			<tr>
                 <th>Cuenta</th>
                 <th>Descripción</th>
-                <th>Nivel</th>
                 <th>Debitos</th>
                 <th>Creditos</th>
 			</tr>
@@ -18,7 +17,6 @@
                 <tr>
                     <td>{{ $item->plancuentas_cuenta }}</td>
                     <td>{{ $item->plancuentas_nombre }}</td>
-                    <td>{{ $item->plancuentas_nivel }}</td>
 					<td>{{ number_format($item->debito, 2, ',', '.') }}</td>
                     <td>{{ number_format(0,2,',' , '.') }}</td>
                 </tr>
@@ -38,7 +36,7 @@
 					$ttcredito += $item->credito;
 				/*--}}
 
-                <tr>
+                <tr style="border-top: 1px dashed #000">
                     <td class="size-8 right bold" colspan="3">Totales CUENTA {{ $item->plancuentas_cuenta }}</td>
                     <td class="size-8 bold">{{ number_format($tdebito, 2, ',', '.') }}</td>
                     <td class="size-8 bold">{{ number_format($tcredito, 2, ',', '.') }}</td>
