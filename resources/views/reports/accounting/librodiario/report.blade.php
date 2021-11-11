@@ -25,7 +25,7 @@
                     <td></td>
                     <td></td>
                     <td align="right">{{ number_format(0, 2, ',', '.') }}</td>
-					<td align="right">{{ number_format($item->credito, 2, ',', '.') }}</td>
+					{{-- <td align="right">{{ number_format($item->credito, 2, ',', '.') }}</td> --}}
                 </tr>
 
                 {{--*/
@@ -36,13 +36,16 @@
 					$ttcredito += $item->credito;
 				/*--}}
 
-                <tr style="border-top: 1px dashed #000">
+                <tr>
                     <td class="size-8 right bold" colspan="3">Totales CUENTA {{ $item->plancuentas_cuenta }}</td>
-                    <td class="size-8 bold" align="right">{{ number_format($tdebito, 2, ',', '.') }}</td>
-                    <td class="size-8 bold" align="right">{{ number_format($tcredito, 2, ',', '.') }}</td>
+                    <td class="size-8 bold" align="right" style="font-weight: bold">{{ number_format($tdebito, 2, ',', '.') }}</td>
+                    {{-- <td class="size-8 bold" align="right">{{ number_format($tcredito, 2, ',', '.') }}</td> --}}
+                </tr>
+                <tr>
+
                 </tr>
             @endforeach
-			<tr>
+			<tr style="border-top: 1px solid #000">
 				<td class="size-8 right bold" colspan="3">Totales Movimiento</td>
 				<td class="size-8 bold" align="right">{{ number_format($ttdebito, 2, ',', '.') }}</td>
 				<td class="size-8 bold" align="right">{{ number_format($ttcredito, 2, ',', '.') }}</td>
