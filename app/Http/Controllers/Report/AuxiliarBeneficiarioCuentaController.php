@@ -29,7 +29,7 @@ class AuxiliarBeneficiarioCuentaController extends Controller
 
             // Preparar datos reporte
             $query = Asiento2::query();
-            $query->select('asiento2_detalle AS detalle', 'asiento2_debito AS debito', 'asiento2_credito AS credito', DB::raw("CONCAT(asiento1_ano, '-', asiento1_mes, '-', asiento1_dia) as fecha"), 'documento_nombre', 'folder_nombre', 'plancuentas_cuenta', 'plancuentas_nombre');
+            $query->select('asiento2_detalle AS detalle', 'asiento2_debito AS debito', 'asiento2_credito AS credito', DB::raw("CONVERT(plancuentas_cuenta, UNSIGNED)  as plancuentas_cuenta"), DB::raw("CONCAT(asiento1_ano, '-', asiento1_mes, '-', asiento1_dia) as fecha"), 'documento_nombre', 'folder_nombre', 'plancuentas_nombre');
             $query->tercero();
             $query->join('koi_asiento1', 'asiento2_asiento', '=', 'koi_asiento1.id');
             $query->join('koi_plancuentas', 'asiento2_cuenta', '=', 'koi_plancuentas.id');
@@ -69,7 +69,10 @@ class AuxiliarBeneficiarioCuentaController extends Controller
             $query->orderBy('koi_asiento1.asiento1_ano', 'desc');
             $query->orderBy('koi_asiento1.asiento1_mes', 'asc');
             $query->orderBy('koi_asiento1.asiento1_dia', 'asc');
+            $query->orderBy(DB::raw("CONVERT(plancuentas_cuenta, UNSIGNED)"), 'asc');
+            
             $data = $query->get();
+            // 
 
             $monthNameInicial = config('koi.meses')[$request->filter_mes_inicial];
             $monthNameFinal = config('koi.meses')[$request->filter_mes_final];
