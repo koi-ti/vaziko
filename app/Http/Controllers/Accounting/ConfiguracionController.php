@@ -83,6 +83,14 @@ class ConfiguracionController extends Controller
                         call_in_background("update:saldos {$fechaCierre->month} {$fechaCierre->year} {$user}");
                         $message = 'Se estan actualizando los saldos, cuando termine se le notificara.!';
                         break;
+                    case 'open':
+                        // Update date empresa
+                        $fechaCierre = $fechaCierre->subMonths(1);
+                        $empresa->empresa_fecha_cierre_contabilidad = $fechaCierre;
+                        $empresa->save();
+
+                        $message = 'Se abrio el mes anterior!';
+                        break;
                 }
 
                 // Commit Transaction

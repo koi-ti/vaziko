@@ -14,7 +14,8 @@ app || (app = {});
         el: '#configuracion-main',
         events: {
             'submit #form-closing': 'submitForm',
-            'submit #form-balance': 'submitForm'
+            'submit #form-balance': 'submitForm',
+            'submit #form-open': 'submitForm'
         },
 
         /**
@@ -40,7 +41,12 @@ app || (app = {});
                     var message = "Esta operación afectará los saldos iniciales de los Saldos Contables. Desea Continuar?",
                         title = "Cierre contable mensual",
                         state = "closing";
-                } else {
+                } else if(form == 'form-open') {
+                    var message = "Esta operación abrira el mes anterior?",
+                        title = "Actualizar saldos",
+                        state = "open";
+                }
+                else {
                     var message = "Esta operación actualizara los saldos contables. Desea Continuar?",
                         title = "Actualizar saldos",
                         state = "balance";

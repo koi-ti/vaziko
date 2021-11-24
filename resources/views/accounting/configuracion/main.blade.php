@@ -47,6 +47,22 @@
                     </div>
                 </div>
             @endability
+            @ability ('abrir' | 'configuracion')
+                <div class="col-sm-6">
+                    <div class="box box-success spinner-main">
+                        <div class="box-header">
+                            <h4 class="title-configuracion text-center">Abrir mes anterior</h4>
+                        </div>
+                        <div class="box-footer">
+                            {!! Form::open(['id' => 'form-open', 'method' => 'POST']) !!}
+                                <div class="col-md-2 col-sm-6 col-xs-6 col-md-offset-5">
+                                    <button type="submit" class="btn btn-primary btn-sm btn-block">{{ trans('app.update') }}</button>
+                                </div>
+                            {!! Form::close() !!}
+                        </div>
+                    </div>
+                </div>
+            @endability
         </div>
 
         <script type="text/template" id="config-confirm-tpl">
