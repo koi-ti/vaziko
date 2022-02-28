@@ -782,4 +782,29 @@ class OrdenpController extends Controller
         }
         return response()->json(['success' => false]);
     }
+
+    /**
+     * Export pdf the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function saldo(Request $request, $id)
+    {
+        if ($request->ajax()) {
+            $orden = Ordenp::getOrden($id);
+            if (!$orden instanceof Ordenp){
+                abort(404);
+            }
+    
+            $detalle = Ordenp2::getOrdenesp2($orden->id);
+            foreach($detalle as $producto) {
+                $producto->orden2_saldo = $producto->orden2_cantidad;
+                $producto->orden2_facturado = 0;
+                $producto->save();
+            }
+            
+            return response()->json(['success' => true, 'id' => $orden->id, 'msg' => 'Se ha saldado la orden con exito.']);
+        }
+    }
 }

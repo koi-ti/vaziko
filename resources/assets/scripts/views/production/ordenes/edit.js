@@ -19,6 +19,7 @@ app || (app = {});
         templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
+            'click .balance-ordenp': 'saldoOrdenp',
             'click .close-ordenp': 'closeOrdenp',
             'click .complete-ordenp': 'completeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
@@ -333,6 +334,37 @@ app || (app = {});
 
             // Redirect to pdf
             window.open(window.Misc.urlFull(Route.route('ordenes.exportar', {ordenes: this.model.get('id')})), '_blank');
+        },
+
+        /**
+        * saldo
+        */
+         saldoOrdenp: function (e) {
+            e.preventDefault();
+            console.log('llljkllkj--lkjgfrdeswaqqaswedfrtgqawsedrfftgyhujikolpñ');
+
+            var route = window.Misc.urlFull(Route.route('ordenes.saldo', {ordenes: this.model.get('id')})),
+                _this = this;
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#ordenp-saldo-confirm-tpl').html() || '')),
+                    titleConfirm: 'Realizar un balance',
+                    onConfirm: function () {
+                        // Saldar orden
+                        window.Misc.saldoModule({
+                            'url': route,
+                            'wrap': _this.$el,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+            cloneConfirm.render();
         },
 
         /**

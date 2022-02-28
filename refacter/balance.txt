@@ -1,0 +1,34 @@
+/**
+ * 
+ // Filtrar la cuenta
+                $collection = collect($saldos);
+
+                $collection_filter = $collection->where('plancuentas_cuenta', '110505');
+                $inicial = $collection_filter->sum('inicial');
+                $debitomes = $collection_filter->sum('debitomes');
+                $creditomes = $collection_filter->sum('creditomes');
+
+                // no tiene en cuenta la cuenta anterior
+
+                // armar nuevo objeto
+                $object = new stdClass();
+                $object->debitomes = $debitomes;
+                $object->creditomes = $creditomes;
+                $object->plancuentas_cuenta = "11100501";
+                $object->plancuentas_nombre = "CAJA GENERAL";
+                $object->plancuentas_naturaleza = "D";
+                $object->plancuentas_nivel = 4;
+                $object->tercero_nombre = "TODOS LOS TERCEROS";
+                $object->tercero_nit = "TODOS LOS TERCEROS";
+                $object->inicial = $inicial;
+
+                foreach($collection as $item) {
+                    echo "$item->plancuentas_nivel \n"; 
+                }
+                $collection_saldos = $collection->where("plancuentas_nivel", "!=", 4);
+
+                // dd($collection_saldos);
+                // agrega el objeto a la coleccion saldos
+                $collection_saldos->push($object);
+                $saldos = $collection_saldos;
+ */

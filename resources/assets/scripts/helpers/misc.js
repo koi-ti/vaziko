@@ -484,6 +484,53 @@
         },
 
         /**
+        * Saldo module
+        */
+        saldoModule: function ( options ) {
+
+            options || (options = {});
+
+            var defaults = {
+                'callback': null,
+                'wrap': 'body',
+                'url': null
+            }, settings = {};
+
+            settings = $.extend({}, defaults, options);
+
+            // Saldar module
+            $.ajax({
+                url: settings.url,
+                type: 'GET',
+                beforeSend: function() {
+                    window.Misc.setSpinner( settings.wrap );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( settings.wrap );
+
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // return callback
+                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                    settings.callback( resp );
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( settings.wrap );
+                alertify.error(thrownError);
+            });
+        },
+
+        /**
         * Clone module
         */
         cloneModule: function ( options ) {

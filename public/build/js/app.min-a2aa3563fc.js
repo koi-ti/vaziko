@@ -11595,6 +11595,656 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class CreateFacturaView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateFacturaView = Backbone.View.extend({
+
+        el: '#factura-create',
+        template: _.template(($('#add-facturas-tpl').html() || '') ),
+        events: {
+            'submit #form-factura' :'onStore',
+            'submit #form-detalle-factura' :'onStoreItem',
+            'change .change-impuestos' :'changeImpuestos'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Attributes
+            this.detalleFactura2List = new app.DetalleFactura2List();
+            this.impuestos = {};
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html(this.template(attributes));
+
+            // Declare wrappers
+            this.$formdetalle = this.$('#form-detalle-factura');
+            this.spinner = this.$('.spinner-main');
+
+            this.referenceView();
+            this.ready();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceView: function () {
+           // Detalle factura list
+           this.detalleFacturaView = new app.DetalleFacturaView({
+               collection: this.detalleFactura2List,
+               parameters: {
+                   wrapper: this.spinner,
+                   edit: true
+               }
+           });
+        },
+
+        changeImpuestos: function (e) {
+            var value = $(e.currentTarget).inputmask('unmaskedvalue'),
+                key = $(e.currentTarget).attr('id');
+                total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
+                $('#total-create').html(window.Misc.currency(total))
+                this.impuestos[key] = value;
+        },
+
+        /**
+        * Event Create facturas
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                    data.detalle = this.detalleFactura2List.toJSON();
+                    data.impuestos = this.impuestos;
+
+                this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Event Create detalle facturas
+        */
+        onStoreItem: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target);
+                this.detalleFactura2List.trigger('store', data, this.$formdetalle);
+            }
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initDatePicker == 'function')
+                window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.spinner);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // Redirect if ok
+                window.Misc.redirect(window.Misc.urlFull(Route.route('facturas.show', {facturas: resp.id})));
+            }
+        }
+    });
+})(jQuery, this, this.document);
+
+/**
+* Class DetalleFacturaItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturaItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template(($('#add-factura-item-tpl').html() || '')),
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+	        // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            this.impuestos = {};
+
+            // Events Listener
+            this.listenTo(this.model, 'change', this.render);
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html( this.template(attributes) );
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class DetalleFacturaView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturaView = Backbone.View.extend({
+
+        el: '#browse-detalle-factura-list',
+        events: {
+            'click .item-remove': 'removeOne',
+            'change .change-cantidad': 'changeCantidad'
+        },
+        parameters: {
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // References
+            this.$facturado = this.$('#subtotal-facturado');
+            this.$subtotal = this.$('#subtotal-create');
+            this.$piva = this.$('#p_iva-create');
+            this.$iva = this.$('#iva-create');
+            this.$rtefuente = this.$('#rtefuente-create');
+            this.$rteica = this.$('#rteica-create');
+            this.$rteiva = this.$('#rteiva-create');
+            this.$total = this.$('#total-create');
+            this.impuestos = {};
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'store', this.storeOne );
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
+
+            if (this.parameters.dataFilter.factura) {
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+            }
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object detallePedidocModel Model instance
+        */
+        addOne: function (factura2Model) {
+            var view = new app.DetalleFacturaItemView({
+                model: factura2Model
+            });
+            factura2Model.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.$el.find('tbody').html('');
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Change cantidad input
+        */
+        changeCantidad: function (e) {
+            var selector = this.$(e.currentTarget);
+
+            // rules && validate
+            var min = selector.attr('min');
+            var max = selector.attr('max');
+            if (selector.val() < parseInt(min) || _.isEmpty(selector.val())) {
+                selector.val(min);
+            }
+
+            if (selector.val() > parseInt(max)) {
+                selector.val(max);
+            }
+
+            // Settear el valor al modelo
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            model.set({factura2_cantidad: selector.val()}, {silent: true});
+
+            this.impuestos.subtotal = this.collection.totalize().subtotal;
+            this.impuestos.tercero = $('#factura1_tercero').val();
+
+            this.calculateImpuestos();
+        },
+
+        /**
+        * Change cantidad input
+        */
+        calculateImpuestos: function () {
+            var _this = this;
+
+            $.get(window.Misc.urlFull(Route.route('facturas.impuestos', this.impuestos)), function (resp) {
+                if (resp.success) {
+                    _this.$subtotal.html(window.Misc.currency(resp.subtotal))
+                    _this.$piva.html('IVA ' + resp.p_iva + ' %')
+                    _this.$iva.val(window.Misc.currency(resp.iva))
+                    _this.$rtefuente.val(window.Misc.currency(resp.rtefuente))
+                    _this.$rteica.val(window.Misc.currency(resp.rteica))
+                    _this.$rteiva.val(window.Misc.currency(resp.rteiva))
+                    _this.$total.html(window.Misc.currency(resp.total))
+                }
+            });
+        },
+        /**
+        * store
+        * @param form element
+        */
+        storeOne: function (data, form) {
+            var _this = this
+
+            // Validate duplicate store
+            var result = this.collection.validar(data);
+            if (!result.success){
+                alertify.error(result.error);
+                return;
+            }
+
+            // Set Spinner
+            window.Misc.setSpinner(this.parameters.wrapper);
+
+            // Add model in collection
+            var factura2Model = new app.Factura2Model();
+                factura2Model.save(data, {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            // response success or error
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
+                            window.Misc.clearForm(form);
+                        }
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
+                    }
+                });
+        },
+
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if (model instanceof Backbone.Model) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            codigo: model.get('factura2_orden2'),
+                            nombre: model.get('factura2_producto_nombre')
+                        },
+                        template: _.template(($('#delete-item-factura-confirm-tpl').html() || '')),
+                        titleConfirm: 'Eliminar producto',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.impuestos.subtotal = _this.collection.totalize().subtotal;
+                            _this.calculateImpuestos();
+
+                            if (!this.collection.length)  {
+                                $('#iva-create').attr('readonly', true);
+                                $('#rtefuente-create').attr('readonly', true)
+                                $('#rteica-create').attr('readonly', true)
+                                $('#rteiva-create').attr('readonly', true)
+                            }
+                        }
+                    }
+                });
+
+                cancelConfirm.render();
+            }
+        },
+
+        /**
+        * Render totalize valores
+        */
+        totalize: function () {
+            var data = this.collection.totalize();
+
+            if (this.$facturado.length) {
+                this.$facturado.html(data.facturado);
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainFacturasView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainFacturasView = Backbone.View.extend({
+
+        el: '#facturas-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$facturasSearchTable = this.$('#facturas-search-table');
+
+            // References
+            this.$searchfacturaNumero = this.$('#searchfactura_numero');
+            this.$searchfacturaTercero = this.$('#searchfactura_tercero');
+            this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
+
+            this.facturasSearchTable = this.$facturasSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('facturas.index')),
+                    data: function (data) {
+                        data.persistent = true;
+                        data.factura1_numero = _this.$searchfacturaNumero.val();
+                        data.tercero_nit = _this.$searchfacturaTercero.val();
+                        data.tercero_nombre = _this.$searchfacturaTerceroNombre.val();
+                    }
+                },
+                columns: [
+                    { data: 'factura1_numero', name: 'factura1_numero' },
+                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
+                    { data: 'tercero_nit', name: 'tercero_nit' },
+                    { data: 'tercero_nombre', name: 'factura1_tercero' },
+                    { data: 'factura1_total', name: 'factura1_total' },
+                    { data: 'factura1_anulado', name: 'factura1_anulado' }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '5%',
+                        render: function (data, type, full, row) {
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturas.show', {facturas: full.id }))  +'">' + data + '</a>';
+                        },
+                    },
+                    {
+                        targets: 1,
+                        width: '5%'
+                    },
+                    {
+                        targets: 2,
+                        width: '15%'
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        className: 'text-right',
+                        render: function (data, type, full, row) {
+                            return window.Misc.currency(data);
+                        },
+                    },
+                    {
+                        targets: 5,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) ? 'ANULADO' : 'ABIERTA';
+                        },
+                    },
+                ],
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.factura1_anulado)) {
+                        $(row).css({"color":"red"});
+                    } else {
+                        $(row).css({"color":"#00a65a"});
+                    }
+                }
+            });
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.facturasSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            this.$searchfacturaNumero.val('');
+            this.$searchfacturaTercero.val('');
+            this.$searchfacturaTerceroNombre.val('');
+
+            this.facturasSearchTable.ajax.reload();
+        },
+    });
+})(jQuery, this, this.document);
+
+/**
+* Class ShowFacturaView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowFacturaView = Backbone.View.extend({
+
+        el: '#factura-show',
+        events: {
+            'click .anular-factura': 'anularFactura'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Initalize collections
+            this.detalleFactura2List = new app.DetalleFactura2List();
+            this.detalleFactura4List = new app.DetalleFactura4List();
+
+            // Refernece spinner
+            this.spinner = this.$('.spinner-main');
+
+            // Reference views
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Detalle factura list
+            this.factura2ListView = new app.DetalleFacturaView({
+                collection: this.detalleFactura2List,
+                parameters: {
+                    wrapper: this.spinner,
+                    edit: false,
+                    dataFilter: {
+                        factura: this.model.get('id')
+                    }
+                }
+            });
+
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFactura4List,
+                parameters: {
+                    wrapper: this.spinner,
+                    edit: false,
+                    template: _.template(($('#add-detalle-factura-tpl').html() || '')),
+                    call: 'factura',
+                    dataFilter: {
+                        factura: this.model.get('id')
+                    }
+                }
+            });
+        },
+
+        /**
+        * Event anular factura
+        */
+        anularFactura: function (e) {
+            e.preventDefault();
+            var _this = this;
+
+            var anularConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#factura-anular-confirm-tpl').html() || '')),
+                    titleConfirm: 'Anular factura',
+                    onConfirm: function () {
+                        // Anular factura
+                        $.ajax({
+                            url: window.Misc.urlFull(Route.route('facturas.anular', {facturas: _this.model.get('id')})),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner(_this.spinner);
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if (_.isObject(resp.errors)) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if (!resp.success) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', {facturas: _this.model.get('id')})));
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+            anularConfirm.render();
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
 * Class CreateAcabadospView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -17927,6 +18577,7 @@ app || (app = {});
         templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
             'click .submit-ordenp': 'submitOrdenp',
+            'click .balance-ordenp': 'saldoOrdenp',
             'click .close-ordenp': 'closeOrdenp',
             'click .complete-ordenp': 'completeOrdenp',
             'click .clone-ordenp': 'cloneOrdenp',
@@ -18241,6 +18892,37 @@ app || (app = {});
 
             // Redirect to pdf
             window.open(window.Misc.urlFull(Route.route('ordenes.exportar', {ordenes: this.model.get('id')})), '_blank');
+        },
+
+        /**
+        * saldo
+        */
+         saldoOrdenp: function (e) {
+            e.preventDefault();
+            console.log('llljkllkj--lkjgfrdeswaqqaswedfrtgqawsedrfftgyhujikolpñ');
+
+            var route = window.Misc.urlFull(Route.route('ordenes.saldo', {ordenes: this.model.get('id')})),
+                _this = this;
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#ordenp-saldo-confirm-tpl').html() || '')),
+                    titleConfirm: 'Realizar un balance',
+                    onConfirm: function () {
+                        // Saldar orden
+                        window.Misc.saldoModule({
+                            'url': route,
+                            'wrap': _this.$el,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+            cloneConfirm.render();
         },
 
         /**
@@ -20214,6 +20896,7 @@ app || (app = {});
         templateProductop: _.template( ($('#chart-productop-ordenp').html() || '') ),
         templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
+            'click .balance-ordenp': 'saldoOrdenp',
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
@@ -20501,6 +21184,36 @@ app || (app = {});
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                     previewLink.attr("href", value.thumbnailUrl);
             }, this);
+        },
+
+        /**
+        * saldo
+        */
+        saldoOrdenp: function (e) {
+            e.preventDefault();
+
+            var route = window.Misc.urlFull(Route.route('ordenes.saldo', {ordenes: this.model.get('id')})),
+                _this = this;
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#ordenp-saldo-confirm-tpl').html() || '')),
+                    titleConfirm: 'Realizar un balance',
+                    onConfirm: function () {
+                        // Saldar orden
+                        window.Misc.saldoModule({
+                            'url': route,
+                            'wrap': _this.$el,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+            cloneConfirm.render();
         },
 
         /**
@@ -24523,656 +25236,6 @@ app || (app = {});
                     },
                 ]
 			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateFacturaView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateFacturaView = Backbone.View.extend({
-
-        el: '#factura-create',
-        template: _.template(($('#add-facturas-tpl').html() || '') ),
-        events: {
-            'submit #form-factura' :'onStore',
-            'submit #form-detalle-factura' :'onStoreItem',
-            'change .change-impuestos' :'changeImpuestos'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Attributes
-            this.detalleFactura2List = new app.DetalleFactura2List();
-            this.impuestos = {};
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html(this.template(attributes));
-
-            // Declare wrappers
-            this.$formdetalle = this.$('#form-detalle-factura');
-            this.spinner = this.$('.spinner-main');
-
-            this.referenceView();
-            this.ready();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceView: function () {
-           // Detalle factura list
-           this.detalleFacturaView = new app.DetalleFacturaView({
-               collection: this.detalleFactura2List,
-               parameters: {
-                   wrapper: this.spinner,
-                   edit: true
-               }
-           });
-        },
-
-        changeImpuestos: function (e) {
-            var value = $(e.currentTarget).inputmask('unmaskedvalue'),
-                key = $(e.currentTarget).attr('id');
-                total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
-                $('#total-create').html(window.Misc.currency(total))
-                this.impuestos[key] = value;
-        },
-
-        /**
-        * Event Create facturas
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                    data.detalle = this.detalleFactura2List.toJSON();
-                    data.impuestos = this.impuestos;
-
-                this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
-        /**
-        * Event Create detalle facturas
-        */
-        onStoreItem: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson(e.target);
-                this.detalleFactura2List.trigger('store', data, this.$formdetalle);
-            }
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initDatePicker == 'function')
-                window.initComponent.initDatePicker();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // Redirect if ok
-                window.Misc.redirect(window.Misc.urlFull(Route.route('facturas.show', {facturas: resp.id})));
-            }
-        }
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturaItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturaItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template(($('#add-factura-item-tpl').html() || '')),
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-	        // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            this.impuestos = {};
-
-            // Events Listener
-            this.listenTo(this.model, 'change', this.render);
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturaView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturaView = Backbone.View.extend({
-
-        el: '#browse-detalle-factura-list',
-        events: {
-            'click .item-remove': 'removeOne',
-            'change .change-cantidad': 'changeCantidad'
-        },
-        parameters: {
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // References
-            this.$facturado = this.$('#subtotal-facturado');
-            this.$subtotal = this.$('#subtotal-create');
-            this.$piva = this.$('#p_iva-create');
-            this.$iva = this.$('#iva-create');
-            this.$rtefuente = this.$('#rtefuente-create');
-            this.$rteica = this.$('#rteica-create');
-            this.$rteiva = this.$('#rteiva-create');
-            this.$total = this.$('#total-create');
-            this.impuestos = {};
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'request', this.loadSpinner );
-            this.listenTo( this.collection, 'sync', this.responseServer );
-
-            if (this.parameters.dataFilter.factura) {
-                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-            }
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object detallePedidocModel Model instance
-        */
-        addOne: function (factura2Model) {
-            var view = new app.DetalleFacturaItemView({
-                model: factura2Model
-            });
-            factura2Model.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.$el.find('tbody').html('');
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Change cantidad input
-        */
-        changeCantidad: function (e) {
-            var selector = this.$(e.currentTarget);
-
-            // rules && validate
-            var min = selector.attr('min');
-            var max = selector.attr('max');
-            if (selector.val() < parseInt(min) || _.isEmpty(selector.val())) {
-                selector.val(min);
-            }
-
-            if (selector.val() > parseInt(max)) {
-                selector.val(max);
-            }
-
-            // Settear el valor al modelo
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
-
-            model.set({factura2_cantidad: selector.val()}, {silent: true});
-
-            this.impuestos.subtotal = this.collection.totalize().subtotal;
-            this.impuestos.tercero = $('#factura1_tercero').val();
-
-            this.calculateImpuestos();
-        },
-
-        /**
-        * Change cantidad input
-        */
-        calculateImpuestos: function () {
-            var _this = this;
-
-            $.get(window.Misc.urlFull(Route.route('facturas.impuestos', this.impuestos)), function (resp) {
-                if (resp.success) {
-                    _this.$subtotal.html(window.Misc.currency(resp.subtotal))
-                    _this.$piva.html('IVA ' + resp.p_iva + ' %')
-                    _this.$iva.val(window.Misc.currency(resp.iva))
-                    _this.$rtefuente.val(window.Misc.currency(resp.rtefuente))
-                    _this.$rteica.val(window.Misc.currency(resp.rteica))
-                    _this.$rteiva.val(window.Misc.currency(resp.rteiva))
-                    _this.$total.html(window.Misc.currency(resp.total))
-                }
-            });
-        },
-        /**
-        * store
-        * @param form element
-        */
-        storeOne: function (data, form) {
-            var _this = this
-
-            // Validate duplicate store
-            var result = this.collection.validar(data);
-            if (!result.success){
-                alertify.error(result.error);
-                return;
-            }
-
-            // Set Spinner
-            window.Misc.setSpinner(this.parameters.wrapper);
-
-            // Add model in collection
-            var factura2Model = new app.Factura2Model();
-                factura2Model.save(data, {
-                    success: function (model, resp) {
-                        if (!_.isUndefined(resp.success)) {
-                            // response success or error
-                            window.Misc.removeSpinner(_this.parameters.wrapper);
-                            var text = resp.success ? '' : resp.errors;
-                            if (_.isObject(resp.errors)) {
-                                text = window.Misc.parseErrors(resp.errors);
-                            }
-
-                            if (!resp.success) {
-                                alertify.error(text);
-                                return;
-                            }
-
-                            // Add model in collection
-                            _this.collection.add(model);
-                            window.Misc.clearForm(form);
-                        }
-                    },
-                    error: function (model, error) {
-                        window.Misc.removeSpinner(_this.parameters.wrapper);
-                        alertify.error(error.statusText)
-                    }
-                });
-        },
-
-        /**
-        * Event remove item
-        */
-        removeOne: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource),
-                _this = this;
-
-            if (model instanceof Backbone.Model) {
-                var cancelConfirm = new window.app.ConfirmWindow({
-                    parameters: {
-                        dataFilter: {
-                            codigo: model.get('factura2_orden2'),
-                            nombre: model.get('factura2_producto_nombre')
-                        },
-                        template: _.template(($('#delete-item-factura-confirm-tpl').html() || '')),
-                        titleConfirm: 'Eliminar producto',
-                        onConfirm: function () {
-                            model.view.remove();
-                            _this.collection.remove(model);
-                            _this.impuestos.subtotal = _this.collection.totalize().subtotal;
-                            _this.calculateImpuestos();
-
-                            if (!this.collection.length)  {
-                                $('#iva-create').attr('readonly', true);
-                                $('#rtefuente-create').attr('readonly', true)
-                                $('#rteica-create').attr('readonly', true)
-                                $('#rteiva-create').attr('readonly', true)
-                            }
-                        }
-                    }
-                });
-
-                cancelConfirm.render();
-            }
-        },
-
-        /**
-        * Render totalize valores
-        */
-        totalize: function () {
-            var data = this.collection.totalize();
-
-            if (this.$facturado.length) {
-                this.$facturado.html(data.facturado);
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainFacturasView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainFacturasView = Backbone.View.extend({
-
-        el: '#facturas-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$facturasSearchTable = this.$('#facturas-search-table');
-
-            // References
-            this.$searchfacturaNumero = this.$('#searchfactura_numero');
-            this.$searchfacturaTercero = this.$('#searchfactura_tercero');
-            this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
-
-            this.facturasSearchTable = this.$facturasSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('facturas.index')),
-                    data: function (data) {
-                        data.persistent = true;
-                        data.factura1_numero = _this.$searchfacturaNumero.val();
-                        data.tercero_nit = _this.$searchfacturaTercero.val();
-                        data.tercero_nombre = _this.$searchfacturaTerceroNombre.val();
-                    }
-                },
-                columns: [
-                    { data: 'factura1_numero', name: 'factura1_numero' },
-                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
-                    { data: 'tercero_nit', name: 'tercero_nit' },
-                    { data: 'tercero_nombre', name: 'factura1_tercero' },
-                    { data: 'factura1_total', name: 'factura1_total' },
-                    { data: 'factura1_anulado', name: 'factura1_anulado' }
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '5%',
-                        render: function (data, type, full, row) {
-                           return '<a href="'+ window.Misc.urlFull(Route.route('facturas.show', {facturas: full.id }))  +'">' + data + '</a>';
-                        },
-                    },
-                    {
-                        targets: 1,
-                        width: '5%'
-                    },
-                    {
-                        targets: 2,
-                        width: '15%'
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                        className: 'text-right',
-                        render: function (data, type, full, row) {
-                            return window.Misc.currency(data);
-                        },
-                    },
-                    {
-                        targets: 5,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) ? 'ANULADO' : 'ABIERTA';
-                        },
-                    },
-                ],
-                fnRowCallback: function(row, data) {
-                    if (parseInt(data.factura1_anulado)) {
-                        $(row).css({"color":"red"});
-                    } else {
-                        $(row).css({"color":"#00a65a"});
-                    }
-                }
-            });
-        },
-
-        search: function(e) {
-            e.preventDefault();
-
-            this.facturasSearchTable.ajax.reload();
-        },
-
-        clear: function(e) {
-            e.preventDefault();
-
-            this.$searchfacturaNumero.val('');
-            this.$searchfacturaTercero.val('');
-            this.$searchfacturaTerceroNombre.val('');
-
-            this.facturasSearchTable.ajax.reload();
-        },
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class ShowFacturaView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowFacturaView = Backbone.View.extend({
-
-        el: '#factura-show',
-        events: {
-            'click .anular-factura': 'anularFactura'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Initalize collections
-            this.detalleFactura2List = new app.DetalleFactura2List();
-            this.detalleFactura4List = new app.DetalleFactura4List();
-
-            // Refernece spinner
-            this.spinner = this.$('.spinner-main');
-
-            // Reference views
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Detalle factura list
-            this.factura2ListView = new app.DetalleFacturaView({
-                collection: this.detalleFactura2List,
-                parameters: {
-                    wrapper: this.spinner,
-                    edit: false,
-                    dataFilter: {
-                        factura: this.model.get('id')
-                    }
-                }
-            });
-
-            // Detalle list
-            this.factura4ListView = new app.Factura4ListView({
-                collection: this.detalleFactura4List,
-                parameters: {
-                    wrapper: this.spinner,
-                    edit: false,
-                    template: _.template(($('#add-detalle-factura-tpl').html() || '')),
-                    call: 'factura',
-                    dataFilter: {
-                        factura: this.model.get('id')
-                    }
-                }
-            });
-        },
-
-        /**
-        * Event anular factura
-        */
-        anularFactura: function (e) {
-            e.preventDefault();
-            var _this = this;
-
-            var anularConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    template: _.template(($('#factura-anular-confirm-tpl').html() || '')),
-                    titleConfirm: 'Anular factura',
-                    onConfirm: function () {
-                        // Anular factura
-                        $.ajax({
-                            url: window.Misc.urlFull(Route.route('facturas.anular', {facturas: _this.model.get('id')})),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner(_this.spinner);
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner(_this.spinner);
-                            if (!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject(resp.errors)) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if (!resp.success) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', {facturas: _this.model.get('id')})));
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner(_this.spinner);
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-            anularConfirm.render();
         }
     });
 
@@ -30752,6 +30815,53 @@ app || (app = {});
         },
 
         /**
+        * Saldo module
+        */
+        saldoModule: function ( options ) {
+
+            options || (options = {});
+
+            var defaults = {
+                'callback': null,
+                'wrap': 'body',
+                'url': null
+            }, settings = {};
+
+            settings = $.extend({}, defaults, options);
+
+            // Saldar module
+            $.ajax({
+                url: settings.url,
+                type: 'GET',
+                beforeSend: function() {
+                    window.Misc.setSpinner( settings.wrap );
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner( settings.wrap );
+
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if( _.isObject( resp.errors ) ) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if( !resp.success ) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // return callback
+                if( ({}).toString.call(settings.callback).slice(8,-1) === 'Function' )
+                    settings.callback( resp );
+            })
+            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner( settings.wrap );
+                alertify.error(thrownError);
+            });
+        },
+
+        /**
         * Clone module
         */
         cloneModule: function ( options ) {
@@ -30863,7 +30973,7 @@ app || (app = {});
 
             absolute: false,
             rootUrl: 'http://localhost',
-            routes : [{"host":null,"methods":["POST"],"uri":"auth\/login","name":"auth.login","action":"App\Http\Controllers\Auth\AuthController@postLogin"},{"host":null,"methods":["GET","HEAD"],"uri":"auth\/logout","name":"auth.logout","action":"App\Http\Controllers\Auth\AuthController@getLogout"},{"host":null,"methods":["GET","HEAD"],"uri":"login","name":"login","action":"App\Http\Controllers\Auth\AuthController@getLogin"},{"host":null,"methods":["GET","HEAD"],"uri":"\/","name":"dashboard","action":"App\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/actividades","name":"search.actividades","action":"App\Http\Controllers\Admin\BuscadorController@actividades"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/municipios","name":"search.municipios","action":"App\Http\Controllers\Admin\BuscadorController@municipios"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/terceros","name":"search.terceros","action":"App\Http\Controllers\Admin\BuscadorController@terceros"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/contactos","name":"search.contactos","action":"App\Http\Controllers\Admin\BuscadorController@contactos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cuentas","name":"search.cuentas","action":"App\Http\Controllers\Admin\BuscadorController@cuentas"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cuentasnif","name":"search.cuentasnif","action":"App\Http\Controllers\Admin\BuscadorController@cuentasnif"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/facturas","name":"search.facturas","action":"App\Http\Controllers\Admin\BuscadorController@facturas"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cotizaciones","name":"search.cotizaciones","action":"App\Http\Controllers\Admin\BuscadorController@cotizaciones"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/ordenes","name":"search.ordenes","action":"App\Http\Controllers\Admin\BuscadorController@ordenes"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productos","name":"search.productos","action":"App\Http\Controllers\Admin\BuscadorController@productos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productosp","name":"search.productosp","action":"App\Http\Controllers\Admin\BuscadorController@productosp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productoscotizacion","name":"search.productoscotizacion","action":"App\Http\Controllers\Admin\BuscadorController@productosCotizacion"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productosorden","name":"search.productosorden","action":"App\Http\Controllers\Admin\BuscadorController@productosOrden"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/subactividadesp","name":"search.subactividadesp","action":"App\Http\Controllers\Admin\BuscadorController@subactividadesp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/subtipoproductosp","name":"search.subtipoproductosp","action":"App\Http\Controllers\Admin\BuscadorController@subtipoproductosp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/documentos","name":"search.documentos","action":"App\Http\Controllers\Admin\BuscadorController@documentos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/facturasp","name":"search.facturasp","action":"App\Http\Controllers\Admin\BuscadorController@facturasp"},{"host":null,"methods":["GET","HEAD"],"uri":"empresa","name":"empresa.index","action":"App\Http\Controllers\Admin\EmpresaController@index"},{"host":null,"methods":["PUT"],"uri":"empresa\/{empresa}","name":"empresa.update","action":"App\Http\Controllers\Admin\EmpresaController@update"},{"host":null,"methods":["PATCH"],"uri":"empresa\/{empresa}","name":null,"action":"App\Http\Controllers\Admin\EmpresaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/dv","name":"terceros.dv","action":"App\Http\Controllers\Admin\TerceroController@dv"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/rcree","name":"terceros.rcree","action":"App\Http\Controllers\Admin\TerceroController@rcree"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/facturap","name":"terceros.facturap","action":"App\Http\Controllers\Admin\TerceroController@facturap"},{"host":null,"methods":["POST"],"uri":"terceros\/setpassword","name":"terceros.setpassword","action":"App\Http\Controllers\Admin\TerceroController@setpassword"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/contactos\/estado","name":"terceros.contactos.estado","action":"App\Http\Controllers\Admin\ContactoController@estado"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/contactos","name":"terceros.contactos.index","action":"App\Http\Controllers\Admin\ContactoController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/contactos","name":"terceros.contactos.store","action":"App\Http\Controllers\Admin\ContactoController@store"},{"host":null,"methods":["PUT"],"uri":"terceros\/contactos\/{contactos}","name":"terceros.contactos.update","action":"App\Http\Controllers\Admin\ContactoController@update"},{"host":null,"methods":["PATCH"],"uri":"terceros\/contactos\/{contactos}","name":null,"action":"App\Http\Controllers\Admin\ContactoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/roles","name":"terceros.roles.index","action":"App\Http\Controllers\Admin\UsuarioRolController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/roles","name":"terceros.roles.store","action":"App\Http\Controllers\Admin\UsuarioRolController@store"},{"host":null,"methods":["DELETE"],"uri":"terceros\/roles\/{roles}","name":"terceros.roles.destroy","action":"App\Http\Controllers\Admin\UsuarioRolController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/imagenes","name":"terceros.imagenes.index","action":"App\Http\Controllers\Admin\TerceroImagenController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/imagenes","name":"terceros.imagenes.store","action":"App\Http\Controllers\Admin\TerceroImagenController@store"},{"host":null,"methods":["DELETE"],"uri":"terceros\/imagenes\/{imagenes}","name":"terceros.imagenes.destroy","action":"App\Http\Controllers\Admin\TerceroImagenController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros","name":"terceros.index","action":"App\Http\Controllers\Admin\TerceroController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/create","name":"terceros.create","action":"App\Http\Controllers\Admin\TerceroController@create"},{"host":null,"methods":["POST"],"uri":"terceros","name":"terceros.store","action":"App\Http\Controllers\Admin\TerceroController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/{terceros}","name":"terceros.show","action":"App\Http\Controllers\Admin\TerceroController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/{terceros}\/edit","name":"terceros.edit","action":"App\Http\Controllers\Admin\TerceroController@edit"},{"host":null,"methods":["PUT"],"uri":"terceros\/{terceros}","name":"terceros.update","action":"App\Http\Controllers\Admin\TerceroController@update"},{"host":null,"methods":["PATCH"],"uri":"terceros\/{terceros}","name":null,"action":"App\Http\Controllers\Admin\TerceroController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/permisos","name":"roles.permisos.index","action":"App\Http\Controllers\Admin\PermisoRolController@index"},{"host":null,"methods":["PUT"],"uri":"roles\/permisos\/{permisos}","name":"roles.permisos.update","action":"App\Http\Controllers\Admin\PermisoRolController@update"},{"host":null,"methods":["PATCH"],"uri":"roles\/permisos\/{permisos}","name":null,"action":"App\Http\Controllers\Admin\PermisoRolController@update"},{"host":null,"methods":["DELETE"],"uri":"roles\/permisos\/{permisos}","name":"roles.permisos.destroy","action":"App\Http\Controllers\Admin\PermisoRolController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"roles","name":"roles.index","action":"App\Http\Controllers\Admin\RolController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/create","name":"roles.create","action":"App\Http\Controllers\Admin\RolController@create"},{"host":null,"methods":["POST"],"uri":"roles","name":"roles.store","action":"App\Http\Controllers\Admin\RolController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/{roles}","name":"roles.show","action":"App\Http\Controllers\Admin\RolController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/{roles}\/edit","name":"roles.edit","action":"App\Http\Controllers\Admin\RolController@edit"},{"host":null,"methods":["PUT"],"uri":"roles\/{roles}","name":"roles.update","action":"App\Http\Controllers\Admin\RolController@update"},{"host":null,"methods":["PATCH"],"uri":"roles\/{roles}","name":null,"action":"App\Http\Controllers\Admin\RolController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades","name":"actividades.index","action":"App\Http\Controllers\Admin\ActividadController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/create","name":"actividades.create","action":"App\Http\Controllers\Admin\ActividadController@create"},{"host":null,"methods":["POST"],"uri":"actividades","name":"actividades.store","action":"App\Http\Controllers\Admin\ActividadController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/{actividades}","name":"actividades.show","action":"App\Http\Controllers\Admin\ActividadController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/{actividades}\/edit","name":"actividades.edit","action":"App\Http\Controllers\Admin\ActividadController@edit"},{"host":null,"methods":["PUT"],"uri":"actividades\/{actividades}","name":"actividades.update","action":"App\Http\Controllers\Admin\ActividadController@update"},{"host":null,"methods":["PATCH"],"uri":"actividades\/{actividades}","name":null,"action":"App\Http\Controllers\Admin\ActividadController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"departamentos","name":"departamentos.index","action":"App\Http\Controllers\Admin\DepartamentoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"departamentos\/{departamentos}","name":"departamentos.show","action":"App\Http\Controllers\Admin\DepartamentoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"municipios","name":"municipios.index","action":"App\Http\Controllers\Admin\MunicipioController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales","name":"sucursales.index","action":"App\Http\Controllers\Admin\SucursalController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/create","name":"sucursales.create","action":"App\Http\Controllers\Admin\SucursalController@create"},{"host":null,"methods":["POST"],"uri":"sucursales","name":"sucursales.store","action":"App\Http\Controllers\Admin\SucursalController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/{sucursales}","name":"sucursales.show","action":"App\Http\Controllers\Admin\SucursalController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/{sucursales}\/edit","name":"sucursales.edit","action":"App\Http\Controllers\Admin\SucursalController@edit"},{"host":null,"methods":["PUT"],"uri":"sucursales\/{sucursales}","name":"sucursales.update","action":"App\Http\Controllers\Admin\SucursalController@update"},{"host":null,"methods":["PATCH"],"uri":"sucursales\/{sucursales}","name":null,"action":"App\Http\Controllers\Admin\SucursalController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa","name":"puntosventa.index","action":"App\Http\Controllers\Admin\PuntoVentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/create","name":"puntosventa.create","action":"App\Http\Controllers\Admin\PuntoVentaController@create"},{"host":null,"methods":["POST"],"uri":"puntosventa","name":"puntosventa.store","action":"App\Http\Controllers\Admin\PuntoVentaController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/{puntosventa}","name":"puntosventa.show","action":"App\Http\Controllers\Admin\PuntoVentaController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/{puntosventa}\/edit","name":"puntosventa.edit","action":"App\Http\Controllers\Admin\PuntoVentaController@edit"},{"host":null,"methods":["PUT"],"uri":"puntosventa\/{puntosventa}","name":"puntosventa.update","action":"App\Http\Controllers\Admin\PuntoVentaController@update"},{"host":null,"methods":["PATCH"],"uri":"puntosventa\/{puntosventa}","name":null,"action":"App\Http\Controllers\Admin\PuntoVentaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/impuestos","name":"facturas.impuestos","action":"App\Http\Controllers\Receivable\Factura1Controller@impuestos"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/anular\/{facturas}","name":"facturas.anular","action":"App\Http\Controllers\Receivable\Factura1Controller@anular"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/exportar\/{facturas}","name":"facturas.exportar","action":"App\Http\Controllers\Receivable\Factura1Controller@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/facturados","name":"facturas.facturados.index","action":"App\Http\Controllers\Receivable\Factura2Controller@index"},{"host":null,"methods":["POST"],"uri":"facturas\/facturados","name":"facturas.facturados.store","action":"App\Http\Controllers\Receivable\Factura2Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/productos","name":"facturas.productos.index","action":"App\Http\Controllers\Receivable\Factura4Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas","name":"facturas.index","action":"App\Http\Controllers\Receivable\Factura1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/create","name":"facturas.create","action":"App\Http\Controllers\Receivable\Factura1Controller@create"},{"host":null,"methods":["POST"],"uri":"facturas","name":"facturas.store","action":"App\Http\Controllers\Receivable\Factura1Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/{facturas}","name":"facturas.show","action":"App\Http\Controllers\Receivable\Factura1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/reverse\/{asientos}","name":"asientos.reverse","action":"App\Http\Controllers\Accounting\AsientoController@reverse"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/exportar\/{asientos}","name":"asientos.exportar","action":"App\Http\Controllers\Accounting\AsientoController@exportar"},{"host":null,"methods":["POST"],"uri":"asientos\/import","name":"asientos.import","action":"App\Http\Controllers\Accounting\AsientoController@import"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle\/evaluate","name":"asientos.detalle.evaluate","action":"App\Http\Controllers\Accounting\DetalleAsientoController@evaluate"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle\/validate","name":"asientos.detalle.validate","action":"App\Http\Controllers\Accounting\DetalleAsientoController@validation"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/detalle\/movimientos","name":"asientos.detalle.movimientos.index","action":"App\Http\Controllers\Accounting\AsientoMovimientoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/detalle","name":"asientos.detalle.index","action":"App\Http\Controllers\Accounting\DetalleAsientoController@index"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle","name":"asientos.detalle.store","action":"App\Http\Controllers\Accounting\DetalleAsientoController@store"},{"host":null,"methods":["PUT"],"uri":"asientos\/detalle\/{detalle}","name":"asientos.detalle.update","action":"App\Http\Controllers\Accounting\DetalleAsientoController@update"},{"host":null,"methods":["PATCH"],"uri":"asientos\/detalle\/{detalle}","name":null,"action":"App\Http\Controllers\Accounting\DetalleAsientoController@update"},{"host":null,"methods":["DELETE"],"uri":"asientos\/detalle\/{detalle}","name":"asientos.detalle.destroy","action":"App\Http\Controllers\Accounting\DetalleAsientoController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos","name":"asientos.index","action":"App\Http\Controllers\Accounting\AsientoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/create","name":"asientos.create","action":"App\Http\Controllers\Accounting\AsientoController@create"},{"host":null,"methods":["POST"],"uri":"asientos","name":"asientos.store","action":"App\Http\Controllers\Accounting\AsientoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/{asientos}","name":"asientos.show","action":"App\Http\Controllers\Accounting\AsientoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/{asientos}\/edit","name":"asientos.edit","action":"App\Http\Controllers\Accounting\AsientoController@edit"},{"host":null,"methods":["PUT"],"uri":"asientos\/{asientos}","name":"asientos.update","action":"App\Http\Controllers\Accounting\AsientoController@update"},{"host":null,"methods":["PATCH"],"uri":"asientos\/{asientos}","name":null,"action":"App\Http\Controllers\Accounting\AsientoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/exportar\/{asientosnif}","name":"asientosnif.exportar","action":"App\Http\Controllers\Accounting\AsientoNifController@exportar"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle\/evaluate","name":"asientosnif.detalle.evaluate","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@evaluate"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle\/validate","name":"asientosnif.detalle.validate","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@validation"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/detalle\/movimientos","name":"asientosnif.detalle.movimientos","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@movimientos"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/detalle","name":"asientosnif.detalle.index","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@index"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle","name":"asientosnif.detalle.store","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@store"},{"host":null,"methods":["DELETE"],"uri":"asientosnif\/detalle\/{detalle}","name":"asientosnif.detalle.destroy","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif","name":"asientosnif.index","action":"App\Http\Controllers\Accounting\AsientoNifController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/{asientosnif}","name":"asientosnif.show","action":"App\Http\Controllers\Accounting\AsientoNifController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/{asientosnif}\/edit","name":"asientosnif.edit","action":"App\Http\Controllers\Accounting\AsientoNifController@edit"},{"host":null,"methods":["PUT"],"uri":"asientosnif\/{asientosnif}","name":"asientosnif.update","action":"App\Http\Controllers\Accounting\AsientoNifController@update"},{"host":null,"methods":["PATCH"],"uri":"asientosnif\/{asientosnif}","name":null,"action":"App\Http\Controllers\Accounting\AsientoNifController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"configuracion","name":"configuracion.index","action":"App\Http\Controllers\Accounting\ConfiguracionController@index"},{"host":null,"methods":["POST"],"uri":"configuracion","name":"configuracion.store","action":"App\Http\Controllers\Accounting\ConfiguracionController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto","name":"centroscosto.index","action":"App\Http\Controllers\Accounting\CentroCostoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/create","name":"centroscosto.create","action":"App\Http\Controllers\Accounting\CentroCostoController@create"},{"host":null,"methods":["POST"],"uri":"centroscosto","name":"centroscosto.store","action":"App\Http\Controllers\Accounting\CentroCostoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/{centroscosto}","name":"centroscosto.show","action":"App\Http\Controllers\Accounting\CentroCostoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/{centroscosto}\/edit","name":"centroscosto.edit","action":"App\Http\Controllers\Accounting\CentroCostoController@edit"},{"host":null,"methods":["PUT"],"uri":"centroscosto\/{centroscosto}","name":"centroscosto.update","action":"App\Http\Controllers\Accounting\CentroCostoController@update"},{"host":null,"methods":["PATCH"],"uri":"centroscosto\/{centroscosto}","name":null,"action":"App\Http\Controllers\Accounting\CentroCostoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos","name":"documentos.index","action":"App\Http\Controllers\Accounting\DocumentoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/create","name":"documentos.create","action":"App\Http\Controllers\Accounting\DocumentoController@create"},{"host":null,"methods":["POST"],"uri":"documentos","name":"documentos.store","action":"App\Http\Controllers\Accounting\DocumentoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/{documentos}","name":"documentos.show","action":"App\Http\Controllers\Accounting\DocumentoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/{documentos}\/edit","name":"documentos.edit","action":"App\Http\Controllers\Accounting\DocumentoController@edit"},{"host":null,"methods":["PUT"],"uri":"documentos\/{documentos}","name":"documentos.update","action":"App\Http\Controllers\Accounting\DocumentoController@update"},{"host":null,"methods":["PATCH"],"uri":"documentos\/{documentos}","name":null,"action":"App\Http\Controllers\Accounting\DocumentoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"folders","name":"folders.index","action":"App\Http\Controllers\Accounting\FolderController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/create","name":"folders.create","action":"App\Http\Controllers\Accounting\FolderController@create"},{"host":null,"methods":["POST"],"uri":"folders","name":"folders.store","action":"App\Http\Controllers\Accounting\FolderController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/{folders}","name":"folders.show","action":"App\Http\Controllers\Accounting\FolderController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/{folders}\/edit","name":"folders.edit","action":"App\Http\Controllers\Accounting\FolderController@edit"},{"host":null,"methods":["PUT"],"uri":"folders\/{folders}","name":"folders.update","action":"App\Http\Controllers\Accounting\FolderController@update"},{"host":null,"methods":["PATCH"],"uri":"folders\/{folders}","name":null,"action":"App\Http\Controllers\Accounting\FolderController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/nivel","name":"plancuentas.nivel","action":"App\Http\Controllers\Accounting\PlanCuentasController@nivel"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas","name":"plancuentas.index","action":"App\Http\Controllers\Accounting\PlanCuentasController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/create","name":"plancuentas.create","action":"App\Http\Controllers\Accounting\PlanCuentasController@create"},{"host":null,"methods":["POST"],"uri":"plancuentas","name":"plancuentas.store","action":"App\Http\Controllers\Accounting\PlanCuentasController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/{plancuentas}","name":"plancuentas.show","action":"App\Http\Controllers\Accounting\PlanCuentasController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/{plancuentas}\/edit","name":"plancuentas.edit","action":"App\Http\Controllers\Accounting\PlanCuentasController@edit"},{"host":null,"methods":["PUT"],"uri":"plancuentas\/{plancuentas}","name":"plancuentas.update","action":"App\Http\Controllers\Accounting\PlanCuentasController@update"},{"host":null,"methods":["PATCH"],"uri":"plancuentas\/{plancuentas}","name":null,"action":"App\Http\Controllers\Accounting\PlanCuentasController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/nivel","name":"plancuentasnif.nivel","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@nivel"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif","name":"plancuentasnif.index","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/create","name":"plancuentasnif.create","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@create"},{"host":null,"methods":["POST"],"uri":"plancuentasnif","name":"plancuentasnif.store","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/{plancuentasnif}","name":"plancuentasnif.show","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/{plancuentasnif}\/edit","name":"plancuentasnif.edit","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@edit"},{"host":null,"methods":["PUT"],"uri":"plancuentasnif\/{plancuentasnif}","name":"plancuentasnif.update","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@update"},{"host":null,"methods":["PATCH"],"uri":"plancuentasnif\/{plancuentasnif}","name":null,"action":"App\Http\Controllers\Accounting\PlanCuentasNifController@update"},{"host":null,"methods":["POST"],"uri":"productos\/evaluate","name":"productos.evaluate","action":"App\Http\Controllers\Inventory\ProductoController@evaluate"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/rollos","name":"productos.rollos.index","action":"App\Http\Controllers\Inventory\ProdbodeRolloController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/prodbode","name":"productos.prodbode.index","action":"App\Http\Controllers\Inventory\ProdBodeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/historial","name":"productos.historial.index","action":"App\Http\Controllers\Inventory\ProductoHistorialController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos","name":"productos.index","action":"App\Http\Controllers\Inventory\ProductoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/create","name":"productos.create","action":"App\Http\Controllers\Inventory\ProductoController@create"},{"host":null,"methods":["POST"],"uri":"productos","name":"productos.store","action":"App\Http\Controllers\Inventory\ProductoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/{productos}","name":"productos.show","action":"App\Http\Controllers\Inventory\ProductoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/{productos}\/edit","name":"productos.edit","action":"App\Http\Controllers\Inventory\ProductoController@edit"},{"host":null,"methods":["PUT"],"uri":"productos\/{productos}","name":"productos.update","action":"App\Http\Controllers\Inventory\ProductoController@update"},{"host":null,"methods":["PATCH"],"uri":"productos\/{productos}","name":null,"action":"App\Http\Controllers\Inventory\ProductoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/detalle","name":"traslados.detalle.index","action":"App\Http\Controllers\Inventory\DetalleTrasladoController@index"},{"host":null,"methods":["POST"],"uri":"traslados\/detalle","name":"traslados.detalle.store","action":"App\Http\Controllers\Inventory\DetalleTrasladoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados","name":"traslados.index","action":"App\Http\Controllers\Inventory\TrasladosController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/create","name":"traslados.create","action":"App\Http\Controllers\Inventory\TrasladosController@create"},{"host":null,"methods":["POST"],"uri":"traslados","name":"traslados.store","action":"App\Http\Controllers\Inventory\TrasladosController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/{traslados}","name":"traslados.show","action":"App\Http\Controllers\Inventory\TrasladosController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos","name":"grupos.index","action":"App\Http\Controllers\Inventory\GrupoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/create","name":"grupos.create","action":"App\Http\Controllers\Inventory\GrupoController@create"},{"host":null,"methods":["POST"],"uri":"grupos","name":"grupos.store","action":"App\Http\Controllers\Inventory\GrupoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/{grupos}","name":"grupos.show","action":"App\Http\Controllers\Inventory\GrupoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/{grupos}\/edit","name":"grupos.edit","action":"App\Http\Controllers\Inventory\GrupoController@edit"},{"host":null,"methods":["PUT"],"uri":"grupos\/{grupos}","name":"grupos.update","action":"App\Http\Controllers\Inventory\GrupoController@update"},{"host":null,"methods":["PATCH"],"uri":"grupos\/{grupos}","name":null,"action":"App\Http\Controllers\Inventory\GrupoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos","name":"subgrupos.index","action":"App\Http\Controllers\Inventory\SubGrupoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/create","name":"subgrupos.create","action":"App\Http\Controllers\Inventory\SubGrupoController@create"},{"host":null,"methods":["POST"],"uri":"subgrupos","name":"subgrupos.store","action":"App\Http\Controllers\Inventory\SubGrupoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/{subgrupos}","name":"subgrupos.show","action":"App\Http\Controllers\Inventory\SubGrupoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/{subgrupos}\/edit","name":"subgrupos.edit","action":"App\Http\Controllers\Inventory\SubGrupoController@edit"},{"host":null,"methods":["PUT"],"uri":"subgrupos\/{subgrupos}","name":"subgrupos.update","action":"App\Http\Controllers\Inventory\SubGrupoController@update"},{"host":null,"methods":["PATCH"],"uri":"subgrupos\/{subgrupos}","name":null,"action":"App\Http\Controllers\Inventory\SubGrupoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades","name":"unidades.index","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/create","name":"unidades.create","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@create"},{"host":null,"methods":["POST"],"uri":"unidades","name":"unidades.store","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/{unidades}","name":"unidades.show","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/{unidades}\/edit","name":"unidades.edit","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@edit"},{"host":null,"methods":["PUT"],"uri":"unidades\/{unidades}","name":"unidades.update","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@update"},{"host":null,"methods":["PATCH"],"uri":"unidades\/{unidades}","name":null,"action":"App\Http\Controllers\Inventory\UnidadesMedidaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"agendaordenes\/exportar","name":"agendaordenes.exportar","action":"App\Http\Controllers\Production\AgendaOrdenespController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"agendaordenes","name":"agendaordenes.index","action":"App\Http\Controllers\Production\AgendaOrdenespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/maquinas","name":"precotizaciones.productos.maquinas.index","action":"App\Http\Controllers\Production\PreCotizacion8Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/acabados","name":"precotizaciones.productos.acabados.index","action":"App\Http\Controllers\Production\PreCotizacion7Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/imagenes","name":"precotizaciones.productos.imagenes.index","action":"App\Http\Controllers\Production\PreCotizacion4Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/materiales","name":"precotizaciones.productos.materiales.index","action":"App\Http\Controllers\Production\PreCotizacion3Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/empaques","name":"precotizaciones.productos.empaques.index","action":"App\Http\Controllers\Production\PreCotizacion9Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/areas","name":"precotizaciones.productos.areas.index","action":"App\Http\Controllers\Production\PreCotizacion6Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/transportes","name":"precotizaciones.productos.transportes.index","action":"App\Http\Controllers\Production\PreCotizacion10Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos","name":"precotizaciones.productos.index","action":"App\Http\Controllers\Production\PreCotizacion2Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/{productos}","name":"precotizaciones.productos.show","action":"App\Http\Controllers\Production\PreCotizacion2Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones","name":"precotizaciones.index","action":"App\Http\Controllers\Production\PreCotizacion1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/{precotizaciones}","name":"precotizaciones.show","action":"App\Http\Controllers\Production\PreCotizacion1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/exportar\/{cotizaciones}","name":"cotizaciones.exportar","action":"App\Http\Controllers\Production\Cotizacion1Controller@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/estados\/{cotizaciones}","name":"cotizaciones.estados","action":"App\Http\Controllers\Production\Cotizacion1Controller@estados"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/abrir\/{cotizaciones}","name":"cotizaciones.abrir","action":"App\Http\Controllers\Production\Cotizacion1Controller@abrir"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/clonar\/{cotizaciones}","name":"cotizaciones.clonar","action":"App\Http\Controllers\Production\Cotizacion1Controller@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/generar\/{cotizaciones}","name":"cotizaciones.generar","action":"App\Http\Controllers\Production\Cotizacion1Controller@generar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/graficas\/{cotizaciones}","name":"cotizaciones.graficas","action":"App\Http\Controllers\Production\Cotizacion1Controller@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/archivos","name":"cotizaciones.archivos.index","action":"App\Http\Controllers\Production\CotizacionArchivosController@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/archivos","name":"cotizaciones.archivos.store","action":"App\Http\Controllers\Production\CotizacionArchivosController@store"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/archivos\/{archivos}","name":"cotizaciones.archivos.destroy","action":"App\Http\Controllers\Production\CotizacionArchivosController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/clonar\/{productos}","name":"cotizaciones.productos.clonar","action":"App\Http\Controllers\Production\Cotizacion2Controller@clonar"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/producto","name":"cotizaciones.productos.producto","action":"App\Http\Controllers\Production\Cotizacion2Controller@producto"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/maquinas","name":"cotizaciones.productos.maquinas.index","action":"App\Http\Controllers\Production\Cotizacion3Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/acabados","name":"cotizaciones.productos.acabados.index","action":"App\Http\Controllers\Production\Cotizacion5Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/imagenes","name":"cotizaciones.productos.imagenes.index","action":"App\Http\Controllers\Production\Cotizacion8Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/imagenes","name":"cotizaciones.productos.imagenes.store","action":"App\Http\Controllers\Production\Cotizacion8Controller@store"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/productos\/imagenes\/{imagenes}","name":"cotizaciones.productos.imagenes.destroy","action":"App\Http\Controllers\Production\Cotizacion8Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/materiales","name":"cotizaciones.productos.materiales.index","action":"App\Http\Controllers\Production\Cotizacion4Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/materiales","name":"cotizaciones.productos.materiales.store","action":"App\Http\Controllers\Production\Cotizacion4Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/empaques","name":"cotizaciones.productos.empaques.index","action":"App\Http\Controllers\Production\Cotizacion9Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/empaques","name":"cotizaciones.productos.empaques.store","action":"App\Http\Controllers\Production\Cotizacion9Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/areas","name":"cotizaciones.productos.areas.index","action":"App\Http\Controllers\Production\Cotizacion6Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/areas","name":"cotizaciones.productos.areas.store","action":"App\Http\Controllers\Production\Cotizacion6Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/transportes","name":"cotizaciones.productos.transportes.index","action":"App\Http\Controllers\Production\Cotizacion10Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/transportes","name":"cotizaciones.productos.transportes.store","action":"App\Http\Controllers\Production\Cotizacion10Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos","name":"cotizaciones.productos.index","action":"App\Http\Controllers\Production\Cotizacion2Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/create","name":"cotizaciones.productos.create","action":"App\Http\Controllers\Production\Cotizacion2Controller@create"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos","name":"cotizaciones.productos.store","action":"App\Http\Controllers\Production\Cotizacion2Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.show","action":"App\Http\Controllers\Production\Cotizacion2Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/{productos}\/edit","name":"cotizaciones.productos.edit","action":"App\Http\Controllers\Production\Cotizacion2Controller@edit"},{"host":null,"methods":["PUT"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.update","action":"App\Http\Controllers\Production\Cotizacion2Controller@update"},{"host":null,"methods":["PATCH"],"uri":"cotizaciones\/productos\/{productos}","name":null,"action":"App\Http\Controllers\Production\Cotizacion2Controller@update"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.destroy","action":"App\Http\Controllers\Production\Cotizacion2Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/bitacora","name":"cotizaciones.bitacora.index","action":"App\Http\Controllers\Admin\BitacoraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones","name":"cotizaciones.index","action":"App\Http\Controllers\Production\Cotizacion1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/create","name":"cotizaciones.create","action":"App\Http\Controllers\Production\Cotizacion1Controller@create"},{"host":null,"methods":["POST"],"uri":"cotizaciones","name":"cotizaciones.store","action":"App\Http\Controllers\Production\Cotizacion1Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/{cotizaciones}","name":"cotizaciones.show","action":"App\Http\Controllers\Production\Cotizacion1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/{cotizaciones}\/edit","name":"cotizaciones.edit","action":"App\Http\Controllers\Production\Cotizacion1Controller@edit"},{"host":null,"methods":["PUT"],"uri":"cotizaciones\/{cotizaciones}","name":"cotizaciones.update","action":"App\Http\Controllers\Production\Cotizacion1Controller@update"},{"host":null,"methods":["PATCH"],"uri":"cotizaciones\/{cotizaciones}","name":null,"action":"App\Http\Controllers\Production\Cotizacion1Controller@update"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/clonar\/{productosp}","name":"productosp.clonar","action":"App\Http\Controllers\Production\ProductopController@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/tips","name":"productosp.tips.index","action":"App\Http\Controllers\Production\Productop2Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/tips","name":"productosp.tips.store","action":"App\Http\Controllers\Production\Productop2Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/tips\/{tips}","name":"productosp.tips.destroy","action":"App\Http\Controllers\Production\Productop2Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/areas","name":"productosp.areas.index","action":"App\Http\Controllers\Production\Productop3Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/areas","name":"productosp.areas.store","action":"App\Http\Controllers\Production\Productop3Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/areas\/{areas}","name":"productosp.areas.destroy","action":"App\Http\Controllers\Production\Productop3Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/maquinas","name":"productosp.maquinas.index","action":"App\Http\Controllers\Production\Productop4Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/maquinas","name":"productosp.maquinas.store","action":"App\Http\Controllers\Production\Productop4Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/maquinas\/{maquinas}","name":"productosp.maquinas.destroy","action":"App\Http\Controllers\Production\Productop4Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/materiales","name":"productosp.materiales.index","action":"App\Http\Controllers\Production\Productop5Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/materiales","name":"productosp.materiales.store","action":"App\Http\Controllers\Production\Productop5Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/materiales\/{materiales}","name":"productosp.materiales.destroy","action":"App\Http\Controllers\Production\Productop5Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/acabados","name":"productosp.acabados.index","action":"App\Http\Controllers\Production\Productop6Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/acabados","name":"productosp.acabados.store","action":"App\Http\Controllers\Production\Productop6Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/acabados\/{acabados}","name":"productosp.acabados.destroy","action":"App\Http\Controllers\Production\Productop6Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/imagenes","name":"productosp.imagenes.index","action":"App\Http\Controllers\Production\ProductopImagenController@index"},{"host":null,"methods":["POST"],"uri":"productosp\/imagenes","name":"productosp.imagenes.store","action":"App\Http\Controllers\Production\ProductopImagenController@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/imagenes\/{imagenes}","name":"productosp.imagenes.destroy","action":"App\Http\Controllers\Production\ProductopImagenController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp","name":"productosp.index","action":"App\Http\Controllers\Production\ProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/create","name":"productosp.create","action":"App\Http\Controllers\Production\ProductopController@create"},{"host":null,"methods":["POST"],"uri":"productosp","name":"productosp.store","action":"App\Http\Controllers\Production\ProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/{productosp}","name":"productosp.show","action":"App\Http\Controllers\Production\ProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/{productosp}\/edit","name":"productosp.edit","action":"App\Http\Controllers\Production\ProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"productosp\/{productosp}","name":"productosp.update","action":"App\Http\Controllers\Production\ProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"productosp\/{productosp}","name":null,"action":"App\Http\Controllers\Production\ProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/cerrar\/{ordenes}","name":"ordenes.cerrar","action":"App\Http\Controllers\Production\OrdenpController@cerrar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/abrir\/{ordenes}","name":"ordenes.abrir","action":"App\Http\Controllers\Production\OrdenpController@abrir"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/completar\/{ordenes}","name":"ordenes.completar","action":"App\Http\Controllers\Production\OrdenpController@completar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/clonar\/{ordenes}","name":"ordenes.clonar","action":"App\Http\Controllers\Production\OrdenpController@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/exportar\/{ordenes}","name":"ordenes.exportar","action":"App\Http\Controllers\Production\OrdenpController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/graficas\/{ordenes}","name":"ordenes.graficas","action":"App\Http\Controllers\Production\OrdenpController@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/archivos","name":"ordenes.archivos.index","action":"App\Http\Controllers\Production\OrdenpArchivosController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/archivos","name":"ordenes.archivos.store","action":"App\Http\Controllers\Production\OrdenpArchivosController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/archivos\/{archivos}","name":"ordenes.archivos.destroy","action":"App\Http\Controllers\Production\OrdenpArchivosController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/clonar\/{productos}","name":"ordenes.productos.clonar","action":"App\Http\Controllers\Production\DetalleOrdenpController@clonar"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/producto","name":"ordenes.productos.producto","action":"App\Http\Controllers\Production\DetalleOrdenpController@producto"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/maquinas","name":"ordenes.productos.maquinas.index","action":"App\Http\Controllers\Production\DetalleMaquinaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/acabados","name":"ordenes.productos.acabados.index","action":"App\Http\Controllers\Production\DetalleAcabadoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/imagenes","name":"ordenes.productos.imagenes.index","action":"App\Http\Controllers\Production\DetalleImagenespController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/imagenes","name":"ordenes.productos.imagenes.store","action":"App\Http\Controllers\Production\DetalleImagenespController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/productos\/imagenes\/{imagenes}","name":"ordenes.productos.imagenes.destroy","action":"App\Http\Controllers\Production\DetalleImagenespController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/materiales","name":"ordenes.productos.materiales.index","action":"App\Http\Controllers\Production\DetalleMaterialesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/materiales","name":"ordenes.productos.materiales.store","action":"App\Http\Controllers\Production\DetalleMaterialesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/empaques","name":"ordenes.productos.empaques.index","action":"App\Http\Controllers\Production\DetalleEmpaquesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/empaques","name":"ordenes.productos.empaques.store","action":"App\Http\Controllers\Production\DetalleEmpaquesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/areas","name":"ordenes.productos.areas.index","action":"App\Http\Controllers\Production\DetalleAreasController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/areas","name":"ordenes.productos.areas.store","action":"App\Http\Controllers\Production\DetalleAreasController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/transportes","name":"ordenes.productos.transportes.index","action":"App\Http\Controllers\Production\DetalleTransportesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/transportes","name":"ordenes.productos.transportes.store","action":"App\Http\Controllers\Production\DetalleTransportesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos","name":"ordenes.productos.index","action":"App\Http\Controllers\Production\DetalleOrdenpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/create","name":"ordenes.productos.create","action":"App\Http\Controllers\Production\DetalleOrdenpController@create"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos","name":"ordenes.productos.store","action":"App\Http\Controllers\Production\DetalleOrdenpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.show","action":"App\Http\Controllers\Production\DetalleOrdenpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/{productos}\/edit","name":"ordenes.productos.edit","action":"App\Http\Controllers\Production\DetalleOrdenpController@edit"},{"host":null,"methods":["PUT"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.update","action":"App\Http\Controllers\Production\DetalleOrdenpController@update"},{"host":null,"methods":["PATCH"],"uri":"ordenes\/productos\/{productos}","name":null,"action":"App\Http\Controllers\Production\DetalleOrdenpController@update"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.destroy","action":"App\Http\Controllers\Production\DetalleOrdenpController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/bitacora","name":"ordenes.bitacora.index","action":"App\Http\Controllers\Admin\BitacoraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos\/exportar\/{despachos}","name":"ordenes.despachos.exportar","action":"App\Http\Controllers\Production\DespachopController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos\/pendientes","name":"ordenes.despachos.pendientes","action":"App\Http\Controllers\Production\DespachopController@pendientes"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos","name":"ordenes.despachos.index","action":"App\Http\Controllers\Production\DespachopController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/despachos","name":"ordenes.despachos.store","action":"App\Http\Controllers\Production\DespachopController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/despachos\/{despachos}","name":"ordenes.despachos.destroy","action":"App\Http\Controllers\Production\DespachopController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes","name":"ordenes.index","action":"App\Http\Controllers\Production\OrdenpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/create","name":"ordenes.create","action":"App\Http\Controllers\Production\OrdenpController@create"},{"host":null,"methods":["POST"],"uri":"ordenes","name":"ordenes.store","action":"App\Http\Controllers\Production\OrdenpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/{ordenes}","name":"ordenes.show","action":"App\Http\Controllers\Production\OrdenpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/{ordenes}\/edit","name":"ordenes.edit","action":"App\Http\Controllers\Production\OrdenpController@edit"},{"host":null,"methods":["PUT"],"uri":"ordenes\/{ordenes}","name":"ordenes.update","action":"App\Http\Controllers\Production\OrdenpController@update"},{"host":null,"methods":["PATCH"],"uri":"ordenes\/{ordenes}","name":null,"action":"App\Http\Controllers\Production\OrdenpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp","name":"tiemposp.index","action":"App\Http\Controllers\Production\TiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/create","name":"tiemposp.create","action":"App\Http\Controllers\Production\TiempopController@create"},{"host":null,"methods":["POST"],"uri":"tiemposp","name":"tiemposp.store","action":"App\Http\Controllers\Production\TiempopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/{tiemposp}","name":"tiemposp.show","action":"App\Http\Controllers\Production\TiempopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/{tiemposp}\/edit","name":"tiemposp.edit","action":"App\Http\Controllers\Production\TiempopController@edit"},{"host":null,"methods":["PUT"],"uri":"tiemposp\/{tiemposp}","name":"tiemposp.update","action":"App\Http\Controllers\Production\TiempopController@update"},{"host":null,"methods":["PATCH"],"uri":"tiemposp\/{tiemposp}","name":null,"action":"App\Http\Controllers\Production\TiempopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp","name":"acabadosp.index","action":"App\Http\Controllers\Production\AcabadospController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/create","name":"acabadosp.create","action":"App\Http\Controllers\Production\AcabadospController@create"},{"host":null,"methods":["POST"],"uri":"acabadosp","name":"acabadosp.store","action":"App\Http\Controllers\Production\AcabadospController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/{acabadosp}","name":"acabadosp.show","action":"App\Http\Controllers\Production\AcabadospController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/{acabadosp}\/edit","name":"acabadosp.edit","action":"App\Http\Controllers\Production\AcabadospController@edit"},{"host":null,"methods":["PUT"],"uri":"acabadosp\/{acabadosp}","name":"acabadosp.update","action":"App\Http\Controllers\Production\AcabadospController@update"},{"host":null,"methods":["PATCH"],"uri":"acabadosp\/{acabadosp}","name":null,"action":"App\Http\Controllers\Production\AcabadospController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp","name":"actividadesp.index","action":"App\Http\Controllers\Production\ActividadpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/create","name":"actividadesp.create","action":"App\Http\Controllers\Production\ActividadpController@create"},{"host":null,"methods":["POST"],"uri":"actividadesp","name":"actividadesp.store","action":"App\Http\Controllers\Production\ActividadpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/{actividadesp}","name":"actividadesp.show","action":"App\Http\Controllers\Production\ActividadpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/{actividadesp}\/edit","name":"actividadesp.edit","action":"App\Http\Controllers\Production\ActividadpController@edit"},{"host":null,"methods":["PUT"],"uri":"actividadesp\/{actividadesp}","name":"actividadesp.update","action":"App\Http\Controllers\Production\ActividadpController@update"},{"host":null,"methods":["PATCH"],"uri":"actividadesp\/{actividadesp}","name":null,"action":"App\Http\Controllers\Production\ActividadpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp","name":"areasp.index","action":"App\Http\Controllers\Production\AreaspController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/create","name":"areasp.create","action":"App\Http\Controllers\Production\AreaspController@create"},{"host":null,"methods":["POST"],"uri":"areasp","name":"areasp.store","action":"App\Http\Controllers\Production\AreaspController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/{areasp}","name":"areasp.show","action":"App\Http\Controllers\Production\AreaspController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/{areasp}\/edit","name":"areasp.edit","action":"App\Http\Controllers\Production\AreaspController@edit"},{"host":null,"methods":["PUT"],"uri":"areasp\/{areasp}","name":"areasp.update","action":"App\Http\Controllers\Production\AreaspController@update"},{"host":null,"methods":["PATCH"],"uri":"areasp\/{areasp}","name":null,"action":"App\Http\Controllers\Production\AreaspController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp","name":"maquinasp.index","action":"App\Http\Controllers\Production\MaquinaspController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/create","name":"maquinasp.create","action":"App\Http\Controllers\Production\MaquinaspController@create"},{"host":null,"methods":["POST"],"uri":"maquinasp","name":"maquinasp.store","action":"App\Http\Controllers\Production\MaquinaspController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/{maquinasp}","name":"maquinasp.show","action":"App\Http\Controllers\Production\MaquinaspController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/{maquinasp}\/edit","name":"maquinasp.edit","action":"App\Http\Controllers\Production\MaquinaspController@edit"},{"host":null,"methods":["PUT"],"uri":"maquinasp\/{maquinasp}","name":"maquinasp.update","action":"App\Http\Controllers\Production\MaquinaspController@update"},{"host":null,"methods":["PATCH"],"uri":"maquinasp\/{maquinasp}","name":null,"action":"App\Http\Controllers\Production\MaquinaspController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp","name":"materialesp.index","action":"App\Http\Controllers\Production\MaterialespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/create","name":"materialesp.create","action":"App\Http\Controllers\Production\MaterialespController@create"},{"host":null,"methods":["POST"],"uri":"materialesp","name":"materialesp.store","action":"App\Http\Controllers\Production\MaterialespController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/{materialesp}","name":"materialesp.show","action":"App\Http\Controllers\Production\MaterialespController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/{materialesp}\/edit","name":"materialesp.edit","action":"App\Http\Controllers\Production\MaterialespController@edit"},{"host":null,"methods":["PUT"],"uri":"materialesp\/{materialesp}","name":"materialesp.update","action":"App\Http\Controllers\Production\MaterialespController@update"},{"host":null,"methods":["PATCH"],"uri":"materialesp\/{materialesp}","name":null,"action":"App\Http\Controllers\Production\MaterialespController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp","name":"tipomaterialesp.index","action":"App\Http\Controllers\Production\TipoMaterialespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/create","name":"tipomaterialesp.create","action":"App\Http\Controllers\Production\TipoMaterialespController@create"},{"host":null,"methods":["POST"],"uri":"tipomaterialesp","name":"tipomaterialesp.store","action":"App\Http\Controllers\Production\TipoMaterialespController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":"tipomaterialesp.show","action":"App\Http\Controllers\Production\TipoMaterialespController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/{tipomaterialesp}\/edit","name":"tipomaterialesp.edit","action":"App\Http\Controllers\Production\TipoMaterialespController@edit"},{"host":null,"methods":["PUT"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":"tipomaterialesp.update","action":"App\Http\Controllers\Production\TipoMaterialespController@update"},{"host":null,"methods":["PATCH"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":null,"action":"App\Http\Controllers\Production\TipoMaterialespController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp","name":"tipoproductosp.index","action":"App\Http\Controllers\Production\TipoProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/create","name":"tipoproductosp.create","action":"App\Http\Controllers\Production\TipoProductopController@create"},{"host":null,"methods":["POST"],"uri":"tipoproductosp","name":"tipoproductosp.store","action":"App\Http\Controllers\Production\TipoProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/{tipoproductosp}","name":"tipoproductosp.show","action":"App\Http\Controllers\Production\TipoProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/{tipoproductosp}\/edit","name":"tipoproductosp.edit","action":"App\Http\Controllers\Production\TipoProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"tipoproductosp\/{tipoproductosp}","name":"tipoproductosp.update","action":"App\Http\Controllers\Production\TipoProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"tipoproductosp\/{tipoproductosp}","name":null,"action":"App\Http\Controllers\Production\TipoProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp","name":"subactividadesp.index","action":"App\Http\Controllers\Production\SubActividadpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/create","name":"subactividadesp.create","action":"App\Http\Controllers\Production\SubActividadpController@create"},{"host":null,"methods":["POST"],"uri":"subactividadesp","name":"subactividadesp.store","action":"App\Http\Controllers\Production\SubActividadpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/{subactividadesp}","name":"subactividadesp.show","action":"App\Http\Controllers\Production\SubActividadpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/{subactividadesp}\/edit","name":"subactividadesp.edit","action":"App\Http\Controllers\Production\SubActividadpController@edit"},{"host":null,"methods":["PUT"],"uri":"subactividadesp\/{subactividadesp}","name":"subactividadesp.update","action":"App\Http\Controllers\Production\SubActividadpController@update"},{"host":null,"methods":["PATCH"],"uri":"subactividadesp\/{subactividadesp}","name":null,"action":"App\Http\Controllers\Production\SubActividadpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp","name":"subtipoproductosp.index","action":"App\Http\Controllers\Production\SubtipoProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/create","name":"subtipoproductosp.create","action":"App\Http\Controllers\Production\SubtipoProductopController@create"},{"host":null,"methods":["POST"],"uri":"subtipoproductosp","name":"subtipoproductosp.store","action":"App\Http\Controllers\Production\SubtipoProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":"subtipoproductosp.show","action":"App\Http\Controllers\Production\SubtipoProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/{subtipoproductosp}\/edit","name":"subtipoproductosp.edit","action":"App\Http\Controllers\Production\SubtipoProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":"subtipoproductosp.update","action":"App\Http\Controllers\Production\SubtipoProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":null,"action":"App\Http\Controllers\Production\SubtipoProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp\/cuotas","name":"facturasp.cuotas.index","action":"App\Http\Controllers\Treasury\FacturapCuotasController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp","name":"facturasp.index","action":"App\Http\Controllers\Treasury\FacturapController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp\/{facturasp}","name":"facturasp.show","action":"App\Http\Controllers\Treasury\FacturapController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"restadocartera","name":"restadocartera.index","action":"App\Http\Controllers\Report\EstadoCarteraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rcarteraedades","name":"rcarteraedades.index","action":"App\Http\Controllers\Report\CarteraEdadesController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxbeneficiariocuenta","name":"rauxbeneficiariocuenta.index","action":"App\Http\Controllers\Report\AuxiliarBeneficiarioCuentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxcontable","name":"rauxcontable.index","action":"App\Http\Controllers\Report\AuxiliarContableController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxcuenta","name":"rauxcuenta.index","action":"App\Http\Controllers\Report\AuxiliarCuentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rbalancegeneral","name":"rbalancegeneral.index","action":"App\Http\Controllers\Report\BalanceGeneralController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rlibrodiario","name":"rlibrodiario.index","action":"App\Http\Controllers\Report\LibroDiarioController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rlibromayor","name":"rlibromayor.index","action":"App\Http\Controllers\Report\LibroMayorController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp\/graficas","name":"rtiemposp.graficas","action":"App\Http\Controllers\Report\TiempopController@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp\/exportar","name":"rtiemposp.exportar","action":"App\Http\Controllers\Report\TiempopController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp","name":"rtiemposp.index","action":"App\Http\Controllers\Report\TiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rresumentiemposp","name":"rresumentiemposp.index","action":"App\Http\Controllers\Report\ResumenTiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rhistorialproveedores","name":"rhistorialproveedores.index","action":"App\Http\Controllers\Report\HistorialProveedorController@index"}],
+            routes : [{"host":null,"methods":["POST"],"uri":"auth\/login","name":"auth.login","action":"App\Http\Controllers\Auth\AuthController@postLogin"},{"host":null,"methods":["GET","HEAD"],"uri":"auth\/logout","name":"auth.logout","action":"App\Http\Controllers\Auth\AuthController@getLogout"},{"host":null,"methods":["GET","HEAD"],"uri":"login","name":"login","action":"App\Http\Controllers\Auth\AuthController@getLogin"},{"host":null,"methods":["GET","HEAD"],"uri":"\/","name":"dashboard","action":"App\Http\Controllers\HomeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/actividades","name":"search.actividades","action":"App\Http\Controllers\Admin\BuscadorController@actividades"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/municipios","name":"search.municipios","action":"App\Http\Controllers\Admin\BuscadorController@municipios"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/terceros","name":"search.terceros","action":"App\Http\Controllers\Admin\BuscadorController@terceros"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/contactos","name":"search.contactos","action":"App\Http\Controllers\Admin\BuscadorController@contactos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cuentas","name":"search.cuentas","action":"App\Http\Controllers\Admin\BuscadorController@cuentas"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cuentasnif","name":"search.cuentasnif","action":"App\Http\Controllers\Admin\BuscadorController@cuentasnif"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/facturas","name":"search.facturas","action":"App\Http\Controllers\Admin\BuscadorController@facturas"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/cotizaciones","name":"search.cotizaciones","action":"App\Http\Controllers\Admin\BuscadorController@cotizaciones"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/ordenes","name":"search.ordenes","action":"App\Http\Controllers\Admin\BuscadorController@ordenes"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productos","name":"search.productos","action":"App\Http\Controllers\Admin\BuscadorController@productos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productosp","name":"search.productosp","action":"App\Http\Controllers\Admin\BuscadorController@productosp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productoscotizacion","name":"search.productoscotizacion","action":"App\Http\Controllers\Admin\BuscadorController@productosCotizacion"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/productosorden","name":"search.productosorden","action":"App\Http\Controllers\Admin\BuscadorController@productosOrden"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/subactividadesp","name":"search.subactividadesp","action":"App\Http\Controllers\Admin\BuscadorController@subactividadesp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/subtipoproductosp","name":"search.subtipoproductosp","action":"App\Http\Controllers\Admin\BuscadorController@subtipoproductosp"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/documentos","name":"search.documentos","action":"App\Http\Controllers\Admin\BuscadorController@documentos"},{"host":null,"methods":["GET","HEAD"],"uri":"search\/facturasp","name":"search.facturasp","action":"App\Http\Controllers\Admin\BuscadorController@facturasp"},{"host":null,"methods":["GET","HEAD"],"uri":"empresa","name":"empresa.index","action":"App\Http\Controllers\Admin\EmpresaController@index"},{"host":null,"methods":["PUT"],"uri":"empresa\/{empresa}","name":"empresa.update","action":"App\Http\Controllers\Admin\EmpresaController@update"},{"host":null,"methods":["PATCH"],"uri":"empresa\/{empresa}","name":null,"action":"App\Http\Controllers\Admin\EmpresaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/dv","name":"terceros.dv","action":"App\Http\Controllers\Admin\TerceroController@dv"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/rcree","name":"terceros.rcree","action":"App\Http\Controllers\Admin\TerceroController@rcree"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/facturap","name":"terceros.facturap","action":"App\Http\Controllers\Admin\TerceroController@facturap"},{"host":null,"methods":["POST"],"uri":"terceros\/setpassword","name":"terceros.setpassword","action":"App\Http\Controllers\Admin\TerceroController@setpassword"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/contactos\/estado","name":"terceros.contactos.estado","action":"App\Http\Controllers\Admin\ContactoController@estado"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/contactos","name":"terceros.contactos.index","action":"App\Http\Controllers\Admin\ContactoController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/contactos","name":"terceros.contactos.store","action":"App\Http\Controllers\Admin\ContactoController@store"},{"host":null,"methods":["PUT"],"uri":"terceros\/contactos\/{contactos}","name":"terceros.contactos.update","action":"App\Http\Controllers\Admin\ContactoController@update"},{"host":null,"methods":["PATCH"],"uri":"terceros\/contactos\/{contactos}","name":null,"action":"App\Http\Controllers\Admin\ContactoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/roles","name":"terceros.roles.index","action":"App\Http\Controllers\Admin\UsuarioRolController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/roles","name":"terceros.roles.store","action":"App\Http\Controllers\Admin\UsuarioRolController@store"},{"host":null,"methods":["DELETE"],"uri":"terceros\/roles\/{roles}","name":"terceros.roles.destroy","action":"App\Http\Controllers\Admin\UsuarioRolController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/imagenes","name":"terceros.imagenes.index","action":"App\Http\Controllers\Admin\TerceroImagenController@index"},{"host":null,"methods":["POST"],"uri":"terceros\/imagenes","name":"terceros.imagenes.store","action":"App\Http\Controllers\Admin\TerceroImagenController@store"},{"host":null,"methods":["DELETE"],"uri":"terceros\/imagenes\/{imagenes}","name":"terceros.imagenes.destroy","action":"App\Http\Controllers\Admin\TerceroImagenController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros","name":"terceros.index","action":"App\Http\Controllers\Admin\TerceroController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/create","name":"terceros.create","action":"App\Http\Controllers\Admin\TerceroController@create"},{"host":null,"methods":["POST"],"uri":"terceros","name":"terceros.store","action":"App\Http\Controllers\Admin\TerceroController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/{terceros}","name":"terceros.show","action":"App\Http\Controllers\Admin\TerceroController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"terceros\/{terceros}\/edit","name":"terceros.edit","action":"App\Http\Controllers\Admin\TerceroController@edit"},{"host":null,"methods":["PUT"],"uri":"terceros\/{terceros}","name":"terceros.update","action":"App\Http\Controllers\Admin\TerceroController@update"},{"host":null,"methods":["PATCH"],"uri":"terceros\/{terceros}","name":null,"action":"App\Http\Controllers\Admin\TerceroController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/permisos","name":"roles.permisos.index","action":"App\Http\Controllers\Admin\PermisoRolController@index"},{"host":null,"methods":["PUT"],"uri":"roles\/permisos\/{permisos}","name":"roles.permisos.update","action":"App\Http\Controllers\Admin\PermisoRolController@update"},{"host":null,"methods":["PATCH"],"uri":"roles\/permisos\/{permisos}","name":null,"action":"App\Http\Controllers\Admin\PermisoRolController@update"},{"host":null,"methods":["DELETE"],"uri":"roles\/permisos\/{permisos}","name":"roles.permisos.destroy","action":"App\Http\Controllers\Admin\PermisoRolController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"roles","name":"roles.index","action":"App\Http\Controllers\Admin\RolController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/create","name":"roles.create","action":"App\Http\Controllers\Admin\RolController@create"},{"host":null,"methods":["POST"],"uri":"roles","name":"roles.store","action":"App\Http\Controllers\Admin\RolController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/{roles}","name":"roles.show","action":"App\Http\Controllers\Admin\RolController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"roles\/{roles}\/edit","name":"roles.edit","action":"App\Http\Controllers\Admin\RolController@edit"},{"host":null,"methods":["PUT"],"uri":"roles\/{roles}","name":"roles.update","action":"App\Http\Controllers\Admin\RolController@update"},{"host":null,"methods":["PATCH"],"uri":"roles\/{roles}","name":null,"action":"App\Http\Controllers\Admin\RolController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades","name":"actividades.index","action":"App\Http\Controllers\Admin\ActividadController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/create","name":"actividades.create","action":"App\Http\Controllers\Admin\ActividadController@create"},{"host":null,"methods":["POST"],"uri":"actividades","name":"actividades.store","action":"App\Http\Controllers\Admin\ActividadController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/{actividades}","name":"actividades.show","action":"App\Http\Controllers\Admin\ActividadController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"actividades\/{actividades}\/edit","name":"actividades.edit","action":"App\Http\Controllers\Admin\ActividadController@edit"},{"host":null,"methods":["PUT"],"uri":"actividades\/{actividades}","name":"actividades.update","action":"App\Http\Controllers\Admin\ActividadController@update"},{"host":null,"methods":["PATCH"],"uri":"actividades\/{actividades}","name":null,"action":"App\Http\Controllers\Admin\ActividadController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"departamentos","name":"departamentos.index","action":"App\Http\Controllers\Admin\DepartamentoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"departamentos\/{departamentos}","name":"departamentos.show","action":"App\Http\Controllers\Admin\DepartamentoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"municipios","name":"municipios.index","action":"App\Http\Controllers\Admin\MunicipioController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales","name":"sucursales.index","action":"App\Http\Controllers\Admin\SucursalController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/create","name":"sucursales.create","action":"App\Http\Controllers\Admin\SucursalController@create"},{"host":null,"methods":["POST"],"uri":"sucursales","name":"sucursales.store","action":"App\Http\Controllers\Admin\SucursalController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/{sucursales}","name":"sucursales.show","action":"App\Http\Controllers\Admin\SucursalController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"sucursales\/{sucursales}\/edit","name":"sucursales.edit","action":"App\Http\Controllers\Admin\SucursalController@edit"},{"host":null,"methods":["PUT"],"uri":"sucursales\/{sucursales}","name":"sucursales.update","action":"App\Http\Controllers\Admin\SucursalController@update"},{"host":null,"methods":["PATCH"],"uri":"sucursales\/{sucursales}","name":null,"action":"App\Http\Controllers\Admin\SucursalController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa","name":"puntosventa.index","action":"App\Http\Controllers\Admin\PuntoVentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/create","name":"puntosventa.create","action":"App\Http\Controllers\Admin\PuntoVentaController@create"},{"host":null,"methods":["POST"],"uri":"puntosventa","name":"puntosventa.store","action":"App\Http\Controllers\Admin\PuntoVentaController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/{puntosventa}","name":"puntosventa.show","action":"App\Http\Controllers\Admin\PuntoVentaController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"puntosventa\/{puntosventa}\/edit","name":"puntosventa.edit","action":"App\Http\Controllers\Admin\PuntoVentaController@edit"},{"host":null,"methods":["PUT"],"uri":"puntosventa\/{puntosventa}","name":"puntosventa.update","action":"App\Http\Controllers\Admin\PuntoVentaController@update"},{"host":null,"methods":["PATCH"],"uri":"puntosventa\/{puntosventa}","name":null,"action":"App\Http\Controllers\Admin\PuntoVentaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/impuestos","name":"facturas.impuestos","action":"App\Http\Controllers\Receivable\Factura1Controller@impuestos"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/anular\/{facturas}","name":"facturas.anular","action":"App\Http\Controllers\Receivable\Factura1Controller@anular"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/exportar\/{facturas}","name":"facturas.exportar","action":"App\Http\Controllers\Receivable\Factura1Controller@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/facturados","name":"facturas.facturados.index","action":"App\Http\Controllers\Receivable\Factura2Controller@index"},{"host":null,"methods":["POST"],"uri":"facturas\/facturados","name":"facturas.facturados.store","action":"App\Http\Controllers\Receivable\Factura2Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/productos","name":"facturas.productos.index","action":"App\Http\Controllers\Receivable\Factura4Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas","name":"facturas.index","action":"App\Http\Controllers\Receivable\Factura1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/create","name":"facturas.create","action":"App\Http\Controllers\Receivable\Factura1Controller@create"},{"host":null,"methods":["POST"],"uri":"facturas","name":"facturas.store","action":"App\Http\Controllers\Receivable\Factura1Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"facturas\/{facturas}","name":"facturas.show","action":"App\Http\Controllers\Receivable\Factura1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/reverse\/{asientos}","name":"asientos.reverse","action":"App\Http\Controllers\Accounting\AsientoController@reverse"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/exportar\/{asientos}","name":"asientos.exportar","action":"App\Http\Controllers\Accounting\AsientoController@exportar"},{"host":null,"methods":["POST"],"uri":"asientos\/import","name":"asientos.import","action":"App\Http\Controllers\Accounting\AsientoController@import"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle\/evaluate","name":"asientos.detalle.evaluate","action":"App\Http\Controllers\Accounting\DetalleAsientoController@evaluate"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle\/validate","name":"asientos.detalle.validate","action":"App\Http\Controllers\Accounting\DetalleAsientoController@validation"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/detalle\/movimientos","name":"asientos.detalle.movimientos.index","action":"App\Http\Controllers\Accounting\AsientoMovimientoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/detalle","name":"asientos.detalle.index","action":"App\Http\Controllers\Accounting\DetalleAsientoController@index"},{"host":null,"methods":["POST"],"uri":"asientos\/detalle","name":"asientos.detalle.store","action":"App\Http\Controllers\Accounting\DetalleAsientoController@store"},{"host":null,"methods":["PUT"],"uri":"asientos\/detalle\/{detalle}","name":"asientos.detalle.update","action":"App\Http\Controllers\Accounting\DetalleAsientoController@update"},{"host":null,"methods":["PATCH"],"uri":"asientos\/detalle\/{detalle}","name":null,"action":"App\Http\Controllers\Accounting\DetalleAsientoController@update"},{"host":null,"methods":["DELETE"],"uri":"asientos\/detalle\/{detalle}","name":"asientos.detalle.destroy","action":"App\Http\Controllers\Accounting\DetalleAsientoController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos","name":"asientos.index","action":"App\Http\Controllers\Accounting\AsientoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/create","name":"asientos.create","action":"App\Http\Controllers\Accounting\AsientoController@create"},{"host":null,"methods":["POST"],"uri":"asientos","name":"asientos.store","action":"App\Http\Controllers\Accounting\AsientoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/{asientos}","name":"asientos.show","action":"App\Http\Controllers\Accounting\AsientoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientos\/{asientos}\/edit","name":"asientos.edit","action":"App\Http\Controllers\Accounting\AsientoController@edit"},{"host":null,"methods":["PUT"],"uri":"asientos\/{asientos}","name":"asientos.update","action":"App\Http\Controllers\Accounting\AsientoController@update"},{"host":null,"methods":["PATCH"],"uri":"asientos\/{asientos}","name":null,"action":"App\Http\Controllers\Accounting\AsientoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/exportar\/{asientosnif}","name":"asientosnif.exportar","action":"App\Http\Controllers\Accounting\AsientoNifController@exportar"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle\/evaluate","name":"asientosnif.detalle.evaluate","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@evaluate"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle\/validate","name":"asientosnif.detalle.validate","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@validation"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/detalle\/movimientos","name":"asientosnif.detalle.movimientos","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@movimientos"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/detalle","name":"asientosnif.detalle.index","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@index"},{"host":null,"methods":["POST"],"uri":"asientosnif\/detalle","name":"asientosnif.detalle.store","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@store"},{"host":null,"methods":["DELETE"],"uri":"asientosnif\/detalle\/{detalle}","name":"asientosnif.detalle.destroy","action":"App\Http\Controllers\Accounting\AsientoNifDetalleController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif","name":"asientosnif.index","action":"App\Http\Controllers\Accounting\AsientoNifController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/{asientosnif}","name":"asientosnif.show","action":"App\Http\Controllers\Accounting\AsientoNifController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"asientosnif\/{asientosnif}\/edit","name":"asientosnif.edit","action":"App\Http\Controllers\Accounting\AsientoNifController@edit"},{"host":null,"methods":["PUT"],"uri":"asientosnif\/{asientosnif}","name":"asientosnif.update","action":"App\Http\Controllers\Accounting\AsientoNifController@update"},{"host":null,"methods":["PATCH"],"uri":"asientosnif\/{asientosnif}","name":null,"action":"App\Http\Controllers\Accounting\AsientoNifController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"configuracion","name":"configuracion.index","action":"App\Http\Controllers\Accounting\ConfiguracionController@index"},{"host":null,"methods":["POST"],"uri":"configuracion","name":"configuracion.store","action":"App\Http\Controllers\Accounting\ConfiguracionController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto","name":"centroscosto.index","action":"App\Http\Controllers\Accounting\CentroCostoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/create","name":"centroscosto.create","action":"App\Http\Controllers\Accounting\CentroCostoController@create"},{"host":null,"methods":["POST"],"uri":"centroscosto","name":"centroscosto.store","action":"App\Http\Controllers\Accounting\CentroCostoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/{centroscosto}","name":"centroscosto.show","action":"App\Http\Controllers\Accounting\CentroCostoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"centroscosto\/{centroscosto}\/edit","name":"centroscosto.edit","action":"App\Http\Controllers\Accounting\CentroCostoController@edit"},{"host":null,"methods":["PUT"],"uri":"centroscosto\/{centroscosto}","name":"centroscosto.update","action":"App\Http\Controllers\Accounting\CentroCostoController@update"},{"host":null,"methods":["PATCH"],"uri":"centroscosto\/{centroscosto}","name":null,"action":"App\Http\Controllers\Accounting\CentroCostoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos","name":"documentos.index","action":"App\Http\Controllers\Accounting\DocumentoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/create","name":"documentos.create","action":"App\Http\Controllers\Accounting\DocumentoController@create"},{"host":null,"methods":["POST"],"uri":"documentos","name":"documentos.store","action":"App\Http\Controllers\Accounting\DocumentoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/{documentos}","name":"documentos.show","action":"App\Http\Controllers\Accounting\DocumentoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"documentos\/{documentos}\/edit","name":"documentos.edit","action":"App\Http\Controllers\Accounting\DocumentoController@edit"},{"host":null,"methods":["PUT"],"uri":"documentos\/{documentos}","name":"documentos.update","action":"App\Http\Controllers\Accounting\DocumentoController@update"},{"host":null,"methods":["PATCH"],"uri":"documentos\/{documentos}","name":null,"action":"App\Http\Controllers\Accounting\DocumentoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"folders","name":"folders.index","action":"App\Http\Controllers\Accounting\FolderController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/create","name":"folders.create","action":"App\Http\Controllers\Accounting\FolderController@create"},{"host":null,"methods":["POST"],"uri":"folders","name":"folders.store","action":"App\Http\Controllers\Accounting\FolderController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/{folders}","name":"folders.show","action":"App\Http\Controllers\Accounting\FolderController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"folders\/{folders}\/edit","name":"folders.edit","action":"App\Http\Controllers\Accounting\FolderController@edit"},{"host":null,"methods":["PUT"],"uri":"folders\/{folders}","name":"folders.update","action":"App\Http\Controllers\Accounting\FolderController@update"},{"host":null,"methods":["PATCH"],"uri":"folders\/{folders}","name":null,"action":"App\Http\Controllers\Accounting\FolderController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/nivel","name":"plancuentas.nivel","action":"App\Http\Controllers\Accounting\PlanCuentasController@nivel"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas","name":"plancuentas.index","action":"App\Http\Controllers\Accounting\PlanCuentasController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/create","name":"plancuentas.create","action":"App\Http\Controllers\Accounting\PlanCuentasController@create"},{"host":null,"methods":["POST"],"uri":"plancuentas","name":"plancuentas.store","action":"App\Http\Controllers\Accounting\PlanCuentasController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/{plancuentas}","name":"plancuentas.show","action":"App\Http\Controllers\Accounting\PlanCuentasController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentas\/{plancuentas}\/edit","name":"plancuentas.edit","action":"App\Http\Controllers\Accounting\PlanCuentasController@edit"},{"host":null,"methods":["PUT"],"uri":"plancuentas\/{plancuentas}","name":"plancuentas.update","action":"App\Http\Controllers\Accounting\PlanCuentasController@update"},{"host":null,"methods":["PATCH"],"uri":"plancuentas\/{plancuentas}","name":null,"action":"App\Http\Controllers\Accounting\PlanCuentasController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/nivel","name":"plancuentasnif.nivel","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@nivel"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif","name":"plancuentasnif.index","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/create","name":"plancuentasnif.create","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@create"},{"host":null,"methods":["POST"],"uri":"plancuentasnif","name":"plancuentasnif.store","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/{plancuentasnif}","name":"plancuentasnif.show","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"plancuentasnif\/{plancuentasnif}\/edit","name":"plancuentasnif.edit","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@edit"},{"host":null,"methods":["PUT"],"uri":"plancuentasnif\/{plancuentasnif}","name":"plancuentasnif.update","action":"App\Http\Controllers\Accounting\PlanCuentasNifController@update"},{"host":null,"methods":["PATCH"],"uri":"plancuentasnif\/{plancuentasnif}","name":null,"action":"App\Http\Controllers\Accounting\PlanCuentasNifController@update"},{"host":null,"methods":["POST"],"uri":"productos\/evaluate","name":"productos.evaluate","action":"App\Http\Controllers\Inventory\ProductoController@evaluate"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/rollos","name":"productos.rollos.index","action":"App\Http\Controllers\Inventory\ProdbodeRolloController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/prodbode","name":"productos.prodbode.index","action":"App\Http\Controllers\Inventory\ProdBodeController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/historial","name":"productos.historial.index","action":"App\Http\Controllers\Inventory\ProductoHistorialController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos","name":"productos.index","action":"App\Http\Controllers\Inventory\ProductoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/create","name":"productos.create","action":"App\Http\Controllers\Inventory\ProductoController@create"},{"host":null,"methods":["POST"],"uri":"productos","name":"productos.store","action":"App\Http\Controllers\Inventory\ProductoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/{productos}","name":"productos.show","action":"App\Http\Controllers\Inventory\ProductoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"productos\/{productos}\/edit","name":"productos.edit","action":"App\Http\Controllers\Inventory\ProductoController@edit"},{"host":null,"methods":["PUT"],"uri":"productos\/{productos}","name":"productos.update","action":"App\Http\Controllers\Inventory\ProductoController@update"},{"host":null,"methods":["PATCH"],"uri":"productos\/{productos}","name":null,"action":"App\Http\Controllers\Inventory\ProductoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/detalle","name":"traslados.detalle.index","action":"App\Http\Controllers\Inventory\DetalleTrasladoController@index"},{"host":null,"methods":["POST"],"uri":"traslados\/detalle","name":"traslados.detalle.store","action":"App\Http\Controllers\Inventory\DetalleTrasladoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados","name":"traslados.index","action":"App\Http\Controllers\Inventory\TrasladosController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/create","name":"traslados.create","action":"App\Http\Controllers\Inventory\TrasladosController@create"},{"host":null,"methods":["POST"],"uri":"traslados","name":"traslados.store","action":"App\Http\Controllers\Inventory\TrasladosController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"traslados\/{traslados}","name":"traslados.show","action":"App\Http\Controllers\Inventory\TrasladosController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos","name":"grupos.index","action":"App\Http\Controllers\Inventory\GrupoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/create","name":"grupos.create","action":"App\Http\Controllers\Inventory\GrupoController@create"},{"host":null,"methods":["POST"],"uri":"grupos","name":"grupos.store","action":"App\Http\Controllers\Inventory\GrupoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/{grupos}","name":"grupos.show","action":"App\Http\Controllers\Inventory\GrupoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"grupos\/{grupos}\/edit","name":"grupos.edit","action":"App\Http\Controllers\Inventory\GrupoController@edit"},{"host":null,"methods":["PUT"],"uri":"grupos\/{grupos}","name":"grupos.update","action":"App\Http\Controllers\Inventory\GrupoController@update"},{"host":null,"methods":["PATCH"],"uri":"grupos\/{grupos}","name":null,"action":"App\Http\Controllers\Inventory\GrupoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos","name":"subgrupos.index","action":"App\Http\Controllers\Inventory\SubGrupoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/create","name":"subgrupos.create","action":"App\Http\Controllers\Inventory\SubGrupoController@create"},{"host":null,"methods":["POST"],"uri":"subgrupos","name":"subgrupos.store","action":"App\Http\Controllers\Inventory\SubGrupoController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/{subgrupos}","name":"subgrupos.show","action":"App\Http\Controllers\Inventory\SubGrupoController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subgrupos\/{subgrupos}\/edit","name":"subgrupos.edit","action":"App\Http\Controllers\Inventory\SubGrupoController@edit"},{"host":null,"methods":["PUT"],"uri":"subgrupos\/{subgrupos}","name":"subgrupos.update","action":"App\Http\Controllers\Inventory\SubGrupoController@update"},{"host":null,"methods":["PATCH"],"uri":"subgrupos\/{subgrupos}","name":null,"action":"App\Http\Controllers\Inventory\SubGrupoController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades","name":"unidades.index","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/create","name":"unidades.create","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@create"},{"host":null,"methods":["POST"],"uri":"unidades","name":"unidades.store","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/{unidades}","name":"unidades.show","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"unidades\/{unidades}\/edit","name":"unidades.edit","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@edit"},{"host":null,"methods":["PUT"],"uri":"unidades\/{unidades}","name":"unidades.update","action":"App\Http\Controllers\Inventory\UnidadesMedidaController@update"},{"host":null,"methods":["PATCH"],"uri":"unidades\/{unidades}","name":null,"action":"App\Http\Controllers\Inventory\UnidadesMedidaController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"agendaordenes\/exportar","name":"agendaordenes.exportar","action":"App\Http\Controllers\Production\AgendaOrdenespController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"agendaordenes","name":"agendaordenes.index","action":"App\Http\Controllers\Production\AgendaOrdenespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/maquinas","name":"precotizaciones.productos.maquinas.index","action":"App\Http\Controllers\Production\PreCotizacion8Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/acabados","name":"precotizaciones.productos.acabados.index","action":"App\Http\Controllers\Production\PreCotizacion7Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/imagenes","name":"precotizaciones.productos.imagenes.index","action":"App\Http\Controllers\Production\PreCotizacion4Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/materiales","name":"precotizaciones.productos.materiales.index","action":"App\Http\Controllers\Production\PreCotizacion3Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/empaques","name":"precotizaciones.productos.empaques.index","action":"App\Http\Controllers\Production\PreCotizacion9Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/areas","name":"precotizaciones.productos.areas.index","action":"App\Http\Controllers\Production\PreCotizacion6Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/transportes","name":"precotizaciones.productos.transportes.index","action":"App\Http\Controllers\Production\PreCotizacion10Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos","name":"precotizaciones.productos.index","action":"App\Http\Controllers\Production\PreCotizacion2Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/productos\/{productos}","name":"precotizaciones.productos.show","action":"App\Http\Controllers\Production\PreCotizacion2Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones","name":"precotizaciones.index","action":"App\Http\Controllers\Production\PreCotizacion1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"precotizaciones\/{precotizaciones}","name":"precotizaciones.show","action":"App\Http\Controllers\Production\PreCotizacion1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/exportar\/{cotizaciones}","name":"cotizaciones.exportar","action":"App\Http\Controllers\Production\Cotizacion1Controller@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/estados\/{cotizaciones}","name":"cotizaciones.estados","action":"App\Http\Controllers\Production\Cotizacion1Controller@estados"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/abrir\/{cotizaciones}","name":"cotizaciones.abrir","action":"App\Http\Controllers\Production\Cotizacion1Controller@abrir"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/clonar\/{cotizaciones}","name":"cotizaciones.clonar","action":"App\Http\Controllers\Production\Cotizacion1Controller@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/generar\/{cotizaciones}","name":"cotizaciones.generar","action":"App\Http\Controllers\Production\Cotizacion1Controller@generar"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/graficas\/{cotizaciones}","name":"cotizaciones.graficas","action":"App\Http\Controllers\Production\Cotizacion1Controller@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/archivos","name":"cotizaciones.archivos.index","action":"App\Http\Controllers\Production\CotizacionArchivosController@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/archivos","name":"cotizaciones.archivos.store","action":"App\Http\Controllers\Production\CotizacionArchivosController@store"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/archivos\/{archivos}","name":"cotizaciones.archivos.destroy","action":"App\Http\Controllers\Production\CotizacionArchivosController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/clonar\/{productos}","name":"cotizaciones.productos.clonar","action":"App\Http\Controllers\Production\Cotizacion2Controller@clonar"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/producto","name":"cotizaciones.productos.producto","action":"App\Http\Controllers\Production\Cotizacion2Controller@producto"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/maquinas","name":"cotizaciones.productos.maquinas.index","action":"App\Http\Controllers\Production\Cotizacion3Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/acabados","name":"cotizaciones.productos.acabados.index","action":"App\Http\Controllers\Production\Cotizacion5Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/imagenes","name":"cotizaciones.productos.imagenes.index","action":"App\Http\Controllers\Production\Cotizacion8Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/imagenes","name":"cotizaciones.productos.imagenes.store","action":"App\Http\Controllers\Production\Cotizacion8Controller@store"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/productos\/imagenes\/{imagenes}","name":"cotizaciones.productos.imagenes.destroy","action":"App\Http\Controllers\Production\Cotizacion8Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/materiales","name":"cotizaciones.productos.materiales.index","action":"App\Http\Controllers\Production\Cotizacion4Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/materiales","name":"cotizaciones.productos.materiales.store","action":"App\Http\Controllers\Production\Cotizacion4Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/empaques","name":"cotizaciones.productos.empaques.index","action":"App\Http\Controllers\Production\Cotizacion9Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/empaques","name":"cotizaciones.productos.empaques.store","action":"App\Http\Controllers\Production\Cotizacion9Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/areas","name":"cotizaciones.productos.areas.index","action":"App\Http\Controllers\Production\Cotizacion6Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/areas","name":"cotizaciones.productos.areas.store","action":"App\Http\Controllers\Production\Cotizacion6Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/transportes","name":"cotizaciones.productos.transportes.index","action":"App\Http\Controllers\Production\Cotizacion10Controller@index"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos\/transportes","name":"cotizaciones.productos.transportes.store","action":"App\Http\Controllers\Production\Cotizacion10Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos","name":"cotizaciones.productos.index","action":"App\Http\Controllers\Production\Cotizacion2Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/create","name":"cotizaciones.productos.create","action":"App\Http\Controllers\Production\Cotizacion2Controller@create"},{"host":null,"methods":["POST"],"uri":"cotizaciones\/productos","name":"cotizaciones.productos.store","action":"App\Http\Controllers\Production\Cotizacion2Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.show","action":"App\Http\Controllers\Production\Cotizacion2Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/productos\/{productos}\/edit","name":"cotizaciones.productos.edit","action":"App\Http\Controllers\Production\Cotizacion2Controller@edit"},{"host":null,"methods":["PUT"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.update","action":"App\Http\Controllers\Production\Cotizacion2Controller@update"},{"host":null,"methods":["PATCH"],"uri":"cotizaciones\/productos\/{productos}","name":null,"action":"App\Http\Controllers\Production\Cotizacion2Controller@update"},{"host":null,"methods":["DELETE"],"uri":"cotizaciones\/productos\/{productos}","name":"cotizaciones.productos.destroy","action":"App\Http\Controllers\Production\Cotizacion2Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/bitacora","name":"cotizaciones.bitacora.index","action":"App\Http\Controllers\Admin\BitacoraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones","name":"cotizaciones.index","action":"App\Http\Controllers\Production\Cotizacion1Controller@index"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/create","name":"cotizaciones.create","action":"App\Http\Controllers\Production\Cotizacion1Controller@create"},{"host":null,"methods":["POST"],"uri":"cotizaciones","name":"cotizaciones.store","action":"App\Http\Controllers\Production\Cotizacion1Controller@store"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/{cotizaciones}","name":"cotizaciones.show","action":"App\Http\Controllers\Production\Cotizacion1Controller@show"},{"host":null,"methods":["GET","HEAD"],"uri":"cotizaciones\/{cotizaciones}\/edit","name":"cotizaciones.edit","action":"App\Http\Controllers\Production\Cotizacion1Controller@edit"},{"host":null,"methods":["PUT"],"uri":"cotizaciones\/{cotizaciones}","name":"cotizaciones.update","action":"App\Http\Controllers\Production\Cotizacion1Controller@update"},{"host":null,"methods":["PATCH"],"uri":"cotizaciones\/{cotizaciones}","name":null,"action":"App\Http\Controllers\Production\Cotizacion1Controller@update"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/clonar\/{productosp}","name":"productosp.clonar","action":"App\Http\Controllers\Production\ProductopController@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/tips","name":"productosp.tips.index","action":"App\Http\Controllers\Production\Productop2Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/tips","name":"productosp.tips.store","action":"App\Http\Controllers\Production\Productop2Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/tips\/{tips}","name":"productosp.tips.destroy","action":"App\Http\Controllers\Production\Productop2Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/areas","name":"productosp.areas.index","action":"App\Http\Controllers\Production\Productop3Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/areas","name":"productosp.areas.store","action":"App\Http\Controllers\Production\Productop3Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/areas\/{areas}","name":"productosp.areas.destroy","action":"App\Http\Controllers\Production\Productop3Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/maquinas","name":"productosp.maquinas.index","action":"App\Http\Controllers\Production\Productop4Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/maquinas","name":"productosp.maquinas.store","action":"App\Http\Controllers\Production\Productop4Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/maquinas\/{maquinas}","name":"productosp.maquinas.destroy","action":"App\Http\Controllers\Production\Productop4Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/materiales","name":"productosp.materiales.index","action":"App\Http\Controllers\Production\Productop5Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/materiales","name":"productosp.materiales.store","action":"App\Http\Controllers\Production\Productop5Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/materiales\/{materiales}","name":"productosp.materiales.destroy","action":"App\Http\Controllers\Production\Productop5Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/acabados","name":"productosp.acabados.index","action":"App\Http\Controllers\Production\Productop6Controller@index"},{"host":null,"methods":["POST"],"uri":"productosp\/acabados","name":"productosp.acabados.store","action":"App\Http\Controllers\Production\Productop6Controller@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/acabados\/{acabados}","name":"productosp.acabados.destroy","action":"App\Http\Controllers\Production\Productop6Controller@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/imagenes","name":"productosp.imagenes.index","action":"App\Http\Controllers\Production\ProductopImagenController@index"},{"host":null,"methods":["POST"],"uri":"productosp\/imagenes","name":"productosp.imagenes.store","action":"App\Http\Controllers\Production\ProductopImagenController@store"},{"host":null,"methods":["DELETE"],"uri":"productosp\/imagenes\/{imagenes}","name":"productosp.imagenes.destroy","action":"App\Http\Controllers\Production\ProductopImagenController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp","name":"productosp.index","action":"App\Http\Controllers\Production\ProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/create","name":"productosp.create","action":"App\Http\Controllers\Production\ProductopController@create"},{"host":null,"methods":["POST"],"uri":"productosp","name":"productosp.store","action":"App\Http\Controllers\Production\ProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/{productosp}","name":"productosp.show","action":"App\Http\Controllers\Production\ProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"productosp\/{productosp}\/edit","name":"productosp.edit","action":"App\Http\Controllers\Production\ProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"productosp\/{productosp}","name":"productosp.update","action":"App\Http\Controllers\Production\ProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"productosp\/{productosp}","name":null,"action":"App\Http\Controllers\Production\ProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/cerrar\/{ordenes}","name":"ordenes.cerrar","action":"App\Http\Controllers\Production\OrdenpController@cerrar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/abrir\/{ordenes}","name":"ordenes.abrir","action":"App\Http\Controllers\Production\OrdenpController@abrir"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/completar\/{ordenes}","name":"ordenes.completar","action":"App\Http\Controllers\Production\OrdenpController@completar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/clonar\/{ordenes}","name":"ordenes.clonar","action":"App\Http\Controllers\Production\OrdenpController@clonar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/saldo\/{ordenes}","name":"ordenes.saldo","action":"App\Http\Controllers\Production\OrdenpController@saldo"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/exportar\/{ordenes}","name":"ordenes.exportar","action":"App\Http\Controllers\Production\OrdenpController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/graficas\/{ordenes}","name":"ordenes.graficas","action":"App\Http\Controllers\Production\OrdenpController@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/archivos","name":"ordenes.archivos.index","action":"App\Http\Controllers\Production\OrdenpArchivosController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/archivos","name":"ordenes.archivos.store","action":"App\Http\Controllers\Production\OrdenpArchivosController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/archivos\/{archivos}","name":"ordenes.archivos.destroy","action":"App\Http\Controllers\Production\OrdenpArchivosController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/clonar\/{productos}","name":"ordenes.productos.clonar","action":"App\Http\Controllers\Production\DetalleOrdenpController@clonar"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/producto","name":"ordenes.productos.producto","action":"App\Http\Controllers\Production\DetalleOrdenpController@producto"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/maquinas","name":"ordenes.productos.maquinas.index","action":"App\Http\Controllers\Production\DetalleMaquinaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/acabados","name":"ordenes.productos.acabados.index","action":"App\Http\Controllers\Production\DetalleAcabadoController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/imagenes","name":"ordenes.productos.imagenes.index","action":"App\Http\Controllers\Production\DetalleImagenespController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/imagenes","name":"ordenes.productos.imagenes.store","action":"App\Http\Controllers\Production\DetalleImagenespController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/productos\/imagenes\/{imagenes}","name":"ordenes.productos.imagenes.destroy","action":"App\Http\Controllers\Production\DetalleImagenespController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/materiales","name":"ordenes.productos.materiales.index","action":"App\Http\Controllers\Production\DetalleMaterialesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/materiales","name":"ordenes.productos.materiales.store","action":"App\Http\Controllers\Production\DetalleMaterialesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/empaques","name":"ordenes.productos.empaques.index","action":"App\Http\Controllers\Production\DetalleEmpaquesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/empaques","name":"ordenes.productos.empaques.store","action":"App\Http\Controllers\Production\DetalleEmpaquesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/areas","name":"ordenes.productos.areas.index","action":"App\Http\Controllers\Production\DetalleAreasController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/areas","name":"ordenes.productos.areas.store","action":"App\Http\Controllers\Production\DetalleAreasController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/transportes","name":"ordenes.productos.transportes.index","action":"App\Http\Controllers\Production\DetalleTransportesController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos\/transportes","name":"ordenes.productos.transportes.store","action":"App\Http\Controllers\Production\DetalleTransportesController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos","name":"ordenes.productos.index","action":"App\Http\Controllers\Production\DetalleOrdenpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/create","name":"ordenes.productos.create","action":"App\Http\Controllers\Production\DetalleOrdenpController@create"},{"host":null,"methods":["POST"],"uri":"ordenes\/productos","name":"ordenes.productos.store","action":"App\Http\Controllers\Production\DetalleOrdenpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.show","action":"App\Http\Controllers\Production\DetalleOrdenpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/productos\/{productos}\/edit","name":"ordenes.productos.edit","action":"App\Http\Controllers\Production\DetalleOrdenpController@edit"},{"host":null,"methods":["PUT"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.update","action":"App\Http\Controllers\Production\DetalleOrdenpController@update"},{"host":null,"methods":["PATCH"],"uri":"ordenes\/productos\/{productos}","name":null,"action":"App\Http\Controllers\Production\DetalleOrdenpController@update"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/productos\/{productos}","name":"ordenes.productos.destroy","action":"App\Http\Controllers\Production\DetalleOrdenpController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/bitacora","name":"ordenes.bitacora.index","action":"App\Http\Controllers\Admin\BitacoraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos\/exportar\/{despachos}","name":"ordenes.despachos.exportar","action":"App\Http\Controllers\Production\DespachopController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos\/pendientes","name":"ordenes.despachos.pendientes","action":"App\Http\Controllers\Production\DespachopController@pendientes"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/despachos","name":"ordenes.despachos.index","action":"App\Http\Controllers\Production\DespachopController@index"},{"host":null,"methods":["POST"],"uri":"ordenes\/despachos","name":"ordenes.despachos.store","action":"App\Http\Controllers\Production\DespachopController@store"},{"host":null,"methods":["DELETE"],"uri":"ordenes\/despachos\/{despachos}","name":"ordenes.despachos.destroy","action":"App\Http\Controllers\Production\DespachopController@destroy"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes","name":"ordenes.index","action":"App\Http\Controllers\Production\OrdenpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/create","name":"ordenes.create","action":"App\Http\Controllers\Production\OrdenpController@create"},{"host":null,"methods":["POST"],"uri":"ordenes","name":"ordenes.store","action":"App\Http\Controllers\Production\OrdenpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/{ordenes}","name":"ordenes.show","action":"App\Http\Controllers\Production\OrdenpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"ordenes\/{ordenes}\/edit","name":"ordenes.edit","action":"App\Http\Controllers\Production\OrdenpController@edit"},{"host":null,"methods":["PUT"],"uri":"ordenes\/{ordenes}","name":"ordenes.update","action":"App\Http\Controllers\Production\OrdenpController@update"},{"host":null,"methods":["PATCH"],"uri":"ordenes\/{ordenes}","name":null,"action":"App\Http\Controllers\Production\OrdenpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp","name":"tiemposp.index","action":"App\Http\Controllers\Production\TiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/create","name":"tiemposp.create","action":"App\Http\Controllers\Production\TiempopController@create"},{"host":null,"methods":["POST"],"uri":"tiemposp","name":"tiemposp.store","action":"App\Http\Controllers\Production\TiempopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/{tiemposp}","name":"tiemposp.show","action":"App\Http\Controllers\Production\TiempopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tiemposp\/{tiemposp}\/edit","name":"tiemposp.edit","action":"App\Http\Controllers\Production\TiempopController@edit"},{"host":null,"methods":["PUT"],"uri":"tiemposp\/{tiemposp}","name":"tiemposp.update","action":"App\Http\Controllers\Production\TiempopController@update"},{"host":null,"methods":["PATCH"],"uri":"tiemposp\/{tiemposp}","name":null,"action":"App\Http\Controllers\Production\TiempopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp","name":"acabadosp.index","action":"App\Http\Controllers\Production\AcabadospController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/create","name":"acabadosp.create","action":"App\Http\Controllers\Production\AcabadospController@create"},{"host":null,"methods":["POST"],"uri":"acabadosp","name":"acabadosp.store","action":"App\Http\Controllers\Production\AcabadospController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/{acabadosp}","name":"acabadosp.show","action":"App\Http\Controllers\Production\AcabadospController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"acabadosp\/{acabadosp}\/edit","name":"acabadosp.edit","action":"App\Http\Controllers\Production\AcabadospController@edit"},{"host":null,"methods":["PUT"],"uri":"acabadosp\/{acabadosp}","name":"acabadosp.update","action":"App\Http\Controllers\Production\AcabadospController@update"},{"host":null,"methods":["PATCH"],"uri":"acabadosp\/{acabadosp}","name":null,"action":"App\Http\Controllers\Production\AcabadospController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp","name":"actividadesp.index","action":"App\Http\Controllers\Production\ActividadpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/create","name":"actividadesp.create","action":"App\Http\Controllers\Production\ActividadpController@create"},{"host":null,"methods":["POST"],"uri":"actividadesp","name":"actividadesp.store","action":"App\Http\Controllers\Production\ActividadpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/{actividadesp}","name":"actividadesp.show","action":"App\Http\Controllers\Production\ActividadpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"actividadesp\/{actividadesp}\/edit","name":"actividadesp.edit","action":"App\Http\Controllers\Production\ActividadpController@edit"},{"host":null,"methods":["PUT"],"uri":"actividadesp\/{actividadesp}","name":"actividadesp.update","action":"App\Http\Controllers\Production\ActividadpController@update"},{"host":null,"methods":["PATCH"],"uri":"actividadesp\/{actividadesp}","name":null,"action":"App\Http\Controllers\Production\ActividadpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp","name":"areasp.index","action":"App\Http\Controllers\Production\AreaspController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/create","name":"areasp.create","action":"App\Http\Controllers\Production\AreaspController@create"},{"host":null,"methods":["POST"],"uri":"areasp","name":"areasp.store","action":"App\Http\Controllers\Production\AreaspController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/{areasp}","name":"areasp.show","action":"App\Http\Controllers\Production\AreaspController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"areasp\/{areasp}\/edit","name":"areasp.edit","action":"App\Http\Controllers\Production\AreaspController@edit"},{"host":null,"methods":["PUT"],"uri":"areasp\/{areasp}","name":"areasp.update","action":"App\Http\Controllers\Production\AreaspController@update"},{"host":null,"methods":["PATCH"],"uri":"areasp\/{areasp}","name":null,"action":"App\Http\Controllers\Production\AreaspController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp","name":"maquinasp.index","action":"App\Http\Controllers\Production\MaquinaspController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/create","name":"maquinasp.create","action":"App\Http\Controllers\Production\MaquinaspController@create"},{"host":null,"methods":["POST"],"uri":"maquinasp","name":"maquinasp.store","action":"App\Http\Controllers\Production\MaquinaspController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/{maquinasp}","name":"maquinasp.show","action":"App\Http\Controllers\Production\MaquinaspController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"maquinasp\/{maquinasp}\/edit","name":"maquinasp.edit","action":"App\Http\Controllers\Production\MaquinaspController@edit"},{"host":null,"methods":["PUT"],"uri":"maquinasp\/{maquinasp}","name":"maquinasp.update","action":"App\Http\Controllers\Production\MaquinaspController@update"},{"host":null,"methods":["PATCH"],"uri":"maquinasp\/{maquinasp}","name":null,"action":"App\Http\Controllers\Production\MaquinaspController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp","name":"materialesp.index","action":"App\Http\Controllers\Production\MaterialespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/create","name":"materialesp.create","action":"App\Http\Controllers\Production\MaterialespController@create"},{"host":null,"methods":["POST"],"uri":"materialesp","name":"materialesp.store","action":"App\Http\Controllers\Production\MaterialespController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/{materialesp}","name":"materialesp.show","action":"App\Http\Controllers\Production\MaterialespController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"materialesp\/{materialesp}\/edit","name":"materialesp.edit","action":"App\Http\Controllers\Production\MaterialespController@edit"},{"host":null,"methods":["PUT"],"uri":"materialesp\/{materialesp}","name":"materialesp.update","action":"App\Http\Controllers\Production\MaterialespController@update"},{"host":null,"methods":["PATCH"],"uri":"materialesp\/{materialesp}","name":null,"action":"App\Http\Controllers\Production\MaterialespController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp","name":"tipomaterialesp.index","action":"App\Http\Controllers\Production\TipoMaterialespController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/create","name":"tipomaterialesp.create","action":"App\Http\Controllers\Production\TipoMaterialespController@create"},{"host":null,"methods":["POST"],"uri":"tipomaterialesp","name":"tipomaterialesp.store","action":"App\Http\Controllers\Production\TipoMaterialespController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":"tipomaterialesp.show","action":"App\Http\Controllers\Production\TipoMaterialespController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tipomaterialesp\/{tipomaterialesp}\/edit","name":"tipomaterialesp.edit","action":"App\Http\Controllers\Production\TipoMaterialespController@edit"},{"host":null,"methods":["PUT"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":"tipomaterialesp.update","action":"App\Http\Controllers\Production\TipoMaterialespController@update"},{"host":null,"methods":["PATCH"],"uri":"tipomaterialesp\/{tipomaterialesp}","name":null,"action":"App\Http\Controllers\Production\TipoMaterialespController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp","name":"tipoproductosp.index","action":"App\Http\Controllers\Production\TipoProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/create","name":"tipoproductosp.create","action":"App\Http\Controllers\Production\TipoProductopController@create"},{"host":null,"methods":["POST"],"uri":"tipoproductosp","name":"tipoproductosp.store","action":"App\Http\Controllers\Production\TipoProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/{tipoproductosp}","name":"tipoproductosp.show","action":"App\Http\Controllers\Production\TipoProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"tipoproductosp\/{tipoproductosp}\/edit","name":"tipoproductosp.edit","action":"App\Http\Controllers\Production\TipoProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"tipoproductosp\/{tipoproductosp}","name":"tipoproductosp.update","action":"App\Http\Controllers\Production\TipoProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"tipoproductosp\/{tipoproductosp}","name":null,"action":"App\Http\Controllers\Production\TipoProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp","name":"subactividadesp.index","action":"App\Http\Controllers\Production\SubActividadpController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/create","name":"subactividadesp.create","action":"App\Http\Controllers\Production\SubActividadpController@create"},{"host":null,"methods":["POST"],"uri":"subactividadesp","name":"subactividadesp.store","action":"App\Http\Controllers\Production\SubActividadpController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/{subactividadesp}","name":"subactividadesp.show","action":"App\Http\Controllers\Production\SubActividadpController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subactividadesp\/{subactividadesp}\/edit","name":"subactividadesp.edit","action":"App\Http\Controllers\Production\SubActividadpController@edit"},{"host":null,"methods":["PUT"],"uri":"subactividadesp\/{subactividadesp}","name":"subactividadesp.update","action":"App\Http\Controllers\Production\SubActividadpController@update"},{"host":null,"methods":["PATCH"],"uri":"subactividadesp\/{subactividadesp}","name":null,"action":"App\Http\Controllers\Production\SubActividadpController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp","name":"subtipoproductosp.index","action":"App\Http\Controllers\Production\SubtipoProductopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/create","name":"subtipoproductosp.create","action":"App\Http\Controllers\Production\SubtipoProductopController@create"},{"host":null,"methods":["POST"],"uri":"subtipoproductosp","name":"subtipoproductosp.store","action":"App\Http\Controllers\Production\SubtipoProductopController@store"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":"subtipoproductosp.show","action":"App\Http\Controllers\Production\SubtipoProductopController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"subtipoproductosp\/{subtipoproductosp}\/edit","name":"subtipoproductosp.edit","action":"App\Http\Controllers\Production\SubtipoProductopController@edit"},{"host":null,"methods":["PUT"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":"subtipoproductosp.update","action":"App\Http\Controllers\Production\SubtipoProductopController@update"},{"host":null,"methods":["PATCH"],"uri":"subtipoproductosp\/{subtipoproductosp}","name":null,"action":"App\Http\Controllers\Production\SubtipoProductopController@update"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp\/cuotas","name":"facturasp.cuotas.index","action":"App\Http\Controllers\Treasury\FacturapCuotasController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp","name":"facturasp.index","action":"App\Http\Controllers\Treasury\FacturapController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"facturasp\/{facturasp}","name":"facturasp.show","action":"App\Http\Controllers\Treasury\FacturapController@show"},{"host":null,"methods":["GET","HEAD"],"uri":"restadocartera","name":"restadocartera.index","action":"App\Http\Controllers\Report\EstadoCarteraController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rcarteraedades","name":"rcarteraedades.index","action":"App\Http\Controllers\Report\CarteraEdadesController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxbeneficiariocuenta","name":"rauxbeneficiariocuenta.index","action":"App\Http\Controllers\Report\AuxiliarBeneficiarioCuentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxcontable","name":"rauxcontable.index","action":"App\Http\Controllers\Report\AuxiliarContableController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rauxcuenta","name":"rauxcuenta.index","action":"App\Http\Controllers\Report\AuxiliarCuentaController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rbalancegeneral","name":"rbalancegeneral.index","action":"App\Http\Controllers\Report\BalanceGeneralController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rlibrodiario","name":"rlibrodiario.index","action":"App\Http\Controllers\Report\LibroDiarioController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rlibromayor","name":"rlibromayor.index","action":"App\Http\Controllers\Report\LibroMayorController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp\/graficas","name":"rtiemposp.graficas","action":"App\Http\Controllers\Report\TiempopController@graficas"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp\/exportar","name":"rtiemposp.exportar","action":"App\Http\Controllers\Report\TiempopController@exportar"},{"host":null,"methods":["GET","HEAD"],"uri":"rtiemposp","name":"rtiemposp.index","action":"App\Http\Controllers\Report\TiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rresumentiemposp","name":"rresumentiemposp.index","action":"App\Http\Controllers\Report\ResumenTiempopController@index"},{"host":null,"methods":["GET","HEAD"],"uri":"rhistorialproveedores","name":"rhistorialproveedores.index","action":"App\Http\Controllers\Report\HistorialProveedorController@index"}],
             prefix: '',
 
             route : function (name, parameters, route) {

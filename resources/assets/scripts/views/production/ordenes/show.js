@@ -17,6 +17,7 @@ app || (app = {});
         templateProductop: _.template( ($('#chart-productop-ordenp').html() || '') ),
         templateOrdenp: _.template( ($('#chart-detalle-ordenp').html() || '') ),
         events: {
+            'click .balance-ordenp': 'saldoOrdenp',
             'click .export-ordenp': 'exportOrdenp',
             'click .open-ordenp': 'openOrdenp',
             'click .close-ordenp': 'closeOrdenp',
@@ -304,6 +305,36 @@ app || (app = {});
                 var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
                     previewLink.attr("href", value.thumbnailUrl);
             }, this);
+        },
+
+        /**
+        * saldo
+        */
+        saldoOrdenp: function (e) {
+            e.preventDefault();
+
+            var route = window.Misc.urlFull(Route.route('ordenes.saldo', {ordenes: this.model.get('id')})),
+                _this = this;
+
+            var cloneConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#ordenp-saldo-confirm-tpl').html() || '')),
+                    titleConfirm: 'Realizar un balance',
+                    onConfirm: function () {
+                        // Saldar orden
+                        window.Misc.saldoModule({
+                            'url': route,
+                            'wrap': _this.$el,
+                            'callback': (function (_this) {
+                                return function (resp) {
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                }
+                            })(_this)
+                        });
+                    }
+                }
+            });
+            cloneConfirm.render();
         },
 
         /**

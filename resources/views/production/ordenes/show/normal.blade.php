@@ -23,6 +23,9 @@
                 @endability
                 <li class="pull-right">
                     <div class="btn-group" role="group">
+                        @ability ('admin')
+                            <a class="btn btn-primary balance-ordenp" title="Saldo">S</a>
+                        @endability
                         @ability ('exportar' | 'ordenes')
                             <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                         @endability
@@ -388,6 +391,10 @@
 
 <script type="text/template" id="ordenp-clone-confirm-tpl">
     <p>¿Está seguro que desea clonar la orden de producción <b>{{ $orden->orden_codigo }}</b>?</p>
+</script>
+
+<script type="text/template" id="ordenp-saldo-confirm-tpl">
+    <p>¿Realizar saldo de <b>{{ $orden->orden_codigo }}</b>?</p>
 </script>
 
 <script type="text/template" id="ordenp-producto-item-list-tpl">

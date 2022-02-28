@@ -218,6 +218,7 @@ Route::group(['middleware' => 'auth'], function () {
 		Route::get('abrir/{ordenes}', ['as' => 'ordenes.abrir', 'uses' => 'Production\OrdenpController@abrir']);
 		Route::get('completar/{ordenes}', ['as' => 'ordenes.completar', 'uses' => 'Production\OrdenpController@completar']);
 		Route::get('clonar/{ordenes}', ['as' => 'ordenes.clonar', 'uses' => 'Production\OrdenpController@clonar']);
+        Route::get('saldo/{ordenes}', ['as' => 'ordenes.saldo', 'uses' => 'Production\OrdenpController@saldo']);
 		Route::get('exportar/{ordenes}', ['as' => 'ordenes.exportar', 'uses' => 'Production\OrdenpController@exportar']);
 		Route::get('graficas/{ordenes}', ['as' => 'ordenes.graficas', 'uses' => 'Production\OrdenpController@graficas']);
 		Route::resource('archivos', 'Production\OrdenpArchivosController', ['only' => ['index', 'store', 'destroy']]);
