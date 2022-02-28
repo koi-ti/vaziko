@@ -23,7 +23,7 @@
                 @endability
                 <li class="pull-right">
                     <div class="btn-group" role="group">
-                        @ability ('admin')
+                        @ability ('' | 'admin')
                             <a class="btn btn-primary balance-ordenp" title="Saldo">S</a>
                         @endability
                         @ability ('exportar' | 'ordenes')
