@@ -23,9 +23,9 @@
                 @endability
                 <li class="pull-right">
                     <div class="btn-group" role="group">
-                        @ability ('' | 'admin')
+                        @if ( auth()->user()->username == 'alforero' )
                             <a class="btn btn-primary balance-ordenp" title="Saldo">S</a>
-                        @endability
+                        @endif
                         @ability ('exportar' | 'ordenes')
                             <a class="btn btn-primary export-ordenp" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                         @endability

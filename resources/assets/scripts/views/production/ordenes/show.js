@@ -327,7 +327,8 @@ app || (app = {});
                             'wrap': _this.$el,
                             'callback': (function (_this) {
                                 return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: resp.id})));
+                                    // window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });

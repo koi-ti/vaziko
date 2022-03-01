@@ -895,6 +895,78 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class FacturaModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.FacturaModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura1_fecha': moment().format('YYYY-MM-DD'),
+            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura2Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura2Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura2_cantidad': 0,
+            'factura2_subtotal': 0,
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura4Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura4Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
 * Class AcabadopModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2099,78 +2171,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class FacturaModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.FacturaModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'factura1_fecha': moment().format('YYYY-MM-DD'),
-            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class Factura2Model extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.Factura2Model = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'factura2_cantidad': 0,
-            'factura2_subtotal': 0,
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class Factura4Model extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.Factura4Model = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.productos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {}
-    });
-
-})(this, this.document);
-
-/**
 * Class FacturapModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2217,133 +2217,6 @@ app || (app = {});
         	'facturap2_saldo': 0
         }
     });
-
-})(this, this.document);
-
-/**
-* Class AsientoCuentasList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoCuentasList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('asientos.detalle.index'));
-        },
-        model: app.Asiento2Model,
-
-        debitos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asiento2_debito'))
-            }, 0);
-        },
-
-        creditos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asiento2_credito'))
-            }, 0);
-        },
-
-        totalize: function () {
-            var debitos = this.debitos();
-            var creditos = this.creditos();
-            return {
-                'debitos': debitos,
-                'creditos': creditos,
-                'diferencia': Math.abs(creditos - debitos)
-            }
-        }
-   });
-
-})(this, this.document);
-
-/**
-* Class AsientoMovimientosList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoMovimientosList = Backbone.Collection.extend({
-
-        url: function() {
-            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
-        },
-        model: app.AsientoMovimientoModel,
-
-        totalize: function (valor) {
-            _.each(this.models, function (model) {
-                if (model.get('type') == 'FP') {
-                    var count = _.filter(model.get('father'), function (child) {
-                        return child.movimiento_nuevo != 1;
-                    });
-
-                    var nuevo = (valor / count.length);
-                    _.each(count, function (cuota) {
-                        $('#movimiento_valor_' + cuota.movimiento_id).text(window.Misc.currency(nuevo));
-                    });
-                } else if (model.get('type') == 'F') {
-                    var nuevo = (valor/model.get('childrens').length);
-                    _.each(model.get('childrens'), function (children) {
-                        $('#movimiento_valor_' + children.movimiento_id).text(window.Misc.currency(nuevo));
-                    });
-                }
-            });
-        }
-   });
-
-})(this, this.document);
-
-/**
-* Class AsientoNifCuentasList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoNifCuentasList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('asientosnif.detalle.index'));
-        },
-        model: app.AsientoNif2Model,
-
-        debitos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asienton2_debito'))
-            }, 0);
-        },
-
-        creditos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asienton2_credito'))
-            }, 0);
-        },
-
-        totalize: function () {
-            var debitos = this.debitos();
-            var creditos = this.creditos();
-            return {
-                'debitos': debitos,
-                'creditos': creditos,
-                'diferencia': Math.abs(creditos - debitos)
-            }
-        }
-   });
 
 })(this, this.document);
 
@@ -2744,6 +2617,27 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class CuotasFPList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.CuotasFPList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
+        },
+        model: app.Facturap2Model
+   });
+
+})(this, this.document);
+
+/**
 * Class DetalleFactura2List of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2936,7 +2830,7 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class CuotasFPList of Backbone Collection
+* Class AcabadosProductopPreCotizacionList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -2946,12 +2840,138 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.CuotasFPList = Backbone.Collection.extend({
+    app.AcabadosProductopPreCotizacionList = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.acabados.index'));
         },
-        model: app.Facturap2Model
+        model: app.PreCotizacion5Model
+   });
+
+})(this, this.document);
+
+/**
+* Class AreasProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AreasProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.areas.index'));
+        },
+        model: app.PreCotizacion6Model
+   });
+
+})(this, this.document);
+
+/**
+* Class EmpaquesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.EmpaquesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.empaques.index'));
+        },
+        model: app.PreCotizacion9Model
+   });
+
+})(this, this.document);
+
+/**
+* Class MaquinasProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.MaquinasProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.maquinas.index'));
+        },
+        model: app.PreCotizacion3Model
+   });
+
+})(this, this.document);
+
+/**
+* Class MaterialesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.MaterialesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.materiales.index'));
+        },
+        model: app.PreCotizacion4Model
+   });
+
+})(this, this.document);
+
+/**
+* Class ProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.index'));
+        },
+        model: app.PreCotizacion2Model
+   });
+
+})(this, this.document);
+
+/**
+* Class TransportesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TransportesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
+        },
+        model: app.PreCotizacion10Model
    });
 
 })(this, this.document);
@@ -3427,174 +3447,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class AcabadosProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AcabadosProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.acabados.index'));
-        },
-        model: app.PreCotizacion5Model
-   });
-
-})(this, this.document);
-
-/**
-* Class AreasProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AreasProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.areas.index'));
-        },
-        model: app.PreCotizacion6Model
-   });
-
-})(this, this.document);
-
-/**
-* Class EmpaquesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.EmpaquesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.empaques.index'));
-        },
-        model: app.PreCotizacion9Model
-   });
-
-})(this, this.document);
-
-/**
-* Class MaquinasProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.MaquinasProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.maquinas.index'));
-        },
-        model: app.PreCotizacion3Model
-   });
-
-})(this, this.document);
-
-/**
-* Class MaterialesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.MaterialesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.materiales.index'));
-        },
-        model: app.PreCotizacion4Model
-   });
-
-})(this, this.document);
-
-/**
-* Class ProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.index'));
-        },
-        model: app.PreCotizacion2Model
-   });
-
-})(this, this.document);
-
-/**
-* Class TransportesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TransportesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
-        },
-        model: app.PreCotizacion10Model
-   });
-
-})(this, this.document);
-
-/**
-* Class TiempopList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TiempopList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('tiemposp.index'));
-        },
-        model: app.TiempopModel
-   });
-
-})(this, this.document);
-
-/**
 * Class ProductoHistorialList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3784,6 +3636,27 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class TiempopList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TiempopList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('tiemposp.index'));
+        },
+        model: app.TiempopModel
+   });
+
+})(this, this.document);
+
+/**
 * Class PermisosRolList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3868,6 +3741,90 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class AsientoCuentasList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoCuentasList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('asientos.detalle.index'));
+        },
+        model: app.Asiento2Model,
+
+        debitos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asiento2_debito'))
+            }, 0);
+        },
+
+        creditos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asiento2_credito'))
+            }, 0);
+        },
+
+        totalize: function () {
+            var debitos = this.debitos();
+            var creditos = this.creditos();
+            return {
+                'debitos': debitos,
+                'creditos': creditos,
+                'diferencia': Math.abs(creditos - debitos)
+            }
+        }
+   });
+
+})(this, this.document);
+
+/**
+* Class AsientoMovimientosList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoMovimientosList = Backbone.Collection.extend({
+
+        url: function() {
+            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
+        },
+        model: app.AsientoMovimientoModel,
+
+        totalize: function (valor) {
+            _.each(this.models, function (model) {
+                if (model.get('type') == 'FP') {
+                    var count = _.filter(model.get('father'), function (child) {
+                        return child.movimiento_nuevo != 1;
+                    });
+
+                    var nuevo = (valor / count.length);
+                    _.each(count, function (cuota) {
+                        $('#movimiento_valor_' + cuota.movimiento_id).text(window.Misc.currency(nuevo));
+                    });
+                } else if (model.get('type') == 'F') {
+                    var nuevo = (valor/model.get('childrens').length);
+                    _.each(model.get('childrens'), function (children) {
+                        $('#movimiento_valor_' + children.movimiento_id).text(window.Misc.currency(nuevo));
+                    });
+                }
+            });
+        }
+   });
+
+})(this, this.document);
+
+/**
 * Class TrasladoProductosList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3884,6 +3841,49 @@ app || (app = {});
             return window.Misc.urlFull(Route.route('traslados.detalle.index'));
         },
         model: app.Traslado2Model
+   });
+
+})(this, this.document);
+
+/**
+* Class AsientoNifCuentasList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoNifCuentasList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('asientosnif.detalle.index'));
+        },
+        model: app.AsientoNif2Model,
+
+        debitos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asienton2_debito'))
+            }, 0);
+        },
+
+        creditos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asienton2_credito'))
+            }, 0);
+        },
+
+        totalize: function () {
+            var debitos = this.debitos();
+            var creditos = this.creditos();
+            return {
+                'debitos': debitos,
+                'creditos': creditos,
+                'diferencia': Math.abs(creditos - debitos)
+            }
+        }
    });
 
 })(this, this.document);
@@ -11595,656 +11595,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreateFacturaView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateFacturaView = Backbone.View.extend({
-
-        el: '#factura-create',
-        template: _.template(($('#add-facturas-tpl').html() || '') ),
-        events: {
-            'submit #form-factura' :'onStore',
-            'submit #form-detalle-factura' :'onStoreItem',
-            'change .change-impuestos' :'changeImpuestos'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Attributes
-            this.detalleFactura2List = new app.DetalleFactura2List();
-            this.impuestos = {};
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html(this.template(attributes));
-
-            // Declare wrappers
-            this.$formdetalle = this.$('#form-detalle-factura');
-            this.spinner = this.$('.spinner-main');
-
-            this.referenceView();
-            this.ready();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceView: function () {
-           // Detalle factura list
-           this.detalleFacturaView = new app.DetalleFacturaView({
-               collection: this.detalleFactura2List,
-               parameters: {
-                   wrapper: this.spinner,
-                   edit: true
-               }
-           });
-        },
-
-        changeImpuestos: function (e) {
-            var value = $(e.currentTarget).inputmask('unmaskedvalue'),
-                key = $(e.currentTarget).attr('id');
-                total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
-                $('#total-create').html(window.Misc.currency(total))
-                this.impuestos[key] = value;
-        },
-
-        /**
-        * Event Create facturas
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                    data.detalle = this.detalleFactura2List.toJSON();
-                    data.impuestos = this.impuestos;
-
-                this.model.save( data, {patch: true, silent: true} );
-            }
-        },
-
-        /**
-        * Event Create detalle facturas
-        */
-        onStoreItem: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson(e.target);
-                this.detalleFactura2List.trigger('store', data, this.$formdetalle);
-            }
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initDatePicker == 'function')
-                window.initComponent.initDatePicker();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // Redirect if ok
-                window.Misc.redirect(window.Misc.urlFull(Route.route('facturas.show', {facturas: resp.id})));
-            }
-        }
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturaItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturaItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template(($('#add-factura-item-tpl').html() || '')),
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-	        // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            this.impuestos = {};
-
-            // Events Listener
-            this.listenTo(this.model, 'change', this.render);
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html( this.template(attributes) );
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturaView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturaView = Backbone.View.extend({
-
-        el: '#browse-detalle-factura-list',
-        events: {
-            'click .item-remove': 'removeOne',
-            'change .change-cantidad': 'changeCantidad'
-        },
-        parameters: {
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // References
-            this.$facturado = this.$('#subtotal-facturado');
-            this.$subtotal = this.$('#subtotal-create');
-            this.$piva = this.$('#p_iva-create');
-            this.$iva = this.$('#iva-create');
-            this.$rtefuente = this.$('#rtefuente-create');
-            this.$rteica = this.$('#rteica-create');
-            this.$rteiva = this.$('#rteiva-create');
-            this.$total = this.$('#total-create');
-            this.impuestos = {};
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'request', this.loadSpinner );
-            this.listenTo( this.collection, 'sync', this.responseServer );
-
-            if (this.parameters.dataFilter.factura) {
-                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-            }
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object detallePedidocModel Model instance
-        */
-        addOne: function (factura2Model) {
-            var view = new app.DetalleFacturaItemView({
-                model: factura2Model
-            });
-            factura2Model.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.$el.find('tbody').html('');
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Change cantidad input
-        */
-        changeCantidad: function (e) {
-            var selector = this.$(e.currentTarget);
-
-            // rules && validate
-            var min = selector.attr('min');
-            var max = selector.attr('max');
-            if (selector.val() < parseInt(min) || _.isEmpty(selector.val())) {
-                selector.val(min);
-            }
-
-            if (selector.val() > parseInt(max)) {
-                selector.val(max);
-            }
-
-            // Settear el valor al modelo
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource);
-
-            model.set({factura2_cantidad: selector.val()}, {silent: true});
-
-            this.impuestos.subtotal = this.collection.totalize().subtotal;
-            this.impuestos.tercero = $('#factura1_tercero').val();
-
-            this.calculateImpuestos();
-        },
-
-        /**
-        * Change cantidad input
-        */
-        calculateImpuestos: function () {
-            var _this = this;
-
-            $.get(window.Misc.urlFull(Route.route('facturas.impuestos', this.impuestos)), function (resp) {
-                if (resp.success) {
-                    _this.$subtotal.html(window.Misc.currency(resp.subtotal))
-                    _this.$piva.html('IVA ' + resp.p_iva + ' %')
-                    _this.$iva.val(window.Misc.currency(resp.iva))
-                    _this.$rtefuente.val(window.Misc.currency(resp.rtefuente))
-                    _this.$rteica.val(window.Misc.currency(resp.rteica))
-                    _this.$rteiva.val(window.Misc.currency(resp.rteiva))
-                    _this.$total.html(window.Misc.currency(resp.total))
-                }
-            });
-        },
-        /**
-        * store
-        * @param form element
-        */
-        storeOne: function (data, form) {
-            var _this = this
-
-            // Validate duplicate store
-            var result = this.collection.validar(data);
-            if (!result.success){
-                alertify.error(result.error);
-                return;
-            }
-
-            // Set Spinner
-            window.Misc.setSpinner(this.parameters.wrapper);
-
-            // Add model in collection
-            var factura2Model = new app.Factura2Model();
-                factura2Model.save(data, {
-                    success: function (model, resp) {
-                        if (!_.isUndefined(resp.success)) {
-                            // response success or error
-                            window.Misc.removeSpinner(_this.parameters.wrapper);
-                            var text = resp.success ? '' : resp.errors;
-                            if (_.isObject(resp.errors)) {
-                                text = window.Misc.parseErrors(resp.errors);
-                            }
-
-                            if (!resp.success) {
-                                alertify.error(text);
-                                return;
-                            }
-
-                            // Add model in collection
-                            _this.collection.add(model);
-                            window.Misc.clearForm(form);
-                        }
-                    },
-                    error: function (model, error) {
-                        window.Misc.removeSpinner(_this.parameters.wrapper);
-                        alertify.error(error.statusText)
-                    }
-                });
-        },
-
-        /**
-        * Event remove item
-        */
-        removeOne: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource),
-                _this = this;
-
-            if (model instanceof Backbone.Model) {
-                var cancelConfirm = new window.app.ConfirmWindow({
-                    parameters: {
-                        dataFilter: {
-                            codigo: model.get('factura2_orden2'),
-                            nombre: model.get('factura2_producto_nombre')
-                        },
-                        template: _.template(($('#delete-item-factura-confirm-tpl').html() || '')),
-                        titleConfirm: 'Eliminar producto',
-                        onConfirm: function () {
-                            model.view.remove();
-                            _this.collection.remove(model);
-                            _this.impuestos.subtotal = _this.collection.totalize().subtotal;
-                            _this.calculateImpuestos();
-
-                            if (!this.collection.length)  {
-                                $('#iva-create').attr('readonly', true);
-                                $('#rtefuente-create').attr('readonly', true)
-                                $('#rteica-create').attr('readonly', true)
-                                $('#rteiva-create').attr('readonly', true)
-                            }
-                        }
-                    }
-                });
-
-                cancelConfirm.render();
-            }
-        },
-
-        /**
-        * Render totalize valores
-        */
-        totalize: function () {
-            var data = this.collection.totalize();
-
-            if (this.$facturado.length) {
-                this.$facturado.html(data.facturado);
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainFacturasView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainFacturasView = Backbone.View.extend({
-
-        el: '#facturas-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$facturasSearchTable = this.$('#facturas-search-table');
-
-            // References
-            this.$searchfacturaNumero = this.$('#searchfactura_numero');
-            this.$searchfacturaTercero = this.$('#searchfactura_tercero');
-            this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
-
-            this.facturasSearchTable = this.$facturasSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('facturas.index')),
-                    data: function (data) {
-                        data.persistent = true;
-                        data.factura1_numero = _this.$searchfacturaNumero.val();
-                        data.tercero_nit = _this.$searchfacturaTercero.val();
-                        data.tercero_nombre = _this.$searchfacturaTerceroNombre.val();
-                    }
-                },
-                columns: [
-                    { data: 'factura1_numero', name: 'factura1_numero' },
-                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
-                    { data: 'tercero_nit', name: 'tercero_nit' },
-                    { data: 'tercero_nombre', name: 'factura1_tercero' },
-                    { data: 'factura1_total', name: 'factura1_total' },
-                    { data: 'factura1_anulado', name: 'factura1_anulado' }
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '5%',
-                        render: function (data, type, full, row) {
-                           return '<a href="'+ window.Misc.urlFull(Route.route('facturas.show', {facturas: full.id }))  +'">' + data + '</a>';
-                        },
-                    },
-                    {
-                        targets: 1,
-                        width: '5%'
-                    },
-                    {
-                        targets: 2,
-                        width: '15%'
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                        className: 'text-right',
-                        render: function (data, type, full, row) {
-                            return window.Misc.currency(data);
-                        },
-                    },
-                    {
-                        targets: 5,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) ? 'ANULADO' : 'ABIERTA';
-                        },
-                    },
-                ],
-                fnRowCallback: function(row, data) {
-                    if (parseInt(data.factura1_anulado)) {
-                        $(row).css({"color":"red"});
-                    } else {
-                        $(row).css({"color":"#00a65a"});
-                    }
-                }
-            });
-        },
-
-        search: function(e) {
-            e.preventDefault();
-
-            this.facturasSearchTable.ajax.reload();
-        },
-
-        clear: function(e) {
-            e.preventDefault();
-
-            this.$searchfacturaNumero.val('');
-            this.$searchfacturaTercero.val('');
-            this.$searchfacturaTerceroNombre.val('');
-
-            this.facturasSearchTable.ajax.reload();
-        },
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class ShowFacturaView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowFacturaView = Backbone.View.extend({
-
-        el: '#factura-show',
-        events: {
-            'click .anular-factura': 'anularFactura'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Initalize collections
-            this.detalleFactura2List = new app.DetalleFactura2List();
-            this.detalleFactura4List = new app.DetalleFactura4List();
-
-            // Refernece spinner
-            this.spinner = this.$('.spinner-main');
-
-            // Reference views
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Detalle factura list
-            this.factura2ListView = new app.DetalleFacturaView({
-                collection: this.detalleFactura2List,
-                parameters: {
-                    wrapper: this.spinner,
-                    edit: false,
-                    dataFilter: {
-                        factura: this.model.get('id')
-                    }
-                }
-            });
-
-            // Detalle list
-            this.factura4ListView = new app.Factura4ListView({
-                collection: this.detalleFactura4List,
-                parameters: {
-                    wrapper: this.spinner,
-                    edit: false,
-                    template: _.template(($('#add-detalle-factura-tpl').html() || '')),
-                    call: 'factura',
-                    dataFilter: {
-                        factura: this.model.get('id')
-                    }
-                }
-            });
-        },
-
-        /**
-        * Event anular factura
-        */
-        anularFactura: function (e) {
-            e.preventDefault();
-            var _this = this;
-
-            var anularConfirm = new window.app.ConfirmWindow({
-                parameters: {
-                    template: _.template(($('#factura-anular-confirm-tpl').html() || '')),
-                    titleConfirm: 'Anular factura',
-                    onConfirm: function () {
-                        // Anular factura
-                        $.ajax({
-                            url: window.Misc.urlFull(Route.route('facturas.anular', {facturas: _this.model.get('id')})),
-                            type: 'GET',
-                            beforeSend: function() {
-                                window.Misc.setSpinner(_this.spinner);
-                            }
-                        })
-                        .done(function(resp) {
-                            window.Misc.removeSpinner(_this.spinner);
-                            if (!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject(resp.errors)) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
-
-                                if (!resp.success) {
-                                    alertify.error(text);
-                                    return;
-                                }
-
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', {facturas: _this.model.get('id')})));
-                            }
-                        })
-                        .fail(function(jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner(_this.spinner);
-                            alertify.error(thrownError);
-                        });
-                    }
-                }
-            });
-            anularConfirm.render();
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class CreateAcabadospView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -18899,7 +18249,6 @@ app || (app = {});
         */
          saldoOrdenp: function (e) {
             e.preventDefault();
-            console.log('llljkllkj--lkjgfrdeswaqqaswedfrtgqawsedrfftgyhujikolpñ');
 
             var route = window.Misc.urlFull(Route.route('ordenes.saldo', {ordenes: this.model.get('id')})),
                 _this = this;
@@ -18915,7 +18264,8 @@ app || (app = {});
                             'wrap': _this.$el,
                             'callback': (function (_this) {
                                 return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: resp.id})));
+                                    // window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });
@@ -21206,7 +20556,8 @@ app || (app = {});
                             'wrap': _this.$el,
                             'callback': (function (_this) {
                                 return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: resp.id})));
+                                    // window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.id})));
                                 }
                             })(_this)
                         });
@@ -25242,7 +24593,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainRBalanceGeneralView
+* Class CreateFacturaView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -25252,37 +24603,641 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainRBalanceGeneralView = Backbone.View.extend({
+    app.CreateFacturaView = Backbone.View.extend({
 
-        el: '#rbalancegeneral-main',
-        template: _.template(($('#add-tercero-tpl').html() || '')),
+        el: '#factura-create',
+        template: _.template(($('#add-facturas-tpl').html() || '') ),
         events: {
-            'ifChanged #filter_tercero_check': 'changeTerceroCheck'
+            'submit #form-factura' :'onStore',
+            'submit #form-detalle-factura' :'onStoreItem',
+            'change .change-impuestos' :'changeImpuestos'
         },
 
         /**
         * Constructor Method
         */
         initialize: function () {
-            this.$renderTercero = this.$('#render-tercero');
+            // Attributes
+            this.detalleFactura2List = new app.DetalleFactura2List();
+            this.impuestos = {};
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html(this.template(attributes));
+
+            // Declare wrappers
+            this.$formdetalle = this.$('#form-detalle-factura');
+            this.spinner = this.$('.spinner-main');
+
+            this.referenceView();
+            this.ready();
         },
 
         /**
-        * Event tercero check
+        * reference to views
         */
-        changeTerceroCheck: function (e) {
-            e.preventDefault();
+        referenceView: function () {
+           // Detalle factura list
+           this.detalleFacturaView = new app.DetalleFacturaView({
+               collection: this.detalleFactura2List,
+               parameters: {
+                   wrapper: this.spinner,
+                   edit: true
+               }
+           });
+        },
 
-            // Clear render
-            this.$renderTercero.empty().html();
+        changeImpuestos: function (e) {
+            var value = $(e.currentTarget).inputmask('unmaskedvalue'),
+                key = $(e.currentTarget).attr('id');
+                total =  this.detalleFactura2List.totalize().subtotal + $('#iva-create').inputmask('unmaskedvalue') - $('#rtefuente-create').inputmask('unmaskedvalue') - $('#rteica-create').inputmask('unmaskedvalue') - $('#rteiva-create').inputmask('unmaskedvalue');
+                $('#total-create').html(window.Misc.currency(total))
+                this.impuestos[key] = value;
+        },
 
-            // Validate check
-            var selected = this.$(e.currentTarget).is(':checked');
-            if (selected) {
-                this.$renderTercero.html(this.template());
+        /**
+        * Event Create facturas
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                    data.detalle = this.detalleFactura2List.toJSON();
+                    data.impuestos = this.impuestos;
+
+                this.model.save( data, {patch: true, silent: true} );
+            }
+        },
+
+        /**
+        * Event Create detalle facturas
+        */
+        onStoreItem: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target);
+                this.detalleFactura2List.trigger('store', data, this.$formdetalle);
+            }
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initDatePicker == 'function')
+                window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.spinner);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // Redirect if ok
+                window.Misc.redirect(window.Misc.urlFull(Route.route('facturas.show', {facturas: resp.id})));
             }
         }
+    });
+})(jQuery, this, this.document);
 
+/**
+* Class DetalleFacturaItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturaItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template(($('#add-factura-item-tpl').html() || '')),
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+	        // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            this.impuestos = {};
+
+            // Events Listener
+            this.listenTo(this.model, 'change', this.render);
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html( this.template(attributes) );
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class DetalleFacturaView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturaView = Backbone.View.extend({
+
+        el: '#browse-detalle-factura-list',
+        events: {
+            'click .item-remove': 'removeOne',
+            'change .change-cantidad': 'changeCantidad'
+        },
+        parameters: {
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // References
+            this.$facturado = this.$('#subtotal-facturado');
+            this.$subtotal = this.$('#subtotal-create');
+            this.$piva = this.$('#p_iva-create');
+            this.$iva = this.$('#iva-create');
+            this.$rtefuente = this.$('#rtefuente-create');
+            this.$rteica = this.$('#rteica-create');
+            this.$rteiva = this.$('#rteiva-create');
+            this.$total = this.$('#total-create');
+            this.impuestos = {};
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'store', this.storeOne );
+            this.listenTo( this.collection, 'request', this.loadSpinner );
+            this.listenTo( this.collection, 'sync', this.responseServer );
+
+            if (this.parameters.dataFilter.factura) {
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+            }
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object detallePedidocModel Model instance
+        */
+        addOne: function (factura2Model) {
+            var view = new app.DetalleFacturaItemView({
+                model: factura2Model
+            });
+            factura2Model.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.$el.find('tbody').html('');
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Change cantidad input
+        */
+        changeCantidad: function (e) {
+            var selector = this.$(e.currentTarget);
+
+            // rules && validate
+            var min = selector.attr('min');
+            var max = selector.attr('max');
+            if (selector.val() < parseInt(min) || _.isEmpty(selector.val())) {
+                selector.val(min);
+            }
+
+            if (selector.val() > parseInt(max)) {
+                selector.val(max);
+            }
+
+            // Settear el valor al modelo
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource);
+
+            model.set({factura2_cantidad: selector.val()}, {silent: true});
+
+            this.impuestos.subtotal = this.collection.totalize().subtotal;
+            this.impuestos.tercero = $('#factura1_tercero').val();
+
+            this.calculateImpuestos();
+        },
+
+        /**
+        * Change cantidad input
+        */
+        calculateImpuestos: function () {
+            var _this = this;
+
+            $.get(window.Misc.urlFull(Route.route('facturas.impuestos', this.impuestos)), function (resp) {
+                if (resp.success) {
+                    _this.$subtotal.html(window.Misc.currency(resp.subtotal))
+                    _this.$piva.html('IVA ' + resp.p_iva + ' %')
+                    _this.$iva.val(window.Misc.currency(resp.iva))
+                    _this.$rtefuente.val(window.Misc.currency(resp.rtefuente))
+                    _this.$rteica.val(window.Misc.currency(resp.rteica))
+                    _this.$rteiva.val(window.Misc.currency(resp.rteiva))
+                    _this.$total.html(window.Misc.currency(resp.total))
+                }
+            });
+        },
+        /**
+        * store
+        * @param form element
+        */
+        storeOne: function (data, form) {
+            var _this = this
+
+            // Validate duplicate store
+            var result = this.collection.validar(data);
+            if (!result.success){
+                alertify.error(result.error);
+                return;
+            }
+
+            // Set Spinner
+            window.Misc.setSpinner(this.parameters.wrapper);
+
+            // Add model in collection
+            var factura2Model = new app.Factura2Model();
+                factura2Model.save(data, {
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            // response success or error
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
+                            window.Misc.clearForm(form);
+                        }
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
+                    }
+                });
+        },
+
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if (model instanceof Backbone.Model) {
+                var cancelConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            codigo: model.get('factura2_orden2'),
+                            nombre: model.get('factura2_producto_nombre')
+                        },
+                        template: _.template(($('#delete-item-factura-confirm-tpl').html() || '')),
+                        titleConfirm: 'Eliminar producto',
+                        onConfirm: function () {
+                            model.view.remove();
+                            _this.collection.remove(model);
+                            _this.impuestos.subtotal = _this.collection.totalize().subtotal;
+                            _this.calculateImpuestos();
+
+                            if (!this.collection.length)  {
+                                $('#iva-create').attr('readonly', true);
+                                $('#rtefuente-create').attr('readonly', true)
+                                $('#rteica-create').attr('readonly', true)
+                                $('#rteiva-create').attr('readonly', true)
+                            }
+                        }
+                    }
+                });
+
+                cancelConfirm.render();
+            }
+        },
+
+        /**
+        * Render totalize valores
+        */
+        totalize: function () {
+            var data = this.collection.totalize();
+
+            if (this.$facturado.length) {
+                this.$facturado.html(data.facturado);
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainFacturasView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainFacturasView = Backbone.View.extend({
+
+        el: '#facturas-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$facturasSearchTable = this.$('#facturas-search-table');
+
+            // References
+            this.$searchfacturaNumero = this.$('#searchfactura_numero');
+            this.$searchfacturaTercero = this.$('#searchfactura_tercero');
+            this.$searchfacturaTerceroNombre = this.$('#searchfactura_tercero_nombre');
+
+            this.facturasSearchTable = this.$facturasSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('facturas.index')),
+                    data: function (data) {
+                        data.persistent = true;
+                        data.factura1_numero = _this.$searchfacturaNumero.val();
+                        data.tercero_nit = _this.$searchfacturaTercero.val();
+                        data.tercero_nombre = _this.$searchfacturaTerceroNombre.val();
+                    }
+                },
+                columns: [
+                    { data: 'factura1_numero', name: 'factura1_numero' },
+                    { data: 'puntoventa_prefijo', name: 'puntoventa_prefijo' },
+                    { data: 'tercero_nit', name: 'tercero_nit' },
+                    { data: 'tercero_nombre', name: 'factura1_tercero' },
+                    { data: 'factura1_total', name: 'factura1_total' },
+                    { data: 'factura1_anulado', name: 'factura1_anulado' }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '5%',
+                        render: function (data, type, full, row) {
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturas.show', {facturas: full.id }))  +'">' + data + '</a>';
+                        },
+                    },
+                    {
+                        targets: 1,
+                        width: '5%'
+                    },
+                    {
+                        targets: 2,
+                        width: '15%'
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        className: 'text-right',
+                        render: function (data, type, full, row) {
+                            return window.Misc.currency(data);
+                        },
+                    },
+                    {
+                        targets: 5,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) ? 'ANULADO' : 'ABIERTA';
+                        },
+                    },
+                ],
+                fnRowCallback: function(row, data) {
+                    if (parseInt(data.factura1_anulado)) {
+                        $(row).css({"color":"red"});
+                    } else {
+                        $(row).css({"color":"#00a65a"});
+                    }
+                }
+            });
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.facturasSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            this.$searchfacturaNumero.val('');
+            this.$searchfacturaTercero.val('');
+            this.$searchfacturaTerceroNombre.val('');
+
+            this.facturasSearchTable.ajax.reload();
+        },
+    });
+})(jQuery, this, this.document);
+
+/**
+* Class ShowFacturaView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowFacturaView = Backbone.View.extend({
+
+        el: '#factura-show',
+        events: {
+            'click .anular-factura': 'anularFactura'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Initalize collections
+            this.detalleFactura2List = new app.DetalleFactura2List();
+            this.detalleFactura4List = new app.DetalleFactura4List();
+
+            // Refernece spinner
+            this.spinner = this.$('.spinner-main');
+
+            // Reference views
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Detalle factura list
+            this.factura2ListView = new app.DetalleFacturaView({
+                collection: this.detalleFactura2List,
+                parameters: {
+                    wrapper: this.spinner,
+                    edit: false,
+                    dataFilter: {
+                        factura: this.model.get('id')
+                    }
+                }
+            });
+
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFactura4List,
+                parameters: {
+                    wrapper: this.spinner,
+                    edit: false,
+                    template: _.template(($('#add-detalle-factura-tpl').html() || '')),
+                    call: 'factura',
+                    dataFilter: {
+                        factura: this.model.get('id')
+                    }
+                }
+            });
+        },
+
+        /**
+        * Event anular factura
+        */
+        anularFactura: function (e) {
+            e.preventDefault();
+            var _this = this;
+
+            var anularConfirm = new window.app.ConfirmWindow({
+                parameters: {
+                    template: _.template(($('#factura-anular-confirm-tpl').html() || '')),
+                    titleConfirm: 'Anular factura',
+                    onConfirm: function () {
+                        // Anular factura
+                        $.ajax({
+                            url: window.Misc.urlFull(Route.route('facturas.anular', {facturas: _this.model.get('id')})),
+                            type: 'GET',
+                            beforeSend: function() {
+                                window.Misc.setSpinner(_this.spinner);
+                            }
+                        })
+                        .done(function(resp) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            if (!_.isUndefined(resp.success)) {
+                                // response success or error
+                                var text = resp.success ? '' : resp.errors;
+                                if (_.isObject(resp.errors)) {
+                                    text = window.Misc.parseErrors(resp.errors);
+                                }
+
+                                if (!resp.success) {
+                                    alertify.error(text);
+                                    return;
+                                }
+
+                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('facturas.show', {facturas: _this.model.get('id')})));
+                            }
+                        })
+                        .fail(function(jqXHR, ajaxOptions, thrownError) {
+                            window.Misc.removeSpinner(_this.spinner);
+                            alertify.error(thrownError);
+                        });
+                    }
+                }
+            });
+            anularConfirm.render();
+        }
     });
 
 })(jQuery, this, this.document);
@@ -25530,6 +25485,52 @@ app || (app = {});
                 }
             });
         },
+
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainRBalanceGeneralView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainRBalanceGeneralView = Backbone.View.extend({
+
+        el: '#rbalancegeneral-main',
+        template: _.template(($('#add-tercero-tpl').html() || '')),
+        events: {
+            'ifChanged #filter_tercero_check': 'changeTerceroCheck'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            this.$renderTercero = this.$('#render-tercero');
+        },
+
+        /**
+        * Event tercero check
+        */
+        changeTerceroCheck: function (e) {
+            e.preventDefault();
+
+            // Clear render
+            this.$renderTercero.empty().html();
+
+            // Validate check
+            var selected = this.$(e.currentTarget).is(':checked');
+            if (selected) {
+                this.$renderTercero.html(this.template());
+            }
+        }
 
     });
 
