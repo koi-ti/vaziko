@@ -321,347 +321,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class ActividadModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ActividadModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('actividades.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'actividad_codigo': '',
-        	'actividad_nombre': '',
-        	'actividad_tarifa': '0',
-        	'actividad_categoria': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class BitacoraModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.BitacoraModel = Backbone.Model.extend({
-        idAttribute: 'id',
-        defaults: {}
-    });
-
-})(this, this.document);
-
-/**
-* Class ContactoModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ContactoModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('terceros.contactos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'tcontacto_nombres': '',
-        	'tcontacto_apellidos': '',
-        	'tcontacto_telefono': '',
-        	'tcontacto_celular': '',
-            'tcontacto_municipio': '',
-            'tcontacto_direccion': '',
-        	'tcontacto_direccion_nomenclatura': '',
-        	'tcontacto_email': '',
-        	'tcontacto_cargo': '',
-            'tcontacto_activo': 1
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class EmpresaModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.EmpresaModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('empresa.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'tercero_nit': '',
-            'tercero_digito': '',
-            'tercero_regimen' : '',
-            'tercero_tipo' : '',
-			'tercero_persona' : '',
-            'tercero_razonsocial' : '',
-            'tercero_nombre1' : '',
-            'tercero_nombre2' : '',
-            'tercero_apellido1' : '',
-            'tercero_apellido2' : '',
-            'tercero_direccion' : '',
-            'tercero_direccion_nomenclatura' : '',
-            'tercero_municipio' : '',
-            'tercero_email' : '',
-            'tercero_telefono1' : '',
-            'tercero_telefono2' : '',
-            'tercero_fax' : '',
-            'tercero_celular' : '',
-            'tercero_actividad' : '',
-            'tercero_cc_representante' : '',
-            'tercero_representante' : '',
-            'tercero_responsable_iva': false,
-            'tercero_autoretenedor_cree': false,
-            'tercero_gran_contribuyente': false,
-            'tercero_autoretenedor_renta': false,
-            'tercero_autoretenedor_ica': false,
-            'tercero_formapago' : '',
-            'actividad_tarifa' : '',
-            'empresa_niif' : '',
-            'empresa_round' : false,
-            'empresa_paginacion': 1,
-            'empresa_iva' : ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class ModuloModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ModuloModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('roles.permisos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'name': '',
-            'display_name': '',
-            'nivel1': '',
-            'nivel2': '',
-            'nivel3': '',
-            'nivel4': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class PuntoVentaModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.PuntoVentaModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('puntosventa.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'puntoventa_nombre': '',
-            'puntoventa_numero': '',
-            'puntoventa_prefijo': '',
-            'puntoventa_resolucion_dian': '',
-            'puntoventa_documento': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class RolModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.RolModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('roles.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'display_name': '',
-            'description': '',
-            'permissions': []
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class SucursalModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.SucursalModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('sucursales.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'sucursal_nombre': '',
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class TerceroModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TerceroModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('terceros.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'tercero_nit': '',
-            'tercero_digito': '',
-            'tercero_regimen' : '',
-            'tercero_tipo' : '',
-            'tercero_persona' : '',
-            'tercero_razonsocial' : '',
-            'tercero_nombre_comercial' : '',
-            'tercero_nombre1' : '',
-            'tercero_nombre2' : '',
-            'tercero_apellido1' : '',
-            'tercero_apellido2' : '',
-            'tercero_direccion' : '',
-            'tercero_direccion_nomenclatura' : '',
-            'tercero_municipio' : '',
-            'tercero_email' : '',
-            'tercero_email_factura1' : '',
-            'tercero_email_factura2' : '',
-            'tercero_telefono1' : '',
-            'tercero_telefono2' : '',
-            'tercero_fax' : '',
-            'tercero_celular' : '',
-            'tercero_actividad' : '',
-            'tercero_cc_representante' : '',
-            'tercero_representante' : '',
-            'tercero_formapago' : '',
-            'tercero_sigla' : '',
-            'tercero_codigopostal' : '',
-            'tercero_activo': false,
-            'tercero_responsable_iva': false,
-            'tercero_autoretenedor_cree': false,
-            'tercero_gran_contribuyente': false,
-            'tercero_autoretenedor_renta': false,
-            'tercero_autoretenedor_ica': false,
-            'tercero_socio': false,
-            'tercero_cliente': false,
-            'tercero_acreedor': false,
-            'tercero_interno': false,
-            'tercero_mandatario': false,
-            'tercero_empleado': false,
-            'tercero_proveedor': false,
-            'tercero_extranjero': false,
-            'tercero_afiliado': false,
-            'tercero_otro': false,
-            'tercero_tecnico': false,
-            'tercero_coordinador': false,
-            'tercero_coordinador_por': '',
-            'tercero_vendedor': false,
-            'tercero_vendedor_estado': false,
-            'tercero_comision': 0,
-            'tercero_cual': '',
-            'username': '',
-            'actividad_tarifa' : '',
-            'vendedor_nit': '',
-            'vendedor_nombre': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class UsuarioRolModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.UsuarioRolModel = Backbone.Model.extend({
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('terceros.roles.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'user_id': '',
-        	'role_id': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
 * Class GrupoModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -890,78 +549,6 @@ app || (app = {});
         	'unidadmedida_sigla': '',
         	'unidadmedida_nombre': ''
         }
-    });
-
-})(this, this.document);
-
-/**
-* Class FacturaModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.FacturaModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'factura1_fecha': moment().format('YYYY-MM-DD'),
-            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class Factura2Model extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.Factura2Model = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'factura2_cantidad': 0,
-            'factura2_subtotal': 0,
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class Factura4Model extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.Factura4Model = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.productos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {}
     });
 
 })(this, this.document);
@@ -2171,6 +1758,78 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class FacturaModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.FacturaModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura1_fecha': moment().format('YYYY-MM-DD'),
+            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura2Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura2Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura2_cantidad': 0,
+            'factura2_subtotal': 0,
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura4Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura4Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
 * Class FacturapModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2217,6 +1876,474 @@ app || (app = {});
         	'facturap2_saldo': 0
         }
     });
+
+})(this, this.document);
+
+/**
+* Class ActividadModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ActividadModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('actividades.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'actividad_codigo': '',
+        	'actividad_nombre': '',
+        	'actividad_tarifa': '0',
+        	'actividad_categoria': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class BitacoraModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.BitacoraModel = Backbone.Model.extend({
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
+* Class ContactoModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ContactoModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('terceros.contactos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'tcontacto_nombres': '',
+        	'tcontacto_apellidos': '',
+        	'tcontacto_telefono': '',
+        	'tcontacto_celular': '',
+            'tcontacto_municipio': '',
+            'tcontacto_direccion': '',
+        	'tcontacto_direccion_nomenclatura': '',
+        	'tcontacto_email': '',
+        	'tcontacto_cargo': '',
+            'tcontacto_activo': 1
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class EmpresaModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.EmpresaModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('empresa.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'tercero_nit': '',
+            'tercero_digito': '',
+            'tercero_regimen' : '',
+            'tercero_tipo' : '',
+			'tercero_persona' : '',
+            'tercero_razonsocial' : '',
+            'tercero_nombre1' : '',
+            'tercero_nombre2' : '',
+            'tercero_apellido1' : '',
+            'tercero_apellido2' : '',
+            'tercero_direccion' : '',
+            'tercero_direccion_nomenclatura' : '',
+            'tercero_municipio' : '',
+            'tercero_email' : '',
+            'tercero_telefono1' : '',
+            'tercero_telefono2' : '',
+            'tercero_fax' : '',
+            'tercero_celular' : '',
+            'tercero_actividad' : '',
+            'tercero_cc_representante' : '',
+            'tercero_representante' : '',
+            'tercero_responsable_iva': false,
+            'tercero_autoretenedor_cree': false,
+            'tercero_gran_contribuyente': false,
+            'tercero_autoretenedor_renta': false,
+            'tercero_autoretenedor_ica': false,
+            'tercero_formapago' : '',
+            'actividad_tarifa' : '',
+            'empresa_niif' : '',
+            'empresa_round' : false,
+            'empresa_paginacion': 1,
+            'empresa_iva' : ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class ModuloModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ModuloModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('roles.permisos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'name': '',
+            'display_name': '',
+            'nivel1': '',
+            'nivel2': '',
+            'nivel3': '',
+            'nivel4': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class PuntoVentaModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.PuntoVentaModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('puntosventa.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'puntoventa_nombre': '',
+            'puntoventa_numero': '',
+            'puntoventa_prefijo': '',
+            'puntoventa_resolucion_dian': '',
+            'puntoventa_documento': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class RolModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.RolModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('roles.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'display_name': '',
+            'description': '',
+            'permissions': []
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class SucursalModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.SucursalModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('sucursales.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'sucursal_nombre': '',
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class TerceroModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TerceroModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('terceros.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'tercero_nit': '',
+            'tercero_digito': '',
+            'tercero_regimen' : '',
+            'tercero_tipo' : '',
+            'tercero_persona' : '',
+            'tercero_razonsocial' : '',
+            'tercero_nombre_comercial' : '',
+            'tercero_nombre1' : '',
+            'tercero_nombre2' : '',
+            'tercero_apellido1' : '',
+            'tercero_apellido2' : '',
+            'tercero_direccion' : '',
+            'tercero_direccion_nomenclatura' : '',
+            'tercero_municipio' : '',
+            'tercero_email' : '',
+            'tercero_email_factura1' : '',
+            'tercero_email_factura2' : '',
+            'tercero_telefono1' : '',
+            'tercero_telefono2' : '',
+            'tercero_fax' : '',
+            'tercero_celular' : '',
+            'tercero_actividad' : '',
+            'tercero_cc_representante' : '',
+            'tercero_representante' : '',
+            'tercero_formapago' : '',
+            'tercero_sigla' : '',
+            'tercero_codigopostal' : '',
+            'tercero_activo': false,
+            'tercero_responsable_iva': false,
+            'tercero_autoretenedor_cree': false,
+            'tercero_gran_contribuyente': false,
+            'tercero_autoretenedor_renta': false,
+            'tercero_autoretenedor_ica': false,
+            'tercero_socio': false,
+            'tercero_cliente': false,
+            'tercero_acreedor': false,
+            'tercero_interno': false,
+            'tercero_mandatario': false,
+            'tercero_empleado': false,
+            'tercero_proveedor': false,
+            'tercero_extranjero': false,
+            'tercero_afiliado': false,
+            'tercero_otro': false,
+            'tercero_tecnico': false,
+            'tercero_coordinador': false,
+            'tercero_coordinador_por': '',
+            'tercero_vendedor': false,
+            'tercero_vendedor_estado': false,
+            'tercero_comision': 0,
+            'tercero_cual': '',
+            'username': '',
+            'actividad_tarifa' : '',
+            'vendedor_nit': '',
+            'vendedor_nombre': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class UsuarioRolModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.UsuarioRolModel = Backbone.Model.extend({
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('terceros.roles.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'user_id': '',
+        	'role_id': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class AsientoNifCuentasList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoNifCuentasList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('asientosnif.detalle.index'));
+        },
+        model: app.AsientoNif2Model,
+
+        debitos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asienton2_debito'))
+            }, 0);
+        },
+
+        creditos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asienton2_credito'))
+            }, 0);
+        },
+
+        totalize: function () {
+            var debitos = this.debitos();
+            var creditos = this.creditos();
+            return {
+                'debitos': debitos,
+                'creditos': creditos,
+                'diferencia': Math.abs(creditos - debitos)
+            }
+        }
+   });
+
+})(this, this.document);
+
+/**
+* Class AsientoCuentasList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoCuentasList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('asientos.detalle.index'));
+        },
+        model: app.Asiento2Model,
+
+        debitos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asiento2_debito'))
+            }, 0);
+        },
+
+        creditos: function () {
+            return this.reduce(function (sum, model) {
+                return sum + parseFloat(model.get('asiento2_credito'))
+            }, 0);
+        },
+
+        totalize: function () {
+            var debitos = this.debitos();
+            var creditos = this.creditos();
+            return {
+                'debitos': debitos,
+                'creditos': creditos,
+                'diferencia': Math.abs(creditos - debitos)
+            }
+        }
+   });
+
+})(this, this.document);
+
+/**
+* Class AsientoMovimientosList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AsientoMovimientosList = Backbone.Collection.extend({
+
+        url: function() {
+            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
+        },
+        model: app.AsientoMovimientoModel,
+
+        totalize: function (valor) {
+            _.each(this.models, function (model) {
+                if (model.get('type') == 'FP') {
+                    var count = _.filter(model.get('father'), function (child) {
+                        return child.movimiento_nuevo != 1;
+                    });
+
+                    var nuevo = (valor / count.length);
+                    _.each(count, function (cuota) {
+                        $('#movimiento_valor_' + cuota.movimiento_id).text(window.Misc.currency(nuevo));
+                    });
+                } else if (model.get('type') == 'F') {
+                    var nuevo = (valor/model.get('childrens').length);
+                    _.each(model.get('childrens'), function (children) {
+                        $('#movimiento_valor_' + children.movimiento_id).text(window.Misc.currency(nuevo));
+                    });
+                }
+            });
+        }
+   });
 
 })(this, this.document);
 
@@ -2617,27 +2744,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class CuotasFPList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.CuotasFPList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
-        },
-        model: app.Facturap2Model
-   });
-
-})(this, this.document);
-
-/**
 * Class DetalleFactura2List of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2830,7 +2936,7 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class AcabadosProductopPreCotizacionList of Backbone Collection
+* Class CuotasFPList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -2840,138 +2946,12 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.AcabadosProductopPreCotizacionList = Backbone.Collection.extend({
+    app.CuotasFPList = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.acabados.index'));
+            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
         },
-        model: app.PreCotizacion5Model
-   });
-
-})(this, this.document);
-
-/**
-* Class AreasProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AreasProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.areas.index'));
-        },
-        model: app.PreCotizacion6Model
-   });
-
-})(this, this.document);
-
-/**
-* Class EmpaquesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.EmpaquesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.empaques.index'));
-        },
-        model: app.PreCotizacion9Model
-   });
-
-})(this, this.document);
-
-/**
-* Class MaquinasProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.MaquinasProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.maquinas.index'));
-        },
-        model: app.PreCotizacion3Model
-   });
-
-})(this, this.document);
-
-/**
-* Class MaterialesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.MaterialesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.materiales.index'));
-        },
-        model: app.PreCotizacion4Model
-   });
-
-})(this, this.document);
-
-/**
-* Class ProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.index'));
-        },
-        model: app.PreCotizacion2Model
-   });
-
-})(this, this.document);
-
-/**
-* Class TransportesProductopPreCotizacionList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TransportesProductopPreCotizacionList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
-        },
-        model: app.PreCotizacion10Model
+        model: app.Facturap2Model
    });
 
 })(this, this.document);
@@ -3447,6 +3427,174 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class AcabadosProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AcabadosProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.acabados.index'));
+        },
+        model: app.PreCotizacion5Model
+   });
+
+})(this, this.document);
+
+/**
+* Class AreasProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.AreasProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.areas.index'));
+        },
+        model: app.PreCotizacion6Model
+   });
+
+})(this, this.document);
+
+/**
+* Class EmpaquesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.EmpaquesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.empaques.index'));
+        },
+        model: app.PreCotizacion9Model
+   });
+
+})(this, this.document);
+
+/**
+* Class MaquinasProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.MaquinasProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.maquinas.index'));
+        },
+        model: app.PreCotizacion3Model
+   });
+
+})(this, this.document);
+
+/**
+* Class MaterialesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.MaterialesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.materiales.index'));
+        },
+        model: app.PreCotizacion4Model
+   });
+
+})(this, this.document);
+
+/**
+* Class ProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.index'));
+        },
+        model: app.PreCotizacion2Model
+   });
+
+})(this, this.document);
+
+/**
+* Class TransportesProductopPreCotizacionList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TransportesProductopPreCotizacionList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
+        },
+        model: app.PreCotizacion10Model
+   });
+
+})(this, this.document);
+
+/**
+* Class TiempopList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TiempopList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('tiemposp.index'));
+        },
+        model: app.TiempopModel
+   });
+
+})(this, this.document);
+
+/**
 * Class ProductoHistorialList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3636,27 +3784,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class TiempopList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TiempopList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('tiemposp.index'));
-        },
-        model: app.TiempopModel
-   });
-
-})(this, this.document);
-
-/**
 * Class PermisosRolList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3741,90 +3868,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class AsientoCuentasList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoCuentasList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('asientos.detalle.index'));
-        },
-        model: app.Asiento2Model,
-
-        debitos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asiento2_debito'))
-            }, 0);
-        },
-
-        creditos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asiento2_credito'))
-            }, 0);
-        },
-
-        totalize: function () {
-            var debitos = this.debitos();
-            var creditos = this.creditos();
-            return {
-                'debitos': debitos,
-                'creditos': creditos,
-                'diferencia': Math.abs(creditos - debitos)
-            }
-        }
-   });
-
-})(this, this.document);
-
-/**
-* Class AsientoMovimientosList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoMovimientosList = Backbone.Collection.extend({
-
-        url: function() {
-            return window.Misc.urlFull(Route.route('asientos.detalle.movimientos.index'));
-        },
-        model: app.AsientoMovimientoModel,
-
-        totalize: function (valor) {
-            _.each(this.models, function (model) {
-                if (model.get('type') == 'FP') {
-                    var count = _.filter(model.get('father'), function (child) {
-                        return child.movimiento_nuevo != 1;
-                    });
-
-                    var nuevo = (valor / count.length);
-                    _.each(count, function (cuota) {
-                        $('#movimiento_valor_' + cuota.movimiento_id).text(window.Misc.currency(nuevo));
-                    });
-                } else if (model.get('type') == 'F') {
-                    var nuevo = (valor/model.get('childrens').length);
-                    _.each(model.get('childrens'), function (children) {
-                        $('#movimiento_valor_' + children.movimiento_id).text(window.Misc.currency(nuevo));
-                    });
-                }
-            });
-        }
-   });
-
-})(this, this.document);
-
-/**
 * Class TrasladoProductosList of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -3841,49 +3884,6 @@ app || (app = {});
             return window.Misc.urlFull(Route.route('traslados.detalle.index'));
         },
         model: app.Traslado2Model
-   });
-
-})(this, this.document);
-
-/**
-* Class AsientoNifCuentasList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.AsientoNifCuentasList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('asientosnif.detalle.index'));
-        },
-        model: app.AsientoNif2Model,
-
-        debitos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asienton2_debito'))
-            }, 0);
-        },
-
-        creditos: function () {
-            return this.reduce(function (sum, model) {
-                return sum + parseFloat(model.get('asienton2_credito'))
-            }, 0);
-        },
-
-        totalize: function () {
-            var debitos = this.debitos();
-            var creditos = this.creditos();
-            return {
-                'debitos': debitos,
-                'creditos': creditos,
-                'diferencia': Math.abs(creditos - debitos)
-            }
-        }
    });
 
 })(this, this.document);
@@ -6554,198 +6554,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreateCentroCostoView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateCentroCostoView = Backbone.View.extend({
-
-        el: '#centrocosto-create',
-        template: _.template( ($('#add-centrocosto-tpl').html() || '') ),
-        events: {
-            'submit #form-centrocosto': 'onStore'
-        },
-        parameters: {
-            callback : ''
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.msgSuccess = 'Centro de costo guardado con exito!';
-            this.$wraperForm = this.$('#render-form-centrocosto');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Forum Post
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // stuffToDo Callback
-                var _this = this,
-                    stuffToDo = {
-                        'toShow': function () {
-                            window.Misc.redirect(window.Misc.urlFull(Route.route('centroscosto.index')));
-                        },
-
-                        'default': function () {
-                            alertify.success(_this.msgSuccess);
-                        }
-                    };
-
-                if (stuffToDo[this.parameters.callback]) {
-                    stuffToDo[this.parameters.callback]();
-                } else {
-                    stuffToDo['default']();
-                }
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainCentrosCostoView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainCentrosCostoView = Backbone.View.extend({
-
-        el: '#centroscosto-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
-            this.$centroscostoSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('centroscosto.index')),
-                columns: [
-                    { data: 'centrocosto_codigo', name: 'centrocosto_codigo' },
-                    { data: 'centrocosto_centro', name: 'centrocosto_centro' },
-                    { data: 'centrocosto_nombre', name: 'centrocosto_nombre' },
-                    { data: 'centrocosto_estructura', name: 'centrocosto_estructura' },
-                    { data: 'centrocosto_activo', name: 'centrocosto_activo' }
-                ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-						action: function (e, dt, node, config) {
-							window.Misc.redirect(window.Misc.urlFull(Route.route('centroscosto.create')))
-						}
-					}
-				],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('centroscosto.show', {centroscosto: full.id}))  +'">' + data + '</a>';
-                        }
-                    },
-                    {
-                        targets: 3,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return data == 'S' ? 'Si' : 'No';
-                        }
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) ? 'Si' : 'No';
-                        }
-                    },
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class MainConfiguracionView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -6836,6 +6644,159 @@ app || (app = {});
                 msgConfirm.render();
             }
         },
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateFolderView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateFolderView = Backbone.View.extend({
+
+        el: '#folder-create',
+        template: _.template( ($('#add-folder-tpl').html() || '') ),
+        events: {
+            'submit #form-folder': 'onStore'
+        },
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-folder');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('folders.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/*
+ * Class MainfoldersView
+ * @author KOI || @dropecamargo
+ * @link http://koi-ti.com
+ **/
+
+//global app blackbone
+app || (app={});
+
+(function ($, window, document, undefined) {
+
+    app.MainFoldersView = Backbone.View.extend({
+
+        el: '#folders-main',
+
+        /*
+         * Constructor method
+         */
+        initialize: function () {
+            // DataTable
+            this.$foldersSearchTable = this.$('#folders-search-table');
+            this.$foldersSearchTable.DataTable({
+                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('folders.index')),
+                columns: [
+                    { data: 'folder_codigo', name: 'folder_codigo' },
+                    { data: 'folder_nombre', name: 'folder_nombre' }
+                ],
+                buttons: [
+                    {
+                        text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('folders.create')))
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '15%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('folders.show', {folders: full.id}))  +'">' + data + '</a>';
+                        }
+                    }
+                ]
+            });
+        }
     });
 
 })(jQuery, this, this.document);
@@ -7022,159 +6983,6 @@ app || (app = {});
                             return parseInt(data) ? 'Si' : 'No';
                         }
                     },
-                ]
-            });
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateFolderView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateFolderView = Backbone.View.extend({
-
-        el: '#folder-create',
-        template: _.template( ($('#add-folder-tpl').html() || '') ),
-        events: {
-            'submit #form-folder': 'onStore'
-        },
-        parameters: {},
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-folder');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('folders.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/*
- * Class MainfoldersView
- * @author KOI || @dropecamargo
- * @link http://koi-ti.com
- **/
-
-//global app blackbone
-app || (app={});
-
-(function ($, window, document, undefined) {
-
-    app.MainFoldersView = Backbone.View.extend({
-
-        el: '#folders-main',
-
-        /*
-         * Constructor method
-         */
-        initialize: function () {
-            // DataTable
-            this.$foldersSearchTable = this.$('#folders-search-table');
-            this.$foldersSearchTable.DataTable({
-                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('folders.index')),
-                columns: [
-                    { data: 'folder_codigo', name: 'folder_codigo' },
-                    { data: 'folder_nombre', name: 'folder_nombre' }
-                ],
-                buttons: [
-                    {
-                        text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-                        action: function (e, dt, node, config) {
-                            window.Misc.redirect(window.Misc.urlFull(Route.route('folders.create')))
-                        }
-                    }
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '15%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('folders.show', {folders: full.id}))  +'">' + data + '</a>';
-                        }
-                    }
                 ]
             });
         }
@@ -7667,6 +7475,198 @@ app || (app = {});
 
             this.plancuentasNifSearchTable.ajax.reload();
         },
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateCentroCostoView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateCentroCostoView = Backbone.View.extend({
+
+        el: '#centrocosto-create',
+        template: _.template( ($('#add-centrocosto-tpl').html() || '') ),
+        events: {
+            'submit #form-centrocosto': 'onStore'
+        },
+        parameters: {
+            callback : ''
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.msgSuccess = 'Centro de costo guardado con exito!';
+            this.$wraperForm = this.$('#render-form-centrocosto');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Forum Post
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // stuffToDo Callback
+                var _this = this,
+                    stuffToDo = {
+                        'toShow': function () {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('centroscosto.index')));
+                        },
+
+                        'default': function () {
+                            alertify.success(_this.msgSuccess);
+                        }
+                    };
+
+                if (stuffToDo[this.parameters.callback]) {
+                    stuffToDo[this.parameters.callback]();
+                } else {
+                    stuffToDo['default']();
+                }
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainCentrosCostoView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainCentrosCostoView = Backbone.View.extend({
+
+        el: '#centroscosto-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$centroscostoSearchTable = this.$('#centroscosto-search-table');
+            this.$centroscostoSearchTable.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('centroscosto.index')),
+                columns: [
+                    { data: 'centrocosto_codigo', name: 'centrocosto_codigo' },
+                    { data: 'centrocosto_centro', name: 'centrocosto_centro' },
+                    { data: 'centrocosto_nombre', name: 'centrocosto_nombre' },
+                    { data: 'centrocosto_estructura', name: 'centrocosto_estructura' },
+                    { data: 'centrocosto_activo', name: 'centrocosto_activo' }
+                ],
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('centroscosto.create')))
+						}
+					}
+				],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('centroscosto.show', {centroscosto: full.id}))  +'">' + data + '</a>';
+                        }
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return data == 'S' ? 'Si' : 'No';
+                        }
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
+                ]
+			});
+        }
     });
 
 })(jQuery, this, this.document);
@@ -11442,159 +11442,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreateUnidadView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateUnidadView = Backbone.View.extend({
-
-        el: '#unidades-create',
-        template: _.template( ($('#add-unidad-tpl').html() || '') ),
-        events: {
-            'submit #form-unidades': 'onStore'
-        },
-        parameters: {},
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-unidad');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function() {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('unidades.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainUnidadesView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainUnidadesView = Backbone.View.extend({
-
-        el: '#unidades-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$unidadesSearchTable = this.$('#unidades-search-table');
-            this.$unidadesSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('unidades.index')),
-                columns: [
-                    { data: 'unidadmedida_sigla', name: 'unidadmedida_sigla' },
-                    { data: 'unidadmedida_nombre', name: 'unidadmedida_nombre' }
-                ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-						action: function (e, dt, node, config) {
-							window.Misc.redirect(window.Misc.urlFull(Route.route('unidades.create')))
-						}
-					}
-				],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('unidades.show', {unidades: full.id})) + '">' + data + '</a>';
-                        }
-                    }
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class CreateAcabadospView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -11911,6 +11758,159 @@ app || (app = {});
                         width: '10%',
                         render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
+                        }
+                    }
+                ]
+			});
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateUnidadView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateUnidadView = Backbone.View.extend({
+
+        el: '#unidades-create',
+        template: _.template( ($('#add-unidad-tpl').html() || '') ),
+        events: {
+            'submit #form-unidades': 'onStore'
+        },
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-unidad');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function() {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('unidades.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainUnidadesView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainUnidadesView = Backbone.View.extend({
+
+        el: '#unidades-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$unidadesSearchTable = this.$('#unidades-search-table');
+            this.$unidadesSearchTable.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('unidades.index')),
+                columns: [
+                    { data: 'unidadmedida_sigla', name: 'unidadmedida_sigla' },
+                    { data: 'unidadmedida_nombre', name: 'unidadmedida_nombre' }
+                ],
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('unidades.create')))
+						}
+					}
+				],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('unidades.show', {unidades: full.id})) + '">' + data + '</a>';
                         }
                     }
                 ]
@@ -16331,6 +16331,383 @@ app || (app = {});
                 ]
 			});
         }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainPreCotizacionesView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainPreCotizacionesView = Backbone.View.extend({
+
+        el: '#precotizaciones-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear',
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$precotizacionesSearchTable = this.$('#precotizaciones-search-table');
+            this.$searchprecotizacionNumero = this.$('#searchprecotizacion_numero');
+            this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
+            this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
+            this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
+            this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
+            this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
+
+            this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
+                    data: function(data) {
+                        data.persistent = true;
+                        data.precotizacion_numero = _this.$searchprecotizacionNumero.val();
+                        data.precotizacion_tercero_nit = _this.$searchprecotizacionTercero.val();
+                        data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
+                        data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
+                        data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
+                        data.precotizacion_productop = _this.$searchprecotizacionProductop.val();
+                    }
+                },
+                columns: [
+                    { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
+                    { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
+                    { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
+                    { data: 'precotizacion1_fh_culminada', name: 'precotizacion1_fh_culminada' },
+                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
+                ],
+                order: [
+                    [ 1, 'desc' ], [ 2, 'desc' ]
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '7%',
+                        render: function ( data, type, full, row ) {
+                           return '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.id }) )  +'">' + data + '</a>';
+                        },
+                    },
+                    {
+                        targets: [1, 2],
+                        visible: false,
+                    },
+                    {
+                        targets: 3,
+                        width: '60%',
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                    },
+                    {
+                        targets: 5,
+                        width: '10%',
+                        searchable: false,
+                        orderable: false,
+                    },
+                    {
+                        targets: 6,
+                        width: '7%',
+                        searchable: false,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function ( data, type, full, row ) {
+                            if( parseInt(full.precotizacion1_culminada) ) {
+                                return '<span class="label label-primary">CULMINADA</span>';
+                            } else if( parseInt(full.precotizacion1_abierta) ) {
+                                return '<span class="label label-success">ABIERTA</span>';
+                            } else {
+                                return '<span class="label label-danger">CERRADA</span>';
+                            }
+                        }
+                    }
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( parseInt(data.precotizacion1_culminada) ) {
+                        $(row).css( {"color":"#3C8DBC"} );
+                    }else if( parseInt(data.precotizacion1_abierta) ) {
+                        $(row).css( {"color":"#00A65A"} );
+                    }else{
+                        $(row).css( {"color":"#DD4B39"} );
+                    }
+                }
+            });
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.precotizacionesSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            this.$searchprecotizacionNumero.val('');
+            this.$searchprecotizacionTercero.val('');
+            this.$searchprecotizacionTerceroName.val('');
+            this.$searchprecotizacionReferencia.val('');
+            this.$searchprecotizacionEstado.val('');
+            this.$searchprecotizacionProductop.val('').trigger('change');
+
+            this.precotizacionesSearchTable.ajax.reload();
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ProductopPreCotizacionListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ProductopPreCotizacionListView = Backbone.View.extend({
+
+        el: '#browse-precotizacion-productop-list',
+        parameters: {
+        	wrapper: null,
+            edit: false,
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object precotizacion2Model Model instance
+        */
+        addOne: function (precotizacion2Model) {
+            var view = new app.ProductopPreCotizacionItemView({
+                model: precotizacion2Model,
+                parameters: {
+                    edit: this.parameters.edit
+                }
+            });
+            precotizacion2Model.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            if (this.collection.length) {
+                this.$el.find('tbody').empty('');
+            }
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ProductopPreCotizacionItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ProductopPreCotizacionItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#precotizacion-producto-item-list-tpl').html() || '') ),
+        parameters: {
+            edit: false
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function(opts){
+	        // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function(){
+            var attributes = this.model.toJSON();
+                attributes.edit = this.parameters.edit;
+            this.$el.html( this.template(attributes) );
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ShowPreCotizacionView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowPreCotizacionView = Backbone.View.extend({
+
+        el: '#precotizaciones-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // precotizacion codigo
+            this.codigo = this.$('#precotizacion_codigo').val();
+
+            // Attributes
+            this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
+            this.spinner = this.$('.spinner-main');
+
+            // Reference views
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Productos list
+            this.productopPreCotizacionListView = new app.ProductopPreCotizacionListView({
+                collection: this.productopPreCotizacionList,
+                parameters: {
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        precotizacion: this.model.get('id')
+                    }
+               }
+            });
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ShowPreCotizacion2View
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowPreCotizacion2View = Backbone.View.extend({
+
+        el: '#precotizaciones-productos-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            _.bindAll(this, 'onSessionRequestComplete');
+
+            // Recuperar fineuploader container
+            this.$uploaderFile = this.$('.fine-uploader');
+            this.uploadPictures();
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function (e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-precotizacion-producto',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        precotizacion2: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                }
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
     });
 
 })(jQuery, this, this.document);
@@ -21286,383 +21663,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainPreCotizacionesView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainPreCotizacionesView = Backbone.View.extend({
-
-        el: '#precotizaciones-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear',
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$precotizacionesSearchTable = this.$('#precotizaciones-search-table');
-            this.$searchprecotizacionNumero = this.$('#searchprecotizacion_numero');
-            this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
-            this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
-            this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
-            this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
-            this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
-
-            this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
-                    data: function(data) {
-                        data.persistent = true;
-                        data.precotizacion_numero = _this.$searchprecotizacionNumero.val();
-                        data.precotizacion_tercero_nit = _this.$searchprecotizacionTercero.val();
-                        data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
-                        data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
-                        data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
-                        data.precotizacion_productop = _this.$searchprecotizacionProductop.val();
-                    }
-                },
-                columns: [
-                    { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
-                    { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
-                    { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
-                    { data: 'precotizacion1_fh_culminada', name: 'precotizacion1_fh_culminada' },
-                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
-                ],
-                order: [
-                    [ 1, 'desc' ], [ 2, 'desc' ]
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '7%',
-                        render: function ( data, type, full, row ) {
-                           return '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.id }) )  +'">' + data + '</a>';
-                        },
-                    },
-                    {
-                        targets: [1, 2],
-                        visible: false,
-                    },
-                    {
-                        targets: 3,
-                        width: '60%',
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                    },
-                    {
-                        targets: 5,
-                        width: '10%',
-                        searchable: false,
-                        orderable: false,
-                    },
-                    {
-                        targets: 6,
-                        width: '7%',
-                        searchable: false,
-                        orderable: false,
-                        className: 'text-center',
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_culminada) ) {
-                                return '<span class="label label-primary">CULMINADA</span>';
-                            } else if( parseInt(full.precotizacion1_abierta) ) {
-                                return '<span class="label label-success">ABIERTA</span>';
-                            } else {
-                                return '<span class="label label-danger">CERRADA</span>';
-                            }
-                        }
-                    }
-                ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.precotizacion1_culminada) ) {
-                        $(row).css( {"color":"#3C8DBC"} );
-                    }else if( parseInt(data.precotizacion1_abierta) ) {
-                        $(row).css( {"color":"#00A65A"} );
-                    }else{
-                        $(row).css( {"color":"#DD4B39"} );
-                    }
-                }
-            });
-        },
-
-        search: function(e) {
-            e.preventDefault();
-
-            this.precotizacionesSearchTable.ajax.reload();
-        },
-
-        clear: function(e) {
-            e.preventDefault();
-
-            this.$searchprecotizacionNumero.val('');
-            this.$searchprecotizacionTercero.val('');
-            this.$searchprecotizacionTerceroName.val('');
-            this.$searchprecotizacionReferencia.val('');
-            this.$searchprecotizacionEstado.val('');
-            this.$searchprecotizacionProductop.val('').trigger('change');
-
-            this.precotizacionesSearchTable.ajax.reload();
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ProductopPreCotizacionListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ProductopPreCotizacionListView = Backbone.View.extend({
-
-        el: '#browse-precotizacion-productop-list',
-        parameters: {
-        	wrapper: null,
-            edit: false,
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object precotizacion2Model Model instance
-        */
-        addOne: function (precotizacion2Model) {
-            var view = new app.ProductopPreCotizacionItemView({
-                model: precotizacion2Model,
-                parameters: {
-                    edit: this.parameters.edit
-                }
-            });
-            precotizacion2Model.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            if (this.collection.length) {
-                this.$el.find('tbody').empty('');
-            }
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ProductopPreCotizacionItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ProductopPreCotizacionItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#precotizacion-producto-item-list-tpl').html() || '') ),
-        parameters: {
-            edit: false
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function(opts){
-	        // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function(){
-            var attributes = this.model.toJSON();
-                attributes.edit = this.parameters.edit;
-            this.$el.html( this.template(attributes) );
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ShowPreCotizacionView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowPreCotizacionView = Backbone.View.extend({
-
-        el: '#precotizaciones-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // precotizacion codigo
-            this.codigo = this.$('#precotizacion_codigo').val();
-
-            // Attributes
-            this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
-            this.spinner = this.$('.spinner-main');
-
-            // Reference views
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Productos list
-            this.productopPreCotizacionListView = new app.ProductopPreCotizacionListView({
-                collection: this.productopPreCotizacionList,
-                parameters: {
-                    wrapper: this.spinner,
-                    dataFilter: {
-                        precotizacion: this.model.get('id')
-                    }
-               }
-            });
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ShowPreCotizacion2View
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowPreCotizacion2View = Backbone.View.extend({
-
-        el: '#precotizaciones-productos-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            _.bindAll(this, 'onSessionRequestComplete');
-
-            // Recuperar fineuploader container
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.uploadPictures();
-        },
-
-        /**
-        * UploadPictures
-        */
-        uploadPictures: function (e) {
-            var _this = this;
-
-            this.$uploaderFile.fineUploader({
-                debug: false,
-                template: 'qq-template-precotizacion-producto',
-                dragDrop: false,
-                session: {
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                    params: {
-                        precotizacion2: this.model.get('id'),
-                    },
-                    refreshOnRequest: false
-                },
-                thumbnails: {
-                    placeholders: {
-                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                    }
-                },
-                callbacks: {
-                    onSessionRequestComplete: _this.onSessionRequestComplete,
-                }
-            });
-
-            this.$uploaderFile.find('.buttons').remove();
-            this.$uploaderFile.find('.qq-upload-drop-area').remove();
-        },
-
-        onSessionRequestComplete: function (id, name, resp) {
-            _.each( id, function (value, key){
-                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                    previewLink.attr("href", value.thumbnailUrl);
-            }, this);
-        },
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class AcabadoItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -24593,6 +24593,300 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class MainRBalanceGeneralView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainRBalanceGeneralView = Backbone.View.extend({
+
+        el: '#rbalancegeneral-main',
+        template: _.template(($('#add-tercero-tpl').html() || '')),
+        events: {
+            'ifChanged #filter_tercero_check': 'changeTerceroCheck'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            this.$renderTercero = this.$('#render-tercero');
+        },
+
+        /**
+        * Event tercero check
+        */
+        changeTerceroCheck: function (e) {
+            e.preventDefault();
+
+            // Clear render
+            this.$renderTercero.empty().html();
+
+            // Validate check
+            var selected = this.$(e.currentTarget).is(':checked');
+            if (selected) {
+                this.$renderTercero.html(this.template());
+            }
+        }
+
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class DetalleFacturapItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturapItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#facturap-item-list-tpl').html() || '') ),
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+	        // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html(this.template(attributes));
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class DetalleFacturapView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.DetalleFacturapView = Backbone.View.extend({
+
+        el: '#browse-detalle-facturap-list',
+        parameters: {
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            //Init Attributes
+            this.confCollection = { reset: true, data: {} };
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            if (!_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter)) {
+                this.confCollection.data = this.parameters.dataFilter;
+                this.collection.fetch(this.confCollection);
+            }
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object detallePedidocModel Model instance
+        */
+        addOne: function (facturap2Model) {
+            var view = new app.DetalleFacturapItemView({
+                model: facturap2Model,
+            });
+            facturap2Model.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainFacturaspView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainFacturaspView = Backbone.View.extend({
+
+        el: '#facturasp-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$facturaspSearchTable = this.$('#facturasp-search-table');
+
+            // References
+            this.$searchfacturapFacturap = this.$('#searchfacturap_facturap');
+            this.$searchfacturapFecha = this.$('#searchfacturap_fecha');
+            this.$searchfacturapTercero = this.$('#searchfacturap_tercero');
+            this.$searchfacturapTerceroNombre = this.$('#searchfacturap_tercero_nombre');
+
+            this.facturaspSearchTable = this.$facturaspSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('facturasp.index')),
+                    data: function(data) {
+                        data.persistent = true;
+                        data.facturap = _this.$searchfacturapFacturap.val();
+                        data.facturap_fecha = _this.$searchfacturapFecha.val();
+                        data.tercero_nit = _this.$searchfacturapTercero.val();
+                        data.tercero_nombre = _this.$searchfacturapTerceroNombre.val();
+                    }
+                },
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'sucursal_nombre', name: 'sucursal_nombre' },
+                    { data: 'facturap1_factura', name: 'facturap1_factura' },
+                    { data: 'facturap1_fecha', name: 'facturap1_fecha' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '5%',
+                        render: function (data, type, full, row) {
+                           return '<a href="'+ window.Misc.urlFull(Route.route('facturasp.show', {facturasp: full.id}))  +'">' + data + '</a>';
+                        },
+                    },
+                ]
+            });
+        },
+
+        search: function (e) {
+            e.preventDefault();
+
+            this.facturaspSearchTable.ajax.reload();
+        },
+
+        clear: function (e) {
+            e.preventDefault();
+
+            this.$searchfacturapFacturap.val('');
+            this.$searchfacturapFecha.val('');
+            this.$searchfacturapTercero.val('');
+            this.$searchfacturapTerceroNombre.val('');
+
+            this.facturaspSearchTable.ajax.reload();
+        },
+    });
+})(jQuery, this, this.document);
+
+/**
+* Class ShowFacturaView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowFacturapView = Backbone.View.extend({
+
+        el: '#facturap-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            this.cuotasFPList = new app.CuotasFPList();
+
+            // Reference views
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Detalle factura list
+            this.detalleFacturapView = new app.DetalleFacturapView({
+                collection: this.cuotasFPList,
+                parameters: {
+                    edit: false,
+                    dataFilter: {
+                        facturap1: this.model.get('id')
+                    }
+                }
+            });
+        },
+
+    });
+
+})(jQuery, this, this.document);
+
+/**
 * Class CreateFacturaView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -25238,300 +25532,6 @@ app || (app = {});
             });
             anularConfirm.render();
         }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturapItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturapItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#facturap-item-list-tpl').html() || '') ),
-        parameters: {},
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-	        // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html(this.template(attributes));
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class DetalleFacturapView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.DetalleFacturapView = Backbone.View.extend({
-
-        el: '#browse-detalle-facturap-list',
-        parameters: {
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            //Init Attributes
-            this.confCollection = { reset: true, data: {} };
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            if (!_.isUndefined(this.parameters.dataFilter) && !_.isNull(this.parameters.dataFilter)) {
-                this.confCollection.data = this.parameters.dataFilter;
-                this.collection.fetch(this.confCollection);
-            }
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object detallePedidocModel Model instance
-        */
-        addOne: function (facturap2Model) {
-            var view = new app.DetalleFacturapItemView({
-                model: facturap2Model,
-            });
-            facturap2Model.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainFacturaspView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainFacturaspView = Backbone.View.extend({
-
-        el: '#facturasp-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$facturaspSearchTable = this.$('#facturasp-search-table');
-
-            // References
-            this.$searchfacturapFacturap = this.$('#searchfacturap_facturap');
-            this.$searchfacturapFecha = this.$('#searchfacturap_fecha');
-            this.$searchfacturapTercero = this.$('#searchfacturap_tercero');
-            this.$searchfacturapTerceroNombre = this.$('#searchfacturap_tercero_nombre');
-
-            this.facturaspSearchTable = this.$facturaspSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('facturasp.index')),
-                    data: function(data) {
-                        data.persistent = true;
-                        data.facturap = _this.$searchfacturapFacturap.val();
-                        data.facturap_fecha = _this.$searchfacturapFecha.val();
-                        data.tercero_nit = _this.$searchfacturapTercero.val();
-                        data.tercero_nombre = _this.$searchfacturapTerceroNombre.val();
-                    }
-                },
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'sucursal_nombre', name: 'sucursal_nombre' },
-                    { data: 'facturap1_factura', name: 'facturap1_factura' },
-                    { data: 'facturap1_fecha', name: 'facturap1_fecha' },
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '5%',
-                        render: function (data, type, full, row) {
-                           return '<a href="'+ window.Misc.urlFull(Route.route('facturasp.show', {facturasp: full.id}))  +'">' + data + '</a>';
-                        },
-                    },
-                ]
-            });
-        },
-
-        search: function (e) {
-            e.preventDefault();
-
-            this.facturaspSearchTable.ajax.reload();
-        },
-
-        clear: function (e) {
-            e.preventDefault();
-
-            this.$searchfacturapFacturap.val('');
-            this.$searchfacturapFecha.val('');
-            this.$searchfacturapTercero.val('');
-            this.$searchfacturapTerceroNombre.val('');
-
-            this.facturaspSearchTable.ajax.reload();
-        },
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class ShowFacturaView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowFacturapView = Backbone.View.extend({
-
-        el: '#facturap-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            this.cuotasFPList = new app.CuotasFPList();
-
-            // Reference views
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Detalle factura list
-            this.detalleFacturapView = new app.DetalleFacturapView({
-                collection: this.cuotasFPList,
-                parameters: {
-                    edit: false,
-                    dataFilter: {
-                        facturap1: this.model.get('id')
-                    }
-                }
-            });
-        },
-
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainRBalanceGeneralView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainRBalanceGeneralView = Backbone.View.extend({
-
-        el: '#rbalancegeneral-main',
-        template: _.template(($('#add-tercero-tpl').html() || '')),
-        events: {
-            'ifChanged #filter_tercero_check': 'changeTerceroCheck'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            this.$renderTercero = this.$('#render-tercero');
-        },
-
-        /**
-        * Event tercero check
-        */
-        changeTerceroCheck: function (e) {
-            e.preventDefault();
-
-            // Clear render
-            this.$renderTercero.empty().html();
-
-            // Validate check
-            var selected = this.$(e.currentTarget).is(':checked');
-            if (selected) {
-                this.$renderTercero.html(this.template());
-            }
-        }
-
     });
 
 })(jQuery, this, this.document);
