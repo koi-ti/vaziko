@@ -198,6 +198,7 @@ class DetalleOrdenpController extends Controller
                         $historial->productohistorial_producto = $orden4->orden4_producto;
                         $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
+                        $historial->productohistorial_numero_modulo = $orden->id;
                         $historial->save();
 
                         // Actualizar producto
@@ -260,6 +261,7 @@ class DetalleOrdenpController extends Controller
                         $historial->productohistorial_producto = $orden9->orden9_producto;
                         $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
+                        $historial->productohistorial_numero_modulo = $orden->id;
                         $historial->save();
 
                         // Actualizar producto
@@ -544,6 +546,7 @@ class DetalleOrdenpController extends Controller
                             $historial->productohistorial_producto = $orden4->orden4_producto;
                             $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
                             $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
+                            $historial->productohistorial_numero_modulo = $orden->id;
                             $historial->save();
 
                             // Actualizar producto
@@ -631,6 +634,7 @@ class DetalleOrdenpController extends Controller
                             $historial->productohistorial_producto = $orden9->orden9_producto;
                             $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
                             $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
+                            $historial->productohistorial_numero_modulo = $orden->id;
                             $historial->save();
 
                             // // Actualizar producto

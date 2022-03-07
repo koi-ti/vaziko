@@ -1411,10 +1411,19 @@
 </div>
 
 <script type="text/template" id="producto-historial-item-list-tpl">
-	<% if (productohistorial_tipo == 'COT') { %>
-		<td><span class="label label-danger">COTIZACIÓN</span></td>
-	<% } else { %>
-		<td><span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
+	<% if (productohistorial_modulo == 'C') { %>
+        <td>
+            <a href="{{ url('') }}/cotizaciones/<%- productohistorial_numero_modulo %>" target="_blank">
+                <span class="label label-danger"><%- productohistorial_numero_modulo %></span>
+            </a>
+            <span class="label label-danger">COTIZACIÓN</span>
+        </td>
+    <% } else { %>
+        <td>
+            <a href="{{ url('') }}/ordenes/<%- productohistorial_numero_modulo %>" target="_blank">
+                <span class="label label-danger"><%- productohistorial_numero_modulo %></span>
+            </a>
+            <span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
 	<% } %>
 	<td><%- moment(productohistorial_fh_elaboro).format('YYYY-MM-DD') %></td>
 	<td class="text-right"><%- window.Misc.currency(productohistorial_valor) %></td>

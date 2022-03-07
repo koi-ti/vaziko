@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Base\Bitacora;
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\Tiempop;
 use App, View, DB, Log, Datatables, Storage;
+use App\Models\Inventory\Producto;
 
 class OrdenpController extends Controller
 {
@@ -19,8 +20,22 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $query = Ordenp::query();
-            $query->select('koi_ordenproduccion.id', 'orden_cotizacion', 'cotizacion1_precotizacion', DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo, CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'orden_numero', 'orden_ano', 'orden_fecha_elaboro as orden_fecha', 'orden_fecha_inicio', 'orden_fecha_entrega', 'orden_hora_entrega', 'orden_anulada', 'orden_abierta', 'orden_culminada',
-                DB::raw("
+            $query->select(
+                'koi_ordenproduccion.id',
+                'orden_cotizacion',
+                'cotizacion1_precotizacion',
+                DB::raw("CONCAT(orden_numero,'-',SUBSTRING(orden_ano, -2)) as orden_codigo, CONCAT(cotizacion1_numero,'-',SUBSTRING(cotizacion1_ano, -2)) as cotizacion_codigo, CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"),
+                'orden_numero',
+                'orden_ano',
+                'orden_fecha_elaboro as orden_fecha',
+                'orden_fecha_inicio',
+                'orden_fecha_entrega',
+                'orden_hora_entrega',
+                'orden_anulada',
+                'orden_abierta',
+                'orden_culminada',
+                DB::raw(
+                    "
                     CONCAT(
                         (CASE WHEN tercero_persona = 'N'
                             THEN CONCAT(tercero_nombre1,' ',tercero_nombre2,' ',tercero_apellido1,' ',tercero_apellido2,
@@ -215,7 +230,7 @@ class OrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id]);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -373,7 +388,7 @@ class OrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id' => $orden->id, 'orden_iva' => $orden->orden_iva]);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -418,7 +433,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden reabierta con exito.']);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -450,7 +465,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Orden cerrada con exito.']);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -483,7 +498,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'msg' => 'Culmino la orden de producción con exito.']);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -501,7 +516,7 @@ class OrdenpController extends Controller
     public function exportar($id)
     {
         $orden = Ordenp::getOrden($id);
-        if (!$orden instanceof Ordenp){
+        if (!$orden instanceof Ordenp) {
             abort(404);
         }
 
@@ -510,7 +525,7 @@ class OrdenpController extends Controller
 
         // Export pdf
         $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle' ,'title'))->render());
+        $pdf->loadHTML(View::make('production.ordenes.export',  compact('orden', 'detalle', 'title'))->render());
         return $pdf->stream(sprintf('%s_%s_%s_%s.pdf', 'ordenp', $orden->id, date('Y_m_d'), date('H_i_s')));
     }
 
@@ -564,9 +579,9 @@ class OrdenpController extends Controller
                     // Maquinas
                     $maquinas = Ordenp3::where('orden3_orden2', $orden2->id)->get();
                     foreach ($maquinas as $orden3) {
-                         $neworden3 = $orden3->replicate();
-                         $neworden3->orden3_orden2 = $neworden2->id;
-                         $neworden3->save();
+                        $neworden3 = $orden3->replicate();
+                        $neworden3->orden3_orden2 = $neworden2->id;
+                        $neworden3->save();
                     }
 
                     // Acabados
@@ -587,7 +602,7 @@ class OrdenpController extends Controller
                         $neworden8->save();
 
                         // Recuperar imagen y copiar
-                        if (Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo") ) {
+                        if (Storage::has("ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo")) {
                             $object = new \stdClass();
                             $object->copy = "ordenes/orden_$orden2->orden2_orden/producto_$orden2->id/$orden8->orden8_archivo";
                             $object->paste = "ordenes/orden_$neworden2->orden2_orden/producto_$neworden2->id/$neworden8->orden8_archivo";
@@ -599,33 +614,39 @@ class OrdenpController extends Controller
                     // Areasp
                     $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
                     foreach ($areasp as $orden6) {
-                         $neworden6 = $orden6->replicate();
-                         $neworden6->orden6_orden2 = $neworden2->id;
-                         $neworden6->save();
+                        $neworden6 = $orden6->replicate();
+                        $neworden6->orden6_orden2 = $neworden2->id;
+                        $neworden6->save();
                     }
 
                     // Materiales
                     $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
                     foreach ($materiales as $orden4) {
-                         $neworden4 = $orden4->replicate();
-                         $neworden4->orden4_orden2 = $neworden2->id;
-                         $neworden4->save();
+                        $producto = Producto::find($orden4->orden4_producto);
+                        $neworden4 = $orden4->replicate();
+                        $neworden4->orden4_valor_unitario = $producto->producto_precio;
+                        $neworden4->orden4_valor_total = $producto->producto_precio * $orden4->orden4_cantidad;
+                        $neworden4->orden4_orden2 = $neworden2->id;
+                        $neworden4->save();
                     }
 
                     // Empaques
                     $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
                     foreach ($empaques as $orden9) {
-                         $neworden9 = $orden9->replicate();
-                         $neworden9->orden9_orden2 = $neworden2->id;
-                         $neworden9->save();
+                        $producto = Producto::find($orden9->orden9_producto);
+                        $neworden9 = $orden9->replicate();
+                        $neworden9->orden9_valor_unitario = $producto->producto_precio;
+                        $neworden9->orden9_valor_total = $producto->producto_precio * $orden9->orden9_cantidad;
+                        $neworden9->orden9_orden2 = $neworden2->id;
+                        $neworden9->save();
                     }
 
                     // Transporte
                     $transporte = Ordenp10::where('orden10_orden2', $orden2->id)->get();
                     foreach ($transporte as $orden10) {
-                         $neworden10 = $orden10->replicate();
-                         $neworden10->orden10_orden2 = $neworden2->id;
-                         $neworden10->save();
+                        $neworden10 = $orden10->replicate();
+                        $neworden10->orden10_orden2 = $neworden2->id;
+                        $neworden10->save();
                     }
                 }
 
@@ -642,7 +663,7 @@ class OrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden->id, 'msg' => 'Orden clonada con exito.']);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -759,13 +780,13 @@ class OrdenpController extends Controller
                 $labeltransportes = 'Transportes de producción';
                 $labelvolumen = 'Volumen';
             } else {
-                $labelprecio =  round($precio/($total ? $total : 1 ) * 100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
-                $labelviaticos = round($viaticos/($total ? $total : 1 ) * 100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
-                $labelmateriales = round($materiales/($total ? $total : 1 ) * 100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
-                $labelareas = round($areas/($total ? $total : 1 ) * 100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
-                $labelempaques = round($empaques/($total ? $total : 1 ) * 100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
-                $labeltransportes = round($transportes/($total ? $total : 1 ) * 100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
-                $labelvolumen = round($volumen/($total ? $total : 1 ) * 100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
+                $labelprecio =  round($precio / ($total ? $total : 1) * 100, 2) . '%' . ' Precio ' . number_format($precio, 0, ',', '.');
+                $labelviaticos = round($viaticos / ($total ? $total : 1) * 100, 2) . '%' . ' Viáticos ' . number_format($viaticos, 0, ',', '.');
+                $labelmateriales = round($materiales / ($total ? $total : 1) * 100, 2) . '%' . ' Materiales de producción ' . number_format($prevMateriales, 0, ',', '.') . ' / ' . number_format($materiales, 0, ',', '.');
+                $labelareas = round($areas / ($total ? $total : 1) * 100, 2) . '%' . ' Áreas de producción ' . number_format($prevAreas, 0, ',', '.') . ' / ' . number_format($areas, 0, ',', '.');
+                $labelempaques = round($empaques / ($total ? $total : 1) * 100, 2) . '%' . ' Empaques de producción ' . number_format($prevEmpaques, 0, ',', '.') . ' / ' . number_format($empaques, 0, ',', '.');
+                $labeltransportes = round($transportes / ($total ? $total : 1) * 100, 2) . '%' . ' Transportes de producción ' . number_format($prevTransportes, 0, ',', '.') . ' / ' . number_format($transportes, 0, ',', '.');
+                $labelvolumen = round($volumen / ($total ? $total : 1) * 100, 2) . '%' . ' Volumen ' . number_format($volumen, 0, ',', '.');
             }
 
             $chartproducto = new \stdClass();
@@ -793,17 +814,17 @@ class OrdenpController extends Controller
     {
         if ($request->ajax()) {
             $orden = Ordenp::getOrden($id);
-            if (!$orden instanceof Ordenp){
+            if (!$orden instanceof Ordenp) {
                 abort(404);
             }
-    
+
             $detalle = Ordenp2::getOrdenesp2($orden->id);
-            foreach($detalle as $producto) {
+            foreach ($detalle as $producto) {
                 $producto->orden2_saldo = $producto->orden2_cantidad;
                 $producto->orden2_facturado = 0;
                 $producto->save();
             }
-            
+
             return response()->json(['success' => true, 'id' => $orden->id, 'msg' => 'Se ha saldado la orden con exito.']);
         }
     }

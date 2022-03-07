@@ -19,6 +19,7 @@ class CreateProductohistorialTable extends Migration
              $table->integer('productohistorial_producto');
              $table->double('productohistorial_valor')->default(0);
              $table->datetime('productohistorial_fh_elaboro');
+             $table->integer('numero_modulo');
          });
      }
 

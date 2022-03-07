@@ -160,6 +160,7 @@ class Cotizacion2Controller extends Controller
                             $cotizacion8->cotizacion8_imprimir = 1;
                             $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                             $cotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
+                            $cotizacion8->numero_modulo = 
                             $cotizacion8->save();
 
                             // Recuperar imagen y copiar
@@ -242,6 +243,7 @@ class Cotizacion2Controller extends Controller
                         $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
                         $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                        $historial->productohistorial_numero_modulo = $cotizacion->id;
                         $historial->save();
 
                         // Actualizar producto
@@ -304,6 +306,7 @@ class Cotizacion2Controller extends Controller
                         $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
                         $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
                         $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
+                        $historial->productohistorial_numero_modulo = $cotizacion->id;
                         $historial->save();
 
                         // Actualizar producto
@@ -614,6 +617,7 @@ class Cotizacion2Controller extends Controller
                                 $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
                                 $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
                                 $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                                $historial->productohistorial_numero_modulo = $cotizacion->id;
                                 $historial->save();
 
                                 // Actualizar producto
@@ -630,6 +634,7 @@ class Cotizacion2Controller extends Controller
                                 $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
                                 $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
                                 $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                                $historial->productohistorial_numero_modulo = $cotizacion->id;
                                 $historial->save();
 
                                 // Actualizar producto
@@ -713,6 +718,7 @@ class Cotizacion2Controller extends Controller
                                 $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
                                 $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
                                 $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
+                                $historial->productohistorial_numero_modulo = $cotizacion->id;
                                 $historial->save();
 
                                 // Actualizar producto
@@ -729,6 +735,7 @@ class Cotizacion2Controller extends Controller
                                 $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
                                 $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
                                 $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
+                                $historial->productohistorial_numero_modulo = $cotizacion->id;
                                 $historial->save();
 
                                 // Actualizar producto
