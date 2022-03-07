@@ -527,9 +527,28 @@ class DetalleOrdenpController extends Controller
                                 $orden4->orden4_usuario_elaboro = auth()->user()->id;
                                 $orden4->save();
                             } else {
+                                $insumo = Producto::find($material['orden4_producto']);
+                                if (!$insumo instanceof Producto) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
+                                }
+
                                 $orden4->fill($material);
                                 $orden4->save();
                             }
+
+                            // Historial
+                            $historial = new ProductoHistorial;
+                            $historial->productohistorial_tipo = 'M';
+                            $historial->productohistorial_modulo = 'O';
+                            $historial->productohistorial_producto = $orden4->orden4_producto;
+                            $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
+                            $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
+                            $historial->save();
+
+                            // Actualizar producto
+                            $insumo->producto_precio = $orden4->orden4_valor_unitario;
+                            $insumo->save();
 
                             // asociar id a un array para validar
                             $keys[] = $orden4->id;
@@ -595,9 +614,28 @@ class DetalleOrdenpController extends Controller
                                 $orden9->orden9_usuario_elaboro = auth()->user()->id;
                                 $orden9->save();
                             } else {
+                                $producto = Producto::find($empaque['orden9_producto']);
+                                if (!$producto instanceof Producto) {
+                                    DB::rollback();
+                                    return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
+                                }
+
                                 $orden9->fill($empaque);
                                 $orden9->save();
                             }
+
+                            // Historial
+                            $historial = new ProductoHistorial;
+                            $historial->productohistorial_tipo = 'E';
+                            $historial->productohistorial_modulo = 'O';
+                            $historial->productohistorial_producto = $orden9->orden9_producto;
+                            $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
+                            $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
+                            $historial->save();
+
+                            // // Actualizar producto
+                            $producto->producto_precio = $orden9->orden9_valor_unitario;
+                            $producto->save();
 
                             // asociar id a un array para validar
                             $keys[] = $orden9->id;
