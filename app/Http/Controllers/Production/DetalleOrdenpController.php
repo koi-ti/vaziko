@@ -427,7 +427,6 @@ class DetalleOrdenpController extends Controller
     {
         if ($request->ajax()) {
             $data = $request->all();
-
             // Recuperar orden2
             $orden2 = Ordenp2::findOrFail($id);
 
@@ -534,24 +533,25 @@ class DetalleOrdenpController extends Controller
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del material, por favor verifique la información o consulte al administrador.']);
                                 }
-
+                                $valor_unitario = $orden4->orden4_valor_unitario;
                                 $orden4->fill($material);
                                 $orden4->save();
+                                if($valor_unitario != $material['orden4_valor_unitario']) {
+                                    // Historial
+                                    $historial = new ProductoHistorial;
+                                    $historial->productohistorial_tipo = 'M';
+                                    $historial->productohistorial_modulo = 'O';
+                                    $historial->productohistorial_producto = $orden4->orden4_producto;
+                                    $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
+                                    $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
+                                    $historial->productohistorial_numero_modulo = $orden->id;
+                                    $historial->save();
+    
+                                    // Actualizar producto
+                                    $insumo->producto_precio = $orden4->orden4_valor_unitario;
+                                    $insumo->save();
+                                }
                             }
-
-                            // Historial
-                            $historial = new ProductoHistorial;
-                            $historial->productohistorial_tipo = 'M';
-                            $historial->productohistorial_modulo = 'O';
-                            $historial->productohistorial_producto = $orden4->orden4_producto;
-                            $historial->productohistorial_valor = $orden4->orden4_valor_unitario;
-                            $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
-                            $historial->productohistorial_numero_modulo = $orden->id;
-                            $historial->save();
-
-                            // Actualizar producto
-                            $insumo->producto_precio = $orden4->orden4_valor_unitario;
-                            $insumo->save();
 
                             // asociar id a un array para validar
                             $keys[] = $orden4->id;
@@ -622,24 +622,26 @@ class DetalleOrdenpController extends Controller
                                     DB::rollback();
                                     return response()->json(['success' => false, 'errors' => 'No es posible recuperar el insumo del empaque, por favor verifique la información o consulte al administrador.']);
                                 }
-
+                                $valor_unitario = $orden9->orden9_valor_unitario;
                                 $orden9->fill($empaque);
                                 $orden9->save();
+                                
+                                if ($valor_unitario != $empaque['orden9_valor_unitario']) {
+                                    // Historial
+                                    $historial = new ProductoHistorial;
+                                    $historial->productohistorial_tipo = 'E';
+                                    $historial->productohistorial_modulo = 'O';
+                                    $historial->productohistorial_producto = $orden9->orden9_producto;
+                                    $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
+                                    $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
+                                    $historial->productohistorial_numero_modulo = $orden->id;
+                                    $historial->save();
+
+                                    // // Actualizar producto
+                                    $producto->producto_precio = $orden9->orden9_valor_unitario;
+                                    $producto->save();
+                                }
                             }
-
-                            // Historial
-                            $historial = new ProductoHistorial;
-                            $historial->productohistorial_tipo = 'E';
-                            $historial->productohistorial_modulo = 'O';
-                            $historial->productohistorial_producto = $orden9->orden9_producto;
-                            $historial->productohistorial_valor = $orden9->orden9_valor_unitario;
-                            $historial->productohistorial_fh_elaboro = $orden9->orden9_fh_elaboro;
-                            $historial->productohistorial_numero_modulo = $orden->id;
-                            $historial->save();
-
-                            // // Actualizar producto
-                            $producto->producto_precio = $orden9->orden9_valor_unitario;
-                            $producto->save();
 
                             // asociar id a un array para validar
                             $keys[] = $orden9->id;

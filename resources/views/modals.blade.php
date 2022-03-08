@@ -299,7 +299,7 @@
 
 <!-- Modal historial insumo -->
 <div class="modal fade" id="modal-historial-resource-component" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-	<div class="modal-dialog modal-md" role="document">
+	<div class="modal-dialog modal-lg" role="document">
 		<div class="modal-content" id="content-edit-resource-component">
 			<div class="modal-header small-box {{ config('koi.template.bg') }}">
 				<button type="button" class="close icon-close-koi" data-dismiss="modal" aria-label="Close">
@@ -1421,7 +1421,7 @@
     <% } else { %>
         <td>
             <a href="{{ url('') }}/ordenes/<%- productohistorial_numero_modulo %>" target="_blank">
-                <span class="label label-danger"><%- productohistorial_numero_modulo %></span>
+                <span class="label label-info"><%- productohistorial_numero_modulo %></span>
             </a>
             <span class="label label-info">ORDEN DE PRODUCCIÓN</span></td>
 	<% } %>

@@ -624,22 +624,24 @@ class Cotizacion2Controller extends Controller
                                 $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
                                 $insumo->save();
                             } else {
+                                $valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                                 $cotizacion4->fill($material);
                                 $cotizacion4->save();
+                                if ($valor_unitario != $material['cotizacion4_valor_unitario']) {
+                                    // Historial
+                                    $historial = new ProductoHistorial;
+                                    $historial->productohistorial_tipo = 'M';
+                                    $historial->productohistorial_modulo = 'C';
+                                    $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
+                                    $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
+                                    $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                                    $historial->productohistorial_numero_modulo = $cotizacion->id;
+                                    $historial->save();
 
-                                // Historial
-                                $historial = new ProductoHistorial;
-                                $historial->productohistorial_tipo = 'M';
-                                $historial->productohistorial_modulo = 'C';
-                                $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
-                                $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
-                                $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
-                                $historial->productohistorial_numero_modulo = $cotizacion->id;
-                                $historial->save();
-
-                                // Actualizar producto
-                                $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
-                                $insumo->save();
+                                    // Actualizar producto
+                                    $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                                    $insumo->save();
+                                }
                             }
 
                             // asociar id a un array para validar
@@ -725,22 +727,25 @@ class Cotizacion2Controller extends Controller
                                 $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
                                 $producto->save();
                             } else {
+                                $valor_unitario = $cotizacion9->cotizacion9_valor_unitario;
                                 $cotizacion9->fill($empaque);
                                 $cotizacion9->save();
 
-                                // Historial
-                                $historial = new ProductoHistorial;
-                                $historial->productohistorial_tipo = 'E';
-                                $historial->productohistorial_modulo = 'C';
-                                $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
-                                $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
-                                $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
-                                $historial->productohistorial_numero_modulo = $cotizacion->id;
-                                $historial->save();
-
-                                // Actualizar producto
-                                $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
-                                $producto->save();
+                                if ($valor_unitario != $material['cotizacion9_valor_unitario']) {
+                                    // Historial
+                                    $historial = new ProductoHistorial;
+                                    $historial->productohistorial_tipo = 'E';
+                                    $historial->productohistorial_modulo = 'C';
+                                    $historial->productohistorial_producto = $cotizacion9->cotizacion9_producto;
+                                    $historial->productohistorial_valor = $cotizacion9->cotizacion9_valor_unitario;
+                                    $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
+                                    $historial->productohistorial_numero_modulo = $cotizacion->id;
+                                    $historial->save();
+    
+                                    // Actualizar producto
+                                    $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
+                                    $producto->save();
+                                }
                             }
 
                             // asociar id a un array para validar

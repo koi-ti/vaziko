@@ -21,7 +21,7 @@ class ProductoHistorialController extends Controller
 
             $producto = Producto::find($request->insumo);
             $tipo = $producto->producto_empaque === 0 ? 'M':'E';
-            
+
             $data = [];
             if ($request->has('tipo') && $request->has('insumo')) {
                 $data = ProductoHistorial::where('productohistorial_tipo', $tipo)
