@@ -731,7 +731,7 @@ class Cotizacion2Controller extends Controller
                                 $cotizacion9->fill($empaque);
                                 $cotizacion9->save();
 
-                                if ($valor_unitario != $material['cotizacion9_valor_unitario']) {
+                                if ($valor_unitario != $empaque['cotizacion9_valor_unitario']) {
                                     // Historial
                                     $historial = new ProductoHistorial;
                                     $historial->productohistorial_tipo = 'E';
