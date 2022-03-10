@@ -574,6 +574,7 @@ class OrdenpController extends Controller
                     $neworden2->orden2_entregado = 0;
                     $neworden2->orden2_usuario_elaboro = auth()->user()->id;
                     $neworden2->orden2_fecha_elaboro = date('Y-m-d H:i:s');
+                    $neworden2->orden2_total_valor_unitario = 0;
                     $neworden2->save();
 
                     // Maquinas
