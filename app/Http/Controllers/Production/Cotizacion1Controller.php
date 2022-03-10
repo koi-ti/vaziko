@@ -395,6 +395,15 @@ class Cotizacion1Controller extends Controller
             }
 
             $cotizacion = Cotizacion1::findOrFail($id);
+
+            // Cotizacion2
+            $productos = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->orderBy('id', 'asc')->get();
+            foreach ($productos as $producto) {
+                if($producto->cotizacion2_total_valor_unitario == 0) {
+                    return response()->json(['success' => false, 'errors' => 'La seccion de productos no puede estar en $0.00']);
+                }
+            }
+            
             DB::beginTransaction();
             try {
                 // Cotización
@@ -713,6 +722,14 @@ class Cotizacion1Controller extends Controller
 
             if ($cotizacion->cotizacion1_pre) {
                 return response()->json(['success' => false, 'errors' => 'La cotización no se encuentra aprobada, por favor verifique la información o consulte al adminitrador.']);
+            }
+
+            // Cotizacion2
+            $productos = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->orderBy('id', 'asc')->get();
+            foreach ($productos as $producto) {
+                if($producto->cotizacion2_total_valor_unitario == 0) {
+                    return response()->json(['success' => false, 'errors' => 'La seccion de productos no puede estar en $0.00']);
+                }
             }
 
             DB::beginTransaction();
