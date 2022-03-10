@@ -578,6 +578,7 @@ class Cotizacion1Controller extends Controller
                     $newcotizacion2->cotizacion2_entregado = 0;
                     $newcotizacion2->cotizacion2_usuario_elaboro = auth()->user()->id;
                     $newcotizacion2->cotizacion2_fecha_elaboro = date('Y-m-d H:i:s');
+                    $newcotizacion2->cotizacion2_total_valor_unitario = 0;
                     $newcotizacion2->save();
 
                     // Maquinas
