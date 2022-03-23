@@ -8,6 +8,7 @@ use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, 
 use App\Models\Production\Ordenp, App\Models\Production\Ordenp2, App\Models\Production\Ordenp3, App\Models\Production\Ordenp4, App\Models\Production\Ordenp5, App\Models\Production\Ordenp6, App\Models\Production\Ordenp8, App\Models\Production\Ordenp9, App\Models\Production\Ordenp10, App\Models\Production\Tiempop;
 use App, View, DB, Log, Datatables, Storage;
 use App\Models\Inventory\Producto;
+use App\Models\Production\Areap;
 
 class OrdenpController extends Controller
 {
@@ -615,8 +616,10 @@ class OrdenpController extends Controller
                     // Areasp
                     $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
                     foreach ($areasp as $orden6) {
+                        $areap = Areap::find($orden6->orden6_areap);
                         $neworden6 = $orden6->replicate();
                         $neworden6->orden6_orden2 = $neworden2->id;
+                        $neworden6->orden6_valor = $areap->areap_valor;
                         $neworden6->save();
                     }
 

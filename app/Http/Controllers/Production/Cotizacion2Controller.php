@@ -267,6 +267,11 @@ class Cotizacion2Controller extends Controller
                         $cotizacion6->cotizacion6_cotizacion2 = $cotizacion2->id;
                         $cotizacion6->save();
 
+                        // Actualizar areasp
+                        // $areap_update = Areap::find($areap->cotizacion6_areap);
+                        // $areap_update->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                        // $producto->save();
+
                         $tiempo = intval($areap->cotizacion6_horas) + (intval($areap->cotizacion6_minutos) / 60);
                         $totalareasp += round($cotizacion6->cotizacion6_valor * $tiempo);
                     }

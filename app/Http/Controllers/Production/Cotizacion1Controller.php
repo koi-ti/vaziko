@@ -8,6 +8,7 @@ use App\Models\Production\Cotizacion1, App\Models\Production\Cotizacion2, App\Mo
 use App\Models\Base\Tercero, App\Models\Base\Contacto, App\Models\Base\Empresa, App\Models\Base\Bitacora;
 use App, View, DB, Log, Datatables, Storage;
 use App\Models\Inventory\Producto;
+use App\Models\Production\Areap;
 
 class Cotizacion1Controller extends Controller
 {
@@ -642,8 +643,11 @@ class Cotizacion1Controller extends Controller
                     // Areasp
                     $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
                     foreach ($areasp as $cotizacion6) {
+                        $areap = Areap::find($cotizacion6->cotizacion6_areap);
+                        
                         $newcotizacion6 = $cotizacion6->replicate();
                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                        $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
                         $newcotizacion6->save();
                     }
 
