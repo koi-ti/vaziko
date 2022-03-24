@@ -321,239 +321,6 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class GrupoModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.GrupoModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('grupos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'grupo_nombre': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class ItemRolloModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ItemRolloModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('productos.rollos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'prodboderollo_item': 0,
-        	'prodboderollo_centimetro': 0,
-        	'prodboderollo_saldo': 0
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class ItemRolloModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ProdBodeModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('productos.prodbode.index'));
-        },
-        idAttribute: 'id',
-        defaults: {}
-    });
-
-})(this, this.document);
-
-/**
-* Class ProductoModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ProductoModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('productos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-            'producto_nombre': '',
-            'producto_codigo': '',
-            'producto_codigoori': '',
-            'producto_referencia': '',
-            'producto_materialp': '',
-            'producto_grupo': '',
-            'producto_subgrupo': '',
-            'producto_unidadmedida': '',
-            'producto_precio': 0,
-            'producto_costo': 0,
-            'producto_vidautil': 0,
-            'producto_unidades': true,
-            'producto_serie': false,
-            'producto_metrado': false,
-            'producto_empaque': false,
-            'producto_ancho': 0,
-            'producto_largo': 0
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class ProductoHistorialModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.ProductoHistorialModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('productos.historial.index'));
-        },
-        idAttribute: 'id',
-        defaults: {}
-    });
-
-})(this, this.document);
-
-/**
-* Class SubGrupoModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.SubGrupoModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('subgrupos.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'subgrupo_nombre': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
-* Class TrasladoModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.TrasladoModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('traslados.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'traslado1_sucursal': '',
-        	'traslado1_numero': '',
-        	'traslado1_destino': '',
-        	'traslado1_fecha': moment().format('YYYY-MM-DD'),
-        	'traslado1_observaciones': ''
-		}
-    });
-
-})(this, this.document);
-
-/**
-* Class Traslado2Model extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.Traslado2Model = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('traslados.detalle.index'));
-        },
-        idAttribute: 'id',
-        defaults: {}
-    });
-
-})(this, this.document);
-
-/**
-* Class UnidadModel extend of Backbone Model
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.UnidadModel = Backbone.Model.extend({
-
-        urlRoot: function () {
-            return window.Misc.urlFull(Route.route('unidades.index'));
-        },
-        idAttribute: 'id',
-        defaults: {
-        	'unidadmedida_sigla': '',
-        	'unidadmedida_nombre': ''
-        }
-    });
-
-})(this, this.document);
-
-/**
 * Class ActividadModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -895,7 +662,7 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class FacturaModel extend of Backbone Model
+* Class GrupoModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -905,22 +672,21 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.FacturaModel = Backbone.Model.extend({
+    app.GrupoModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.index'));
+            return window.Misc.urlFull(Route.route('grupos.index'));
         },
         idAttribute: 'id',
         defaults: {
-            'factura1_fecha': moment().format('YYYY-MM-DD'),
-            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
+        	'grupo_nombre': ''
         }
     });
 
 })(this, this.document);
 
 /**
-* Class Factura2Model extend of Backbone Model
+* Class ItemRolloModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -930,22 +696,23 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.Factura2Model = Backbone.Model.extend({
+    app.ItemRolloModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
+            return window.Misc.urlFull(Route.route('productos.rollos.index'));
         },
         idAttribute: 'id',
         defaults: {
-            'factura2_cantidad': 0,
-            'factura2_subtotal': 0,
+        	'prodboderollo_item': 0,
+        	'prodboderollo_centimetro': 0,
+        	'prodboderollo_saldo': 0
         }
     });
 
 })(this, this.document);
 
 /**
-* Class Factura4Model extend of Backbone Model
+* Class ItemRolloModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -955,13 +722,174 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.Factura4Model = Backbone.Model.extend({
+    app.ProdBodeModel = Backbone.Model.extend({
 
         urlRoot: function () {
-            return window.Misc.urlFull(Route.route('facturas.productos.index'));
+            return window.Misc.urlFull(Route.route('productos.prodbode.index'));
         },
         idAttribute: 'id',
         defaults: {}
+    });
+
+})(this, this.document);
+
+/**
+* Class ProductoModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ProductoModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('productos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'producto_nombre': '',
+            'producto_codigo': '',
+            'producto_codigoori': '',
+            'producto_referencia': '',
+            'producto_materialp': '',
+            'producto_grupo': '',
+            'producto_subgrupo': '',
+            'producto_unidadmedida': '',
+            'producto_precio': 0,
+            'producto_costo': 0,
+            'producto_vidautil': 0,
+            'producto_unidades': true,
+            'producto_serie': false,
+            'producto_metrado': false,
+            'producto_empaque': false,
+            'producto_ancho': 0,
+            'producto_largo': 0
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class ProductoHistorialModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.ProductoHistorialModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('productos.historial.index'));
+        },
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
+* Class SubGrupoModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.SubGrupoModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('subgrupos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'subgrupo_nombre': ''
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class TrasladoModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TrasladoModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('traslados.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'traslado1_sucursal': '',
+        	'traslado1_numero': '',
+        	'traslado1_destino': '',
+        	'traslado1_fecha': moment().format('YYYY-MM-DD'),
+        	'traslado1_observaciones': ''
+		}
+    });
+
+})(this, this.document);
+
+/**
+* Class Traslado2Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Traslado2Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('traslados.detalle.index'));
+        },
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
+* Class UnidadModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.UnidadModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('unidades.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+        	'unidadmedida_sigla': '',
+        	'unidadmedida_nombre': ''
+        }
     });
 
 })(this, this.document);
@@ -2171,6 +2099,78 @@ app || (app = {});
 })(this, this.document);
 
 /**
+* Class FacturaModel extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.FacturaModel = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura1_fecha': moment().format('YYYY-MM-DD'),
+            'factura1_fecha_vencimiento': moment().format('YYYY-MM-DD')
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura2Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura2Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
+        },
+        idAttribute: 'id',
+        defaults: {
+            'factura2_cantidad': 0,
+            'factura2_subtotal': 0,
+        }
+    });
+
+})(this, this.document);
+
+/**
+* Class Factura4Model extend of Backbone Model
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.Factura4Model = Backbone.Model.extend({
+
+        urlRoot: function () {
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
+        },
+        idAttribute: 'id',
+        defaults: {}
+    });
+
+})(this, this.document);
+
+/**
 * Class FacturapModel extend of Backbone Model
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -2343,219 +2343,6 @@ app || (app = {});
                 'diferencia': Math.abs(creditos - debitos)
             }
         }
-   });
-
-})(this, this.document);
-
-/**
-* Class DetalleFactura2List of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.DetalleFactura2List = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
-        },
-        model: app.Factura2Model,
-
-        facturado: function () {
-            return this.reduce(function(sum, model) {
-                return sum + parseInt(model.get('factura2_cantidad'))
-            }, 0);
-        },
-
-        validar: function (data) {
-            var response = {
-                success: false,
-                error: ''
-            }
-
-            // Validate exist
-            var modelExits = _.find(this.models, function(item) {
-                return item.get('id') == data.factura1_orden;
-            });
-
-            if (modelExits instanceof Backbone.Model) {
-                response.error = 'La orden No. '+ data.factura1_orden +' ya se encuentra registrada.';
-                return response;
-            }
-
-            $('#iva-create').attr('readonly', false);
-            $('#rtefuente-create').attr('readonly', false);
-            $('#rteica-create').attr('readonly', false);
-            $('#rteiva-create').attr('readonly', false);
-
-            response.success = true;
-            return response;
-        },
-
-        subtotal: function () {
-            return this.reduce(function(sum, model) {
-                return sum + (parseInt(model.get('factura2_cantidad')) * parseFloat(model.get('factura2_producto_valor_unitario')))
-            }, 0);
-        },
-
-        renderSubtotal: function () {
-            _.each(this.models, function(item) {
-                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('factura2_producto_valor_unitario'));
-                $('#subtotal_'+item.get('id')).html(window.Misc.currency(total));
-            });
-        },
-
-        totalize: function () {
-            var facturado = this.facturado();
-            var subtotal = this.subtotal();
-                this.renderSubtotal();
-
-            return {
-                'facturado': facturado,
-                'subtotal': subtotal
-            }
-        }
-   });
-
-})(this, this.document);
-
-/**
-* Class DetalleFactura4List of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.DetalleFactura4List = Backbone.Collection.extend({
-        url: function () {
-            return window.Misc.urlFull(Route.route('facturas.productos.index'));
-        },
-        model: app.Factura4Model,
-
-        valor: function () {
-            return this.reduce(function(sum, model) {
-                return sum + parseFloat(model.get('factura4_saldo'))
-            }, 0);
-        },
-
-        calculate: function (modelos) {
-            var saldo = _.reduce(modelos, function(sum, model) {
-                return sum + parseFloat(model.get('factura4_saldo'))
-            }, 0);
-
-            return {
-                'saldo': saldo,
-                'count': modelos.length
-            }
-        },
-
-        matchPorvencer: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') > 0;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMayor360: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') < -360;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMenor360: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') <= -181 && item.get('days') >= -360;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMenor180: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') <= -91 && item.get('days') >= -180;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMenor90: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') <= -61 && item.get('days') >= -90;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMenor60: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') <= -31 && item.get('days') >= -60;
-            });
-
-            return this.calculate(match);
-        },
-
-        matchMenor30: function () {
-            var match = _.filter(this.models, function(item) {
-                return item.get('days') <= 0 && item.get('days') >= -30;
-            });
-
-            return this.calculate(match);
-        },
-
-        totalize: function () {
-            var valor = this.valor();
-            var porvencer = this.matchPorvencer();
-            var mayor360 = this.matchMayor360();
-            var menor360 = this.matchMenor360();
-            var menor180 = this.matchMenor180();
-            var menor90 = this.matchMenor90();
-            var menor60 = this.matchMenor60();
-            var menor30 = this.matchMenor30();
-            var tcount = porvencer.count + menor30.count + menor60.count + menor90.count + menor180.count +menor360.count + mayor360.count;
-
-            return {
-                'valor': valor,
-                'porvencer': porvencer,
-                'mayor360': mayor360,
-                'menor360': menor360,
-                'menor180': menor180,
-                'menor90': menor90,
-                'menor60': menor60,
-                'menor30': menor30,
-                'tcount': tcount
-            }
-        }
-   });
-})(this, this.document);
-
-/**
-* Class CuotasFPList of Backbone Collection
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function (window, document, undefined) {
-
-    app.CuotasFPList = Backbone.Collection.extend({
-
-        url: function () {
-            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
-        },
-        model: app.Facturap2Model
    });
 
 })(this, this.document);
@@ -2957,7 +2744,7 @@ app || (app = {});
 })(this, this.document);
 
 /**
-* Class TiempopList of Backbone Collection
+* Class DetalleFactura2List of Backbone Collection
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -2967,12 +2754,204 @@ app || (app = {});
 
 (function (window, document, undefined) {
 
-    app.TiempopList = Backbone.Collection.extend({
+    app.DetalleFactura2List = Backbone.Collection.extend({
 
         url: function () {
-            return window.Misc.urlFull(Route.route('tiemposp.index'));
+            return window.Misc.urlFull(Route.route('facturas.facturados.index'));
         },
-        model: app.TiempopModel
+        model: app.Factura2Model,
+
+        facturado: function () {
+            return this.reduce(function(sum, model) {
+                return sum + parseInt(model.get('factura2_cantidad'))
+            }, 0);
+        },
+
+        validar: function (data) {
+            var response = {
+                success: false,
+                error: ''
+            }
+
+            // Validate exist
+            var modelExits = _.find(this.models, function(item) {
+                return item.get('id') == data.factura1_orden;
+            });
+
+            if (modelExits instanceof Backbone.Model) {
+                response.error = 'La orden No. '+ data.factura1_orden +' ya se encuentra registrada.';
+                return response;
+            }
+
+            $('#iva-create').attr('readonly', false);
+            $('#rtefuente-create').attr('readonly', false);
+            $('#rteica-create').attr('readonly', false);
+            $('#rteiva-create').attr('readonly', false);
+
+            response.success = true;
+            return response;
+        },
+
+        subtotal: function () {
+            return this.reduce(function(sum, model) {
+                return sum + (parseInt(model.get('factura2_cantidad')) * parseFloat(model.get('factura2_producto_valor_unitario')))
+            }, 0);
+        },
+
+        renderSubtotal: function () {
+            _.each(this.models, function(item) {
+                var total = parseInt(item.get('factura2_cantidad')) * parseFloat(item.get('factura2_producto_valor_unitario'));
+                $('#subtotal_'+item.get('id')).html(window.Misc.currency(total));
+            });
+        },
+
+        totalize: function () {
+            var facturado = this.facturado();
+            var subtotal = this.subtotal();
+                this.renderSubtotal();
+
+            return {
+                'facturado': facturado,
+                'subtotal': subtotal
+            }
+        }
+   });
+
+})(this, this.document);
+
+/**
+* Class DetalleFactura4List of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.DetalleFactura4List = Backbone.Collection.extend({
+        url: function () {
+            return window.Misc.urlFull(Route.route('facturas.productos.index'));
+        },
+        model: app.Factura4Model,
+
+        valor: function () {
+            return this.reduce(function(sum, model) {
+                return sum + parseFloat(model.get('factura4_saldo'))
+            }, 0);
+        },
+
+        calculate: function (modelos) {
+            var saldo = _.reduce(modelos, function(sum, model) {
+                return sum + parseFloat(model.get('factura4_saldo'))
+            }, 0);
+
+            return {
+                'saldo': saldo,
+                'count': modelos.length
+            }
+        },
+
+        matchPorvencer: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') > 0;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMayor360: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') < -360;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMenor360: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') <= -181 && item.get('days') >= -360;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMenor180: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') <= -91 && item.get('days') >= -180;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMenor90: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') <= -61 && item.get('days') >= -90;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMenor60: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') <= -31 && item.get('days') >= -60;
+            });
+
+            return this.calculate(match);
+        },
+
+        matchMenor30: function () {
+            var match = _.filter(this.models, function(item) {
+                return item.get('days') <= 0 && item.get('days') >= -30;
+            });
+
+            return this.calculate(match);
+        },
+
+        totalize: function () {
+            var valor = this.valor();
+            var porvencer = this.matchPorvencer();
+            var mayor360 = this.matchMayor360();
+            var menor360 = this.matchMenor360();
+            var menor180 = this.matchMenor180();
+            var menor90 = this.matchMenor90();
+            var menor60 = this.matchMenor60();
+            var menor30 = this.matchMenor30();
+            var tcount = porvencer.count + menor30.count + menor60.count + menor90.count + menor180.count +menor360.count + mayor360.count;
+
+            return {
+                'valor': valor,
+                'porvencer': porvencer,
+                'mayor360': mayor360,
+                'menor360': menor360,
+                'menor180': menor180,
+                'menor90': menor90,
+                'menor60': menor60,
+                'menor30': menor30,
+                'tcount': tcount
+            }
+        }
+   });
+})(this, this.document);
+
+/**
+* Class CuotasFPList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.CuotasFPList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('facturasp.cuotas.index'));
+        },
+        model: app.Facturap2Model
    });
 
 })(this, this.document);
@@ -3590,6 +3569,27 @@ app || (app = {});
             return window.Misc.urlFull(Route.route('precotizaciones.productos.transportes.index'));
         },
         model: app.PreCotizacion10Model
+   });
+
+})(this, this.document);
+
+/**
+* Class TiempopList of Backbone Collection
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function (window, document, undefined) {
+
+    app.TiempopList = Backbone.Collection.extend({
+
+        url: function () {
+            return window.Misc.urlFull(Route.route('tiemposp.index'));
+        },
+        model: app.TiempopModel
    });
 
 })(this, this.document);
@@ -6746,6 +6746,254 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class MainConfiguracionView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainConfiguracionView = Backbone.View.extend({
+
+        el: '#configuracion-main',
+        events: {
+            'submit #form-closing': 'submitForm',
+            'submit #form-balance': 'submitForm',
+            'submit #form-open': 'submitForm'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Reference form
+            this.spinner = this.$('.spinner-main');
+        },
+
+        /**
+        * Event submit form
+        */
+        submitForm: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var form = $(e.currentTarget).attr('id'),
+                    _this = this;
+
+                // Validate form
+                if (form == 'form-closing') {
+                    var message = "Esta operación afectará los saldos iniciales de los Saldos Contables. Desea Continuar?",
+                        title = "Cierre contable mensual",
+                        state = "closing";
+                } else if(form == 'form-open') {
+                    var message = "Esta operación abrira el mes anterior?",
+                        title = "Actualizar saldos",
+                        state = "open";
+                }
+                else {
+                    var message = "Esta operación actualizara los saldos contables. Desea Continuar?",
+                        title = "Actualizar saldos",
+                        state = "balance";
+                }
+
+                var msgConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {message: message},
+                        template: _.template(($('#config-confirm-tpl').html() || '')),
+                        titleConfirm: title,
+                        onConfirm: function () {
+                            $.ajax({
+                                url: window.Misc.urlFull(Route.route('configuracion.store')),
+                                data: {state: state},
+                                type: 'POST',
+                                beforeSend: function () {
+                                    window.Misc.setSpinner(_this.spinner);
+                                }
+                            })
+                            .done(function (resp) {
+                                if (!_.isUndefined(resp.success)) {
+                                    window.Misc.removeSpinner(_this.spinner);
+                                    // response success or error
+                                    var text = resp.success ? resp.msg : resp.errors;
+                                    if (!resp.success) {
+                                        alertify.error(text);
+                                        return;
+                                    }
+
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('configuracion.index')));
+                                }
+                            })
+                            .fail(function(jqXHR, ajaxOptions, thrownError) {
+                                window.Misc.removeSpinner(_this.spinner);
+                                alertify.error(thrownError);
+                            });
+                        }
+                    }
+                });
+                msgConfirm.render();
+            }
+        },
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateFolderView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateFolderView = Backbone.View.extend({
+
+        el: '#folder-create',
+        template: _.template( ($('#add-folder-tpl').html() || '') ),
+        events: {
+            'submit #form-folder': 'onStore'
+        },
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-folder');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('folders.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/*
+ * Class MainfoldersView
+ * @author KOI || @dropecamargo
+ * @link http://koi-ti.com
+ **/
+
+//global app blackbone
+app || (app={});
+
+(function ($, window, document, undefined) {
+
+    app.MainFoldersView = Backbone.View.extend({
+
+        el: '#folders-main',
+
+        /*
+         * Constructor method
+         */
+        initialize: function () {
+            // DataTable
+            this.$foldersSearchTable = this.$('#folders-search-table');
+            this.$foldersSearchTable.DataTable({
+                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+                        "<'row'<'col-sm-12'tr>>" +
+                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('folders.index')),
+                columns: [
+                    { data: 'folder_codigo', name: 'folder_codigo' },
+                    { data: 'folder_nombre', name: 'folder_nombre' }
+                ],
+                buttons: [
+                    {
+                        text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('folders.create')))
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '15%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('folders.show', {folders: full.id}))  +'">' + data + '</a>';
+                        }
+                    }
+                ]
+            });
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
 * Class CreateDocumentoView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -6935,7 +7183,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainConfiguracionView  of Backbone Router
+* Class CreatePlanCuentaNifView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -6945,85 +7193,229 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainConfiguracionView = Backbone.View.extend({
+    app.CreatePlanCuentaNifView = Backbone.View.extend({
 
-        el: '#configuracion-main',
+        el: '#plancuentasnif-create',
+        template: _.template( ($('#add-plancuentasnif-tpl').html() || '') ),
         events: {
-            'submit #form-closing': 'submitForm',
-            'submit #form-balance': 'submitForm',
-            'submit #form-open': 'submitForm'
+            'change input#plancuentasn_cuenta': 'cuentaChanged',
+            'submit #form-plancuentasnif': 'onStore'
         },
 
         /**
         * Constructor Method
         */
         initialize: function () {
-            // Reference form
-            this.spinner = this.$('.spinner-main');
+            // Attributes
+            this.$wraperForm = this.$('#render-form-plancuentasnif');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html( this.template(attributes) );
+
+            this.$nivel = this.$('#plancuentasn_nivel');
+
+            // to fire plugins
+            this.ready();
+		},
+
+        ready: function () {
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        },
+
+        cuentaChanged: function (e) {
+            var _this = this;
+
+            $.ajax({
+                url: window.Misc.urlFull(Route.route('plancuentasnif.nivel')),
+                type: 'GET',
+                data: { plancuentasn_cuenta: $(e.currentTarget).val() },
+                beforeSend: function() {
+                    _this.$nivel.val('');
+                    window.Misc.setSpinner(_this.el);
+                }
+            })
+            .done(function(resp) {
+                window.Misc.removeSpinner(_this.el);
+                if (resp.success) {
+                    if (_.isUndefined(resp.nivel) || _.isNull(resp.nivel) || !_.isNumber(resp.nivel)) {
+                        alertify.error('Ocurrió un error definiendo el nivel de la cuenta, por favor verifique el número de caracteres.');
+                    }
+                    _this.$nivel.val(resp.nivel);
+                }
+            })
+            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                window.Misc.removeSpinner(_this.el);
+                alertify.error(thrownError);
+            });
         },
 
         /**
-        * Event submit form
+        * Event Create Cuenta
         */
-        submitForm: function (e) {
+        onStore: function (e) {
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var form = $(e.currentTarget).attr('id'),
-                    _this = this;
-
-                // Validate form
-                if (form == 'form-closing') {
-                    var message = "Esta operación afectará los saldos iniciales de los Saldos Contables. Desea Continuar?",
-                        title = "Cierre contable mensual",
-                        state = "closing";
-                } else if(form == 'form-open') {
-                    var message = "Esta operación abrira el mes anterior?",
-                        title = "Actualizar saldos",
-                        state = "open";
-                }
-                else {
-                    var message = "Esta operación actualizara los saldos contables. Desea Continuar?",
-                        title = "Actualizar saldos",
-                        state = "balance";
-                }
-
-                var msgConfirm = new window.app.ConfirmWindow({
-                    parameters: {
-                        dataFilter: {message: message},
-                        template: _.template(($('#config-confirm-tpl').html() || '')),
-                        titleConfirm: title,
-                        onConfirm: function () {
-                            $.ajax({
-                                url: window.Misc.urlFull(Route.route('configuracion.store')),
-                                data: {state: state},
-                                type: 'POST',
-                                beforeSend: function () {
-                                    window.Misc.setSpinner(_this.spinner);
-                                }
-                            })
-                            .done(function (resp) {
-                                if (!_.isUndefined(resp.success)) {
-                                    window.Misc.removeSpinner(_this.spinner);
-                                    // response success or error
-                                    var text = resp.success ? resp.msg : resp.errors;
-                                    if (!resp.success) {
-                                        alertify.error(text);
-                                        return;
-                                    }
-
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('configuracion.index')));
-                                }
-                            })
-                            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                                window.Misc.removeSpinner(_this.spinner);
-                                alertify.error(thrownError);
-                            });
-                        }
-                    }
-                });
-                msgConfirm.render();
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
             }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('plancuentasnif.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainPlanCuentasNifView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+(function ($, window, document, undefined) {
+
+    app.MainPlanCuentasNifView = Backbone.View.extend({
+
+        el: '#plancuentasnif-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$plancuentasNifSearchTable = this.$('#plancuentasnif-search-table');
+            this.$searchCuenta = this.$('#plancuentasn_cuenta');
+            this.$searchName = this.$('#plancuentasn_nombre');
+
+            this.plancuentasNifSearchTable = this.$plancuentasNifSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('plancuentasnif.index')),
+                    data: function (data) {
+                        data.persistent = true;
+                        data.plancuentasn_cuenta = _this.$searchCuenta.val();
+                        data.plancuentasn_nombre = _this.$searchName.val();
+                    }
+                },
+                columns: [
+                    { data: 'plancuentasn_cuenta', name: 'plancuentasn_cuenta' },
+                    { data: 'plancuentasn_nivel', name: 'plancuentasn_nivel' },
+                    { data: 'plancuentasn_nombre', name: 'plancuentasn_nombre' },
+                    { data: 'plancuentasn_naturaleza', name: 'plancuentasn_naturaleza' },
+                    { data: 'plancuentasn_tercero', name: 'plancuentasn_tercero' },
+                    { data: 'plancuentasn_tipo', name: 'plancuentasn_tipo' },
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '15%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('plancuentasnif.show', {plancuentasnif: full.id})) + '">' + data + '</a>';
+                        }
+                    },
+                    {
+                        targets: 1,
+                        width: '10%'
+                    },
+                    {
+                        targets: 3,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) == 'D' ? 'Débito' : 'Crédito';
+                        }
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
+                    {
+                        targets: 5,
+                        width: '15%',
+                        render: function (data, type, full, row) {
+                            if (data == 'N') {
+                                return 'Ninguno';
+                            } else if (data == 'I') {
+                                return 'Inventario';
+                            } else if (data == 'C') {
+                                return 'Cartera';
+                            } else if (data == 'P') {
+                                return 'Cuentas por pagar';
+                            }
+                            return '';
+                        }
+                    },
+                ]
+			});
+        },
+
+        search: function (e) {
+            e.preventDefault();
+
+            this.plancuentasNifSearchTable.ajax.reload();
+        },
+
+        clear: function (e) {
+            e.preventDefault();
+
+            this.$searchCuenta.val('');
+            this.$searchName.val('');
+
+            this.plancuentasNifSearchTable.ajax.reload();
         },
     });
 
@@ -7280,7 +7672,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreatePlanCuentaNifView  of Backbone Router
+* Class MainDepartamentoView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -7290,382 +7682,32 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreatePlanCuentaNifView = Backbone.View.extend({
+    app.MainDepartamentoView = Backbone.View.extend({
 
-        el: '#plancuentasnif-create',
-        template: _.template( ($('#add-plancuentasnif-tpl').html() || '') ),
-        events: {
-            'change input#plancuentasn_cuenta': 'cuentaChanged',
-            'submit #form-plancuentasnif': 'onStore'
-        },
+        el: '#departamentos-main',
 
         /**
         * Constructor Method
         */
-        initialize: function () {
-            // Attributes
-            this.$wraperForm = this.$('#render-form-plancuentasnif');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html( this.template(attributes) );
-
-            this.$nivel = this.$('#plancuentasn_nivel');
-
-            // to fire plugins
-            this.ready();
-		},
-
-        ready: function () {
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-        },
-
-        cuentaChanged: function (e) {
-            var _this = this;
-
-            $.ajax({
-                url: window.Misc.urlFull(Route.route('plancuentasnif.nivel')),
-                type: 'GET',
-                data: { plancuentasn_cuenta: $(e.currentTarget).val() },
-                beforeSend: function() {
-                    _this.$nivel.val('');
-                    window.Misc.setSpinner(_this.el);
-                }
-            })
-            .done(function(resp) {
-                window.Misc.removeSpinner(_this.el);
-                if (resp.success) {
-                    if (_.isUndefined(resp.nivel) || _.isNull(resp.nivel) || !_.isNumber(resp.nivel)) {
-                        alertify.error('Ocurrió un error definiendo el nivel de la cuenta, por favor verifique el número de caracteres.');
-                    }
-                    _this.$nivel.val(resp.nivel);
-                }
-            })
-            .fail(function (jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner(_this.el);
-                alertify.error(thrownError);
-            });
-        },
-
-        /**
-        * Event Create Cuenta
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('plancuentasnif.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainPlanCuentasNifView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-(function ($, window, document, undefined) {
-
-    app.MainPlanCuentasNifView = Backbone.View.extend({
-
-        el: '#plancuentasnif-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$plancuentasNifSearchTable = this.$('#plancuentasnif-search-table');
-            this.$searchCuenta = this.$('#plancuentasn_cuenta');
-            this.$searchName = this.$('#plancuentasn_nombre');
-
-            this.plancuentasNifSearchTable = this.$plancuentasNifSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('plancuentasnif.index')),
-                    data: function (data) {
-                        data.persistent = true;
-                        data.plancuentasn_cuenta = _this.$searchCuenta.val();
-                        data.plancuentasn_nombre = _this.$searchName.val();
-                    }
-                },
-                columns: [
-                    { data: 'plancuentasn_cuenta', name: 'plancuentasn_cuenta' },
-                    { data: 'plancuentasn_nivel', name: 'plancuentasn_nivel' },
-                    { data: 'plancuentasn_nombre', name: 'plancuentasn_nombre' },
-                    { data: 'plancuentasn_naturaleza', name: 'plancuentasn_naturaleza' },
-                    { data: 'plancuentasn_tercero', name: 'plancuentasn_tercero' },
-                    { data: 'plancuentasn_tipo', name: 'plancuentasn_tipo' },
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '15%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('plancuentasnif.show', {plancuentasnif: full.id})) + '">' + data + '</a>';
-                        }
-                    },
-                    {
-                        targets: 1,
-                        width: '10%'
-                    },
-                    {
-                        targets: 3,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) == 'D' ? 'Débito' : 'Crédito';
-                        }
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) ? 'Si' : 'No';
-                        }
-                    },
-                    {
-                        targets: 5,
-                        width: '15%',
-                        render: function (data, type, full, row) {
-                            if (data == 'N') {
-                                return 'Ninguno';
-                            } else if (data == 'I') {
-                                return 'Inventario';
-                            } else if (data == 'C') {
-                                return 'Cartera';
-                            } else if (data == 'P') {
-                                return 'Cuentas por pagar';
-                            }
-                            return '';
-                        }
-                    },
-                ]
-			});
-        },
-
-        search: function (e) {
-            e.preventDefault();
-
-            this.plancuentasNifSearchTable.ajax.reload();
-        },
-
-        clear: function (e) {
-            e.preventDefault();
-
-            this.$searchCuenta.val('');
-            this.$searchName.val('');
-
-            this.plancuentasNifSearchTable.ajax.reload();
-        },
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateFolderView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateFolderView = Backbone.View.extend({
-
-        el: '#folder-create',
-        template: _.template( ($('#add-folder-tpl').html() || '') ),
-        events: {
-            'submit #form-folder': 'onStore'
-        },
-        parameters: {},
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-folder');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('folders.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/*
- * Class MainfoldersView
- * @author KOI || @dropecamargo
- * @link http://koi-ti.com
- **/
-
-//global app blackbone
-app || (app={});
-
-(function ($, window, document, undefined) {
-
-    app.MainFoldersView = Backbone.View.extend({
-
-        el: '#folders-main',
-
-        /*
-         * Constructor method
-         */
         initialize: function () {
             // DataTable
-            this.$foldersSearchTable = this.$('#folders-search-table');
-            this.$foldersSearchTable.DataTable({
-                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-                        "<'row'<'col-sm-12'tr>>" +
-                        "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('folders.index')),
+            this.$departamentosSearchTable = this.$('#departamentos-search-table');
+            this.$departamentosSearchTable.DataTable({
+                ajax: window.Misc.urlFull(Route.route('departamentos.index')),
                 columns: [
-                    { data: 'folder_codigo', name: 'folder_codigo' },
-                    { data: 'folder_nombre', name: 'folder_nombre' }
-                ],
-                buttons: [
-                    {
-                        text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-                        action: function (e, dt, node, config) {
-                            window.Misc.redirect(window.Misc.urlFull(Route.route('folders.create')))
-                        }
-                    }
+                    { data: 'departamento_codigo', name: 'departamento_codigo' },
+                    { data: 'departamento_nombre', name: 'departamento_nombre' }
                 ],
                 columnDefs: [
                     {
                         targets: 0,
                         width: '15%',
                         render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('folders.show', {folders: full.id}))  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull(Route.route('departamentos.show', {departamentos: full.id}) )  +'">' + data + '</a>';
                         }
                     }
                 ]
-            });
+			});
         }
     });
 
@@ -7819,6 +7861,45 @@ app || (app = {});
                         render: function (data, type, full, row) {
                             return '<a href="'+ window.Misc.urlFull( Route.route('actividades.show', {actividades: full.id}) )  +'">' + data + '</a>';
                         }
+                    }
+                ]
+			});
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainModuloView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainModuloView = Backbone.View.extend({
+
+        el: '#modulos-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$modulosSearchTable = this.$('#modulos-search-table');
+            this.$modulosSearchTable.DataTable({
+                ajax: window.Misc.urlFull(Route.route('modulos.index')),
+                columns: [
+                    { data: 'display_name', name: 'display_name'},
+                    { data: 'name', name: 'name'}
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '25%'
                     }
                 ]
 			});
@@ -8061,45 +8142,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainModuloView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainModuloView = Backbone.View.extend({
-
-        el: '#modulos-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$modulosSearchTable = this.$('#modulos-search-table');
-            this.$modulosSearchTable.DataTable({
-                ajax: window.Misc.urlFull(Route.route('modulos.index')),
-                columns: [
-                    { data: 'display_name', name: 'display_name'},
-                    { data: 'name', name: 'name'}
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '25%'
-                    }
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class MainPermisoView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -8297,6 +8339,542 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class CreateRolView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateRolView = Backbone.View.extend({
+
+        el: '#rol-create',
+        template: _.template( ($('#add-rol-tpl').html() || '') ),
+        events: {
+            'submit #form-roles': 'onStore',
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Events
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = false;
+            this.$el.html(this.template(attributes));
+
+            this.spinner = this.$('#spinner-main');
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.spinner);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // Redirect to edit rol
+                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.edit', {roles: resp.id})));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreatePermisoRolView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreatePermisoRolView = Backbone.View.extend({
+
+        el: '#modal-permisorol-component',
+        template: _.template( ($('#edit-permissions-tpl').html() || '') ),
+        events: {
+            'submit #form-permisorol-component': 'onStore'
+        },
+        parameters: {
+        	permissions : [],
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            this.$el.find('.inner-title-modal').empty().html(this.model.get('display_name'));
+            this.$wraperContent = this.$el.find('.modal-body');
+
+            // Events
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            // Attributes
+            var attributes = this.model.toJSON();
+            attributes.permissions = this.parameters.permissions;
+
+            this.$el.find('.content-modal').empty().html( this.template( attributes ) );
+
+            // to fire plugins
+            this.ready();
+
+            this.$el.modal('show');
+
+            return this;
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+        },
+
+        /**
+        * Event Create Contact
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                    data.role_id = this.parameters.dataFilter.role_id;
+
+                this.model.save(data, {wait: true, patch: true});
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.$wraperContent);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.$wraperContent);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+
+            	this.$el.modal('hide');
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class EditRolView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.EditRolView = Backbone.View.extend({
+
+        el: '#rol-create',
+        template: _.template( ($('#add-rol-tpl').html() || '') ),
+        events: {
+            'submit #form-roles': 'onStore',
+            'click .toggle-children': 'toggleChildren',
+            'click .btn-set-permission': 'changePermissions'
+        },
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.stuffToDo = {};
+            this.stuffToVw = {};
+            this.permissions = [];
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = true;
+                attributes.permissions = this.model.get('permissions').slice(0, 4)
+            this.$el.html(this.template(attributes));
+
+            this.spinner = this.$('.spinner-main');
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /**
+        * Event toggle children
+        */
+        toggleChildren: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                father = $(e.currentTarget).attr("data-father"),
+                nivel1 = $(e.currentTarget).attr("data-nivel1"),
+                nivel2 = $(e.currentTarget).attr("data-nivel2"),
+                _this = this;
+
+            if ((this.stuffToVw[resource] instanceof Backbone.View) == false) {
+                this.stuffToDo[resource] = new app.PermisosRolList();
+                this.stuffToVw[resource] = new app.PermisosRolListView({
+                    el: '#wrapper-permisions-'+resource,
+                    collection: this.stuffToDo[resource],
+                    parameters: {
+                        wrapper: this.$('#wrapper-father-'+father),
+                        permissions: this.model.get('permissions').slice(0, 4),
+                        father: resource,
+                        dataFilter: {
+                            'role_id': this.model.get('id'),
+                            'nivel1': nivel1,
+                            'nivel2': nivel2
+                        }
+                   }
+                });
+            }
+        },
+
+        changePermissions: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                father = $(e.currentTarget).attr("data-father"),
+                collection = this.stuffToDo[father],
+                model = collection.get(resource),
+                _this = this;
+
+            if (this.createPermisoRolView instanceof Backbone.View) {
+                this.createPermisoRolView.stopListening();
+                this.createPermisoRolView.undelegateEvents();
+            }
+
+            this.createPermisoRolView = new app.CreatePermisoRolView({
+                model: model,
+                collection: collection,
+                parameters: {
+                    permissions: this.model.get('permissions'),
+                    dataFilter: {
+                        'role_id': this.model.get('id'),
+                        'nivel1': model.get('nivel1'),
+                        'nivel2': model.get('nivel2')
+                    }
+                }
+            });
+            this.createPermisoRolView.render();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.spinner);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // Redirect to edit rol
+                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainRolesView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainRolesView = Backbone.View.extend({
+
+        el: '#roles-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$rolesSearchTable = this.$('#roles-search-table');
+            this.$rolesSearchTable.DataTable({
+                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+                    "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('roles.index')),
+                columns: [
+                    { data: 'display_name', name: 'display_name' },
+                    { data: 'description', name: 'description' }
+                ],
+                buttons: [
+                    {
+                        text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+                        action: function (e, dt, node, config) {
+                            window.Misc.redirect(window.Misc.urlFull(Route.route('roles.create')))
+                        }
+                    }
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '30%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('roles.show', {roles: full.id }))  +'">' + data + '</a>';
+                        }
+                    }
+                ]
+            });
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class PermisosRolItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.PermisosRolItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#permissions-rol-list-tpl').html() || '') ),
+        parameters: {
+            father: null,
+            permissions: [],
+            edit: false
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = this.parameters.edit;
+                attributes.father = this.parameters.father;
+                attributes.permissions = this.parameters.permissions;
+            this.$el.html(this.template(attributes));
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class PermisosRolListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.PermisosRolListView = Backbone.View.extend({
+
+        events: {},
+        parameters: {
+            wrapper: null,
+            father: null,
+            edit: false,
+            permissions: [],
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'store', this.storeOne );
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+        },
+
+        /**
+        * Render view rol by model
+        * @param Object contactModel Model instance
+        */
+        addOne: function (moduloModel) {
+            var view = new app.PermisosRolItemView({
+                model: moduloModel,
+                parameters: {
+                    father: this.parameters.father,
+                    permissions: this.parameters.permissions,
+                    edit: this.parameters.edit
+                }
+            });
+            moduloModel.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.$el.find('tbody').html('');
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
 * Class CreateSucursalView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -8448,7 +9026,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreateGrupoView  of Backbone Router
+* Class ContactItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -8458,42 +9036,24 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.CreateGrupoView = Backbone.View.extend({
+    app.ContactItemView = Backbone.View.extend({
 
-        el: '#grupos-create',
-        template: _.template( ($('#add-grupo-tpl').html() || '') ),
-        events: {
-            'submit #form-grupos': 'onStore'
+        tagName: 'tr',
+        template: _.template( ($('#contact-item-list-tpl').html() || '') ),
+        parameters: {
+            edit: false,
         },
-        parameters: {},
 
         /**
         * Constructor Method
         */
         initialize: function (opts) {
-            // Initialize
+            // extends parameters
             if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
+                this.parameters = $.extend({},this.parameters, opts.parameters);
 
-            // Attributes
-            this.$wraperForm = this.$('#render-form-grupo');
-
-            // Events
+            // Events Listener
             this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
         },
 
         /*
@@ -8501,9 +9061,253 @@ app || (app = {});
         */
         render: function () {
             var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
+                attributes.edit = this.parameters.edit;
+
+            if (!attributes.tcontacto_activo) {
+                this.$el.addClass('disable-row');
+            }
+
+            this.$el.html(this.template(attributes));
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ContactsListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ContactsListView = Backbone.View.extend({
+
+        el: '#browse-contact-list',
+        events: {
+            'click .item-edit': 'editOne',
+            'click .item-state': 'stateOne',
+        },
+        parameters: {
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            // Trigger
+            this.on('createOne', this.createOne, this);
+
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object contactModel Model instance
+        */
+        addOne: function (contactModel) {
+            var view = new app.ContactItemView({
+                model: contactModel,
+                parameters: {
+                    edit: this.parameters.edit
+                }
+            });
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.$el.find('tbody').html('');
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Create one item
+        */
+        createOne: function(tercero, address, nomenclatura, municipio) {
+            var _this = this;
+
+            if (this.createTContactoView instanceof Backbone.View) {
+                this.createTContactoView.stopListening();
+                this.createTContactoView.undelegateEvents();
+            }
+
+            this.createTContactoView = new app.CreateTContactoView({
+                model: new app.ContactoModel({
+                    tcontacto_direccion: address,
+                    tcontacto_direccion_nomenclatura: nomenclatura,
+                    tcontacto_municipio: municipio
+                }),
+                collection: _this.collection,
+                parameters: {
+                    'tercero_id': tercero
+               }
+            });
+            this.createTContactoView.render();
+        },
+
+        /**
+        * Edit one item
+        */
+        editOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if (model.get('tcontacto_activo')) {
+                if (this.createTContactoView instanceof Backbone.View) {
+                    this.createTContactoView.stopListening();
+                    this.createTContactoView.undelegateEvents();
+                }
+
+                this.createTContactoView = new app.CreateTContactoView({
+                    model: model
+                });
+                this.createTContactoView.render();
+            }
+        },
+
+        /**
+        * Change state one item
+        */
+        stateOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if (model instanceof Backbone.Model) {
+                var stateConfirm = new window.app.ConfirmWindow({
+                    parameters: {
+                        dataFilter: {
+                            nombre: model.get('tcontacto_nombres') + ' ' + model.get('tcontacto_apellidos'),
+                            activo: model.get('tcontacto_activo')
+                        },
+                        template: _.template(($('#tcontacto-state-confirm-tpl').html() || '')),
+                        titleConfirm: 'Estado del contacto',
+                        onConfirm: function () {
+                            $.ajax({
+                                url: window.Misc.urlFull(Route.route('terceros.contactos.estado', {contacto: model.get('id')})),
+                                type: 'GET',
+                                beforeSend: function () {
+                                    window.Misc.setSpinner(_this.el);
+                                }
+                            })
+                            .done(function (resp) {
+                                if (!_.isUndefined(resp.success)) {
+                                    window.Misc.removeSpinner(_this.el);
+                                    // response success or error
+                                    var text = resp.success ? resp.msg : resp.errors;
+                                    if (!resp.success) {
+                                        alertify.error(text);
+                                        return;
+                                    }
+
+                                    alertify.success(resp.msg);
+                                    _this.collection.fetch({data: _this.parameters.dataFilter, reset: true});
+                                }
+                            })
+                            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                                window.Misc.removeSpinner(_this.el);
+                                alertify.error(thrownError);
+                            });
+                        }
+                    }
+                });
+                stateConfirm.render();
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateTerceroView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateTerceroView = Backbone.View.extend({
+
+        el: '#tercero-create',
+        template: _.template( ($('#add-tercero-tpl').html() || '') ),
+        events: {
+            'submit #form-tercero': 'onStore'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // Events
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = false;
+            this.$el.html(this.template(attributes));
+
+            this.spinner = this.$('.spinner-main');
+            this.$form = this.$('#form-tercero');
+            this.$formAccounting = this.$('#form-accounting');
 
             this.ready();
+        },
+
+        /**
+        * Event Create Forum Post
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson(this.$formAccounting));
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
         },
 
         /**
@@ -8513,20 +9317,32 @@ app || (app = {});
             // to fire plugins
             if (typeof window.initComponent.initToUpper == 'function')
                 window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initInputMask == 'function')
+                window.initComponent.initInputMask();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
+            window.Misc.setSpinner(this.spinner);
         },
 
         /**
         * response of the server
         */
         responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
+            window.Misc.removeSpinner(this.spinner);
             if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
@@ -8539,7 +9355,8 @@ app || (app = {});
                     return;
                 }
 
-                window.Misc.redirect(window.Misc.urlFull(Route.route('grupos.index')));
+                // Redirect to edit tercero
+                window.Misc.redirect(window.Misc.urlFull(Route.route('terceros.edit', {terceros: resp.id})));
             }
         }
     });
@@ -8547,7 +9364,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainGruposView
+* Class CreateTContactoView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -8557,45 +9374,977 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainGruposView = Backbone.View.extend({
+    app.CreateTContactoView = Backbone.View.extend({
 
-        el: '#grupos-main',
+        el: 'body',
+        template: _.template( ($('#add-contacto-tpl').html() || '') ),
+        events: {
+            'submit #form-tcontacto-component': 'onStore'
+        },
+        parameters: {
+        	tercero_id : null
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events
+            this.listenTo( this.model, 'change:id', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+
+            this.$modalComponent = this.$('#modal-tcontacto-component');
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            // Attributes
+            var attributes = this.model.toJSON();
+
+            this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
+            this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
+
+            // to fire plugins
+            this.ready();
+
+            this.$modalComponent.modal('show');
+
+            return this;
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initInputMask == 'function')
+                window.initComponent.initInputMask();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        },
+
+        /**
+        * Event Create Contact
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                	data.tcontacto_tercero = this.parameters.tercero_id;
+                this.model.save(data, {wait: true, patch: true});
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.$wraperContent);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.$wraperContent);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                if (this.collection instanceof Backbone.Collection) {
+	                // Add model in collection
+	            	this.collection.add(model);
+	            }
+
+            	this.$modalComponent.modal('hide');
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class EditTerceroView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.EditTerceroView = Backbone.View.extend({
+
+        el: '#tercero-create',
+        template: _.template( ($('#add-tercero-tpl').html() || '') ),
+        events: {
+            'submit #form-tercero': 'onStore',
+            'submit #form-item-roles': 'onStoreRol',
+            'submit #form-changed-password': 'onStorePassword',
+            'ifChanged .change_employee': 'changedEmployee',
+            'ifChanged #tercero_tecnico': 'changedTechnical',
+            'ifChanged #tercero_coordinador': 'changedCoordinador',
+            'click .btn-add-tcontacto': 'addContacto'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
+
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.msgSuccess = 'Tercero guardado con exito!';
+
+            this.contactsList = new app.ContactsList();
+            this.rolList = new app.RolList();
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = true;
+
+            this.$el.html(this.template(attributes));
+
+            this.$form = this.$('#form-tercero');
+            this.$formAccounting = this.$('#form-accounting');
+            this.$formEmployee = this.$('#form-employee');
+
+            this.$checkEmployee = this.$('#tercero_empleado');
+            this.$checkInternal = this.$('#tercero_interno');
+
+            this.$coordinador_por = this.$('#tercero_coordinador_por');
+
+            this.$username = this.$('#username');
+            this.$password = this.$('#password');
+            this.$password_confirmation = this.$('#password_confirmation');
+
+            this.$wrapperEmployes = this.$('#wrapper-empleados');
+            this.$wrapperCoordinador = this.$('#wrapper-coordinador');
+
+            this.$uploaderFile = this.$('.fine-uploader');
+            this.spinner = this.$('.spinner-main');
+
+            // Reference views
+            this.referenceViews();
+            this.uploadPictures();
+            this.ready();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Contact list
+            this.contactsListView = new app.ContactsListView( {
+                collection: this.contactsList,
+                parameters: {
+                    edit: true,
+                    wrapper: this.$('#wrapper-tcontacto'),
+                    dataFilter: {
+                        tercero_id: this.model.get('id')
+                    }
+               }
+            });
+
+            // Rol list
+            this.rolesListView = new app.RolesListView( {
+                collection: this.rolList,
+                parameters: {
+                    edit: true,
+                    wrapper: this.$('#wrapper-roles'),
+                    dataFilter: {
+                        tercero_id: this.model.get('id')
+                    }
+               }
+            });
+        },
+
+        /**
+        * Event Create Forum Post
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = $.extend({}, window.Misc.formToJson(e.target), window.Misc.formToJson(this.$formAccounting), window.Misc.formToJson(this.$formEmployee));
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /**
+        * Event add item rol
+        */
+        onStoreRol: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                // Prepare global data
+                var data = window.Misc.formToJson( e.target );
+                this.rolList.trigger('store', data);
+            }
+        },
+
+        addContacto: function () {
+            this.contactsListView.trigger('createOne',
+                this.model.get('id'),
+                this.model.get('tercero_direccion'),
+                this.model.get('tercero_direccion_nomenclatura'),
+                this.model.get('tercero_municipio')
+            );
+        },
+
+        changedTechnical: function (e) {
+            var selected = $(e.target).is(':checked');
+            if (selected) {
+                this.$wrapperCoordinador.removeClass('hide');
+            } else {
+                this.$wrapperCoordinador.addClass('hide');
+            }
+        },
+
+        changedCoordinador: function (e) {
+            var selected = $(e.target).is(':checked');
+            var nombre = this.model.get('tercero_nombre1')+' '+this.model.get('tercero_nombre2')+' '+this.model.get('tercero_apellido1')+' '+this.model.get('tercero_apellido2');
+            var select = [{id: this.model.get('id') , text: nombre}];
+
+            if (selected) {
+                this.$coordinador_por.select2({ data: select }).trigger('change');
+                this.$coordinador_por.select2({ language: 'es', placeholder: 'Seleccione', allowClear: false });
+            } else {
+                this.$coordinador_por.find('option[value='+this.model.get('id')+']').remove();
+            }
+        },
+
+        changedEmployee: function (e) {
+            // Active if internal or employee
+            if (this.$checkInternal.is(':checked') || this.$checkEmployee.is(':checked')) {
+                this.$wrapperEmployes.removeClass('hide')
+            } else {
+                this.$wrapperEmployes.addClass('hide')
+            }
+        },
+
+        onStorePassword: function(e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target);
+                    data.id = this.model.get('id');
+                    _this = this;
+
+                $.ajax({
+                    type: "POST",
+                    url: window.Misc.urlFull(Route.route('terceros.setpassword')),
+                    data: data,
+                    beforeSend: function () {
+                        window.Misc.setSpinner(_this.$('#wrapper-password'));
+                    }
+                })
+                .done(function(resp) {
+                    window.Misc.removeSpinner(_this.$('#wrapper-password'));
+                    if (!_.isUndefined(resp.success)) {
+                        // response success or error
+                        var text = resp.success ? '' : resp.errors;
+                        if (_.isObject(resp.errors)) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
+
+                        if (!resp.success) {
+                            alertify.error(text);
+                            return;
+                        }
+
+                        alertify.success(resp.message);
+                    }
+                })
+                .fail(function(jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner( _this.$('#wrapper-password') );
+                    alertify.error(thrownError);
+                });
+            }
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function (e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-tercero',
+                multiple: true,
+                autoUpload: true,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
+                    params: {
+                        tercero_id: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                request: {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        tercero_id: this.model.get('id')
+                    }
+                },
+                retry: {
+                    maxAutoAttempts: 3,
+                },
+                deleteFile: {
+                    enabled: true,
+                    forceConfirm: true,
+                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        tercero_id: this.model.get('id')
+                    }
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                validation: {
+                    itemLimit: 10,
+                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
+                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
+                },
+                messages: {
+                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+                },
+                callbacks: {
+                    onComplete: _this.onCompleteLoadFile,
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+        },
+
+        /**
+        * complete upload of file
+        * @param Number id
+        * @param Strinf name
+        * @param Object resp
+        */
+        onCompleteLoadFile: function (id, name, resp) {
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
+            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
+            this.$uploaderFile.fineUploader('setName', id, resp.name);
+
+            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
+                previewLink.attr("href", resp.url);
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initInputMask == 'function')
+                window.initComponent.initInputMask();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.spinner);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.spinner);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                // Redirect to edit tercero
+                window.Misc.successRedirect(this.msgSuccess, window.Misc.urlFull(Route.route('terceros.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class FacturaptListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.FacturaptListView = Backbone.View.extend({
+
+        el: '#browse-facturap-list',
+        parameters: {
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            this.collection.fetch({data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true});
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object facturap2Model Model instance
+        */
+        addOne: function (facturap2Model) {
+            var view = new app.FacturaptItemView({
+                model: facturap2Model
+            });
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class FacturaptItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.FacturaptItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#facturapt-item-list-tpl').html() || '') ),
 
         /**
         * Constructor Method
         */
         initialize: function () {
-            // DataTable
-            this.$gruposSearchTable = this.$('#grupos-search-table');
-            this.$gruposSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('grupos.index')),
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$el.html(this.template(attributes));
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainTerceroView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainTerceroView = Backbone.View.extend({
+
+        el: '#terceros-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$tercerosSearchTable = this.$('#terceros-search-table');
+            this.$searchNit = this.$('#tercero_nit');
+            this.$searchName = this.$('#tercero_nombre');
+
+            this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
+				dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull(Route.route('terceros.index')),
+                    data: function (data) {
+                        data.persistent = true;
+                        data.tercero_nit = _this.$searchNit.val();
+                        data.tercero_nombre = _this.$searchName.val();
+                    }
+                },
                 columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'grupo_nombre', name: 'grupo_nombre' }
+                    { data: 'tercero_nit', name: 'tercero_nit' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'tercero_razonsocial', name: 'tercero_razonsocial'},
+                    { data: 'tercero_nombre1', name: 'tercero_nombre1' },
+                    { data: 'tercero_nombre2', name: 'tercero_nombre2' },
+                    { data: 'tercero_apellido1', name: 'tercero_apellido1' },
+                    { data: 'tercero_apellido2', name: 'tercero_apellido2' }
                 ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-						action: function (e, dt, node, config) {
-							window.Misc.redirect(window.Misc.urlFull(Route.route('grupos.create')))
-						}
-					}
-				],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '10%',
+                        width: '15%',
                         render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('grupos.show', {grupos: full.id}))  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull(Route.route('terceros.show', {terceros: full.id }))  +'">' + data + '</a>';
                         }
+                    },
+                    {
+                        targets: 1,
+                        width: '85%',
+                        searchable: false
+                    },
+                    {
+                        targets: [2, 3, 4, 5, 6],
+                        visible: false
                     }
                 ]
 			});
+        },
+
+        search: function (e) {
+            e.preventDefault();
+
+            this.tercerosSearchTable.ajax.reload();
+        },
+
+        clear: function (e) {
+            e.preventDefault();
+
+            this.$searchNit.val('');
+            this.$searchName.val('');
+
+            this.tercerosSearchTable.ajax.reload();
+        },
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class RolesListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.RolesListView = Backbone.View.extend({
+
+        el: '#browse-roles-list',
+        events: {
+            'click .item-roles-remove': 'removeOne'
+        },
+        parameters: {
+            wrapper: null,
+            edit: false,
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'add', this.addOne );
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'store', this.storeOne );
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            this.collection.fetch({data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true});
+        },
+
+        /**
+        * Render view rol by model
+        * @param Object contactModel Model instance
+        */
+        addOne: function (usuariorolModel) {
+            var view = new app.RolItemView({
+                model: usuariorolModel,
+                parameters: {
+                    edit: this.parameters.edit
+                }
+            });
+            usuariorolModel.view = view;
+            this.$el.prepend(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * storesrol
+        * @param form element
+        */
+        storeOne: function (data) {
+            var _this = this;
+
+            // Set Spinner
+            window.Misc.setSpinner(this.parameters.wrapper);
+
+            // Prepare data
+            data.user_id = this.parameters.dataFilter.tercero_id;
+
+            // Add model in collection
+            var usuariorolModel = new app.UsuarioRolModel();
+                usuariorolModel.save(data, {
+                    success: function(model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner(_this.parameters.wrapper);
+                            // response success or error
+                            var text = resp.success ? '' : resp.errors;
+                            if (_.isObject(resp.errors)) {
+                                text = window.Misc.parseErrors(resp.errors);
+                            }
+
+                            if (!resp.success) {
+                                alertify.error(text);
+                                return;
+                            }
+
+                            // Add model in collection
+                            _this.collection.add(model);
+                        }
+                    },
+                    error: function (model, error) {
+                        window.Misc.removeSpinner(_this.parameters.wrapper);
+                        alertify.error(error.statusText)
+                    }
+                });
+        },
+
+        /**
+        * Event remove item
+        */
+        removeOne: function (e) {
+            e.preventDefault();
+
+            var resource = $(e.currentTarget).attr("data-resource"),
+                model = this.collection.get(resource),
+                _this = this;
+
+            if (model instanceof Backbone.Model) {
+                model.destroy({
+                    data: { user_id: this.parameters.dataFilter.tercero_id },
+                    processData: true,
+                    success: function (model, resp) {
+                        if (!_.isUndefined(resp.success)) {
+                            window.Misc.removeSpinner( _this.parameters.wrapper );
+                            if (!resp.success) {
+                                alertify.error(resp.errors);
+                                return;
+                            }
+
+                            model.view.remove();
+                        }
+                    }
+                });
+            }
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
         }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class RolItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.RolItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#roles-item-list-tpl').html() || '') ),
+        parameters: {
+            edit: false
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.edit = this.parameters.edit;
+            this.$el.html(this.template(attributes));
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ShowTerceroView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowTerceroView = Backbone.View.extend({
+
+        el: '#terceros-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            _.bindAll(this, 'onSessionRequestComplete');
+
+            this.contactsList = new app.ContactsList();
+            this.facturaptList = new app.FacturaptList();
+            this.rolList = new app.RolList();
+            this.detalleFacturaList = new app.DetalleFactura4List();
+            this.$uploaderFile = this.$('.fine-uploader');
+
+            // Reference views
+            this.uploadPictures();
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Contact list
+            this.contactsListView = new app.ContactsListView( {
+                collection: this.contactsList,
+                parameters: {
+                    edit: false,
+                    dataFilter: {
+                        tercero_id: this.model.get('id')
+                    }
+               }
+            });
+
+            // Rol list
+            this.rolesListView = new app.RolesListView( {
+                collection: this.rolList,
+                parameters: {
+                    edit: false,
+                    wrapper: this.$('#wrapper-roles'),
+                    dataFilter: {
+                        tercero_id: this.model.get('id')
+                    }
+               }
+            });
+
+            // Facturap list
+            this.facturaptListView = new app.FacturaptListView( {
+                collection: this.facturaptList,
+                parameters: {
+                    dataFilter: {
+                        tercero_id: this.model.get('id')
+                    }
+               }
+            });
+
+            // Detalle list
+            this.factura4ListView = new app.Factura4ListView({
+                collection: this.detalleFacturaList,
+                parameters: {
+                    edit: false,
+                    template: _.template( ($('#add-detalle-factura-cartera-tpl').html() || '') ),
+                    call: 'tercero',
+                    dataFilter: {
+                        tercero_id: this.model.get('id'),
+                    }
+                }
+            });
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function (e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-tercero',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
+                    params: {
+                        tercero_id: _this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                },
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each(id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
     });
 
 })(jQuery, this, this.document);
@@ -8932,6 +10681,159 @@ app || (app = {});
             });
         }
     });
+})(jQuery, this, this.document);
+
+/**
+* Class CreateGrupoView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateGrupoView = Backbone.View.extend({
+
+        el: '#grupos-create',
+        template: _.template( ($('#add-grupo-tpl').html() || '') ),
+        events: {
+            'submit #form-grupos': 'onStore'
+        },
+        parameters: {},
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-grupo');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('grupos.index')));
+            }
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class MainGruposView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainGruposView = Backbone.View.extend({
+
+        el: '#grupos-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$gruposSearchTable = this.$('#grupos-search-table');
+            this.$gruposSearchTable.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('grupos.index')),
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'grupo_nombre', name: 'grupo_nombre' }
+                ],
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('grupos.create')))
+						}
+					}
+				],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('grupos.show', {grupos: full.id}))  +'">' + data + '</a>';
+                        }
+                    }
+                ]
+			});
+        }
+    });
+
 })(jQuery, this, this.document);
 
 /**
@@ -9693,7 +11595,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainDepartamentoView
+* Class CreateAcabadospView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -9703,251 +11605,12 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainDepartamentoView = Backbone.View.extend({
+    app.CreateAcabadospView = Backbone.View.extend({
 
-        el: '#departamentos-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$departamentosSearchTable = this.$('#departamentos-search-table');
-            this.$departamentosSearchTable.DataTable({
-                ajax: window.Misc.urlFull(Route.route('departamentos.index')),
-                columns: [
-                    { data: 'departamento_codigo', name: 'departamento_codigo' },
-                    { data: 'departamento_nombre', name: 'departamento_nombre' }
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '15%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('departamentos.show', {departamentos: full.id}) )  +'">' + data + '</a>';
-                        }
-                    }
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateRolView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateRolView = Backbone.View.extend({
-
-        el: '#rol-create',
-        template: _.template( ($('#add-rol-tpl').html() || '') ),
+        el: '#acabadosp-create',
+        template: _.template( ($('#add-acabadop-tpl').html() || '') ),
         events: {
-            'submit #form-roles': 'onStore',
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Events
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = false;
-            this.$el.html(this.template(attributes));
-
-            this.spinner = this.$('#spinner-main');
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // Redirect to edit rol
-                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.edit', {roles: resp.id})));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreatePermisoRolView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreatePermisoRolView = Backbone.View.extend({
-
-        el: '#modal-permisorol-component',
-        template: _.template( ($('#edit-permissions-tpl').html() || '') ),
-        events: {
-            'submit #form-permisorol-component': 'onStore'
-        },
-        parameters: {
-        	permissions : [],
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            this.$el.find('.inner-title-modal').empty().html(this.model.get('display_name'));
-            this.$wraperContent = this.$el.find('.modal-body');
-
-            // Events
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            // Attributes
-            var attributes = this.model.toJSON();
-            attributes.permissions = this.parameters.permissions;
-
-            this.$el.find('.content-modal').empty().html( this.template( attributes ) );
-
-            // to fire plugins
-            this.ready();
-
-            this.$el.modal('show');
-
-            return this;
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-        },
-
-        /**
-        * Event Create Contact
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                    data.role_id = this.parameters.dataFilter.role_id;
-
-                this.model.save(data, {wait: true, patch: true});
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.$wraperContent);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.$wraperContent);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-
-            	this.$el.modal('hide');
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class EditRolView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.EditRolView = Backbone.View.extend({
-
-        el: '#rol-create',
-        template: _.template( ($('#add-rol-tpl').html() || '') ),
-        events: {
-            'submit #form-roles': 'onStore',
-            'click .toggle-children': 'toggleChildren',
-            'click .btn-set-permission': 'changePermissions'
+            'submit #form-acabadosp': 'onStore'
         },
         parameters: {},
 
@@ -9960,26 +11623,12 @@ app || (app = {});
                 this.parameters = $.extend({}, this.parameters, opts.parameters);
 
             // Attributes
-            this.stuffToDo = {};
-            this.stuffToVw = {};
-            this.permissions = [];
+            this.$wraperForm = this.$('#render-form-acabadop');
 
             // Events
             this.listenTo( this.model, 'change', this.render );
             this.listenTo( this.model, 'sync', this.responseServer );
             this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = true;
-                attributes.permissions = this.model.get('permissions').slice(0, 4)
-            this.$el.html(this.template(attributes));
-
-            this.spinner = this.$('.spinner-main');
         },
 
         /**
@@ -9994,78 +11643,37 @@ app || (app = {});
             }
         },
 
-        /**
-        * Event toggle children
+        /*
+        * Render View Element
         */
-        toggleChildren: function (e) {
-            e.preventDefault();
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
 
-            var resource = $(e.currentTarget).attr("data-resource"),
-                father = $(e.currentTarget).attr("data-father"),
-                nivel1 = $(e.currentTarget).attr("data-nivel1"),
-                nivel2 = $(e.currentTarget).attr("data-nivel2"),
-                _this = this;
-
-            if ((this.stuffToVw[resource] instanceof Backbone.View) == false) {
-                this.stuffToDo[resource] = new app.PermisosRolList();
-                this.stuffToVw[resource] = new app.PermisosRolListView({
-                    el: '#wrapper-permisions-'+resource,
-                    collection: this.stuffToDo[resource],
-                    parameters: {
-                        wrapper: this.$('#wrapper-father-'+father),
-                        permissions: this.model.get('permissions').slice(0, 4),
-                        father: resource,
-                        dataFilter: {
-                            'role_id': this.model.get('id'),
-                            'nivel1': nivel1,
-                            'nivel2': nivel2
-                        }
-                   }
-                });
-            }
+            this.ready();
         },
 
-        changePermissions: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                father = $(e.currentTarget).attr("data-father"),
-                collection = this.stuffToDo[father],
-                model = collection.get(resource),
-                _this = this;
-
-            if (this.createPermisoRolView instanceof Backbone.View) {
-                this.createPermisoRolView.stopListening();
-                this.createPermisoRolView.undelegateEvents();
-            }
-
-            this.createPermisoRolView = new app.CreatePermisoRolView({
-                model: model,
-                collection: collection,
-                parameters: {
-                    permissions: this.model.get('permissions'),
-                    dataFilter: {
-                        'role_id': this.model.get('id'),
-                        'nivel1': model.get('nivel1'),
-                        'nivel2': model.get('nivel2')
-                    }
-                }
-            });
-            this.createPermisoRolView.render();
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
         },
 
         /**
         * Load spinner on the request
         */
         loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
+            window.Misc.setSpinner(this.el);
         },
 
         /**
         * response of the server
         */
         responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
+            window.Misc.removeSpinner(this.el);
             if (!_.isUndefined(resp.success)) {
                 // response success or error
                 var text = resp.success ? '' : resp.errors;
@@ -10078,8 +11686,7 @@ app || (app = {});
                     return;
                 }
 
-                // Redirect to edit rol
-                window.Misc.redirect(window.Misc.urlFull(Route.route('roles.index')));
+                window.Misc.redirect(window.Misc.urlFull(Route.route('acabadosp.index')));
             }
         }
     });
@@ -10087,7 +11694,7 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class MainRolesView
+* Class MainAcabadospView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
 */
@@ -10097,176 +11704,47 @@ app || (app = {});
 
 (function ($, window, document, undefined) {
 
-    app.MainRolesView = Backbone.View.extend({
+    app.MainAcabadospView = Backbone.View.extend({
 
-        el: '#roles-main',
+        el: '#acabadosp-main',
 
         /**
         * Constructor Method
         */
         initialize: function () {
             // DataTable
-            this.$rolesSearchTable = this.$('#roles-search-table');
-            this.$rolesSearchTable.DataTable({
-                dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-                    "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('roles.index')),
+            this.$acabadospSearchTable = this.$('#acabadosp-search-table');
+            this.$acabadospSearchTable.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('acabadosp.index')),
                 columns: [
-                    { data: 'display_name', name: 'display_name' },
-                    { data: 'description', name: 'description' }
+                    { data: 'id', name: 'id' },
+                    { data: 'acabadop_nombre', name: 'acabadop_nombre' },
+                    { data: 'acabadop_descripcion', name: 'acabadop_descripcion' }
                 ],
-                buttons: [
-                    {
-                        text: '<i class="fa fa-plus"></i> Nuevo',
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo',
                         className: 'btn-sm',
-                        action: function (e, dt, node, config) {
-                            window.Misc.redirect(window.Misc.urlFull(Route.route('roles.create')))
-                        }
-                    }
-                ],
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('acabadosp.create')))
+						}
+					}
+				],
                 columnDefs: [
                     {
                         targets: 0,
-                        width: '30%',
+                        width: '10%',
                         render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('roles.show', {roles: full.id }))  +'">' + data + '</a>';
+                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id}) )  +'">' + data + '</a>';
                         }
                     }
                 ]
-            });
+			});
         }
     });
-
-})(jQuery, this, this.document);
-
-/**
-* Class PermisosRolItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.PermisosRolItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#permissions-rol-list-tpl').html() || '') ),
-        parameters: {
-            father: null,
-            permissions: [],
-            edit: false
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = this.parameters.edit;
-                attributes.father = this.parameters.father;
-                attributes.permissions = this.parameters.permissions;
-            this.$el.html(this.template(attributes));
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class PermisosRolListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.PermisosRolListView = Backbone.View.extend({
-
-        events: {},
-        parameters: {
-            wrapper: null,
-            father: null,
-            edit: false,
-            permissions: [],
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-        },
-
-        /**
-        * Render view rol by model
-        * @param Object contactModel Model instance
-        */
-        addOne: function (moduloModel) {
-            var view = new app.PermisosRolItemView({
-                model: moduloModel,
-                parameters: {
-                    father: this.parameters.father,
-                    permissions: this.parameters.permissions,
-                    edit: this.parameters.edit
-                }
-            });
-            moduloModel.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.$el.find('tbody').html('');
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
 
 })(jQuery, this, this.document);
 
@@ -10433,160 +11911,6 @@ app || (app = {});
                         width: '10%',
                         render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
-                        }
-                    }
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateAcabadospView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateAcabadospView = Backbone.View.extend({
-
-        el: '#acabadosp-create',
-        template: _.template( ($('#add-acabadop-tpl').html() || '') ),
-        events: {
-            'submit #form-acabadosp': 'onStore'
-        },
-        parameters: {},
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-acabadop');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('acabadosp.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainAcabadospView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainAcabadospView = Backbone.View.extend({
-
-        el: '#acabadosp-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$acabadospSearchTable = this.$('#acabadosp-search-table');
-            this.$acabadospSearchTable.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('acabadosp.index')),
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'acabadop_nombre', name: 'acabadop_nombre' },
-                    { data: 'acabadop_descripcion', name: 'acabadop_descripcion' }
-                ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-						action: function (e, dt, node, config) {
-							window.Misc.redirect(window.Misc.urlFull(Route.route('acabadosp.create')))
-						}
-					}
-				],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull( Route.route('acabadosp.show', {acabadosp: full.id}) )  +'">' + data + '</a>';
                         }
                     }
                 ]
@@ -13277,9 +14601,9 @@ app || (app = {});
                                                 '</ul></div>';
                                 }
 
-                                if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
-                                    buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
-                                }
+                                // if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
+                                //     buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
+                                // }
 
                                 if (parseInt(full.exportar) && full.cotizacion1_estados == 'CS') {
                                     buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
@@ -13295,6 +14619,10 @@ app || (app = {});
 
                                 if (parseInt(full.cotizar) && ['PF', 'CC', 'CF'].indexOf(full.cotizacion1_estados) !== -1) {
                                     buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Siguiente estado de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="next"><i class="fa fa-arrow-right"></i></a>';
+                                }
+
+                                if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
+                                    buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
                                 }
 
                             } else {
@@ -15007,383 +16335,6 @@ app || (app = {});
                 ]
 			});
         }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainPreCotizacionesView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainPreCotizacionesView = Backbone.View.extend({
-
-        el: '#precotizaciones-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear',
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$precotizacionesSearchTable = this.$('#precotizaciones-search-table');
-            this.$searchprecotizacionNumero = this.$('#searchprecotizacion_numero');
-            this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
-            this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
-            this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
-            this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
-            this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
-
-            this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
-                dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
-                    data: function(data) {
-                        data.persistent = true;
-                        data.precotizacion_numero = _this.$searchprecotizacionNumero.val();
-                        data.precotizacion_tercero_nit = _this.$searchprecotizacionTercero.val();
-                        data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
-                        data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
-                        data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
-                        data.precotizacion_productop = _this.$searchprecotizacionProductop.val();
-                    }
-                },
-                columns: [
-                    { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
-                    { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
-                    { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
-                    { data: 'precotizacion1_fh_culminada', name: 'precotizacion1_fh_culminada' },
-                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
-                ],
-                order: [
-                    [ 1, 'desc' ], [ 2, 'desc' ]
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '7%',
-                        render: function ( data, type, full, row ) {
-                           return '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.id }) )  +'">' + data + '</a>';
-                        },
-                    },
-                    {
-                        targets: [1, 2],
-                        visible: false,
-                    },
-                    {
-                        targets: 3,
-                        width: '60%',
-                    },
-                    {
-                        targets: 4,
-                        width: '10%',
-                    },
-                    {
-                        targets: 5,
-                        width: '10%',
-                        searchable: false,
-                        orderable: false,
-                    },
-                    {
-                        targets: 6,
-                        width: '7%',
-                        searchable: false,
-                        orderable: false,
-                        className: 'text-center',
-                        render: function ( data, type, full, row ) {
-                            if( parseInt(full.precotizacion1_culminada) ) {
-                                return '<span class="label label-primary">CULMINADA</span>';
-                            } else if( parseInt(full.precotizacion1_abierta) ) {
-                                return '<span class="label label-success">ABIERTA</span>';
-                            } else {
-                                return '<span class="label label-danger">CERRADA</span>';
-                            }
-                        }
-                    }
-                ],
-                fnRowCallback: function( row, data ) {
-                    if ( parseInt(data.precotizacion1_culminada) ) {
-                        $(row).css( {"color":"#3C8DBC"} );
-                    }else if( parseInt(data.precotizacion1_abierta) ) {
-                        $(row).css( {"color":"#00A65A"} );
-                    }else{
-                        $(row).css( {"color":"#DD4B39"} );
-                    }
-                }
-            });
-        },
-
-        search: function(e) {
-            e.preventDefault();
-
-            this.precotizacionesSearchTable.ajax.reload();
-        },
-
-        clear: function(e) {
-            e.preventDefault();
-
-            this.$searchprecotizacionNumero.val('');
-            this.$searchprecotizacionTercero.val('');
-            this.$searchprecotizacionTerceroName.val('');
-            this.$searchprecotizacionReferencia.val('');
-            this.$searchprecotizacionEstado.val('');
-            this.$searchprecotizacionProductop.val('').trigger('change');
-
-            this.precotizacionesSearchTable.ajax.reload();
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ProductopPreCotizacionListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ProductopPreCotizacionListView = Backbone.View.extend({
-
-        el: '#browse-precotizacion-productop-list',
-        parameters: {
-        	wrapper: null,
-            edit: false,
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object precotizacion2Model Model instance
-        */
-        addOne: function (precotizacion2Model) {
-            var view = new app.ProductopPreCotizacionItemView({
-                model: precotizacion2Model,
-                parameters: {
-                    edit: this.parameters.edit
-                }
-            });
-            precotizacion2Model.view = view;
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            if (this.collection.length) {
-                this.$el.find('tbody').empty('');
-            }
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ProductopPreCotizacionItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ProductopPreCotizacionItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#precotizacion-producto-item-list-tpl').html() || '') ),
-        parameters: {
-            edit: false
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function(opts){
-	        // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function(){
-            var attributes = this.model.toJSON();
-                attributes.edit = this.parameters.edit;
-            this.$el.html( this.template(attributes) );
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ShowPreCotizacionView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowPreCotizacionView = Backbone.View.extend({
-
-        el: '#precotizaciones-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // precotizacion codigo
-            this.codigo = this.$('#precotizacion_codigo').val();
-
-            // Attributes
-            this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
-            this.spinner = this.$('.spinner-main');
-
-            // Reference views
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Productos list
-            this.productopPreCotizacionListView = new app.ProductopPreCotizacionListView({
-                collection: this.productopPreCotizacionList,
-                parameters: {
-                    wrapper: this.spinner,
-                    dataFilter: {
-                        precotizacion: this.model.get('id')
-                    }
-               }
-            });
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ShowPreCotizacion2View
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowPreCotizacion2View = Backbone.View.extend({
-
-        el: '#precotizaciones-productos-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            _.bindAll(this, 'onSessionRequestComplete');
-
-            // Recuperar fineuploader container
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.uploadPictures();
-        },
-
-        /**
-        * UploadPictures
-        */
-        uploadPictures: function (e) {
-            var _this = this;
-
-            this.$uploaderFile.fineUploader({
-                debug: false,
-                template: 'qq-template-precotizacion-producto',
-                dragDrop: false,
-                session: {
-                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
-                    params: {
-                        precotizacion2: this.model.get('id'),
-                    },
-                    refreshOnRequest: false
-                },
-                thumbnails: {
-                    placeholders: {
-                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                    }
-                },
-                callbacks: {
-                    onSessionRequestComplete: _this.onSessionRequestComplete,
-                }
-            });
-
-            this.$uploaderFile.find('.buttons').remove();
-            this.$uploaderFile.find('.qq-upload-drop-area').remove();
-        },
-
-        onSessionRequestComplete: function (id, name, resp) {
-            _.each( id, function (value, key){
-                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                    previewLink.attr("href", value.thumbnailUrl);
-            }, this);
-        },
     });
 
 })(jQuery, this, this.document);
@@ -20339,6 +21290,383 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class MainPreCotizacionesView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainPreCotizacionesView = Backbone.View.extend({
+
+        el: '#precotizaciones-main',
+        events: {
+            'click .btn-search': 'search',
+            'click .btn-clear': 'clear',
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            var _this = this;
+
+            // Rerefences
+            this.$precotizacionesSearchTable = this.$('#precotizaciones-search-table');
+            this.$searchprecotizacionNumero = this.$('#searchprecotizacion_numero');
+            this.$searchprecotizacionTercero = this.$('#searchprecotizacion_tercero');
+            this.$searchprecotizacionTerceroName = this.$('#searchprecotizacion_tercero_nombre');
+            this.$searchprecotizacionReferencia = this.$('#searchprecotizacion_referencia');
+            this.$searchprecotizacionEstado = this.$('#searchprecotizacion_estado');
+            this.$searchprecotizacionProductop = this.$('#searchprecotizacion_productop');
+
+            this.precotizacionesSearchTable = this.$precotizacionesSearchTable.DataTable({
+                dom: "<'row'<'col-sm-12'tr>>" +
+                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: {
+                    url: window.Misc.urlFull( Route.route('precotizaciones.index') ),
+                    data: function(data) {
+                        data.persistent = true;
+                        data.precotizacion_numero = _this.$searchprecotizacionNumero.val();
+                        data.precotizacion_tercero_nit = _this.$searchprecotizacionTercero.val();
+                        data.precotizacion_tercero_nombre = _this.$searchprecotizacionTerceroName.val();
+                        data.precotizacion_referencia = _this.$searchprecotizacionReferencia.val();
+                        data.precotizacion_estado = _this.$searchprecotizacionEstado.val();
+                        data.precotizacion_productop = _this.$searchprecotizacionProductop.val();
+                    }
+                },
+                columns: [
+                    { data: 'precotizacion_codigo', name: 'precotizacion_codigo' },
+                    { data: 'precotizacion1_ano', name: 'precotizacion1_ano' },
+                    { data: 'precotizacion1_numero', name: 'precotizacion1_numero' },
+                    { data: 'tercero_nombre', name: 'tercero_nombre' },
+                    { data: 'precotizacion1_fecha', name: 'precotizacion1_fecha' },
+                    { data: 'precotizacion1_fh_culminada', name: 'precotizacion1_fh_culminada' },
+                    { data: 'precotizacion1_abierta', name: 'precotizacion1_abierta' },
+                ],
+                order: [
+                    [ 1, 'desc' ], [ 2, 'desc' ]
+                ],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '7%',
+                        render: function ( data, type, full, row ) {
+                           return '<a href="'+ window.Misc.urlFull( Route.route('precotizaciones.show', {precotizaciones: full.id }) )  +'">' + data + '</a>';
+                        },
+                    },
+                    {
+                        targets: [1, 2],
+                        visible: false,
+                    },
+                    {
+                        targets: 3,
+                        width: '60%',
+                    },
+                    {
+                        targets: 4,
+                        width: '10%',
+                    },
+                    {
+                        targets: 5,
+                        width: '10%',
+                        searchable: false,
+                        orderable: false,
+                    },
+                    {
+                        targets: 6,
+                        width: '7%',
+                        searchable: false,
+                        orderable: false,
+                        className: 'text-center',
+                        render: function ( data, type, full, row ) {
+                            if( parseInt(full.precotizacion1_culminada) ) {
+                                return '<span class="label label-primary">CULMINADA</span>';
+                            } else if( parseInt(full.precotizacion1_abierta) ) {
+                                return '<span class="label label-success">ABIERTA</span>';
+                            } else {
+                                return '<span class="label label-danger">CERRADA</span>';
+                            }
+                        }
+                    }
+                ],
+                fnRowCallback: function( row, data ) {
+                    if ( parseInt(data.precotizacion1_culminada) ) {
+                        $(row).css( {"color":"#3C8DBC"} );
+                    }else if( parseInt(data.precotizacion1_abierta) ) {
+                        $(row).css( {"color":"#00A65A"} );
+                    }else{
+                        $(row).css( {"color":"#DD4B39"} );
+                    }
+                }
+            });
+        },
+
+        search: function(e) {
+            e.preventDefault();
+
+            this.precotizacionesSearchTable.ajax.reload();
+        },
+
+        clear: function(e) {
+            e.preventDefault();
+
+            this.$searchprecotizacionNumero.val('');
+            this.$searchprecotizacionTercero.val('');
+            this.$searchprecotizacionTerceroName.val('');
+            this.$searchprecotizacionReferencia.val('');
+            this.$searchprecotizacionEstado.val('');
+            this.$searchprecotizacionProductop.val('').trigger('change');
+
+            this.precotizacionesSearchTable.ajax.reload();
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ProductopPreCotizacionListView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ProductopPreCotizacionListView = Backbone.View.extend({
+
+        el: '#browse-precotizacion-productop-list',
+        parameters: {
+        	wrapper: null,
+            edit: false,
+            dataFilter: {}
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listeners
+            this.listenTo( this.collection, 'reset', this.addAll );
+            this.listenTo( this.collection, 'request', this.loadSpinner);
+            this.listenTo( this.collection, 'sync', this.responseServer);
+
+            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
+        },
+
+        /**
+        * Render view contact by model
+        * @param Object precotizacion2Model Model instance
+        */
+        addOne: function (precotizacion2Model) {
+            var view = new app.ProductopPreCotizacionItemView({
+                model: precotizacion2Model,
+                parameters: {
+                    edit: this.parameters.edit
+                }
+            });
+            precotizacion2Model.view = view;
+            this.$el.append(view.render().el);
+        },
+
+        /**
+        * Render all view Marketplace of the collection
+        */
+        addAll: function () {
+            if (this.collection.length) {
+                this.$el.find('tbody').empty('');
+            }
+            this.collection.forEach(this.addOne, this);
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (target, xhr, opts) {
+            window.Misc.setSpinner(this.parameters.wrapper);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (target, resp, opts) {
+            window.Misc.removeSpinner(this.parameters.wrapper);
+        }
+   });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ProductopPreCotizacionItemView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ProductopPreCotizacionItemView = Backbone.View.extend({
+
+        tagName: 'tr',
+        template: _.template( ($('#precotizacion-producto-item-list-tpl').html() || '') ),
+        parameters: {
+            edit: false
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function(opts){
+	        // Extends parameters
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({},this.parameters, opts.parameters);
+
+            // Events Listener
+            this.listenTo( this.model, 'change', this.render );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function(){
+            var attributes = this.model.toJSON();
+                attributes.edit = this.parameters.edit;
+            this.$el.html( this.template(attributes) );
+            return this;
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ShowPreCotizacionView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowPreCotizacionView = Backbone.View.extend({
+
+        el: '#precotizaciones-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // precotizacion codigo
+            this.codigo = this.$('#precotizacion_codigo').val();
+
+            // Attributes
+            this.productopPreCotizacionList = new app.ProductopPreCotizacionList();
+            this.spinner = this.$('.spinner-main');
+
+            // Reference views
+            this.referenceViews();
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Productos list
+            this.productopPreCotizacionListView = new app.ProductopPreCotizacionListView({
+                collection: this.productopPreCotizacionList,
+                parameters: {
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        precotizacion: this.model.get('id')
+                    }
+               }
+            });
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class ShowPreCotizacion2View
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.ShowPreCotizacion2View = Backbone.View.extend({
+
+        el: '#precotizaciones-productos-show',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            _.bindAll(this, 'onSessionRequestComplete');
+
+            // Recuperar fineuploader container
+            this.$uploaderFile = this.$('.fine-uploader');
+            this.uploadPictures();
+        },
+
+        /**
+        * UploadPictures
+        */
+        uploadPictures: function (e) {
+            var _this = this;
+
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-precotizacion-producto',
+                dragDrop: false,
+                session: {
+                    endpoint: window.Misc.urlFull( Route.route('precotizaciones.productos.imagenes.index') ),
+                    params: {
+                        precotizacion2: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                },
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                callbacks: {
+                    onSessionRequestComplete: _this.onSessionRequestComplete,
+                }
+            });
+
+            this.$uploaderFile.find('.buttons').remove();
+            this.$uploaderFile.find('.qq-upload-drop-area').remove();
+        },
+
+        onSessionRequestComplete: function (id, name, resp) {
+            _.each( id, function (value, key){
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                    previewLink.attr("href", value.thumbnailUrl);
+            }, this);
+        },
+    });
+
+})(jQuery, this, this.document);
+
+/**
 * Class AcabadoItemView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -22308,1330 +23636,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class ContactItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ContactItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#contact-item-list-tpl').html() || '') ),
-        parameters: {
-            edit: false,
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = this.parameters.edit;
-
-            if (!attributes.tcontacto_activo) {
-                this.$el.addClass('disable-row');
-            }
-
-            this.$el.html(this.template(attributes));
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ContactsListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ContactsListView = Backbone.View.extend({
-
-        el: '#browse-contact-list',
-        events: {
-            'click .item-edit': 'editOne',
-            'click .item-state': 'stateOne',
-        },
-        parameters: {
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            // Trigger
-            this.on('createOne', this.createOne, this);
-
-            this.collection.fetch({data: this.parameters.dataFilter, reset: true});
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object contactModel Model instance
-        */
-        addOne: function (contactModel) {
-            var view = new app.ContactItemView({
-                model: contactModel,
-                parameters: {
-                    edit: this.parameters.edit
-                }
-            });
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.$el.find('tbody').html('');
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Create one item
-        */
-        createOne: function(tercero, address, nomenclatura, municipio) {
-            var _this = this;
-
-            if (this.createTContactoView instanceof Backbone.View) {
-                this.createTContactoView.stopListening();
-                this.createTContactoView.undelegateEvents();
-            }
-
-            this.createTContactoView = new app.CreateTContactoView({
-                model: new app.ContactoModel({
-                    tcontacto_direccion: address,
-                    tcontacto_direccion_nomenclatura: nomenclatura,
-                    tcontacto_municipio: municipio
-                }),
-                collection: _this.collection,
-                parameters: {
-                    'tercero_id': tercero
-               }
-            });
-            this.createTContactoView.render();
-        },
-
-        /**
-        * Edit one item
-        */
-        editOne: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource),
-                _this = this;
-
-            if (model.get('tcontacto_activo')) {
-                if (this.createTContactoView instanceof Backbone.View) {
-                    this.createTContactoView.stopListening();
-                    this.createTContactoView.undelegateEvents();
-                }
-
-                this.createTContactoView = new app.CreateTContactoView({
-                    model: model
-                });
-                this.createTContactoView.render();
-            }
-        },
-
-        /**
-        * Change state one item
-        */
-        stateOne: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource),
-                _this = this;
-
-            if (model instanceof Backbone.Model) {
-                var stateConfirm = new window.app.ConfirmWindow({
-                    parameters: {
-                        dataFilter: {
-                            nombre: model.get('tcontacto_nombres') + ' ' + model.get('tcontacto_apellidos'),
-                            activo: model.get('tcontacto_activo')
-                        },
-                        template: _.template(($('#tcontacto-state-confirm-tpl').html() || '')),
-                        titleConfirm: 'Estado del contacto',
-                        onConfirm: function () {
-                            $.ajax({
-                                url: window.Misc.urlFull(Route.route('terceros.contactos.estado', {contacto: model.get('id')})),
-                                type: 'GET',
-                                beforeSend: function () {
-                                    window.Misc.setSpinner(_this.el);
-                                }
-                            })
-                            .done(function (resp) {
-                                if (!_.isUndefined(resp.success)) {
-                                    window.Misc.removeSpinner(_this.el);
-                                    // response success or error
-                                    var text = resp.success ? resp.msg : resp.errors;
-                                    if (!resp.success) {
-                                        alertify.error(text);
-                                        return;
-                                    }
-
-                                    alertify.success(resp.msg);
-                                    _this.collection.fetch({data: _this.parameters.dataFilter, reset: true});
-                                }
-                            })
-                            .fail(function (jqXHR, ajaxOptions, thrownError) {
-                                window.Misc.removeSpinner(_this.el);
-                                alertify.error(thrownError);
-                            });
-                        }
-                    }
-                });
-                stateConfirm.render();
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateTerceroView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateTerceroView = Backbone.View.extend({
-
-        el: '#tercero-create',
-        template: _.template( ($('#add-tercero-tpl').html() || '') ),
-        events: {
-            'submit #form-tercero': 'onStore'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Events
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = false;
-            this.$el.html(this.template(attributes));
-
-            this.spinner = this.$('.spinner-main');
-            this.$form = this.$('#form-tercero');
-            this.$formAccounting = this.$('#form-accounting');
-
-            this.ready();
-        },
-
-        /**
-        * Event Create Forum Post
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson( e.target ), window.Misc.formToJson(this.$formAccounting));
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initInputMask == 'function')
-                window.initComponent.initInputMask();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // Redirect to edit tercero
-                window.Misc.redirect(window.Misc.urlFull(Route.route('terceros.edit', {terceros: resp.id})));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class CreateTContactoView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateTContactoView = Backbone.View.extend({
-
-        el: 'body',
-        template: _.template( ($('#add-contacto-tpl').html() || '') ),
-        events: {
-            'submit #form-tcontacto-component': 'onStore'
-        },
-        parameters: {
-        	tercero_id : null
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events
-            this.listenTo( this.model, 'change:id', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-
-            this.$modalComponent = this.$('#modal-tcontacto-component');
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            // Attributes
-            var attributes = this.model.toJSON();
-
-            this.$modalComponent.find('.content-modal').html('').html( this.template( attributes ) );
-            this.$wraperContent = this.$('#content-tcontacto-component').find('.modal-body');
-
-            // to fire plugins
-            this.ready();
-
-            this.$modalComponent.modal('show');
-
-            return this;
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initInputMask == 'function')
-                window.initComponent.initInputMask();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-        },
-
-        /**
-        * Event Create Contact
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                	data.tcontacto_tercero = this.parameters.tercero_id;
-                this.model.save(data, {wait: true, patch: true});
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.$wraperContent);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.$wraperContent);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                if (this.collection instanceof Backbone.Collection) {
-	                // Add model in collection
-	            	this.collection.add(model);
-	            }
-
-            	this.$modalComponent.modal('hide');
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class EditTerceroView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.EditTerceroView = Backbone.View.extend({
-
-        el: '#tercero-create',
-        template: _.template( ($('#add-tercero-tpl').html() || '') ),
-        events: {
-            'submit #form-tercero': 'onStore',
-            'submit #form-item-roles': 'onStoreRol',
-            'submit #form-changed-password': 'onStorePassword',
-            'ifChanged .change_employee': 'changedEmployee',
-            'ifChanged #tercero_tecnico': 'changedTechnical',
-            'ifChanged #tercero_coordinador': 'changedCoordinador',
-            'click .btn-add-tcontacto': 'addContacto'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            _.bindAll(this, 'onCompleteLoadFile', 'onSessionRequestComplete');
-
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.msgSuccess = 'Tercero guardado con exito!';
-
-            this.contactsList = new app.ContactsList();
-            this.rolList = new app.RolList();
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = true;
-
-            this.$el.html(this.template(attributes));
-
-            this.$form = this.$('#form-tercero');
-            this.$formAccounting = this.$('#form-accounting');
-            this.$formEmployee = this.$('#form-employee');
-
-            this.$checkEmployee = this.$('#tercero_empleado');
-            this.$checkInternal = this.$('#tercero_interno');
-
-            this.$coordinador_por = this.$('#tercero_coordinador_por');
-
-            this.$username = this.$('#username');
-            this.$password = this.$('#password');
-            this.$password_confirmation = this.$('#password_confirmation');
-
-            this.$wrapperEmployes = this.$('#wrapper-empleados');
-            this.$wrapperCoordinador = this.$('#wrapper-coordinador');
-
-            this.$uploaderFile = this.$('.fine-uploader');
-            this.spinner = this.$('.spinner-main');
-
-            // Reference views
-            this.referenceViews();
-            this.uploadPictures();
-            this.ready();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Contact list
-            this.contactsListView = new app.ContactsListView( {
-                collection: this.contactsList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-tcontacto'),
-                    dataFilter: {
-                        tercero_id: this.model.get('id')
-                    }
-               }
-            });
-
-            // Rol list
-            this.rolesListView = new app.RolesListView( {
-                collection: this.rolList,
-                parameters: {
-                    edit: true,
-                    wrapper: this.$('#wrapper-roles'),
-                    dataFilter: {
-                        tercero_id: this.model.get('id')
-                    }
-               }
-            });
-        },
-
-        /**
-        * Event Create Forum Post
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = $.extend({}, window.Misc.formToJson(e.target), window.Misc.formToJson(this.$formAccounting), window.Misc.formToJson(this.$formEmployee));
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /**
-        * Event add item rol
-        */
-        onStoreRol: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                // Prepare global data
-                var data = window.Misc.formToJson( e.target );
-                this.rolList.trigger('store', data);
-            }
-        },
-
-        addContacto: function () {
-            this.contactsListView.trigger('createOne',
-                this.model.get('id'),
-                this.model.get('tercero_direccion'),
-                this.model.get('tercero_direccion_nomenclatura'),
-                this.model.get('tercero_municipio')
-            );
-        },
-
-        changedTechnical: function (e) {
-            var selected = $(e.target).is(':checked');
-            if (selected) {
-                this.$wrapperCoordinador.removeClass('hide');
-            } else {
-                this.$wrapperCoordinador.addClass('hide');
-            }
-        },
-
-        changedCoordinador: function (e) {
-            var selected = $(e.target).is(':checked');
-            var nombre = this.model.get('tercero_nombre1')+' '+this.model.get('tercero_nombre2')+' '+this.model.get('tercero_apellido1')+' '+this.model.get('tercero_apellido2');
-            var select = [{id: this.model.get('id') , text: nombre}];
-
-            if (selected) {
-                this.$coordinador_por.select2({ data: select }).trigger('change');
-                this.$coordinador_por.select2({ language: 'es', placeholder: 'Seleccione', allowClear: false });
-            } else {
-                this.$coordinador_por.find('option[value='+this.model.get('id')+']').remove();
-            }
-        },
-
-        changedEmployee: function (e) {
-            // Active if internal or employee
-            if (this.$checkInternal.is(':checked') || this.$checkEmployee.is(':checked')) {
-                this.$wrapperEmployes.removeClass('hide')
-            } else {
-                this.$wrapperEmployes.addClass('hide')
-            }
-        },
-
-        onStorePassword: function(e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson(e.target);
-                    data.id = this.model.get('id');
-                    _this = this;
-
-                $.ajax({
-                    type: "POST",
-                    url: window.Misc.urlFull(Route.route('terceros.setpassword')),
-                    data: data,
-                    beforeSend: function () {
-                        window.Misc.setSpinner(_this.$('#wrapper-password'));
-                    }
-                })
-                .done(function(resp) {
-                    window.Misc.removeSpinner(_this.$('#wrapper-password'));
-                    if (!_.isUndefined(resp.success)) {
-                        // response success or error
-                        var text = resp.success ? '' : resp.errors;
-                        if (_.isObject(resp.errors)) {
-                            text = window.Misc.parseErrors(resp.errors);
-                        }
-
-                        if (!resp.success) {
-                            alertify.error(text);
-                            return;
-                        }
-
-                        alertify.success(resp.message);
-                    }
-                })
-                .fail(function(jqXHR, ajaxOptions, thrownError) {
-                    window.Misc.removeSpinner( _this.$('#wrapper-password') );
-                    alertify.error(thrownError);
-                });
-            }
-        },
-
-        /**
-        * UploadPictures
-        */
-        uploadPictures: function (e) {
-            var _this = this;
-
-            this.$uploaderFile.fineUploader({
-                debug: false,
-                template: 'qq-template-tercero',
-                multiple: true,
-                autoUpload: true,
-                session: {
-                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
-                    params: {
-                        tercero_id: this.model.get('id'),
-                    },
-                    refreshOnRequest: false
-                },
-                request: {
-                    inputName: 'file',
-                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
-                    params: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        tercero_id: this.model.get('id')
-                    }
-                },
-                retry: {
-                    maxAutoAttempts: 3,
-                },
-                deleteFile: {
-                    enabled: true,
-                    forceConfirm: true,
-                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
-                    params: {
-                        _token: $('meta[name="csrf-token"]').attr('content'),
-                        tercero_id: this.model.get('id')
-                    }
-                },
-                thumbnails: {
-                    placeholders: {
-                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                    }
-                },
-                validation: {
-                    itemLimit: 10,
-                    sizeLimit: ( 3 * 1024 ) * 1024, // 3mb,
-                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
-                },
-                messages: {
-                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
-                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
-                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
-                },
-                callbacks: {
-                    onComplete: _this.onCompleteLoadFile,
-                    onSessionRequestComplete: _this.onSessionRequestComplete,
-                },
-            });
-        },
-
-        /**
-        * complete upload of file
-        * @param Number id
-        * @param Strinf name
-        * @param Object resp
-        */
-        onCompleteLoadFile: function (id, name, resp) {
-            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id);
-            this.$uploaderFile.fineUploader('setUuid', id, resp.id);
-            this.$uploaderFile.fineUploader('setName', id, resp.name);
-
-            var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.preview-link');
-                previewLink.attr("href", resp.url);
-        },
-
-        onSessionRequestComplete: function (id, name, resp) {
-            _.each( id, function (value, key){
-                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                    previewLink.attr("href", value.thumbnailUrl);
-            }, this);
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initInputMask == 'function')
-                window.initComponent.initInputMask();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.spinner);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.spinner);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                // Redirect to edit tercero
-                window.Misc.successRedirect(this.msgSuccess, window.Misc.urlFull(Route.route('terceros.index')));
-            }
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class FacturaptListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.FacturaptListView = Backbone.View.extend({
-
-        el: '#browse-facturap-list',
-        parameters: {
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            this.collection.fetch({data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true});
-        },
-
-        /**
-        * Render view contact by model
-        * @param Object facturap2Model Model instance
-        */
-        addOne: function (facturap2Model) {
-            var view = new app.FacturaptItemView({
-                model: facturap2Model
-            });
-            this.$el.append(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class FacturaptItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.FacturaptItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#facturapt-item-list-tpl').html() || '') ),
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$el.html(this.template(attributes));
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainTerceroView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainTerceroView = Backbone.View.extend({
-
-        el: '#terceros-main',
-        events: {
-            'click .btn-search': 'search',
-            'click .btn-clear': 'clear'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            var _this = this;
-
-            // Rerefences
-            this.$tercerosSearchTable = this.$('#terceros-search-table');
-            this.$searchNit = this.$('#tercero_nit');
-            this.$searchName = this.$('#tercero_nombre');
-
-            this.tercerosSearchTable = this.$tercerosSearchTable.DataTable({
-				dom: "<'row'<'col-sm-12'tr>>" +
-                    "<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: {
-                    url: window.Misc.urlFull(Route.route('terceros.index')),
-                    data: function (data) {
-                        data.persistent = true;
-                        data.tercero_nit = _this.$searchNit.val();
-                        data.tercero_nombre = _this.$searchName.val();
-                    }
-                },
-                columns: [
-                    { data: 'tercero_nit', name: 'tercero_nit' },
-                    { data: 'tercero_nombre', name: 'tercero_nombre' },
-                    { data: 'tercero_razonsocial', name: 'tercero_razonsocial'},
-                    { data: 'tercero_nombre1', name: 'tercero_nombre1' },
-                    { data: 'tercero_nombre2', name: 'tercero_nombre2' },
-                    { data: 'tercero_apellido1', name: 'tercero_apellido1' },
-                    { data: 'tercero_apellido2', name: 'tercero_apellido2' }
-                ],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '15%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('terceros.show', {terceros: full.id }))  +'">' + data + '</a>';
-                        }
-                    },
-                    {
-                        targets: 1,
-                        width: '85%',
-                        searchable: false
-                    },
-                    {
-                        targets: [2, 3, 4, 5, 6],
-                        visible: false
-                    }
-                ]
-			});
-        },
-
-        search: function (e) {
-            e.preventDefault();
-
-            this.tercerosSearchTable.ajax.reload();
-        },
-
-        clear: function (e) {
-            e.preventDefault();
-
-            this.$searchNit.val('');
-            this.$searchName.val('');
-
-            this.tercerosSearchTable.ajax.reload();
-        },
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class RolesListView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.RolesListView = Backbone.View.extend({
-
-        el: '#browse-roles-list',
-        events: {
-            'click .item-roles-remove': 'removeOne'
-        },
-        parameters: {
-            wrapper: null,
-            edit: false,
-            dataFilter: {}
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listeners
-            this.listenTo( this.collection, 'add', this.addOne );
-            this.listenTo( this.collection, 'reset', this.addAll );
-            this.listenTo( this.collection, 'request', this.loadSpinner);
-            this.listenTo( this.collection, 'store', this.storeOne );
-            this.listenTo( this.collection, 'sync', this.responseServer);
-
-            this.collection.fetch({data: {tercero_id: this.parameters.dataFilter.tercero_id}, reset: true});
-        },
-
-        /**
-        * Render view rol by model
-        * @param Object contactModel Model instance
-        */
-        addOne: function (usuariorolModel) {
-            var view = new app.RolItemView({
-                model: usuariorolModel,
-                parameters: {
-                    edit: this.parameters.edit
-                }
-            });
-            usuariorolModel.view = view;
-            this.$el.prepend(view.render().el);
-        },
-
-        /**
-        * Render all view Marketplace of the collection
-        */
-        addAll: function () {
-            this.collection.forEach(this.addOne, this);
-        },
-
-        /**
-        * storesrol
-        * @param form element
-        */
-        storeOne: function (data) {
-            var _this = this;
-
-            // Set Spinner
-            window.Misc.setSpinner(this.parameters.wrapper);
-
-            // Prepare data
-            data.user_id = this.parameters.dataFilter.tercero_id;
-
-            // Add model in collection
-            var usuariorolModel = new app.UsuarioRolModel();
-                usuariorolModel.save(data, {
-                    success: function(model, resp) {
-                        if (!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner(_this.parameters.wrapper);
-                            // response success or error
-                            var text = resp.success ? '' : resp.errors;
-                            if (_.isObject(resp.errors)) {
-                                text = window.Misc.parseErrors(resp.errors);
-                            }
-
-                            if (!resp.success) {
-                                alertify.error(text);
-                                return;
-                            }
-
-                            // Add model in collection
-                            _this.collection.add(model);
-                        }
-                    },
-                    error: function (model, error) {
-                        window.Misc.removeSpinner(_this.parameters.wrapper);
-                        alertify.error(error.statusText)
-                    }
-                });
-        },
-
-        /**
-        * Event remove item
-        */
-        removeOne: function (e) {
-            e.preventDefault();
-
-            var resource = $(e.currentTarget).attr("data-resource"),
-                model = this.collection.get(resource),
-                _this = this;
-
-            if (model instanceof Backbone.Model) {
-                model.destroy({
-                    data: { user_id: this.parameters.dataFilter.tercero_id },
-                    processData: true,
-                    success: function (model, resp) {
-                        if (!_.isUndefined(resp.success)) {
-                            window.Misc.removeSpinner( _this.parameters.wrapper );
-                            if (!resp.success) {
-                                alertify.error(resp.errors);
-                                return;
-                            }
-
-                            model.view.remove();
-                        }
-                    }
-                });
-            }
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (target, xhr, opts) {
-            window.Misc.setSpinner(this.parameters.wrapper);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (target, resp, opts) {
-            window.Misc.removeSpinner(this.parameters.wrapper);
-        }
-   });
-
-})(jQuery, this, this.document);
-
-/**
-* Class RolItemView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.RolItemView = Backbone.View.extend({
-
-        tagName: 'tr',
-        template: _.template( ($('#roles-item-list-tpl').html() || '') ),
-        parameters: {
-            edit: false
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Extends parameters
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({},this.parameters, opts.parameters);
-
-            // Events Listener
-            this.listenTo( this.model, 'change', this.render );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.edit = this.parameters.edit;
-            this.$el.html(this.template(attributes));
-            return this;
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class ShowTerceroView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.ShowTerceroView = Backbone.View.extend({
-
-        el: '#terceros-show',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            _.bindAll(this, 'onSessionRequestComplete');
-
-            this.contactsList = new app.ContactsList();
-            this.facturaptList = new app.FacturaptList();
-            this.rolList = new app.RolList();
-            this.detalleFacturaList = new app.DetalleFactura4List();
-            this.$uploaderFile = this.$('.fine-uploader');
-
-            // Reference views
-            this.uploadPictures();
-            this.referenceViews();
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Contact list
-            this.contactsListView = new app.ContactsListView( {
-                collection: this.contactsList,
-                parameters: {
-                    edit: false,
-                    dataFilter: {
-                        tercero_id: this.model.get('id')
-                    }
-               }
-            });
-
-            // Rol list
-            this.rolesListView = new app.RolesListView( {
-                collection: this.rolList,
-                parameters: {
-                    edit: false,
-                    wrapper: this.$('#wrapper-roles'),
-                    dataFilter: {
-                        tercero_id: this.model.get('id')
-                    }
-               }
-            });
-
-            // Facturap list
-            this.facturaptListView = new app.FacturaptListView( {
-                collection: this.facturaptList,
-                parameters: {
-                    dataFilter: {
-                        tercero_id: this.model.get('id')
-                    }
-               }
-            });
-
-            // Detalle list
-            this.factura4ListView = new app.Factura4ListView({
-                collection: this.detalleFacturaList,
-                parameters: {
-                    edit: false,
-                    template: _.template( ($('#add-detalle-factura-cartera-tpl').html() || '') ),
-                    call: 'tercero',
-                    dataFilter: {
-                        tercero_id: this.model.get('id'),
-                    }
-                }
-            });
-        },
-
-        /**
-        * UploadPictures
-        */
-        uploadPictures: function (e) {
-            var _this = this;
-
-            this.$uploaderFile.fineUploader({
-                debug: false,
-                template: 'qq-template-tercero',
-                dragDrop: false,
-                session: {
-                    endpoint: window.Misc.urlFull( Route.route('terceros.imagenes.index') ),
-                    params: {
-                        tercero_id: _this.model.get('id'),
-                    },
-                    refreshOnRequest: false
-                },
-                thumbnails: {
-                    placeholders: {
-                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                    }
-                },
-                callbacks: {
-                    onSessionRequestComplete: _this.onSessionRequestComplete,
-                },
-            });
-
-            this.$uploaderFile.find('.buttons').remove();
-            this.$uploaderFile.find('.qq-upload-drop-area').remove();
-        },
-
-        onSessionRequestComplete: function (id, name, resp) {
-            _.each(id, function (value, key){
-                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                    previewLink.attr("href", value.thumbnailUrl);
-            }, this);
-        },
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class MainReporteTiempospView
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -23984,6 +23988,112 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
+* Class MainTiempopView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainTiempopView = Backbone.View.extend({
+
+        el: '#tiemposp-main',
+        template: _.template(($('#add-tiempop-tpl').html() || '')),
+        events: {
+            'submit #form-tiempop': 'onStore'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Collection
+            this.tiempopList = new app.TiempopList();
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+                attributes.ordenp = this.parameters.data.ordenp;
+
+            // Render in wrapper
+            this.$el.html(this.template(attributes));
+
+            // Rerence wrappers for render
+            this.spinner = this.$('.spinner-main');
+            this.$form = this.$('#form-tiempop');
+
+            // If exists ordnep
+            if (this.parameters.data.ordenp)
+                this.$('#tiempop_ordenp').val(attributes.ordenp).trigger('change');
+
+            // Reference views
+            this.referenceViews();
+            this.ready();
+        },
+
+        /**
+        * Event Create Forum Post
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson(e.target);
+                this.tiempopList.trigger('store', data, this.$form);
+            }
+        },
+
+        /**
+        * reference to views
+        */
+        referenceViews: function () {
+            // Despachos pendientes list
+            this.tiempopListView = new app.TiempopListView({
+                collection: this.tiempopList,
+                parameters: {
+                    wrapper: this.spinner,
+                    dataFilter: {
+                        call: 'tiemposp'
+                    }
+                }
+            });
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+
+            if (typeof window.initComponent.initDatePicker == 'function')
+                window.initComponent.initDatePicker();
+
+            if (typeof window.initComponent.initClockPicker == 'function')
+                window.initComponent.initClockPicker();
+
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initSelect2 == 'function')
+                window.initComponent.initSelect2();
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
 * Class CreateSubtipoProductopView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -24155,277 +24265,6 @@ app || (app = {});
 })(jQuery, this, this.document);
 
 /**
-* Class CreateTipoMaterialpView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.CreateTipoMaterialpView = Backbone.View.extend({
-
-        el: '#tipomaterialesp-create',
-        template: _.template( ($('#add-tipomaterialp-tpl').html() || '') ),
-        events: {
-            'submit #form-tipomaterialp': 'onStore'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Attributes
-            this.$wraperForm = this.$('#render-form-tipomaterialp');
-
-            // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-            this.$wraperForm.html(this.template(attributes));
-
-            this.ready();
-        },
-
-        /**
-        * Event Create Folder
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson( e.target );
-                this.model.save(data, {wait: true, patch: true, silent: true});
-            }
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initICheck == 'function')
-                window.initComponent.initICheck();
-
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-        },
-
-        /**
-        * Load spinner on the request
-        */
-        loadSpinner: function (model, xhr, opts) {
-            window.Misc.setSpinner(this.el);
-        },
-
-        /**
-        * response of the server
-        */
-        responseServer: function (model, resp, opts) {
-            window.Misc.removeSpinner(this.el);
-            if (!_.isUndefined(resp.success)) {
-                // response success or error
-                var text = resp.success ? '' : resp.errors;
-                if (_.isObject(resp.errors)) {
-                    text = window.Misc.parseErrors(resp.errors);
-                }
-
-                if (!resp.success) {
-                    alertify.error(text);
-                    return;
-                }
-
-                window.Misc.redirect(window.Misc.urlFull(Route.route('tipomaterialesp.index')));
-            }
-        }
-    });
-})(jQuery, this, this.document);
-
-/**
-* Class MainTipoMaterialespView
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainTipoMaterialespView = Backbone.View.extend({
-
-        el: '#tipomaterialesp-main',
-
-        /**
-        * Constructor Method
-        */
-        initialize: function () {
-            // DataTable
-            this.$tipomaterialpSearchTablese = this.$('#tipomaterialesp-search-table');
-            this.$tipomaterialpSearchTablese.DataTable({
-				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
-					"<'row'<'col-sm-12'tr>>" +
-					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
-                ajax: window.Misc.urlFull(Route.route('tipomaterialesp.index')),
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'tipomaterial_nombre', name: 'tipomaterial_nombre' },
-                    { data: 'tipomaterial_activo', name: 'tipomaterial_activo' },
-                ],
-				buttons: [
-					{
-						text: '<i class="fa fa-plus"></i> Nuevo',
-                        className: 'btn-sm',
-						action: function (e, dt, node, config) {
-							window.Misc.redirect(window.Misc.urlFull(Route.route('tipomaterialesp.create')))
-						}
-					}
-				],
-                columnDefs: [
-                    {
-                        targets: 0,
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return '<a href="'+ window.Misc.urlFull(Route.route('tipomaterialesp.show', {tipomaterialesp: full.id})) + '">' + data + '</a>';
-                        }
-                    },
-                    {
-                        targets: [2],
-                        width: '10%',
-                        render: function (data, type, full, row) {
-                            return parseInt(data) ? 'Si' : 'No';
-                        }
-                    },
-                ]
-			});
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
-* Class MainTiempopView  of Backbone Router
-* @author KOI || @dropecamargo
-* @link http://koi-ti.com
-*/
-
-//Global App Backbone
-app || (app = {});
-
-(function ($, window, document, undefined) {
-
-    app.MainTiempopView = Backbone.View.extend({
-
-        el: '#tiemposp-main',
-        template: _.template(($('#add-tiempop-tpl').html() || '')),
-        events: {
-            'submit #form-tiempop': 'onStore'
-        },
-
-        /**
-        * Constructor Method
-        */
-        initialize: function (opts) {
-            // Initialize
-            if (opts !== undefined && _.isObject(opts.parameters))
-                this.parameters = $.extend({}, this.parameters, opts.parameters);
-
-            // Collection
-            this.tiempopList = new app.TiempopList();
-        },
-
-        /*
-        * Render View Element
-        */
-        render: function () {
-            var attributes = this.model.toJSON();
-                attributes.ordenp = this.parameters.data.ordenp;
-
-            // Render in wrapper
-            this.$el.html(this.template(attributes));
-
-            // Rerence wrappers for render
-            this.spinner = this.$('.spinner-main');
-            this.$form = this.$('#form-tiempop');
-
-            // If exists ordnep
-            if (this.parameters.data.ordenp)
-                this.$('#tiempop_ordenp').val(attributes.ordenp).trigger('change');
-
-            // Reference views
-            this.referenceViews();
-            this.ready();
-        },
-
-        /**
-        * Event Create Forum Post
-        */
-        onStore: function (e) {
-            if (!e.isDefaultPrevented()) {
-                e.preventDefault();
-
-                var data = window.Misc.formToJson(e.target);
-                this.tiempopList.trigger('store', data, this.$form);
-            }
-        },
-
-        /**
-        * reference to views
-        */
-        referenceViews: function () {
-            // Despachos pendientes list
-            this.tiempopListView = new app.TiempopListView({
-                collection: this.tiempopList,
-                parameters: {
-                    wrapper: this.spinner,
-                    dataFilter: {
-                        call: 'tiemposp'
-                    }
-                }
-            });
-        },
-
-        /**
-        * fires libraries js
-        */
-        ready: function () {
-            // to fire plugins
-            if (typeof window.initComponent.initValidator == 'function')
-                window.initComponent.initValidator();
-
-            if (typeof window.initComponent.initDatePicker == 'function')
-                window.initComponent.initDatePicker();
-
-            if (typeof window.initComponent.initClockPicker == 'function')
-                window.initComponent.initClockPicker();
-
-            if (typeof window.initComponent.initToUpper == 'function')
-                window.initComponent.initToUpper();
-
-            if (typeof window.initComponent.initSelect2 == 'function')
-                window.initComponent.initSelect2();
-        }
-    });
-
-})(jQuery, this, this.document);
-
-/**
 * Class CreateTipoProductopView  of Backbone Router
 * @author KOI || @dropecamargo
 * @link http://koi-ti.com
@@ -24582,6 +24421,171 @@ app || (app = {});
                         targets: [2],
                         width: '10%',
                         render: function ( data, type, full, row ) {
+                            return parseInt(data) ? 'Si' : 'No';
+                        }
+                    },
+                ]
+			});
+        }
+    });
+
+})(jQuery, this, this.document);
+
+/**
+* Class CreateTipoMaterialpView  of Backbone Router
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.CreateTipoMaterialpView = Backbone.View.extend({
+
+        el: '#tipomaterialesp-create',
+        template: _.template( ($('#add-tipomaterialp-tpl').html() || '') ),
+        events: {
+            'submit #form-tipomaterialp': 'onStore'
+        },
+
+        /**
+        * Constructor Method
+        */
+        initialize: function (opts) {
+            // Initialize
+            if (opts !== undefined && _.isObject(opts.parameters))
+                this.parameters = $.extend({}, this.parameters, opts.parameters);
+
+            // Attributes
+            this.$wraperForm = this.$('#render-form-tipomaterialp');
+
+            // Events
+            this.listenTo( this.model, 'change', this.render );
+            this.listenTo( this.model, 'sync', this.responseServer );
+            this.listenTo( this.model, 'request', this.loadSpinner );
+        },
+
+        /*
+        * Render View Element
+        */
+        render: function () {
+            var attributes = this.model.toJSON();
+            this.$wraperForm.html(this.template(attributes));
+
+            this.ready();
+        },
+
+        /**
+        * Event Create Folder
+        */
+        onStore: function (e) {
+            if (!e.isDefaultPrevented()) {
+                e.preventDefault();
+
+                var data = window.Misc.formToJson( e.target );
+                this.model.save(data, {wait: true, patch: true, silent: true});
+            }
+        },
+
+        /**
+        * fires libraries js
+        */
+        ready: function () {
+            // to fire plugins
+            if (typeof window.initComponent.initToUpper == 'function')
+                window.initComponent.initToUpper();
+
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
+
+            if (typeof window.initComponent.initValidator == 'function')
+                window.initComponent.initValidator();
+        },
+
+        /**
+        * Load spinner on the request
+        */
+        loadSpinner: function (model, xhr, opts) {
+            window.Misc.setSpinner(this.el);
+        },
+
+        /**
+        * response of the server
+        */
+        responseServer: function (model, resp, opts) {
+            window.Misc.removeSpinner(this.el);
+            if (!_.isUndefined(resp.success)) {
+                // response success or error
+                var text = resp.success ? '' : resp.errors;
+                if (_.isObject(resp.errors)) {
+                    text = window.Misc.parseErrors(resp.errors);
+                }
+
+                if (!resp.success) {
+                    alertify.error(text);
+                    return;
+                }
+
+                window.Misc.redirect(window.Misc.urlFull(Route.route('tipomaterialesp.index')));
+            }
+        }
+    });
+})(jQuery, this, this.document);
+
+/**
+* Class MainTipoMaterialespView
+* @author KOI || @dropecamargo
+* @link http://koi-ti.com
+*/
+
+//Global App Backbone
+app || (app = {});
+
+(function ($, window, document, undefined) {
+
+    app.MainTipoMaterialespView = Backbone.View.extend({
+
+        el: '#tipomaterialesp-main',
+
+        /**
+        * Constructor Method
+        */
+        initialize: function () {
+            // DataTable
+            this.$tipomaterialpSearchTablese = this.$('#tipomaterialesp-search-table');
+            this.$tipomaterialpSearchTablese.DataTable({
+				dom: "<'row'<'col-sm-4'B><'col-sm-4 text-center'l><'col-sm-4'f>>" +
+					"<'row'<'col-sm-12'tr>>" +
+					"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+                ajax: window.Misc.urlFull(Route.route('tipomaterialesp.index')),
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'tipomaterial_nombre', name: 'tipomaterial_nombre' },
+                    { data: 'tipomaterial_activo', name: 'tipomaterial_activo' },
+                ],
+				buttons: [
+					{
+						text: '<i class="fa fa-plus"></i> Nuevo',
+                        className: 'btn-sm',
+						action: function (e, dt, node, config) {
+							window.Misc.redirect(window.Misc.urlFull(Route.route('tipomaterialesp.create')))
+						}
+					}
+				],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        width: '10%',
+                        render: function (data, type, full, row) {
+                            return '<a href="'+ window.Misc.urlFull(Route.route('tipomaterialesp.show', {tipomaterialesp: full.id})) + '">' + data + '</a>';
+                        }
+                    },
+                    {
+                        targets: [2],
+                        width: '10%',
+                        render: function (data, type, full, row) {
                             return parseInt(data) ? 'Si' : 'No';
                         }
                     },

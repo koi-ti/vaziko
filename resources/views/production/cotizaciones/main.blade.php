@@ -60,11 +60,7 @@
                                             <a class="btn btn-danger export-cotizacion" title="Exportar"><i class="fa fa-file-pdf-o"></i></a>
                                         <% } %>
                                     @endability
-                                    @ability ('generar' | 'cotizaciones')
-                                        <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
-                                            <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
-                                        <% } %>
-                                    @endability
+                                   
                                     @if (auth()->user()->hasRole('admin') || auth()->user()->hasRole('Diseplanea'))
                                         <% if (cotizacion1_estados != 'PC') { %>
                                             <a class="btn btn-success state-cotizacion" title="Estado anterior de la cotización" data-state="<%- cotizacion1_estados %>" data-method="prev">
@@ -77,6 +73,11 @@
                                             <a class="btn btn-success state-cotizacion" title="Siguiente estado de la cotización" data-state="<%- cotizacion1_estados %>" data-method="next">
                                                 <i class="fa fa-arrow-right"></i>
                                             </a>
+                                        <% } %>
+                                    @endability
+                                     @ability ('generar' | 'cotizaciones')
+                                        <% if (['PC' , 'PF'].indexOf(cotizacion1_estados) === -1) { %>
+                                            <a class="btn btn-danger generate-cotizacion" title="Generar orden"><i class="fa fa-sticky-note"></i></a>
                                         <% } %>
                                     @endability
                                 </div>
