@@ -141,10 +141,10 @@ class DetalleOrdenpController extends Controller
 
                     // Recuperar imagenes y almacenar en storage/app/cotizacines
                     $files = [];
-                    $images = isset( $data['imagenes'] ) ? $data['imagenes'] : [];
+                    $images = isset($data['imagenes']) ? $data['imagenes'] : [];
                     foreach ($images as $key => $image) {
                         // Recovery name
-                        $name = str_random(4)."_{$image->getClientOriginalName()}";
+                        $name = str_random(4) . "_{$image->getClientOriginalName()}";
 
                         // Insertar imagen
                         $imagen = new Ordenp8;
@@ -221,6 +221,11 @@ class DetalleOrdenpController extends Controller
                         $orden6->orden6_tiempo = "{$areap->orden6_horas}:{$areap->orden6_minutos}";
                         $orden6->orden6_orden2 = $orden2->id;
                         $orden6->save();
+
+                        // Actualizar areasp
+                        $areap_update = Areap::find($areap->orden6_areap);
+                        $areap_update->areap_valor = $orden6->orden6_valor;
+                        $areap_update->save();
 
                         $tiempo = intval($areap->orden6_horas) + (intval($areap->orden6_minutos) / 60);
                         $totalareasp += round($orden6->orden6_valor * $tiempo);
@@ -324,7 +329,7 @@ class DetalleOrdenpController extends Controller
                     // Commit Transaction
                     DB::commit();
                     return response()->json(['success' => true, 'id_orden' => $orden->id]);
-                } catch(\Exception $e) {
+                } catch (\Exception $e) {
                     DB::rollback();
                     Log::error($e->getMessage());
                     return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -460,7 +465,7 @@ class DetalleOrdenpController extends Controller
 
                         // Cambios
                         $changes = $orden2->getDirty();
-                        
+
                         // Guardar
                         $orden2->save();
 
@@ -505,7 +510,7 @@ class DetalleOrdenpController extends Controller
                         $totalmaterialesp = $totalareasp = $totalempaques = $totaltransportes = 0;
                         $materiales = isset($data['materialesp']) ? $data['materialesp'] : null;
                         foreach ($materiales as $material) {
-                            $orden4 = Ordenp4::find( is_numeric($material['id']) ? $material['id'] : null);
+                            $orden4 = Ordenp4::find(is_numeric($material['id']) ? $material['id'] : null);
                             if (!$orden4 instanceof Ordenp4) {
                                 $materialp = Materialp::find($material['orden4_materialp']);
                                 if (!$materialp instanceof Materialp) {
@@ -536,7 +541,7 @@ class DetalleOrdenpController extends Controller
                                 $valor_unitario = $orden4->orden4_valor_unitario;
                                 $orden4->fill($material);
                                 $orden4->save();
-                                if($valor_unitario != $material['orden4_valor_unitario']) {
+                                if ($valor_unitario != $material['orden4_valor_unitario']) {
                                     // Historial
                                     $historial = new ProductoHistorial;
                                     $historial->productohistorial_tipo = 'M';
@@ -546,7 +551,7 @@ class DetalleOrdenpController extends Controller
                                     $historial->productohistorial_fh_elaboro = $orden4->orden4_fh_elaboro;
                                     $historial->productohistorial_numero_modulo = $orden->id;
                                     $historial->save();
-    
+
                                     // Actualizar producto
                                     $insumo->producto_precio = $orden4->orden4_valor_unitario;
                                     $insumo->save();
@@ -565,7 +570,7 @@ class DetalleOrdenpController extends Controller
                         $keys = [];
                         $areasp = isset($data['areasp']) ? $data['areasp'] : [];
                         foreach ($areasp as $areap) {
-                            $orden6 = Ordenp6::find( is_numeric($areap['id']) ? $areap['id'] : null);
+                            $orden6 = Ordenp6::find(is_numeric($areap['id']) ? $areap['id'] : null);
                             if (!$orden6 instanceof Ordenp6) {
                                 $orden6 = new Ordenp6;
                                 $orden6->fill($areap);
@@ -582,6 +587,13 @@ class DetalleOrdenpController extends Controller
                                 $orden6->save();
                             }
 
+                            $areap_update = Areap::find($areap['orden6_areap']);
+                            if ($orden->orden6_valor != $areap_update->areap_valor) {
+                                // orden6
+                                $areap_update->areap_valor = $orden6->orden6_valor;
+                                $areap_update->save();
+                            }
+
                             $keys[] = $orden6->id;
                             $tiempo = intval($areap['orden6_horas']) + (intval($areap['orden6_minutos']) / 60);
                             $totalareasp += round($orden6->orden6_valor * $tiempo);
@@ -594,7 +606,7 @@ class DetalleOrdenpController extends Controller
                         $keys = [];
                         $empaques = isset($data['empaques']) ? $data['empaques'] : [];
                         foreach ($empaques as $empaque) {
-                            $orden9 = Ordenp9::find( is_numeric($empaque['id']) ? $empaque['id'] : null);
+                            $orden9 = Ordenp9::find(is_numeric($empaque['id']) ? $empaque['id'] : null);
                             if (!$orden9 instanceof Ordenp9) {
                                 $materialp = Materialp::find($empaque['orden9_materialp']);
                                 if (!$materialp instanceof Materialp) {
@@ -625,7 +637,7 @@ class DetalleOrdenpController extends Controller
                                 $valor_unitario = $orden9->orden9_valor_unitario;
                                 $orden9->fill($empaque);
                                 $orden9->save();
-                                
+
                                 if ($valor_unitario != $empaque['orden9_valor_unitario']) {
                                     // Historial
                                     $historial = new ProductoHistorial;
@@ -707,7 +719,7 @@ class DetalleOrdenpController extends Controller
                         // Commit Transaction
                         DB::commit();
                         return response()->json(['success' => true, 'id' => $orden2->id, 'id_orden' => $orden->id]);
-                    } catch(\Exception $e) {
+                    } catch (\Exception $e) {
                         DB::rollback();
                         Log::error($e->getMessage());
                         return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -783,7 +795,7 @@ class DetalleOrdenpController extends Controller
 
                 DB::commit();
                 return response()->json(['success' => true]);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error(sprintf('%s -> %s: %s', 'DetalleOrdenpController', 'destroy', $e->getMessage()));
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
@@ -816,74 +828,74 @@ class DetalleOrdenpController extends Controller
                 // Maquinas
                 $maquinas = Ordenp3::where('orden3_orden2', $orden2->id)->get();
                 foreach ($maquinas as $orden3) {
-                     $neworden3 = $orden3->replicate();
-                     $neworden3->orden3_orden2 = $neworden2->id;
-                     $neworden3->save();
+                    $neworden3 = $orden3->replicate();
+                    $neworden3->orden3_orden2 = $neworden2->id;
+                    $neworden3->save();
                 }
 
                 // Acabados
                 $acabados = Ordenp5::where('orden5_orden2', $orden2->id)->get();
                 foreach ($acabados as $orden5) {
-                     $neworden5 = $orden5->replicate();
-                     $neworden5->orden5_orden2 = $neworden2->id;
-                     $neworden5->save();
+                    $neworden5 = $orden5->replicate();
+                    $neworden5->orden5_orden2 = $neworden2->id;
+                    $neworden5->save();
                 }
 
                 // Imagenes
                 $files = [];
                 $images = Ordenp8::where('orden8_orden2', $orden2->id)->get();
                 foreach ($images as $orden8) {
-                     $neworden8 = $orden8->replicate();
-                     $neworden8->orden8_orden2 = $neworden2->id;
-                     $neworden8->orden8_usuario_elaboro = auth()->user()->id;
-                     $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
-                     $neworden8->save();
+                    $neworden8 = $orden8->replicate();
+                    $neworden8->orden8_orden2 = $neworden2->id;
+                    $neworden8->orden8_usuario_elaboro = auth()->user()->id;
+                    $neworden8->orden8_fh_elaboro = date('Y-m-d H:i:s');
+                    $neworden8->save();
 
-                     if (Storage::has("ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}")) {
-                         $object = new \stdClass();
-                         $object->copy = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}";
-                         $object->paste = "ordenes/orden_{$neworden2->orden2_orden}/producto_{$neworden2->id}/{$neworden8->orden8_archivo}";
+                    if (Storage::has("ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}")) {
+                        $object = new \stdClass();
+                        $object->copy = "ordenes/orden_{$orden2->orden2_orden}/producto_{$orden2->id}/{$orden8->orden8_archivo}";
+                        $object->paste = "ordenes/orden_{$neworden2->orden2_orden}/producto_{$neworden2->id}/{$neworden8->orden8_archivo}";
 
-                         $files[] = $object;
-                     }
+                        $files[] = $object;
+                    }
                 }
 
                 // Materiales
                 $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
                 foreach ($materiales as $orden4) {
-                     $neworden4 = $orden4->replicate();
-                     $neworden4->orden4_orden2 = $neworden2->id;
-                     $neworden4->orden4_usuario_elaboro = auth()->user()->id;
-                     $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
-                     $neworden4->save();
+                    $neworden4 = $orden4->replicate();
+                    $neworden4->orden4_orden2 = $neworden2->id;
+                    $neworden4->orden4_usuario_elaboro = auth()->user()->id;
+                    $neworden4->orden4_fh_elaboro = date('Y-m-d H:i:s');
+                    $neworden4->save();
                 }
 
                 // Areasp
                 $areasp = Ordenp6::where('orden6_orden2', $orden2->id)->get();
                 foreach ($areasp as $orden6) {
-                     $neworden6 = $orden6->replicate();
-                     $neworden6->orden6_orden2 = $neworden2->id;
-                     $neworden6->save();
+                    $neworden6 = $orden6->replicate();
+                    $neworden6->orden6_orden2 = $neworden2->id;
+                    $neworden6->save();
                 }
 
                 // Empaques
                 $empaques = Ordenp9::where('orden9_orden2', $orden2->id)->get();
                 foreach ($empaques as $orden9) {
-                     $neworden9 = $orden9->replicate();
-                     $neworden9->orden9_orden2 = $neworden2->id;
-                     $neworden9->orden9_usuario_elaboro = auth()->user()->id;
-                     $neworden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
-                     $neworden9->save();
+                    $neworden9 = $orden9->replicate();
+                    $neworden9->orden9_orden2 = $neworden2->id;
+                    $neworden9->orden9_usuario_elaboro = auth()->user()->id;
+                    $neworden9->orden9_fh_elaboro = date('Y-m-d H:i:s');
+                    $neworden9->save();
                 }
 
                 // Transportes
                 $transportes = Ordenp10::where('orden10_orden2', $orden2->id)->get();
                 foreach ($transportes as $orden10) {
-                     $neworden10 = $orden10->replicate();
-                     $neworden10->orden10_orden2 = $neworden2->id;
-                     $neworden10->orden10_usuario_elaboro = auth()->user()->id;
-                     $neworden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
-                     $neworden10->save();
+                    $neworden10 = $orden10->replicate();
+                    $neworden10->orden10_orden2 = $neworden2->id;
+                    $neworden10->orden10_usuario_elaboro = auth()->user()->id;
+                    $neworden10->orden10_fh_elaboro = date('Y-m-d H:i:s');
+                    $neworden10->save();
                 }
 
                 // Guardar imagenes si todo sale bien
@@ -899,7 +911,7 @@ class DetalleOrdenpController extends Controller
                 // Commit Transaction
                 DB::commit();
                 return response()->json(['success' => true, 'id' => $neworden2->id, 'msg' => 'Producto orden clonado con exito.']);
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 DB::rollback();
                 Log::error($e->getMessage());
                 return response()->json(['success' => false, 'errors' => trans('app.exception')]);
