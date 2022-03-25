@@ -243,7 +243,7 @@ class Cotizacion1Controller extends Controller
             return response()->json($cotizacion);
         }
 
-        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
+        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', 'no_mod_cot_next_send', ['module' => 'cotizaciones'])) {
             if (auth()->user()->hasRole('Diseplanea') && !in_array($cotizacion->cotizacion1_estados, ['PC', 'PF'])) {
                 return view('production.cotizaciones.show', compact('cotizacion'));
             } else {
