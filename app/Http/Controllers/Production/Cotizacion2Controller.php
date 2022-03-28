@@ -435,6 +435,16 @@ class Cotizacion2Controller extends Controller
 
         // Validar cotizacion
         if ($cotizacion->cotizacion1_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
+            // valida permiso no_mod_cot_next_send
+            if (in_array($cotizacion->cotizacion1_estados, ['CS'])) {
+                if(!auth()->user()->ability('admin', ['module' => 'cotizaciones'])) { // si es admin lo manda a la vista editar de lo contrario ingresa al if
+                    if(auth()->user()->ability('admin', 'no_mod_cot_next_send', ['module' => 'cotizaciones']) ) {
+                        return view('production.cotizaciones.productos.show', compact('cotizacion', 'producto', 'cotizacion2'));
+                    }
+                } else {
+                    return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
+                }
+            }
             return redirect()->route('cotizaciones.productos.edit', ['productos' => $cotizacion2->id]);
         }
         return view('production.cotizaciones.productos.show', compact('cotizacion', 'producto', 'cotizacion2'));
