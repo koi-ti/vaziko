@@ -243,7 +243,19 @@ class Cotizacion1Controller extends Controller
             return response()->json($cotizacion);
         }
 
-        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', 'no_mod_cot_next_send', ['module' => 'cotizaciones'])) {
+        // si la cotizacion esta en estado enviada, valida si el susario tiene el permiso 'no_mod_cot_next_send' en el modulo cotizaciones, si es true el permiso lo manda a la vista show si es false lo manda a edit
+
+        if (in_array($cotizacion->cotizacion1_estados, ['CS'])) {
+            if(!auth()->user()->ability('admin', ['module' => 'cotizaciones'])) { // si es admin lo manda a la vista editar de lo contrario ingresa al if
+                if(auth()->user()->ability('admin', 'no_mod_cot_next_send', ['module' => 'cotizaciones']) ) {
+                    return view('production.cotizaciones.show', compact('cotizacion'));
+                }
+            } else {
+                return redirect()->route('cotizaciones.edit', compact('cotizacion'));
+            }
+        }
+        
+        if ($cotizacion->cotizacion1_abierta && !$cotizacion->cotizacion1_anulada && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             if (auth()->user()->hasRole('Diseplanea') && !in_array($cotizacion->cotizacion1_estados, ['PC', 'PF'])) {
                 return view('production.cotizaciones.show', compact('cotizacion'));
             } else {
@@ -400,11 +412,11 @@ class Cotizacion1Controller extends Controller
             // Cotizacion2
             $productos = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->orderBy('id', 'asc')->get();
             foreach ($productos as $producto) {
-                if($producto->cotizacion2_total_valor_unitario == 0) {
+                if ($producto->cotizacion2_total_valor_unitario == 0) {
                     return response()->json(['success' => false, 'errors' => 'La seccion de productos no puede estar en $0.00']);
                 }
             }
-            
+
             DB::beginTransaction();
             try {
                 // Cotización
@@ -644,7 +656,7 @@ class Cotizacion1Controller extends Controller
                     $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
                     foreach ($areasp as $cotizacion6) {
                         $areap = Areap::find($cotizacion6->cotizacion6_areap);
-                        
+
                         $newcotizacion6 = $cotizacion6->replicate();
                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
                         $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
@@ -731,7 +743,7 @@ class Cotizacion1Controller extends Controller
             // Cotizacion2
             $productos = Cotizacion2::where('cotizacion2_cotizacion', $cotizacion->id)->orderBy('id', 'asc')->get();
             foreach ($productos as $producto) {
-                if($producto->cotizacion2_total_valor_unitario == 0) {
+                if ($producto->cotizacion2_total_valor_unitario == 0) {
                     return response()->json(['success' => false, 'errors' => 'La seccion de productos no puede estar en $0.00']);
                 }
             }
