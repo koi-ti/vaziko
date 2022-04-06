@@ -12,7 +12,7 @@ app || (app = {});
     app.CreateCotizacion2View = Backbone.View.extend({
 
         el: '#cotizaciones-productos-create',
-        template: _.template( ($('#add-cotizacion-producto-tpl').html() || '')),
+        template: _.template(($('#add-cotizacion-producto-tpl').html() || '')),
         events: {
             'click .submit-cotizacion2': 'submitForm',
             'submit #form-cotizacion-producto': 'onStore',
@@ -50,10 +50,10 @@ app || (app = {});
             this.prevtransportes = 0;
 
             // Events
-            this.listenTo( this.model, 'change', this.render );
-            this.listenTo( this.model, 'sync', this.responseServer );
-            this.listenTo( this.model, 'request', this.loadSpinner );
-            this.listenTo( this.model, 'totalize', this.totalCalculate );
+            this.listenTo(this.model, 'change', this.render);
+            this.listenTo(this.model, 'sync', this.responseServer);
+            this.listenTo(this.model, 'request', this.loadSpinner);
+            this.listenTo(this.model, 'totalize', this.totalCalculate);
 
             // bind fineuploader
             _.bindAll(this, 'onSubmitted', 'onSessionRequestComplete');
@@ -64,8 +64,8 @@ app || (app = {});
         */
         render: function () {
             var attributes = this.model.toJSON();
-                attributes.edit = this.model.get('id') ? 1 : 0;
-            this.$el.html( this.template(attributes));
+            attributes.edit = this.model.get('id') ? 1 : 0;
+            this.$el.html(this.template(attributes));
 
             // reference forms
             this.$form = this.$('#form-cotizacion-producto');
@@ -133,7 +133,7 @@ app || (app = {});
             this.range = [-3, -2, -1, 0, 1, 2, 3];
 
             // If exists container
-            if ($('.chart-container').length) {
+            if ($('.chart-container').length) {
                 this.chart = '';
                 this.chartPrecio = 0;
                 this.chartViaticos = 0;
@@ -166,37 +166,37 @@ app || (app = {});
             }
 
             // Materiales
-            this.materialesProductopCotizacionListView = new app.MaterialesProductopCotizacionListView( {
+            this.materialesProductopCotizacionListView = new app.MaterialesProductopCotizacionListView({
                 collection: this.materialesProductopCotizacionList,
                 model: this.model,
                 parameters: {
                     edit: true,
                     dataFilter: dataFilter
-               }
+                }
             });
 
             // Empaques
-            this.empaquesProductopCotizacionListView = new app.EmpaquesProductopCotizacionListView( {
+            this.empaquesProductopCotizacionListView = new app.EmpaquesProductopCotizacionListView({
                 collection: this.empaquesProductopCotizacionList,
                 model: this.model,
                 parameters: {
                     edit: true,
                     dataFilter: dataFilter
-               }
+                }
             });
 
             // Areasp list
-            this.areasProductopCotizacionListView = new app.AreasProductopCotizacionListView( {
+            this.areasProductopCotizacionListView = new app.AreasProductopCotizacionListView({
                 collection: this.areasProductopCotizacionList,
                 model: this.model,
                 parameters: {
                     edit: true,
                     dataFilter: dataFilter
-               }
+                }
             });
 
             // Transportes
-            this.transportesProductopCotizacionListView = new app.TransportesProductopCotizacionListView( {
+            this.transportesProductopCotizacionListView = new app.TransportesProductopCotizacionListView({
                 collection: this.transportesProductopCotizacionList,
                 model: this.model,
                 parameters: {
@@ -231,30 +231,40 @@ app || (app = {});
                 * En el metodo post o crear es necesario mandar las imagenes preguardadas por ende se convierte toda la peticion en un texto plano FormData
                 * El metodo put no es compatible con formData
                 */
-                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
-                    data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val() || 30;
-                    data.cotizacion2_margen_areap = this.$inputmargenareap.val() || 30;
-                    data.cotizacion2_margen_empaque = this.$inputmargenempaque.val() || 30;
-                    data.cotizacion2_margen_transporte = this.$inputmargentransporte.val() || 30;
-                    data.cotizacion2_comision = this.$inputcomision.val() || 0;
-                    data.cotizacion2_descuento = this.$inputdescuento.val() || 0;
-                    data.cotizacion2_volumen = this.$inputvolumen.val() || 0;
-                    data.cotizacion2_round = this.$inputround.val() || 0;
-                    data.materialesp = this.model.isNew() ? JSON.stringify(this.materialesProductopCotizacionList) : this.materialesProductopCotizacionList.toJSON();
-                    data.areasp = this.model.isNew() ? JSON.stringify(this.areasProductopCotizacionList) : this.areasProductopCotizacionList.toJSON();
-                    data.empaques = this.model.isNew() ? JSON.stringify(this.empaquesProductopCotizacionList) : this.empaquesProductopCotizacionList.toJSON();
-                    data.transportes = this.model.isNew() ? JSON.stringify(this.transportesProductopCotizacionList) : this.transportesProductopCotizacionList.toJSON();
-                    data.productop_imagenes = imagenesProducto;
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
+                // data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val() || 30;
+                // data.cotizacion2_margen_areap = this.$inputmargenareap.val() || 30;
+                // data.cotizacion2_margen_empaque = this.$inputmargenempaque.val() || 30;
+                // data.cotizacion2_margen_transporte = this.$inputmargentransporte.val() || 30;
+                // data.cotizacion2_comision = this.$inputcomision.val() || 0;
+                // data.cotizacion2_descuento = this.$inputdescuento.val() || 0;
+                // data.cotizacion2_volumen = this.$inputvolumen.val() || 0;
+                // data.cotizacion2_round = this.$inputround.val() || 0;
+
+                data.cotizacion2_margen_materialp = this.$inputmargenmaterialp.val() || this.model.get('cotizacion2_margen_materialp');
+                data.cotizacion2_margen_areap = this.$inputmargenareap.val() || this.model.get('cotizacion2_margen_areap');
+                data.cotizacion2_margen_empaque = this.$inputmargenempaque.val() || this.model.get('cotizacion2_margen_empaque');
+                data.cotizacion2_margen_transporte = this.$inputmargentransporte.val() || this.model.get('cotizacion2_margen_transporte');
+                data.cotizacion2_comision = this.$inputcomision.val() || this.model.get('cotizacion2_comision');
+                data.cotizacion2_descuento = this.$inputdescuento.val() || this.model.get('cotizacion2_descuento');
+                data.cotizacion2_volumen = this.$inputvolumen.val() || this.model.get('cotizacion2_volumen');
+                data.cotizacion2_round = this.$inputround.val() || this.model.get('cotizacion2_round');
+
+                data.materialesp = this.model.isNew() ? JSON.stringify(this.materialesProductopCotizacionList) : this.materialesProductopCotizacionList.toJSON();
+                data.areasp = this.model.isNew() ? JSON.stringify(this.areasProductopCotizacionList) : this.areasProductopCotizacionList.toJSON();
+                data.empaques = this.model.isNew() ? JSON.stringify(this.empaquesProductopCotizacionList) : this.empaquesProductopCotizacionList.toJSON();
+                data.transportes = this.model.isNew() ? JSON.stringify(this.transportesProductopCotizacionList) : this.transportesProductopCotizacionList.toJSON();
+                data.productop_imagenes = imagenesProducto;
 
                 if (this.model.isNew()) {
-                    this.$files = this.$uploaderFile.fineUploader('getUploads', {status: 'submitted'});
+                    this.$files = this.$uploaderFile.fineUploader('getUploads', { status: 'submitted' });
                     var formData = new FormData();
-                    _.each(this.$files, function(file, key) {
+                    _.each(this.$files, function (file, key) {
                         formData.append('imagenes[]', file.file, file.file.name + '(' + this.$('#cotizacion8_imprimir_' + key).is(':checked') + ')');
                     });
 
                     // Recorrer archivos para mandarlos texto plano
-                    _.each(data, function(value, key) {
+                    _.each(data, function (value, key) {
                         formData.append(key, value);
                     });
 
@@ -265,7 +275,7 @@ app || (app = {});
                         contentType: false
                     });
                 } else {
-                    this.model.save(data, {wait: true, patch: true, silent: true});
+                    this.model.save(data, { wait: true, patch: true, silent: true });
                 }
             }
         },
@@ -277,9 +287,9 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
-                    data.cotizacion4_cantidad = this.$('#cotizacion4_cantidad:disabled').val();
-                    data.previo = this.prevmateriales;
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
+                data.cotizacion4_cantidad = this.$('#cotizacion4_cantidad:disabled').val();
+                data.previo = this.prevmateriales;
                 this.materialesProductopCotizacionList.trigger('store', data, this.$formmaterialp);
             }
         },
@@ -291,7 +301,7 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
                 this.areasProductopCotizacionList.trigger('store', data, this.$formareap);
             }
         },
@@ -303,9 +313,9 @@ app || (app = {});
             if (!e.isDefaultPrevented()) {
                 e.preventDefault();
 
-                var data = $.extend({}, window.Misc.formToJson( e.target), this.parameters.data);
-                    data.cotizacion9_cantidad = this.$('#cotizacion9_cantidad:disabled').val();
-                    data.previo = this.prevempaques;
+                var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
+                data.cotizacion9_cantidad = this.$('#cotizacion9_cantidad:disabled').val();
+                data.previo = this.prevempaques;
                 this.empaquesProductopCotizacionList.trigger('store', data, this.$formempaque);
             }
         },
@@ -318,8 +328,8 @@ app || (app = {});
                 e.preventDefault();
 
                 var data = $.extend({}, window.Misc.formToJson(e.target), this.parameters.data);
-                    data.cotizacion10_cantidad = this.$('#cotizacion10_cantidad:disabled').val();
-                    data.previo = this.prevtransportes;
+                data.cotizacion10_cantidad = this.$('#cotizacion10_cantidad:disabled').val();
+                data.previo = this.prevtransportes;
                 this.transportesProductopCotizacionList.trigger('store', data, this.$formtransporte);
             }
         },
@@ -340,13 +350,13 @@ app || (app = {});
             if (insumo) {
                 var url;
                 if (tipo == 'cotizacion4') {
-                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.materiales.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.materiales.index', { insumo: insumo }));
                     tipo = 'M';
                 } else if (tipo == 'cotizacion9') {
-                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.empaques.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.empaques.index', { insumo: insumo }));
                     tipo = 'E';
                 } else {
-                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.transportes.index', {insumo: insumo}));
+                    url = window.Misc.urlFull(Route.route('cotizaciones.productos.transportes.index', { insumo: insumo }));
                     tipo = 'T';
                 }
 
@@ -361,7 +371,7 @@ app || (app = {});
                         }
 
                         _this.$inputinsumo.val(resp.valor);
-                        _this.$historialinsumo.empty().append( $('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-tipo', tipo);
+                        _this.$historialinsumo.empty().append($('<small>').addClass('text-muted').append("Ver historial de insumo")).attr('data-resource', insumo).attr('data-tipo', tipo);
                     }
                 });
             } else {
@@ -513,7 +523,7 @@ app || (app = {});
         maxinput: function (input, value, margen) {
             if (input.val() >= 100) {
                 input.val(99);
-            } else if (!input.val()) {
+            } else if (!input.val()) {
                 input.val(0);
             }
 
@@ -534,7 +544,7 @@ app || (app = {});
 
             // Ajax charts
             $.ajax({
-                url: window.Misc.urlFull(Route.route('cotizaciones.graficas', {cotizaciones: _this.model.get('cotizacion2_cotizacion')})),
+                url: window.Misc.urlFull(Route.route('cotizaciones.graficas', { cotizaciones: _this.model.get('cotizacion2_cotizacion') })),
                 data: {
                     producto: _this.model.get('id')
                 },
@@ -543,28 +553,28 @@ app || (app = {});
                     window.Misc.setSpinner(_this.spinner);
                 }
             })
-            .done(function(resp) {
-                window.Misc.removeSpinner(_this.spinner);
-                if (!_.isUndefined(resp.success)) {
-                    // response success or error
-                    var text = resp.success ? '' : resp.errors;
-                    if (_.isObject(resp.errors)) {
-                        text = window.Misc.parseErrors(resp.errors);
-                    }
+                .done(function (resp) {
+                    window.Misc.removeSpinner(_this.spinner);
+                    if (!_.isUndefined(resp.success)) {
+                        // response success or error
+                        var text = resp.success ? '' : resp.errors;
+                        if (_.isObject(resp.errors)) {
+                            text = window.Misc.parseErrors(resp.errors);
+                        }
 
-                    if (!resp.success) {
-                        alertify.error(text);
-                        return;
-                    }
+                        if (!resp.success) {
+                            alertify.error(text);
+                            return;
+                        }
 
-                    // Render calendar
-                    _this.charts(resp);
-                }
-            })
-            .fail(function(jqXHR, ajaxOptions, thrownError) {
-                window.Misc.removeSpinner(_this.spinner);
-                alertify.error(thrownError);
-            });
+                        // Render calendar
+                        _this.charts(resp);
+                    }
+                })
+                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                    window.Misc.removeSpinner(_this.spinner);
+                    alertify.error(thrownError);
+                });
 
         },
 
@@ -573,9 +583,9 @@ app || (app = {});
         */
         charts: function (resp) {
             // Definir opciones globales para graficas del modulo
-            Chart.defaults.global.defaultFontColor="black";
-            Chart.defaults.global.defaultFontSize=12;
-            Chart.defaults.global.title.fontSize=14;
+            Chart.defaults.global.defaultFontColor = "black";
+            Chart.defaults.global.defaultFontSize = 12;
+            Chart.defaults.global.title.fontSize = 14;
 
             // Charts productos
             if (!_.isEmpty(resp.chartproductos.data)) {
@@ -605,7 +615,7 @@ app || (app = {});
                         tooltips: {
                             callbacks: {
                                 enabled: false,
-                                label: function(item, data) {
+                                label: function (item, data) {
                                     return data.labels[item.index];
                                 }
                             }
@@ -638,80 +648,80 @@ app || (app = {});
         * UploadPictures
         */
         uploadPictures: function (e) {
-           var _this = this,
+            var _this = this,
                 autoUpload = false,
                 session = {};
-                deleteFile = {};
-                request = {};
+            deleteFile = {};
+            request = {};
 
 
-           // Model exists
-           if (this.model.id != undefined) {
-               var session = {
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
-                   params: {
-                       cotizacion2: this.model.get('id'),
-                   },
-                   refreshOnRequest: false
-               }
+            // Model exists
+            if (this.model.id != undefined) {
+                var session = {
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.productos.imagenes.index')),
+                    params: {
+                        cotizacion2: this.model.get('id'),
+                    },
+                    refreshOnRequest: false
+                }
 
-               var deleteFile = {
-                   enabled: true,
-                   forceConfirm: true,
-                   confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
-                   params: {
-                       _token: $('meta[name="csrf-token"]').attr('content'),
-                       cotizacion2: this.model.get('id')
-                   }
-               }
+                var deleteFile = {
+                    enabled: true,
+                    forceConfirm: true,
+                    confirmMessage: '¿Esta seguro de que desea eliminar este archivo de forma permanente? {filename}',
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.productos.imagenes.index')),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion2: this.model.get('id')
+                    }
+                }
 
-               var request = {
-                   inputName: 'file',
-                   endpoint: window.Misc.urlFull( Route.route('cotizaciones.productos.imagenes.index')),
-                   params: {
-                       _token: $('meta[name="csrf-token"]').attr('content'),
-                       cotizacion2: this.model.get('id')
-                   }
-               }
+                var request = {
+                    inputName: 'file',
+                    endpoint: window.Misc.urlFull(Route.route('cotizaciones.productos.imagenes.index')),
+                    params: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cotizacion2: this.model.get('id')
+                    }
+                }
 
-               autoUpload = true;
-           }
+                autoUpload = true;
+            }
 
-           this.$uploaderFile.fineUploader({
-               debug: false,
-               template: 'qq-template-cotizacion-producto',
-               multiple: true,
-               interceptSubmit: true,
-               autoUpload: autoUpload,
-               omitDefaultParams: true,
-               session: session,
-               request: request,
-               retry: {
-                   maxAutoAttempts: 3,
-               },
-               deleteFile: deleteFile,
-               thumbnails: {
-                   placeholders: {
-                       notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
-                       waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
-                   }
-               },
-               validation: {
-                   itemLimit: 10,
-                   sizeLimit: (3 * 1024) * 1024, // 3mb,
-                   allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
-               },
-               messages: {
-                   typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
-                   sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
-                   tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
-               },
-               callbacks: {
-                   onSubmitted: _this.onSubmitted,
-                   onSessionRequestComplete: _this.onSessionRequestComplete
-               },
-           });
+            this.$uploaderFile.fineUploader({
+                debug: false,
+                template: 'qq-template-cotizacion-producto',
+                multiple: true,
+                interceptSubmit: true,
+                autoUpload: autoUpload,
+                omitDefaultParams: true,
+                session: session,
+                request: request,
+                retry: {
+                    maxAutoAttempts: 3,
+                },
+                deleteFile: deleteFile,
+                thumbnails: {
+                    placeholders: {
+                        notAvailablePath: window.Misc.urlFull("build/css/placeholders/not_available-generic.png"),
+                        waitingPath: window.Misc.urlFull("build/css/placeholders/waiting-generic.png")
+                    }
+                },
+                validation: {
+                    itemLimit: 10,
+                    sizeLimit: (3 * 1024) * 1024, // 3mb,
+                    allowedExtensions: ['jpeg', 'jpg', 'png', 'pdf']
+                },
+                messages: {
+                    typeError: '{file} extensión no valida. Extensiones validas: {extensions}.',
+                    sizeError: '{file} es demasiado grande, el tamaño máximo del archivo es {sizeLimit}.',
+                    tooManyItemsError: 'No puede seleccionar mas de {itemLimit} archivos.',
+                },
+                callbacks: {
+                    onSubmitted: _this.onSubmitted,
+                    onSessionRequestComplete: _this.onSessionRequestComplete
+                },
+            });
         },
 
         /**
@@ -720,12 +730,12 @@ app || (app = {});
         * @param Strinf name
         */
         onSubmitted: function (id, name) {
-           if (typeof window.initComponent.initICheck == 'function')
-               window.initComponent.initICheck();
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
 
-           var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.qq-imprimir');
-               itemFile.attr('name', 'cotizacion8_imprimir_' + id);
-               itemFile.attr('id', 'cotizacion8_imprimir_' + id);
+            var itemFile = this.$uploaderFile.fineUploader('getItemByFileId', id).find('.qq-imprimir');
+            itemFile.attr('name', 'cotizacion8_imprimir_' + id);
+            itemFile.attr('id', 'cotizacion8_imprimir_' + id);
         },
 
         /**
@@ -735,20 +745,20 @@ app || (app = {});
         * @param Object resp
         */
         onSessionRequestComplete: function (id, name, resp) {
-           if (typeof window.initComponent.initICheck == 'function')
-               window.initComponent.initICheck();
+            if (typeof window.initComponent.initICheck == 'function')
+                window.initComponent.initICheck();
 
-           _.each( id, function (value, key) {
-               var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
-                   previewLink.attr("href", value.thumbnailUrl);
+            _.each(id, function (value, key) {
+                var previewLink = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.preview-link');
+                previewLink.attr("href", value.thumbnailUrl);
 
-               var imprimir = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.qq-imprimir');
-                   imprimir.attr('name', 'cotizacion8_imprimir_' + value.uuid);
-                   imprimir.attr('id', 'cotizacion8_imprimir_' + value.uuid);
+                var imprimir = this.$uploaderFile.fineUploader('getItemByFileId', key).find('.qq-imprimir');
+                imprimir.attr('name', 'cotizacion8_imprimir_' + value.uuid);
+                imprimir.attr('id', 'cotizacion8_imprimir_' + value.uuid);
 
-               if (value.imprimir)
-                   imprimir.iCheck('check');
-           }, this);
+                if (value.imprimir)
+                    imprimir.iCheck('check');
+            }, this);
         },
 
         /**
@@ -800,7 +810,7 @@ app || (app = {});
                 }
 
                 // Redirect to cotizacion
-                window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.id_cotizacion})));
+                window.Misc.redirect(window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id_cotizacion })));
             }
         }
     });
