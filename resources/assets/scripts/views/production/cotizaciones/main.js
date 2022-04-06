@@ -42,7 +42,7 @@ app || (app = {});
                     "<'row'<'col-sm-5'i><'col-sm-7'p>>",
                 ajax: {
                     url: window.Misc.urlFull(Route.route('cotizaciones.index')),
-                    data: function(data) {
+                    data: function (data) {
                         data.persistent = true;
                         data.cotizacion_numero = _this.$searchcotizacionCotizacion.val();
                         data.cotizacion_tercero_nit = _this.$searchcotizacionTercero.val();
@@ -62,16 +62,16 @@ app || (app = {});
                     { data: 'productos[0].total', name: 'productos[0].total' }
                 ],
                 order: [
-                    [ 2, 'desc' ], [ 3, 'desc' ]
+                    [2, 'desc'], [3, 'desc']
                 ],
                 columnDefs: [
                     {
                         targets: 0,
                         width: '10%',
                         render: function (data, type, full, row) {
-                            var label = '<a href="'+ window.Misc.urlFull(Route.route('cotizaciones.show', {cotizaciones: full.id }))  +'">' + data + '</a>';
+                            var label = '<a href="' + window.Misc.urlFull(Route.route('cotizaciones.show', { cotizaciones: full.id })) + '">' + data + '</a>';
                             if (full.cotizacion1_precotizacion) {
-                                label += ' <a href="'+ window.Misc.urlFull(Route.route('precotizaciones.show', {precotizaciones: full.cotizacion1_precotizacion })) +'" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
+                                label += ' <a href="' + window.Misc.urlFull(Route.route('precotizaciones.show', { precotizaciones: full.cotizacion1_precotizacion })) + '" title="Ir a precotización"><span class="label label-success">' + full.precotizacion_codigo + '</span></a>';
                             }
                             return label;
                         }
@@ -85,13 +85,13 @@ app || (app = {});
                             var buttons = '<div class="btn-group btn-group-justified btn-group-xs" role="group">';
 
                             if (parseInt(full.cotizacion1_abierta)) {
-                                if (parseInt(full.cerrar) && ['CC' , 'CF', 'CS'].indexOf(full.cotizacion1_estados) !== -1) {
+                                if (parseInt(full.cerrar) && ['CC', 'CF', 'CS'].indexOf(full.cotizacion1_estados) !== -1) {
                                     buttons += '<div class="btn-group btn-group-xs">' +
-                                                '<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>' +
-                                                '<ul class="dropdown-menu pull-right">' +
-                                                    '<li><a href="#" class="state-cotizacion" data-state="CR" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">RECOTIZAR</a></li>' +
-                                                    '<li><a href="#" class="state-cotizacion" data-state="CN" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">NO ACEPTADA</a></li>' +
-                                                '</ul></div>';
+                                        '<a class="btn btn-danger dropdown-toggle" data-toggle="dropdown" title="Cerrar cotización" role="button"><i class="fa fa-lock"></i> <span class="caret"></span></a>' +
+                                        '<ul class="dropdown-menu pull-right">' +
+                                        '<li><a href="#" class="state-cotizacion" data-state="CR" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">RECOTIZAR</a></li>' +
+                                        '<li><a href="#" class="state-cotizacion" data-state="CN" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '">NO ACEPTADA</a></li>' +
+                                        '</ul></div>';
                                 }
 
                                 // if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
@@ -101,9 +101,12 @@ app || (app = {});
                                 if (parseInt(full.exportar) && full.cotizacion1_estados == 'CS') {
                                     buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
                                 }
-                                
-                                if (parseInt(full.devolver) && full.cotizacion1_estados != 'PC') {
-                                    if (parseInt(full.devolver) && full.cotizacion1_estados != 'CS') {
+
+                                if (parseInt(full.devolver) || parseInt(full.devolver_rol_diseplanea) && full.cotizacion1_estados != 'PC') {
+                                    if (parseInt(full.devolver_rol_diseplanea) && full.cotizacion1_estados != 'CS') {
+                                        buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
+                                    }
+                                    if (parseInt(full.devolver)) {
                                         buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
                                     }
                                 }
@@ -116,7 +119,7 @@ app || (app = {});
                                     buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Siguiente estado de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="next"><i class="fa fa-arrow-right"></i></a>';
                                 }
 
-                                if (parseInt(full.generar) && ['PC' , 'PF'].indexOf(full.cotizacion1_estados) === -1) {
+                                if (parseInt(full.generar) && ['PC', 'PF'].indexOf(full.cotizacion1_estados) === -1) {
                                     buttons += '<a class="btn btn-danger btn-xs generate-cotizacion" title="Generar orden de producción" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '"><i class="fa fa-sticky-note"></i></a>';
                                 }
 
@@ -159,13 +162,13 @@ app || (app = {});
                         }
                     },
                 ],
-                fnRowCallback: function(row, data) {
+                fnRowCallback: function (row, data) {
                     if (parseInt(data.cotizacion1_anulada)) {
-                        $(row).css({color: "#DD4B39"});
+                        $(row).css({ color: "#DD4B39" });
                     } else if (parseInt(data.cotizacion1_abierta)) {
-                        $(row).css({color: "#00A65A"});
+                        $(row).css({ color: "#00A65A" });
                     } else {
-                        $(row).css({color: "black"});
+                        $(row).css({ color: "black" });
                     }
                 }
             });
@@ -174,7 +177,7 @@ app || (app = {});
         /**
         * Search dataTable
         */
-        search: function(e) {
+        search: function (e) {
             e.preventDefault();
 
             this.cotizacionesSearchTable.ajax.reload();
@@ -183,7 +186,7 @@ app || (app = {});
         /**
         * Clear dataTable
         */
-        clear: function(e) {
+        clear: function (e) {
             e.preventDefault();
 
             this.$searchcotizacionCotizacion.val('');
@@ -223,7 +226,7 @@ app || (app = {});
                         titleConfirm: 'Estado cotización',
                         onConfirm: function () {
                             $.ajax({
-                                url: window.Misc.urlFull(Route.route('cotizaciones.estados', {cotizaciones: data.resource})),
+                                url: window.Misc.urlFull(Route.route('cotizaciones.estados', { cotizaciones: data.resource })),
                                 type: 'GET',
                                 data: {
                                     state: data.state,
@@ -233,28 +236,28 @@ app || (app = {});
                                     window.Misc.setSpinner(_this.el);
                                 }
                             })
-                            .done(function (resp) {
-                                window.Misc.removeSpinner(_this.el);
-                                if (!_.isUndefined(resp.success)) {
-                                    // response success or error
-                                    var text = resp.success ? '' : resp.errors;
-                                    if (_.isObject(resp.errors)) {
-                                        text = window.Misc.parseErrors(resp.errors);
-                                    }
+                                .done(function (resp) {
+                                    window.Misc.removeSpinner(_this.el);
+                                    if (!_.isUndefined(resp.success)) {
+                                        // response success or error
+                                        var text = resp.success ? '' : resp.errors;
+                                        if (_.isObject(resp.errors)) {
+                                            text = window.Misc.parseErrors(resp.errors);
+                                        }
 
-                                    if (!resp.success) {
-                                        alertify.error(text);
-                                        return;
-                                    }
+                                        if (!resp.success) {
+                                            alertify.error(text);
+                                            return;
+                                        }
 
-                                    alertify.success(resp.msg);
-                                    _this.cotizacionesSearchTable.ajax.reload();
-                                }
-                            })
-                            .fail(function (jqXHR, ajaxOptions, thrownError) {
-                                window.Misc.removeSpinner(_this.el);
-                                alertify.error(thrownError);
-                            });
+                                        alertify.success(resp.msg);
+                                        _this.cotizacionesSearchTable.ajax.reload();
+                                    }
+                                })
+                                .fail(function (jqXHR, ajaxOptions, thrownError) {
+                                    window.Misc.removeSpinner(_this.el);
+                                    alertify.error(thrownError);
+                                });
                         }
                     }
                 });
@@ -269,7 +272,7 @@ app || (app = {});
             e.preventDefault();
 
             var model = this.$(e.currentTarget).data(),
-                route =  window.Misc.urlFull(Route.route('cotizaciones.clonar', { cotizaciones: model.resource })),
+                route = window.Misc.urlFull(Route.route('cotizaciones.clonar', { cotizaciones: model.resource })),
                 _this = this;
 
             var cloneConfirm = new window.app.ConfirmWindow({
@@ -286,7 +289,7 @@ app || (app = {});
                             'wrap': _this.el,
                             'callback': (function (_this) {
                                 return function (resp) {
-                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: resp.id})));
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: resp.id })));
                                 }
                             })(_this)
                         });
@@ -303,7 +306,7 @@ app || (app = {});
             e.preventDefault();
 
             var model = this.$(e.currentTarget).data(),
-                route =  window.Misc.urlFull(Route.route('cotizaciones.generar', {cotizaciones: model.resource})),
+                route = window.Misc.urlFull(Route.route('cotizaciones.generar', { cotizaciones: model.resource })),
                 _this = this;
 
             var generateConfirm = new window.app.ConfirmWindow({
@@ -323,26 +326,26 @@ app || (app = {});
                                 window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function (resp) {
-                            window.Misc.removeSpinner(_this.el);
-                            if (!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject(resp.errors)) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
+                            .done(function (resp) {
+                                window.Misc.removeSpinner(_this.el);
+                                if (!_.isUndefined(resp.success)) {
+                                    // response success or error
+                                    var text = resp.success ? '' : resp.errors;
+                                    if (_.isObject(resp.errors)) {
+                                        text = window.Misc.parseErrors(resp.errors);
+                                    }
 
-                                if (!resp.success) {
-                                    alertify.error(text);
-                                    return;
+                                    if (!resp.success) {
+                                        alertify.error(text);
+                                        return;
+                                    }
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', { ordenes: resp.orden_id })));
                                 }
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.edit', {ordenes: resp.orden_id})));
-                            }
-                        })
-                        .fail(function (jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner(_this.el);
-                            alertify.error(thrownError);
-                        });
+                            })
+                            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                                window.Misc.removeSpinner(_this.el);
+                                alertify.error(thrownError);
+                            });
                     }
                 }
             });
@@ -367,33 +370,33 @@ app || (app = {});
                     titleConfirm: 'Reabir cotización',
                     onConfirm: function () {
                         $.ajax({
-                            url: window.Misc.urlFull(Route.route('cotizaciones.abrir', {cotizaciones: model.resource})),
+                            url: window.Misc.urlFull(Route.route('cotizaciones.abrir', { cotizaciones: model.resource })),
                             type: 'GET',
                             beforeSend: function () {
                                 window.Misc.setSpinner(_this.el);
                             }
                         })
-                        .done(function (resp) {
-                            window.Misc.removeSpinner(_this.el);
-                            if (!_.isUndefined(resp.success)) {
-                                // response success or error
-                                var text = resp.success ? '' : resp.errors;
-                                if (_.isObject(resp.errors)) {
-                                    text = window.Misc.parseErrors(resp.errors);
-                                }
+                            .done(function (resp) {
+                                window.Misc.removeSpinner(_this.el);
+                                if (!_.isUndefined(resp.success)) {
+                                    // response success or error
+                                    var text = resp.success ? '' : resp.errors;
+                                    if (_.isObject(resp.errors)) {
+                                        text = window.Misc.parseErrors(resp.errors);
+                                    }
 
-                                if (!resp.success) {
-                                    alertify.error(text);
-                                    return;
-                                }
+                                    if (!resp.success) {
+                                        alertify.error(text);
+                                        return;
+                                    }
 
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', {cotizaciones: model.resource})));
-                            }
-                        })
-                        .fail(function (jqXHR, ajaxOptions, thrownError) {
-                            window.Misc.removeSpinner(_this.el);
-                            alertify.error(thrownError);
-                        });
+                                    window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('cotizaciones.edit', { cotizaciones: model.resource })));
+                                }
+                            })
+                            .fail(function (jqXHR, ajaxOptions, thrownError) {
+                                window.Misc.removeSpinner(_this.el);
+                                alertify.error(thrownError);
+                            });
                     }
                 }
             });
@@ -407,7 +410,7 @@ app || (app = {});
             e.preventDefault();
 
             // Redirect to pdf
-            window.open(window.Misc.urlFull(Route.route('cotizaciones.exportar', {cotizaciones: $(e.currentTarget).data('codigo')})), '_blank');
+            window.open(window.Misc.urlFull(Route.route('cotizaciones.exportar', { cotizaciones: $(e.currentTarget).data('codigo') })), '_blank');
         },
     });
 })(jQuery, this, this.document);

@@ -56,7 +56,9 @@ class Cotizacion1Controller extends Controller
             }
 
             // If permissions
-            $devolver = auth()->user()->hasRole('admin') ? 'TRUE' : (auth()->user()->hasRole('Diseplanea') ? 'TRUE' : 'FALSE');
+            
+            $devolver = auth()->user()->hasRole('admin') ? 'TRUE' : 'FALSE';
+            $devolver_rol_diseplanea = auth()->user()->hasRole('Diseplanea') ? 'TRUE' : 'FALSE';
             $cerrar = auth()->user()->ability('admin', 'cerrar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $abrir = auth()->user()->ability('admin', 'abrir', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
             $clonar = auth()->user()->ability('admin', 'clonar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
@@ -66,7 +68,7 @@ class Cotizacion1Controller extends Controller
             $exportar = auth()->user()->ability('admin', 'exportar', ['module' => 'cotizaciones']) ? 'TRUE' : 'FALSE';
 
             // If ability other permission
-            $query->addSelect(DB::raw("{$devolver} AS devolver, {$cerrar} AS cerrar, {$abrir} AS abrir, {$clonar} AS clonar, {$precotizar} AS precotizar, {$cotizar} AS cotizar, {$exportar} AS exportar, {$generar} AS generar"));
+            $query->addSelect(DB::raw("{$devolver} AS devolver, {$devolver_rol_diseplanea} AS devolver_rol_diseplanea, {$cerrar} AS cerrar, {$abrir} AS abrir, {$clonar} AS clonar, {$precotizar} AS precotizar, {$cotizar} AS cotizar, {$exportar} AS exportar, {$generar} AS generar"));
 
             // Persistent data filter
             if ($request->has('persistent') && $request->persistent) {
