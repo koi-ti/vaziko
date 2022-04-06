@@ -16,6 +16,7 @@ class PreCotizacion1Controller extends Controller
      */
     public function index(Request $request)
     {
+        abort(404, 'rdew');
         if ($request->ajax()){
             $query = PreCotizacion1::query();
             $query->select('koi_precotizacion1.id', DB::raw("CONCAT(precotizacion1_numero,'-',SUBSTRING(precotizacion1_ano, -2)) as precotizacion_codigo"), 'precotizacion1_fh_elaboro', 'precotizacion1_fh_culminada', 'precotizacion1_culminada', 'precotizacion1_numero', 'precotizacion1_ano', 'precotizacion1_fecha', 'precotizacion1_abierta',

@@ -101,9 +101,11 @@ app || (app = {});
                                 if (parseInt(full.exportar) && full.cotizacion1_estados == 'CS') {
                                     buttons += '<a class="btn btn-danger export-cotizacion" data-resource="' + full.id + '" data-codigo="' + full.cotizacion_codigo + '" title="Exportar cotización"><i class="fa fa-file-pdf-o"></i></a>';
                                 }
-
+                                
                                 if (parseInt(full.devolver) && full.cotizacion1_estados != 'PC') {
-                                    buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
+                                    if (parseInt(full.devolver) && full.cotizacion1_estados != 'CS') {
+                                        buttons += '<a class="btn btn-success btn-xs state-cotizacion" title="Estado anterior de la cotización" data-resource="' + full.id + '" data-state="' + full.cotizacion1_estados + '" data-method="prev"><i class="fa fa-arrow-left"></i></a>';
+                                    }
                                 }
 
                                 if (parseInt(full.precotizar) && full.cotizacion1_estados == 'PC') {
