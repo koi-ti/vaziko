@@ -297,7 +297,10 @@ app || (app = {});
                                     return;
                                 }
 
-                                window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: model.resource})));
+                                alertify.success(resp.msg);
+                                _this.ordersSearchTable.ajax.reload();
+
+                                // window.Misc.successRedirect(resp.msg, window.Misc.urlFull(Route.route('ordenes.show', {ordenes: model.resource})));
                             }
                         })
                         .fail(function (jqXHR, ajaxOptions, thrownError) {

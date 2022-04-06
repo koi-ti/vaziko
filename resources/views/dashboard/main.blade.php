@@ -64,7 +64,7 @@
 					</a>
 				</div>
 			</div>
-			<div class="col-sm-3">
+			{{-- <div class="col-sm-3">
 				<div class="small-box bg-green">
 					<div class="inner">
 						<h3>Pre-cotizaciones</h3>
@@ -77,7 +77,7 @@
 						Más información <i class="fa fa-arrow-circle-right"></i>
 					</a>
 				</div>
-			</div>
+			</div> --}}
 			<div class="col-sm-3">
 				<div class="small-box bg-green">
 					<div class="inner">
