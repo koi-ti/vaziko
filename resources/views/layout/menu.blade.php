@@ -227,9 +227,9 @@
                     <li class="{{ Request::segment(1) == 'agendaordenes' ? 'active' : '' }}">
                         <a href="{{ route('agendaordenes.index') }}"><i class="fa fa-calendar"></i> Agenda</a>
                     </li>
-                    <li class="{{ Request::segment(1) == 'precotizaciones' ? 'active' : '' }}">
+                    {{-- <li class="{{ Request::segment(1) == 'precotizaciones' ? 'active' : '' }}">
                         <a href="{{ route('precotizaciones.index') }}"><i class="fa fa-envelope-open-o"></i> Pre-cotizaciones</a>
-                    </li>
+                    </li> --}}
                     <li class="{{ Request::segment(1) == 'cotizaciones' ? 'active' : '' }}">
                         <a href="{{ route('cotizaciones.index') }}"><i class="fa fa-envelope-o"></i> Cotizaciones</a>
                     </li>
