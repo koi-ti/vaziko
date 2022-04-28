@@ -689,7 +689,7 @@ class Cotizacion2Controller extends Controller
 
                             // Actualizar areasp
                             $areap_update = Areap::find($areap['cotizacion6_areap']);
-                            if ($areap != null) {
+                            if ($areap_update != null) {
                                 if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
                                     // cotizacion6
                                     $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
