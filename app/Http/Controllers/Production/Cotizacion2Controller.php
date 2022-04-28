@@ -160,8 +160,8 @@ class Cotizacion2Controller extends Controller
                             $cotizacion8->cotizacion8_imprimir = 1;
                             $cotizacion8->cotizacion8_fh_elaboro = date('Y-m-d H:i:s');
                             $cotizacion8->cotizacion8_usuario_elaboro = auth()->user()->id;
-                            $cotizacion8->numero_modulo = 
-                            $cotizacion8->save();
+                            $cotizacion8->numero_modulo =
+                                $cotizacion8->save();
 
                             // Recuperar imagen y copiar
                             if (Storage::has("productosp/productop_{$productopimagen->productopimagen_productop}/{$productopimagen->productopimagen_archivo}")) {
@@ -436,8 +436,8 @@ class Cotizacion2Controller extends Controller
         if ($cotizacion->cotizacion1_abierta && auth()->user()->ability('admin', 'editar', ['module' => 'cotizaciones'])) {
             // valida permiso no_mod_cot_next_send
             if (in_array($cotizacion->cotizacion1_estados, ['CS'])) {
-                if(!auth()->user()->ability('admin', ['module' => 'cotizaciones'])) { // si es admin lo manda a la vista editar de lo contrario ingresa al if
-                    if(auth()->user()->ability('admin', 'no_mod_cot_next_send', ['module' => 'cotizaciones']) ) {
+                if (!auth()->user()->ability('admin', ['module' => 'cotizaciones'])) { // si es admin lo manda a la vista editar de lo contrario ingresa al if
+                    if (auth()->user()->ability('admin', 'no_mod_cot_next_send', ['module' => 'cotizaciones'])) {
                         return view('production.cotizaciones.productos.show', compact('cotizacion', 'producto', 'cotizacion2'));
                     }
                 } else {
@@ -689,10 +689,12 @@ class Cotizacion2Controller extends Controller
 
                             // Actualizar areasp
                             $areap_update = Areap::find($areap['cotizacion6_areap']);
-                            if($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) { 
-                                // cotizacion6
-                                $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
-                                $areap_update->save();
+                            if ($areap != null) {
+                                if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
+                                    // cotizacion6
+                                    $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
+                                    $areap_update->save();
+                                }
                             }
 
                             $keys[] = $cotizacion6->id;
@@ -763,7 +765,7 @@ class Cotizacion2Controller extends Controller
                                     $historial->productohistorial_fh_elaboro = $cotizacion9->cotizacion9_fh_elaboro;
                                     $historial->productohistorial_numero_modulo = $cotizacion->id;
                                     $historial->save();
-    
+
                                     // Actualizar producto
                                     $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
                                     $producto->save();
