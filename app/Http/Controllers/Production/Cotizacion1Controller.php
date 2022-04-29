@@ -646,8 +646,10 @@ class Cotizacion1Controller extends Controller
                         $producto = Producto::find($cotizacion4->cotizacion4_producto);
 
                         $newcotizacion4 = $cotizacion4->replicate();
-                        $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
-                        $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
+                        if($producto->producto_precio != 0) {
+                            $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
+                            $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
+                        }
                         $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
