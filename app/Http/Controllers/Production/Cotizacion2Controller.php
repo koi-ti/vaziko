@@ -269,8 +269,10 @@ class Cotizacion2Controller extends Controller
 
                         // Actualizar areasp
                         $areap_update = Areap::find($areap->cotizacion6_areap);
-                        $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
-                        $areap_update->save();
+                        if($areap_update  != null) {
+                            $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
+                            $areap_update->save();
+                        }
 
                         $tiempo = intval($areap->cotizacion6_horas) + (intval($areap->cotizacion6_minutos) / 60);
                         $totalareasp += round($cotizacion6->cotizacion6_valor * $tiempo);
@@ -690,11 +692,11 @@ class Cotizacion2Controller extends Controller
                             // Actualizar areasp
                             $areap_update = Areap::find($areap['cotizacion6_areap']);
                             if ($areap_update == null) {
-                                if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
+                                // if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
                                     // cotizacion6
-                                    $areap_update->areap_valor = 0;
-                                    $areap_update->save();
-                                }
+                                    // $areap_update->areap_valor = 0;
+                                    // $areap_update->save();
+                                // }
                             } else {
                                 if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
                                     // cotizacion6

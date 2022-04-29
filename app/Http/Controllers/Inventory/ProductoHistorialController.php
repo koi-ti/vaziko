@@ -26,7 +26,6 @@ class ProductoHistorialController extends Controller
             if ($request->has('tipo') && $request->has('insumo')) {
                 $data = ProductoHistorial::where('productohistorial_tipo', $tipo)
                                         ->where('productohistorial_producto', $request->insumo)
-                                        ->limit(10)
                                         ->orderBy('id', 'desc')
                                         ->get();
             }
