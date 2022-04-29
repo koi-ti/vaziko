@@ -661,7 +661,9 @@ class Cotizacion1Controller extends Controller
 
                         $newcotizacion6 = $cotizacion6->replicate();
                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
-                        if($areap != null) {
+                        if($areap == null) {
+                            $newcotizacion6->cotizacion6_valor = 0;
+                        } else {
                             $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
                         }
                         $newcotizacion6->save();
@@ -670,8 +672,8 @@ class Cotizacion1Controller extends Controller
                     // Empaques
                     $empaques = Cotizacion9::where('cotizacion9_cotizacion2', $cotizacion2->id)->get();
                     foreach ($empaques as $cotizacion9) {
-                        $producto = Producto::find($cotizacion4->cotizacion4_producto);
-
+                        $producto = Producto::find($cotizacion9->cotizacion9_producto);
+                        
                         $newcotizacion9 = $cotizacion9->replicate();
                         $newcotizacion9->cotizacion9_valor_unitario = $producto->producto_precio;
                         $newcotizacion9->cotizacion9_valor_total = $producto->producto_precio * $cotizacion9->cotizacion9_cantidad;
