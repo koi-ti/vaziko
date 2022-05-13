@@ -16,8 +16,12 @@
 			@if (count($saldos) > 0)
 				{{--*/
 					$lastNivel = $cuenta = $saldoDebito = $saldoCredito = $totalFinal = $totalInicio = 0;
+                    $inicial_t = 0;
+                    $debitomes_t = 0;
+                    $creditomes_t = 0;
+                    $final_t = 0;
 				/*--}}
-				@foreach ($saldos as $saldo)
+				@foreach ($saldos as $key => $saldo)
 					{{--*/
 						if ($saldo->plancuentas_naturaleza == 'D') {
 							$final = $saldo->inicial + ($saldo->debitomes - $saldo->creditomes);
@@ -28,6 +32,24 @@
 
 					@if ($tercero)
 						@if ($saldo->plancuentas_cuenta != $cuenta)
+                            @if ($cuenta > 0)
+                            <tr>
+								<th align="right">TOTAL</th>
+								<th align="left" class="left"></th>
+						 		<th align="right">{{ $inicial_t }}</th>
+								<th align="right">{{ $debitomes_t }}</th>
+								<th align="right">{{ $creditomes_t }}</th>
+								<th align="right">{{ $final_t }}</th>
+							</tr>
+                            <tr> <td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+                            {{--*/ 
+                                $inicial_t = 0;
+                                $debitomes_t = 0;
+                                $creditomes_t = 0;
+                                $final_t = 0;
+                            /*--}}
+                            @endif
+
 							<tr>
 								<th align="right">{{ $saldo->plancuentas_cuenta }}</th>
 								<th colspan="5" align="left">{{ $saldo->plancuentas_nombre }}</th>
@@ -74,7 +96,6 @@
 							$lastNivel = $saldo->plancuentas_nivel;
 						/*--}}
 					@endif
-
 					{{-- Calculo totales --}}
 					{{--*/
 						if ($saldo->plancuentas_nivel == 1) {
@@ -85,6 +106,12 @@
 						}
 
 						$cuenta = $saldo->plancuentas_cuenta;
+
+                        // muestra el total cada vez que la cuenta cambia
+                        $inicial_t += $saldo->inicial;
+                        $debitomes_t += $saldo->debitomes;
+                        $creditomes_t += $saldo->creditomes;
+                        $final_t += $final;
 					/*--}}
 				@endforeach
 				<tr>
