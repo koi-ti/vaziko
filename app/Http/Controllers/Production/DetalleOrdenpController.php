@@ -588,10 +588,12 @@ class DetalleOrdenpController extends Controller
                             }
 
                             $areap_update = Areap::find($areap['orden6_areap']);
-                            if ($orden->orden6_valor != $areap_update->areap_valor) {
+                            if($areap_update instanceof Areap) {
+                              if ($orden->orden6_valor != $areap_update->areap_valor) {
                                 // orden6
                                 $areap_update->areap_valor = $orden6->orden6_valor;
                                 $areap_update->save();
+                              }
                             }
 
                             $keys[] = $orden6->id;

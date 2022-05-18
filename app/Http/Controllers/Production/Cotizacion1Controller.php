@@ -664,7 +664,7 @@ class Cotizacion1Controller extends Controller
                         $newcotizacion6 = $cotizacion6->replicate();
                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
                         if($areap == null) {
-                            $newcotizacion6->cotizacion6_valor = 0;
+                            $newcotizacion6->cotizacion6_valor = $cotizacion6->cotizacion6_valor;
                         } else {
                             $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
                         }
