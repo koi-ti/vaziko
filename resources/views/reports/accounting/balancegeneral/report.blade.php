@@ -35,7 +35,7 @@
                             @if ($cuenta > 0)
                             <tr>
 								<th align="right">TOTAL</th>
-								<th align="left" class="left"></th>
+								<th align="left" class="left">{{ $saldo->plancuentas_nombre }}</th>
 						 		<th align="right">{{ $inicial_t }}</th>
 								<th align="right">{{ $debitomes_t }}</th>
 								<th align="right">{{ $creditomes_t }}</th>
