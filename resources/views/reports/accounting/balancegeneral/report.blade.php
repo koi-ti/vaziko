@@ -20,6 +20,7 @@
                     $debitomes_t = 0;
                     $creditomes_t = 0;
                     $final_t = 0;
+                    $plancuentas_nombre = '';
 				/*--}}
 				@foreach ($saldos as $key => $saldo)
 					{{--*/
@@ -35,20 +36,21 @@
                             @if ($cuenta > 0)
                             <tr>
 								<th align="right">TOTAL</th>
-								<th align="left" class="left">{{ $saldo->plancuentas_nombre }}</th>
+								<th align="left" class="left">{{ $plancuentas_nombre }}</th>
 						 		<th align="right">{{ $inicial_t }}</th>
 								<th align="right">{{ $debitomes_t }}</th>
 								<th align="right">{{ $creditomes_t }}</th>
 								<th align="right">{{ $final_t }}</th>
 							</tr>
-                            <tr> <td></td><td></td><td></td><td></td><td></td><td></td> </tr>
-                            {{--*/ 
-                                $inicial_t = 0;
-                                $debitomes_t = 0;
-                                $creditomes_t = 0;
-                                $final_t = 0;
-                            /*--}}
-                            @endif
+              <tr> <td></td><td></td><td></td><td></td><td></td><td></td> </tr>
+              {{--*/ 
+                  $inicial_t = 0;
+                  $debitomes_t = 0;
+                  $creditomes_t = 0;
+                  $final_t = 0;
+                  $plancuentas_nombre = '';
+              /*--}}
+              @endif
 
 							<tr>
 								<th align="right">{{ $saldo->plancuentas_cuenta }}</th>
@@ -107,11 +109,12 @@
 
 						$cuenta = $saldo->plancuentas_cuenta;
 
-                        // muestra el total cada vez que la cuenta cambia
-                        $inicial_t += $saldo->inicial;
-                        $debitomes_t += $saldo->debitomes;
-                        $creditomes_t += $saldo->creditomes;
-                        $final_t += $final;
+            // muestra el total cada vez que la cuenta cambia
+            $inicial_t += $saldo->inicial;
+            $debitomes_t += $saldo->debitomes;
+            $creditomes_t += $saldo->creditomes;
+            $final_t += $final;
+            $plancuentas_nombre = $saldo->plancuentas_nombre;
 					/*--}}
 				@endforeach
 				<tr>
