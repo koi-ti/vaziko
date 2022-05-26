@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Report;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Classes\Reports\Accounting\BalanceGeneral;
-use App\Models\Base\Tercero, App\Models\Accounting\SaldoTercero;
+use App\Models\Base\Tercero, App\Models\Accounting\SaldoTercero, App\Models\Accounting\PlanCuenta;
 use DB, Excel;
 
 class BalanceGeneralController extends Controller
@@ -41,6 +41,46 @@ class BalanceGeneralController extends Controller
                         $addSql = "AND saldosterceros_tercero = '{$tercero->id}'";
                     }
                 }
+                $query = PlanCuenta::query();
+                $query->select('koi_plancuentas.*');
+
+                $query->with(['saldosterceros' => function ($q) use ($mes, $ano, $request) {
+                    $q->select('koi_saldosterceros.*');
+                    $q->where('saldosterceros_mes', '=', $mes);
+                    $q->where('saldosterceros_ano', '=', $ano);
+                    $q->addSelect(
+                        DB::raw("saldosterceros_debito_mes AS debitomes"),
+                        DB::raw("saldosterceros_credito_mes AS creditomes"),
+                        DB::raw("'' AS inicial")
+                    );
+                    $q->with(['cuenta' => function ($qcuenta) use ($request) {
+                        $qcuenta->select(
+                            'id',
+                            'plancuentas_cuenta',
+                            'plancuentas_nombre',
+                            'plancuentas_naturaleza',
+                            'plancuentas_nivel',
+                        );
+                    }]);
+                    $q->with(['tercero' => function ($qtercerco) {
+                        $qtercerco->select('id', 'tercero_nit');
+                        $qtercerco->nombre($qtercerco);
+                    }]);
+                }]);
+                $query->where('plancuentas_cuenta', '>=', $request->filter_cuenta_inicio);
+                $query->where('plancuentas_cuenta', '<=', $request->filter_cuenta_fin);
+                $saldos = $query->get();
+
+                $title = sprintf('%s %s %s', $tercero ? 'Balance general terceros ' : 'Balance general ',  config('koi.meses')[$request->filter_mes], $request->filter_ano);
+                $titleDownload = $tercero ? 'balance_general_tercero' : 'balance_general';
+                $type = $request->type;
+                Excel::create(sprintf('%s_%s_%s_%s', $titleDownload, $request->filter_ano, $request->filter_mes, date('Y_m_d H_i_s')), function ($excel) use ($saldos, $title, $type, $tercero, $mes2, $ano2) {
+                    $excel->sheet('Excel', function ($sheet) use ($saldos, $title, $type, $tercero, $mes2, $ano2) {
+                        $sheet->loadView('reports.accounting.balancegeneral.report.tercero', compact('saldos', 'title', 'type', 'tercero', 'mes2', 'ano2'));
+                    });
+                })->download('xls');
+
+                return true;
 
                 $sql = "
                     SELECT
@@ -68,7 +108,7 @@ class BalanceGeneralController extends Controller
                         saldosterceros_mes = {$mes} AND saldosterceros_ano = {$ano} {$addSql}
                     ";
 
-                    $tercero = true;
+                $tercero = true;
             } else {
                 $sql = "
                     SELECT plancuentas_nombre, plancuentas_cuenta, plancuentas_naturaleza, plancuentas_nivel,
@@ -115,17 +155,25 @@ class BalanceGeneralController extends Controller
             // Generate file
             switch ($type) {
                 case 'xls':
-                    Excel::create(sprintf('%s_%s_%s_%s', $titleDownload, $request->filter_ano, $request->filter_mes, date('Y_m_d H_i_s')), function ($excel) use ($saldos, $title, $type, $tercero) {
-                        $excel->sheet('Excel', function ($sheet) use ($saldos, $title, $type, $tercero) {
-                            $sheet->loadView('reports.accounting.balancegeneral.report', compact('saldos', 'title', 'type', 'tercero'));
-                        });
-                    })->download('xls');
-                break;
+                    if ($tercero) {
+                        Excel::create(sprintf('%s_%s_%s_%s', $titleDownload, $request->filter_ano, $request->filter_mes, date('Y_m_d H_i_s')), function ($excel) use ($saldos, $title, $type, $tercero) {
+                            $excel->sheet('Excel', function ($sheet) use ($saldos, $title, $type, $tercero) {
+                                $sheet->loadView('reports.accounting.balancegeneral.report.tercero', compact('saldos', 'title', 'type', 'tercero'));
+                            });
+                        })->download('xls');
+                    } else {
+                        Excel::create(sprintf('%s_%s_%s_%s', $titleDownload, $request->filter_ano, $request->filter_mes, date('Y_m_d H_i_s')), function ($excel) use ($saldos, $title, $type, $tercero) {
+                            $excel->sheet('Excel', function ($sheet) use ($saldos, $title, $type, $tercero) {
+                                $sheet->loadView('reports.accounting.balancegeneral.report.normal', compact('saldos', 'title', 'type', 'tercero'));
+                            });
+                        })->download('xls');
+                    }
+                    break;
 
                 case 'pdf':
                     $pdf = new BalanceGeneral('L', 'mm', 'Letter');
                     $pdf->buldReport($saldos, $title);
-                break;
+                    break;
             }
         }
 
