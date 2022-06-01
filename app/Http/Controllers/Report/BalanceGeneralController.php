@@ -71,8 +71,6 @@ class BalanceGeneralController extends Controller
                 $query->where('plancuentas_cuenta', '<=', $request->filter_cuenta_fin);
                 $saldos = $query->get();
 
-                dd($saldos->toArray());
-
                 $title = sprintf('%s %s %s', $tercero ? 'Balance general terceros ' : 'Balance general ',  config('koi.meses')[$request->filter_mes], $request->filter_ano);
                 $titleDownload = $tercero ? 'balance_general_tercero' : 'balance_general';
                 $type = $request->type;
