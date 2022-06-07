@@ -69,6 +69,7 @@ class BalanceGeneralController extends Controller
                 }]);
                 $query->where('plancuentas_cuenta', '>=', $request->filter_cuenta_inicio);
                 $query->where('plancuentas_cuenta', '<=', $request->filter_cuenta_fin);
+                $query->orderBy('plancuentas_cuenta', 'asc');
                 $saldos = $query->get();
 
                 $title = sprintf('%s %s %s', $tercero ? 'Balance general terceros ' : 'Balance general ',  config('koi.meses')[$request->filter_mes], $request->filter_ano);
