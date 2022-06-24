@@ -92,7 +92,7 @@
     </li>
 
     {{-- Contabilidad --}}
-    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'configuracion', 'saldos', 'rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'centroscosto',  'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
+    <li class="treeview {{ in_array(Request::segment(1), ['asientos', 'asientosnif', 'configuracion', 'saldos', 'rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'rmediosmagneticos', 'centroscosto',  'documentos', 'folders', 'plancuentas', 'plancuentasnif']) ? 'active' : '' }}">
         <a href="#">
             <i class="fa fa-book"></i> <span>Contabilidad</span><i class="fa fa-angle-left pull-right"></i>
         </a>
@@ -117,7 +117,7 @@
             </li>
 
             {{-- Reportes contabilidad --}}
-            <li class="{{ in_array(Request::segment(1), ['rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor']) ? 'active' : '' }}">
+            <li class="{{ in_array(Request::segment(1), ['rauxbeneficiariocuenta', 'rauxcontable', 'rauxcuenta', 'rbalancegeneral', 'rlibrodiario', 'rlibromayor', 'rmediosmagneticos']) ? 'active' : '' }}">
                 <a href="#">
                     <i class="fa fa-bar-chart-o"></i> Reportes <i class="fa fa-angle-left pull-right"></i>
                 </a>
@@ -139,6 +139,9 @@
                     </li>
                     <li class="{{ Request::segment(1) == 'rlibromayor' ? 'active' : '' }}">
                         <a href="{{ route('rlibromayor.index') }}"><i class="fa fa-circle-o"></i> Libro mayor</a>
+                    </li>
+                    <li class="{{ Request::segment(1) == 'rmediosmagneticos' ? 'active' : '' }}">
+                        <a href="{{ route('rmediosmagneticos.index') }}"><i class="fa fa-circle-o"></i> Medios Magneticos</a>
                     </li>
                 </ul>
             </li>
