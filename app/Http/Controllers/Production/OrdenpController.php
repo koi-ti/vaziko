@@ -619,18 +619,24 @@ class OrdenpController extends Controller
                         $areap = Areap::find($orden6->orden6_areap);
                         $neworden6 = $orden6->replicate();
                         $neworden6->orden6_orden2 = $neworden2->id;
-                        $neworden6->orden6_valor = $areap->areap_valor;
+                        if($areap != null) {
+                            $neworden6->orden6_valor = $areap->areap_valor;
+                        }
                         $neworden6->save();
                     }
 
                     // Materiales
                     $materiales = Ordenp4::where('orden4_orden2', $orden2->id)->get();
                     foreach ($materiales as $orden4) {
-                        $producto = Producto::find($orden4->orden4_producto);
+                        $producto = Producto::historialr()->find($orden4->orden4_producto);
                         $neworden4 = $orden4->replicate();
-                        $neworden4->orden4_valor_unitario = $producto->producto_precio;
-                        $neworden4->orden4_valor_total = $producto->producto_precio * $orden4->orden4_cantidad;
                         $neworden4->orden4_orden2 = $neworden2->id;
+                        // $neworden4->orden4_valor_unitario = $producto->producto_precio;
+                        // $neworden4->orden4_valor_total = $producto->producto_precio * $orden4->orden4_cantidad;
+                        if(count($producto->historial)) {
+                            $neworden4->orden4_valor_unitario = $producto->historial[0]->productohistorial_valor;
+                            $neworden4->orden4_valor_total = $producto->historial[0]->productohistorial_valor * $orden4->orden4_cantidad;
+                        }
                         $neworden4->save();
                     }
 

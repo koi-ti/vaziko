@@ -247,8 +247,8 @@ class Cotizacion2Controller extends Controller
                         $historial->save();
 
                         // Actualizar producto
-                        $producto->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
-                        $producto->save();
+                        // $producto->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                        // $producto->save();
 
                         $totalmaterialesp += round($cotizacion4->cotizacion4_valor_total);
                     }
@@ -268,11 +268,13 @@ class Cotizacion2Controller extends Controller
                         $cotizacion6->save();
 
                         // Actualizar areasp
+                        /*
                         $areap_update = Areap::find($areap->cotizacion6_areap);
                         if($areap_update  != null) {
                             $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
                             $areap_update->save();
                         }
+                        */
 
                         $tiempo = intval($areap->cotizacion6_horas) + (intval($areap->cotizacion6_minutos) / 60);
                         $totalareasp += round($cotizacion6->cotizacion6_valor * $tiempo);
@@ -317,8 +319,8 @@ class Cotizacion2Controller extends Controller
                         $historial->save();
 
                         // Actualizar producto
-                        $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
-                        $producto->save();
+                        // $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
+                        // $producto->save();
 
                         $totalempaques += round($cotizacion9->cotizacion9_valor_total);
                     }
@@ -637,8 +639,8 @@ class Cotizacion2Controller extends Controller
                                 $historial->save();
 
                                 // Actualizar producto
-                                $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
-                                $insumo->save();
+                                // $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                                // $insumo->save();
                             } else {
                                 $valor_unitario = $cotizacion4->cotizacion4_valor_unitario;
                                 $cotizacion4->fill($material);
@@ -655,8 +657,8 @@ class Cotizacion2Controller extends Controller
                                     $historial->save();
 
                                     // Actualizar producto
-                                    $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
-                                    $insumo->save();
+                                    // $insumo->producto_precio = $cotizacion4->cotizacion4_valor_unitario;
+                                    // $insumo->save();
                                 }
                             }
 
@@ -700,7 +702,7 @@ class Cotizacion2Controller extends Controller
                             } else {
                                 if ($cotizacion6->cotizacion6_valor != $areap_update->areap_valor) {
                                     // cotizacion6
-                                    $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
+                                    // $areap_update->areap_valor = $cotizacion6->cotizacion6_valor;
                                     $areap_update->save();
                                 }
                             }
@@ -756,8 +758,8 @@ class Cotizacion2Controller extends Controller
                                 $historial->save();
 
                                 // Actualizar producto
-                                $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
-                                $producto->save();
+                                // $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
+                                // $producto->save();
                             } else {
                                 $valor_unitario = $cotizacion9->cotizacion9_valor_unitario;
                                 $cotizacion9->fill($empaque);
@@ -775,8 +777,8 @@ class Cotizacion2Controller extends Controller
                                     $historial->save();
 
                                     // Actualizar producto
-                                    $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
-                                    $producto->save();
+                                    // $producto->producto_precio = $cotizacion9->cotizacion9_valor_unitario;
+                                    // $producto->save();
                                 }
                             }
 
@@ -990,18 +992,44 @@ class Cotizacion2Controller extends Controller
                 // Materiales
                 $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->get();
                 foreach ($materiales as $cotizacion4) {
+                    // $producto = Producto::historialr()->find($cotizacion4->cotizacion4_producto);
                     $newcotizacion4 = $cotizacion4->replicate();
                     $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                     $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
                     $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
+                    // if(count($producto->historial)) {
+                    //     $newcotizacion4->cotizacion4_valor_unitario = $producto->historial[0]->productohistorial_valor;
+                    //     $newcotizacion4->cotizacion4_valor_total = $producto->historial[0]->productohistorial_valor * $cotizacion4->cotizacion4_cantidad;
+                    // }
                     $newcotizacion4->save();
+
+                    // Historial
+                    $historial = new ProductoHistorial;
+                    $historial->productohistorial_tipo = 'M';
+                    $historial->productohistorial_modulo = 'C';
+                    $historial->productohistorial_producto = $cotizacion4->cotizacion4_producto;
+                    $historial->productohistorial_valor = $cotizacion4->cotizacion4_valor_unitario;
+                    $historial->productohistorial_fh_elaboro = $cotizacion4->cotizacion4_fh_elaboro;
+                    $historial->productohistorial_numero_modulo = $cotizacion->id;
+                    $historial->save();
                 }
 
                 // Areasp
                 $areasp = Cotizacion6::where('cotizacion6_cotizacion2', $cotizacion2->id)->get();
+                // foreach ($areasp as $cotizacion6) {
+                //     $newcotizacion6 = $cotizacion6->replicate();
+                //     $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                //     $newcotizacion6->save();
+                // }
                 foreach ($areasp as $cotizacion6) {
+                    $areap = Areap::find($cotizacion6->cotizacion6_areap);
                     $newcotizacion6 = $cotizacion6->replicate();
                     $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
+                    if($areap == null) {
+                        $newcotizacion6->cotizacion6_valor = $cotizacion6->cotizacion6_valor;
+                    } else {
+                        $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
+                    }
                     $newcotizacion6->save();
                 }
 

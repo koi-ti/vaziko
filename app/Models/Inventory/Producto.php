@@ -3,6 +3,7 @@
 namespace App\Models\Inventory;
 
 use App\Models\BaseModel;
+use App\Models\Inventory\ProductoHistorial;
 use DB, Cache, Validator;
 
 class Producto extends BaseModel
@@ -136,5 +137,24 @@ class Producto extends BaseModel
                 ->orderBy('sucursal_nombre', 'asc')
                 ->where('prodbode_cantidad', '>', 0);
         }
+    }
+
+    /**
+     * scopes
+     */
+    public function scopeHistorialr($query)
+    {
+        return $query->with(['historial' => function ($qhistorial) {
+            $qhistorial->orderBy('productohistorial_fh_elaboro', 'desc');
+            $qhistorial->limit(1);
+        }]);
+    }
+
+    /**
+     * relations
+     */
+    public function historial()
+    {
+        return $this->hasMany(ProductoHistorial::class, 'productohistorial_producto', 'id');
     }
 }

@@ -643,12 +643,16 @@ class Cotizacion1Controller extends Controller
                     // Materiales
                     $materiales = Cotizacion4::where('cotizacion4_cotizacion2', $cotizacion2->id)->get();
                     foreach ($materiales as $cotizacion4) {
-                        $producto = Producto::find($cotizacion4->cotizacion4_producto);
-
+                        $producto = Producto::historialr()->find($cotizacion4->cotizacion4_producto);
+                    
                         $newcotizacion4 = $cotizacion4->replicate();
-                        if($producto->producto_precio != 0) {
-                            $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
-                            $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
+                        // if($producto->producto_precio != 0) {
+                        //     $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
+                        //     $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
+                        // }
+                        if(count($producto->historial)) {
+                            $newcotizacion4->cotizacion4_valor_unitario = $producto->historial[0]->productohistorial_valor;
+                            $newcotizacion4->cotizacion4_valor_total = $producto->historial[0]->productohistorial_valor * $cotizacion4->cotizacion4_cantidad;
                         }
                         $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');

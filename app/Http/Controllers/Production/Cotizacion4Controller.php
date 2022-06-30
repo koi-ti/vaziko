@@ -23,7 +23,8 @@ class Cotizacion4Controller extends Controller
                 $data = Cotizacion4::getCotizaciones4($request->cotizacion2);
             }
             if ($request->has('insumo')) {
-                $data = Cotizacion4::select('cotizacion4_valor_unitario as valor')->where('cotizacion4_producto', $request->insumo)->orderBy('id', 'desc')->first();
+                $data = Producto::select('producto_precio as valor')->find($request->insumo);
+                // $data = Cotizacion4::select('cotizacion4_valor_unitario as valor')->where('cotizacion4_producto', $request->insumo)->orderBy('id', 'desc')->first();
             }
             return response()->json($data);
         }
