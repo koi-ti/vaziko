@@ -1,3 +1,12 @@
+## Vaziko
+### Requisitos
+Composer version 1.10.26
+PHP 7.4.30
+Laravel Framework version 5.1.46 (LTS)
+### Js
+Usa Gulp
+version de node 10 (recomendado)
+
 ## Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)

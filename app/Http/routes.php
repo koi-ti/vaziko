@@ -279,6 +279,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::resource('rbalancegeneral', 'Report\BalanceGeneralController', ['only' => ['index']]);
 	Route::resource('rlibrodiario', 'Report\LibroDiarioController', ['only' => ['index']]);
 	Route::resource('rlibromayor', 'Report\LibroMayorController', ['only' => ['index']]);
+    Route::resource('rmediosmagneticos', 'Report\MedioMagneticoController', ['only' => ['index']]);
 
 	// Produccion
 	Route::group(['prefix' => 'rtiemposp'], function () {
