@@ -13,7 +13,27 @@
 			</tr>
 		</thead>
 		<tbody>
-            
+            @foreach ($data as $item)
+            {{-- {{ dd($data->toArray()) }} --}}
+                <tr>
+                    <th align="center">{{ $item->plancuentas_cuenta }}</th>
+                    <th align="center">{{ $item->plancuentas_nombre }}</th>
+                    <th align="center">IN---ICIAL</th>
+                    <th align="center">DEB---ITO</th>
+                    <th align="center">CR---EDITO</th>
+                    <th align="center">FI--NAL</th>
+                </tr>
+                @foreach ($item->saldosterceros as $saldotercero)
+                    <tr>
+                        <td align="center">{{ $saldotercero->cuenta->plancuentas_cuenta }}</td>
+                        <td align="center">{{ $saldotercero->cuenta->plancuentas_nombre }}</td>
+                        <td align="center">{{ $saldotercero->debitomes }}</td>
+                        <td align="center">{{ $saldotercero->creditomes }}</td>
+                        <td align="center">{{ $saldotercero->inicial }}</td>
+                        <td align="center">fin--al</td>
+                    </tr>
+                @endforeach
+            @endforeach
         </tbody>
 	</table>
 @stop

@@ -32,7 +32,7 @@ app || (app = {});
             'producto_metrado': false,
             'producto_empaque': false,
             'producto_ancho': 0,
-            'producto_largo': 0
+            'producto_largo': 0,
         }
     });
 

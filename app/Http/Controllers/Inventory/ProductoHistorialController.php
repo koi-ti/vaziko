@@ -27,7 +27,7 @@ class ProductoHistorialController extends Controller
                 $data = ProductoHistorial::where('productohistorial_tipo', $tipo)
                                         ->where('productohistorial_producto', $request->insumo)
                                         ->orderBy('productohistorial_fh_elaboro', 'asc')
-                                        ->limit(20)
+                                        // ->limit(20)
                                         ->get();
             }
             return response()->json($data);

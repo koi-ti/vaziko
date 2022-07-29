@@ -39,7 +39,7 @@ class Producto extends BaseModel
      * @var array
      */
     protected $boolean = [
-        'producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque'
+        'producto_serie', 'producto_metrado', 'producto_unidades', 'producto_empaque', 'producto_precio'
     ];
 
     /**
@@ -156,5 +156,9 @@ class Producto extends BaseModel
     public function historial()
     {
         return $this->hasMany(ProductoHistorial::class, 'productohistorial_producto', 'id');
+    }
+    
+    public function bitacora () {
+        return $this->morphMany('App\Models\Base\Bitacora', 'bitacora');
     }
 }

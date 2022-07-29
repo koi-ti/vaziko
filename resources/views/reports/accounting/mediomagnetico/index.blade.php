@@ -80,24 +80,44 @@
                             <select name="filter_cuenta_aditional_nombre[]" id="filter_cuenta_aditional_nombre"
                                 class="form-control select2-default-clear" multiple>
                                 @foreach (App\Models\Accounting\PlanCuentaNif::getPlanCuentas() as $key => $value)
-                                    <option value="{{ $key }}"> {{ $value }}</option>
+                                    <option value="{{ $key }}-{{ $value }}"> {{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row form-group">
-                        <label for="filter_mes" class="control-label col-sm-1 col-md-offset-2 text-right">Mes</label>
+                        <label for="filter_mes_start" class="control-label col-sm-1 col-md-offset-2 text-right">Mes Inicio</label>
                         <div class="form-group col-sm-3 col-md-2">
-                            <select name="filter_mes" id="filter_mes" class="form-control" required>
+                            <select name="filter_mes_start" id="filter_mes_start" class="form-control" required>
                                 @foreach (config('koi.meses') as $key => $value)
                                     <option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>
                                         {{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <label for="filter_ano" class="control-label col-md-1 text-right">Año</label>
+                        <label for="filter_ano_start" class="control-label col-md-1 text-right">Año Inicio</label>
                         <div class="form-group col-xs-6 col-sm-3 col-md-2">
-                            <select name="filter_ano" id="filter_ano" class="form-control" required>
+                            <select name="filter_ano_start" id="filter_ano_start" class="form-control" required>
+                                @for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
+                                    <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>
+                                        {{ $i }}</option>
+                                @endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label for="filter_mes_end" class="control-label col-sm-1 col-md-offset-2 text-right">Mes Fin</label>
+                        <div class="form-group col-sm-3 col-md-2">
+                            <select name="filter_mes_end" id="filter_mes_end" class="form-control" required>
+                                @foreach (config('koi.meses') as $key => $value)
+                                    <option value="{{ $key }}" {{ $key == date('m') ? 'selected' : '' }}>
+                                        {{ $value }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <label for="filter_ano_end" class="control-label col-md-1 text-right">Año Fin</label>
+                        <div class="form-group col-xs-6 col-sm-3 col-md-2">
+                            <select name="filter_ano_end" id="filter_ano_end" class="form-control" required>
                                 @for ($i = config('koi.app.ano'); $i <= date('Y'); $i++)
                                     <option value="{{ $i }}" {{ $i == date('Y') ? 'selected' : '' }}>
                                         {{ $i }}</option>

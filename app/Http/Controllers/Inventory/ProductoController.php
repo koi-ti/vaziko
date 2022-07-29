@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Inventory\Producto, App\Models\Inventory\Grupo, App\Models\Inventory\SubGrupo, App\Models\Inventory\Unidad;
 use App\Models\Production\Materialp;
+use App\Models\Base\Bitacora;
 use DB, Log, Datatables, Cache;
 
 class ProductoController extends Controller
@@ -223,12 +224,24 @@ class ProductoController extends Controller
                         $producto->producto_unidadmedida = $unidadmedida->id;
                     }
 
+                    // Traer datos originales
+                    $original = $producto->getOriginal();
+
                     // Producto
                     $producto->fill($data);
                     $producto->fillBoolean($data);
+                    $producto->producto_precio = $data['producto_precio'];
                     $producto->producto_grupo = $grupo->id;
                     $producto->producto_subgrupo = $subgrupo->id;
+                    // Traer cambios en el modelo
+                    $changes = $producto->getDirty();
+                    
                     $producto->save();
+
+                    // Si hay cambios en la producto
+                    if ($changes) {
+                        Bitacora::createBitacora($producto, $original, $changes, 'Productonsumos', 'U', $request->ip());
+                    }
 
                     // Commit Transaction
                     DB::commit();

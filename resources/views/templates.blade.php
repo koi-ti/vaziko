@@ -669,6 +669,11 @@
             <label for="producto_empaque" class="control-label">¿Empaque?</label>
             <div><input type="checkbox" id="producto_empaque" name="producto_empaque" value="producto_empaque" <%- parseInt(producto_empaque) ? 'checked': ''%>></div>
         </div>
+        <div class="form-group col-md-2">
+			<label for="producto_precio" class="control-label">Precio</label>
+			<input type="number" id="producto_precio" name="producto_precio" value="<%- producto_precio %>" placeholder="Producto" class="form-control input-sm input-toupper" maxlength="200" required>
+            <div class="help-block with-errors"></div>
+		</div>
 	</div>
 </script>
 

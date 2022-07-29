@@ -650,10 +650,14 @@ class Cotizacion1Controller extends Controller
                         //     $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
                         //     $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
                         // }
-                        if(count($producto->historial)) {
-                            $newcotizacion4->cotizacion4_valor_unitario = $producto->historial[0]->productohistorial_valor;
-                            $newcotizacion4->cotizacion4_valor_total = $producto->historial[0]->productohistorial_valor * $cotizacion4->cotizacion4_cantidad;
-                        }
+
+                        // if(count($producto->historial)) {
+                        //     $newcotizacion4->cotizacion4_valor_unitario = $producto->historial[0]->productohistorial_valor;
+                        //     $newcotizacion4->cotizacion4_valor_total = $producto->historial[0]->productohistorial_valor * $cotizacion4->cotizacion4_cantidad;
+                        // }
+                        $newcotizacion4->cotizacion4_valor_unitario = $producto->producto_precio;
+                        $newcotizacion4->cotizacion4_valor_total = $producto->producto_precio * $cotizacion4->cotizacion4_cantidad;
+
                         $newcotizacion4->cotizacion4_cotizacion2 = $newcotizacion2->id;
                         $newcotizacion4->cotizacion4_fh_elaboro = date('Y-m-d H:i:s');
                         $newcotizacion4->cotizacion4_usuario_elaboro = auth()->user()->id;
@@ -668,7 +672,8 @@ class Cotizacion1Controller extends Controller
                         $newcotizacion6 = $cotizacion6->replicate();
                         $newcotizacion6->cotizacion6_cotizacion2 = $newcotizacion2->id;
                         if($areap == null) {
-                            $newcotizacion6->cotizacion6_valor = $cotizacion6->cotizacion6_valor;
+                            // $newcotizacion6->cotizacion6_valor = $cotizacion6->cotizacion6_valor;
+                            $newcotizacion6->cotizacion6_valor = 0;
                         } else {
                             $newcotizacion6->cotizacion6_valor = $areap->areap_valor;
                         }
@@ -719,8 +724,15 @@ class Cotizacion1Controller extends Controller
                     }
                 }
 
+                
                 // Si hay cambios en la cotizacion
-                Bitacora::createBitacora($cotizacion, [], 'Se clono la cotización', 'Cotización', 'U', $request->ip());
+                $msg = "Se clonó cotización a -> " . $newcotizacion->cotizacion1_numero ."_". substr($newcotizacion->cotizacion1_ano, -2) . " , ordenes/". $newcotizacion->id;
+                Bitacora::createBitacora($cotizacion, [], $msg, 'Cotización', 'U', $request->ip());
+                
+                $msg = "-> Esta cotización es clonada de " . $cotizacion->cotizacion1_numero ."_". substr($cotizacion->cotizacion1_ano, -2) . " , ordenes/". $cotizacion->id;
+
+                // newcotizacion
+                Bitacora::createBitacora($newcotizacion, [], $msg, 'Cotización', 'U', $request->ip());
 
                 // Commit Transaction
                 DB::commit();
